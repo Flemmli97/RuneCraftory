@@ -19,8 +19,8 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameManager;
 import io.github.flemmli97.tenshilib.common.data.SyncedReloadListeners;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -28,11 +28,10 @@ import java.util.function.Consumer;
 public class DataPackHandler {
 
     public static final Gson GSON = new Gson();
+    private static final Set<ListenerExtension> LISTENERS = new HashSet<>();
+    private static final Map<ResourceLocation, SyncableListener<?>> SYNCABLES = new HashMap<>();
 
     public static final DataPackHandler INSTANCE = new DataPackHandler();
-
-    private static final Set<ListenerExtension> LISTENERS = new HashSet<>();
-    private static final Map<ResourceLocation, SyncableListener<?>> SYNCABLES = new LinkedHashMap<>();
 
     private final ItemStatManager itemStats = syncable(new ItemStatManager());
     private final CropManager crops = syncable(new CropManager());

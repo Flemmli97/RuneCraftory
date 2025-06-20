@@ -56,7 +56,6 @@ import net.minecraft.world.level.block.Block;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -70,8 +69,6 @@ import java.util.stream.Stream;
  * Same as LanguageProvider but with a linked hashmap
  */
 public class LangGen implements DataProvider {
-
-    private static final Comparator<String> ORDER = Comparator.comparingInt(o -> LangType.get(o).ordinal());
 
     private final Map<String, String> data = new LinkedHashMap<>();
     private final PackOutput packOutput;
@@ -853,12 +850,10 @@ public class LangGen implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         this.addTranslations();
-        Map<String, String> sort = this.data.entrySet().stream().sorted((e, e2) -> ORDER.compare(e.getKey(), e2.getKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, v) -> old, LinkedHashMap::new));
-        if (!sort.isEmpty()) {
+        if (!this.data.isEmpty()) {
             Path path = this.packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.modid + "/lang/" + this.locale + ".json");
             JsonObject json = new JsonObject();
-            sort.forEach(json::addProperty);
+            this.data.forEach(json::addProperty);
             return DataProvider.saveStable(cache, json, path);
         }
         return CompletableFuture.allOf();
@@ -919,22 +914,5 @@ public class LangGen implements DataProvider {
     public void addPatchouliEntityDesc(List<RegistryEntrySupplier<EntityType<?>, ?>> list, RegistryEntrySupplier<EntityType<?>, ?> sup, String value) {
         list.add(sup);
         this.add(patchouliEntity(sup.getID()), value);
-    }
-
-    enum LangType {
-        ITEM,
-        BLOCK,
-        ENTITY,
-        OTHER;
-
-        public static LangType get(String s) {
-            if (s.startsWith("item."))
-                return ITEM;
-            if (s.startsWith("block."))
-                return BLOCK;
-            if (s.startsWith("entity."))
-                return ENTITY;
-            return OTHER;
-        }
     }
 }

@@ -1242,7 +1242,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolHoe> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolHoe> sup = register("hoe_" + tier.getName(), () -> new ItemToolHoe(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HOES, t -> new ArrayList<>()).add(sup);
@@ -1251,7 +1251,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolWateringCan> wateringCan(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolWateringCan> sup = register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)
                 .component(ModDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
@@ -1261,7 +1261,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolSickle> sickle(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolSickle> sup = register("sickle_" + tier.getName(), () -> new ItemToolSickle(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SICKLES, t -> new ArrayList<>()).add(sup);
@@ -1270,7 +1270,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolHammer> hammerTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolHammer> sup = register("hammer_" + tier.getName(), () -> new ItemToolHammer(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
@@ -1279,7 +1279,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolAxe> axeTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolAxe> sup = register("axe_" + tier.getName(), () -> new ItemToolAxe(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
@@ -1288,7 +1288,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolFishingRod> fishingRod(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolFishingRod> sup = register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.RARE : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier).stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISHING_RODS, t -> new ArrayList<>()).add(sup);

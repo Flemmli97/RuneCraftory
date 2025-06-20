@@ -30,7 +30,7 @@ public abstract class LevelRendererMixin {
     private ClientLevel level;
 
     @WrapOperation(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
-    private Biome.Precipitation cacheBiomeSnowRain(Biome instance, BlockPos pos, Operation<Biome.Precipitation> origOp) {
+    private Biome.Precipitation checkSnowAndRain(Biome instance, BlockPos pos, Operation<Biome.Precipitation> origOp) {
         Biome.Precipitation original = origOp.call(instance, pos);
         if (original == Biome.Precipitation.RAIN && SeasonUtils.coldEnoughForSnowSeason(this.minecraft.level, pos, instance))
             return Biome.Precipitation.SNOW;
@@ -38,7 +38,7 @@ public abstract class LevelRendererMixin {
     }
 
     @WrapOperation(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
-    private Biome.Precipitation rainTickCheck(Biome instance, BlockPos pos, Operation<Biome.Precipitation> origOp) {
+    private Biome.Precipitation onRainTick(Biome instance, BlockPos pos, Operation<Biome.Precipitation> origOp) {
         Biome.Precipitation original = origOp.call(instance, pos);
         if (original == Biome.Precipitation.RAIN && SeasonUtils.coldEnoughForSnowSeason(this.minecraft.level, pos, instance))
             return Biome.Precipitation.SNOW;

@@ -52,7 +52,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener implements
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, Map<Item, ItemStat> props) {
-            buf.writeInt(props.size());
+            buf.writeVarInt(props.size());
             props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
                 ItemStat.STREAM_CODEC.encode(buf, prop);

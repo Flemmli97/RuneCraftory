@@ -22,15 +22,21 @@ import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -46,7 +52,7 @@ import java.util.stream.Stream;
 
 public class RunecraftoryCommand {
 
-    public static void reg(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void reg(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
         dispatcher.register(Commands.literal("runecraftory")
                 .then(Commands.literal("skill").requires(src -> src.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.players())
@@ -75,10 +81,10 @@ public class RunecraftoryCommand {
                 )
                 .then(Commands.literal("spell").requires(src -> src.hasPermission(2))
                         .then(Commands.literal("cast")
-                                .then(Commands.argument("spell", SpellArgumentType.spell()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, Set.of(ctx.getSource().getEntityOrException())))
+                                .then(Commands.argument("spell", ResourceArgument.resource(buildContext, ModSpells.SPELL_REGISTRY_KEY)).executes(ctx -> RunecraftoryCommand.castSpell(ctx, Set.of(ctx.getSource().getEntityOrException())))
                                         .then(Commands.argument("for", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, EntityArgument.getEntities(ctx, "as"))))))
                         .then(Commands.literal("apply")
-                                .then(Commands.argument("spell", SpellArgumentType.spell())
+                                .then(Commands.argument("spell", ResourceArgument.resource(buildContext, ModSpells.SPELL_REGISTRY_KEY))
                                         .then(Commands.argument("tier", IntegerArgumentType.integer(1, 3)).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, Set.of(ctx.getSource().getEntityOrException())))
                                                 .then(Commands.argument("for", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, EntityArgument.getEntities(ctx, "as")))))))
                 )
@@ -300,21 +306,23 @@ public class RunecraftoryCommand {
         return i;
     }
 
-    private static int castSpell(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) {
+    @SuppressWarnings("unchecked")
+    private static int castSpell(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
-        Spell spell = SpellArgumentType.getSpell(ctx, "spell");
+        Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity living) {
-                spell.use(living);
+                spell.value().use(living);
                 success++;
             }
         }
         return success;
     }
 
-    private static int applySpellTo(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) {
+    @SuppressWarnings("unchecked")
+    private static int applySpellTo(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
-        Spell spell = SpellArgumentType.getSpell(ctx, "spell");
+        Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
         int tier = IntegerArgumentType.getInteger(ctx, "tier");
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity living) {
@@ -322,9 +330,9 @@ public class RunecraftoryCommand {
                 if (stack.getItem() instanceof ItemStaffBase) {
                     StaffData data = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT);
                     stack.set(ModDataComponentTypes.STAFF.get(), switch (tier) {
-                        case 3 -> data.setTier3Spell(spell);
-                        case 2 -> data.setTier2Spell(spell);
-                        default -> data.setTier1Spell(spell);
+                        case 3 -> data.setTier3Spell(spell.value());
+                        case 2 -> data.setTier2Spell(spell.value());
+                        default -> data.setTier1Spell(spell.value());
                     });
                     success++;
                 }

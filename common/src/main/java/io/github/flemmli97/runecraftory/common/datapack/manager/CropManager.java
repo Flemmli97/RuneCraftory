@@ -48,7 +48,7 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, Map<Item, CropProperties> props) {
-            buf.writeInt(props.size());
+            buf.writeVarInt(props.size());
             props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
                 CropProperties.STREAM_CODEC.encode(buf, prop);

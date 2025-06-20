@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMixin implements PrevEntityPosition {
 
     @Unique
-    private double oldMPosX1, oldMPosX2;
+    private double runecraftory$oldMPosX1, runecraftory$oldMPosX2;
     @Unique
-    private double oldMPosY1, oldMPosY2;
+    private double runecraftory$oldMPosY1, runecraftory$oldMPosY2;
     @Unique
-    private double oldMPosZ1, oldMPosZ2;
+    private double runecraftory$oldMPosZ1, runecraftory$oldMPosZ2;
     @Unique
-    private boolean saveAt2;
+    private boolean runecraftory$saveAt2;
 
     @Inject(method = "updatePlayerPose", at = @At("HEAD"), cancellable = true)
     private void noPoseUpdate(CallbackInfo info) {
@@ -37,31 +37,31 @@ public abstract class PlayerMixin implements PrevEntityPosition {
     //Saving actually the last 2 positions of the player
     @Inject(method = "tick", at = @At("HEAD"))
     private void savePos(CallbackInfo info) {
-        if (this.saveAt2) {
-            this.oldMPosX2 = ((Player) (Object) this).getX();
-            this.oldMPosY2 = ((Player) (Object) this).getY();
-            this.oldMPosZ2 = ((Player) (Object) this).getZ();
-            this.saveAt2 = false;
+        if (this.runecraftory$saveAt2) {
+            this.runecraftory$oldMPosX2 = ((Player) (Object) this).getX();
+            this.runecraftory$oldMPosY2 = ((Player) (Object) this).getY();
+            this.runecraftory$oldMPosZ2 = ((Player) (Object) this).getZ();
+            this.runecraftory$saveAt2 = false;
         } else {
-            this.oldMPosX1 = ((Player) (Object) this).getX();
-            this.oldMPosY1 = ((Player) (Object) this).getY();
-            this.oldMPosZ1 = ((Player) (Object) this).getZ();
-            this.saveAt2 = true;
+            this.runecraftory$oldMPosX1 = ((Player) (Object) this).getX();
+            this.runecraftory$oldMPosY1 = ((Player) (Object) this).getY();
+            this.runecraftory$oldMPosZ1 = ((Player) (Object) this).getZ();
+            this.runecraftory$saveAt2 = true;
         }
     }
 
     @Override
     public double runecraftory$getOldPlayerX() {
-        return this.saveAt2 ? this.oldMPosX2 : this.oldMPosX1;
+        return this.runecraftory$saveAt2 ? this.runecraftory$oldMPosX2 : this.runecraftory$oldMPosX1;
     }
 
     @Override
     public double runecraftory$getOldPlayerY() {
-        return this.saveAt2 ? this.oldMPosY2 : this.oldMPosY1;
+        return this.runecraftory$saveAt2 ? this.runecraftory$oldMPosY2 : this.runecraftory$oldMPosY1;
     }
 
     @Override
     public double runecraftory$getOldPlayerZ() {
-        return this.saveAt2 ? this.oldMPosZ2 : this.oldMPosZ1;
+        return this.runecraftory$saveAt2 ? this.runecraftory$oldMPosZ2 : this.runecraftory$oldMPosZ1;
     }
 }

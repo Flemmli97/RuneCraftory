@@ -39,8 +39,8 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
     public static final StreamCodec<RegistryFriendlyByteBuf, Map<Item, FoodProperties>> CODEC = new StreamCodec<>() {
         @Override
         public Map<Item, FoodProperties> decode(RegistryFriendlyByteBuf buf) {
-            ImmutableMap.Builder<Item, FoodProperties> builder = ImmutableMap.builder();
             int size = buf.readVarInt();
+            ImmutableMap.Builder<Item, FoodProperties> builder = ImmutableMap.builder();
             for (int i = 0; i < size; i++)
                 builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), FoodProperties.STREAM_CODEC.decode(buf));
             return builder.build();
@@ -48,7 +48,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, Map<Item, FoodProperties> props) {
-            buf.writeInt(props.size());
+            buf.writeVarInt(props.size());
             props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
                 FoodProperties.STREAM_CODEC.encode(buf, prop);

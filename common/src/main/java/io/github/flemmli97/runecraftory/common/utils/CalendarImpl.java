@@ -5,11 +5,13 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 
@@ -76,18 +78,15 @@ public class CalendarImpl {
         this.nextForecast = nextDays;
     }
 
-    public void toPacket(FriendlyByteBuf buffer) {
-        buffer.writeInt(this.date);
-        buffer.writeEnum(this.day);
-        buffer.writeEnum(this.season);
-        buffer.writeEnum(this.currentWeather);
+    public CalendarSync getData() {
+        return new CalendarSync(this.date, this.day, this.season, this.currentWeather);
     }
 
-    public void fromPacket(FriendlyByteBuf buffer) {
-        this.date = buffer.readInt();
-        this.day = buffer.readEnum(EnumDay.class);
-        this.season = buffer.readEnum(EnumSeason.class);
-        this.currentWeather = buffer.readEnum(EnumWeather.class);
+    public void update(CalendarSync data) {
+        this.date = data.date();
+        this.day = data.day();
+        this.season = data.season();
+        this.currentWeather = data.currentWeather();
     }
 
     public void read(CompoundTag nbt) {
@@ -117,5 +116,15 @@ public class CalendarImpl {
         Arrays.stream(this.nextForecast).forEach(w -> next.add(StringTag.valueOf(w.toString())));
         nbt.put("NextForecast", next);
         return nbt;
+    }
+
+    public record CalendarSync(int date, EnumDay day, EnumSeason season, EnumWeather currentWeather) {
+
+        public static final StreamCodec<ByteBuf, CalendarSync> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.INT, CalendarSync::date,
+                ByteBufCodecs.idMapper(i -> EnumDay.values()[i], Enum::ordinal), CalendarSync::day,
+                ByteBufCodecs.idMapper(i -> EnumSeason.values()[i], Enum::ordinal), CalendarSync::season,
+                ByteBufCodecs.idMapper(i -> EnumWeather.values()[i], Enum::ordinal), CalendarSync::currentWeather,
+                CalendarSync::new);
     }
 }

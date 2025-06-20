@@ -13,21 +13,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ItemEntityMixin {
 
     @Unique
-    private boolean hitSomething;
+    private boolean runecraftory$hitSomething;
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void checkEntityCollision(CallbackInfo info) {
-        if (!this.hitSomething && !((ItemEntity) (Object) this).onGround())
-            this.hitSomething = MixinUtils.handleEntityCollision(((ItemEntity) (Object) this));
+        if (!this.runecraftory$hitSomething && !((ItemEntity) (Object) this).onGround())
+            this.runecraftory$hitSomething = MixinUtils.handleEntityCollision(((ItemEntity) (Object) this));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
     private void saveHit(CompoundTag tag, CallbackInfo info) {
-        tag.putBoolean("HitSomething", this.hitSomething);
+        tag.putBoolean("HitSomething", this.runecraftory$hitSomething);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void readHit(CompoundTag tag, CallbackInfo info) {
-        this.hitSomething = tag.getBoolean("HitSomething");
+        this.runecraftory$hitSomething = tag.getBoolean("HitSomething");
     }
 }

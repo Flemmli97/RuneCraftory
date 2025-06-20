@@ -2,6 +2,9 @@ package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+
+import java.util.Map;
 
 public class LibConstants {
 
@@ -22,10 +25,11 @@ public class LibConstants {
 
     public static final ResourceLocation STEP_UP_TEMP = RuneCraftory.modRes("step_buff_temp");
 
-    public static final ResourceLocation[] EQUIPMENT_MODIFIERS = new ResourceLocation[]{RuneCraftory.modRes("a86e87f5-2f4a-4105-9d8b-1f29fed2f67e"),
-            RuneCraftory.modRes("0f1dc59e-c82b-4765-a651-de69152440fc"),
-            RuneCraftory.modRes("bb429d9c-ade1-4fe8-b914-5f1196ad9fa6"),
-            RuneCraftory.modRes("88969886-531e-4141-9087-ef8340f8216c"),
-            RuneCraftory.modRes("6fec8873-50b8-40d5-b8b9-94e06ef68c11"),
-            RuneCraftory.modRes("fea154ab-3e7c-4d01-9e4e-18e515d37e57")};
+    public static final Map<EquipmentSlot, ResourceLocation> EQUIPMENT_MODIFIERS = Map.of(
+            EquipmentSlot.MAINHAND, RuneCraftory.modRes("a86e87f5-2f4a-4105-9d8b-1f29fed2f67e"),
+            EquipmentSlot.OFFHAND, RuneCraftory.modRes("0f1dc59e-c82b-4765-a651-de69152440fc"),
+            EquipmentSlot.HEAD, RuneCraftory.modRes("bb429d9c-ade1-4fe8-b914-5f1196ad9fa6"),
+            EquipmentSlot.CHEST, RuneCraftory.modRes("88969886-531e-4141-9087-ef8340f8216c"),
+            EquipmentSlot.LEGS, RuneCraftory.modRes("6fec8873-50b8-40d5-b8b9-94e06ef68c11"),
+            EquipmentSlot.FEET, RuneCraftory.modRes("fea154ab-3e7c-4d01-9e4e-18e515d37e57"));
 }

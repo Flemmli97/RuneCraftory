@@ -42,7 +42,8 @@
     "StructureTemplateMixin",
     "StructureTemplatePoolMixin",
     "TargetingConditionsMixin",
-    "TreeFeatureMixin"
+    "TreeFeatureMixin",
+    "PacketDecoderMixin"
   ],
   "client": [
     "AtlasMixin",

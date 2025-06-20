@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public record StaffData(Optional<Spell> tier1, Optional<Spell> tier2, Optional<Spell> tier3, int chargeTime) {
 
-    public static final StaffData DEFAULT = new StaffData(null, null, null, 0);
+    public static final StaffData DEFAULT = new StaffData(Optional.empty(), Optional.empty(), Optional.empty(), 0);
     public static final Codec<StaffData> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("first_spell").forGetter(StaffData::tier1),
                     ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("second_spell").forGetter(StaffData::tier2),

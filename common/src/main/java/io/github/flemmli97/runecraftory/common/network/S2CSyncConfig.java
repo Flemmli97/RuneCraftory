@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.network;
 
+import com.mojang.datafixers.types.Type;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ServerValue;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,6 +19,7 @@ public class S2CSyncConfig implements CustomPacketPayload {
         public S2CSyncConfig decode(RegistryFriendlyByteBuf buf) {
             S2CSyncConfig pkt = new S2CSyncConfig();
             pkt.buf = new FriendlyByteBuf(buf.copy());
+            buf.clear();
             return pkt;
         }
 

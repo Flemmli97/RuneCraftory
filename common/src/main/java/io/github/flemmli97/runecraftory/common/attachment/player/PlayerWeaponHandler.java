@@ -62,9 +62,9 @@ public class PlayerWeaponHandler implements AttackActionHandler {
                 return true;
             }
             action.onSetup(this.entity, this);
-            this.setAnimationBasedOnState(action, -1, true);
             this.store(DataKey.USED_WEAPON, stack);
             this.store(DataKey.USED_SPELL, spell);
+            this.setAnimationBasedOnState(action, -1, true);
             return true;
         }
         return false;

@@ -415,7 +415,7 @@
           ]
         },
         {
-          "name": "riderPos",
+          "name": "ridingPos",
           "parent": "body",
           "pivot": [0, 10, -3.5]
         }

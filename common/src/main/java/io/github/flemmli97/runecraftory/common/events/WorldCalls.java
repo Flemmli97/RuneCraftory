@@ -1,12 +1,9 @@
 package io.github.flemmli97.runecraftory.common.events;
 
-import com.mojang.brigadier.CommandDispatcher;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -15,10 +12,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class WorldCalls {
-
-    public static void command(CommandDispatcher<CommandSourceStack> dispatcher) {
-        RunecraftoryCommand.reg(dispatcher);
-    }
 
 //    public static void addFeatures(BiConsumer<GenerationStep.Decoration, Holder<PlacedFeature>> cons, Biome.BiomeCategory category) {
 //        switch (category) {

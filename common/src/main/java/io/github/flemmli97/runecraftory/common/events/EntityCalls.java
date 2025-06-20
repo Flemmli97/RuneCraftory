@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
@@ -27,7 +28,6 @@ import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -50,6 +50,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -157,10 +158,8 @@ public class EntityCalls {
             if (entry.getKey().getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                 ItemStack now = entry.getValue();
                 ItemStack last = lastArmor.apply(entry.getKey());
-                if (last.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
-                    last.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(last, e -> e.onRemove(entity, last));
-                if (now.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
-                    now.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(last, e -> e.onEquip(entity, now));
+                ArmorEffect.runArmorEffectFor(last, effect -> effect.onRemove(entity, last));
+                ArmorEffect.runArmorEffectFor(now, effect -> effect.onEquip(entity, now));
             }
         }
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
@@ -182,8 +181,11 @@ public class EntityCalls {
         if (!hasWeapon) {
             AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
             if (inst != null)
-                for (EquipmentSlot slot : EquipmentSlot.values())
-                    inst.removeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()]);
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    ResourceLocation id = LibConstants.EQUIPMENT_MODIFIERS.get(slot);
+                    if (id != null)
+                        inst.removeModifier(id);
+                }
         }
     }
 
@@ -357,8 +359,7 @@ public class EntityCalls {
             if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR)
                 continue;
             ItemStack stack = entity.getItemBySlot(slot);
-            if (!stack.isEmpty() && stack.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
-                stack.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(stack, e -> e.onTick(entity, stack));
+            ArmorEffect.runArmorEffectFor(stack, effect -> effect.onTick(entity, stack));
         }
         if (entity instanceof Mob mob) {
             boolean disabled = EntityUtils.isDisabled(mob);

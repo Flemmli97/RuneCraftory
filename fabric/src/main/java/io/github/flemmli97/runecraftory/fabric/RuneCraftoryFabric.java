@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.fabric;
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
+import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -11,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorMaterials;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -150,7 +152,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         });
 
         //WorldCalls
-        CommandRegistrationCallback.EVENT.register(((dispatcher, ctx, selection) -> WorldCalls.command(dispatcher)));
+        CommandRegistrationCallback.EVENT.register(((dispatcher, ctx, selection) -> RunecraftoryCommand.reg(dispatcher, ctx)));
 //        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), d, feature.unwrapKey().get())),
 //                Biome.BiomeCategory.THEEND);
 //        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), d, feature.unwrapKey().get())),
@@ -201,6 +203,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModNPCLooks.NPC_FEATURES.register().registerContent();
         ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent();
         ModNPCJobs.JOBS.register().registerContent();
+        ModArmorMaterials.MATERIALS.registerContent();
 
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();

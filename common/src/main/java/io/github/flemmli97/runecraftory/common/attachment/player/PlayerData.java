@@ -154,7 +154,7 @@ public class PlayerData {
     }
 
     public int getMaxRunePoints() {
-        return (int) (this.runePointsMax + this.foodBuffs.getOrDefault(ModAttributes.MAX_RUNEPOINTS.get(), 0d));
+        return (int) (this.runePointsMax + this.foodBuffs.getOrDefault(ModAttributes.MAX_RUNEPOINTS.asHolder(), 0d));
     }
 
     public float getMaxRunePointsRaw() {
@@ -438,11 +438,11 @@ public class PlayerData {
         if (att == Attributes.ATTACK_DAMAGE) {
             val += this.getStr() + this.strAdd;
         }
-        if (att == ModAttributes.MAGIC_ATTACK.get())
+        if (att.value() == ModAttributes.MAGIC_ATTACK.get())
             val += this.getIntel() + this.intAdd;
-        if (att == ModAttributes.DEFENCE.get())
+        if (att.value() == ModAttributes.DEFENCE.get())
             val += vit * 0.5;
-        if (att == ModAttributes.MAGIC_DEFENCE.get())
+        if (att.value() == ModAttributes.MAGIC_DEFENCE.get())
             val += vit * 0.5;
         val += this.foodBuffs.getOrDefault(att, 0d);
 

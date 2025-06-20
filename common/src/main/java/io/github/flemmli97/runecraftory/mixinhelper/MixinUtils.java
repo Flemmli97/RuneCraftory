@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -121,8 +120,7 @@ public class MixinUtils {
             if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR)
                 continue;
             ItemStack stack = living.getItemBySlot(slot);
-            if (!stack.isEmpty() && stack.has(ModDataComponentTypes.ARMOR_EFFECT.get()))
-                stack.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(stack, e -> e.onStep(living, stack));
+            ArmorEffect.runArmorEffectFor(stack, effect -> effect.onStep(living, stack));
         }
     }
 }

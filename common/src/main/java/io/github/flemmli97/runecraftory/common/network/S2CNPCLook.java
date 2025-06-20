@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.network;
 
+import com.mojang.datafixers.types.Type;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -12,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class S2CNPCLook implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<S2CNPCLook> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("c2s_dialogue_action"));
+    public static final CustomPacketPayload.Type<S2CNPCLook> TYPE = new CustomPacketPayload.Type<>(RuneCraftory.modRes("c2s_npc_look"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CNPCLook> STREAM_CODEC = new StreamCodec<>() {
         @Override

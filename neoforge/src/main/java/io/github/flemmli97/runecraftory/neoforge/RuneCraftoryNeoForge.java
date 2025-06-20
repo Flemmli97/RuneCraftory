@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.ModArmorMaterials;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -103,6 +104,7 @@ public class RuneCraftoryNeoForge {
         ModParticles.PARTICLES.registerContent(modBus);
         ModActivities.ACTIVITIES.registerContent(modBus);
         ModPoiTypes.POI.registerContent(modBus);
+        ModArmorMaterials.MATERIALS.registerContent(modBus);
 
         ModNPCActions.ACTIONS.register().registerContent(modBus);
         ModAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);

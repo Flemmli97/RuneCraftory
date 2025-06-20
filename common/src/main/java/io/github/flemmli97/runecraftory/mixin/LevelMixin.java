@@ -15,21 +15,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LevelMixin implements LevelSnapshotHandler {
 
     @Unique
-    private final LevelSetBlockSnapshot runecraftory_level_snapshot = new LevelSetBlockSnapshot((Level) (Object) this);
+    private final LevelSetBlockSnapshot runecraftory$levelSnapshot = new LevelSetBlockSnapshot((Level) (Object) this);
 
     @Inject(method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getChunkAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;"), cancellable = true)
     private void handleSetBlock(BlockPos pos, BlockState state, int flags, int recursionLeft, CallbackInfoReturnable<Boolean> info) {
-        if (this.runecraftory_level_snapshot.isTakingSnapshot()) {
-            this.runecraftory_level_snapshot.appendBlockSnapshot(new LevelSetBlockSnapshot.BlockSnapshot(state, pos instanceof BlockPos.MutableBlockPos ? pos.immutable() : pos, flags));
+        if (this.runecraftory$levelSnapshot.isTakingSnapshot()) {
+            this.runecraftory$levelSnapshot.appendBlockSnapshot(new LevelSetBlockSnapshot.BlockSnapshot(state, pos instanceof BlockPos.MutableBlockPos ? pos.immutable() : pos, flags));
             info.setReturnValue(false);
         }
     }
 
     @Inject(method = "getBlockState", at = @At("HEAD"), cancellable = true)
     private void handleGetBlock(BlockPos pos, CallbackInfoReturnable<BlockState> info) {
-        if (this.runecraftory_level_snapshot.isTakingSnapshot()) {
-            BlockState state = this.runecraftory_level_snapshot.getBlockState(pos);
+        if (this.runecraftory$levelSnapshot.isTakingSnapshot()) {
+            BlockState state = this.runecraftory$levelSnapshot.getBlockState(pos);
             if (state != null)
                 info.setReturnValue(state);
         }
@@ -37,6 +37,6 @@ public abstract class LevelMixin implements LevelSnapshotHandler {
 
     @Override
     public LevelSetBlockSnapshot runecraftory$getSnapshotHandler() {
-        return this.runecraftory_level_snapshot;
+        return this.runecraftory$levelSnapshot;
     }
 }

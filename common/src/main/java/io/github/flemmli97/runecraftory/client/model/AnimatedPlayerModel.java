@@ -50,7 +50,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
             this.rightLeg = model.getPart("RightLeg");
             this.leftLeg = model.getPart("LeftLeg");
         });
-        this.anim = AnimationManager.getInstance().getAnimation(RuneCraftory.modRes("player"));
+        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override

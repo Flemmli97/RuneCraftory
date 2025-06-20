@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.neoforge.event;
 
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
+import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,7 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void command(RegisterCommandsEvent event) {
-        WorldCalls.command(event.getDispatcher());
+        RunecraftoryCommand.reg(event.getDispatcher(), event.getBuildContext());
     }
 
 //    @SubscribeEvent

@@ -75,8 +75,9 @@ public class EntityWooly extends LeapingMonster {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(SPAWNSHEARED, this.getRandom().nextFloat() < 0.05);
-        builder.define(SHEARED, this.entityData.get(SPAWNSHEARED));
+        boolean sheared = this.getRandom().nextFloat() < 0.05;
+        builder.define(SPAWNSHEARED, sheared);
+        builder.define(SHEARED, sheared);
     }
 
     @Override
