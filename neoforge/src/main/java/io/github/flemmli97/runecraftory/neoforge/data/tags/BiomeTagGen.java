@@ -41,6 +41,9 @@ public class BiomeTagGen extends TagsProvider<Biome> {
         this.tag(RunecraftoryTags.Biomes.GENERAL_HERBS).addOptionalTag(RunecraftoryTags.Biomes.IS_MAGICAL.location()).addTag(RunecraftoryTags.Biomes.IS_LUSH).addTag(RunecraftoryTags.Biomes.IS_DENSE_VEGETATION_OVERWORLD).addTag(RunecraftoryTags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_HILL);
 
+        this.tag(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS)
+                .addTag(BiomeTags.IS_OVERWORLD).addTag(BiomeTags.IS_NETHER).addTag(BiomeTags.IS_END);
+
         this.tag(RunecraftoryTags.Biomes.FOREST_GROVE).addTag(BiomeTags.IS_FOREST);
         this.tag(RunecraftoryTags.Biomes.WATER_RUINS).addTag(BiomeTags.IS_OCEAN);
         this.tag(RunecraftoryTags.Biomes.THEATER_RUINS).addTag(RunecraftoryTags.Biomes.IS_SPOOKY);

@@ -1,0 +1,25 @@
+{
+  "type": "runecraftory:mineral_feature",
+  "config": {
+    "amount": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "biomes": {
+      "black_list": "runecraftory:water_nether_end"
+    },
+    "radius": 4,
+    "state_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "runecraftory:ore_tin",
+        "Properties": {
+          "facing": "north",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "tries": 32
+  }
+}

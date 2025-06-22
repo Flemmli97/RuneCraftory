@@ -159,7 +159,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         //WorldCalls
         CommandRegistrationCallback.EVENT.register(((dispatcher, ctx, selection) -> RunecraftoryCommand.reg(dispatcher, ctx)));
         WorldRegistrationCalls.createFeatures(null, feat ->
-                BiomeModifications.addFeature(ctx -> feat.tag().map(tag -> ctx.getBiomeRegistryEntry().is(tag)).orElse(true),
+                BiomeModifications.addFeature(ctx -> ctx.getBiomeRegistryEntry().is(feat.tag()),
                         feat.decoration(), ResourceKey.create(Registries.PLACED_FEATURE, feat.placedFeature())));
         MobSpawnSettings.SpawnerData gateSetting = WorldRegistrationCalls.gateSetting();
         BiomeModifications.addSpawn(t -> true, gateSetting.type.getCategory(), gateSetting.type, gateSetting.getWeight().asInt(), gateSetting.minCount, gateSetting.maxCount);

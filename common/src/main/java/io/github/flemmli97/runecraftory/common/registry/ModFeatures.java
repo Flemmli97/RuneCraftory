@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.world.features.HerbFeature;
+import io.github.flemmli97.runecraftory.common.world.features.BiomeFilteredRandomFeature;
 import io.github.flemmli97.runecraftory.common.world.features.MineralFeature;
+import io.github.flemmli97.runecraftory.common.world.features.config.BiomeFilteredConfig;
 import io.github.flemmli97.runecraftory.common.world.features.config.ChancedBlockClusterConfig;
-import io.github.flemmli97.runecraftory.common.world.features.config.HerbFeatureConfig;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -20,7 +20,7 @@ public class ModFeatures {
     public static final LoaderRegister<TreeDecoratorType<?>> TREE_DECORATORS = LoaderRegistryAccess.INSTANCE.of(Registries.TREE_DECORATOR_TYPE, RuneCraftory.MODID);
 
     public static final RegistryEntrySupplier<Feature<?>, MineralFeature> MINERAL_FEATURE = FEATURES.register("mineral_feature", () -> new MineralFeature(ChancedBlockClusterConfig.CODEC));
-    public static final RegistryEntrySupplier<Feature<?>, HerbFeature> HERB_FEATURE = FEATURES.register("herb_feature", () -> new HerbFeature(HerbFeatureConfig.CODEC));
+    public static final RegistryEntrySupplier<Feature<?>, BiomeFilteredRandomFeature> BIOME_FILTERED_RANDOM_FEATURES = FEATURES.register("biome_filtered_random_features", () -> new BiomeFilteredRandomFeature(BiomeFilteredConfig.CODEC));
 //    public static final RegistryEntrySupplier<Feature<?>, FruitTreeSproutFeature> FRUIT_SPROUT = FEATURES.register("fruit_tree_sprout", () -> new FruitTreeSproutFeature(FruitTreeSproutConfiguration.CODEC));
 //
 //    public static final RegistryEntrySupplier<TrunkPlacerType<?>, TrunkPlacerType<?>> FRUIT_TRUNK_PLACER = TRUNK_PLACER.register("fruit_tree_trunk", () -> createTrunkPlacerType(FruitTreeTrunkPlacer.CODEC));

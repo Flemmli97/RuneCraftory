@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,9 +39,7 @@ import java.util.stream.Stream;
 public class FilterHolderSet<T> implements HolderSet<T> {
 
     public static MapCodec<Structure.StructureSettings> FILTERED_CODEC = RecordCodecBuilder.mapCodec((instance) ->
-            instance.group(codec(Registries.BIOME, Biome.CODEC, false).fieldOf("biomes")
-                            .forGetter(x -> x.biomes() instanceof FilterHolderSet<Biome> filterHolderSet
-                                    ? filterHolderSet : new FilterHolderSet<>(x.biomes(), HolderSet.empty())),
+            instance.group(codec(Registries.BIOME, Biome.CODEC, false).fieldOf("biomes").forGetter(Structure.StructureSettings::biomes),
                     Codec.simpleMap(MobCategory.CODEC, StructureSpawnOverride.CODEC, StringRepresentable.keys(MobCategory.values()))
                             .fieldOf("spawn_overrides").forGetter(Structure.StructureSettings::spawnOverrides),
                     GenerationStep.Decoration.CODEC.fieldOf("step").forGetter(Structure.StructureSettings::step),
@@ -48,12 +47,14 @@ public class FilterHolderSet<T> implements HolderSet<T> {
                             .forGetter(Structure.StructureSettings::terrainAdaptation)
             ).apply(instance, Structure.StructureSettings::new));
 
-    public static <T> MapCodec<FilterHolderSet<T>> codec(ResourceKey<? extends Registry<T>> registryKey, Codec<Holder<T>> holderCodec, boolean forceList) {
-        return RecordCodecBuilder.mapCodec(
+    public static <T> MapCodec<HolderSet<T>> codec(ResourceKey<? extends Registry<T>> registryKey, Codec<Holder<T>> holderCodec, boolean forceList) {
+        return RecordCodecBuilder.<FilterHolderSet<T>>mapCodec(
                 builder -> builder
                         .group(HolderSetCodec.create(registryKey, holderCodec, forceList).fieldOf("base").forGetter(FilterHolderSet::base),
                                 HolderSetCodec.create(registryKey, holderCodec, forceList).fieldOf("filter").forGetter(FilterHolderSet::filter))
-                        .apply(builder, FilterHolderSet::new));
+                        .apply(builder, FilterHolderSet::new))
+                .xmap(Function.identity(), h -> h instanceof FilterHolderSet<T> filterHolderSet
+                        ? filterHolderSet : new FilterHolderSet<>(h, HolderSet.empty()));
     }
 
     private final HolderSet<T> base;

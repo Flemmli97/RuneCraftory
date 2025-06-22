@@ -283,7 +283,9 @@ public class RunecraftoryTags {
         public static final TagKey<Biome> YELLOW_GEN = biome("yellow_gen");
         public static final TagKey<Biome> ORANGE_GEN = biome("orange_gen");
         public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
-        public static final TagKey<Biome> GENERAL_HERBS = biome("herb_tree_biomes");
+        public static final TagKey<Biome> GENERAL_HERBS = biome("general_herbs");
+
+        public static final TagKey<Biome> VANILLA_DIMENSIONS = biome("vanilla_dimensions");
 
         // Structure gen tags
         public static final TagKey<Biome> FOREST_GROVE = biome("forest_grove");

@@ -1,0 +1,16 @@
+{
+  "feature": "runecraftory:mineral_tin",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 5
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 20
+    },
+    {
+      "type": "minecraft:in_square"
+    }
+  ]
+}

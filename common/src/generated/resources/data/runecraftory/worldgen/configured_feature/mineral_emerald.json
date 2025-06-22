@@ -1,0 +1,26 @@
+{
+  "type": "runecraftory:mineral_feature",
+  "config": {
+    "amount": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "biomes": {
+      "black_list": "runecraftory:water_nether_end",
+      "white_list": "runecraftory:emerald_gen"
+    },
+    "radius": 4,
+    "state_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "runecraftory:ore_emerald",
+        "Properties": {
+          "facing": "north",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "tries": 32
+  }
+}

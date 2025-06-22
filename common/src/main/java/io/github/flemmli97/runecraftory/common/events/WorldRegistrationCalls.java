@@ -6,21 +6,30 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.world.features.config.BiomeFilteredConfig;
 import io.github.flemmli97.runecraftory.common.world.features.config.ChancedBlockClusterConfig;
-import io.github.flemmli97.runecraftory.common.world.features.config.HerbFeatureConfig;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -29,32 +38,31 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class WorldRegistrationCalls {
 
-    public static List<HerbFeatureConfig.HerbEntry> defaultHerbEntries(HolderLookup.Provider provider) {
-        ImmutableList.Builder<HerbFeatureConfig.HerbEntry> builder = new ImmutableList.Builder<>();
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.WEEDS.get(), provider, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 100));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.MUSHROOM.get(), provider, RunecraftoryTags.Biomes.MUSHROOM_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 40));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.MONARCH_MUSHROOM.get(), provider, RunecraftoryTags.Biomes.MUSHROOM_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 10));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.WITHERED_GRASS.get(), provider, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 50));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.WHITE_GRASS.get(), provider, RunecraftoryTags.Biomes.IS_SNOWY, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.INDIGO_GRASS.get(), provider, RunecraftoryTags.Biomes.INDIGO_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.PURPLE_GRASS.get(), provider, RunecraftoryTags.Biomes.PURPLE_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.GREEN_GRASS.get(), provider, RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.BLUE_GRASS.get(), provider, RunecraftoryTags.Biomes.BLUE_GEN, RunecraftoryTags.Biomes.NETHER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.YELLOW_GRASS.get(), provider, RunecraftoryTags.Biomes.YELLOW_GEN, RunecraftoryTags.Biomes.WATER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.RED_GRASS.get(), provider, BiomeTags.IS_NETHER, null, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.ORANGE_GRASS.get(), provider, RunecraftoryTags.Biomes.ORANGE_GEN, RunecraftoryTags.Biomes.WATER_END, 30));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.BLACK_GRASS.get(), provider, BiomeTags.IS_END, null, 75));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.ELLI_LEAVES.get(), provider, BiomeTags.IS_END, null, 10));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.ANTIDOTE_GRASS.get(), provider, RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 75));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.MEDICINAL_HERB.get(), provider, RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 75));
-        builder.add(new HerbFeatureConfig.HerbEntry(ModBlocks.BAMBOO_SPROUT.get(), provider, RunecraftoryTags.Biomes.BAMBOO_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 66));
+    public static List<HerbFeatureEntry> defaultHerbEntries() {
+        ImmutableList.Builder<HerbFeatureEntry> builder = new ImmutableList.Builder<>();
+        builder.add(new HerbFeatureEntry(ModBlocks.WEEDS, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 100));
+        builder.add(new HerbFeatureEntry(ModBlocks.MUSHROOM, RunecraftoryTags.Biomes.MUSHROOM_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 40));
+        builder.add(new HerbFeatureEntry(ModBlocks.MONARCH_MUSHROOM, RunecraftoryTags.Biomes.MUSHROOM_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 10));
+        builder.add(new HerbFeatureEntry(ModBlocks.WITHERED_GRASS, null, RunecraftoryTags.Biomes.WATER_NETHER_END, 50));
+        builder.add(new HerbFeatureEntry(ModBlocks.WHITE_GRASS, RunecraftoryTags.Biomes.IS_SNOWY, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.INDIGO_GRASS, RunecraftoryTags.Biomes.INDIGO_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.PURPLE_GRASS, RunecraftoryTags.Biomes.PURPLE_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.GREEN_GRASS, RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.BLUE_GRASS, RunecraftoryTags.Biomes.BLUE_GEN, RunecraftoryTags.Biomes.NETHER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.YELLOW_GRASS, RunecraftoryTags.Biomes.YELLOW_GEN, RunecraftoryTags.Biomes.WATER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.RED_GRASS, BiomeTags.IS_NETHER, null, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.ORANGE_GRASS, RunecraftoryTags.Biomes.ORANGE_GEN, RunecraftoryTags.Biomes.WATER_END, 30));
+        builder.add(new HerbFeatureEntry(ModBlocks.BLACK_GRASS, BiomeTags.IS_END, null, 75));
+        builder.add(new HerbFeatureEntry(ModBlocks.ELLI_LEAVES, BiomeTags.IS_END, null, 10));
+        builder.add(new HerbFeatureEntry(ModBlocks.ANTIDOTE_GRASS, RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 75));
+        builder.add(new HerbFeatureEntry(ModBlocks.MEDICINAL_HERB, RunecraftoryTags.Biomes.GENERAL_HERBS, RunecraftoryTags.Biomes.WATER_NETHER_END, 75));
+        builder.add(new HerbFeatureEntry(ModBlocks.BAMBOO_SPROUT, RunecraftoryTags.Biomes.BAMBOO_GEN, RunecraftoryTags.Biomes.WATER_NETHER_END, 66));
         return builder.build();
     }
 
@@ -67,9 +75,23 @@ public class WorldRegistrationCalls {
                                       Consumer<FeatureBiomeModifier> placedFeatureHandler) {
         ResourceLocation herbs = RuneCraftory.modRes("herb_feature");
         if (register != null) {
+            List<HerbFeatureEntry> herbEntries = defaultHerbEntries();
+            herbEntries.forEach(entry -> {
+                register.registerConfigured(entry.getId(),
+                        provider -> new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(64, 8, 8,
+                                Holder.direct(new PlacedFeature(Holder.direct(new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                                        new SimpleBlockConfiguration(BlockStateProvider.simple(entry.block().get()))
+                                )), List.of(BlockPredicateFilter.forPredicate(BlockPredicate.matchesTag(BlockTags.AIR))))))));
+            });
             register.registerConfigured(herbs,
-                    provider -> new ConfiguredFeature<>(ModFeatures.HERB_FEATURE.get(),
-                            new HerbFeatureConfig(70, 8, 9, defaultHerbEntries(provider))));
+                    provider -> {
+                        List<BiomeFilteredConfig.BiomeFilteredEntry> filtered = herbEntries.stream().map(entry ->
+                                new BiomeFilteredConfig.BiomeFilteredEntry(Holder.direct(
+                                        new PlacedFeature(Holder.Reference.createStandAlone(provider.lookupOrThrow(Registries.CONFIGURED_FEATURE),
+                                                ResourceKey.create(Registries.CONFIGURED_FEATURE, entry.getId())), List.of())),
+                                        entry.whiteList(), entry.blackList(), entry.weight())).toList();
+                        return new ConfiguredFeature<>(ModFeatures.BIOME_FILTERED_RANDOM_FEATURES.get(), new BiomeFilteredConfig(filtered));
+                    });
             register.registerPlaced(herbs,
                     (provider, feat) -> new PlacedFeature(feat, List.of(RarityFilter.onAverageOnceEvery(4),
                             InSquarePlacement.spread(),
@@ -93,12 +115,14 @@ public class WorldRegistrationCalls {
         placedFeatures.forEach(placedFeatureHandler);
     }
 
-    private static List<FeatureBiomeModifier> registerMineralFeatures(@Nullable FeatureRegister register, RegistryEntrySupplier<Block, ?> block, TagKey<Biome> whitelist, TagKey<Biome> blacklist, int chance, int min, int max) {
-        ResourceLocation id = RuneCraftory.modRes("mineral_feature_" + block.getID().getPath().replace("ore_", ""));
+    private static List<FeatureBiomeModifier> registerMineralFeatures(@Nullable FeatureRegister register, RegistryEntrySupplier<Block, ?> block,
+                                                                      TagKey<Biome> whitelist, TagKey<Biome> blacklist,
+                                                                      int chance, int min, int max) {
+        ResourceLocation id = RuneCraftory.modRes("mineral_" + block.getID().getPath().replace("ore_", ""));
         ResourceLocation netherID = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + "_nether");
         if (register != null) {
             register.registerConfigured(id, provider -> new ConfiguredFeature<>(ModFeatures.MINERAL_FEATURE.get(),
-                    new ChancedBlockClusterConfig(block.get(), provider, whitelist, blacklist, UniformInt.of(min, max), 3, 64)));
+                    new ChancedBlockClusterConfig(block.get(), whitelist, blacklist, UniformInt.of(min, max), 4, 32)));
             register.registerPlaced(id, (provider, feat) -> new PlacedFeature(feat, List.of(
                     RarityFilter.onAverageOnceEvery(chance),
                     InSquarePlacement.spread(),
@@ -111,7 +135,7 @@ public class WorldRegistrationCalls {
             )));
         }
         return List.of(FeatureBiomeModifier.of(id),
-                new FeatureBiomeModifier(Optional.of(BiomeTags.IS_NETHER), GenerationStep.Decoration.VEGETAL_DECORATION, netherID));
+                new FeatureBiomeModifier(BiomeTags.IS_NETHER, GenerationStep.Decoration.VEGETAL_DECORATION, netherID));
     }
 
     public static MobSpawnSettings.SpawnerData gateSetting() {
@@ -129,11 +153,19 @@ public class WorldRegistrationCalls {
         void registerPlaced(ResourceLocation id, ResourceLocation configuredID, BiFunction<HolderLookup.Provider, Holder<ConfiguredFeature<?, ?>>, PlacedFeature> placed);
     }
 
-    public record FeatureBiomeModifier(Optional<TagKey<Biome>> tag, GenerationStep.Decoration decoration,
+    public record FeatureBiomeModifier(TagKey<Biome> tag, GenerationStep.Decoration decoration,
                                        ResourceLocation placedFeature) {
 
         public static FeatureBiomeModifier of(ResourceLocation id) {
-            return new FeatureBiomeModifier(Optional.empty(), GenerationStep.Decoration.VEGETAL_DECORATION, id);
+            return new FeatureBiomeModifier(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS, GenerationStep.Decoration.VEGETAL_DECORATION, id);
+        }
+    }
+
+    public record HerbFeatureEntry(RegistryEntrySupplier<Block, ?> block, TagKey<Biome> whiteList,
+                                   TagKey<Biome> blackList, int weight) {
+
+        public ResourceLocation getId() {
+            return RuneCraftory.modRes(this.block.getID().getPath());
         }
     }
 }

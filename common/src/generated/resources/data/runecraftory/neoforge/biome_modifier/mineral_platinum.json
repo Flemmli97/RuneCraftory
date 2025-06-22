@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
   "biomes": "#runecraftory:vanilla_dimensions",
-  "features": "runecraftory:herb_feature",
+  "features": "runecraftory:mineral_platinum",
   "step": "vegetal_decoration"
 }

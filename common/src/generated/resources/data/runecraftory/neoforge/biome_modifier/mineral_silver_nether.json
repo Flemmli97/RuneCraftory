@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "runecraftory:mineral_silver_nether",
+  "step": "vegetal_decoration"
+}
