@@ -38,8 +38,8 @@ dependencies {
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
 //    //modRuntimeOnly "mezz.jei:jei-1.18.2-fabric:${jei_version}"
 //
-//    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
-//
+    modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.7-fabric"
+
     modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-fabric") {
         transitive = false
     }

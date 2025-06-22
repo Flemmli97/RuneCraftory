@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:leon_karnak",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

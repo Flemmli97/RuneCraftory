@@ -284,6 +284,17 @@ public class RunecraftoryTags {
         public static final TagKey<Biome> ORANGE_GEN = biome("orange_gen");
         public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
         public static final TagKey<Biome> GENERAL_HERBS = biome("herb_tree_biomes");
+
+        // Structure gen tags
+        public static final TagKey<Biome> FOREST_GROVE = biome("forest_grove");
+        public static final TagKey<Biome> WATER_RUINS = biome("water_ruins");
+        public static final TagKey<Biome> THEATER_RUINS = biome("theater_ruins");
+        public static final TagKey<Biome> PLAINS_ARENA = biome("plains_arena");
+        public static final TagKey<Biome> DESERT_ARENA = biome("desert_arena");
+        public static final TagKey<Biome> NETHER_ARENA = biome("nether_arena");
+        public static final TagKey<Biome> WIND_SHRINE = biome("wind_shrine");
+        public static final TagKey<Biome> LEON_KARNAK = biome("leon_karnak");
+
     }
 
     public static class Fluids {

@@ -40,5 +40,14 @@ public class BiomeTagGen extends TagsProvider<Biome> {
         this.tag(RunecraftoryTags.Biomes.BAMBOO_GEN).addTag(BiomeTags.IS_JUNGLE).addTag(RunecraftoryTags.Biomes.IS_LUSH).addTag(RunecraftoryTags.Biomes.IS_DENSE_VEGETATION_OVERWORLD);
         this.tag(RunecraftoryTags.Biomes.GENERAL_HERBS).addOptionalTag(RunecraftoryTags.Biomes.IS_MAGICAL.location()).addTag(RunecraftoryTags.Biomes.IS_LUSH).addTag(RunecraftoryTags.Biomes.IS_DENSE_VEGETATION_OVERWORLD).addTag(RunecraftoryTags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_HILL);
+
+        this.tag(RunecraftoryTags.Biomes.FOREST_GROVE).addTag(BiomeTags.IS_FOREST);
+        this.tag(RunecraftoryTags.Biomes.WATER_RUINS).addTag(BiomeTags.IS_OCEAN);
+        this.tag(RunecraftoryTags.Biomes.THEATER_RUINS).addTag(RunecraftoryTags.Biomes.IS_SPOOKY);
+        this.tag(RunecraftoryTags.Biomes.PLAINS_ARENA).addTag(RunecraftoryTags.Biomes.IS_PLAINS);
+        this.tag(RunecraftoryTags.Biomes.DESERT_ARENA).addTag(RunecraftoryTags.Biomes.IS_SANDY);
+        this.tag(RunecraftoryTags.Biomes.NETHER_ARENA).addTag(BiomeTags.IS_NETHER);
+        this.tag(RunecraftoryTags.Biomes.WIND_SHRINE).addTag(RunecraftoryTags.Biomes.IS_MOUNTAIN_PEAK);
+        this.tag(RunecraftoryTags.Biomes.LEON_KARNAK).addTag(RunecraftoryTags.Biomes.IS_MOUNTAIN_PEAK);
     }
 }

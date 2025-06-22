@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1962592967,
+    "separation": 7,
+    "spacing": 21
+  },
+  "structures": [
+    {
+      "structure": "runecraftory:theater_ruins",
+      "weight": 1
+    }
+  ]
+}

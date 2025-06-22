@@ -39,7 +39,7 @@
     "ServerPlayerMixin",
     "SinglePoolElementMixin",
     "SnowLayerBlockMixin",
-    "StructureTemplateMixin",
+    "StructureTemplatePoolMixin",
     "StructureTemplatePoolMixin",
     "TargetingConditionsMixin",
     "TreeFeatureMixin",

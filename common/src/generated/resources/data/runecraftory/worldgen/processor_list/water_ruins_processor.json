@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:water_ruin",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

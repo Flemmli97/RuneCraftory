@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1224466887,
+    "separation": 8,
+    "spacing": 21
+  },
+  "structures": [
+    {
+      "structure": "runecraftory:leon_karnak",
+      "weight": 1
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.neoforge.data.tags.BlockTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.DamageTypeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.EntityTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.ItemTagGen;
+import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -62,7 +63,7 @@ public class DataEvent {
         data.addProvider(true, new ItemTagGen(packOutput, provider, blocks.contentsGetter(), fileHelper));
 
         data.addProvider(true, new AdvancementGen(packOutput, provider, fileHelper));
-        data.addProvider(true, new AnimationDefinitionGen(packOutput));
+        data.addProvider(true, new AnimationDefinitionGen(packOutput, provider));
         data.addProvider(true, new BlockStatesGen(packOutput, ignore));
         data.addProvider(true, new CropGen(packOutput, provider));
         data.addProvider(true, new FoodGen(packOutput, provider));
@@ -84,7 +85,7 @@ public class DataEvent {
         data.addProvider(true, new SoundGen(packOutput, fileHelper));
         data.addProvider(true, new SpellPropertiesgen(packOutput));
         data.addProvider(true, new StructureBossGen(packOutput, verifier, provider));
-//            data.addProvider(true, new MainWorldGenData(packOutput, verifier));
+        data.addProvider(true, new StructureWorldGen(packOutput, provider, verifier));
 //            data.addProvider(true, new PatchouliGen(packOutput));
     }
 

@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:plains",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

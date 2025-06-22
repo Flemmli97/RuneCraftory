@@ -1,9 +1,10 @@
 package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class BossSpawnerProcessor extends DataStructureBlockProcessor {
 
-    public static final Codec<BossSpawnerProcessor> CODEC = ResourceLocation.CODEC.fieldOf("boss").xmap(BossSpawnerProcessor::new, d -> d.boss).codec();
+    public static final MapCodec<BossSpawnerProcessor> CODEC = ResourceLocation.CODEC.fieldOf("boss").xmap(BossSpawnerProcessor::new, d -> d.boss);
 
     protected final ResourceLocation boss;
 
@@ -50,6 +51,6 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return null;//ModStructures.BOSS_PROCESSOR.get();
+        return ModStructures.BOSS_PROCESSOR.get();
     }
 }

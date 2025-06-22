@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -19,8 +20,8 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
     /**
      * Lower case looks better in json
      */
-    public static final Codec<NPCDataProcessor> CODEC = ResourceLocation.CODEC.fieldOf("shop_type")
-            .xmap(NPCDataProcessor::new, d -> d.jobID).codec();
+    public static final MapCodec<NPCDataProcessor> CODEC = ResourceLocation.CODEC.fieldOf("shop_type")
+            .xmap(NPCDataProcessor::new, d -> d.jobID);
 
     protected final ResourceLocation jobID;
 
@@ -45,6 +46,6 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return null;// ModStructures.NPC_PROCESSOR.get();
+        return ModStructures.NPC_PROCESSOR.get();
     }
 }

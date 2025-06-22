@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:theater_ruin",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

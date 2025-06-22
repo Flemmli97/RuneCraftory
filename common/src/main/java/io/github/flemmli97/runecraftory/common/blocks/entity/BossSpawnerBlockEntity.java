@@ -58,6 +58,8 @@ public class BossSpawnerBlockEntity extends BlockEntity {
             return;
         Vec3 pos = Vec3.atCenterOf(blockPos.above(2));
         List<ServerPlayer> nearby = LevelCalc.playersAround(level, pos, 20);
+        if (blockEntity.nextSpawn == null)
+            blockEntity.updateEntity();
         if (!nearby.isEmpty() && blockEntity.nextSpawn != null) {
             EntityProperties prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(blockEntity.nextSpawn);
             boolean canSpawn = false;

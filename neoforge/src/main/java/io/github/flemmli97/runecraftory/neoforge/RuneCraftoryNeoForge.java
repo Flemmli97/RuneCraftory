@@ -27,6 +27,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.runecraftory.neoforge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
@@ -121,8 +122,8 @@ public class RuneCraftoryNeoForge {
         ModCriteria.TRIGGERS.registerContent(modBus);
         ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent(modBus);
         //        ModFeatures.TRUNK_PLACER.registerContent(modBus);
-//        ModStructures.STRUCTURESPROCESSORS.registerContent(modBus);
-        //        ModStructures.STRUCTURES.registerContent(modBus);
+        ModStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
+        ModStructures.STRUCTURES.registerContent(modBus);
         //        ModFeatures.FEATURES.registerContent(modBus);
 //        ModFeatures.CONFIGURED_FEATURES.registerContent(modBus);
     }
