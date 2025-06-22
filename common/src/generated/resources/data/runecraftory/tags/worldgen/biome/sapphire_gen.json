@@ -1,9 +1,0 @@
-{
-  "values": [
-    {
-      "id": "#c:is_magical",
-      "required": false
-    },
-    "#c:is_snowy"
-  ]
-}

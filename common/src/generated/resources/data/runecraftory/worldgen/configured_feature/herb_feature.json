@@ -4,7 +4,8 @@
     "features": [
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end"
+          "black_list": "runecraftory:weeds_blacklist",
+          "white_list": "runecraftory:weeds_whitelist"
         },
         "feature": {
           "feature": "runecraftory:weeds",
@@ -14,8 +15,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:mushroom_gen"
+          "black_list": "runecraftory:mushroom_blacklist",
+          "white_list": "runecraftory:mushroom_whitelist"
         },
         "feature": {
           "feature": "runecraftory:mushroom",
@@ -25,8 +26,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:mushroom_gen"
+          "black_list": "runecraftory:monarch_mushroom_blacklist",
+          "white_list": "runecraftory:monarch_mushroom_whitelist"
         },
         "feature": {
           "feature": "runecraftory:monarch_mushroom",
@@ -36,7 +37,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end"
+          "black_list": "runecraftory:withered_grass_blacklist",
+          "white_list": "runecraftory:withered_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:withered_grass",
@@ -46,8 +48,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "c:is_snowy"
+          "black_list": "runecraftory:white_grass_blacklist",
+          "white_list": "runecraftory:white_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:white_grass",
@@ -57,8 +59,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:indigo_gen"
+          "black_list": "runecraftory:indigo_grass_blacklist",
+          "white_list": "runecraftory:indigo_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:indigo_grass",
@@ -68,8 +70,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:purple_gen"
+          "black_list": "runecraftory:purple_grass_blacklist",
+          "white_list": "runecraftory:purple_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:purple_grass",
@@ -79,8 +81,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:general_herbs"
+          "black_list": "runecraftory:green_grass_blacklist",
+          "white_list": "runecraftory:green_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:green_grass",
@@ -90,8 +92,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:nether_end",
-          "white_list": "runecraftory:blue_gen"
+          "black_list": "runecraftory:blue_grass_blacklist",
+          "white_list": "runecraftory:blue_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:blue_grass",
@@ -101,8 +103,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_end",
-          "white_list": "runecraftory:yellow_gen"
+          "black_list": "runecraftory:yellow_grass_blacklist",
+          "white_list": "runecraftory:yellow_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:yellow_grass",
@@ -112,7 +114,8 @@
       },
       {
         "biomes": {
-          "white_list": "minecraft:is_nether"
+          "black_list": "runecraftory:red_grass_blacklist",
+          "white_list": "runecraftory:red_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:red_grass",
@@ -122,8 +125,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_end",
-          "white_list": "runecraftory:orange_gen"
+          "black_list": "runecraftory:orange_grass_blacklist",
+          "white_list": "runecraftory:orange_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:orange_grass",
@@ -133,7 +136,8 @@
       },
       {
         "biomes": {
-          "white_list": "minecraft:is_end"
+          "black_list": "runecraftory:black_grass_blacklist",
+          "white_list": "runecraftory:black_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:black_grass",
@@ -143,7 +147,8 @@
       },
       {
         "biomes": {
-          "white_list": "minecraft:is_end"
+          "black_list": "runecraftory:elli_leaves_blacklist",
+          "white_list": "runecraftory:elli_leaves_whitelist"
         },
         "feature": {
           "feature": "runecraftory:elli_leaves",
@@ -153,8 +158,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:general_herbs"
+          "black_list": "runecraftory:antidote_grass_blacklist",
+          "white_list": "runecraftory:antidote_grass_whitelist"
         },
         "feature": {
           "feature": "runecraftory:antidote_grass",
@@ -164,8 +169,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:general_herbs"
+          "black_list": "runecraftory:medicinal_herb_blacklist",
+          "white_list": "runecraftory:medicinal_herb_whitelist"
         },
         "feature": {
           "feature": "runecraftory:medicinal_herb",
@@ -175,8 +180,8 @@
       },
       {
         "biomes": {
-          "black_list": "runecraftory:water_nether_end",
-          "white_list": "runecraftory:bamboo_gen"
+          "black_list": "runecraftory:bamboo_sprout_blacklist",
+          "white_list": "runecraftory:bamboo_sprout_whitelist"
         },
         "feature": {
           "feature": "runecraftory:bamboo_sprout",

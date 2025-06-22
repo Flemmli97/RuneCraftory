@@ -7,7 +7,8 @@
       "min_inclusive": 1
     },
     "biomes": {
-      "black_list": "runecraftory:water_nether_end"
+      "black_list": "runecraftory:orichalcum_blacklist",
+      "white_list": "runecraftory:orichalcum_whitelist"
     },
     "radius": 4,
     "state_provider": {

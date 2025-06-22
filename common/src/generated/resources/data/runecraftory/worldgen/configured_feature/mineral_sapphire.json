@@ -7,8 +7,8 @@
       "min_inclusive": 2
     },
     "biomes": {
-      "black_list": "runecraftory:water_nether_end",
-      "white_list": "runecraftory:sapphire_gen"
+      "black_list": "runecraftory:sapphire_blacklist",
+      "white_list": "runecraftory:sapphire_whitelist"
     },
     "radius": 4,
     "state_provider": {

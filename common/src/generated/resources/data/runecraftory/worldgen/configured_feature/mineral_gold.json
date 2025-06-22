@@ -7,7 +7,8 @@
       "min_inclusive": 2
     },
     "biomes": {
-      "black_list": "runecraftory:water_nether_end"
+      "black_list": "runecraftory:gold_blacklist",
+      "white_list": "runecraftory:gold_whitelist"
     },
     "radius": 4,
     "state_provider": {

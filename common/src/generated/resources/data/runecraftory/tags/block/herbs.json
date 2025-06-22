@@ -1,10 +1,7 @@
 {
   "values": [
-    "runecraftory:mushroom",
-    "runecraftory:monarch_mushroom",
-    "runecraftory:elli_leaves",
-    "runecraftory:withered_grass",
     "runecraftory:weeds",
+    "runecraftory:withered_grass",
     "runecraftory:white_grass",
     "runecraftory:indigo_grass",
     "runecraftory:purple_grass",
@@ -16,6 +13,9 @@
     "runecraftory:black_grass",
     "runecraftory:antidote_grass",
     "runecraftory:medicinal_herb",
+    "runecraftory:mushroom",
+    "runecraftory:monarch_mushroom",
+    "runecraftory:elli_leaves",
     "runecraftory:bamboo_sprout"
   ]
 }

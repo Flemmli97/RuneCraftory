@@ -30,13 +30,17 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.ForgingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.SingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -61,6 +65,9 @@ public class ModBlocks {
     public static final LoaderRegister<Block> BLOCKS = LoaderRegistryAccess.INSTANCE.of(Registries.BLOCK, RuneCraftory.MODID);
     public static final LoaderRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = LoaderRegistryAccess.INSTANCE.of(Registries.BLOCK_ENTITY_TYPE, RuneCraftory.MODID);
 
+    /// For datagen only
+    public static final Map<RegistryEntrySupplier<Block, ?>, RunecraftoryTags.Biomes.BiomeGenerationTags> GENERATION_TAGS = new HashMap<>();
+
     public static final List<RegistryEntrySupplier<Block, ?>> CROPS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block, ?>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block, ?>> HERBS = new ArrayList<>();
@@ -73,19 +80,19 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockChemistry> CHEMISTRY = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block, BlockAccessory> ACCESSORY = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
 
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_IRON = mineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_TIN = mineral(EnumMineralTier.TIN);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SILVER = mineral(EnumMineralTier.SILVER);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_GOLD = mineral(EnumMineralTier.GOLD);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_PLATINUM = mineral(EnumMineralTier.PLATINUM);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_ORICHALCUM = mineral(EnumMineralTier.ORICHALCUM);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DIAMOND = mineral(EnumMineralTier.DIAMOND);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DRAGONIC = mineral(EnumMineralTier.DRAGONIC);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AQUAMARINE = mineral(EnumMineralTier.AQUAMARINE);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AMETHYST = mineral(EnumMineralTier.AMETHYST);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_RUBY = mineral(EnumMineralTier.RUBY);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_EMERALD = mineral(EnumMineralTier.EMERALD);
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SAPPHIRE = mineral(EnumMineralTier.SAPPHIRE);
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_IRON = mineral(EnumMineralTier.IRON, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_TIN = mineral(EnumMineralTier.TIN, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SILVER = mineral(EnumMineralTier.SILVER, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_GOLD = mineral(EnumMineralTier.GOLD, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_PLATINUM = mineral(EnumMineralTier.PLATINUM, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_ORICHALCUM = mineral(EnumMineralTier.ORICHALCUM, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DIAMOND = mineral(EnumMineralTier.DIAMOND, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DRAGONIC = mineral(EnumMineralTier.DRAGONIC, List.of(BiomeTags.IS_END), List.of());
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AQUAMARINE = mineral(EnumMineralTier.AQUAMARINE, List.of(RunecraftoryTags.Biomes.IS_AQUATIC, BiomeTags.IS_BEACH, RunecraftoryTags.Biomes.IS_WET), List.of(BiomeTags.IS_NETHER, BiomeTags.IS_END));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AMETHYST = mineral(EnumMineralTier.AMETHYST, List.of(BiomeTags.IS_FOREST, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.Biomes.IS_DEAD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_RUBY = mineral(EnumMineralTier.RUBY, List.of(RunecraftoryTags.Biomes.IS_HOT, BiomeTags.IS_NETHER), List.of());
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_EMERALD = mineral(EnumMineralTier.EMERALD, List.of(RunecraftoryTags.Biomes.IS_PLAINS, RunecraftoryTags.Biomes.IS_WASTELAND, RunecraftoryTags.Biomes.IS_SPARSE_VEGETATION_OVERWORLD, BiomeTags.IS_HILL), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SAPPHIRE = mineral(EnumMineralTier.SAPPHIRE, List.of(RunecraftoryTags.Biomes.IS_MAGICAL, RunecraftoryTags.Biomes.IS_SNOWY), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
 
     public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_IRON = brokenMineral(EnumMineralTier.IRON);
     public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_TIN = brokenMineral(EnumMineralTier.TIN);
@@ -199,23 +206,23 @@ public class ModBlocks {
 
     public static final RegistryEntrySupplier<Block, BlockCrop> DUNGEON = flower("dungeon_flower", () -> () -> Items.STONE, () -> ModItems.DUNGEON_SEEDS);
 
-    public static final RegistryEntrySupplier<Block, BlockHerb> MUSHROOM = herb("mushroom");
-    public static final RegistryEntrySupplier<Block, BlockHerb> MONARCH_MUSHROOM = herb("monarch_mushroom");
-    public static final RegistryEntrySupplier<Block, BlockHerb> ELLI_LEAVES = herb("elli_leaves", BlockHerb.GroundTypes.END);
-    public static final RegistryEntrySupplier<Block, BlockHerb> WITHERED_GRASS = herb("withered_grass", BlockHerb.GroundTypes.SANDY);
-    public static final RegistryEntrySupplier<Block, BlockHerb> WEEDS = herb("weeds");
-    public static final RegistryEntrySupplier<Block, BlockHerb> WHITE_GRASS = herb("white_grass");
-    public static final RegistryEntrySupplier<Block, BlockHerb> INDIGO_GRASS = herb("indigo_grass");
-    public static final RegistryEntrySupplier<Block, BlockHerb> PURPLE_GRASS = herb("purple_grass");
-    public static final RegistryEntrySupplier<Block, BlockHerb> GREEN_GRASS = herb("green_grass");
-    public static final RegistryEntrySupplier<Block, BlockHerb> BLUE_GRASS = herb("blue_grass");
-    public static final RegistryEntrySupplier<Block, BlockHerb> YELLOW_GRASS = herb("yellow_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
-    public static final RegistryEntrySupplier<Block, BlockHerb> RED_GRASS = herb("red_grass", BlockHerb.GroundTypes.NETHER);
-    public static final RegistryEntrySupplier<Block, BlockHerb> ORANGE_GRASS = herb("orange_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
-    public static final RegistryEntrySupplier<Block, BlockHerb> BLACK_GRASS = herb("black_grass", BlockHerb.GroundTypes.END);
-    public static final RegistryEntrySupplier<Block, BlockHerb> ANTIDOTE_GRASS = herb("antidote_grass");
-    public static final RegistryEntrySupplier<Block, BlockHerb> MEDICINAL_HERB = herb("medicinal_herb");
-    public static final RegistryEntrySupplier<Block, BlockHerb> BAMBOO_SPROUT = herb("bamboo_sprout");
+    public static final RegistryEntrySupplier<Block, BlockHerb> WEEDS = herb("weeds", List.of(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> WITHERED_GRASS = herb("withered_grass", List.of(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST), BlockHerb.GroundTypes.SANDY);
+    public static final RegistryEntrySupplier<Block, BlockHerb> WHITE_GRASS = herb("white_grass", List.of(RunecraftoryTags.Biomes.IS_SNOWY), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> INDIGO_GRASS = herb("indigo_grass", List.of(RunecraftoryTags.Biomes.IS_WET, RunecraftoryTags.Biomes.IS_MAGICAL, RunecraftoryTags.Biomes.IS_LUSH), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> PURPLE_GRASS = herb("purple_grass", List.of(RunecraftoryTags.Biomes.IS_WET, RunecraftoryTags.Biomes.IS_MAGICAL), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> GREEN_GRASS = herb("green_grass", List.of(RunecraftoryTags.Biomes.GENERAL_HERBS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> BLUE_GRASS = herb("blue_grass", List.of(BiomeTags.IS_BEACH, RunecraftoryTags.Biomes.IS_MAGICAL, BiomeTags.IS_RIVER, RunecraftoryTags.Biomes.IS_SWAMP), List.of(BiomeTags.IS_NETHER, BiomeTags.IS_END));
+    public static final RegistryEntrySupplier<Block, BlockHerb> YELLOW_GRASS = herb("yellow_grass", List.of(RunecraftoryTags.Biomes.IS_DRY_OVERWORLD, RunecraftoryTags.Biomes.IS_SANDY, BiomeTags.IS_NETHER), List.of(RunecraftoryTags.Biomes.IS_AQUATIC, BiomeTags.IS_END), BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
+    public static final RegistryEntrySupplier<Block, BlockHerb> RED_GRASS = herb("red_grass", List.of(BiomeTags.IS_NETHER), List.of(), BlockHerb.GroundTypes.NETHER);
+    public static final RegistryEntrySupplier<Block, BlockHerb> ORANGE_GRASS = herb("orange_grass", List.of(BiomeTags.IS_NETHER, RunecraftoryTags.Biomes.IS_HOT, BiomeTags.IS_SAVANNA), List.of(RunecraftoryTags.Biomes.IS_AQUATIC, BiomeTags.IS_END), BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
+    public static final RegistryEntrySupplier<Block, BlockHerb> BLACK_GRASS = herb("black_grass", List.of(BiomeTags.IS_END), List.of(), BlockHerb.GroundTypes.END);
+    public static final RegistryEntrySupplier<Block, BlockHerb> ANTIDOTE_GRASS = herb("antidote_grass", List.of(RunecraftoryTags.Biomes.GENERAL_HERBS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> MEDICINAL_HERB = herb("medicinal_herb", List.of(RunecraftoryTags.Biomes.GENERAL_HERBS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> MUSHROOM = herb("mushroom", List.of(BiomeTags.IS_FOREST, RunecraftoryTags.Biomes.IS_MUSHROOM, RunecraftoryTags.Biomes.IS_MAGICAL), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> MONARCH_MUSHROOM = herb("monarch_mushroom", List.of(BiomeTags.IS_FOREST, RunecraftoryTags.Biomes.IS_MUSHROOM, RunecraftoryTags.Biomes.IS_MAGICAL), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockHerb> ELLI_LEAVES = herb("elli_leaves", List.of(BiomeTags.IS_END), List.of(), BlockHerb.GroundTypes.END);
+    public static final RegistryEntrySupplier<Block, BlockHerb> BAMBOO_SPROUT = herb("bamboo_sprout", List.of(BiomeTags.IS_JUNGLE, RunecraftoryTags.Biomes.IS_LUSH, RunecraftoryTags.Biomes.IS_DENSE_VEGETATION_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
 
     public static final RegistryEntrySupplier<Block, BlockTreeRoot> TREE_SOIL = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING));
@@ -244,10 +251,13 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> BlockEntityType.Builder.of(MonsterBarnBlockEntity::new, MONSTER_BARN.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> BlockEntityType.Builder.of(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()).build(null));
 
-    public static RegistryEntrySupplier<Block, BlockMineral> mineral(EnumMineralTier name) {
+    public static RegistryEntrySupplier<Block, BlockMineral> mineral(EnumMineralTier name, List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist) {
         RegistryEntrySupplier<Block, BlockMineral> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of().lightLevel(s -> 1).strength(5, 10)
                 .requiresCorrectToolForDrops()));
         MINERAL_MAP.put(name, reg);
+        if (Platform.INSTANCE.isDatagen()) {
+            GENERATION_TAGS.put(reg, new RunecraftoryTags.Biomes.BiomeGenerationTags(whitelist, blacklist));
+        }
         return reg;
     }
 
@@ -285,9 +295,12 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockHerb> herb(String name, BlockHerb.GroundTypes... types) {
+    public static RegistryEntrySupplier<Block, BlockHerb> herb(String name, List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist, BlockHerb.GroundTypes... types) {
         RegistryEntrySupplier<Block, BlockHerb> reg = BLOCKS.register(name, () -> new BlockHerb(plantProps(), types));
         HERBS.add(reg);
+        if (Platform.INSTANCE.isDatagen()) {
+            GENERATION_TAGS.put(reg, new RunecraftoryTags.Biomes.BiomeGenerationTags(whitelist, blacklist));
+        }
         return reg;
     }
 

@@ -1,10 +1,7 @@
 {
   "values": [
     "#minecraft:is_beach",
-    {
-      "id": "#c:is_magical",
-      "required": false
-    },
+    "#c:is_magical",
     "#minecraft:is_river",
     "#c:is_swamp"
   ]

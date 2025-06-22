@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -198,7 +200,8 @@ public class RunecraftoryTags {
 
         /*
          * ====================
-         * Copy of all common tags defined in neoforge WITHOUT vanilla mirrors
+         * Copy of all common tags defined in neoforge WITHOUT vanilla mirrors.
+         * E.g. IS_END is not here since vanilla has it already and for this mod the difference has no use
          */
         public static final TagKey<Biome> IS_VOID = biomeCommon("is_void");
         public static final TagKey<Biome> IS_HOT = biomeCommon("is_hot");
@@ -263,29 +266,10 @@ public class RunecraftoryTags {
         /*
          * ====================
          */
-        public static final TagKey<Biome> NETHER_END = biome("nether_end");
-
-        /*
-         * Used for worldgen
-         */
-        public static final TagKey<Biome> AQUAMARINE_GEN = biome("aquamarine_gen");
-        public static final TagKey<Biome> AMETHYST_GEN = biome("amethyst_gen");
-        public static final TagKey<Biome> RUBY_GEN = biome("ruby_gen");
-        public static final TagKey<Biome> EMERALD_GEN = biome("emerald_gen");
-        public static final TagKey<Biome> SAPPHIRE_GEN = biome("sapphire_gen");
-
-        public static final TagKey<Biome> WATER_NETHER_END = biome("water_nether_end");
-        public static final TagKey<Biome> MUSHROOM_GEN = biome("mushroom_gen");
-        public static final TagKey<Biome> INDIGO_GEN = biome("indigo_gen");
-        public static final TagKey<Biome> PURPLE_GEN = biome("purple_gen");
-        public static final TagKey<Biome> BLUE_GEN = biome("blue_gen");
-        public static final TagKey<Biome> WATER_END = biome("water_end");
-        public static final TagKey<Biome> YELLOW_GEN = biome("yellow_gen");
-        public static final TagKey<Biome> ORANGE_GEN = biome("orange_gen");
-        public static final TagKey<Biome> BAMBOO_GEN = biome("bamboo_gen");
-        public static final TagKey<Biome> GENERAL_HERBS = biome("general_herbs");
-
         public static final TagKey<Biome> VANILLA_DIMENSIONS = biome("vanilla_dimensions");
+
+        public static final TagKey<Biome> COMMON_GROUND_BLACKLIST = biome("common_ground_blacklist");
+        public static final TagKey<Biome> GENERAL_HERBS = biome("general_herbs");
 
         // Structure gen tags
         public static final TagKey<Biome> FOREST_GROVE = biome("forest_grove");
@@ -297,6 +281,18 @@ public class RunecraftoryTags {
         public static final TagKey<Biome> WIND_SHRINE = biome("wind_shrine");
         public static final TagKey<Biome> LEON_KARNAK = biome("leon_karnak");
 
+        public static TagKey<Biome> getMineralGenTag(EnumMineralTier mineral, boolean whitelist) {
+            return biome(mineral.getSerializedName() + (whitelist ? "_whitelist" : "_blacklist"));
+        }
+
+        public static TagKey<Biome> getBlockBasedGenerationTag(RegistryEntrySupplier<Block, ?> block, boolean whitelist) {
+            String path = block.getID().getPath().replace("ore_", "");
+            return biome(path + (whitelist ? "_whitelist" : "_blacklist"));
+        }
+
+        public record BiomeGenerationTags(List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist) {
+
+        }
     }
 
     public static class Fluids {

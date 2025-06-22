@@ -7,7 +7,8 @@
       "min_inclusive": 1
     },
     "biomes": {
-      "white_list": "minecraft:is_end"
+      "black_list": "runecraftory:dragonic_blacklist",
+      "white_list": "runecraftory:dragonic_whitelist"
     },
     "radius": 4,
     "state_provider": {

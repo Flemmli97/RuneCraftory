@@ -7,7 +7,8 @@
       "min_inclusive": 2
     },
     "biomes": {
-      "white_list": "runecraftory:ruby_gen"
+      "black_list": "runecraftory:ruby_blacklist",
+      "white_list": "runecraftory:ruby_whitelist"
     },
     "radius": 4,
     "state_provider": {

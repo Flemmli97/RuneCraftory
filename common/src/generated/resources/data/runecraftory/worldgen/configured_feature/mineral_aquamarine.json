@@ -7,8 +7,8 @@
       "min_inclusive": 2
     },
     "biomes": {
-      "black_list": "runecraftory:nether_end",
-      "white_list": "runecraftory:aquamarine_gen"
+      "black_list": "runecraftory:aquamarine_blacklist",
+      "white_list": "runecraftory:aquamarine_whitelist"
     },
     "radius": 4,
     "state_provider": {
