@@ -1,0 +1,16 @@
+{
+  "feature": "runecraftory:mineral_feature_sapphire",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 5
+    },
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 66
+    },
+    {
+      "type": "minecraft:in_square"
+    }
+  ]
+}

@@ -13,26 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class WorldCalls {
 
-//    public static void addFeatures(BiConsumer<GenerationStep.Decoration, Holder<PlacedFeature>> cons, Biome.BiomeCategory category) {
-//        switch (category) {
-//            case NETHER -> {
-//                cons.accept(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.PLACEDNETHERHERBFEATURE);
-//                for (Holder<PlacedFeature> holder : ModFeatures.PLACEDNETHERMINERALFEATURES)
-//                    cons.accept(GenerationStep.Decoration.VEGETAL_DECORATION, holder);
-//            }
-//            case THEEND -> {
-//                cons.accept(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.PLACEDENDHERBFEATURE);
-//                for (Holder<PlacedFeature> holder : ModFeatures.PLACEDMINERALFEATURES)
-//                    cons.accept(GenerationStep.Decoration.VEGETAL_DECORATION, holder);
-//            }
-//            default -> {
-//                cons.accept(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.PLACEDHERBFEATURE);
-//                for (Holder<PlacedFeature> holder : ModFeatures.PLACEDMINERALFEATURES)
-//                    cons.accept(GenerationStep.Decoration.VEGETAL_DECORATION, holder);
-//            }
-//        }
-//    }
-
     public static void daily(Level level) {
         if (level instanceof ServerLevel serverLevel && level.dimension().equals(Level.OVERWORLD)) {
             WorldHandler.get(serverLevel.getServer()).update(serverLevel);

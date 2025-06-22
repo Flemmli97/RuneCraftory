@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
+import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
@@ -22,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
@@ -32,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
@@ -58,6 +61,8 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -65,12 +70,12 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.neoforged.fml.config.IConfigSpec;
@@ -153,13 +158,11 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         //WorldCalls
         CommandRegistrationCallback.EVENT.register(((dispatcher, ctx, selection) -> RunecraftoryCommand.reg(dispatcher, ctx)));
-//        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), d, feature.unwrapKey().get())),
-//                Biome.BiomeCategory.THEEND);
-//        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), d, feature.unwrapKey().get())),
-//                Biome.BiomeCategory.THEEND);
-//        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), d, feature.unwrapKey().get())),
-//                Biome.BiomeCategory.NONE);
-        BiomeModifications.addSpawn(t -> true, MobCategory.MONSTER, ModEntities.GATE.get(), 100, 1, 1);
+        WorldRegistrationCalls.createFeatures(null, feat ->
+                BiomeModifications.addFeature(ctx -> feat.tag().map(tag -> ctx.getBiomeRegistryEntry().is(tag)).orElse(true),
+                        feat.decoration(), ResourceKey.create(Registries.PLACED_FEATURE, feat.placedFeature())));
+        MobSpawnSettings.SpawnerData gateSetting = WorldRegistrationCalls.gateSetting();
+        BiomeModifications.addSpawn(t -> true, gateSetting.type.getCategory(), gateSetting.type, gateSetting.getWeight().asInt(), gateSetting.minCount, gateSetting.maxCount);
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.dimension() == Level.OVERWORLD) {
                 WorldCalls.daily(world);
@@ -189,11 +192,10 @@ public class RuneCraftoryFabric implements ModInitializer {
         //ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
-//        ModFeatures.FEATURES.registerContent();
+        ModFeatures.FEATURES.registerContent();
 //        ModFeatures.TRUNK_PLACER.registerContent();
-//        ModFeatures.CONFIGURED_FEATURES.registerContent();
         ModSpells.SPELLS.register().registerContent();
-//        ModStructures.STRUCTURES.registerContent();
+        ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
         ModPoiTypes.POI.registerContent();
@@ -208,7 +210,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModLootRegistries.LOOTFUNCTION.registerContent();
         ModLootRegistries.LOOTCONDITIONS.registerContent();
         ModLootRegistries.NUMBER_PROVIDERS.registerContent();
-//        ModStructures.STRUCTURESPROCESSORS.registerContent();
+        ModStructures.STRUCTURE_PROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
         ModSounds.SOUND_EVENTS.registerContent();
         ModDataComponentTypes.DATA_COMPONENTS.registerContent();

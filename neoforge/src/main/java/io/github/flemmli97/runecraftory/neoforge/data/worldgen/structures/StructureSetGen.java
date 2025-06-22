@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.neoforge.data.worldgen;
+package io.github.flemmli97.runecraftory.neoforge.data.worldgen.structures;
 
 import io.github.flemmli97.tenshilib.common.data.provider.CodecBasedProvider;
 import net.minecraft.core.HolderLookup;

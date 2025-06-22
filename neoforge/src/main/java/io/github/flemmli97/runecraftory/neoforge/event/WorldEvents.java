@@ -19,12 +19,6 @@ public class WorldEvents {
         RunecraftoryCommand.reg(event.getDispatcher(), event.getBuildContext());
     }
 
-//    @SubscribeEvent
-//    public void biomeLoad(BiomeLoadingEvent event) {
-//        event.getSpawns().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1));
-//        WorldCalls.addFeatures(event.getGeneration()::addFeature, event.getCategory());
-//    }
-
     @SubscribeEvent
     public void daily(LevelTickEvent.Post event) {
         if (event.getLevel().dimension().equals(Level.OVERWORLD)) {

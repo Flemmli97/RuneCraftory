@@ -1,0 +1,277 @@
+{
+  "type": "runecraftory:herb_feature",
+  "config": {
+    "entries": [
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:weeds",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 100
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:mushroom_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:mushroom",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 40
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:mushroom_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:monarch_mushroom",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 10
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:withered_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 50
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#c:is_snowy"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:white_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:indigo_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:indigo_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:purple_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:purple_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:herb_tree_biomes"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:green_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:nether_end",
+          "white_list": "#runecraftory:blue_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:blue_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_end",
+          "white_list": "#runecraftory:yellow_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:yellow_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "white_list": "#minecraft:is_nether"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:red_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_end",
+          "white_list": "#runecraftory:orange_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:orange_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 30
+      },
+      {
+        "biomes": {
+          "white_list": "#minecraft:is_end"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:black_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 75
+      },
+      {
+        "biomes": {
+          "white_list": "#minecraft:is_end"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:elli_leaves",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 10
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:herb_tree_biomes"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:antidote_grass",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 75
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:herb_tree_biomes"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:medicinal_herb",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 75
+      },
+      {
+        "biomes": {
+          "black_list": "#runecraftory:water_nether_end",
+          "white_list": "#runecraftory:bamboo_gen"
+        },
+        "state_provider": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "runecraftory:bamboo_sprout",
+            "Properties": {
+              "variant": "0"
+            }
+          }
+        },
+        "weight": 66
+      }
+    ],
+    "radius": 8,
+    "tries": 70,
+    "y_spread": 9
+  }
+}

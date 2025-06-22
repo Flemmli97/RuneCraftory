@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
@@ -124,7 +125,7 @@ public class RuneCraftoryNeoForge {
         //        ModFeatures.TRUNK_PLACER.registerContent(modBus);
         ModStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
         ModStructures.STRUCTURES.registerContent(modBus);
-        //        ModFeatures.FEATURES.registerContent(modBus);
+        ModFeatures.FEATURES.registerContent(modBus);
 //        ModFeatures.CONFIGURED_FEATURES.registerContent(modBus);
     }
 

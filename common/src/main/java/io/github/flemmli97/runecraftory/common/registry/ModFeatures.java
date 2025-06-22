@@ -1,58 +1,26 @@
-//package io.github.flemmli97.runecraftory.common.registry;
-//
-//import com.google.common.collect.ImmutableList;
-//import com.mojang.serialization.Codec;
-//import io.github.flemmli97.runecraftory.RuneCraftory;
-//import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-//import io.github.flemmli97.runecraftory.common.world.features.ChancedBlockClusterConfig;
-//import io.github.flemmli97.runecraftory.common.world.features.HerbFeature;
-//import io.github.flemmli97.runecraftory.common.world.features.HerbFeatureConfig;
-//import io.github.flemmli97.runecraftory.common.world.features.MineralFeature;
-//import io.github.flemmli97.runecraftory.common.world.features.trees.FruitLeaveDecorator;
-//import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeSproutConfiguration;
-//import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeSproutFeature;
-//import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeTrunkPlacer;
-//import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
-//import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
-//import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-//import net.minecraft.core.Holder;
-//import net.minecraft.core.registries.BuiltInRegistries;
-//import net.minecraft.core.registries.Registries;
-//import net.minecraft.data.BuiltinRegistries;
-//import net.minecraft.data.worldgen.placement.PlacementUtils;
-//import net.minecraft.tags.BiomeTags;
-//import net.minecraft.tags.TagKey;
-//import net.minecraft.util.valueproviders.ConstantInt;
-//import net.minecraft.world.level.biome.Biome;
-//import net.minecraft.world.level.block.Block;
-//import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-//import net.minecraft.world.level.levelgen.feature.Feature;
-//import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
-//import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
-//import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer;
-//import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-//import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
-//import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
-//import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
-//import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-//import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
-//import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-//import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-//import net.minecraft.world.level.levelgen.placement.RarityFilter;
-//
-//import java.lang.reflect.Constructor;
-//import java.lang.reflect.InvocationTargetException;
-//import java.util.List;
-//
-//public class ModFeatures {
-//
-//    public static final LoaderRegister<Feature<?>> FEATURES = LoaderRegistryAccess.INSTANCE.of(Registries.FEATURE, RuneCraftory.MODID);
-//    public static final LoaderRegister<TrunkPlacerType<?>> TRUNK_PLACER = LoaderRegistryAccess.INSTANCE.of(Registries.TRUNK_PLACER_TYPE, RuneCraftory.MODID);
-//    public static final LoaderRegister<TreeDecoratorType<?>> TREE_DECORATORS = LoaderRegistryAccess.INSTANCE.of(Registries.TREE_DECORATOR_TYPE, RuneCraftory.MODID);
-//
-//    public static final RegistryEntrySupplier<Feature<?>, MineralFeature> MINERALFEATURE = FEATURES.register("mineral_feature", () -> new MineralFeature(ChancedBlockClusterConfig.CODEC));
-//
-//    public static final RegistryEntrySupplier<Feature<?>, HerbFeature> HERBFEATURE = FEATURES.register("herb_feature", () -> new HerbFeature(HerbFeatureConfig.CODEC));
+package io.github.flemmli97.runecraftory.common.registry;
+
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.world.features.HerbFeature;
+import io.github.flemmli97.runecraftory.common.world.features.MineralFeature;
+import io.github.flemmli97.runecraftory.common.world.features.config.ChancedBlockClusterConfig;
+import io.github.flemmli97.runecraftory.common.world.features.config.HerbFeatureConfig;
+import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
+import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
+
+public class ModFeatures {
+
+    public static final LoaderRegister<Feature<?>> FEATURES = LoaderRegistryAccess.INSTANCE.of(Registries.FEATURE, RuneCraftory.MODID);
+    public static final LoaderRegister<TrunkPlacerType<?>> TRUNK_PLACER = LoaderRegistryAccess.INSTANCE.of(Registries.TRUNK_PLACER_TYPE, RuneCraftory.MODID);
+    public static final LoaderRegister<TreeDecoratorType<?>> TREE_DECORATORS = LoaderRegistryAccess.INSTANCE.of(Registries.TREE_DECORATOR_TYPE, RuneCraftory.MODID);
+
+    public static final RegistryEntrySupplier<Feature<?>, MineralFeature> MINERAL_FEATURE = FEATURES.register("mineral_feature", () -> new MineralFeature(ChancedBlockClusterConfig.CODEC));
+    public static final RegistryEntrySupplier<Feature<?>, HerbFeature> HERB_FEATURE = FEATURES.register("herb_feature", () -> new HerbFeature(HerbFeatureConfig.CODEC));
 //    public static final RegistryEntrySupplier<Feature<?>, FruitTreeSproutFeature> FRUIT_SPROUT = FEATURES.register("fruit_tree_sprout", () -> new FruitTreeSproutFeature(FruitTreeSproutConfiguration.CODEC));
 //
 //    public static final RegistryEntrySupplier<TrunkPlacerType<?>, TrunkPlacerType<?>> FRUIT_TRUNK_PLACER = TRUNK_PLACER.register("fruit_tree_trunk", () -> createTrunkPlacerType(FruitTreeTrunkPlacer.CODEC));
@@ -75,7 +43,7 @@
 //    public static List<Holder<PlacedFeature>> PLACEDNETHERMINERALFEATURES;
 //
 //    public static void registerConfiguredFeatures() {
-//        Holder<ConfiguredFeature<?, ?>> CONFIGUREDHERBFEATURE = BuiltinRegistries.register(Registries.CONFIGURED_FEATURE, "configured_herb_feature", new ConfiguredFeature<>(HERBFEATURE.get(),
+//        Holder<ConfiguredFeature<?, ?>> CONFIGUREDHERBFEATURE = BuiltinRegistries.register(Registries.CONFIGURED_FEATURE, "configured_herb_feature", new ConfiguredFeature<>(HERB_FEATURE.get(),
 //                new HerbFeatureConfig(70, 8, 9, build())));
 //        PLACEDHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
 //                RarityFilter.onAverageOnceEvery(4),
@@ -197,4 +165,4 @@
 //        }
 //        return null;
 //    }
-//}
+}

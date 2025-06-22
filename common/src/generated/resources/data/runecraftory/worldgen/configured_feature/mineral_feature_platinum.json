@@ -1,0 +1,25 @@
+{
+  "type": "runecraftory:mineral_feature",
+  "config": {
+    "amount": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "biomes": {
+      "black_list": "#runecraftory:water_nether_end"
+    },
+    "radius": 3,
+    "state_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "runecraftory:ore_platinum",
+        "Properties": {
+          "facing": "north",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "tries": 64
+  }
+}

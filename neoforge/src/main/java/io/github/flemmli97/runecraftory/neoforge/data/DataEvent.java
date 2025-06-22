@@ -8,7 +8,8 @@ import io.github.flemmli97.runecraftory.neoforge.data.tags.BlockTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.DamageTypeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.EntityTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.ItemTagGen;
-import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
+import io.github.flemmli97.runecraftory.neoforge.data.worldgen.features.FeatureWorldGen;
+import io.github.flemmli97.runecraftory.neoforge.data.worldgen.structures.StructureWorldGen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -86,6 +87,7 @@ public class DataEvent {
         data.addProvider(true, new SpellPropertiesgen(packOutput));
         data.addProvider(true, new StructureBossGen(packOutput, verifier, provider));
         data.addProvider(true, new StructureWorldGen(packOutput, provider, verifier));
+        data.addProvider(true, new FeatureWorldGen(packOutput, provider));
 //            data.addProvider(true, new PatchouliGen(packOutput));
     }
 

@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.neoforge.data.worldgen;
+package io.github.flemmli97.runecraftory.neoforge.data.worldgen.structures;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -68,6 +68,16 @@ public class StructureWorldGen implements DataProvider {
         this.verifier = verifier;
     }
 
+    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<T> key) {
+        return Holder.Reference.createStandAlone(provider.lookupOrThrow(key.registryKey()),
+                key);
+    }
+
+    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<Registry<T>> key, ResourceLocation location) {
+        return Holder.Reference.createStandAlone(provider.lookupOrThrow(key),
+                ResourceKey.create(key, location));
+    }
+
     protected void add(HolderLookup.Provider provider) {
         this.random.setSeed(123456789);
         this.addBossStructure(provider, RuneCraftory.modRes("forest_grove"),
@@ -134,16 +144,6 @@ public class StructureWorldGen implements DataProvider {
                         DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING)
         ));
         this.structureSetGen.add(id, new StructureSet(create(provider, Registries.STRUCTURE, id), placement));
-    }
-
-    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<T> key) {
-        return Holder.Reference.createStandAlone(provider.lookupOrThrow(key.registryKey()),
-                key);
-    }
-
-    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<Registry<T>> key, ResourceLocation location) {
-        return Holder.Reference.createStandAlone(provider.lookupOrThrow(key),
-                ResourceKey.create(key, location));
     }
 
     protected StructureProcessorList simple(ResourceLocation boss) {
