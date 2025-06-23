@@ -238,7 +238,8 @@ public class GateEntity extends Mob implements IBaseMob {
             this.entityData.set(MOB_LEVEL, compound.getInt("MobLevel"));
         }
         this.spawnList.clear();
-        this.spawnList.addAll(BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf()
+        if (compound.contains("Spawns"))
+            this.spawnList.addAll(BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf()
                 .parse(NbtOps.INSTANCE, compound.get("Spawns")).getOrThrow());
         if (compound.contains("Element")) {
             String el = compound.getString("Element");

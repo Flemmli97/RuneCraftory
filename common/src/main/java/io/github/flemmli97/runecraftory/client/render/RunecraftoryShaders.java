@@ -13,17 +13,23 @@ import java.util.function.Consumer;
 public class RunecraftoryShaders extends RenderType {
 
     private static ShaderInstance GATE_SHADER_INSTANCE;
-    public static final ShaderStateShard GATE_SHADER = new ShaderStateShard(() -> GATE_SHADER_INSTANCE);
-    public static final VertexFormat POSITION_COLOR_2X_TEX = VertexFormat.builder().add("Position", VertexFormatElement.POSITION)
-            .add("Color", VertexFormatElement.COLOR).add("Color2", VertexFormatElement.COLOR).add("UV0", VertexFormatElement.UV0)
-            .add("UV1", VertexFormatElement.UV1).build();
-//            .put("Time", VertexHelper.TIME).build());
+    private static final ShaderStateShard GATE_SHADER = new ShaderStateShard(() -> GATE_SHADER_INSTANCE);
+    private static final VertexFormat POSITION_COLOR_2X_TEX = VertexFormat.builder().add("Position", VertexFormatElement.POSITION)
+            .add("Color", VertexFormatElement.COLOR).add("UV0", VertexFormatElement.UV0)
+            .add("UV1", VertexFormatElement.UV1)
+            .add("Color2", VertexFormatElement.NORMAL).add("Offset", VertexFormatElement.UV2).build();
 
-    public static final RenderType GATE_RENDER = RenderType.clouds();
-//    create("runecraftory:gate", POSITION_COLOR_2X_TEX, VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
-//            .setShaderState(GATE_SHADER)
-//            .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-//            .setOverlayState(OVERLAY).createCompositeState(false));
+    /**
+     * The VertexFormat used is unconventional due to vanillas limitation.
+     * {@link VertexFormatElement} is hard to extend and is limited to only 32 different ids.
+     * Invasive changes there might cause potential issues so im leaving it alone...
+     * <p>
+     * POSITION_COLOR_2X_TEX uses the NORMAL element as second color and Offset as a gametime offset
+     */
+    public static final RenderType GATE_RENDER = create("runecraftory:gate", POSITION_COLOR_2X_TEX, VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
+            .setShaderState(GATE_SHADER)
+            .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+            .setOverlayState(OVERLAY).createCompositeState(false));
 
     public static void registerShader(ShaderRegister register) throws IOException {
         register.register(RuneCraftory.modRes("gate"), POSITION_COLOR_2X_TEX,

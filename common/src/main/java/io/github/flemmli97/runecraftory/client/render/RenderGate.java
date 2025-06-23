@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -60,7 +61,6 @@ public class RenderGate extends EntityRenderer<GateEntity> {
         stack.scale(scale, scale, scale);
         stack.translate(0, entity.getBbHeight() * 0.5 - 0.1, 0);
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        stack.mulPose(Axis.YP.rotationDegrees(180.0F));
         stack.mulPose(Axis.ZP.rotationDegrees(entity.clientRenderTick * 0.1f));
 
         float xSize = 1.5f / 2f;
@@ -68,18 +68,18 @@ public class RenderGate extends EntityRenderer<GateEntity> {
         Matrix4f matrix4f = stack.last().pose();
         float[][] colors = this.getColor(entity);
         VertexConsumer builder = bufferIn.getBuffer(RunecraftoryShaders.GATE_RENDER);
-//        VertexHelper.time(builder.addVertex(matrix4f, -xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
-//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(0, 1).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
-//                entity.tickCount, partialTicks);
-//        VertexHelper.time(builder.addVertex(matrix4f, xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
-//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(1, 1).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
-//                entity.tickCount, partialTicks);
-//        VertexHelper.time(builder.addVertex(matrix4f, xSize, ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
-//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(1, 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
-//                entity.tickCount, partialTicks);
-//        VertexHelper.time(builder.addVertex(matrix4f, -xSize, ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
-//                        .setColor(colors[1][0], colors[1][1], colors[1][2], 1).setUv(0, 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0)),
-//                entity.tickCount, partialTicks);
+        builder.addVertex(matrix4f, -xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+                .setNormal(colors[1][0], colors[1][1], colors[1][2])
+                .setUv(0, 1).setUv2(entity.getId(), 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0));
+        builder.addVertex(matrix4f, xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+                .setNormal(colors[1][0], colors[1][1], colors[1][2])
+                .setUv(1, 1).setUv2(entity.getId(), 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0));
+        builder.addVertex(matrix4f, xSize, ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+                .setNormal(colors[1][0], colors[1][1], colors[1][2])
+                .setUv(1, 0).setUv2(entity.getId(), 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0));
+        builder.addVertex(matrix4f, -xSize, ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
+                .setNormal(colors[1][0], colors[1][1], colors[1][2])
+                .setUv(0, 0).setUv2(entity.getId(), 0).setOverlay(LivingEntityRenderer.getOverlayCoords(entity, 0));
         stack.popPose();
     }
 
