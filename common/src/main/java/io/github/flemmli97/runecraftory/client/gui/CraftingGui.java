@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -22,18 +24,18 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 //    private int scrollValue;
 //    private boolean isDragging;
 //
-//    private final EnumSkills skill;
+private final EnumSkills skill;
 
     public CraftingGui(ContainerCrafting container, Inventory inv, Component name) {
         super(container, inv, name);
         this.imageWidth = 209;
         this.imageHeight = 166;
-//        this.skill = switch (this.menu.craftingType()) {
-//            case FORGE -> EnumSkills.FORGING;
-//            case ARMOR -> EnumSkills.CRAFTING;
-//            case CHEM -> EnumSkills.CHEMISTRY;
-//            case COOKING -> EnumSkills.COOKING;
-//        };
+        this.skill = switch (this.menu.craftingType()) {
+            case FORGE -> EnumSkills.FORGING;
+            case ARMOR -> EnumSkills.CRAFTING;
+            case CHEM -> EnumSkills.CHEMISTRY;
+            case COOKING -> EnumSkills.COOKING;
+        };
     }
 
     @Override
@@ -156,9 +158,9 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 //        return super.mouseClicked(mouseX, mouseY, button);
 //    }
 //
-//    public EnumCrafting type() {
-//        return this.menu.craftingType();
-//    }
+public EnumCrafting type() {
+    return this.menu.craftingType();
+}
 //
 //    public int getLeft() {
 //        return this.leftPos;

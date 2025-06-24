@@ -25,12 +25,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class ItemTagGen extends ItemTagsProvider {
 
+    public static final TagKey<Item> HIDDEN_FROM_RECIPE_VIEWERS = TagKey.create(Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath("c", "hidden_from_recipe_viewers"));
+
     public ItemTagGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider, ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, blockTagProvider, RuneCraftory.MODID, existingFileHelper);
     }
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
+        IntrinsicTagAppender<Item> hidden = this.tag(HIDDEN_FROM_RECIPE_VIEWERS);
+        ModItems.NOTEX.forEach(sup -> hidden.add(sup.get()));
         ModItems.DATAGENTAGS.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
         this.tag(RunecraftoryTags.Items.SHORTSWORDS)
                 .add(ModItems.PLANT_SWORD.get());

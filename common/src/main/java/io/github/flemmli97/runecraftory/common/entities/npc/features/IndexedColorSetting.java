@@ -3,8 +3,6 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
@@ -34,25 +32,5 @@ public record IndexedColorSetting(List<Integer> indices, ColorSetting color) {
         public static final StreamCodec<ByteBuf, ResolvedIndexColor> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.INT, ResolvedIndexColor::index, ByteBufCodecs.INT, ResolvedIndexColor::color, ResolvedIndexColor::new
         );
-
-        public ResolvedIndexColor(FriendlyByteBuf buf) {
-            this(buf.readInt(), buf.readInt());
-        }
-
-        public ResolvedIndexColor(CompoundTag tag) {
-            this(tag.getInt("Type"), tag.getInt("Color"));
-        }
-
-        public void writeToBuffer(FriendlyByteBuf buf) {
-            buf.writeInt(this.index);
-            buf.writeInt(this.color);
-        }
-
-        public CompoundTag save() {
-            CompoundTag tag = new CompoundTag();
-            tag.putInt("Index", this.index);
-            tag.putInt("Color", this.color);
-            return tag;
-        }
     }
 }

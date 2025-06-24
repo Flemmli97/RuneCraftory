@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -12,5 +13,5 @@ import java.util.Map;
 public interface AttributeMapAccessor {
 
     @Accessor("attributes")
-    Map<Attribute, AttributeInstance> getAttributes();
+    Map<Holder<Attribute>, AttributeInstance> getAttributes();
 }

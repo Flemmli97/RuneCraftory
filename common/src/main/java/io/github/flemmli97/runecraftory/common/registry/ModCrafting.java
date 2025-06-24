@@ -29,12 +29,13 @@ public class ModCrafting {
     public static final RegistryEntrySupplier<RecipeSerializer<?>, RecipeSerializer<LevelUpUpgradeRecipe>> LEVEL_UPGRADE_SERIALIZER = RECIPESERIALIZER.register("level_upgrade", LevelUpUpgradeRecipe.Serializer::new);
     public static final RegistryEntrySupplier<RecipeSerializer<?>, RecipeSerializer<ShapelessRecipe>> HAMMER_REMAINDER_SERIALIZER = RECIPESERIALIZER.register("hammer_remainder", HammerRemainderRecipe.Serializer::new);
 
-    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> CHEMISTRY = reg("chemistry_recipe");
-    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> ARMOR = reg("armor_recipe");
-    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> COOKING = reg("cooking_recipe");
-    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> FORGE = reg("forge_recipe");
+    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> CHEMISTRY = registerType("chemistry_recipe");
+    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> ARMOR = registerType("armor_recipe");
+    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> COOKING = registerType("cooking_recipe");
+    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> FORGE = registerType("forge_recipe");
+    public static final RegistryEntrySupplier<RecipeType<?>, RecipeType<SextupleRecipe>> LEVEL_UP = registerType("level_up");
 
-    private static <T extends Recipe<?>> RegistryEntrySupplier<RecipeType<?>, RecipeType<T>> reg(String name) {
+    private static <T extends Recipe<?>> RegistryEntrySupplier<RecipeType<?>, RecipeType<T>> registerType(String name) {
         return RECIPETYPE.register(name, () -> new RecipeType<>() {
             @Override
             public String toString() {

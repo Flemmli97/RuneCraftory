@@ -46,7 +46,7 @@
     "PacketDecoderMixin"
   ],
   "client": [
-    "AtlasMixin",
+    "ModelManagerMixin",
     "BiomeColorsMixin",
     "ClientLevelMixin",
     "ClientPacketListenerMixin",

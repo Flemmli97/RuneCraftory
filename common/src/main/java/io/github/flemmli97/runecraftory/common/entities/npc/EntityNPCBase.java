@@ -848,7 +848,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         if (!this.level().isClientSide)
             LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        ((AttributeMapAccessor) this.getAttributes()).getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
+        ((AttributeMapAccessor) this.getAttributes()).getAttributes()
+                .forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
         if (this.data != null) {
             Map<Holder<Attribute>, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
             gain.forEach((att, val) -> {

@@ -4,13 +4,6 @@ loom {
     accessWidenerPath.set project(":fabric").file("src/main/resources/runecraftory.accesswidener")
 }
 
-repositories {
-    maven {
-        url "https://maven.blamejared.com"
-    }
-    maven { url "https://maven.shedaniel.me/" }
-}
-
 dependencies {
     modCompileOnly "io.github.flemmli97:tenshilib:${tenshilib_version}-common"
     modCompileOnly ("io.github.flemmli97:simplequests_api:${simplequests_api_version}-common") {
@@ -19,9 +12,9 @@ dependencies {
     modCompileOnly "net.tslat.smartbrainlib:SmartBrainLib-common-${project.minecraft_version}:${project.sbl_version}"
     modCompileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${forge_config_api}"
 
-//    modCompileOnly "mezz.jei:jei-1.18.2-common:${jei_version}"
-//    modCompileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:8.+"
-//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
+    modCompileOnly "mezz.jei:jei-1.21.1-fabric:${jei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:${rei_version}"
 }
 
 sourceSets.main.resources {

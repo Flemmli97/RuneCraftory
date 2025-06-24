@@ -101,8 +101,8 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
         }
 
         @Override
-        public NPCFeatureType<HairFeatureType.HairFeature> type() {
-            return ModNPCLooks.HAIR.get();
+        public NPCFeatureType<FaceFeatures> type() {
+            return ModNPCLooks.FACE.get();
         }
     }
 

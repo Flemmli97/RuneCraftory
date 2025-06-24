@@ -71,7 +71,7 @@ public class LevelUpUpgradeRecipe implements Recipe<SingleRecipeInput> {
 
     @Override
     public RecipeType<?> getType() {
-        return RecipeType.CRAFTING;
+        return ModCrafting.LEVEL_UP.get();
     }
 
     @Override

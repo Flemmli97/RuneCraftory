@@ -20,5 +20,11 @@ subprojects {
             name = "SmartBrainLib (SBL) Maven Repo"
             url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
         }
+        maven {
+            url "https://maven.blamejared.com"
+        }
+        maven {
+            url "https://maven.shedaniel.me/"
+        }
     }
 }

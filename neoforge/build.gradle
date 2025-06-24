@@ -18,10 +18,6 @@ ext {
 
 repositories {
     maven {
-        url "https://maven.blamejared.com"
-    }
-    maven { url "https://maven.shedaniel.me" }
-    maven {
         name = "CurseMaven"
         url "https://www.cursemaven.com"
     }
@@ -37,31 +33,25 @@ repositories {
 
 dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-neoforge"
-//    modImplementation patchouli
-//    modImplementation patchouli_datagen
+    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${project.minecraft_version}:${project.sbl_version}"
     modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge")
     // Jar-Jar not added otherwise
     modRuntimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
-    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${project.minecraft_version}:${project.sbl_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+
+    modRuntimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
+//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
 //    modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}") {
 //        transitive = false
 //    }
-//    // for 1.18 the package structure is different between forge/fabric
 //    modImplementation "curse.maven:jade-324717:4800837"
-//
-//    //modRuntimeOnly "mezz.jei:jei-1.18.2-forge:${jei_version}"
-//
-//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
-//    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
-//    //modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-//
 //    modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
-//
-//    //Mods useful for testing things
-//    modRuntimeOnly "curse.maven:mobbattle-268746:4697990"
-//    modRuntimeOnly "curse.maven:dummy-225738:3820503"
-//    modRuntimeOnly "curse.maven:spark-361579:3824951"
-//
+
+    // Mods useful for testing things
     modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.7-neoforge"
+    modRuntimeOnly "io.github.flemmli97:mobbattle:1.21.1-2.5.3-neoforge"
+    modRuntimeOnly "curse.maven:moonlight-499980:6682378"
+    modRuntimeOnly "curse.maven:dummy-225738:6608246"
+    modRuntimeOnly "curse.maven:spark-361579:6225208"
 }

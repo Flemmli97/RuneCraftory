@@ -21,9 +21,6 @@
     ],
     "client": [
       "io.github.flemmli97.runecraftory.fabric.client.RuneCraftoryFabricClient"
-    ],
-    "modmenu": [
-      "io.github.flemmli97.runecraftory.fabric.ModMenuIntegration"
     ],"rei_client": [
       "io.github.flemmli97.runecraftory.integration.rei.ReiClientPlugin"
     ], "rei_common": [

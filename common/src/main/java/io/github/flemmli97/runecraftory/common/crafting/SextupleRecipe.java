@@ -120,6 +120,14 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
         return this.group;
     }
 
+    /**
+     * Disables client error logs of unknown recipe category
+     */
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public RecipeOutput createOutput(PlayerBoundCraftingContainer inv, boolean unlocked) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (int j = 0; j < 6; ++j) {
