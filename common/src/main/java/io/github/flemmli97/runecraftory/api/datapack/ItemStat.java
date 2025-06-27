@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -23,12 +24,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,123 +201,51 @@ public class ItemStat {
         boolean shouldHaveStats = ItemNBT.shouldHaveStats(stack);
         if (!shouldHaveStats && this.getDiff() > 0)
             list.add(Component.translatable("runecraftory.tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
-        if (showStat) {
-            AttributeMapDisplay stats = getStatsAttributeMap(stack);
-            List<Component> statsTooltip = stats.components();
-            if (!statsTooltip.isEmpty()) {
-                String prefix = shouldHaveStats ? "runecraftory.tooltip.item.equipped" : "runecraftory.tooltip.item.upgrade";
-                list.add(Component.translatable(prefix).withStyle(ChatFormatting.GRAY));
-                list.addAll(statsTooltip);
-            }
+        if (showStat && !shouldHaveStats) {
+            Map<Holder<Attribute>, Double> stats = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
+                    .map(ItemStat::itemStats).orElse(null);
+            addUpgradeStatsText(stats, list);
         }
         return list;
     }
 
-    /**
-     * Attributes and values to display
-     */
-    private static AttributeMapDisplay getStatsAttributeMap(ItemStack stack) {
-        if (!ItemNBT.shouldHaveStats(stack))
-            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
-                    .map(s -> new AttributeMapDisplay(s.itemStats, null)).orElse(new AttributeMapDisplay(null, null));
-        if (!ItemStat.SHOW_STATS_CUSTOM)
-            return new AttributeMapDisplay(null, null);
-
-//        Map<Holder<Attribute>, AttributeValues> map = new TreeMap<>(ModAttributes.SORTED);
-//        Multimap<Holder<Attribute>, AttributeModifier> multimap = ItemNBT.statIncrease(stack);
-//        multimap.forEach((att, mod) -> map.compute(att, (key, old) -> old == null ? AttributeValues.of(mod) : old.add(mod)));
-        return new AttributeMapDisplay(null, null);
+    private static void addUpgradeStatsText(Map<Holder<Attribute>, Double> stats, List<Component> tooltip) {
+        if (stats == null || stats.isEmpty())
+            return;
+        tooltip.add(Component.translatable("runecraftory.tooltip.item.upgrade").withStyle(ChatFormatting.GRAY));
+        for (Map.Entry<Holder<Attribute>, Double> entry : stats.entrySet()) {
+            if (entry.getKey().is(RunecraftoryTags.Attributes.DISPLAY_IGNORED))
+                continue;
+            double d = Attributes.KNOCKBACK_RESISTANCE.is(entry.getKey()) ? entry.getValue() * 10 : entry.getValue();
+            String num = format(entry.getKey(), d);
+            if (num == null)
+                continue;
+            MutableComponent comp = CommonComponents.space()
+                    .append(Component.translatable("runecraftory.tooltip.item.attribute",
+                            Component.translatable(entry.getKey().value().getDescriptionId()), num));
+            tooltip.add(comp.withStyle(ChatFormatting.BLUE));
+        }
     }
 
-    record AttributeMapDisplay(Map<Holder<Attribute>, Double> flat, Map<Holder<Attribute>, AttributeValues> ext) {
-
-        private List<Component> components() {
-            List<Component> list = new ArrayList<>();
-//            if (this.flat != null) {
-//                for (Map.Entry<Holder<Attribute>, Double> entry : this.flat.entrySet()) {
-//                    ResourceLocation key = BuiltInRegistries.ATTRIBUTE.getKey(entry.getKey());
-//                    if (IGNORED.contains(key))
-//                        continue;
-//                    double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue() * 10 : entry.getValue();
-//                    String num = format(key, d, false);
-//                    if (num == null)
-//                        continue;
-//                    MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().getDescriptionId())).append(Component.literal(": " + num));
-//                    list.add(comp.withStyle(ChatFormatting.BLUE));
-//                }
-//            } else if (this.ext != null) {
-//                for (Map.Entry<Holder<Attribute>, AttributeValues> entry : this.ext.entrySet()) {
-//                    if (IGNORED.contains(key))
-//                        continue;
-//                    if (entry.getValue().flat != 0) {
-//                        double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue().flat * 10 : entry.getValue().flat;
-//                        String num = format(key, d, false);
-//                        if (num == null)
-//                            continue;
-//                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
-//                        list.add(comp.withStyle(ChatFormatting.BLUE));
-//                    }
-//                    if (entry.getValue().multBase != 0) {
-//                        String num = format(key, entry.getValue().multBase, true);
-//                        if (num == null)
-//                            continue;
-//                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
-//                        list.add(comp.withStyle(ChatFormatting.BLUE));
-//                    }
-//                    if (entry.getValue().multTotal != 0) {
-//                        String num = format(key, entry.getValue().multTotal, true);
-//                        if (num == null)
-//                            continue;
-//                        MutableComponent comp = Component.literal(" ").append(Component.translatable(entry.getKey().value().getDescriptionId())).append(Component.literal(": " + num));
-//                        list.add(comp.withStyle(ChatFormatting.BLUE));
-//                    }
-//                }
-//            }
-            return list;
+    private static String format(Holder<Attribute> att, double n) {
+        String sign = n > 0 ? "+" : "";
+        if (att.value() == Attributes.MOVEMENT_SPEED) {
+            double val = ((int) (n * 100)) / 100d;
+            if (val == 0)
+                return null;
+            return (sign + ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(val));
         }
-
-//        private static String format(Holder<Attribute> att, double n, boolean percentage) {
-//            String sign = n > 0 ? (percentage ? "x" : "+") : "";
-//            if (att.value() == Attributes.MOVEMENT_SPEED) {
-//                double val = percentage ? n : ((int) (n * 100)) / 100d;
-//                if (val == 0)
-//                    return null;
-//                return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val));
-//            }
-//            boolean percSign = PERCENT_ATTRIBUTES.contains(att);
-//            double val = percentage ? n : (int) (n * 2) * 0.5f;
-//            if (val == 0)
-//                return null;
-//            return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val)) + (percSign ? "%" : "");
-//        }
+        boolean percSign = att.is(RunecraftoryTags.Attributes.PERCENTAGE_DISPLAY);
+        double val = (int) (n * 2) * 0.5f;
+        if (val == 0)
+            return null;
+        return (sign + ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(val)) + (percSign ? "%" : "");
     }
 
-    private static class AttributeValues {
-
-        private double flat, multBase, multTotal;
-
-        private AttributeValues(double flat, double multBase, double multTotal) {
-            this.flat = flat;
-            this.multBase = multBase;
-            this.multTotal = multTotal;
-        }
-
-//        private static AttributeValues of(AttributeModifier mod) {
-//            return switch (mod.operation()) {
-//                case ADDITION -> new AttributeValues(mod.getAmount(), 0, 0);
-//                case MULTIPLY_BASE -> new AttributeValues(0, mod.getAmount(), 0);
-//                case MULTIPLY_TOTAL -> new AttributeValues(0, 0, mod.getAmount());
-//            };
-//        }
-//
-//        private AttributeValues add(AttributeModifier mod) {
-//            switch (mod.operation()) {
-//                case ADDITION -> this.flat += mod.getAmount();
-//                case MULTIPLY_BASE -> this.multBase += mod.getAmount();
-//                case MULTIPLY_TOTAL -> this.multTotal += mod.getAmount();
-//            }
-//            return this;
-//        }
+    public static AttributeModifier adjustModifier(Holder<Attribute> attribute, AttributeModifier original) {
+        if (attribute.is(RunecraftoryTags.Attributes.PERCENTAGE_DISPLAY) && original.operation() == AttributeModifier.Operation.ADD_VALUE)
+            return new AttributeModifier(original.id(), original.amount() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        return original;
     }
 
     @Override

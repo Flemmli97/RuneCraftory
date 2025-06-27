@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DynamicOps;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
-import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -16,38 +16,38 @@ import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CFoodPkt;
-import io.github.flemmli97.runecraftory.common.network.S2CItemStatBoost;
 import io.github.flemmli97.runecraftory.common.network.S2CLevelPkt;
-import io.github.flemmli97.runecraftory.common.network.S2CMaxRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CMoney;
-import io.github.flemmli97.runecraftory.common.network.S2CPlayerStats;
 import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -56,75 +56,57 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class PlayerData {
 
     private final Player player;
 
-    public boolean starting, unlockedRecipes;
-    //max runepoints possible: 2883
+    private boolean starting;
+
+    private double runePoints;
+
+    private final XpLevelHolder level = new XpLevelHolder();
+    private final EnumMap<EnumSkills, XpLevelHolder> skillLevels = new EnumMap<>(EnumSkills.class);
+
     private int money = GeneralConfig.startingMoney;
-    private float runePointsMax = GeneralConfig.startingRp;
-    private int runePoints = (int) this.runePointsMax;
-    private float str = GeneralConfig.startingStr;
-    private float vit = GeneralConfig.startingVit;
-    private float intel = GeneralConfig.startingIntel;
-    private float strAdd, vitAdd, intAdd;
-    /**
-     * first number is level, second is the xp a.k.a. percent to next level
-     */
-    private final LevelExpPair level = new LevelExpPair();
-    private final EnumMap<EnumSkills, LevelExpPair> skillLevels = new EnumMap<>(EnumSkills.class);
+
+    private final RecipeKeeper keeper = new RecipeKeeper();
+
+    private final InventoryShippingBin shippingBin = new InventoryShippingBin();
+    private final Map<Item, ShippedItemData> shippedItems = new HashMap<>();
+    private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
 
     private final InventorySpells spells = new InventorySpells();
 
     private final DailyPlayerUpdater updater = new DailyPlayerUpdater(this);
-    private int rpStillRegen;
 
-    private final RecipeKeeper keeper = new RecipeKeeper();
-
-    private final Map<Item, ShippedItemData> shippedItems = new HashMap<>();
-    private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
-    private final InventoryShippingBin shipping = new InventoryShippingBin();
-    //Food buff
-    private Holder<Item> lastFoodBuff;
-    private Map<Holder<Attribute>, Double> foodBuffs = new HashMap<>();
+    private Holder<Item> lastEaten;
     private int foodDuration;
 
-    private final PlayerWeaponHandler weaponHandler;
-
     private final WalkingTracker walkingTracker = new WalkingTracker();
-
-    public final EntitySelector entitySelector = new EntitySelector();
-
     public final EntityStatsTracker entityStatsTracker = new EntityStatsTracker();
-
     public final Party party = new Party();
 
-    private boolean touchedWater;
-
     private int craftingSeed;
-
     private int boughtBarns;
-
-    private BlockPos blockBreakPosForMsg;
-    private int breakTick;
-
     private int mobLevelIncrease;
 
-    private NPCData.Gender gender;
+    private final PlayerWeaponHandler weaponHandler;
+    public final EntitySelector entitySelector = new EntitySelector();
+    private BlockPos blockBreakPosForMsg;
+    private int breakTick;
+    private int rpStillRegen;
 
     public PlayerData(Player player) {
         this.player = player;
         for (EnumSkills skill : EnumSkills.values()) {
-            this.skillLevels.put(skill, new LevelExpPair());
+            this.skillLevels.put(skill, new XpLevelHolder());
         }
         this.weaponHandler = new PlayerWeaponHandler(player);
     }
@@ -133,35 +115,84 @@ public class PlayerData {
         return this.player;
     }
 
-    public void setMaxHealth(float amount, boolean asBaseHealth) {
-        AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
-        AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_MODIFIER);
-        double val = amount - (asBaseHealth ? health.getBaseValue() : health.getValue());
-        if (modifier != null && !asBaseHealth)
-            val += modifier.amount();
-        health.removeModifier(LibConstants.MAX_HEALTH_MODIFIER);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, val, AttributeModifier.Operation.ADD_VALUE));
+    public void onJoin() {
+        this.recalculateStats(false);
+        // Update from the config values
+        this.updateConfigAttributes();
+        if (!this.starting) {
+            this.starting = true;
+            this.player.setHealth(this.player.getMaxHealth());
+            this.setRunePoints((int) this.player.getAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder()));
+        }
     }
 
-    private void setFoodHealthBonus(double amount) {
-        AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
-        health.removeModifier(LibConstants.FOOD_MODIFIER);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, amount, AttributeModifier.Operation.ADD_VALUE));
+    private void setForVitality(ResourceLocation modifier, double value, AttributeUpdate update) {
+        this.setAttributeValue(ModAttributes.DEFENCE.asHolder(), modifier, value * 0.5, update);
+        this.setAttributeValue(ModAttributes.MAGIC_DEFENCE.asHolder(), modifier, value * 0.5, update);
+    }
+
+    private void setFoodBonus(Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> bonus) {
+        bonus.getFirst().forEach((att, val) ->
+                this.setAttributeValue(att, LibConstants.FOOD_MODIFIER, val, AttributeUpdate.REPLACE));
+        bonus.getSecond().forEach((att, val) -> {
+            AttributeInstance instance = this.player.getAttribute(att);
+            AttributeUpdate.REPLACE.modify(instance, LibConstants.FOOD_MODIFIER_MULTI, val, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        });
+    }
+
+    private void setAttributeValue(Holder<Attribute> attribute, ResourceLocation modifier, double value, AttributeUpdate update) {
+        AttributeInstance instance = this.player.getAttribute(attribute);
+        if (instance == null)
+            return;
+        update.modify(instance, modifier, value);
+    }
+
+    private void updateConfigAttributes() {
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingHealth, AttributeUpdate.ABSOLUTE);
+        this.setAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingRp, AttributeUpdate.ABSOLUTE);
+        this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingStr, AttributeUpdate.ABSOLUTE);
+        this.setForVitality(LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingVit, AttributeUpdate.ABSOLUTE);
+        this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingIntel, AttributeUpdate.ABSOLUTE);
+    }
+
+    private void updateLevelAttributes() {
+        int lvl = this.level.getLevel() - 1;
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * lvl, AttributeUpdate.REPLACE);
+        this.setAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.rpPerLevel * lvl, AttributeUpdate.REPLACE);
+        this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.strPerLevel * lvl, AttributeUpdate.REPLACE);
+        this.setForVitality(LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.vitPerLevel * lvl, AttributeUpdate.REPLACE);
+        this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.intPerLevel * lvl, AttributeUpdate.REPLACE);
+    }
+
+    private void updateSkillLevelAttributes() {
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::healthIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::strIncrease), AttributeUpdate.REPLACE);
+        this.setForVitality(LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::vitIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::intelIncrease), AttributeUpdate.REPLACE);
+    }
+
+    private void clearAtributeModifier(Holder<Attribute> attribute, ResourceLocation modifier) {
+        AttributeInstance instance = this.player.getAttribute(attribute);
+        if (instance == null)
+            return;
+        instance.removeModifier(modifier);
+    }
+
+    private void clearAllAtributeModifier(ResourceLocation modifier) {
+        ((AttributeMapAccessor) this.player.getAttributes())
+                .getAttributes().forEach((att, inst) -> inst.removeModifier(modifier));
     }
 
     public int getRunePoints() {
-        return this.runePoints;
+        return (int) this.runePoints;
     }
 
     public int getMaxRunePoints() {
-        return (int) (this.runePointsMax + this.foodBuffs.getOrDefault(ModAttributes.MAX_RUNEPOINTS.asHolder(), 0d));
+        return (int) this.player.getAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder());
     }
 
-    public float getMaxRunePointsRaw() {
-        return this.runePointsMax;
-    }
-
-    public boolean decreaseRunePoints(int amount, boolean damage) {
+    public boolean useRunePoints(int amount, boolean damage) {
         if (!GeneralConfig.useRp && !this.player.level().isClientSide)
             return true;
         if (!this.player.isCreative()) {
@@ -171,7 +202,7 @@ public class PlayerData {
             if (this.runePoints >= amount)
                 this.runePoints -= amount;
             else if (damage) {
-                int diff = amount - this.runePoints;
+                int diff = amount - this.getRunePoints();
                 this.runePoints = 0;
                 if (!this.player.level().isClientSide) {
                     int invul = this.player.invulnerableTime;
@@ -192,7 +223,9 @@ public class PlayerData {
         return true;
     }
 
-    public void refreshRunePoints(int amount) {
+    public void regenRunePoints(int amount) {
+        if (amount <= 0)
+            return;
         this.runePoints = Mth.clamp(this.runePoints + amount, 0, this.getMaxRunePoints());
         if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
@@ -202,12 +235,6 @@ public class PlayerData {
         this.runePoints = amount;
         if (this.player instanceof ServerPlayer serverPlayer)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CRunePoints(this), serverPlayer);
-    }
-
-    public void setMaxRunePoints(float amount) {
-        this.runePointsMax = amount;
-        if (this.player instanceof ServerPlayer serverPlayer)
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CMaxRunePoints(this), serverPlayer);
     }
 
     public int getMoney() {
@@ -225,6 +252,10 @@ public class PlayerData {
         return false;
     }
 
+    public void giveMoney(int amount) {
+        this.setMoney(this.getMoney() + amount);
+    }
+
     public void setMoney(int amount) {
         this.money = amount;
         if (this.player instanceof ServerPlayer serverPlayer) {
@@ -233,37 +264,7 @@ public class PlayerData {
         }
     }
 
-    public float getStr() {
-        return this.str;
-    }
-
-    public void setStr(float amount) {
-        this.str = amount;
-        if (this.player instanceof ServerPlayer serverPlayer)
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
-    }
-
-    public float getVit() {
-        return this.vit;
-    }
-
-    public void setVit(float amount) {
-        this.vit = amount;
-        if (this.player instanceof ServerPlayer serverPlayer)
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
-    }
-
-    public float getIntel() {
-        return this.intel;
-    }
-
-    public void setIntel(float amount) {
-        this.intel = amount;
-        if (this.player instanceof ServerPlayer serverPlayer)
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CPlayerStats(this), serverPlayer);
-    }
-
-    public LevelExpPair getPlayerLevel() {
+    public XpLevelHolder getPlayerLevel() {
         return this.level;
     }
 
@@ -281,7 +282,7 @@ public class PlayerData {
     public void addXp(float amount) {
         if (this.level.getLevel() >= GeneralConfig.maxLevel)
             return;
-        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(this.player));
+        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, this::handleLevelStatUpdate);
         if (levelUp) {
             this.player.level().playSound(null, this.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -292,30 +293,24 @@ public class PlayerData {
         }
     }
 
-    private void onLevelUp(Player player) {
-        float health = player.getMaxHealth();
-        this.updateHealth();
-        player.heal(player.getMaxHealth() - health);
-        this.runePointsMax += GeneralConfig.rpPerLevel;
-        this.runePoints = Math.min(this.runePoints + (int) GeneralConfig.rpPerLevel, this.runePoints);
-        this.str += GeneralConfig.strPerLevel;
-        this.vit += GeneralConfig.vitPerLevel;
-        this.intel += GeneralConfig.intPerLevel;
+    private void handleLevelStatUpdate() {
+        float health = this.player.getMaxHealth();
+        int runePoints = this.getRunePoints();
+        this.updateLevelAttributes();
+        this.player.heal(this.player.getMaxHealth() - health);
+        this.regenRunePoints(this.getMaxRunePoints() - runePoints);
     }
 
     public void recalculateStats(boolean regen) {
         if (!(this.player instanceof ServerPlayer serverPlayer))
             return;
-        int lvl = this.level.getLevel() - 1;
-        this.updateHealth();
-        this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRp + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
+        this.updateConfigAttributes();
+        this.updateLevelAttributes();
+        this.updateSkillLevelAttributes();
         if (regen) {
             this.player.setHealth(this.player.getMaxHealth());
-            this.runePoints = (int) this.runePointsMax;
+            this.runePoints = this.getMaxRunePoints();
         }
-        this.str = GeneralConfig.strPerLevel * lvl + GeneralConfig.startingStr + (float) this.skillVal(SkillProperties::strIncrease);
-        this.intel = GeneralConfig.intPerLevel * lvl + GeneralConfig.startingIntel + (float) this.skillVal(SkillProperties::intelIncrease);
-        this.vit = GeneralConfig.vitPerLevel * lvl + GeneralConfig.startingVit + (float) this.skillVal(SkillProperties::vitIncrease);
         LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
     }
 
@@ -323,11 +318,7 @@ public class PlayerData {
         return this.skillLevels.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
-    private double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
-        return this.skillLevels.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
-    }
-
-    public LevelExpPair getSkillLevel(EnumSkills skill) {
+    public XpLevelHolder getSkillLevel(EnumSkills skill) {
         return this.skillLevels.get(skill);
     }
 
@@ -346,7 +337,7 @@ public class PlayerData {
     public void increaseSkill(EnumSkills skill, float amount) {
         if (this.skillLevels.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
-        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, this.player));
+        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), this::onSkillLevelUp);
         if (levelUp) {
             this.player.level().playSound(null, this.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -357,98 +348,40 @@ public class PlayerData {
         }
     }
 
-    private void onSkillLevelUp(EnumSkills skill, Player player) {
-        SkillProperties prop = DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill);
-        int level = this.skillLevels.get(skill).getLevel();
-        float health = player.getMaxHealth();
-        this.updateHealth();
-        player.heal(player.getMaxHealth() - health);
-        if (level <= 100) {
-            this.runePointsMax += prop.rpIncrease();
-            this.runePoints += prop.rpIncrease();
-        }
-        this.str += prop.strIncrease();
-        this.vit += prop.vitIncrease();
-        this.intel += prop.intelIncrease();
-    }
-
-    private void updateHealth() {
-        this.setMaxHealth(GeneralConfig.startingHealth
-                + GeneralConfig.hpPerLevel * LevelCalc.getMultiplierInterval(this.level.getLevel(), 30, 30, 0.5f)
-                + (float) this.skillValLevelFunc((skillLvl, prop) -> {
-            int skillHealthMultiplier = 1 + (skillLvl / 25);
-            return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
-        }), true);
+    private void onSkillLevelUp() {
+        float health = this.player.getMaxHealth();
+        int runePoints = this.getRunePoints();
+        this.updateSkillLevelAttributes();
+        this.player.heal(this.player.getMaxHealth() - health);
+        this.regenRunePoints(this.getMaxRunePoints() - runePoints);
     }
 
     public void increaseStatBonus(ItemStatIncrease.Stat type) {
         switch (type) {
-            case STR -> {
-                this.strAdd += 1;
-                if (this.player instanceof ServerPlayer serverPlayer)
-                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
-            }
-            case INT -> {
-                this.intAdd += 1;
-                if (this.player instanceof ServerPlayer serverPlayer)
-                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
-            }
-            case VIT -> {
-                this.vitAdd += 1;
-                if (this.player instanceof ServerPlayer serverPlayer)
-                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, false), serverPlayer);
-            }
-            case HP -> {
-                AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
-                AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
-                double val = modifier == null ? 0 : modifier.amount();
-                health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
-                health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE, val + 10, AttributeModifier.Operation.ADD_VALUE));
-            }
+            case STR -> this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
+                    1, AttributeUpdate.ADD);
+            case INT ->
+                    this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
+                            1, AttributeUpdate.ADD);
+            case VIT -> this.setForVitality(LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
+                    1, AttributeUpdate.ADD);
+            case HP -> this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
+                    10, AttributeUpdate.ADD);
         }
     }
 
     public void resetAllStatBoost(ItemStatIncrease.Stat type) {
         switch (type) {
-            case STR -> {
-                this.strAdd = 0;
-                if (this.player instanceof ServerPlayer serverPlayer)
-                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
-            }
-            case INT -> {
-                this.intAdd = 0;
-                if (this.player instanceof ServerPlayer serverPlayer)
-                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
-            }
+            case STR ->
+                    this.clearAtributeModifier(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
+            case INT ->
+                    this.clearAtributeModifier(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
             case VIT -> {
-                this.vitAdd = 0;
-                if (this.player instanceof ServerPlayer serverPlayer)
-                    LoaderNetwork.INSTANCE.sendToPlayer(new S2CItemStatBoost(type, true), serverPlayer);
+                this.clearAtributeModifier(ModAttributes.DEFENCE.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
+                this.clearAtributeModifier(ModAttributes.MAGIC_DEFENCE.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
             }
-            case HP -> {
-                AttributeInstance health = this.player.getAttribute(Attributes.MAX_HEALTH);
-                health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
-            }
+            case HP -> this.clearAtributeModifier(Attributes.MAX_HEALTH, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
         }
-    }
-
-    public double getAttributeValue(Holder<Attribute> att) {
-        double val = 0;
-        float vit = this.getVit() + this.vitAdd;
-        if (att == Attributes.ATTACK_DAMAGE) {
-            val += this.getStr() + this.strAdd;
-        }
-        if (att.value() == ModAttributes.MAGIC_ATTACK.get())
-            val += this.getIntel() + this.intAdd;
-        if (att.value() == ModAttributes.DEFENCE.get())
-            val += vit * 0.5;
-        if (att.value() == ModAttributes.MAGIC_DEFENCE.get())
-            val += vit * 0.5;
-        val += this.foodBuffs.getOrDefault(att, 0d);
-
-        AttributeMap atts = this.player.getAttributes();
-        val += atts.hasAttribute(att) ? atts.getValue(att) : 0;
-        return val;
     }
 
     public InventorySpells getInv() {
@@ -456,7 +389,7 @@ public class PlayerData {
     }
 
     public InventoryShippingBin getShippingInv() {
-        return this.shipping;
+        return this.shippingBin;
     }
 
     public void refreshShop() {
@@ -512,41 +445,16 @@ public class PlayerData {
         return this.keeper;
     }
 
-    public Holder<Item> lastEatenFood() {
-        return this.lastFoodBuff;
-    }
-
     public void applyFoodEffect(ItemStack stack) {
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null)
             return;
         Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
-        Map<Holder<Attribute>, Double> gain = foodStats.getFirst();
-        foodStats.getSecond().forEach((att, d) -> {
-            float percent = (float) (d * 0.01f);
-            double mult = 0;
-            if (att == Attributes.MAX_HEALTH)
-                mult += this.player.getMaxHealth() * percent;
-            else if (att == ModAttributes.MAX_RUNEPOINTS.get())
-                mult += this.runePointsMax * percent;
-            else if (att == Attributes.ATTACK_DAMAGE)
-                mult += this.str * percent;
-            else if (att == ModAttributes.DEFENCE.get())
-                mult += this.vit * 0.5 * percent;
-            else if (att == ModAttributes.MAGIC_ATTACK.get())
-                mult += this.intel * percent;
-            else if (att == ModAttributes.DEFENCE.get())
-                mult += this.vit * 0.5 * percent;
-            mult += gain.getOrDefault(att, 0d);
-            gain.put(att, mult);
-        });
-        if (!gain.isEmpty()) {
+        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
             this.removeFoodEffect(this.player);
-            this.foodBuffs = gain;
-            if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
-                this.setFoodHealthBonus(this.foodBuffs.get(Attributes.MAX_HEALTH));
+            this.setFoodBonus(foodStats);
             this.foodDuration = food.duration();
-            this.lastFoodBuff = stack.getItemHolder();
+            this.lastEaten = stack.getItemHolder();
         }
         if (this.player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(stack), serverPlayer);
@@ -554,45 +462,22 @@ public class PlayerData {
     }
 
     public void removeFoodEffect(Player player) {
-        this.foodBuffs = Collections.emptyMap();
         this.foodDuration = -1;
-        this.lastFoodBuff = null;
-        this.setFoodHealthBonus(0);
+        this.lastEaten = null;
+        this.clearAllAtributeModifier(LibConstants.FOOD_MODIFIER);
+        this.clearAllAtributeModifier(LibConstants.FOOD_MODIFIER_MULTI);
         if (player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CFoodPkt(null), serverPlayer);
         }
     }
 
-    public Map<Holder<Attribute>, Double> foodEffects() {
-        return this.foodBuffs;
+    public FoodData foodBuff() {
+        return new FoodData(Optional.ofNullable(this.lastEaten), this.foodDuration);
     }
 
-    public int foodBuffDuration() {
-        return this.foodDuration;
-    }
-
-    public CompoundTag foodBuffNBT() {
-        CompoundTag nbt = new CompoundTag();
-        if (this.lastFoodBuff != null)
-            nbt.put("LastFood", BuiltInRegistries.ITEM.holderByNameCodec().encodeStart(NbtOps.INSTANCE, this.lastFoodBuff).getOrThrow());
-
-        CompoundTag compound3 = new CompoundTag();
-        for (Map.Entry<Holder<Attribute>, Double> entry : this.foodBuffs.entrySet()) {
-            compound3.putDouble(entry.getKey().unwrapKey().get().location().toString(), entry.getValue());
-        }
-        nbt.put("FoodBuffs", compound3);
-        nbt.putInt("FoodBuffDuration", this.foodDuration);
-        return nbt;
-    }
-
-    public void readFoodBuffFromNBT(CompoundTag nbt) {
-        this.lastFoodBuff = nbt.contains("LastFood") ? BuiltInRegistries.ITEM.holderByNameCodec().parse(NbtOps.INSTANCE, nbt.get("LastFood")).getOrThrow() : null;
-        this.foodBuffs.clear();
-        CompoundTag tag = nbt.getCompound("FoodBuffs");
-        for (String s : tag.getAllKeys()) {
-            this.foodBuffs.put(BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(s)).get(), tag.getDouble(s));
-        }
-        this.foodDuration = nbt.getInt("FoodBuffDuration");
+    public void updateFoodBuff(FoodData data) {
+        this.lastEaten = data.food().orElse(null);
+        this.foodDuration = data.duration();
     }
 
     public PlayerWeaponHandler getWeaponHandler() {
@@ -608,7 +493,7 @@ public class PlayerData {
                     this.rpStillRegen = 200;
             }
             if (--this.rpStillRegen < 0 && serverPlayer.tickCount % 20 == 0) {
-                this.refreshRunePoints(1);
+                this.regenRunePoints(1);
             }
             if (--this.breakTick <= 0)
                 this.blockBreakPosForMsg = null;
@@ -625,17 +510,7 @@ public class PlayerData {
                 }
             } else
                 this.entitySelector.reset();
-
-            if (serverPlayer.hasEffect(ModEffects.BATH.asHolder())) {
-                if (!this.touchedWater && serverPlayer.isInWater())
-                    this.touchedWater = true;
-                else if (this.touchedWater && !serverPlayer.isInWater()) {
-                    serverPlayer.removeEffect(ModEffects.BATH.asHolder());
-                    this.touchedWater = false;
-                }
-            }
         }
-        this.getInv().update(this.player);
         this.foodDuration = Math.max(--this.foodDuration, -1);
         if (this.foodDuration == 0) {
             this.removeFoodEffect(this.player);
@@ -686,129 +561,116 @@ public class PlayerData {
         return this.mobLevelIncrease;
     }
 
-    public NPCData.Gender getGender() {
-        return this.gender;
-    }
-
     public void readFromNBT(CompoundTag nbt) {
-//        this.starting = nbt.getBoolean("Starting");
-//        this.runePointsMax = nbt.getFloat("MaxRunePoints");
-//        this.runePoints = nbt.getInt("RunePoints");
-//        this.money = nbt.getInt("Money");
-//        this.str = nbt.getFloat("Strength");
-//        this.vit = nbt.getFloat("Vitality");
-//        this.intel = nbt.getFloat("Intelligence");
-//        this.level.read(nbt.get("Level"));
-//        this.strAdd = nbt.getFloat("StrengthBonus");
-//        this.vitAdd = nbt.getFloat("VitalityBonus");
-//        this.intAdd = nbt.getFloat("IntelligenceBonus");
-//        CompoundTag skillCompound = nbt.getCompound("Skills");
-//        for (EnumSkills skill : EnumSkills.values()) {
-//            this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
-//        }
-//        this.spells.load(nbt.getCompound("Inventory"));
-//        this.shipping.load(nbt.getCompound("Shipping"));
-//        CompoundTag shipped = nbt.getCompound("ShippedItems");
-//        shipped.getAllKeys().forEach(key -> {
-//            CompoundTag d = shipped.getCompound(key);
-//            this.shippedItems.put(Registry.ITEM.get(new ResourceLocation(key)), new ShippedItemData(d.getInt("Amount"), d.getInt("Level")));
-//        });
-//        CompoundTag shops = nbt.getCompound("ShopItems");
-//        shops.getAllKeys().forEach(key -> {
-//            NonNullList<ItemStack> items = NonNullList.create();
-//            shops.getList(key, Tag.TAG_COMPOUND).forEach(comp ->
-//                    items.add(ItemStack.of((CompoundTag) comp)));
-//            this.shopItems.put(ModNPCJobs.getFromID(new ResourceLocation(key)), items);
-//        });
-//        this.keeper.read(nbt.getCompound("Recipes"));
-//        this.updater.read(nbt.getCompound("DailyUpdater"));
-//        /*if (nbt.contains("Quest")) {
-//            this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
-//        }*/
-//        this.readFoodBuffFromNBT(nbt.getCompound("FoodData"));
-//        if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
-//            this.recalculateStats(serverPlayer, false);
-//        }
-//        if (nbt.contains("RestoreHP") && player instanceof ServerPlayer serverPlayer) {
-//            float f = nbt.getFloat("RestoreHP");
-//            //Sheduling the health update in case other mods modify max health
-//            serverPlayer.getServer().tell(new TickTask(1, () -> player.setHealth(f)));
-//        }
-//        this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
-//        this.party.load(nbt.getCompound("PartyTag"));
-//        this.craftingSeed = nbt.getInt("CraftingSeed");
-//        this.boughtBarns = nbt.getInt("BoughtBarns");
-//        this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
+        HolderLookup.Provider provider = this.player.registryAccess();
+        DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
+        this.starting = nbt.getBoolean("Starting");
+        if (nbt.contains("RestoreHP") && this.player instanceof ServerPlayer serverPlayer) {
+            float f = nbt.getFloat("RestoreHP");
+            //Sheduling the health update in case other mods modify max health
+            serverPlayer.getServer().tell(new TickTask(1, () -> this.player.setHealth(f)));
+        }
+        this.runePoints = nbt.getDouble("RunePoints");
+        this.level.read(nbt.get("XpLevel"));
+        CompoundTag skillCompound = nbt.getCompound("Skills");
+        for (EnumSkills skill : EnumSkills.values()) {
+            this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
+        }
+        this.money = nbt.getInt("Money");
+        this.keeper.read(nbt.getCompound("Recipes"));
+
+        this.shippingBin.load(nbt.getCompound("Shippingbin"), provider);
+        ListTag ship = nbt.getList("ShippedItems", Tag.TAG_COMPOUND);
+        ship.forEach(t -> {
+            CompoundTag data = (CompoundTag) t;
+            this.shippedItems.put(BuiltInRegistries.ITEM.byNameCodec().parse(ops, data.get("Item")).getOrThrow(),
+                    new ShippedItemData(data.getInt("Amount"), data.getInt("Level")));
+        });
+        ListTag shop = nbt.getList("ShopItems", Tag.TAG_COMPOUND);
+        shop.forEach(t -> {
+            CompoundTag data = (CompoundTag) t;
+            NonNullList<ItemStack> list = NonNullList.create();
+            ListTag items = data.getList("Items", Tag.TAG_COMPOUND);
+            items.forEach(lt -> ItemStack.parse(provider, lt).ifPresent(list::add));
+            this.shopItems.put(ModNPCJobs.JOBS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
+        });
+        this.spells.load(nbt.getCompound("Inventory"), provider);
+        this.updater.read(nbt.getCompound("DailyUpdater"));
+
+        this.lastEaten = nbt.contains("LastFood") ? BuiltInRegistries.ITEM.holderByNameCodec().parse(NbtOps.INSTANCE, nbt.get("LastFood")).getOrThrow() : null;
+        this.foodDuration = nbt.getInt("FoodBuffDuration");
+
+        this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
+        this.entityStatsTracker.read(nbt.getCompound("TamedEntityTracker"));
+        this.party.load(nbt.getCompound("PartyTag"));
+        this.craftingSeed = nbt.getInt("CraftingSeed");
+        this.boughtBarns = nbt.getInt("BoughtBarns");
+        this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
         return this.writeToNBT(nbt, false);
     }
 
-    public CompoundTag writeToNBT(CompoundTag nbt, boolean wasDead) {
-//        nbt.putBoolean("Starting", this.starting);
-//        nbt.putFloat("MaxRunePoints", this.runePointsMax);
-//        if (this.player == null) {
-//            nbt.putInt("RunePoints", this.runePoints);
-//        } else {
-//            if (wasDead) {
-//                nbt.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
-//                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRpPercent));
-//            } else {
-//                nbt.putFloat("RestoreHP", this.player.getHealth());
-//                nbt.putInt("RunePoints", this.runePoints);
-//            }
-//        }
-//        nbt.putInt("Money", this.money);
-//        nbt.putFloat("Strength", this.str);
-//        nbt.putFloat("Vitality", this.vit);
-//        nbt.putFloat("Intelligence", this.intel);
-//        nbt.put("Level", this.level.save());
-//        nbt.putFloat("StrengthBonus", this.strAdd);
-//        nbt.putFloat("VitalityBonus", this.vitAdd);
-//        nbt.putFloat("IntelligenceBonus", this.intAdd);
-//        CompoundTag skillCompound = new CompoundTag();
-//        for (EnumSkills skill : EnumSkills.values()) {
-//            skillCompound.put(skill.toString(), this.skillLevels.get(skill).save());
-//        }
-//        nbt.put("Skills", skillCompound);
-//        nbt.put("Inventory", this.spells.save());
-//        nbt.put("Shipping", this.shipping.save());
-//        CompoundTag ship = new CompoundTag();
-//        this.shippedItems.forEach((key, value) -> {
-//            CompoundTag d = new CompoundTag();
-//            d.putInt("Amount", value.amount);
-//            d.putInt("Level", value.maxLevel);
-//            ship.put(key.toString(), d);
-//        });
-//        nbt.put("ShippedItems", ship);
-//        CompoundTag shop = new CompoundTag();
-//        for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
-//            ListTag l = new ListTag();
-//            for (ItemStack stack : entry.getValue())
-//                l.add(stack.save(new CompoundTag()));
-//            shop.put(ModNPCJobs.getIDFrom(entry.getKey()).toString(), l);
-//        }
-//        nbt.put("ShopItems", shop);
-//        nbt.put("Recipes", this.keeper.save());
-//        nbt.put("DailyUpdater", this.updater.save());
-//        /*if (this.quest != null) {
-//            nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
-//        }*/
-//        nbt.put("FoodData", this.foodBuffNBT());
-//        nbt.put("WalkingTracker", this.walkingTracker.save());
-//        nbt.put("TamedEntityTracker", this.entityStatsTracker.save());
-//        nbt.put("PartyTag", this.party.save());
-//        nbt.putInt("CraftingSeed", this.craftingSeed);
-//        nbt.putInt("BoughtBarns", this.boughtBarns);
-//        nbt.putInt("MobLevelIncrease", this.mobLevelIncrease);
-        return nbt;
+    public CompoundTag writeToNBT(CompoundTag tag, boolean wasDead) {
+        HolderLookup.Provider provider = this.player.registryAccess();
+        DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
+        tag.putBoolean("Starting", this.starting);
+        if (wasDead) {
+            tag.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
+            tag.putDouble("RunePoints", this.runePoints * GeneralConfig.deathRpPercent);
+        } else {
+            tag.putDouble("RunePoints", this.runePoints);
+        }
+        tag.put("XpLevel", this.level.save());
+        CompoundTag skillCompound = new CompoundTag();
+        for (EnumSkills skill : EnumSkills.values()) {
+            skillCompound.put(skill.toString(), this.skillLevels.get(skill).save());
+        }
+        tag.put("Skills", skillCompound);
+        tag.putInt("Money", this.money);
+        tag.put("Recipes", this.keeper.save());
+
+        tag.put("ShippingBin", this.shippingBin.save(provider));
+        ListTag ship = new ListTag();
+        this.shippedItems.forEach((key, value) -> {
+            CompoundTag data = new CompoundTag();
+            data.putInt("Amount", value.amount);
+            data.putInt("Level", value.maxLevel);
+            data.put("Item", BuiltInRegistries.ITEM.byNameCodec().encodeStart(ops, key).getOrThrow());
+            ship.add(data);
+        });
+        tag.put("ShippedItems", ship);
+        ListTag shop = new ListTag();
+        for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
+            CompoundTag data = new CompoundTag();
+            data.put("Shop", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(ops, entry.getKey()).getOrThrow());
+            ListTag items = new ListTag();
+            for (ItemStack stack : entry.getValue())
+                items.add(stack.save(provider, new CompoundTag()));
+            data.put("Items", items);
+        }
+        tag.put("ShopItems", shop);
+        tag.put("Inventory", this.spells.save(provider));
+        tag.put("DailyUpdater", this.updater.save());
+
+        if (this.lastEaten != null)
+            tag.put("LastFood", BuiltInRegistries.ITEM.holderByNameCodec().encodeStart(NbtOps.INSTANCE, this.lastEaten).getOrThrow());
+        tag.putInt("FoodBuffDuration", this.foodDuration);
+
+        tag.put("WalkingTracker", this.walkingTracker.save());
+        tag.put("TamedEntityTracker", this.entityStatsTracker.save());
+        tag.put("PartyTag", this.party.save());
+        tag.putInt("CraftingSeed", this.craftingSeed);
+        tag.putInt("BoughtBarns", this.boughtBarns);
+        tag.putInt("MobLevelIncrease", this.mobLevelIncrease);
+        return tag;
     }
 
     public void resetAll() {
         PlayerData newData = new PlayerData(this.player);
         newData.spells.load(this.spells.save(this.player.registryAccess()), this.player.registryAccess());
-        newData.shipping.load(this.shipping.save(this.player.registryAccess()), this.player.registryAccess());
+        newData.shippingBin.load(this.shippingBin.save(this.player.registryAccess()), this.player.registryAccess());
         this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()));
         this.recalculateStats(false);
         this.refreshShop();
@@ -819,5 +681,34 @@ public class PlayerData {
 
     public record ShippedItemData(int amount, int maxLevel) {
 
+    }
+
+    public record FoodData(Optional<Holder<Item>> food, int duration) {
+
+    }
+
+    public enum AttributeUpdate {
+        ABSOLUTE,
+        REPLACE,
+        ADD;
+
+        public void modify(AttributeInstance instance, ResourceLocation modifier, double from) {
+            this.modify(instance, modifier, from, AttributeModifier.Operation.ADD_VALUE);
+        }
+
+        public void modify(AttributeInstance instance, ResourceLocation modifier, double from, AttributeModifier.Operation operation) {
+            double value = switch (this) {
+                case ABSOLUTE -> from - instance.getBaseValue();
+                case REPLACE -> from;
+                case ADD -> {
+                    AttributeModifier mod = instance.getModifier(modifier);
+                    yield mod == null ? from : mod.amount() + from;
+                }
+            };
+            instance.removeModifier(modifier);
+            if (this == REPLACE && value <= 0)
+                return;
+            instance.addPermanentModifier(new AttributeModifier(modifier, value, operation));
+        }
     }
 }

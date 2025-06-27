@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
 
@@ -38,14 +38,14 @@ public class Party {
     }
 
     public void load(CompoundTag tag) {
-        ListTag members = tag.getList("Party", Tag.TAG_STRING);
-        members.forEach(t -> this.members.add(UUID.fromString(t.getAsString())));
+        ListTag members = tag.getList("Party", Tag.TAG_INT_ARRAY);
+        members.forEach(t -> this.members.add(NbtUtils.loadUUID(t)));
     }
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         ListTag members = new ListTag();
-        this.members.forEach(uuid -> members.add(StringTag.valueOf(uuid.toString())));
+        this.members.forEach(uuid -> members.add(NbtUtils.createUUID(uuid)));
         tag.put("Party", members);
         return tag;
     }

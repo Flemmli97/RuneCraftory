@@ -21,6 +21,6 @@ public class ItemMedicine extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 5;
+        return 20;
     }
 }

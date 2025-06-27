@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.Minecraft;
@@ -56,9 +56,9 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         this.chestBottom = modelPart.getChild("lid");
         this.chestLock = modelPart.getChild("lock");
 
-        this.chair = ModelManager.getInstance().getModel(LOC_CHAIR);
-        this.woolyPlush = ModelManager.getInstance().getModel(LOC_WOOLY_PLUSH);
-        this.chipSqueekPlush = ModelManager.getInstance().getModel(LOC_CHIPSQUEEK_PLUSH);
+        this.chair = GeoModelManager.getInstance().getModel(LOC_CHAIR);
+        this.woolyPlush = GeoModelManager.getInstance().getModel(LOC_WOOLY_PLUSH);
+        this.chipSqueekPlush = GeoModelManager.getInstance().getModel(LOC_CHIPSQUEEK_PLUSH);
     }
 
     public static LayerDefinition chairLayer() {
@@ -164,6 +164,6 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         stack.scale(-1, -1, 1);
         stack.translate(0.0, -1.501f, 0.0);
         for (ReloadableCache<ModelPartsContainer> part : parts)
-            part.get().getMainPart().render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
+            part.get().getRoot().render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
     }
 }

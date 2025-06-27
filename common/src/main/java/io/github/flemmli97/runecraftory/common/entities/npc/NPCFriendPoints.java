@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +16,7 @@ public class NPCFriendPoints {
 
     private int lastUpdateTalk = -1, lastUpdateGift = -1;
     private final Set<String> answeredConversations = new HashSet<>();
-    public final LevelExpPair points = new LevelExpPair();
+    public final XpLevelHolder points = new XpLevelHolder();
     private int talkCount;
 
     public boolean talked() {

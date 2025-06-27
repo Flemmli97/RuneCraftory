@@ -72,11 +72,12 @@ public class WorldRegistrationCalls {
      * On NeoForge biome modification is used which is datagenned
      * On Fabric datagen is not possible as BiomeModifications is used during init. Features are not created/registered there
      * This code is in common to make modifications easier
+     *
      * @param placedFeatureHandler Placed features should use this in order to add the feature to biomes on respective loaders
      */
     public static void createFeatures(@Nullable FeatureRegister register,
                                       Consumer<FeatureBiomeModifier> placedFeatureHandler) {
-        ResourceLocation herbs = RuneCraftory.modRes("herb_feature");
+        ResourceLocation herbs = ModFeatures.CONFIGRED_HERB_FEATURE.location();
         if (register != null) {
             List<HerbFeatureEntry> herbEntries = defaultHerbEntries();
             herbEntries.forEach(entry -> register.registerConfigured(entry.getId(),

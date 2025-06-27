@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.entity.ChemistryBlockEntity;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
@@ -41,7 +40,7 @@ public class BlockChemistry extends BlockCrafting {
             VoxelUtils.ShapeBuilder.of(5, 14, 7, 7, 18, 9));
 
     public BlockChemistry(Properties props) {
-        super(EnumCrafting.CHEM, props);
+        super(props);
     }
 
     @Override

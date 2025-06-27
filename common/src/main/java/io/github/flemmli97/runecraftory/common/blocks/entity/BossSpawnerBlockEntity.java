@@ -29,7 +29,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -44,9 +43,6 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     private ResourceLocation spawnListId;
     private StructureBossManager.BossSpawnList spawnList;
     private EntityType<?> nextSpawn;
-
-    private ResourceLocation structureID;
-    private StructureStart structure;
 
     public BossSpawnerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.BOSS_SPAWNER_TILE.get(), blockPos, blockState);
@@ -95,10 +91,10 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         if (this.nextSpawn == null)
             this.updateEntity();
         if (!this.level.isClientSide && this.nextSpawn != null) {
-            Entity e = this.nextSpawn.create(this.level);
-            if (e != null) {
+            Entity entity = this.nextSpawn.create(this.level);
+            if (entity != null) {
                 this.lastUpdateDay = WorldUtils.day(this.level);
-                if (e instanceof EnsembleMonsters ensemble) {
+                if (entity instanceof EnsembleMonsters ensemble) {
                     if (!ensemble.canSpawnerSpawn((ServerLevel) this.level, this.worldPosition, 32))
                         return;
                     ensemble.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
@@ -111,14 +107,14 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                     }
                 } else if (!this.noNearby())
                     return;
-                if (e instanceof IBaseMob mob)
+                if (entity instanceof IBaseMob mob)
                     mob.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
-                e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
-                if (e instanceof Mob mob) {
+                entity.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
+                if (entity instanceof Mob mob) {
                     mob.restrictTo(this.worldPosition, 13);
-                    mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null);
+                    mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.SPAWNER, null);
                 }
-                this.level.addFreshEntity(e);
+                this.level.addFreshEntity(entity);
                 this.updateEntity();
             }
         }

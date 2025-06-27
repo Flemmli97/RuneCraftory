@@ -7,15 +7,30 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class OverlayGui {
 
-    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/bars.png");
+    private static final ResourceLocation HEALTH_BAR_BACKGROUND = RuneCraftory.modRes("hud/overlay/health_bar_background");
+    private static final ResourceLocation HEALTH_BAR = RuneCraftory.modRes("hud/overlay/health_bar");
+    private static final ResourceLocation RUNEPOINTS_BAR_BACKGROUND = RuneCraftory.modRes("hud/overlay/runepoints_bar_background");
+    private static final ResourceLocation RUNEPOINTS_BAR = RuneCraftory.modRes("hud/overlay/runepoints_bar");
+    private static final Map<EnumSeason, ResourceLocation> DATE = Arrays.stream(EnumSeason.values())
+            .collect(Collectors.toUnmodifiableMap(
+                    e -> e,
+                    e -> RuneCraftory.modRes("hud/overlay/date_" + e.name().toLowerCase())
+            ));
+
     private final Minecraft mc;
 
     public OverlayGui(Minecraft mc) {
@@ -29,45 +44,31 @@ public class OverlayGui {
         if (ClientConfig.renderHealthRpBar != ClientConfig.HealthRPRenderType.NONE) {
             PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player);
             int barWidth = 76;
-            int yHeight = ClientConfig.renderHealthRpBar == ClientConfig.HealthRPRenderType.BOTH ? 2 + 9 + 9 + 12 : 11;
-            int xPos = ClientConfig.healthBarWidgetPosition.positionX(guiWidth, barWidth + 20 + 2, ClientConfig.healthBarWidgetX) + 1;
+            int yHeight = ClientConfig.renderHealthRpBar == ClientConfig.HealthRPRenderType.BOTH ? 2 * 9 + 12 : 9;
+            int xPos = ClientConfig.healthBarWidgetPosition.positionX(guiWidth, barWidth, ClientConfig.healthBarWidgetX) + 1;
             int yPos = ClientConfig.healthBarWidgetPosition.positionY(guiHeight, yHeight, ClientConfig.healthBarWidgetY) + 1;
-//            this.renderHead(graphics, xPos, yPos);
-            xPos += 20;
             if (data != null && !this.mc.player.isCreative()) {
                 if (ClientConfig.renderHealthRpBar == ClientConfig.HealthRPRenderType.BOTH) {
-                    graphics.blit(TEXTURE_PATH, xPos, yPos, 19, 3, barWidth, 9);
+                    graphics.blitSprite(HEALTH_BAR_BACKGROUND, xPos, yPos, barWidth, 9);
                     int healthWidth = Math.min(barWidth, (int) (this.mc.player.getHealth() / this.mc.player.getMaxHealth() * barWidth));
-                    graphics.blit(TEXTURE_PATH, xPos, yPos, 19, 28, healthWidth, 9);
+                    GuiUtils.drawBorderedBar(graphics, HEALTH_BAR, xPos, yPos, barWidth, 9, healthWidth, 1, 1);
                     yPos += 12;
                 }
-                graphics.blit(TEXTURE_PATH, xPos, yPos, 19, 15, barWidth, 9);
+                graphics.blitSprite(RUNEPOINTS_BAR_BACKGROUND, xPos, yPos, barWidth, 9);
                 int runePointsWidth = Math.min(barWidth, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * barWidth));
-                graphics.blit(TEXTURE_PATH, xPos, yPos, 19, 40, runePointsWidth, 9);
+                GuiUtils.drawBorderedBar(graphics, RUNEPOINTS_BAR, xPos, yPos, barWidth, 9, runePointsWidth, 1, 1);
             }
         }
         if (ClientConfig.renderCalendar) {
             CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
             EnumSeason season = calendar.currentSeason();
-            int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 37, ClientConfig.seasonDisplayX);
-            int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 36, ClientConfig.seasonDisplayY);
-            graphics.blit(TEXTURE_PATH, xPos, yPos, 50, 176, 37, 36);
-            graphics.blit(TEXTURE_PATH, xPos + 3, yPos + 3, season.ordinal() * 32, 226, 32, 30);
-            graphics.blit(TEXTURE_PATH, xPos, yPos + 39, 0, 176, 48, 17);
-
-            ClientHandlers.drawCenteredScaledString(graphics, this.mc.font, Component.translatable(calendar.currentDay().translation()).append(Component.translatable(" " + calendar.date())),
-                    ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 1, 0xbd1600);
+            int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 64, ClientConfig.seasonDisplayX);
+            int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 32, ClientConfig.seasonDisplayY);
+            graphics.blitSprite(DATE.get(season), xPos, yPos, 64, 32);
+            GuiGraphicsExtension.drawCenteredString(graphics, this.mc.font,
+                    Component.translatable("runecraftory.gui.date.format", Component.translatable(calendar.currentDay().translation()), calendar.date())
+                            .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD),
+                    xPos + 32, yPos + 15, 0, false);
         }
     }
-
-//    private void renderHead(PoseStack stack, int x, int y) {
-//        RenderSystem.setShaderTexture(0, this.mc.player.getSkinTextureLocation());
-//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-//        int sizeX = 16;
-//        int sizeY = 16;
-//        blit(stack, x, y, sizeX, sizeY, 8.0f, 8, 8, 8, 64, 64);
-//        RenderSystem.enableBlend();
-//        blit(stack, x, y, sizeX, sizeY, 40.0F, 8, 8, 8, 64, 64);
-//        RenderSystem.disableBlend();
-//    }
 }

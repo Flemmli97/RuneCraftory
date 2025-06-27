@@ -54,16 +54,6 @@ public class ItemToolFishingRod extends FishingRodItem {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-    @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
         if (tier.getTierLevel() != 0) {
@@ -73,6 +63,16 @@ public class ItemToolFishingRod extends FishingRodItem {
             entity.swing(entity.getUsedItemHand());
         }
         super.releaseUsing(stack, world, entity, timeLeft);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
     }
 
     @Override

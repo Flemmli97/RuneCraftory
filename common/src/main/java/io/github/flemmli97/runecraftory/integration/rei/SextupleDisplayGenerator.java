@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.integration.rei;
 
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
-import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;

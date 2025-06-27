@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
@@ -81,7 +81,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private final List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
     private boolean initialSpawn = true;
-    private final LevelExpPair expPair = new LevelExpPair();
+    private final XpLevelHolder expPair = new XpLevelHolder();
     private boolean removeCauseEmptyList;
     private int maxNearby;
     private int spawnDelay;
@@ -129,7 +129,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public LevelExpPair xpLevel() {
+    public XpLevelHolder xpLevel() {
         this.expPair.setLevel(this.entityData.get(MOB_LEVEL), l -> 0);
         return this.expPair;
     }
@@ -240,7 +240,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.spawnList.clear();
         if (compound.contains("Spawns"))
             this.spawnList.addAll(BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf()
-                .parse(NbtOps.INSTANCE, compound.get("Spawns")).getOrThrow());
+                    .parse(NbtOps.INSTANCE, compound.get("Spawns")).getOrThrow());
         if (compound.contains("Element")) {
             String el = compound.getString("Element");
             try {

@@ -37,7 +37,7 @@ public class ItemStatIncrease extends Item {
         boolean shrink = true;
         if (entityLiving instanceof ServerPlayer serverPlayer) {
             level.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), SoundEvents.BREWING_STAND_BREW, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
-            this.increaseStat(stack, level, serverPlayer);
+            this.increaseStat(serverPlayer);
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
             if (serverPlayer.isCreative())
@@ -58,7 +58,7 @@ public class ItemStatIncrease extends Item {
         return 32;
     }
 
-    private void increaseStat(ItemStack stack, Level level, Player player) {
+    private void increaseStat(Player player) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         switch (this.stat) {
             case LEVEL ->

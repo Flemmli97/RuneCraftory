@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMineralSqueek;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
+import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
@@ -22,7 +23,6 @@ import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
@@ -686,19 +686,19 @@ public class Loottables extends LootTableProvider {
             return build;
         }
 
-        protected static LootPool.Builder cropLoot(BlockCrop block) {
+        protected static LootPool.Builder cropLoot(HolderLookup.Provider provider, BlockCrop block) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
             if (block instanceof BlockGiantCrop)
-                build.add(LootItem.lootTableItem(block.getCrop()).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                build.add(LootItem.lootTableItem(block.getCrop(provider)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockGiantCrop.DIRECTION, Direction.NORTH))));
             else
-                build.add(LootItem.lootTableItem(block.getCrop()));
+                build.add(LootItem.lootTableItem(block.getCrop(provider)));
             return build;
         }
 
-        protected static LootPool.Builder cropWeaponLoot(BlockCrop block) {
+        protected static LootPool.Builder cropWeaponLoot(HolderLookup.Provider provider, BlockCrop block) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
-            build.add(LootItem.lootTableItem(block.getCrop())
+            build.add(LootItem.lootTableItem(block.getCrop(provider))
                     .apply(new CropWeaponLootFunction.Builder()));
             return build;
         }
@@ -850,18 +850,18 @@ public class Loottables extends LootTableProvider {
             for (RegistryEntrySupplier<Block, ?> reg : ModBlocks.CROPS) {
                 Block block = reg.get();
                 if (block instanceof BlockCrop)
-                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
+                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot(this.registries, (BlockCrop) block)));
             }
             for (RegistryEntrySupplier<Block, ?> reg : ModBlocks.FLOWERS) {
                 if (reg == ModBlocks.SWORD_CROP || reg == ModBlocks.SHIELD_CROP) {
                     Block block = reg.get();
                     if (block instanceof BlockCrop)
-                        this.add(reg.get(), LootTable.lootTable().withPool(cropWeaponLoot((BlockCrop) block)));
+                        this.add(reg.get(), LootTable.lootTable().withPool(cropWeaponLoot(this.registries, (BlockCrop) block)));
                     continue;
                 }
                 Block block = reg.get();
                 if (block instanceof BlockCrop)
-                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
+                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot(this.registries, (BlockCrop) block)));
             }
             ModBlocks.MINERAL_MAP.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
 

@@ -9,6 +9,7 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -38,8 +39,15 @@ public class EntityAnt extends BaseMonster {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(MELEE).prepare(new SetWalkTargetToAttackTarget<>(), new MoveToAttackTarget<>())
                 .end(1)
-                .build()
-                .cooldownFor(e -> e.animationCooldown(null));
+                .build();
+        //e -> BrainUtils.setForgettableMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN, true, this.animationCooldown(MELEE))
+//                .startCondition(e -> !BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN))
+//                .cooldownFor(e -> e.animationCooldown(null));
+    }
+
+    @Override
+    public boolean isWithinMeleeAttackRange(LivingEntity entity) {
+        return false;
     }
 
     @Override

@@ -23,7 +23,8 @@ import net.minecraft.world.phys.HitResult;
 
 public class FarmlandInfo {
 
-    private static final ResourceLocation TEXTURE_PATH = RuneCraftory.modRes("textures/gui/farmland_view.png");
+    private static final ResourceLocation TEXTURE = RuneCraftory.modRes("hud/farmland_view");
+
     private final Minecraft mc;
 
     public FarmlandInfo(Minecraft mc) {
@@ -57,8 +58,7 @@ public class FarmlandInfo {
         int sY = 60 + (cropBlock ? 40 : 0);
         int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
         int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
-        graphics.blit(TEXTURE_PATH, xPos, yPos, 0, 0, 100, sY - 5);
-        graphics.blit(TEXTURE_PATH, xPos, yPos + sY - 5, 0, 100 - 5, 100, 5);
+        graphics.blitSprite(TEXTURE, xPos, yPos, 100, sY);
         RenderSystem.defaultBlendFunc();
         yPos += 5;
         xPos += 5;

@@ -2,10 +2,10 @@ package io.github.flemmli97.runecraftory.neoforge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.crafting.HammerRemainderRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.LevelUpUpgradeRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipeBuilder;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.recipes.HammerRemainderRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.LevelUpUpgradeRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipeBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;

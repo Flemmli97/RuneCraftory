@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.client.gui.widgets.InfoButton;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
@@ -14,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.items.MultiBlockItem;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
+import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -112,7 +114,9 @@ public class ClientCalls {
                     x += ClientConfig.creativeInventoryOffsetX;
                     y += ClientConfig.creativeInventoryOffsetY;
                 }
-//                cons.accept(new SkillButton(x, y, screen, b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN))));
+                cons.accept(new InfoButton(x, y, screen, b -> {
+                    LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN));
+                }));
             }
         }
     }

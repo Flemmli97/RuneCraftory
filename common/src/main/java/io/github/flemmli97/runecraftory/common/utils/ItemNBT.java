@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
-import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
@@ -11,24 +10,31 @@ import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.ListItemStackHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.mixinhelper.PlayerExtended;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 public class ItemNBT {
 
@@ -52,13 +58,38 @@ public class ItemNBT {
         return stats.getTotalStats();
     }
 
-    public static Multimap<Holder<Attribute>, AttributeModifier> getStatsAttributeMap(ItemStack stack, Multimap<Holder<Attribute>, AttributeModifier> map, EquipmentSlot slot) {
-//        if (ItemNBT.shouldHaveStats(stack) && ItemUtils.slotOf(stack) == slot) {
-//            Multimap<Holder<Attribute>, AttributeModifier> multimap = MultimapBuilder.treeKeys(ModAttributes.SORTED).hashSetValues().build();
-//            ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], d, AttributeModifier.Operation.ADD_VALUE)));
-//            return multimap;
-//        }
-        return map;
+    public static boolean shouldHideVanillaAttributeTooltip(ItemStack stack, EquipmentSlotGroup slotGroup, Player player) {
+        return getStatsAttributes(stack) != null && player != null && !((PlayerExtended) player).runcraftory$hasActualShiftKeyDown();
+    }
+
+    public static void modifyAttribute(ItemStack stack, Consumer<ItemAttributeModifiers.Entry> remove, Consumer<ItemAttributeModifiers.Entry> add) {
+        Pair<EquipmentSlot, Map<Holder<Attribute>, Double>> calculated = getStatsAttributes(stack);
+        if (calculated != null) {
+            // If this stack has custom stats remove default modifiers. This way we respect changes from other sources
+            ItemAttributeModifiers defaultMap = stack.getPrototype().get(DataComponents.ATTRIBUTE_MODIFIERS);
+            if (defaultMap != null) {
+                defaultMap.modifiers().forEach(entry -> {
+                    if (entry.slot().test(calculated.getFirst()))
+                        remove.accept(entry);
+                });
+            }
+            calculated.getSecond().forEach((att, d) ->
+                    add.accept(new ItemAttributeModifiers.Entry(att,
+                            new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS.get(calculated.getFirst()), d, AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.bySlot(calculated.getFirst()))));
+        }
+    }
+
+    public static Pair<EquipmentSlot, Map<Holder<Attribute>, Double>> getStatsAttributes(ItemStack stack) {
+        Equipable equipable = Equipable.get(stack);
+        if (ItemNBT.shouldHaveStats(stack)) {
+            EquipmentSlot slot = equipable != null ? equipable.getEquipmentSlot() : EquipmentSlot.MAINHAND;
+            Map<Holder<Attribute>, Double> stats = ItemNBT.statIncrease(stack);
+            if (stats.isEmpty())
+                return null;
+            return Pair.of(slot, stats);
+        }
+        return null;
     }
 
     public static Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats(ItemStack stack) {

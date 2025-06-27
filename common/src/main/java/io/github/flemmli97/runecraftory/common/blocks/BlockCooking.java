@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CookingBlockEntity;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
@@ -28,7 +27,7 @@ public class BlockCooking extends BlockCrafting {
             VoxelUtils.ShapeBuilder.of(5, 14.25, 13, 6, 16.25, 14));
 
     public BlockCooking(Properties props) {
-        super(EnumCrafting.COOKING, props);
+        super(props);
     }
 
     @Override

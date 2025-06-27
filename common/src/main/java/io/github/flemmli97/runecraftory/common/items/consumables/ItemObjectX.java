@@ -38,7 +38,7 @@ public class ItemObjectX extends Item {
         ItemStack eat = livingEntity.eat(livingEntity.level(), stack);
         List<Holder.Reference<MobEffect>> list = BuiltInRegistries.MOB_EFFECT.holders().filter(effect -> effect.value().getCategory() == MobEffectCategory.HARMFUL).toList();
         if (!list.isEmpty()) {
-            int r = livingEntity.getRandom().nextInt(5) + 1;
+            int r = livingEntity.getRandom().nextInt(4) + 1;
             for (int i = 0; i < r; i++) {
                 Holder.Reference<MobEffect> effect = list.get(livingEntity.getRandom().nextInt(list.size()));
                 int amp = livingEntity.getRandom().nextInt(2);

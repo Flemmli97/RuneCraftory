@@ -4,9 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
+import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -56,7 +56,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
                 cost = Component.translatable("runecraftory.gui.crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
                 yOffset = -25;
             }
-            ClientHandlers.drawCenteredScaledString(graphics, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 1, 0);
+            GuiGraphicsExtension.drawCenteredString(graphics, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 0, false);
         }
         if (data != null) {
             PoseStack stack = graphics.pose();
@@ -69,7 +69,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             graphics.blit(BARS, 0, 0, 131, 74, 96, 29);
             int runePointsWidth = Math.min(76, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 76.0f));
             graphics.blit(BARS, 17, 3, 18, 40, runePointsWidth, 9);
-            ClientHandlers.drawCenteredScaledString(graphics, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
+            GuiGraphicsExtension.drawCenteredString(graphics, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0xffffff, false);
             stack.popPose();
             graphics.drawString(this.font, Component.translatable("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
                     this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);

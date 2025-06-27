@@ -91,7 +91,7 @@ public class SkelefangParticle extends Particle {
 
     public static ModelSkelefang<EntitySkelefang> particleModel() {
         ModelSkelefang<EntitySkelefang> model = new ModelSkelefang<>(RenderType::entityTranslucentCull);
-        model.getModel().getMainPart().loadPoseRecursive(PoseExtended.ZERO);
+        model.getModel().getRoot().loadPoseRecursive(PoseExtended.ZERO);
         return model;
     }
 

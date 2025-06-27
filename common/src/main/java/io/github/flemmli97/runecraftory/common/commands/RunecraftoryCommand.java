@@ -11,15 +11,15 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
-import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
+import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -99,7 +99,7 @@ public class RunecraftoryCommand {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
                 for (EnumSkills skill : EnumSkills.values()) {
-                    LevelExpPair skLvl = data.getSkillLevel(skill);
+                    XpLevelHolder skLvl = data.getSkillLevel(skill);
                     data.setSkillLevel(skill, skLvl.getLevel() + amount, skLvl.getXp(), true);
                 }
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
@@ -114,7 +114,7 @@ public class RunecraftoryCommand {
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            LevelExpPair skLvl = data.getSkillLevel(skill);
+            XpLevelHolder skLvl = data.getSkillLevel(skill);
             data.setSkillLevel(skill, skLvl.getLevel() + amount, skLvl.getXp(), true);
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
             ret++;
@@ -306,7 +306,6 @@ public class RunecraftoryCommand {
         return i;
     }
 
-    @SuppressWarnings("unchecked")
     private static int castSpell(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
         Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
@@ -319,7 +318,6 @@ public class RunecraftoryCommand {
         return success;
     }
 
-    @SuppressWarnings("unchecked")
     private static int applySpellTo(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
         Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());

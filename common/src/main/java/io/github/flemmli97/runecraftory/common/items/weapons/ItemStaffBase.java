@@ -54,17 +54,17 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
     }
 
     @Override
+    public boolean attackOnBlock(LivingEntity entity, ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         if (livingEntity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(livingEntity) - remainingUseDuration;
             if (duration > 0 && duration / this.getStaffChargeTime(livingEntity, stack) <= this.chargeAmount(stack) && duration % this.getStaffChargeTime(livingEntity, stack) == 0)
                 player.connection.send(new ClientboundSoundPacket(SoundEvents.NOTE_BLOCK_XYLOPHONE, player.getSoundSource(), player.getX(), player.getY(), player.getZ(), 1, 1, player.getRandom().nextLong()));
         }
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
-        return !player.isCreative();
     }
 
     @Override
@@ -90,16 +90,6 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-    @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide) {
             int tier = (stack.getUseDuration(entity) - timeLeft - 1) / this.getStaffChargeTime(entity, stack);
@@ -114,6 +104,21 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
                 spell.use((ServerLevel) world, entity, stack);
             }
         }
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
     }
 
     @Override

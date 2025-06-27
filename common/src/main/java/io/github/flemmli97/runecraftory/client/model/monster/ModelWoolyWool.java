@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
-import io.github.flemmli97.tenshilib.client.data.AnimationManager;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -20,6 +20,7 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     private final ReloadableCache<ModelPartsContainer> model;
     protected final ReloadableCache<BedrockAnimations> anim;
 
+    public ModelPartsContainer.ModelPartExtended bodyMain;
     public ModelPartsContainer.ModelPartExtended body;
     public ModelPartsContainer.ModelPartExtended bodyUp;
     public ModelPartsContainer.ModelPartExtended armLeftBase;
@@ -29,7 +30,8 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
 
     public ModelWoolyWool() {
         super();
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
+            this.bodyMain = model.getPart("bodyCenter");
             this.body = model.getPart("body");
             this.bodyUp = model.getPart("bodyUp");
             this.armLeftBase = model.getPart("armLeftBase");
@@ -37,12 +39,12 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
             this.feetLeftBase = model.getPart("feetLeftBase");
             this.feetRightBase = model.getPart("feetRightBase");
         });
-        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
+        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     }
 
     public void syncModel(ModelWooly<T> model) {
-        this.sync(this.getModel().getMainPart(), model.getModel().getMainPart());
+        this.sync(this.bodyMain, model.bodyMain);
         this.sync(this.body, model.body);
         this.sync(this.bodyUp, model.bodyUp);
         this.sync(this.armLeftBase, model.armLeftBase);

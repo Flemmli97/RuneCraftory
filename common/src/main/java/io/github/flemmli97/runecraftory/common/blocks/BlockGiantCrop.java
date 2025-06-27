@@ -5,7 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,16 +26,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class BlockGiantCrop extends BlockCrop {
 
     public static final MapCodec<BlockCrop> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(
-                    propertiesCodec(),
-                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("crop").forGetter(BlockCrop::getCrop),
-                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("seed").forGetter(d -> d.seed.get())
-            ).apply(inst, (prop, crop, seed) -> new BlockGiantCrop(prop, () -> crop, () -> seed)));
+            inst.group(propertiesCodec(),
+                    LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("crop").forGetter(d -> d.crop),
+                    LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("seed").forGetter(d -> d.seed)
+            ).apply(inst, BlockGiantCrop::new));
 
     public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
     public static final EnumProperty<Direction> DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
@@ -41,9 +41,13 @@ public class BlockGiantCrop extends BlockCrop {
 
     private static final VoxelShape[] SHAPE = VoxelUtils.joinedOrDirs(VoxelUtils.ShapeBuilder.of(0.0D, 0.0D, 0.0D, 13.0D, 12.0D, 13.0D));
 
-    public BlockGiantCrop(Properties prop, Supplier<? extends Item> giant, Supplier<? extends Item> seed) {
+    public BlockGiantCrop(Properties prop, ResourceKey<Item> giant, ResourceKey<Item> seed) {
         super(prop, giant, seed);
         this.registerDefaultState(this.defaultBlockState().setValue(DIRECTION, Direction.NORTH));
+    }
+
+    private BlockGiantCrop(BlockBehaviour.Properties prop, LazyResolvedRegistryEntry<Item> crop, LazyResolvedRegistryEntry<Item> seed) {
+        this(prop, crop.getKey(), seed.getKey());
     }
 
     @Override

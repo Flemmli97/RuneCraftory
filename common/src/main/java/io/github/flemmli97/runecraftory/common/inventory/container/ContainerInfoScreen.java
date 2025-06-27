@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
@@ -13,19 +12,24 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ArmorSlot;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+
+import java.util.Map;
 
 public class ContainerInfoScreen extends AbstractContainerMenu {
 
     public static final String TITLE = "runecraftory.container.info";
     public static final String TITLE_SUB = "runecraftory.container.info.sub";
-    private static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET};
+    private static final Map<EquipmentSlot, ResourceLocation> ARMOR_SLOT_TEXTURES = Map.of(
+            EquipmentSlot.HEAD, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET,
+            EquipmentSlot.CHEST, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE,
+            EquipmentSlot.LEGS, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS,
+            EquipmentSlot.FEET, InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS);
     private static final EquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     private final boolean main;
@@ -33,65 +37,38 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
     public ContainerInfoScreen(int windowId, Inventory playerInventory, boolean main) {
         super(main ? ModMenuTypes.INFO_CONTAINER.get() : ModMenuTypes.INFO_SUB_CONTAINER.get(), windowId);
         this.main = main;
-        InventorySpells playerSpells = Platform.INSTANCE.getPlayerData(playerInventory.player).getInv();
-        WrappedContainer iinv = new WrappedContainer(playerSpells) {
-            @Override
-            public int getMaxStackSize() {
-                return 1;
-            }
-
-            @Override
-            public boolean stillValid(Player player) {
-                return true;
-            }
-        };
         if (this.main) {
-            for (int i = 0; i < 9; ++i) {
-                this.addSlot(new Slot(playerInventory, i, 32 + i * 18, 175));
+            for (int hotbar = 0; hotbar < 9; ++hotbar) {
+                this.addSlot(new Slot(playerInventory, hotbar, 27 + hotbar * 18, 178));
             }
-            for (int y = 0; y < 3; ++y) {
-                for (int i = 0; i < 9; ++i) {
-                    this.addSlot(new Slot(playerInventory, i + (y + 1) * 9, 32 + i * 18, 117 + y * 18));
+            for (int column = 0; column < 3; ++column) {
+                for (int row = 0; row < 9; ++row) {
+                    this.addSlot(new Slot(playerInventory, row + (column + 1) * 9, 27 + row * 18, 120 + column * 18));
                 }
             }
         }
         for (int k = 0; k < 4; ++k) {
             EquipmentSlot equipmentslottype = VALID_EQUIPMENT_SLOTS[k];
-            this.addSlot(new Slot(playerInventory, 36 + (3 - k), 14, 13 + k * 18) {
-
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return Platform.INSTANCE.canEquip(stack, equipmentslottype, playerInventory.player);
-                }
-
-                @Override
-                public int getMaxStackSize() {
-                    return 1;
-                }
-
-                @Override
-                public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                    return Pair.of(InventoryMenu.BLOCK_ATLAS, ARMOR_SLOT_TEXTURES[equipmentslottype.getIndex()]);
-                }
-
-                @Override
-                public boolean mayPickup(Player player) {
-                    ItemStack itemstack = this.getItem();
-                    return (itemstack.isEmpty() || player.isCreative() || !EnchantmentHelper.has(itemstack, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) && super.mayPickup(player);
-                }
-            });
+            this.addSlot(new ArmorSlot(playerInventory, playerInventory.player, equipmentslottype, 36 + (3 - k), 9, 9 + k * 18, ARMOR_SLOT_TEXTURES.get(equipmentslottype)));
         }
-        this.addSlot(new Slot(playerInventory, 40, 49, 85) {
+        this.addSlot(new Slot(playerInventory, 40, 27, 81) {
+            @Override
+            public void setByPlayer(ItemStack newStack, ItemStack oldStack) {
+                playerInventory.player.onEquipItem(EquipmentSlot.OFFHAND, oldStack, newStack);
+                super.setByPlayer(newStack, oldStack);
+            }
+
             @Override
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD);
             }
         });
+        WrappedContainer spellWrapped = new WrappedContainer(Platform.INSTANCE.getPlayerData(playerInventory.player).getInv());
         for (int m = 0; m < 4; ++m) {
-            this.addSlot(new Slot(iinv, m, 84, 13 + m * 18) {
+            this.addSlot(new Slot(spellWrapped, m, 78, 9 + m * 18) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    return playerSpells.canPlaceItem(this.index, stack);
+                    return spellWrapped.canPlaceItem(this.index, stack);
                 }
             });
         }

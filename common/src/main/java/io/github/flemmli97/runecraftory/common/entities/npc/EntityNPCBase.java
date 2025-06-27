@@ -13,8 +13,8 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
@@ -59,7 +59,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -213,7 +213,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public NPCWanderGoal wander = new NPCWanderGoal(this);
     public HurtByTargetGoal hurt = new HurtByTargetGoal(this);
 
-    private final LevelExpPair levelPair = new LevelExpPair();
+    private final XpLevelHolder levelPair = new XpLevelHolder();
 
     private NPCJob shop = ModNPCJobs.NONE.get();
 
@@ -816,12 +816,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     public static boolean attack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
-        CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(0).element(ItemNBT.getElement(stack));
+        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).hurtResistant(0).element(ItemNBT.getElement(stack));
         return CombatUtils.mobAttack(attacker, target, source);
     }
 
     @Override
-    public LevelExpPair xpLevel() {
+    public XpLevelHolder xpLevel() {
         return this.levelPair;
     }
 
@@ -849,7 +849,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         ((AttributeMapAccessor) this.getAttributes()).getAttributes()
-                .forEach((att, inst) -> inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD));
+                .forEach((att, inst) -> inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER));
         if (this.data != null) {
             Map<Holder<Attribute>, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
             gain.forEach((att, val) -> {
@@ -862,7 +862,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                     } else {
                         multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.01f;
                     }
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);
                 }
@@ -873,28 +873,28 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.asHolder());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
         inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder());
         if (inst != null) {
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
@@ -974,8 +974,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public void removeFoodEffect() {
         ((AttributeMapAccessor) this.getAttributes())
                 .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(LibConstants.FOOD_UUID);
-                    inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
                 });
     }
 

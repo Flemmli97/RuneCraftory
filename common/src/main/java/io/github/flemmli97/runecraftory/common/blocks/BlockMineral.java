@@ -50,8 +50,7 @@ import java.util.List;
 public class BlockMineral extends Block implements SimpleWaterloggedBlock, ExtendedBlock {
 
     public static final MapCodec<BlockMineral> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(
-                    CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
+            inst.group(CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
                     propertiesCodec()
             ).apply(inst, BlockMineral::new));
 

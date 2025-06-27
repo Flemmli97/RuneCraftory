@@ -3,13 +3,9 @@ package io.github.flemmli97.runecraftory.fabric.mixin;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
-import io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
-import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,21 +13,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin implements PlayerDataGetter {
 
     @Unique
     private final PlayerData runecraftoryPlayerData = new PlayerData((Player) (Object) this);
-
-    @Inject(method = "createAttributes", at = @At("RETURN"))
-    private static void addToAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-        AttributeSupplier.Builder builder = info.getReturnValue();
-        for (RegistryEntrySupplier<Attribute, ?> s : RuneCraftoryFabric.playerAttributes()) {
-            builder.add(s.asHolder());
-        }
-    }
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void loadData(CompoundTag compound, CallbackInfo info) {

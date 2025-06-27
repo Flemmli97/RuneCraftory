@@ -66,7 +66,7 @@ public class UpgradeOutputSlot extends Slot {
             if (DataPackHandler.INSTANCE.itemStatManager().get(material.getItem()).map(s -> s.getTier1Spell() != null || s.getTier2Spell() != null || s.getTier3Spell() != null).orElse(false))
                 ModCriteria.CHANGE_SPELL.get().trigger(serverPlayer);
         }
-        data.decreaseRunePoints(this.container.rpCost(), true);
+        data.useRunePoints(this.container.rpCost(), true);
         switch (this.container.craftingType()) {
             case FORGE -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.FORGING, toUpgrade, material);
             case ARMOR -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.CRAFTING, toUpgrade, material);

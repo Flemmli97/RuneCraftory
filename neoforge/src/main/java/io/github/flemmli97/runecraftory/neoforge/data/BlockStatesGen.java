@@ -66,7 +66,7 @@ public class BlockStatesGen extends BlockStateProvider {
             }
             if (block instanceof BlockGiantCrop giant)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
-                    ResourceLocation texture = this.itemTexture(giant.getCrop());
+                    ResourceLocation texture = this.itemTexture(giant.getCrop(BuiltInRegistries.ITEM.asLookup()));
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(reg.getID().toString(), FLOWER_GIANT, "0", texture))
                             .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
                 }, BlockCrop.WILTED, BlockGiantCrop.AGE);
@@ -83,7 +83,7 @@ public class BlockStatesGen extends BlockStateProvider {
                         parent = FLOWER_BIG;
                         RegistryEntrySupplier<Block, ?> giant = ModBlocks.GIANT_CROP_MAP.get(reg);
                         if (giant != null && giant.get() instanceof BlockGiantCrop giantCrop)
-                            texture = this.itemTexture(giantCrop.getCrop());
+                            texture = this.itemTexture(giantCrop.getCrop(BuiltInRegistries.ITEM.asLookup()));
                     }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();
                 }, BlockCrop.WILTED);

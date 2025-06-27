@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
+import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -66,7 +66,7 @@ public class CraftingOutputSlot extends Slot {
         NonNullList<ItemStack> remaining = this.craftingContainer.getCurrentRecipe() != null ? this.craftingContainer.getCurrentRecipe().value().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
         if (this.craftingContainer.runepointCost() >= 0) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            data.decreaseRunePoints(this.craftingContainer.runepointCost(), true);
+            data.useRunePoints(this.craftingContainer.runepointCost(), true);
             RecipeHolder<? extends SextupleRecipe> recipe = this.craftingContainer.getCurrentRecipe();
             if (recipe != null && !recipe.value().isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
                 data.getRecipeKeeper().unlockRecipe(player, recipe);

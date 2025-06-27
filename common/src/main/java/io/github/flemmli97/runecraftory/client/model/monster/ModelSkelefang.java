@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
-import io.github.flemmli97.tenshilib.client.data.AnimationManager;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -59,7 +59,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
 
     public ModelSkelefang(Function<ResourceLocation, RenderType> function) {
         super(function);
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
             this.head = model.getPart("head");
             this.neck = model.getPart("neckSpine");
             this.body = model.getPart("body");
@@ -77,7 +77,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
             this.ridingPositionBones = model.getPart("ridingPosBones");
             this.ridingPositionHeart = model.getPart("ridingPosHeart");
         });
-        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
+        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override

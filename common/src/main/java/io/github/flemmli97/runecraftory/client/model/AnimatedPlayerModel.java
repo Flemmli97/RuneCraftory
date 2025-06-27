@@ -6,12 +6,13 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
-import io.github.flemmli97.tenshilib.client.data.AnimationManager;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
+import io.github.flemmli97.tenshilib.client.model.PoseExtended;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.client.model.EntityModel;
@@ -30,6 +31,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
 
     protected final ReloadableCache<ModelPartsContainer> model;
     protected ModelPartsContainer.ModelPartExtended head;
+    protected ModelPartsContainer.ModelPartExtended body;
     protected ModelPartsContainer.ModelPartExtended rightArm;
     protected ModelPartsContainer.ModelPartExtended rightArmItem;
     protected ModelPartsContainer.ModelPartExtended leftArm;
@@ -41,8 +43,9 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
 
     public AnimatedPlayerModel() {
         super();
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
             this.head = model.getPart("Head");
+            this.body = model.getPart("Body");
             this.rightArm = model.getPart("RightArm");
             this.rightArmItem = model.getPart("RightItemRoot");
             this.leftArm = model.getPart("LeftArm");
@@ -50,14 +53,14 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
             this.rightLeg = model.getPart("RightLeg");
             this.leftLeg = model.getPart("LeftLeg");
         });
-        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
+        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         this.leftArmItem.visible = false;
         this.rightArmItem.visible = false;
-        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
     private void setup(HumanoidModel<?> model) {
         PartPose body = model.body.storePose();
         this.getModel().resetPoses();
-        this.getModel().getMainPart().loadPose(body);
+        this.body.loadPose(body);
         this.leftArm.loadPose(TransformationHelper.withoutParent(body, model.leftArm.storePose()));
         this.rightArm.loadPose(TransformationHelper.withoutParent(body, model.rightArm.storePose()));
         this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
@@ -109,29 +112,28 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
     public void copyTo(HumanoidModel<?> model) {
         HumanoidMainHand hands = (HumanoidMainHand) model;
         if (model.riding) {
-            ModelPartsContainer.ModelPartExtended body = this.getModel().getMainPart();
-            body.x = body.getDefaultPose().x;
-            body.y = body.getDefaultPose().y;
-            body.z = body.getDefaultPose().z;
+            this.body.x = this.body.getDefaultPose().x;
+            this.body.y = this.body.getDefaultPose().y;
+            this.body.z = this.body.getDefaultPose().z;
             PoseStack stack = new PoseStack();
-            body.translateAndRotate(stack);
+            this.body.translateAndRotate(stack);
             float bodyLength = -12;
             Vector3f v = new Vector3f(0, bodyLength, 0);
             v.mulTranspose(stack.last().normal());
-            body.x += v.x();
-            body.y += v.y() - bodyLength;
-            body.z += v.z();
+            this.body.x += v.x();
+            this.body.y += v.y() - bodyLength;
+            this.body.z += v.z();
         }
-        PartPose main = this.getModel().getMainPart().storePose();
-        this.apply(model.head, main, this.head);
-        model.body.loadPose(main);
-        this.apply(model.leftArm, main, this.leftArm);
+        PoseExtended body = this.body.extendedPose();
+        model.body.loadPose(body.asPartPose());
+        this.apply(model.head, body, this.head);
+        this.apply(model.leftArm, body, this.leftArm);
         hands.runecraftory$getLeftHandItem().loadPose(this.leftArmItem.storePose());
-        this.apply(model.rightArm, main, this.rightArm);
+        this.apply(model.rightArm, body, this.rightArm);
         hands.runecraftory$getRightHandItem().loadPose(this.rightArmItem.storePose());
         if (!model.riding) {
-            this.apply(model.leftLeg, main, this.leftLeg);
-            this.apply(model.rightLeg, main, this.rightLeg);
+            this.apply(model.leftLeg, body, this.leftLeg);
+            this.apply(model.rightLeg, body, this.rightLeg);
         }
         model.hat.copyFrom(model.head);
     }
@@ -141,7 +143,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
         return this.model.get();
     }
 
-    private void apply(ModelPart model, PartPose main, ModelPartsContainer.ModelPartExtended first) {
-        model.loadPose(TransformationHelper.withParent(main, first.storePose()));
+    private void apply(ModelPart model, PoseExtended body, ModelPartsContainer.ModelPartExtended first) {
+        model.loadPose(TransformationHelper.withParent(body, first.storePose()));
     }
 }

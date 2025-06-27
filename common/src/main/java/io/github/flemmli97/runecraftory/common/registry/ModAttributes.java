@@ -38,13 +38,12 @@ public class ModAttributes {
 
     private static int ID = 0;
 
+    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAX_RUNEPOINTS = registerPlayerSyncable("max_runepoints", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     //For ease of use these are attributes
     //Used for e.g. food
     //RP only applies to players
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> HEALTH_GAIN = registerAdditional("health_gain", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> RUNE_POINTS_GAIN = registerAdditional("rune_points_gain", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAX_RUNEPOINTS = registerAdditional("max_runepoints", ID++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DEFENCE = registerSyncable("defence", ID++, 0, -9999, 9999);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> MAGIC_ATTACK = registerSyncable("magic_attack", ID++, 0, -9999, 9999);
@@ -58,7 +57,6 @@ public class ModAttributes {
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DIZZY = register("dizzy", ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> CRITICAL = register("critical", ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> STUN = register("stun", ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute, OrderedAttribute> KNOCKOUT = register("knockout", ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> FAINT = register("faint", ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> DRAIN = register("drain", ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute, OrderedAttribute> WATER_RESISTANCE = register("water_resistance", ID++, 0, -100, 200);

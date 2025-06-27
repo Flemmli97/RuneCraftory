@@ -39,7 +39,7 @@ public class GrassRegrowUtil {
                 new HerbEntry(30, ModBlocks.BLUE_GRASS), new HerbEntry(30, ModBlocks.PURPLE_GRASS),
                 new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS), new HerbEntry(50, ModBlocks.MEDICINAL_HERB),
                 new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
-        map.put(EnumSeason.FALL, List.of(new HerbEntry(100, ModBlocks.WEEDS),
+        map.put(EnumSeason.AUTUMN, List.of(new HerbEntry(100, ModBlocks.WEEDS),
                 new HerbEntry(30, ModBlocks.YELLOW_GRASS), new HerbEntry(20, ModBlocks.RED_GRASS),
                 new HerbEntry(20, ModBlocks.ORANGE_GRASS), new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS),
                 new HerbEntry(50, ModBlocks.MEDICINAL_HERB), new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));

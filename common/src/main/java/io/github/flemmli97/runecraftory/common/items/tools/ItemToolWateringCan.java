@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.items.tools;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -24,7 +23,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -35,10 +33,10 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class ItemToolWateringCan extends TieredItem {
+public class ItemToolWateringCan extends Item {
 
     public ItemToolWateringCan(Item.Properties props) {
-        super(ItemTiers.TIER, props);
+        super(props);
     }
 
     public void postUse(ServerPlayer player) {
@@ -89,6 +87,34 @@ public class ItemToolWateringCan extends TieredItem {
     }
 
     @Override
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
+            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
+            int range = Math.min(useTime, tier.getTierLevel());
+            BlockHitResult result = getPlayerPOVHitResult(world, (Player) entity, ClipContext.Fluid.NONE);
+            if (range == 0) {
+                this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result));
+            } else {
+                BlockPos pos = entity.blockPosition().below();
+                if (result.getType() != HitResult.Type.MISS) {
+                    pos = result.getBlockPos();
+                }
+                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
+                        .filter(p -> this.moisten((ServerLevel) world, p.immutable(), stack, entity))
+                        .count();
+                if (amount > 0) {
+                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
+                    LevelCalc.levelSkill(data, EnumSkills.FARMING, range * 10);
+                    LevelCalc.levelSkill(data, EnumSkills.WATER, range * 3);
+                }
+            }
+        }
+        super.releaseUsing(stack, world, entity, timeLeft);
+    }
+
+    @Override
     public boolean isBarVisible(ItemStack stack) {
         return true;
     }
@@ -116,34 +142,6 @@ public class ItemToolWateringCan extends TieredItem {
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
-    }
-
-    @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
-        if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
-            int range = Math.min(useTime, tier.getTierLevel());
-            BlockHitResult result = getPlayerPOVHitResult(world, (Player) entity, ClipContext.Fluid.NONE);
-            if (range == 0) {
-                this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result));
-            } else {
-                BlockPos pos = entity.blockPosition().below();
-                if (result.getType() != HitResult.Type.MISS) {
-                    pos = result.getBlockPos();
-                }
-                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.moisten((ServerLevel) world, p.immutable(), stack, entity))
-                        .count();
-                if (amount > 0) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
-                    LevelCalc.levelSkill(data, EnumSkills.FARMING, range * 10);
-                    LevelCalc.levelSkill(data, EnumSkills.WATER, range * 3);
-                }
-            }
-        }
-        super.releaseUsing(stack, world, entity, timeLeft);
     }
 
     @Override

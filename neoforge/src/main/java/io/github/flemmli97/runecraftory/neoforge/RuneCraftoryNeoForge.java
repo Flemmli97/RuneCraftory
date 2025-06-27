@@ -126,13 +126,11 @@ public class RuneCraftoryNeoForge {
         ModStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
         ModStructures.STRUCTURES.registerContent(modBus);
         ModFeatures.FEATURES.registerContent(modBus);
-//        ModFeatures.CONFIGURED_FEATURES.registerContent(modBus);
+        ModFeatures.TRUNK_PLACER.registerContent(modBus);
+        ModFeatures.TREE_DECORATORS.registerContent(modBus);
     }
 
     public void common(FMLCommonSetupEvent event) {
-//        event.enqueueWork(() -> {
-//            ModFeatures.registerConfiguredFeatures();
-//        });
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
     }

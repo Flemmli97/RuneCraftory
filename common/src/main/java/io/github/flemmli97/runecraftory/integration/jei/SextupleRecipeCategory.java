@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.integration.jei;
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import mezz.jei.api.constants.VanillaTypes;

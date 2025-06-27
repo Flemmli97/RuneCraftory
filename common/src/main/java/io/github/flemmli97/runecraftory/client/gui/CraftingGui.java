@@ -17,14 +17,14 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     private static final ResourceLocation CRAFTING = RuneCraftory.modRes("textures/gui/crafting.png");
     private static final ResourceLocation COOKING = RuneCraftory.modRes("textures/gui/cooking.png");
     private static final ResourceLocation CHEMISTRY = RuneCraftory.modRes("textures/gui/chemistry.png");
-//
+    //
 //    private Rect scrollBar = new Rect(195, 12, 8, 142);
 //    private Rect scrollArea = new Rect(172, 12, 31, 142);
 //    private final CraftingGui.RecipeSelectButton[] selectButtons = new CraftingGui.RecipeSelectButton[7];
 //    private int scrollValue;
 //    private boolean isDragging;
 //
-private final EnumSkills skill;
+    private final EnumSkills skill;
 
     public CraftingGui(ContainerCrafting container, Inventory inv, Component name) {
         super(container, inv, name);
@@ -42,7 +42,8 @@ private final EnumSkills skill;
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
 
     }
-//
+
+    //
 //    @Override
 //    protected void init() {
 //        super.init();
@@ -158,9 +159,9 @@ private final EnumSkills skill;
 //        return super.mouseClicked(mouseX, mouseY, button);
 //    }
 //
-public EnumCrafting type() {
-    return this.menu.craftingType();
-}
+    public EnumCrafting type() {
+        return this.menu.craftingType();
+    }
 //
 //    public int getLeft() {
 //        return this.leftPos;

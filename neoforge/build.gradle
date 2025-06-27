@@ -9,6 +9,9 @@ loom {
             programArgs "--existing", file("src/main/resources").absolutePath
             programArgs "--existing", project(":common").file("src/main/resources").absolutePath
         }
+        client {
+            vmArgs "-XX:+AllowEnhancedClassRedefinition"
+        }
     }
 }
 

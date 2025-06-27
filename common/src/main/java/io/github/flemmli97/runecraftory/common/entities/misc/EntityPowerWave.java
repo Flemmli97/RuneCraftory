@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,7 +49,7 @@ public class EntityPowerWave extends BaseProjectile {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5).expandTowards(0, 1.5, 0), this::canHit);
             for (LivingEntity living : targets) {
                 this.checkedEntities.add(living.getUUID());
-                if (!this.attackedEntities.contains(living.getUUID()) && CombatUtils.damageWithFaintAndCrit(this.getOwner(), living, new CustomDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(4), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
+                if (!this.attackedEntities.contains(living.getUUID()) && CombatUtils.damageWithFaintAndCrit(this.getOwner(), living, new DynamicDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(4), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
                     this.attackedEntities.add(living.getUUID());
                 }
             }
@@ -58,7 +58,7 @@ public class EntityPowerWave extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(4), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(4), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
     }
 
     @Override

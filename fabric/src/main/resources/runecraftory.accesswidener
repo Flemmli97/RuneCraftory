@@ -12,3 +12,5 @@ accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/St
 
 # accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
 # accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/world/inventory/MenuType$MenuSupplier;)V
+
+accessible class net/minecraft/world/inventory/ArmorSlot

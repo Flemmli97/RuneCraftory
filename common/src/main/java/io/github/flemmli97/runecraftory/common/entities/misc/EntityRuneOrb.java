@@ -47,7 +47,7 @@ public class EntityRuneOrb extends Entity {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         if (this.entityData.get(LEVELSTATS))
             data.increaseSkill(randomSkill, LevelCalc.xpAmountForSkillLevelUp(randomSkill, data.getSkillLevel(randomSkill).getLevel()) - data.getSkillLevel(randomSkill).getXp());
-        data.refreshRunePoints(150);
+        data.regenRunePoints(150);
     }
 
     @Override

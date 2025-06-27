@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -51,69 +51,21 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
 
     private static final Vec3[] PARTICLE_DIRECTION = generateParticleDir(2);
 
+    private static Vec3[] generateParticleDir(int range) {
+        Vec3[] arr = new Vec3[(2 * range + 1) * (2 * range + 1) - 1];
+        int i = 0;
+        for (int x = -range; x <= range; x++)
+            for (int z = -range; z <= range; z++) {
+                if (x == 0 && z == 0)
+                    continue;
+                arr[i] = new Vec3(x, 0, z).normalize().scale(1.2);
+                i++;
+            }
+        return arr;
+    }
+
     public ItemAxeBase(Item.Properties props) {
         super(ItemTiers.TIER, props);
-    }
-
-    @Override
-    public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack);
-    }
-
-    @Override
-    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
-        if (entity instanceof ServerPlayer player) {
-            int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            if (duration == ItemUtils.getChargeTime(entity))
-                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
-        }
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
-        return !player.isCreative();
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (hand == InteractionHand.OFF_HAND)
-            return InteractionResultHolder.pass(itemstack);
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get());
-        if (canCharge) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-    @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
-            if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE_USE.get(), stack);
-                return;
-            }
-            if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {
-                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
-            }
-        }
-    }
-
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
     }
 
     public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
@@ -137,8 +89,8 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
                 ((ServerLevel) entity.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
         }
         if (!list.isEmpty()) {
-            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack))
-                    .knock(CustomDamage.KnockBackType.UP).knockAmount(knockback).hurtResistant(5);
+            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemNBT.getElement(stack))
+                    .knock(DynamicDamage.KnockBackType.UP).knockAmount(knockback).hurtResistant(5);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.1;
             for (Entity e : list) {
@@ -168,16 +120,69 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
         return entities;
     }
 
-    private static Vec3[] generateParticleDir(int range) {
-        Vec3[] arr = new Vec3[(2 * range + 1) * (2 * range + 1) - 1];
-        int i = 0;
-        for (int x = -range; x <= range; x++)
-            for (int z = -range; z <= range; z++) {
-                if (x == 0 && z == 0)
-                    continue;
-                arr[i] = new Vec3(x, 0, z).normalize().scale(1.2);
-                i++;
+    @Override
+    public void executeAttack(Player player, ItemStack stack) {
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack);
+    }
+
+    @Override
+    public boolean attackOnBlock(LivingEntity entity, ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        if (entity instanceof ServerPlayer player) {
+            int duration = stack.getUseDuration(entity) - remainingUseDuration;
+            if (duration == ItemUtils.getChargeTime(entity))
+                EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+        }
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (hand == InteractionHand.OFF_HAND)
+            return InteractionResultHolder.pass(itemstack);
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        boolean canCharge = (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get());
+        if (canCharge) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+            if (entity instanceof ServerPlayer player) {
+                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE_USE.get(), stack);
+                return;
             }
-        return arr;
+            if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {
+                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
+            }
+        }
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 }

@@ -35,7 +35,9 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -115,96 +117,96 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockMonsterBarn> MONSTER_BARN = BLOCKS.register("monster_barn", () -> new BlockMonsterBarn(BlockBehaviour.Properties.of().sound(SoundType.GRASS).noOcclusion().noCollission().strength(1, 10000)));
     public static final RegistryEntrySupplier<Block, BlockQuestboard> QUEST_BOARD = BLOCKS.register("quest_board", () -> new BlockQuestboard(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().strength(2, 5)));
 
-    public static final RegistryEntrySupplier<Block, BlockCrop> TURNIP = crop("turnip", () -> ModItems.TURNIP, () -> ModItems.TURNIP_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> TURNIP_PINK = crop("turnip_pink", () -> ModItems.TURNIP_PINK, () -> ModItems.TURNIP_PINK_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> CABBAGE = crop("cabbage", () -> ModItems.CABBAGE, () -> ModItems.CABBAGE_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> PINK_MELON = crop("pink_melon", () -> ModItems.PINK_MELON, () -> ModItems.PINK_MELON_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> PINEAPPLE = crop("pineapple", () -> ModItems.PINEAPPLE, () -> ModItems.PINEAPPLE_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> STRAWBERRY = crop("strawberry", () -> ModItems.STRAWBERRY, () -> ModItems.STRAWBERRY_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_TURNIP = crop("golden_turnip", () -> ModItems.GOLDEN_TURNIP, () -> ModItems.GOLD_TURNIP_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_POTATO = crop("golden_potato", () -> ModItems.GOLDEN_POTATO, () -> ModItems.GOLD_POTATO_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_PUMPKIN = crop("golden_pumpkin", () -> ModItems.GOLDEN_PUMPKIN, () -> ModItems.GOLD_PUMPKIN_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_CABBAGE = crop("golden_cabbage", () -> ModItems.GOLDEN_CABBAGE, () -> ModItems.GOLD_CABBAGE_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> HOT_HOT_FRUIT = crop("hot_hot_fruit", () -> ModItems.HOT_HOT_FRUIT, () -> ModItems.HOT_HOT_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> BOK_CHOY = crop("bok_choy", () -> ModItems.BOK_CHOY, () -> ModItems.BOK_CHOY_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> LEEK = crop("leek", () -> ModItems.LEEK, () -> ModItems.LEEK_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> RADISH = crop("radish", () -> ModItems.RADISH, () -> ModItems.RADISH_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> SPINACH = crop("spinach", () -> ModItems.SPINACH, () -> ModItems.SPINACH_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> GREEN_PEPPER = crop("green_pepper", () -> ModItems.GREEN_PEPPER, () -> ModItems.GREEN_PEPPER_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> YAM = crop("yam", () -> ModItems.YAM, () -> ModItems.YAM_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> EGGPLANT = crop("eggplant", () -> ModItems.EGGPLANT, () -> ModItems.EGGPLANT_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> TOMATO = crop("tomato", () -> ModItems.TOMATO, () -> ModItems.TOMATO_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> CORN = crop("corn", () -> ModItems.CORN, () -> ModItems.CORN_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> CUCUMBER = crop("cucumber", () -> ModItems.CUCUMBER, () -> ModItems.CUCUMBER_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> PUMPKIN = crop("pumpkin", () -> ModItems.PUMPKIN, () -> ModItems.PUMPKIN_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> ONION = crop("onion", () -> ModItems.ONION, () -> ModItems.ONION_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TURNIP_GIANT = giantCrop("tyrant_turnip", () -> ModItems.TURNIP_GIANT, () -> ModItems.TURNIP_SEEDS, TURNIP);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TURNIP_PINK_GIANT = giantCrop("colossal_pink", () -> ModItems.TURNIP_PINK_GIANT, () -> ModItems.TURNIP_PINK_SEEDS, TURNIP_PINK);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CABBAGE_GIANT = giantCrop("king_cabbage", () -> ModItems.CABBAGE_GIANT, () -> ModItems.CABBAGE_SEEDS, CABBAGE);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PINK_MELON_GIANT = giantCrop("conqueror_melon", () -> ModItems.PINK_MELON_GIANT, () -> ModItems.PINK_MELON_SEEDS, PINK_MELON);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PINEAPPLE_GIANT = giantCrop("king_pineapple", () -> ModItems.PINEAPPLE_GIANT, () -> ModItems.PINEAPPLE_SEEDS, PINEAPPLE);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> STRAWBERRY_GIANT = giantCrop("sultan_strawberry", () -> ModItems.STRAWBERRY_GIANT, () -> ModItems.STRAWBERRY_SEEDS, STRAWBERRY);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_TURNIP_GIANT = giantCrop("golden_tyrant_turnip", () -> ModItems.GOLDEN_TURNIP_GIANT, () -> ModItems.GOLD_TURNIP_SEEDS, GOLDEN_TURNIP);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_POTATO_GIANT = giantCrop("gold_prince_potato", () -> ModItems.GOLDEN_POTATO_GIANT, () -> ModItems.GOLD_POTATO_SEEDS, GOLDEN_POTATO);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_PUMPKIN_GIANT = giantCrop("golden_doom_pumpkin", () -> ModItems.GOLDEN_PUMPKIN_GIANT, () -> ModItems.GOLD_PUMPKIN_SEEDS, PUMPKIN);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_CABBAGE_GIANT = giantCrop("golden_king_cabbage", () -> ModItems.GOLDEN_CABBAGE_GIANT, () -> ModItems.GOLD_CABBAGE_SEEDS, CABBAGE_GIANT);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> HOT_HOT_FRUIT_GIANT = giantCrop("giant_hot_hot_fruit", () -> ModItems.HOT_HOT_FRUIT_GIANT, () -> ModItems.HOT_HOT_SEEDS, HOT_HOT_FRUIT);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> BOK_CHOY_GIANT = giantCrop("boss_bok_choy", () -> ModItems.BOK_CHOY_GIANT, () -> ModItems.BOK_CHOY_SEEDS, BOK_CHOY);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> LEEK_GIANT = giantCrop("legendary_leek", () -> ModItems.LEEK_GIANT, () -> ModItems.LEEK_SEEDS, LEEK);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> RADISH_GIANT = giantCrop("noble_radish", () -> ModItems.RADISH_GIANT, () -> ModItems.RADISH_SEEDS, RADISH);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> SPINACH_GIANT = giantCrop("sovereign_spinach", () -> ModItems.SPINACH_GIANT, () -> ModItems.SPINACH_SEEDS, SPINACH);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GREEN_PEPPER_GIANT = giantCrop("green_pepper_rex", () -> ModItems.GREEN_PEPPER_GIANT, () -> ModItems.GREEN_PEPPER_SEEDS, GREEN_PEPPER);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> YAM_GIANT = giantCrop("lorldy_yam", () -> ModItems.YAM_GIANT, () -> ModItems.YAM_SEEDS, YAM);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> EGGPLANT_GIANT = giantCrop("emperor_eggplant", () -> ModItems.EGGPLANT_GIANT, () -> ModItems.EGGPLANT_SEEDS, EGGPLANT);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TOMATO_GIANT = giantCrop("titan_tomato", () -> ModItems.TOMATO_GIANT, () -> ModItems.TOMATO_SEEDS, TOMATO);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CORN_GIANT = giantCrop("gigant_corn", () -> ModItems.CORN_GIANT, () -> ModItems.CORN_SEEDS, CORN);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CUCUMBER_GIANT = giantCrop("kaiser_cucumber", () -> ModItems.CUCUMBER_GIANT, () -> ModItems.CUCUMBER_SEEDS, CUCUMBER);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PUMPKIN_GIANT = giantCrop("doom_pumpkin", () -> ModItems.PUMPKIN_GIANT, () -> ModItems.PUMPKIN_SEEDS, PUMPKIN);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> ONION_GIANT = giantCrop("ultra_onion", () -> ModItems.ONION_GIANT, () -> ModItems.ONION_SEEDS, ONION);
-    public static final RegistryEntrySupplier<Block, BlockCrop> FODDER = crop("fodder", () -> ModItems.FODDER, () -> ModItems.FODDER_SEEDS);
+    public static final RegistryEntrySupplier<Block, BlockCrop> TURNIP = crop("turnip", ModItems.TURNIP::getKey, ModItems.TURNIP_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> TURNIP_PINK = crop("turnip_pink", ModItems.TURNIP_PINK::getKey, ModItems.TURNIP_PINK_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> CABBAGE = crop("cabbage", ModItems.CABBAGE::getKey, ModItems.CABBAGE_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> PINK_MELON = crop("pink_melon", ModItems.PINK_MELON::getKey, ModItems.PINK_MELON_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> PINEAPPLE = crop("pineapple", ModItems.PINEAPPLE::getKey, ModItems.PINEAPPLE_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> STRAWBERRY = crop("strawberry", ModItems.STRAWBERRY::getKey, ModItems.STRAWBERRY_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_TURNIP = crop("golden_turnip", ModItems.GOLDEN_TURNIP::getKey, ModItems.GOLD_TURNIP_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_POTATO = crop("golden_potato", ModItems.GOLDEN_POTATO::getKey, ModItems.GOLD_POTATO_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_PUMPKIN = crop("golden_pumpkin", ModItems.GOLDEN_PUMPKIN::getKey, ModItems.GOLD_PUMPKIN_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> GOLDEN_CABBAGE = crop("golden_cabbage", ModItems.GOLDEN_CABBAGE::getKey, ModItems.GOLD_CABBAGE_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> HOT_HOT_FRUIT = crop("hot_hot_fruit", ModItems.HOT_HOT_FRUIT::getKey, ModItems.HOT_HOT_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> BOK_CHOY = crop("bok_choy", ModItems.BOK_CHOY::getKey, ModItems.BOK_CHOY_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> LEEK = crop("leek", ModItems.LEEK::getKey, ModItems.LEEK_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> RADISH = crop("radish", ModItems.RADISH::getKey, ModItems.RADISH_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> SPINACH = crop("spinach", ModItems.SPINACH::getKey, ModItems.SPINACH_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> GREEN_PEPPER = crop("green_pepper", ModItems.GREEN_PEPPER::getKey, ModItems.GREEN_PEPPER_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> YAM = crop("yam", ModItems.YAM::getKey, ModItems.YAM_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> EGGPLANT = crop("eggplant", ModItems.EGGPLANT::getKey, ModItems.EGGPLANT_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> TOMATO = crop("tomato", ModItems.TOMATO::getKey, ModItems.TOMATO_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> CORN = crop("corn", ModItems.CORN::getKey, ModItems.CORN_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> CUCUMBER = crop("cucumber", ModItems.CUCUMBER::getKey, ModItems.CUCUMBER_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> PUMPKIN = crop("pumpkin", ModItems.PUMPKIN::getKey, ModItems.PUMPKIN_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> ONION = crop("onion", ModItems.ONION::getKey, ModItems.ONION_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TURNIP_GIANT = giantCrop("tyrant_turnip", ModItems.TURNIP_GIANT::getKey, ModItems.TURNIP_SEEDS::getKey, TURNIP);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TURNIP_PINK_GIANT = giantCrop("colossal_pink", ModItems.TURNIP_PINK_GIANT::getKey, ModItems.TURNIP_PINK_SEEDS::getKey, TURNIP_PINK);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CABBAGE_GIANT = giantCrop("king_cabbage", ModItems.CABBAGE_GIANT::getKey, ModItems.CABBAGE_SEEDS::getKey, CABBAGE);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PINK_MELON_GIANT = giantCrop("conqueror_melon", ModItems.PINK_MELON_GIANT::getKey, ModItems.PINK_MELON_SEEDS::getKey, PINK_MELON);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PINEAPPLE_GIANT = giantCrop("king_pineapple", ModItems.PINEAPPLE_GIANT::getKey, ModItems.PINEAPPLE_SEEDS::getKey, PINEAPPLE);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> STRAWBERRY_GIANT = giantCrop("sultan_strawberry", ModItems.STRAWBERRY_GIANT::getKey, ModItems.STRAWBERRY_SEEDS::getKey, STRAWBERRY);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_TURNIP_GIANT = giantCrop("golden_tyrant_turnip", ModItems.GOLDEN_TURNIP_GIANT::getKey, ModItems.GOLD_TURNIP_SEEDS::getKey, GOLDEN_TURNIP);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_POTATO_GIANT = giantCrop("gold_prince_potato", ModItems.GOLDEN_POTATO_GIANT::getKey, ModItems.GOLD_POTATO_SEEDS::getKey, GOLDEN_POTATO);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_PUMPKIN_GIANT = giantCrop("golden_doom_pumpkin", ModItems.GOLDEN_PUMPKIN_GIANT::getKey, ModItems.GOLD_PUMPKIN_SEEDS::getKey, PUMPKIN);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GOLDEN_CABBAGE_GIANT = giantCrop("golden_king_cabbage", ModItems.GOLDEN_CABBAGE_GIANT::getKey, ModItems.GOLD_CABBAGE_SEEDS::getKey, CABBAGE_GIANT);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> HOT_HOT_FRUIT_GIANT = giantCrop("giant_hot_hot_fruit", ModItems.HOT_HOT_FRUIT_GIANT::getKey, ModItems.HOT_HOT_SEEDS::getKey, HOT_HOT_FRUIT);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> BOK_CHOY_GIANT = giantCrop("boss_bok_choy", ModItems.BOK_CHOY_GIANT::getKey, ModItems.BOK_CHOY_SEEDS::getKey, BOK_CHOY);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> LEEK_GIANT = giantCrop("legendary_leek", ModItems.LEEK_GIANT::getKey, ModItems.LEEK_SEEDS::getKey, LEEK);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> RADISH_GIANT = giantCrop("noble_radish", ModItems.RADISH_GIANT::getKey, ModItems.RADISH_SEEDS::getKey, RADISH);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> SPINACH_GIANT = giantCrop("sovereign_spinach", ModItems.SPINACH_GIANT::getKey, ModItems.SPINACH_SEEDS::getKey, SPINACH);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GREEN_PEPPER_GIANT = giantCrop("green_pepper_rex", ModItems.GREEN_PEPPER_GIANT::getKey, ModItems.GREEN_PEPPER_SEEDS::getKey, GREEN_PEPPER);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> YAM_GIANT = giantCrop("lorldy_yam", ModItems.YAM_GIANT::getKey, ModItems.YAM_SEEDS::getKey, YAM);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> EGGPLANT_GIANT = giantCrop("emperor_eggplant", ModItems.EGGPLANT_GIANT::getKey, ModItems.EGGPLANT_SEEDS::getKey, EGGPLANT);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TOMATO_GIANT = giantCrop("titan_tomato", ModItems.TOMATO_GIANT::getKey, ModItems.TOMATO_SEEDS::getKey, TOMATO);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CORN_GIANT = giantCrop("gigant_corn", ModItems.CORN_GIANT::getKey, ModItems.CORN_SEEDS::getKey, CORN);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CUCUMBER_GIANT = giantCrop("kaiser_cucumber", ModItems.CUCUMBER_GIANT::getKey, ModItems.CUCUMBER_SEEDS::getKey, CUCUMBER);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PUMPKIN_GIANT = giantCrop("doom_pumpkin", ModItems.PUMPKIN_GIANT::getKey, ModItems.PUMPKIN_SEEDS::getKey, PUMPKIN);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> ONION_GIANT = giantCrop("ultra_onion", ModItems.ONION_GIANT::getKey, ModItems.ONION_SEEDS::getKey, ONION);
+    public static final RegistryEntrySupplier<Block, BlockCrop> FODDER = crop("fodder", ModItems.FODDER::getKey, ModItems.FODDER_SEEDS::getKey);
 
-    public static final RegistryEntrySupplier<Block, BlockCrop> POTATO_GIANT = crop("potato", () -> () -> Items.POTATO, () -> () -> Items.POTATO);
-    public static final RegistryEntrySupplier<Block, BlockCrop> CARROT_GIANT = crop("carrot", () -> () -> Items.CARROT, () -> () -> Items.CARROT);
+    public static final RegistryEntrySupplier<Block, BlockCrop> POTATO_GIANT = crop("potato", () -> ofVanilla(Items.POTATO), () -> ofVanilla(Items.POTATO));
+    public static final RegistryEntrySupplier<Block, BlockCrop> CARROT_GIANT = crop("carrot", () -> ofVanilla(Items.CARROT), () -> ofVanilla(Items.CARROT));
 
-    public static final RegistryEntrySupplier<Block, BlockCrop> TOYHERB = flower("toyherb", () -> ModItems.TOYHERB, () -> ModItems.TOYHERB_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> MOONDROP_FLOWER = flower("moondrop_flower", () -> ModItems.MOONDROP_FLOWER, () -> ModItems.MOONDROP_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> PINK_CAT = flower("pink_cat", () -> ModItems.PINK_CAT, () -> ModItems.PINK_CAT_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> CHARM_BLUE = flower("charm_blue", () -> ModItems.CHARM_BLUE, () -> ModItems.CHARM_BLUE_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> LAMP_GRASS = flower("lamp_grass", () -> ModItems.LAMP_GRASS, () -> ModItems.LAMP_GRASS_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> CHERRY_GRASS = flower("cherry_grass", () -> ModItems.CHERRY_GRASS, () -> ModItems.CHERRY_GRASS_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> POM_POM_GRASS = flower("pom_pom_grass", () -> ModItems.POM_POM_GRASS, () -> ModItems.POM_POM_GRASS_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> AUTUMN_GRASS = flower("autumn_grass", () -> ModItems.AUTUMN_GRASS, () -> ModItems.AUTUMN_GRASS_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> NOEL_GRASS = flower("noel_grass", () -> ModItems.NOEL_GRASS, () -> ModItems.NOEL_GRASS_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> FIREFLOWER = flower("fireflower", () -> ModItems.FIREFLOWER, () -> ModItems.FIREFLOWER_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> FOUR_LEAF_CLOVER = flower("four_leaf_clover", () -> ModItems.FOUR_LEAF_CLOVER, () -> ModItems.FOUR_LEAF_CLOVER_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> IRONLEAF = flower("ironleaf", () -> ModItems.IRONLEAF, () -> ModItems.IRONLEAF_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> WHITE_CRYSTAL = flower("white_crystal", () -> ModItems.WHITE_CRYSTAL, () -> ModItems.WHITE_CRYSTAL_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> RED_CRYSTAL = flower("red_crystal", () -> ModItems.RED_CRYSTAL, () -> ModItems.RED_CRYSTAL_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> GREEN_CRYSTAL = flower("green_crystal", () -> ModItems.GREEN_CRYSTAL, () -> ModItems.GREEN_CRYSTAL_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> BLUE_CRYSTAL = flower("blue_crystal", () -> ModItems.BLUE_CRYSTAL, () -> ModItems.BLUE_CRYSTAL_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> EMERY_FLOWER = flower("emery_flower", () -> ModItems.EMERY_FLOWER, () -> ModItems.EMERY_FLOWER_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TOYHERB_GIANT = giantFlower("ultra_toyherb", () -> ModItems.TOYHERB_GIANT, () -> ModItems.TOYHERB_SEEDS, TOYHERB);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> MOONDROP_FLOWER_GIANT = giantFlower("ultra_moondrop_flower", () -> ModItems.MOONDROP_FLOWER_GIANT, () -> ModItems.MOONDROP_SEEDS, MOONDROP_FLOWER);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PINK_CAT_GIANT = giantFlower("king_pink_cat", () -> ModItems.PINK_CAT_GIANT, () -> ModItems.PINK_CAT_SEEDS, PINK_CAT);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CHARM_BLUE_GIANT = giantFlower("great_charm_blue", () -> ModItems.CHARM_BLUE_GIANT, () -> ModItems.CHARM_BLUE_SEEDS, CHARM_BLUE);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> LAMP_GRASS_GIANT = giantFlower("kaiser_lamp_grass", () -> ModItems.LAMP_GRASS_GIANT, () -> ModItems.LAMP_GRASS_SEEDS, LAMP_GRASS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CHERRY_GRASS_GIANT = giantFlower("king_cherry_grass", () -> ModItems.CHERRY_GRASS_GIANT, () -> ModItems.CHERRY_GRASS_SEEDS, CHERRY_GRASS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> POM_POM_GRASS_GIANT = giantFlower("king_pom_pom_grass", () -> ModItems.POM_POM_GRASS_GIANT, () -> ModItems.POM_POM_GRASS_SEEDS, POM_POM_GRASS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> AUTUMN_GRASS_GIANT = giantFlower("big_autumn_grass", () -> ModItems.AUTUMN_GRASS_GIANT, () -> ModItems.AUTUMN_GRASS_SEEDS, AUTUMN_GRASS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> NOEL_GRASS_GIANT = giantFlower("large_noel_grass", () -> ModItems.NOEL_GRASS_GIANT, () -> ModItems.NOEL_GRASS_SEEDS, NOEL_GRASS);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> FIREFLOWER_GIANT = giantFlower("big_fireflower", () -> ModItems.FIREFLOWER_GIANT, () -> ModItems.FIREFLOWER_SEEDS, FIREFLOWER);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> FOUR_LEAF_CLOVER_GIANT = giantFlower("great_four_leaf_clover", () -> ModItems.FOUR_LEAF_CLOVER_GIANT, () -> ModItems.FOUR_LEAF_CLOVER_SEEDS, FOUR_LEAF_CLOVER);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> IRONLEAF_GIANT = giantFlower("super_ironleaf", () -> ModItems.IRONLEAF_GIANT, () -> ModItems.IRONLEAF_SEEDS, IRONLEAF);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> WHITE_CRYSTAL_GIANT = giantFlower("big_white_crystal", () -> ModItems.WHITE_CRYSTAL_GIANT, () -> ModItems.WHITE_CRYSTAL_SEEDS, WHITE_CRYSTAL);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> RED_CRYSTAL_GIANT = giantFlower("big_red_crystal", () -> ModItems.RED_CRYSTAL_GIANT, () -> ModItems.RED_CRYSTAL_SEEDS, RED_CRYSTAL);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GREEN_CRYSTAL_GIANT = giantFlower("big_green_crystal", () -> ModItems.GREEN_CRYSTAL_GIANT, () -> ModItems.GREEN_CRYSTAL_SEEDS, GREEN_CRYSTAL);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> BLUE_CRYSTAL_GIANT = giantFlower("big_blue_crystal", () -> ModItems.BLUE_CRYSTAL_GIANT, () -> ModItems.BLUE_CRYSTAL_SEEDS, BLUE_CRYSTAL);
-    public static final RegistryEntrySupplier<Block, BlockGiantCrop> EMERY_FLOWER_GIANT = giantFlower("great_emery_flower", () -> ModItems.EMERY_FLOWER_GIANT, () -> ModItems.EMERY_FLOWER_SEEDS, EMERY_FLOWER);
+    public static final RegistryEntrySupplier<Block, BlockCrop> TOYHERB = flower("toyherb", ModItems.TOYHERB::getKey, ModItems.TOYHERB_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> MOONDROP_FLOWER = flower("moondrop_flower", ModItems.MOONDROP_FLOWER::getKey, ModItems.MOONDROP_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> PINK_CAT = flower("pink_cat", ModItems.PINK_CAT::getKey, ModItems.PINK_CAT_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> CHARM_BLUE = flower("charm_blue", ModItems.CHARM_BLUE::getKey, ModItems.CHARM_BLUE_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> LAMP_GRASS = flower("lamp_grass", ModItems.LAMP_GRASS::getKey, ModItems.LAMP_GRASS_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> CHERRY_GRASS = flower("cherry_grass", ModItems.CHERRY_GRASS::getKey, ModItems.CHERRY_GRASS_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> POM_POM_GRASS = flower("pom_pom_grass", ModItems.POM_POM_GRASS::getKey, ModItems.POM_POM_GRASS_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> AUTUMN_GRASS = flower("autumn_grass", ModItems.AUTUMN_GRASS::getKey, ModItems.AUTUMN_GRASS_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> NOEL_GRASS = flower("noel_grass", ModItems.NOEL_GRASS::getKey, ModItems.NOEL_GRASS_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> FIREFLOWER = flower("fireflower", ModItems.FIREFLOWER::getKey, ModItems.FIREFLOWER_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> FOUR_LEAF_CLOVER = flower("four_leaf_clover", ModItems.FOUR_LEAF_CLOVER::getKey, ModItems.FOUR_LEAF_CLOVER_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> IRONLEAF = flower("ironleaf", ModItems.IRONLEAF::getKey, ModItems.IRONLEAF_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> WHITE_CRYSTAL = flower("white_crystal", ModItems.WHITE_CRYSTAL::getKey, ModItems.WHITE_CRYSTAL_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> RED_CRYSTAL = flower("red_crystal", ModItems.RED_CRYSTAL::getKey, ModItems.RED_CRYSTAL_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> GREEN_CRYSTAL = flower("green_crystal", ModItems.GREEN_CRYSTAL::getKey, ModItems.GREEN_CRYSTAL_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> BLUE_CRYSTAL = flower("blue_crystal", ModItems.BLUE_CRYSTAL::getKey, ModItems.BLUE_CRYSTAL_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> EMERY_FLOWER = flower("emery_flower", ModItems.EMERY_FLOWER::getKey, ModItems.EMERY_FLOWER_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> TOYHERB_GIANT = giantFlower("ultra_toyherb", ModItems.TOYHERB_GIANT::getKey, ModItems.TOYHERB_SEEDS::getKey, TOYHERB);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> MOONDROP_FLOWER_GIANT = giantFlower("ultra_moondrop_flower", ModItems.MOONDROP_FLOWER_GIANT::getKey, ModItems.MOONDROP_SEEDS::getKey, MOONDROP_FLOWER);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> PINK_CAT_GIANT = giantFlower("king_pink_cat", ModItems.PINK_CAT_GIANT::getKey, ModItems.PINK_CAT_SEEDS::getKey, PINK_CAT);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CHARM_BLUE_GIANT = giantFlower("great_charm_blue", ModItems.CHARM_BLUE_GIANT::getKey, ModItems.CHARM_BLUE_SEEDS::getKey, CHARM_BLUE);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> LAMP_GRASS_GIANT = giantFlower("kaiser_lamp_grass", ModItems.LAMP_GRASS_GIANT::getKey, ModItems.LAMP_GRASS_SEEDS::getKey, LAMP_GRASS);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> CHERRY_GRASS_GIANT = giantFlower("king_cherry_grass", ModItems.CHERRY_GRASS_GIANT::getKey, ModItems.CHERRY_GRASS_SEEDS::getKey, CHERRY_GRASS);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> POM_POM_GRASS_GIANT = giantFlower("king_pom_pom_grass", ModItems.POM_POM_GRASS_GIANT::getKey, ModItems.POM_POM_GRASS_SEEDS::getKey, POM_POM_GRASS);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> AUTUMN_GRASS_GIANT = giantFlower("big_autumn_grass", ModItems.AUTUMN_GRASS_GIANT::getKey, ModItems.AUTUMN_GRASS_SEEDS::getKey, AUTUMN_GRASS);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> NOEL_GRASS_GIANT = giantFlower("large_noel_grass", ModItems.NOEL_GRASS_GIANT::getKey, ModItems.NOEL_GRASS_SEEDS::getKey, NOEL_GRASS);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> FIREFLOWER_GIANT = giantFlower("big_fireflower", ModItems.FIREFLOWER_GIANT::getKey, ModItems.FIREFLOWER_SEEDS::getKey, FIREFLOWER);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> FOUR_LEAF_CLOVER_GIANT = giantFlower("great_four_leaf_clover", ModItems.FOUR_LEAF_CLOVER_GIANT::getKey, ModItems.FOUR_LEAF_CLOVER_SEEDS::getKey, FOUR_LEAF_CLOVER);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> IRONLEAF_GIANT = giantFlower("super_ironleaf", ModItems.IRONLEAF_GIANT::getKey, ModItems.IRONLEAF_SEEDS::getKey, IRONLEAF);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> WHITE_CRYSTAL_GIANT = giantFlower("big_white_crystal", ModItems.WHITE_CRYSTAL_GIANT::getKey, ModItems.WHITE_CRYSTAL_SEEDS::getKey, WHITE_CRYSTAL);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> RED_CRYSTAL_GIANT = giantFlower("big_red_crystal", ModItems.RED_CRYSTAL_GIANT::getKey, ModItems.RED_CRYSTAL_SEEDS::getKey, RED_CRYSTAL);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> GREEN_CRYSTAL_GIANT = giantFlower("big_green_crystal", ModItems.GREEN_CRYSTAL_GIANT::getKey, ModItems.GREEN_CRYSTAL_SEEDS::getKey, GREEN_CRYSTAL);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> BLUE_CRYSTAL_GIANT = giantFlower("big_blue_crystal", ModItems.BLUE_CRYSTAL_GIANT::getKey, ModItems.BLUE_CRYSTAL_SEEDS::getKey, BLUE_CRYSTAL);
+    public static final RegistryEntrySupplier<Block, BlockGiantCrop> EMERY_FLOWER_GIANT = giantFlower("great_emery_flower", ModItems.EMERY_FLOWER_GIANT::getKey, ModItems.EMERY_FLOWER_SEEDS::getKey, EMERY_FLOWER);
 
-    public static final RegistryEntrySupplier<Block, BlockCrop> SHIELD_CROP = flower("shield_flower", () -> ModItems.PLANT_SHIELD, () -> ModItems.SHIELD_SEEDS);
-    public static final RegistryEntrySupplier<Block, BlockCrop> SWORD_CROP = flower("sword_flower", () -> ModItems.PLANT_SWORD, () -> ModItems.SWORD_SEEDS);
+    public static final RegistryEntrySupplier<Block, BlockCrop> SHIELD_CROP = flower("shield_flower", ModItems.PLANT_SHIELD::getKey, ModItems.SHIELD_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, BlockCrop> SWORD_CROP = flower("sword_flower", ModItems.PLANT_SWORD::getKey, ModItems.SWORD_SEEDS::getKey);
 
-    public static final RegistryEntrySupplier<Block, BlockCrop> DUNGEON = flower("dungeon_flower", () -> () -> Items.STONE, () -> ModItems.DUNGEON_SEEDS);
+    public static final RegistryEntrySupplier<Block, BlockCrop> DUNGEON = flower("dungeon_flower", () -> ofVanilla(Items.STONE), ModItems.DUNGEON_SEEDS::getKey);
 
     public static final RegistryEntrySupplier<Block, BlockHerb> WEEDS = herb("weeds", List.of(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
     public static final RegistryEntrySupplier<Block, BlockHerb> WITHERED_GRASS = herb("withered_grass", List.of(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST), BlockHerb.GroundTypes.SANDY);
@@ -225,21 +227,21 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockHerb> BAMBOO_SPROUT = herb("bamboo_sprout", List.of(BiomeTags.IS_JUNGLE, RunecraftoryTags.Biomes.IS_LUSH, RunecraftoryTags.Biomes.IS_DENSE_VEGETATION_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
 
     public static final RegistryEntrySupplier<Block, BlockTreeRoot> TREE_SOIL = BLOCKS.register("tree_soil", () -> new BlockTreeRoot(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING));
+    public static final RegistryEntrySupplier<Block, BlockTreeBase> APPLE_TREE = BLOCKS.register("apple_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.APPLE_1.value(), () -> ModFeatures.APPLE_2.value(), () -> ModFeatures.APPLE_3.value(), ModItems.APPLE_SAPLING.getKey()));
     public static final RegistryEntrySupplier<Block, BlockTreeSapling> APPLE_SAPLING = BLOCKS.register("apple_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), APPLE_TREE));
     public static final RegistryEntrySupplier<Block, RotatedPillarBlock> APPLE_WOOD = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, LeavesBlock> APPLE_LEAVES = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), () -> Items.APPLE));
-    public static final RegistryEntrySupplier<Block, BlockTreeBase> ORANGE_TREE = BLOCKS.register("orange_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.ORANGE_1.value(), () -> ModFeatures.ORANGE_2.value(), () -> ModFeatures.ORANGE_3.value(), ModItems.ORANGE_SAPLING));
+    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ofVanilla(Items.APPLE)));
+    public static final RegistryEntrySupplier<Block, BlockTreeBase> ORANGE_TREE = BLOCKS.register("orange_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.ORANGE_1.value(), () -> ModFeatures.ORANGE_2.value(), () -> ModFeatures.ORANGE_3.value(), ModItems.ORANGE_SAPLING.getKey()));
     public static final RegistryEntrySupplier<Block, BlockTreeSapling> ORANGE_SAPLING = BLOCKS.register("orange_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), ORANGE_TREE));
     public static final RegistryEntrySupplier<Block, RotatedPillarBlock> ORANGE_WOOD = BLOCKS.register("orange_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, LeavesBlock> ORANGE_LEAVES = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.ORANGE));
-    public static final RegistryEntrySupplier<Block, BlockTreeBase> GRAPE_TREE = BLOCKS.register("grape_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.GRAPE_1.value(), () -> ModFeatures.GRAPE_2.value(), () -> ModFeatures.GRAPE_3.value(), ModItems.GRAPE_SAPLING));
+    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.ORANGE.getKey()));
+    public static final RegistryEntrySupplier<Block, BlockTreeBase> GRAPE_TREE = BLOCKS.register("grape_tree", () -> new BlockTreeBase(logProps()));//, () -> ModFeatures.GRAPE_1.value(), () -> ModFeatures.GRAPE_2.value(), () -> ModFeatures.GRAPE_3.value(), ModItems.GRAPE_SAPLING.getKey()));
     public static final RegistryEntrySupplier<Block, BlockTreeSapling> GRAPE_SAPLING = BLOCKS.register("grape_sapling", () -> new BlockTreeSapling(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), GRAPE_TREE));
     public static final RegistryEntrySupplier<Block, RotatedPillarBlock> GRAPE_WOOD = BLOCKS.register("grape_wood", () -> new RotatedPillarBlock(logProps().sound(SoundType.WOOD).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES));
+    public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES.getKey()));
 
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BrokenMineralBlockEntity>> BROKEN_MINERAL_TILE = brokenMineralTile("broken_mineral_tile", BROKEN_MINERAL_MAP.values());
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> BlockEntityType.Builder.of(AccessoryBlockEntity::new, ACCESSORY.get()).build(null));
@@ -267,13 +269,13 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockCrop> crop(String name, Supplier<Supplier<? extends Item>> crop, Supplier<Supplier<? extends Item>> seed) {
+    public static RegistryEntrySupplier<Block, BlockCrop> crop(String name, Supplier<ResourceKey<Item>> crop, Supplier<ResourceKey<Item>> seed) {
         RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(cropProps(), crop.get(), seed.get()));
         CROPS.add(reg);
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block, ?> crop) {
+    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed, RegistryEntrySupplier<Block, ?> crop) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         CROPS.add(reg);
         if (Platform.INSTANCE.isDatagen())
@@ -281,13 +283,13 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockCrop> flower(String name, Supplier<Supplier<? extends Item>> crop, Supplier<Supplier<? extends Item>> seed) {
+    public static RegistryEntrySupplier<Block, BlockCrop> flower(String name, Supplier<ResourceKey<Item>> crop, Supplier<ResourceKey<Item>> seed) {
         RegistryEntrySupplier<Block, BlockCrop> reg = BLOCKS.register(name, () -> new BlockCrop(cropProps(), crop.get(), seed.get()));
         FLOWERS.add(reg);
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<Supplier<? extends Item>> giant, Supplier<Supplier<? extends Item>> seed, RegistryEntrySupplier<Block, ?> flower) {
+    public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed, RegistryEntrySupplier<Block, ?> flower) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         FLOWERS.add(reg);
         if (Platform.INSTANCE.isDatagen())
@@ -327,5 +329,9 @@ public class ModBlocks {
 
     private static BlockBehaviour.Properties cropProps() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY);
+    }
+
+    private static ResourceKey<Item> ofVanilla(Item item) {
+        return ResourceKey.create(Registries.ITEM, BuiltInRegistries.ITEM.getKey(item));
     }
 }

@@ -35,7 +35,7 @@ public class SeasonUtils {
             return temp;
         switch (season) {
             case SUMMER -> temp += 0.1f;
-            case FALL -> temp -= 0.25f;
+            case AUTUMN -> temp -= 0.25f;
             case WINTER -> temp -= 0.8f;
         }
         return temp;

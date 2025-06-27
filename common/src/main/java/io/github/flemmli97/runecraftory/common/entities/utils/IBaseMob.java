@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.utils;
 
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface IBaseMob {
 
-    LevelExpPair xpLevel();
+    XpLevelHolder xpLevel();
 
     void setLevel(int level);
 

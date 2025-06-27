@@ -7,7 +7,7 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import java.util.List;
 
 /**
- * All relevant player model animations. Here since NPC also use them
+ * All relevant player model animations. NPCs also use them
  */
 public class PlayerModelAnimations {
 

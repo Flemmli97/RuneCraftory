@@ -4,11 +4,8 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
-import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,7 +13,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements EntityDataGetter {
@@ -26,17 +22,6 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
 
     @Shadow
     protected ItemStack useItem;
-
-    /**
-     * Really hate the attribute system
-     */
-    @Inject(method = "createLivingAttributes", at = @At("RETURN"))
-    private static void addToAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-        AttributeSupplier.Builder builder = info.getReturnValue();
-        for (RegistryEntrySupplier<Attribute, ?> s : RuneCraftoryFabric.attributes()) {
-            builder.add(s.asHolder());
-        }
-    }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickCall(CallbackInfo info) {

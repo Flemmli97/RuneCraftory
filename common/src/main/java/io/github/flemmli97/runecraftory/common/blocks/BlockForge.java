@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.entity.ForgingBlockEntity;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
@@ -29,7 +28,7 @@ public class BlockForge extends BlockCrafting {
             VoxelUtils.ShapeBuilder.of(0, 5, 4, 16, 6, 13));
 
     public BlockForge(Properties props) {
-        super(EnumCrafting.FORGE, props);
+        super(props);
     }
 
     @Override

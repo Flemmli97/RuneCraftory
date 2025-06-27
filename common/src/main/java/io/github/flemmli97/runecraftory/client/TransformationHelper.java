@@ -1,45 +1,33 @@
 package io.github.flemmli97.runecraftory.client;
 
-import com.mojang.math.Axis;
+import io.github.flemmli97.tenshilib.client.model.PoseExtended;
 import net.minecraft.client.model.geom.PartPose;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class TransformationHelper {
 
     /**
      * Calculates the correct PartPose to apply to a child ModelPart that is not actually a child of the given parent
      */
-    public static PartPose withParent(PartPose parent, PartPose child) {
-        Matrix4f matrix4f = new Matrix4f();
-        matrix4f.translate(parent.x, parent.y, parent.z);
-        boolean parentRotated = false;
-        if (parent.zRot != 0) {
-            matrix4f.rotate(Axis.ZP.rotation(parent.zRot));
-            parentRotated = true;
+    public static PartPose withParent(PoseExtended parent, PartPose child) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.translate(parent.x, parent.y, parent.z);
+        boolean parentRotated = parent.xRot != 0.0F || parent.yRot != 0.0F || parent.zRot != 0.0F;
+        if (parentRotated) {
+            matrix.rotate(new Quaternionf().rotationZYX(parent.zRot, parent.yRot, parent.xRot));
         }
-        if (parent.yRot != 0) {
-            matrix4f.rotate(Axis.YP.rotation(parent.yRot));
-            parentRotated = true;
+        if (parent.xScale != 1.0F || parent.yScale != 1.0F || parent.zScale != 1.0F) {
+            matrix.scale(parent.xScale, parent.yScale, parent.zScale);
         }
-        if (parent.xRot != 0) {
-            matrix4f.rotate(Axis.XP.rotation(parent.xRot));
-            parentRotated = true;
-        }
-        Vector4f pos = new Vector4f(child.x, child.y, child.z, 1);
-        pos.mul(matrix4f);
-        Vector3f rot;
-        if (!parentRotated) {
-            rot = new Vector3f(child.xRot, child.yRot, child.zRot);
-        } else {
-            if (child.zRot != 0)
-                matrix4f.rotate(Axis.ZP.rotation(child.zRot));
-            if (child.yRot != 0)
-                matrix4f.rotate(Axis.YP.rotation(child.yRot));
-            if (child.xRot != 0)
-                matrix4f.rotate(Axis.XP.rotation(child.xRot));
-            rot = matrix4f.getEulerAnglesZYX(new Vector3f());
+
+        Vector3f pos = new Vector3f();
+        matrix.transformPosition(child.x, child.y, child.z, pos);
+        Vector3f rot = new Vector3f(child.xRot, child.yRot, child.zRot);
+        if (parentRotated) {
+            matrix.rotateZYX(rot);
+            rot = matrix.getEulerAnglesZYX(new Vector3f());
         }
         return PartPose.offsetAndRotation(pos.x(),
                 pos.y(),
@@ -54,34 +42,19 @@ public class TransformationHelper {
      * Vanilla non child poses -> Models with child element
      */
     public static PartPose withoutParent(PartPose parent, PartPose child) {
-        Matrix4f matrix4f = new Matrix4f();
-        boolean parentRotated = false;
-        if (parent.xRot != 0) {
-            matrix4f.rotate(Axis.XN.rotation(parent.xRot));
-            parentRotated = true;
+        Matrix4f matrix = new Matrix4f();
+        boolean parentRotated = parent.xRot != 0.0F || parent.yRot != 0.0F || parent.zRot != 0.0F;
+        if (parentRotated) {
+            matrix.rotate(new Quaternionf().rotateXYZ(parent.zRot, parent.yRot, parent.xRot));
         }
-        if (parent.yRot != 0) {
-            matrix4f.rotate(Axis.YN.rotation(parent.yRot));
-            parentRotated = true;
-        }
-        if (parent.zRot != 0) {
-            matrix4f.rotate(Axis.ZN.rotation(parent.zRot));
-            parentRotated = true;
-        }
-        matrix4f.translate(-parent.x, -parent.y, -parent.z);
-        Vector4f pos = new Vector4f(child.x, child.y, child.z, 1);
-        pos.mul(matrix4f);
-        Vector3f rot;
-        if (!parentRotated) {
-            rot = new Vector3f(child.xRot, child.yRot, child.zRot);
-        } else {
-            if (child.zRot != 0)
-                matrix4f.rotate(Axis.ZP.rotation(child.zRot));
-            if (child.yRot != 0)
-                matrix4f.rotate(Axis.YP.rotation(child.yRot));
-            if (child.xRot != 0)
-                matrix4f.rotate(Axis.XP.rotation(child.xRot));
-            rot = matrix4f.getEulerAnglesZYX(new Vector3f());
+        matrix.translate(-parent.x, -parent.y, -parent.z);
+        Vector3f pos = new Vector3f();
+        matrix.transformPosition(child.x, child.y, child.z, pos);
+
+        Vector3f rot = new Vector3f(child.xRot, child.yRot, child.zRot);
+        if (parentRotated) {
+            matrix.rotateZYX(rot);
+            rot = matrix.getEulerAnglesZYX(new Vector3f());
         }
         return PartPose.offsetAndRotation(pos.x(),
                 pos.y(),

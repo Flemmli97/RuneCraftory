@@ -73,7 +73,7 @@ public class ClientMixinUtils {
         return switch (tint.season) {
             case SPRING -> desaturate(add(tint.origin, LEAVE_SPRING), 0.1f);
             case SUMMER -> tint.origin;
-            case FALL -> desaturate(add(FastColor.ARGB32.multiply(tint.origin, LEAVE_FALL), 0x3c1e00), 0.2f);
+            case AUTUMN -> desaturate(add(FastColor.ARGB32.multiply(tint.origin, LEAVE_FALL), 0x3c1e00), 0.2f);
             case WINTER -> desaturate(add(FastColor.ARGB32.multiply(tint.origin, LEAVE_FALL), 0x3c1e00), 0.6f);
         };
     }
@@ -82,7 +82,7 @@ public class ClientMixinUtils {
         return switch (tint.season) {
             case SPRING -> desaturate(add(tint.origin, LEAVE_SPRING), 0.1f);
             case SUMMER -> tint.origin;
-            case FALL -> desaturate(tint.origin, 0.25f);
+            case AUTUMN -> desaturate(tint.origin, 0.25f);
             case WINTER -> desaturate(tint.origin, 0.7f);
         };
     }
@@ -114,7 +114,7 @@ public class ClientMixinUtils {
     }
 
     public static boolean shouldAnimate(LivingEntity entity) {
-        return ClientHandlers.getAnimatedPlayerModel() != null && (entity instanceof Player || entity instanceof AnimatedEntity);
+        return entity instanceof Player || entity instanceof AnimatedEntity;
     }
 
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
@@ -126,29 +126,27 @@ public class ClientMixinUtils {
         if (model.leftArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(off).is(ModItems.UMBRELLA.get())) {
             model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
-        if (ClientHandlers.getAnimatedPlayerModel() != null) {
-            float partialTicks = ClientHandlers.getPartialTicks();
-            if (entity instanceof AnimatedEntity) {
-                boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
-                if (result)
-                    ClientHandlers.getAnimatedPlayerModel().copyTo(model);
-                return;
-            }
-            PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).getWeaponHandler() : null;
-            if (weaponHandler == null)
-                return;
-            boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
-            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
-            if (result) {
+        float partialTicks = ClientHandlers.getPartialTicks();
+        if (entity instanceof AnimatedEntity) {
+            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
+            if (result)
                 ClientHandlers.getAnimatedPlayerModel().copyTo(model);
-                if (ItemRenderContext) {
-                    model.setAllVisible(false);
-                    model.leftArm.visible = true;
-                    model.rightArm.visible = true;
-                    if (model instanceof PlayerModel<?> playerModel) {
-                        playerModel.leftSleeve.copyFrom(model.leftArm);
-                        playerModel.rightSleeve.copyFrom(model.rightArm);
-                    }
+            return;
+        }
+        PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).getWeaponHandler() : null;
+        if (weaponHandler == null)
+            return;
+        boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
+        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
+        if (result) {
+            ClientHandlers.getAnimatedPlayerModel().copyTo(model);
+            if (ItemRenderContext) {
+                model.setAllVisible(false);
+                model.leftArm.visible = true;
+                model.rightArm.visible = true;
+                if (model instanceof PlayerModel<?> playerModel) {
+                    playerModel.leftSleeve.copyFrom(model.leftArm);
+                    playerModel.rightSleeve.copyFrom(model.rightArm);
                 }
             }
         }
@@ -234,16 +232,5 @@ public class ClientMixinUtils {
 
     record SeasonedTint(int origin, EnumSeason season) {
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof SeasonedTint tint)
-                return tint.origin == this.origin && tint.season == this.season;
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return (this.season + ";" + this.origin).hashCode();
-        }
     }
 }

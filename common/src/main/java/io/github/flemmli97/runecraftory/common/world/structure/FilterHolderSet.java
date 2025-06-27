@@ -49,10 +49,10 @@ public class FilterHolderSet<T> implements HolderSet<T> {
 
     public static <T> MapCodec<HolderSet<T>> codec(ResourceKey<? extends Registry<T>> registryKey, Codec<Holder<T>> holderCodec, boolean forceList) {
         return RecordCodecBuilder.<FilterHolderSet<T>>mapCodec(
-                builder -> builder
-                        .group(HolderSetCodec.create(registryKey, holderCodec, forceList).fieldOf("base").forGetter(FilterHolderSet::base),
-                                HolderSetCodec.create(registryKey, holderCodec, forceList).fieldOf("filter").forGetter(FilterHolderSet::filter))
-                        .apply(builder, FilterHolderSet::new))
+                        builder -> builder
+                                .group(HolderSetCodec.create(registryKey, holderCodec, forceList).fieldOf("base").forGetter(FilterHolderSet::base),
+                                        HolderSetCodec.create(registryKey, holderCodec, forceList).fieldOf("filter").forGetter(FilterHolderSet::filter))
+                                .apply(builder, FilterHolderSet::new))
                 .xmap(Function.identity(), h -> h instanceof FilterHolderSet<T> filterHolderSet
                         ? filterHolderSet : new FilterHolderSet<>(h, HolderSet.empty()));
     }

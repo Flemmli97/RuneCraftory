@@ -311,7 +311,7 @@ public class LevelCalc {
         float percentAmount = percent > 0 ? data.getMaxRunePoints() * percent * skillReduction : 0;
         val = Math.max(percentAmount, val);
         int usage = Mth.ceil(val);
-        return data.decreaseRunePoints(usage, hurt);
+        return data.useRunePoints(usage, hurt);
     }
 
     public static float getMultiplierInterval(int level, int interval, float max, float bonus) {

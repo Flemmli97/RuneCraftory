@@ -125,8 +125,10 @@ public class ItemUtils {
 
     public static float getShieldEfficiency(ItemStack stack) {
         float eff = stack.getOrDefault(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 1f);
-        if (stack.has(ModDataComponentTypes.DRAGON_SCALE.get()))
-            eff = Mth.clamp(eff + 0.5f, 0.5f, 1);
+        if (eff < 1) {
+            if (stack.has(ModDataComponentTypes.DRAGON_SCALE.get()))
+                eff = Mth.clamp(eff + 0.5f, 0.5f, 0.75f);
+        }
         return eff;
     }
 }

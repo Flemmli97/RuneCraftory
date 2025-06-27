@@ -44,6 +44,13 @@ public class ItemToolHoe extends HoeItem {
         super(ItemTiers.TIER, props);
     }
 
+    public static void onHoeUse(ServerPlayer player) {
+        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        LevelCalc.useRP(data, 3, true, 0, true, EnumSkills.FARMING, EnumSkills.EARTH);
+        LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
+        LevelCalc.levelSkill(data, EnumSkills.EARTH, 1.5f);
+    }
+
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
@@ -56,6 +63,15 @@ public class ItemToolHoe extends HoeItem {
     }
 
     @Override
+    public InteractionResult useOn(UseOnContext ctx) {
+        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        if (tier.getTierLevel() == 0) {
+            return this.useOnBlock(ctx);
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
@@ -64,16 +80,6 @@ public class ItemToolHoe extends HoeItem {
             return InteractionResultHolder.consume(stack);
         }
         return InteractionResultHolder.pass(stack);
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
     }
 
     @Override
@@ -106,17 +112,18 @@ public class ItemToolHoe extends HoeItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext ctx) {
-        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
-        if (tier.getTierLevel() == 0) {
-            return this.useOnBlock(ctx);
-        }
-        return InteractionResult.PASS;
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 
     private InteractionResult useOnBlock(UseOnContext ctx) {
@@ -140,12 +147,5 @@ public class ItemToolHoe extends HoeItem {
             return true;
         }
         return false;
-    }
-
-    public static void onHoeUse(ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        LevelCalc.useRP(data, 3, true, 0, true, EnumSkills.FARMING, EnumSkills.EARTH);
-        LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
-        LevelCalc.levelSkill(data, EnumSkills.EARTH, 1.5f);
     }
 }

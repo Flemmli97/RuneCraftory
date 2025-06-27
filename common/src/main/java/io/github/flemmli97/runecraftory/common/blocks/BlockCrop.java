@@ -4,13 +4,18 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -21,24 +26,28 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.function.Supplier;
-
 public class BlockCrop extends CropBlock {
 
     public static final MapCodec<BlockCrop> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(
-                    propertiesCodec(),
-                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("crop").forGetter(BlockCrop::getCrop),
-                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("seed").forGetter(d -> d.seed.get())
-            ).apply(inst, (prop, crop, seed) -> new BlockCrop(prop, () -> crop, () -> seed)));
+            inst.group(propertiesCodec(),
+                    LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("crop").forGetter(d -> d.crop),
+                    LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("seed").forGetter(d -> d.seed)
+            ).apply(inst, BlockCrop::new));
 
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)};
-    protected final Supplier<? extends Item> crop;
-    protected final Supplier<? extends Item> seed;
+    protected final LazyResolvedRegistryEntry<Item> crop;
+    protected final LazyResolvedRegistryEntry<Item> seed;
 
-    public BlockCrop(BlockBehaviour.Properties prop, Supplier<? extends Item> crop, Supplier<? extends Item> seed) {
+    public BlockCrop(BlockBehaviour.Properties prop, ResourceKey<Item> crop, ResourceKey<Item> seed) {
+        super(prop);
+        this.registerDefaultState(this.defaultBlockState().setValue(this.getAgeProperty(), 0).setValue(WILTED, false));
+        this.crop = new LazyResolvedRegistryEntry<>(crop);
+        this.seed = new LazyResolvedRegistryEntry<>(seed);
+    }
+
+    private BlockCrop(BlockBehaviour.Properties prop, LazyResolvedRegistryEntry<Item> crop, LazyResolvedRegistryEntry<Item> seed) {
         super(prop);
         this.registerDefaultState(this.defaultBlockState().setValue(this.getAgeProperty(), 0).setValue(WILTED, false));
         this.crop = crop;
@@ -76,7 +85,12 @@ public class BlockCrop extends CropBlock {
 
     @Override
     protected ItemLike getBaseSeedId() {
-        return this.seed.get();
+        return Items.AIR;
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return new ItemStack(this.seed.get(level.registryAccess()));
     }
 
     @Override
@@ -84,8 +98,12 @@ public class BlockCrop extends CropBlock {
         builder.add(AGE).add(WILTED);
     }
 
-    public Item getCrop() {
-        return this.crop.get();
+    public Item getCrop(HolderLookup.Provider provider) {
+        return this.crop.get(provider).value();
+    }
+
+    public Item getCrop(HolderLookup<Item> provider) {
+        return this.crop.get(provider).value();
     }
 
     public void onWither(int amount, Level level, BlockState state, BlockPos pos) {

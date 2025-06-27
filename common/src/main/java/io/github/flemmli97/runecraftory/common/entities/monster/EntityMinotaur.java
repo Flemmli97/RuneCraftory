@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
@@ -123,10 +123,10 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public CustomDamage.Builder damageSourceAttack() {
-        CustomDamage.Builder source = super.damageSourceAttack();
+    public DynamicDamage.Builder damageSourceAttack() {
+        DynamicDamage.Builder source = super.damageSourceAttack();
         if (this.getAnimationHandler().isCurrent(CHARGE))
-            source.knock(CustomDamage.KnockBackType.BACK).knockAmount(2);
+            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(2);
         else if (this.getAnimationHandler().isCurrent(SWING))
             source.withChangedAttribute(ModAttributes.STUN.asHolder(), 30);
         return source;

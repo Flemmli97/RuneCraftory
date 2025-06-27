@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
@@ -44,9 +43,6 @@ public abstract class Spell {
 
     public static void playSound(LivingEntity entity, SoundEvent sound, float volume, float pitch) {
         entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), sound, entity.getSoundSource(), volume, pitch);
-    }
-
-    public void update(Player player, ItemStack stack) {
     }
 
     public void levelSkill(ServerPlayer player) {

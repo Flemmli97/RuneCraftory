@@ -24,12 +24,17 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
 
     public ItemGloveBase(Item.Properties props) {
-        super(props.stacksTo(1));
+        super(props);
     }
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVES.get(), stack);
+    }
+
+    @Override
+    public boolean attackOnBlock(LivingEntity entity, ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -39,11 +44,6 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
             if (duration == ItemUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
-        return !player.isCreative();
     }
 
     @Override
@@ -61,6 +61,18 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
     }
 
     @Override
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+        if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+            Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVE_USE.get(), stack);
+        }
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
+
+    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
     }
@@ -68,13 +80,6 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
-    }
-
-    @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
-            Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVE_USE.get(), stack);
-        }
     }
 
     @Override

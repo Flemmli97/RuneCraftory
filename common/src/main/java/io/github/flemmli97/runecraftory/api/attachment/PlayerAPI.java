@@ -15,7 +15,7 @@ public class PlayerAPI {
     }
 
     public static boolean useRunepoints(Player player, int amount, boolean damage) {
-        return Platform.INSTANCE.getPlayerData(player).decreaseRunePoints(amount, damage);
+        return Platform.INSTANCE.getPlayerData(player).useRunePoints(amount, damage);
     }
 
     public static int getLevel(Player player) {

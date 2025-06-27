@@ -50,6 +50,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -180,48 +181,9 @@ public class LangGen implements DataProvider {
             }
         }
 
-        this.add(ModAttributes.HEALTH_GAIN.get().getDescriptionId(), "HP");
-        this.add(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId(), "RP");
-        this.add(ModAttributes.MAX_RUNEPOINTS.get().getDescriptionId(), "RP Max");
-
-        this.add(ModAttributes.DEFENCE.get().getDescriptionId(), "DEF");
-        this.add(ModAttributes.MAGIC_ATTACK.get().getDescriptionId(), "M. ATT");
-        this.add(ModAttributes.MAGIC_DEFENCE.get().getDescriptionId(), "M. DEF");
-        this.add(ModAttributes.PARALYSIS.get().getDescriptionId(), "Para");
-        this.add(ModAttributes.POISON.get().getDescriptionId(), "Poison");
-        this.add(ModAttributes.SEAL.get().getDescriptionId(), "Sealing");
-        this.add(ModAttributes.SLEEP.get().getDescriptionId(), "Sleep");
-        this.add(ModAttributes.FATIGUE.get().getDescriptionId(), "Fatigue");
-        this.add(ModAttributes.COLD.get().getDescriptionId(), "Cold");
-        this.add(ModAttributes.DIZZY.get().getDescriptionId(), "Dizz");
-        this.add(ModAttributes.CRITICAL.get().getDescriptionId(), "Crit");
-        this.add(ModAttributes.STUN.get().getDescriptionId(), "Stun");
-        this.add(ModAttributes.FAINT.get().getDescriptionId(), "Faint");
-        this.add(ModAttributes.DRAIN.get().getDescriptionId(), "Drain");
-        this.add(ModAttributes.WATER_RESISTANCE.get().getDescriptionId(), "Water Res");
-        this.add(ModAttributes.EARTH_RESISTANCE.get().getDescriptionId(), "Earth Res");
-        this.add(ModAttributes.WIND_RESISTANCE.get().getDescriptionId(), "Wind Res");
-        this.add(ModAttributes.FIRE_RESISTANCE.get().getDescriptionId(), "Fire Res");
-        this.add(ModAttributes.DARK_RESISTANCE.get().getDescriptionId(), "Dark Res");
-        this.add(ModAttributes.LIGHT_RESISTANCE.get().getDescriptionId(), "Light Res");
-        this.add(ModAttributes.LOVE_RESISTANCE.get().getDescriptionId(), "Love Res");
-        this.add(ModAttributes.PARALYSIS_RESISTANCE.get().getDescriptionId(), "Paralysis Res");
-        this.add(ModAttributes.POISON_RESISTANCE.get().getDescriptionId(), "Poison Res");
-        this.add(ModAttributes.SEAL_RESISTANCE.get().getDescriptionId(), "Seal Res");
-        this.add(ModAttributes.SLEEP_RESISTANCE.get().getDescriptionId(), "Sleep Res");
-        this.add(ModAttributes.FATIGUE_RESISTANCE.get().getDescriptionId(), "Fatigue Res");
-        this.add(ModAttributes.COLD_RESISTANCE.get().getDescriptionId(), "Cold Res");
-        this.add(ModAttributes.DIZZY_RESISTANCE.get().getDescriptionId(), "Diz Res");
-        this.add(ModAttributes.CRITICAL_RESISTANCE.get().getDescriptionId(), "Crit Res");
-        this.add(ModAttributes.STUN_RESISTANCE.get().getDescriptionId(), "Stun Res");
-        this.add(ModAttributes.FAINT_RESISTANCE.get().getDescriptionId(), "Faint Res");
-        this.add(ModAttributes.DRAIN_RESISTANCE.get().getDescriptionId(), "Drain Res");
-
-        this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
-        this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
-        this.add(ModAttributes.ATTACK_WIDTH.get().getDescriptionId(), "Attack Width");
-        this.add(ModAttributes.CHARGE_TIME.get().getDescriptionId(), "Charge Time");
-
+        for (RegistryEntrySupplier<Attribute, ? extends Attribute> sup : ModAttributes.ATTRIBUTES.getEntries()) {
+            this.add(sup.get().getDescriptionId(), this.simpleTranslation(sup.getID()));
+        }
         for (RegistryEntrySupplier<MobEffect, ?> reg : ModEffects.EFFECTS.getEntries()) {
             this.add(reg.get(), this.simpleTranslation(reg.getID()));
         }
@@ -257,7 +219,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.item.buy", "Buy: %s$");
         this.add("runecraftory.tooltip.item.sell", "Sell: %s$");
         this.add("runecraftory.tooltip.item.difficulty", "Upgrade Difficulty: %s");
-        this.add("runecraftory.tooltip.item.equipped", "When equipped");
         this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
         this.add("runecraftory.tooltip.item.attribute", "%s: %s");
         this.add("runecraftory.tooltip.item.attribute.percentage", "%s: %s%");
@@ -375,6 +336,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.magnifying_glass.view.level", "Quality: %s");
         this.add("runecraftory.magnifying_glass.view.giant", "Size: %s");
         this.add("runecraftory.magnifying_glass.view.defence", "Defence: %s");
+
+        this.add("runecraftory.gui.date.format", "%s %s");
 
         this.add(C2SNPCInteraction.Action.TALK.translation, "Talk");
         this.add(C2SNPCInteraction.Action.FOLLOW.translation, "Follow me");

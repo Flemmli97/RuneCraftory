@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.CraftingBlockItem;
 import io.github.flemmli97.runecraftory.common.items.QuestBoardItem;
-import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
@@ -61,12 +60,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ModItems {
@@ -82,6 +83,7 @@ public class ModItems {
     public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> FRUITS = new ArrayList<>();
     public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item, ?>> CROPS = new ArrayList<>();
+    public static final List<RegistryEntrySupplier<Item, ?>> GIANT_CROPS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item, ?>> FOOD = new ArrayList<>();
 
     public static final List<RegistryEntrySupplier<Item, ?>> TIER_1_CHEST = new ArrayList<>();
@@ -92,6 +94,8 @@ public class ModItems {
     private static final FoodProperties LOW_FOOD_PROP = new FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).alwaysEdible().build();
     private static final FoodProperties FOOD_PROP = new FoodProperties.Builder().nutrition(2).saturationModifier(0.5f).alwaysEdible().build();
     private static final FoodProperties HIGH_FOOD_PROP = new FoodProperties.Builder().nutrition(6).saturationModifier(0.75f).alwaysEdible().build();
+
+    private static final FoodProperties GIANT_CROP_FOOD_PROP = new FoodProperties(2, 0.5f, true, 2.4f, Optional.empty(), List.of());
 
     public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_SCRAP = hoe(EnumToolTier.SCRAP);
     public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_IRON = hoe(EnumToolTier.IRON);
@@ -1242,6 +1246,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolHoe> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolHoe> sup = register("hoe_" + tier.getName(), () -> new ItemToolHoe(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
@@ -1261,6 +1266,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolSickle> sickle(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolSickle> sup = register("sickle_" + tier.getName(), () -> new ItemToolSickle(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
@@ -1270,6 +1276,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolHammer> hammerTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolHammer> sup = register("hammer_" + tier.getName(), () -> new ItemToolHammer(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
@@ -1279,6 +1286,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemToolAxe> axeTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item, ItemToolAxe> sup = register("axe_" + tier.getName(), () -> new ItemToolAxe(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen())
@@ -1298,11 +1306,13 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemShortSwordBase> shortSword(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemShortSwordBase> sup = register(name, () -> new ItemShortSwordBase(new Item.Properties()
+                    .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SHORT_SWORD))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemShortSwordBase> sup = register(name, () -> new ItemShortSwordBase(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SHORT_SWORD))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
@@ -1314,12 +1324,14 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemLongSwordBase> longSword(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemLongSwordBase> sup = register(name, () -> new ItemLongSwordBase(new Item.Properties()
+                    .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.LONG_SWORD))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemLongSwordBase> sup = register(name, () -> new ItemLongSwordBase(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.LONG_SWORD))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
@@ -1332,12 +1344,14 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemSpearBase> spear(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemSpearBase> sup = register(name, () -> new ItemSpearBase(new Item.Properties()
+                    .stacksTo(1)
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SPEAR))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemSpearBase> sup = register(name, () -> new ItemSpearBase(new Item.Properties()
+                .stacksTo(1)
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SPEAR))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
@@ -1350,12 +1364,14 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemAxeBase> axe(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemAxeBase> sup = register(name, () -> new ItemAxeBase(new Item.Properties()
+                    .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemAxeBase> sup = register(name, () -> new ItemAxeBase(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
@@ -1368,12 +1384,14 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemHammerBase> hammer(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemHammerBase> sup = register(name, () -> new ItemHammerBase(new Item.Properties()
+                    .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemHammerBase> sup = register(name, () -> new ItemHammerBase(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
@@ -1386,12 +1404,14 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemDualBladeBase> dualBlade(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemDualBladeBase> sup = register(name, () -> new ItemDualBladeBase(new Item.Properties()
+                    .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.DUAL_BLADES))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemDualBladeBase> sup = register(name, () -> new ItemDualBladeBase(new Item.Properties()
+                .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.DUAL_BLADES))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
@@ -1404,12 +1424,14 @@ public class ModItems {
     private static RegistryEntrySupplier<Item, ItemGloveBase> gloves(String name, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemGloveBase> sup = register(name, () -> new ItemGloveBase(new Item.Properties()
+                    .stacksTo(1)
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                     .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.GLOVES))));
             NOTEX.add(sup);
             return sup;
         }
         RegistryEntrySupplier<Item, ItemGloveBase> sup = register(name, () -> new ItemGloveBase(new Item.Properties()
+                .stacksTo(1)
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.GLOVES))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (Platform.INSTANCE.isDatagen()) {
@@ -1443,11 +1465,11 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemArmorBase> equipment(ArmorItem.Type slot, String name, Texture texture, boolean useItemTexture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties(), RuneCraftory.modRes(name), useItemTexture));
+            RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties().stacksTo(1), RuneCraftory.modRes(name), useItemTexture));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties(), RuneCraftory.modRes(name), useItemTexture), ModCreativeModTabs.EQUIPMENT);
+        RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties().stacksTo(1), RuneCraftory.modRes(name), useItemTexture), ModCreativeModTabs.EQUIPMENT);
         if (Platform.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             switch (slot) {
@@ -1582,19 +1604,25 @@ public class ModItems {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, Item> sup;
             if (small != null)
-                sup = register(name, () -> new ItemGiantCrops(new Item.Properties().food(FOOD_PROP)));
+                sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)));
             else
                 sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)));
             NOTEX.add(sup);
+            if (Platform.INSTANCE.isDatagen()) {
+                if (small != null)
+                    GIANT_CROPS.add(sup);
+            }
             return sup;
         }
         RegistryEntrySupplier<Item, Item> sup;
         if (small != null)
-            sup = register(name, () -> new ItemGiantCrops(new Item.Properties().food(FOOD_PROP)), ModCreativeModTabs.CROPS);
+            sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), ModCreativeModTabs.CROPS);
         else
             sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)), ModCreativeModTabs.CROPS);
         if (Platform.INSTANCE.isDatagen()) {
             TIER_1_CHEST.add(sup);
+            if (small != null)
+                GIANT_CROPS.add(sup);
             String tagName = small != null ? small.getPath() : name;
             switch (type) {
                 case 0 -> VEGGIES.add(Pair.of(tagName, sup));

@@ -41,8 +41,8 @@ public class InventoryShippingBin extends SaveItemContainer {
             QuestHandler.getData(player).trigger(ShippingTracker.KEY, stack);
             this.setItem(i, ItemStack.EMPTY);
         }
-        data.setMoney(data.getMoney() + money);
+        data.giveMoney(money);
         if (money != 0)
-            player.displayClientMessage(Component.translatable("runecraftory.misc.shipping.money").append("" + money).withStyle(ChatFormatting.GOLD), true);
+            player.displayClientMessage(Component.translatable("runecraftory.misc.shipping.money", money).withStyle(ChatFormatting.GOLD), true);
     }
 }

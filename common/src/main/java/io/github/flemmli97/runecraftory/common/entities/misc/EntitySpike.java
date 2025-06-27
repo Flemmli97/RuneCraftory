@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -157,7 +157,7 @@ public class EntitySpike extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).knock(CustomDamage.KnockBackType.UP).knockAmount(0.6f).magic().hurtResistant(0);
+        DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).knock(DynamicDamage.KnockBackType.UP).knockAmount(0.6f).magic().hurtResistant(0);
         return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 

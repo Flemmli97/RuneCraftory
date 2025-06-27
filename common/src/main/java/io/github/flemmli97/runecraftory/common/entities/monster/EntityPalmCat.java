@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -115,9 +115,9 @@ public class EntityPalmCat extends LeapingMonster {
 
     @Override
     public boolean doHurtTarget(Entity entity) {
-        CustomDamage.Builder source = new CustomDamage.Builder(this).noKnockback().hurtResistant(1);
+        DynamicDamage.Builder source = new DynamicDamage.Builder(this).noKnockback().hurtResistant(1);
         if (this.getAnimationHandler().isCurrent(LEAP))
-            source.knock(CustomDamage.KnockBackType.UP).knockAmount(1);
+            source.knock(DynamicDamage.KnockBackType.UP).knockAmount(1);
         boolean hurt = CombatUtils.mobAttack(this, entity, source);
         if (hurt)
             this.hitAny = true;

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.model.armor;
 
 import io.github.flemmli97.runecraftory.client.model.SimpleGeoModel;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.HumanoidModel;
@@ -25,7 +25,7 @@ public class CustomHumanoidArmorModel<T extends Entity> extends SimpleGeoModel<T
 
     @Override
     protected ReloadableCache<ModelPartsContainer> load(ResourceLocation location) {
-        return ModelManager.getInstance().getModel(location, model -> {
+        return GeoModelManager.getInstance().getModel(location, model -> {
             this.head = model.getOptionalPart("head").orElse(null);
             this.hat = model.getOptionalPart("hat").orElse(null);
             this.body = model.getOptionalPart("body").orElse(null);

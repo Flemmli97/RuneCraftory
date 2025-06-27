@@ -49,7 +49,7 @@ public class EntityRuney extends Entity {
         };
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         data.increaseStatBonus(stat);
-        data.refreshRunePoints(150);
+        data.regenRunePoints(150);
         player.level().playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 1, 0.5f);
     }
 

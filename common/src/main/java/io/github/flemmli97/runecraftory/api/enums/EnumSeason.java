@@ -6,7 +6,7 @@ public enum EnumSeason {
 
     SPRING(ChatFormatting.RED, "spring"),
     SUMMER(ChatFormatting.DARK_GREEN, "summer"),
-    FALL(ChatFormatting.GOLD, "fall"),
+    AUTUMN(ChatFormatting.GOLD, "autumn"),
     WINTER(ChatFormatting.BLUE, "winter");
 
     public static final String PREFIX = "runecraftory.season.";
@@ -21,9 +21,9 @@ public enum EnumSeason {
 
     public static EnumSeason nextSeason(EnumSeason season) {
         return switch (season) {
-            case FALL -> WINTER;
+            case AUTUMN -> WINTER;
             case SPRING -> SUMMER;
-            case SUMMER -> FALL;
+            case SUMMER -> AUTUMN;
             default -> SPRING;
         };
     }

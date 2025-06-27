@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
@@ -116,7 +116,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, Anima
             }
             if (this.tickLeft <= 21 && this.tickLeft >= 9) {
                 if (this.getOwner() != null && this.tickLeft % 3 == 0)
-                    this.caughtEntities.forEach(e -> CombatUtils.mobAttack(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier));
+                    this.caughtEntities.forEach(e -> CombatUtils.mobAttack(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier));
             }
             if (this.tickLeft <= 0) {
                 this.caughtEntities.forEach(e -> Platform.INSTANCE.getEntityData(e).setOrthoView(e, false));

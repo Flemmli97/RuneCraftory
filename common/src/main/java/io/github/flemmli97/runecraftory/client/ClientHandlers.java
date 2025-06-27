@@ -23,8 +23,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -60,7 +58,7 @@ public class ClientHandlers {
     public static TriggerKeyBind SPELL_3;
     public static TriggerKeyBind SPELL_4;
 
-    private static AnimatedPlayerModel<?> ANIMATED_PLAYER_MODEL;
+    private static final AnimatedPlayerModel<?> ANIMATED_PLAYER_MODEL = new AnimatedPlayerModel<>();
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
@@ -174,66 +172,6 @@ public class ClientHandlers {
         }
     }
 
-    public static void drawCenteredScaledString(GuiGraphics graphics, Font font, Component component, float x, float y, float scale, int color) {
-        if (scale != 1) {
-            PoseStack stack = graphics.pose();
-            stack.pushPose();
-            stack.translate(x, y, 0);
-            stack.scale(scale, scale, scale);
-            stack.translate(-font.width(component) * 0.5, 0, 0);
-            graphics.drawString(font, component, 0, 0, color);
-            stack.popPose();
-        } else {
-            x -= font.width(component) * 0.5;
-            graphics.drawString(font, component, (int) x, (int) y, color);
-        }
-    }
-
-    public static void drawCenteredScaledString(GuiGraphics graphics, Font font, String string, float x, float y, float scale, int color) {
-        if (scale != 1) {
-            PoseStack stack = graphics.pose();
-            stack.pushPose();
-            stack.translate(x, y, 0);
-            stack.scale(scale, scale, scale);
-            stack.translate(-font.width(string) * 0.5, 0, 0);
-            graphics.drawString(font, string, 0, 0, color);
-            stack.popPose();
-        } else {
-            x -= font.width(string) * 0.5;
-            graphics.drawString(font, string, (int) x, (int) y, color);
-        }
-    }
-
-    public static void drawRightAlignedScaledString(GuiGraphics graphics, Font font, Component string, float x, float y, float scale, int color) {
-        if (scale != 1) {
-            PoseStack stack = graphics.pose();
-            stack.pushPose();
-            stack.translate(x, y, 0);
-            stack.scale(scale, scale, scale);
-            stack.translate(-font.width(string), 0, 0);
-            graphics.drawString(font, string, 0, 0, color);
-            stack.popPose();
-        } else {
-            x -= font.width(string);
-            graphics.drawString(font, string, (int) x, (int) y, color);
-        }
-    }
-
-    public static void drawRightAlignedScaledString(GuiGraphics graphics, Font font, String string, float x, float y, float scale, int color) {
-        if (scale != 1) {
-            PoseStack stack = graphics.pose();
-            stack.pushPose();
-            stack.translate(x, y, 0);
-            stack.scale(scale, scale, scale);
-            stack.translate(-font.width(string), 0, 0);
-            graphics.drawString(font, string, 0, 0, color);
-            stack.popPose();
-        } else {
-            x -= font.width(string);
-            graphics.drawString(font, string, (int) x, (int) y, color);
-        }
-    }
-
     public static void handleShopRespone(Component txt) {
 //        if (Minecraft.getInstance().screen instanceof NPCShopGui shop) {
 //            if (txt != null)
@@ -248,19 +186,12 @@ public class ClientHandlers {
     }
 
     public static void initNonRendererModels(EntityRendererProvider.Context ctx) {
-        ANIMATED_PLAYER_MODEL = new AnimatedPlayerModel<>();
         ArmorModels.initArmorModels(ctx);
     }
 
     public static void updateCurrentRecipeIndex(int index) {
 //        if (Minecraft.getInstance().screen instanceof CraftingGui gui)
 //            gui.setScrollValue(index);
-    }
-
-    public static void onAttributePkt() {
-//        if (Minecraft.getInstance().screen instanceof InfoScreen screen) {
-//            screen.onAttributePkt();
-//        }
     }
 
     public static void handleTriggers(S2CTriggers.TriggerType type, BlockPos pos) {

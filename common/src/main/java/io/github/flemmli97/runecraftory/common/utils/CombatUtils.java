@@ -80,9 +80,7 @@ public class CombatUtils {
         if (!(entity instanceof LivingEntity attacker))
             return 0;
         double increase = 0;
-        if (attacker instanceof Player player) {
-            increase += Platform.INSTANCE.getPlayerData(player).getAttributeValue(att);
-        } else if (attacker.getAttribute(att) != null) {
+        if (attacker.getAttribute(att) != null) {
             increase += attacker.getAttributeValue(att);
         }
         int inc = (int) increase;
@@ -151,12 +149,13 @@ public class CombatUtils {
         float reduce = 0;
         boolean ignoreDefence = switch (GeneralConfig.defenceSystem) {
             case NO_DEFENCE -> true;
-            case VANILLA_IGNORE -> !(source instanceof CustomDamage);
-            case IGNORE_VANILLA_MOBS -> !(source instanceof CustomDamage) && source.getEntity() instanceof Mob;
-            case IGNORE_VANILLA_PLAYER_ATT -> !(source instanceof CustomDamage) && source.getEntity() instanceof Player;
-            case IGNORE_VANILLA_PLAYER_HURT -> !(source instanceof CustomDamage) && entity instanceof Player;
+            case VANILLA_IGNORE -> !(source instanceof DynamicDamage);
+            case IGNORE_VANILLA_MOBS -> !(source instanceof DynamicDamage) && source.getEntity() instanceof Mob;
+            case IGNORE_VANILLA_PLAYER_ATT ->
+                    !(source instanceof DynamicDamage) && source.getEntity() instanceof Player;
+            case IGNORE_VANILLA_PLAYER_HURT -> !(source instanceof DynamicDamage) && entity instanceof Player;
             case IGNORE_VANILLA_PLAYER ->
-                    !(source instanceof CustomDamage) && (entity instanceof Player || source.getEntity() instanceof Player);
+                    !(source instanceof DynamicDamage) && (entity instanceof Player || source.getEntity() instanceof Player);
         };
         if (!ignoreDefence) {
             if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
@@ -169,15 +168,15 @@ public class CombatUtils {
         float dmg = amount - reduce;
         if (reduce > amount * 0.8)
             dmg = (float) Math.max(0.05 * amount, amount * 0.2 * Math.pow(0.997, reduce - amount * 0.8));
-        if (source instanceof CustomDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
+        if (source instanceof DynamicDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
             dmg += entity.level().random.nextGaussian() * dmg / 10.0;
         }
         return elementalReduction(entity, source, dmg);
     }
 
     public static float elementalReduction(LivingEntity entity, DamageSource source, float amount) {
-        if (source instanceof CustomDamage && ((CustomDamage) source).getElement() != EnumElement.NONE) {
-            EnumElement element = ((CustomDamage) source).getElement();
+        if (source instanceof DynamicDamage && ((DynamicDamage) source).getElement() != EnumElement.NONE) {
+            EnumElement element = ((DynamicDamage) source).getElement();
             double percent = 0;
             switch (element) {
                 case DARK:
@@ -228,8 +227,8 @@ public class CombatUtils {
             removeTempAttribute(entity, Attributes.KNOCKBACK_RESISTANCE);
     }
 
-    public static void knockBack(LivingEntity entity, CustomDamage source) {
-        if (source.getKnockBackType() == CustomDamage.KnockBackType.NONE)
+    public static void knockBack(LivingEntity entity, DynamicDamage source) {
+        if (source.getKnockBackType() == DynamicDamage.KnockBackType.NONE)
             return;
         Entity attacker = source.getEntity();
         float strength = source.knockAmount();
@@ -254,7 +253,7 @@ public class CombatUtils {
                     break;
             }
         }
-        if (source.getKnockBackType() == CustomDamage.KnockBackType.VANILLA) {
+        if (source.getKnockBackType() == DynamicDamage.KnockBackType.VANILLA) {
             entity.knockback(strength, xRatio, zRatio);
         } else {
             Vec3 mot = entity.getDeltaMovement();
@@ -264,7 +263,7 @@ public class CombatUtils {
                 float f = (float) Math.sqrt(xRatio * xRatio + zRatio * zRatio);
                 mot = mot.scale(0.5).add(xRatio / f * strength, 0, zRatio / f * strength);
             }
-            if (source.getKnockBackType() != CustomDamage.KnockBackType.UP) {
+            if (source.getKnockBackType() != DynamicDamage.KnockBackType.UP) {
                 if (entity.onGround()) {
                     y /= 2.0;
                     y += strength;
@@ -303,20 +302,23 @@ public class CombatUtils {
                         return true;
                     }
                 }
+                if (resetCooldown) {
+                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
+                }
                 boolean faint = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.asHolder(), target);
                 boolean critical = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRITICAL.asHolder(), target);
-                CustomDamage.DamageCategory damageCategory = CustomDamage.DamageCategory.NORMAL;
+                DynamicDamage.DamageCategory damageCategory = DynamicDamage.DamageCategory.NORMAL;
                 if (faint)
-                    damageCategory = CustomDamage.DamageCategory.FAINT;
+                    damageCategory = DynamicDamage.DamageCategory.FAINT;
                 else if (critical)
-                    damageCategory = CustomDamage.DamageCategory.IGNOREDEF;
+                    damageCategory = DynamicDamage.DamageCategory.IGNOREDEF;
                 if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
-                    damageCategory = CustomDamage.DamageCategory.FIXED;
+                    damageCategory = DynamicDamage.DamageCategory.FIXED;
                     damage = 1;
                 }
-                CustomDamage.Builder source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageCategory)
-                        .knock(CustomDamage.KnockBackType.VANILLA).hurtResistant(0);
-                CustomDamage tempBuild = source.get(player.registryAccess());
+                DynamicDamage.Builder source = new DynamicDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageCategory)
+                        .knock(DynamicDamage.KnockBackType.VANILLA).hurtResistant(0);
+                DynamicDamage tempBuild = source.get(player.registryAccess());
 
                 double enchantBonus = EnchantmentHelper.modifyDamage(serverLevel, stack, player, tempBuild, damage) - damage;
                 damage += enchantBonus;
@@ -355,27 +357,27 @@ public class CombatUtils {
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
-        CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(5).element(ItemNBT.getElement(stack));
+        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).hurtResistant(5).element(ItemNBT.getElement(stack));
         return mobAttack(attacker, target, source);
     }
 
-    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source) {
+    public static boolean mobAttack(LivingEntity attacker, Entity target, DynamicDamage.Builder source) {
         ItemStack stack = attacker.getMainHandItem();
         double damage = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level() instanceof ServerLevel serverLevel)
             ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
         if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
-            source.damageType(CustomDamage.DamageCategory.FIXED);
+            source.damageType(DynamicDamage.DamageCategory.FIXED);
             damage = 1;
         }
         return mobAttack(attacker, target, source, damage);
     }
 
-    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double damage) {
+    public static boolean mobAttack(LivingEntity attacker, Entity target, DynamicDamage.Builder source, double damage) {
         return mobAttack(attacker, target, source, damage, null);
     }
 
-    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double damage, @Nullable ItemStack stack) {
+    public static boolean mobAttack(LivingEntity attacker, Entity target, DynamicDamage.Builder source, double damage, @Nullable ItemStack stack) {
         if (target.level().getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
             return false;
         if (damage > 0) {
@@ -389,20 +391,20 @@ public class CombatUtils {
         return false;
     }
 
-    public static boolean damageWithFaintAndCrit(@Nullable Entity attacker, Entity target, CustomDamage.Builder builder, double damage, @Nullable ItemStack stack) {
+    public static boolean damageWithFaintAndCrit(@Nullable Entity attacker, Entity target, DynamicDamage.Builder builder, double damage, @Nullable ItemStack stack) {
         return damage(attacker, target, builder, damage, stack, true, true);
     }
 
-    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage.Builder builder, double damage, @Nullable ItemStack stack, boolean allowCrit, boolean allowFaint) {
+    public static boolean damage(@Nullable Entity attacker, Entity target, DynamicDamage.Builder builder, double damage, @Nullable ItemStack stack, boolean allowCrit, boolean allowFaint) {
         // Setup some more things
         if (attacker instanceof LivingEntity living) {
             builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(living, att, val));
             if (allowFaint && living.level().random.nextDouble() < statusEffectValue(living, ModAttributes.FAINT.asHolder(), target)) {
-                builder.damageType(CustomDamage.DamageCategory.FAINT);
+                builder.damageType(DynamicDamage.DamageCategory.FAINT);
             } else if (allowCrit && living.level().random.nextDouble() < statusEffectValue(living, ModAttributes.CRITICAL.asHolder(), target)) {
                 switch (builder.getDamageType()) {
-                    case MAGIC -> builder.damageType(CustomDamage.DamageCategory.IGNOREMAGICDEF);
-                    case NORMAL -> builder.damageType(CustomDamage.DamageCategory.IGNOREDEF);
+                    case MAGIC -> builder.damageType(DynamicDamage.DamageCategory.IGNOREMAGICDEF);
+                    case NORMAL -> builder.damageType(DynamicDamage.DamageCategory.IGNOREDEF);
                 }
             }
             if (builder.calculateKnockback()) {
@@ -412,7 +414,7 @@ public class CombatUtils {
             }
         }
 
-        CustomDamage source = builder.get(target.registryAccess());
+        DynamicDamage source = builder.get(target.registryAccess());
         float dmg = (float) damage;
         if (source.criticalDamage())
             dmg = Float.MAX_VALUE;

@@ -23,7 +23,7 @@ public class ColdEffect extends UncurableEffect {
         if (living instanceof Player player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             int amount = Math.min(data.getRunePoints(), (int) (data.getMaxRunePoints() * 0.05));
-            data.decreaseRunePoints(amount, false);
+            data.useRunePoints(amount, false);
         }
         return super.applyEffectTick(living, amplifier);
     }

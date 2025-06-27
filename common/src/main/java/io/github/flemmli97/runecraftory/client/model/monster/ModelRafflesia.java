@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
-import io.github.flemmli97.tenshilib.client.data.AnimationManager;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -40,7 +40,7 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
 
     public ModelRafflesia() {
         super();
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
             this.mainRoot = model.getPart("mainRoot");
             this.head = model.getPart("head");
             this.horseTail = model.getPart("leftStem");
@@ -48,12 +48,12 @@ public class ModelRafflesia<T extends EntityRafflesia> extends EntityModel<T> im
             this.flower = model.getPart("frontStem");
             this.ridingPosition = model.getPart("ridingPos");
         });
-        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
+        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override

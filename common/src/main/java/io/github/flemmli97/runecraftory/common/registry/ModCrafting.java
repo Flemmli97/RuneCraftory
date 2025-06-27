@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.crafting.ArmorRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.ChemistryRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.CookingRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.ForgingRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.HammerRemainderRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.LevelUpUpgradeRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.ArmorRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.ChemistryRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.CookingRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.ForgingRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.HammerRemainderRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.LevelUpUpgradeRecipe;
+import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;

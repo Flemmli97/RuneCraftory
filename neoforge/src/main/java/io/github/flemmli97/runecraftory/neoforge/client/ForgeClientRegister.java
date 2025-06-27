@@ -42,6 +42,7 @@ import java.util.function.Function;
 
 public class ForgeClientRegister {
 
+    @SuppressWarnings("deprecation")
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         ClientRegister.init();

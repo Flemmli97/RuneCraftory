@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
@@ -123,7 +123,7 @@ public class EntityStatusBall extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).noKnockback();
+        DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).noKnockback();
         this.type.damageMod.accept(builder);
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             this.discard();
@@ -169,13 +169,13 @@ public class EntityStatusBall extends BaseDamageCloud {
                 .withChangedAttribute(ModAttributes.PARALYSIS.asHolder(), 5)
                 .withChangedAttribute(ModAttributes.POISON.asHolder(), 5), new Vector3f(135 / 255F, 23 / 255F, 29 / 255F), 30);
 
-        public final Consumer<CustomDamage.Builder> damageMod;
+        public final Consumer<DynamicDamage.Builder> damageMod;
 
         public final Vector3f particleColor;
 
         public final int maxLivingTicks;
 
-        Type(Consumer<CustomDamage.Builder> damageMod, Vector3f particleColor, int maxLivingTicks) {
+        Type(Consumer<DynamicDamage.Builder> damageMod, Vector3f particleColor, int maxLivingTicks) {
             this.damageMod = damageMod;
             this.particleColor = particleColor;
             this.maxLivingTicks = maxLivingTicks;

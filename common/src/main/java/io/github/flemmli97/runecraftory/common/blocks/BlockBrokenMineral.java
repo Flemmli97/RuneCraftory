@@ -38,8 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock, EntityBlock, ExtendedBlock {
 
     public static final MapCodec<BlockBrokenMineral> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(
-                    CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
+            inst.group(CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
                     propertiesCodec()
             ).apply(inst, BlockBrokenMineral::new));
 

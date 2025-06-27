@@ -35,8 +35,8 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
     }
 
     @Override
-    public boolean doSweepingAttack() {
-        return false;
+    public boolean attackOnBlock(LivingEntity entity, ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -46,11 +46,6 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
             if (duration == ItemUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
-        return !player.isCreative();
     }
 
     @Override
@@ -68,16 +63,6 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-    @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
@@ -88,6 +73,21 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
                 entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Map;
 
@@ -32,8 +32,8 @@ public abstract class LivingEntityMixin {
         EntityCalls.dropInventoryDeath((LivingEntity) (Object) this);
     }
 
-    @Inject(method = "collectEquipmentChanges", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void onChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> info, Map<EquipmentSlot, ItemStack> map) {
+    @Inject(method = "collectEquipmentChanges", at = @At("RETURN"))
+    private void onChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> info, @Local Map<EquipmentSlot, ItemStack> map) {
         if (map != null)
             // Can't be a method reference!
             EntityCalls.updateEquipment((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), this::getLastArmorItem);

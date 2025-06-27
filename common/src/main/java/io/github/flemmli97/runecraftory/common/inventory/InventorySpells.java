@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class InventorySpells extends SaveItemContainer {
@@ -13,6 +12,11 @@ public class InventorySpells extends SaveItemContainer {
 
     public InventorySpells() {
         super(4);
+    }
+
+    @Override
+    public int getMaxStackSize(int index) {
+        return 1;
     }
 
     @Override
@@ -45,12 +49,5 @@ public class InventorySpells extends SaveItemContainer {
             }
         }
         this.stacks.clear();
-    }
-
-    public void update(Player player) {
-        for (ItemStack stack : this.stacks) {
-            if (stack.getItem() instanceof ItemSpell)
-                ((ItemSpell) stack.getItem()).getSpell().update(player, stack);
-        }
     }
 }

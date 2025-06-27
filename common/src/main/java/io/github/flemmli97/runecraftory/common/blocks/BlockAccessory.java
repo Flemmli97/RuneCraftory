@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.entity.AccessoryBlockEntity;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
 import net.minecraft.core.BlockPos;
@@ -32,7 +31,7 @@ public class BlockAccessory extends BlockCrafting {
             VoxelUtils.ShapeBuilder.of(1, 15, 7, 4, 16, 14));
 
     public BlockAccessory(Properties props) {
-        super(EnumCrafting.ARMOR, props);
+        super(props);
     }
 
     @Override

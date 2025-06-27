@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -35,11 +34,8 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
 
     public static final EnumProperty<EnumPart> PART = EnumProperty.create("part", EnumPart.class);
 
-    private final EnumCrafting type;
-
-    public BlockCrafting(EnumCrafting type, BlockBehaviour.Properties props) {
+    public BlockCrafting(BlockBehaviour.Properties props) {
         super(props);
-        this.type = type;
     }
 
     @Override
@@ -147,10 +143,6 @@ public abstract class BlockCrafting extends HorizontalDirectionalBlock implement
         if (state.getValue(PART) == EnumPart.RIGHT)
             return from.relative(state.getValue(FACING).getClockWise());
         return from.relative(state.getValue(FACING).getCounterClockWise());
-    }
-
-    public boolean hasUpgradeScreen() {
-        return this.type == EnumCrafting.ARMOR || this.type == EnumCrafting.FORGE;
     }
 
     @Override

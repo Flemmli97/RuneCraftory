@@ -34,11 +34,8 @@ public class PacketRegistrar {
         register.register(S2CEntityDataSync.TYPE, S2CEntityDataSync.STREAM_CODEC, S2CEntityDataSync::handle);
         register.register(S2CEntityDataSyncAll.TYPE, S2CEntityDataSyncAll.STREAM_CODEC, S2CEntityDataSyncAll::handle);
         register.register(S2CFoodPkt.TYPE, S2CFoodPkt.STREAM_CODEC, S2CFoodPkt::handle);
-        register.register(S2CItemStatBoost.TYPE, S2CItemStatBoost.STREAM_CODEC, S2CItemStatBoost::handle);
         register.register(S2CLevelPkt.TYPE, S2CLevelPkt.STREAM_CODEC, S2CLevelPkt::handle);
-        register.register(S2CMaxRunePoints.TYPE, S2CMaxRunePoints.STREAM_CODEC, S2CMaxRunePoints::handle);
         register.register(S2CMoney.TYPE, S2CMoney.STREAM_CODEC, S2CMoney::handle);
-        register.register(S2CPlayerStats.TYPE, S2CPlayerStats.STREAM_CODEC, S2CPlayerStats::handle);
         register.register(S2CRecipe.TYPE, S2CRecipe.STREAM_CODEC, S2CRecipe::handle);
         register.register(S2CRunePoints.TYPE, S2CRunePoints.STREAM_CODEC, S2CRunePoints::handle);
         register.register(S2CSkillLevelPkt.TYPE, S2CSkillLevelPkt.STREAM_CODEC, S2CSkillLevelPkt::handle);

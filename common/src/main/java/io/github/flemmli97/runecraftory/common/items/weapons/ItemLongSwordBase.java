@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -35,9 +35,39 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
         super(ItemTiers.TIER, props);
     }
 
+    public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+        if (entity instanceof ServerPlayer player)
+            player.sweepAttack();
+        if (performRightClickAction(stack, entity, 0) && entity instanceof ServerPlayer player) {
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.LONGSWORD, 7);
+        }
+    }
+
+    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, double range) {
+        Collection<LivingEntity> list = CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 60, entity.getYRot() + 60, (float) range)
+                .apply(entity, null);
+        if (!list.isEmpty()) {
+            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(DynamicDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
+            boolean success = false;
+            double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.2;
+            for (LivingEntity e : list) {
+                if (CombatUtils.damageWithFaintAndCrit(entity, e, base.get(), damagePhys, stack))
+                    success = true;
+            }
+            return success;
+        }
+        return false;
+    }
+
     @Override
     public void executeAttack(Player player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.LONG_SWORD.get(), stack);
+    }
+
+    @Override
+    public boolean attackOnBlock(LivingEntity entity, ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -64,16 +94,6 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-    @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
@@ -86,29 +106,14 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
         }
     }
 
-    public static void delayedRightClickAction(LivingEntity entity, ItemStack stack) {
-        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-        if (entity instanceof ServerPlayer player)
-            player.sweepAttack();
-        if (performRightClickAction(stack, entity, 0) && entity instanceof ServerPlayer player) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.LONGSWORD, 7);
-        }
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
     }
 
-    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, double range) {
-        Collection<LivingEntity> list = CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 60, entity.getYRot() + 60, (float) range)
-                .apply(entity, null);
-        if (!list.isEmpty()) {
-            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
-            boolean success = false;
-            double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.2;
-            for (LivingEntity e : list) {
-                if (CombatUtils.damageWithFaintAndCrit(entity, e, base.get(), damagePhys, stack))
-                    success = true;
-            }
-            return success;
-        }
-        return false;
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return 72000;
     }
 
     @Override

@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
+import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
@@ -35,12 +36,13 @@ import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
-import io.github.flemmli97.runecraftory.common.utils.LootTableResources;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
 import io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
+import io.github.flemmli97.tenshilib.fabric.loader.events.CommonSetupEvent;
+import io.github.flemmli97.tenshilib.fabric.loader.events.EntityAttributeModifierEvent;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
@@ -69,6 +71,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -81,14 +84,11 @@ import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfig;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class RuneCraftoryFabric implements ModInitializer {
-
-    private static boolean INIT_ATTRIBUTES;
 
     public static void entityTick(LivingEntity entity) {
         EntityCalls.updateLivingTick(entity);
@@ -177,6 +177,23 @@ public class RuneCraftoryFabric implements ModInitializer {
                 builder.withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableResources.CHEST_LOOT_SPELLS)));
         }));
 
+        EntityAttributeModifierEvent.EVENT.register(event -> {
+            for (EntityType<? extends LivingEntity> t : event.getTypes()) {
+                for (RegistryEntrySupplier<Attribute, ?> s : ModAttributes.ENTITY_ATTRIBUTES) {
+                    if (!event.has(t, s.asHolder()))
+                        event.add(t, s.asHolder());
+                }
+            }
+            for (RegistryEntrySupplier<Attribute, ?> s : ModAttributes.PLAYER_ATTRIBUTES) {
+                event.add(EntityType.PLAYER, s.asHolder());
+            }
+        });
+
+        CommonSetupEvent.EVENT.register(listener -> listener.enqueue(RuneCraftory.MODID, () -> {
+            this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
+            this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
+        }));
+
         QuestHandler.register();
     }
 
@@ -189,11 +206,12 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         ModBlocks.BLOCK_ENTITY_TYPES.registerContent();
         ModMenuTypes.CONTAINERS.registerContent();
-        //ModAttributes.ATTRIBUTES.registerContent();
+        ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
         ModFeatures.FEATURES.registerContent();
-//        ModFeatures.TRUNK_PLACER.registerContent();
+        ModFeatures.TRUNK_PLACER.registerContent();
+        ModFeatures.TREE_DECORATORS.registerContent();
         ModSpells.SPELLS.register().registerContent();
         ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
@@ -215,25 +233,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModSounds.SOUND_EVENTS.registerContent();
         ModDataComponentTypes.DATA_COMPONENTS.registerContent();
         ModCriteria.TRIGGERS.registerContent();
-        this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
-        this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
 //        ModFeatures.registerConfiguredFeatures();
-    }
-
-    public static Collection<RegistryEntrySupplier<Attribute, ?>> attributes() {
-        if (!INIT_ATTRIBUTES) {
-            ModAttributes.ATTRIBUTES.registerContent();
-            INIT_ATTRIBUTES = true;
-        }
-        return ModAttributes.ENTITY_ATTRIBUTES;
-    }
-
-    public static Collection<RegistryEntrySupplier<Attribute, ?>> playerAttributes() {
-        if (!INIT_ATTRIBUTES) {
-            ModAttributes.ATTRIBUTES.registerContent();
-            INIT_ATTRIBUTES = true;
-        }
-        return ModAttributes.PLAYER_ATTRIBUTES;
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

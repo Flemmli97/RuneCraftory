@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.network;
 
-import com.mojang.datafixers.types.Type;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;

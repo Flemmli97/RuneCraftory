@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
-import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemProp;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -136,7 +135,7 @@ public class ItemModels extends ItemModelProvider {
                 this.withExistingParent(sup.getID().getPath(), ResourceLocation.fromNamespaceAndPath(sup.getID().getNamespace(), "block/" + sup.getID().getPath()));
             else if (sup.get() instanceof ItemProp)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/generated"), "layer0", RuneCraftory.modRes(this.folder + "/" + ModItems.UNKNOWN.getID().getPath()));
-            else if (sup.get() instanceof ItemGiantCrops)
+            else if (ModItems.GIANT_CROPS.contains(sup))
                 this.singleTexture(sup.getID().getPath(), this.modLoc(this.folder + "/double_sized_item"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()));
             else if (sup == ModItems.NPC_BABY)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/generated"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_boy"))

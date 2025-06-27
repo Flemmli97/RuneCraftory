@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -16,7 +16,7 @@ public class S2CEntityLevelPkt implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CEntityLevelPkt> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CEntityLevelPkt decode(RegistryFriendlyByteBuf buf) {
-            return new S2CEntityLevelPkt(buf.readInt(), new LevelExpPair(buf));
+            return new S2CEntityLevelPkt(buf.readInt(), new XpLevelHolder(buf));
         }
 
         @Override
@@ -27,9 +27,9 @@ public class S2CEntityLevelPkt implements CustomPacketPayload {
     };
 
     private final int entityID;
-    private final LevelExpPair level;
+    private final XpLevelHolder level;
 
-    private S2CEntityLevelPkt(int id, LevelExpPair level) {
+    private S2CEntityLevelPkt(int id, XpLevelHolder level) {
         this.entityID = id;
         this.level = level;
     }

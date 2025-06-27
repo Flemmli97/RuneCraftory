@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -168,7 +168,7 @@ public class EntitySkelefang extends BossMonster {
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                        new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP).withChangedAttribute(ModAttributes.STUN.asHolder(), 70))) {
+                        new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP).withChangedAttribute(ModAttributes.STUN.asHolder(), 70))) {
                     entity.hitEntity.add(e);
                 }
             });

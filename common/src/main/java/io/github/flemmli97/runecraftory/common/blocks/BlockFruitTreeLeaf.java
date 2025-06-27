@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.blocks;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -18,21 +19,23 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.function.Supplier;
-
 public class BlockFruitTreeLeaf extends LeavesBlock {
 
     public static final MapCodec<BlockFruitTreeLeaf> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(
-                    propertiesCodec(),
-                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("fruit").forGetter(d -> d.fruit.get())
-            ).apply(inst, (prop, fruit) -> new BlockFruitTreeLeaf(prop, () -> fruit)));
+            inst.group(propertiesCodec(),
+                    LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("fruit").forGetter(d -> d.fruit)
+            ).apply(inst, BlockFruitTreeLeaf::new));
 
     public static final BooleanProperty HAS_FRUIT = BooleanProperty.create("has_fruit");
 
-    private final Supplier<Item> fruit;
+    private final LazyResolvedRegistryEntry<Item> fruit;
 
-    public BlockFruitTreeLeaf(Properties properties, Supplier<Item> fruit) {
+    public BlockFruitTreeLeaf(Properties properties, ResourceKey<Item> fruit) {
+        super(properties);
+        this.fruit = new LazyResolvedRegistryEntry<>(fruit);
+    }
+
+    private BlockFruitTreeLeaf(Properties properties, LazyResolvedRegistryEntry<Item> fruit) {
         super(properties);
         this.fruit = fruit;
     }
@@ -58,7 +61,7 @@ public class BlockFruitTreeLeaf extends LeavesBlock {
         if (level.isClientSide)
             return ItemInteractionResult.SUCCESS;
         if (state.getValue(HAS_FRUIT)) {
-            Block.popResource(level, pos.below(), new ItemStack(this.fruit.get()));
+            Block.popResource(level, pos.below(), new ItemStack(this.fruit.get(level.registryAccess())));
             level.setBlock(pos, state.setValue(HAS_FRUIT, false), Block.UPDATE_ALL);
             return ItemInteractionResult.CONSUME;
         }

@@ -33,7 +33,7 @@ public class BathEffect extends MobEffect implements ExtendedEffect {
             living.heal(living.getMaxHealth() * 0.04f);
             if (living instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                data.refreshRunePoints(Math.max(1, (int) (data.getMaxRunePoints() * 0.03f)));
+                data.regenRunePoints(Math.max(1, (int) (data.getMaxRunePoints() * 0.03f)));
                 LevelCalc.levelSkill(data, EnumSkills.BATH, 2f);
             }
         } else if (entityData.enteredBath()) {

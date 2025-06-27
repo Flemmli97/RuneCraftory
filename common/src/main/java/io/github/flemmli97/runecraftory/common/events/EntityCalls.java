@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.events;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
@@ -33,7 +32,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -41,6 +40,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -71,6 +71,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -84,6 +85,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -95,12 +97,7 @@ public class EntityCalls {
         if (player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            data.recalculateStats(false);
-            if (!data.starting) {
-                data.starting = true;
-                data.setMaxHealth(GeneralConfig.startingHealth, true);
-                player.setHealth(player.getMaxHealth());
-            }
+            data.onJoin();
             QuestHandler.removeNPCQuestsFor(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSyncConfig(), serverPlayer);
             FamilyHandler.get(serverPlayer.getServer())
@@ -143,13 +140,14 @@ public class EntityCalls {
     }
 
     /**
-     * Using vanilla attribute system instead of saving it custom on the player. Also now makes it possible to affect generic entities.
-     * We are doing this roundabout way cause the attack damage bonus of equipment should only come into play when the player has a fitting weapon in
-     * the main hand.
+     * Listens to equipment changes.
+     * Does the following:
+     * * Calculates and applies penalty to shield stats depending on used weapon
+     * * Makes it so if entity is NOT using a weapon all damage buffs from equipment is removed
      */
     public static void updateEquipment(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem, Function<EquipmentSlot, ItemStack> lastArmor) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            //Readd attack damage to unchanged slots. This is to make sure the client gets send the correct data
+            // Readd attack damage to unchanged slots. This is to make sure the client gets send the correct data
             if (!changed.containsKey(slot)) {
                 reAddAttackDamage(entity, entity.getItemBySlot(slot), slot);
             }
@@ -162,24 +160,24 @@ public class EntityCalls {
                 ArmorEffect.runArmorEffectFor(now, effect -> effect.onEquip(entity, now));
             }
         }
-        boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
-        float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
-        if (changed.containsKey(EquipmentSlot.MAINHAND)) {
-            //Recalc offhand stats if mainhand changed but offhand did not
-            if (!changed.containsKey(EquipmentSlot.OFFHAND)) {
-                recalcOffhandBonus(entity, entity.getOffhandItem(), shieldEfficiency);
-            }
+        if (changed.containsKey(EquipmentSlot.MAINHAND) || changed.containsKey(EquipmentSlot.OFFHAND)) {
+            float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
+            recalcOffhandBonus(entity, shieldEfficiency);
         }
-        ItemStack off = changed.get(EquipmentSlot.OFFHAND);
-        if (off != null)
-            recalcOffhandBonus(entity, off, shieldEfficiency);
-        //Telling the client the attribute values before damage is removed so players know the potential damage
+        // Telling the client the attribute values before damage is removed so players know the potential damage
         if (entity instanceof ServerPlayer serverPlayer) {
             EntityUtils.sendAttributesTo(serverPlayer, serverPlayer);
         }
-        //If player doesnt have a weapon now we remove all attack damage modifiers
-        if (!hasWeapon) {
+        // If player doesnt have a weapon now we remove all attack damage modifiers
+        if (!ItemNBT.isWeapon(entity.getMainHandItem())) {
             AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (inst != null)
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    ResourceLocation id = LibConstants.EQUIPMENT_MODIFIERS.get(slot);
+                    if (id != null)
+                        inst.removeModifier(id);
+                }
+            inst = entity.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
             if (inst != null)
                 for (EquipmentSlot slot : EquipmentSlot.values()) {
                     ResourceLocation id = LibConstants.EQUIPMENT_MODIFIERS.get(slot);
@@ -190,23 +188,33 @@ public class EntityCalls {
     }
 
     private static void reAddAttackDamage(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
-//        stack.getAttributeModifiers(slot).get(Attributes.ATTACK_DAMAGE).forEach(mod -> {
-//            AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-//            if (inst != null) {
-//                inst.removeModifier(mod);
-//                inst.addTransientModifier(mod);
-//            }
-//        });
+        stack.forEachModifier(slot, (att, mod) -> {
+            if (att.unwrapKey().map(Attributes.ATTACK_DAMAGE::is).orElse(false) || att.is(ModAttributes.MAGIC_ATTACK.getKey())) {
+                AttributeInstance attributeInstance = entity.getAttribute(att);
+                if (attributeInstance != null) {
+                    attributeInstance.removeModifier(mod.id());
+                    attributeInstance.addTransientModifier(mod);
+                }
+            }
+        });
     }
 
-    private static void recalcOffhandBonus(LivingEntity entity, ItemStack stack, float efficiency) {
-//        stack.getAttributeModifiers(EquipmentSlot.OFFHAND).forEach((att, mod) -> {
-//            AttributeInstance inst = entity.getAttribute(att);
-//            if (inst != null) {
-//                inst.removeModifier(mod);
-//                inst.addTransientModifier(new AttributeModifier(mod.getId(), mod.getName(), mod.getAmount() * efficiency, mod.getOperation()));
-//            }
-//        });
+    private static void recalcOffhandBonus(LivingEntity entity, float efficiency) {
+        if (efficiency == 1) {
+            ((AttributeMapAccessor) entity.getAttributes())
+                    .getAttributes().forEach((att, inst) -> inst.removeModifier(LibConstants.SHIELD_PENALTY));
+            return;
+        }
+        float reduction = 1 - efficiency;
+        Map<Holder<Attribute>, AttributeModifier> offhandMods = new HashMap<>();
+        ((AttributeMapAccessor) entity.getAttributes())
+                .getAttributes().forEach((att, inst) -> {
+                    AttributeModifier mod = inst.getModifier(LibConstants.EQUIPMENT_MODIFIERS.get(EquipmentSlot.OFFHAND));
+                    if (mod != null)
+                        offhandMods.put(att, mod);
+                });
+        offhandMods.forEach((att, mod) -> entity.getAttributes().getInstance(att)
+                .addTransientModifier(new AttributeModifier(LibConstants.SHIELD_PENALTY, -mod.amount() * reduction, AttributeModifier.Operation.ADD_VALUE)));
     }
 
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
@@ -223,7 +231,7 @@ public class EntityCalls {
                 }
             }
         }
-        if (source instanceof CustomDamage || attacker instanceof Player) {
+        if (source instanceof DynamicDamage || attacker instanceof Player) {
             return false;
         }
         if (attacker instanceof LivingEntity living && living.getMainHandItem().is(RunecraftoryTags.Items.UPGRADABLE_HELD) && !living.getType().is(RunecraftoryTags.EntityTypes.HELD_WEAPON_EXEMPT)) {
@@ -349,10 +357,6 @@ public class EntityCalls {
                 int food = EntityUtils.paralysed(player) ? 6 : 14;
                 player.getFoodData().setFoodLevel(food);
                 player.getFoodData().setSaturation(0);
-            /*if (player.hasEffect(MobEffects.HUNGER)) {
-                player.removeEffect(MobEffects.HUNGER);
-                player.addEffect(new MobEffectInstance(ModEffects.poison.get(), 600, 1));
-            }*/
             }
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -393,22 +397,22 @@ public class EntityCalls {
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.has(DataComponents.FOOD)) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    LevelCalc.levelSkill(data, EnumSkills.EATING, 5);
-                    data.refreshRunePoints(EntityUtils.getRPFromVanillaFood(stack));
+                    if (data.foodBuff().duration() <= 0)
+                        LevelCalc.levelSkill(data, EnumSkills.EATING, 5);
+                    data.regenRunePoints(EntityUtils.getRPFromVanillaFood(stack));
                 }
                 return;
             }
             if (entity instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                if (data.foodBuffDuration() <= 0)
+                if (data.foodBuff().duration() <= 0)
                     data.getDailyUpdater().onFoodEaten();
                 data.applyFoodEffect(stack);
-                data.refreshRunePoints(prop.getRPRegen() + (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
+                data.regenRunePoints(prop.getRPRegen() + (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
             }
-            Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> map = ItemNBT.foodStats(stack);
-            int healthGain = map.getFirst().getOrDefault(ModAttributes.HEALTH_GAIN.asHolder(), 0d).intValue();
+            int healthGain = prop.getHPGain();
             EntityUtils.foodHealing(entity, healthGain);
-            int healthPercent = map.getSecond().getOrDefault(ModAttributes.HEALTH_GAIN.asHolder(), 0d).intValue();
+            int healthPercent = prop.getHpPercentGain();
             EntityUtils.foodHealing(entity, entity.getMaxHealth() * healthPercent * 0.01F);
             if (prop.potionHeals() != null)
                 for (Holder<MobEffect> s : prop.potionHeals()) {
@@ -425,7 +429,7 @@ public class EntityCalls {
         if (GeneralConfig.healOnWakeUp && player instanceof ServerPlayer) {
             player.heal(player.getMaxHealth());
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            data.refreshRunePoints(data.getMaxRunePoints());
+            data.regenRunePoints(data.getMaxRunePoints());
             LevelCalc.levelSkill(data, EnumSkills.SLEEPING, 75);
             player.removeEffect(ModEffects.FATIGUE.asHolder());
         }
@@ -445,8 +449,6 @@ public class EntityCalls {
         else if (damage > 1 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && entity instanceof ServerPlayer player) {
             LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
         }
-        //if (source instanceof CustomDamage)
-        //    entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
         return damage;
     }
 

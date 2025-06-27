@@ -87,6 +87,8 @@ public class AttributeTagGen extends TagsProvider<Attribute> {
         this.tag(RunecraftoryTags.Attributes.DISPLAY_IGNORED)
                 .add(ModAttributes.ATTACK_SPEED.getKey(),
                         ModAttributes.ATTACK_RANGE.getKey(),
+                        ModAttributes.ATTACK_WIDTH.getKey(),
+                        ModAttributes.CHARGE_TIME.getKey(),
                         ModAttributes.HEALTH_GAIN.getKey(),
                         ModAttributes.RUNE_POINTS_GAIN.getKey());
     }

@@ -28,6 +28,13 @@ public class ItemSpell extends Item {
     }
 
     @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, list, tooltipFlag);
+        if (this.spell.get() == ModSpells.EMPTY.get())
+            list.add(Component.literal("WIP").withStyle(ChatFormatting.DARK_RED));
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer && this.useSpell(serverPlayer, player.getItemInHand(hand))) {
             return InteractionResultHolder.success(player.getItemInHand(hand));
@@ -52,13 +59,6 @@ public class ItemSpell extends Item {
             }
         }
         return false;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, list, tooltipFlag);
-        if (this.spell.get() == ModSpells.EMPTY.get())
-            list.add(Component.literal("WIP").withStyle(ChatFormatting.DARK_RED));
     }
 
     public Spell getSpell() {

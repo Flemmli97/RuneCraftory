@@ -8,8 +8,8 @@ import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
@@ -41,7 +41,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -234,7 +234,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     private int playDeathTick;
 
-    private final LevelExpPair levelPair = new LevelExpPair();
+    private final XpLevelHolder levelPair = new XpLevelHolder();
 
     protected int tamingTick = -1;
     //These 2 values are not getting saved intentionally to prevent stuff like player dying or running away
@@ -248,7 +248,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private int tpCooldown;
     private Behaviour behaviour = Behaviour.WANDER;
 
-    private final LevelExpPair friendlyPoints = new LevelExpPair();
+    private final XpLevelHolder friendlyPoints = new XpLevelHolder();
 
     private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
 
@@ -699,8 +699,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
                 double inc = (this.friendlyPoints.getLevel() - 1) * 0.03;
-                inst.removeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD, inc, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                inst.removeModifier(LibConstants.FRIENDSHIP_MODIFIER);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FRIENDSHIP_MODIFIER, inc, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
         }
     }
@@ -714,18 +714,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         };
         AttributeInstance inst = this.getAttribute(toIncrease);
         if (inst != null) {
-            AttributeModifier mod = inst.getModifier(LibConstants.ATTRIBUTE_BRUSH_MOD);
+            AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_BRUSH_MODIFIER);
             double inc = 1;
             if (mod != null)
                 inc += mod.amount();
-            inst.removeModifier(LibConstants.ATTRIBUTE_BRUSH_MOD);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_BRUSH_MOD, inc, AttributeModifier.Operation.ADD_VALUE));
+            inst.removeModifier(LibConstants.MONSTER_BRUSH_MODIFIER);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_BRUSH_MODIFIER, inc, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
     @Override
     public boolean isControlledByLocalInstance() {
-        return this.hasControllingPassenger() && !this.level().isClientSide;
+        return this.hasControllingPassenger() || !this.level().isClientSide;
     }
 
     @Override
@@ -733,8 +733,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return CombatUtils.mobAttack(this, entity, this.damageSourceAttack());
     }
 
-    public CustomDamage.Builder damageSourceAttack() {
-        return new CustomDamage.Builder(this).hurtResistant(5);
+    public DynamicDamage.Builder damageSourceAttack() {
+        return new DynamicDamage.Builder(this).hurtResistant(5);
     }
 
     public int animationCooldown(@Nullable String anim) {
@@ -823,7 +823,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
-    public LevelExpPair xpLevel() {
+    public XpLevelHolder xpLevel() {
         return this.levelPair;
     }
 
@@ -872,15 +872,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 AttributeInstance inst = this.getAttribute(entry.getKey());
                 if (inst == null)
                     continue;
-                inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, entry.getValue(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER_MULTI, entry.getValue(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             }
             for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getFirst().entrySet()) {
                 AttributeInstance inst = this.getAttribute(entry.getKey());
                 if (inst == null)
                     continue;
-                inst.removeModifier(LibConstants.FOOD_UUID);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
+                inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
             }
             this.foodBuffTick = food.duration();
         }
@@ -901,8 +901,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public void removeFoodEffect() {
         ((AttributeMapAccessor) this.getAttributes())
                 .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(LibConstants.FOOD_UUID);
-                    inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
                 });
     }
 
@@ -940,13 +940,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).ifPresent(s -> s.getMonsterGiftIncrease().forEach((att, d) -> {
                             AttributeInstance inst = this.getAttribute(att);
                             if (inst != null) {
-                                AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_ITEM_BONUS);
+                                AttributeModifier mod = inst.getModifier(LibConstants.SHIELD_PENALTY);
                                 double val = d;
                                 if (mod != null) {
                                     val += mod.amount();
                                     inst.removeModifier(mod);
                                 }
-                                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_ITEM_BONUS, val, AttributeModifier.Operation.ADD_VALUE));
+                                inst.addPermanentModifier(new AttributeModifier(LibConstants.SHIELD_PENALTY, val, AttributeModifier.Operation.ADD_VALUE));
                             }
                         }));
                     }
@@ -999,14 +999,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
                 val *= 0.01;
-                inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
+                inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
                 if (att == Attributes.MAX_HEALTH) {
                     multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.15f) * 0.02f;
                 } else {
                     multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.015f;
                 }
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
@@ -1019,7 +1019,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void addXp(float amount) {
-        LevelExpPair pair = this.xpLevel();
+        XpLevelHolder pair = this.xpLevel();
         boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
         LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
@@ -1030,7 +1030,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public void updateMoveAnimation() {
     }
 
-    public LevelExpPair getFriendlyPoints() {
+    public XpLevelHolder getFriendlyPoints() {
         return this.friendlyPoints;
     }
 
@@ -1219,7 +1219,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     protected void actuallyHurt(DamageSource source, float damageAmount) {
         super.actuallyHurt(source, damageAmount);
-        if (!this.isTamed() && source instanceof CustomDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == EnumElement.LOVE)
+        if (!this.isTamed() && source instanceof DynamicDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == EnumElement.LOVE)
             this.loveAttCount = Math.min(100, this.loveAttCount + 1);
         if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.isTamed() && this.getHealth() <= 0) {
             this.setHealth(0.01f);
@@ -1911,13 +1911,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         );
     }
 
-    @SuppressWarnings({"unchecked"})
     @Override
     public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
         return BrainActivityGroup.fightTasks(
                 new InvalidateAttackTarget<BaseMonster>(),
                 new FirstApplicableBehaviour<>(
-                        (ExtendedBehaviour<BaseMonster>) this.getCombatAI(),
+                        this.getCombatAI(),
                         new OneRandomBehaviour<>(this.getIdleAI().toArray(Pair[]::new))
                 )
         );

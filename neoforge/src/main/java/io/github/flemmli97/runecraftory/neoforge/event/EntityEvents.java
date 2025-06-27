@@ -3,9 +3,11 @@ package io.github.flemmli97.runecraftory.neoforge.event;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -116,14 +118,12 @@ public class EntityEvents {
         }
     }
 
-//    @SubscribeEvent
-//    public void itemStackAttributes(ItemAttributeModifierEvent event) {
-//        Multimap<Attribute, AttributeModifier> map = ItemNBT.getStatsAttributeMap(event.getItemStack(), event.getModifiers(), event.getSlotType());
-//        if (map != event.getModifiers()) {
-//            event.clearModifiers();
-//            map.forEach(event::addModifier);
-//        }
-//    }
+    @SubscribeEvent
+    public void itemStackAttributes(ItemAttributeModifierEvent event) {
+        ItemNBT.modifyAttribute(event.getItemStack(),
+                entry -> event.removeModifier(entry.attribute(), entry.modifier().id()),
+                entry -> event.addModifier(entry.attribute(), entry.modifier(), entry.slot()));
+    }
 
     @SubscribeEvent
     public void farmlandTrample(BlockEvent.FarmlandTrampleEvent event) {

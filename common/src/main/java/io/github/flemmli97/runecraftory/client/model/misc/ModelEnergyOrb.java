@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.EntityModel;
@@ -24,12 +24,12 @@ public class ModelEnergyOrb<T extends EntityHomingEnergyOrb> extends EntityModel
     public ModelEnergyOrb(float growth) {
         super(RenderType::entityTranslucentCull);
         this.growth = growth;
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> this.bone = model.getPart("bone"));
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> this.bone = model.getPart("bone"));
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.model.get().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.model.get().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -122,7 +122,7 @@ public class EntityWolf extends LeapingMonster {
     }
 
     public static boolean wolfAttack(LivingEntity attacker, Entity target) {
-        CustomDamage.Builder source = new CustomDamage.Builder(attacker).noKnockback().hurtResistant(1);
+        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).noKnockback().hurtResistant(1);
         return CombatUtils.mobAttack(attacker, target, source);
     }
 

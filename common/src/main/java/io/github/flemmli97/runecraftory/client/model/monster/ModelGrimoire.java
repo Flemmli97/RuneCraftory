@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityGrimoire;
-import io.github.flemmli97.tenshilib.client.data.AnimationManager;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -35,16 +35,16 @@ public class ModelGrimoire<T extends EntityGrimoire> extends EntityModel<T> impl
 
     public ModelGrimoire() {
         super();
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> {
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
             this.head = model.getPart("head");
             this.ridingPosition = model.getPart("ridingPos");
         });
-        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
+        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.getModel().getMainPart().render(poseStack, buffer, packedLight, packedOverlay, color);
+        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
     }
 
     @Override

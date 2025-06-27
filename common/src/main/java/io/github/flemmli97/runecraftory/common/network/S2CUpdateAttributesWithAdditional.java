@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -57,7 +56,6 @@ public class S2CUpdateAttributesWithAdditional implements CustomPacketPayload {
                 attributeInstance.addTransientModifier(attributeModifier);
             }
         }
-        ClientHandlers.onAttributePkt();
     }
 
     @Override

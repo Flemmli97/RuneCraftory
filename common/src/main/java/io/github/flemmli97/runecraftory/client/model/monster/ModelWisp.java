@@ -6,8 +6,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityWispBase;
-import io.github.flemmli97.tenshilib.client.data.AnimationManager;
-import io.github.flemmli97.tenshilib.client.data.ModelManager;
+import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -35,21 +35,19 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
 
     public ModelWisp() {
         super(RenderType::entityTranslucentCull);
-        this.model = ModelManager.getInstance().getModel(LOCATION, model -> this.ridingPosition = model.getPart("ridingPos"));
-        this.anim = AnimationManager.getInstance().getAnimation(LOCATION);
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> this.ridingPosition = model.getPart("ridingPos"));
+        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        //poseStack.scale(0.85f, 0.85f, 0.85f);
-        //poseStack.translate(0, 0.2, 0);
-        this.getModel().getMainPart().render(poseStack, buffer, LightTexture.FULL_BRIGHT, packedOverlay, FastColor.ARGB32.color(200, color));
+        this.getModel().getRoot().render(poseStack, buffer, LightTexture.FULL_BRIGHT, packedOverlay, FastColor.ARGB32.color(200, color));
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getModel().resetPoses();
-        this.getModel().getMainPart().visible = true;
+        this.getModel().getRoot().visible = true;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);

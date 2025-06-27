@@ -9,9 +9,12 @@ import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class ModFeatures {
 
@@ -21,7 +24,10 @@ public class ModFeatures {
 
     public static final RegistryEntrySupplier<Feature<?>, MineralFeature> MINERAL_FEATURE = FEATURES.register("mineral_feature", () -> new MineralFeature(ChancedBlockClusterConfig.CODEC));
     public static final RegistryEntrySupplier<Feature<?>, BiomeFilteredRandomFeature> BIOME_FILTERED_RANDOM_FEATURES = FEATURES.register("biome_filtered_random_features", () -> new BiomeFilteredRandomFeature(BiomeFilteredConfig.CODEC));
-//    public static final RegistryEntrySupplier<Feature<?>, FruitTreeSproutFeature> FRUIT_SPROUT = FEATURES.register("fruit_tree_sprout", () -> new FruitTreeSproutFeature(FruitTreeSproutConfiguration.CODEC));
+
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CONFIGRED_HERB_FEATURE = ResourceKey.create(Registries.CONFIGURED_FEATURE, RuneCraftory.modRes("herb_feature"));
+    public static final ResourceKey<PlacedFeature> HERB_FEATURE = ResourceKey.create(Registries.PLACED_FEATURE, CONFIGRED_HERB_FEATURE.location());
+//        public static final RegistryEntrySupplier<Feature<?>, FruitTreeSproutFeature> FRUIT_SPROUT = FEATURES.register("fruit_tree_sprout", () -> new FruitTreeSproutFeature(FruitTreeSproutConfiguration.CODEC));
 //
 //    public static final RegistryEntrySupplier<TrunkPlacerType<?>, TrunkPlacerType<?>> FRUIT_TRUNK_PLACER = TRUNK_PLACER.register("fruit_tree_trunk", () -> createTrunkPlacerType(FruitTreeTrunkPlacer.CODEC));
 //    public static final RegistryEntrySupplier<TreeDecoratorType<?>, TreeDecoratorType<?>> FRUIT_DECORATOR = TREE_DECORATORS.register("fruit_decorator", () -> createTreeDecoratorType(FruitLeaveDecorator.CODEC));
