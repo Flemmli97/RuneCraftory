@@ -104,6 +104,10 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
                 49, 70, 30, 0.0625F, mouseX, mouseY, entity);
     }
 
+    protected ResourceLocation texture() {
+        return INVENTORY;
+    }
+
     protected void buttons() {
         this.addRenderableWidget(new TexturedButton(this.leftPos + 8, this.topPos + 103, 12, 12,
                 Component.literal("<"), b -> {
@@ -117,10 +121,6 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         this.addRenderableWidget(new TexturedButton(this.leftPos + 8 + 13, this.topPos + 103, 12, 12,
                 Component.literal(">"), b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.SUB)))
                 .withSprite(SpriteResources.PAGE_BUTTON));
-    }
-
-    protected ResourceLocation texture() {
-        return INVENTORY;
     }
 
     @Override

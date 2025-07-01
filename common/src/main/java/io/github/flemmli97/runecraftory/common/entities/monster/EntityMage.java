@@ -2,8 +2,12 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -14,6 +18,10 @@ import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StayWithinDistanceOfAttackTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.function.Predicate;
 
@@ -21,26 +29,13 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String SWING = BUILDER.add("swing", AnimationsBuilder.definition(0.64).marker("attack", 0.36));
-    public static final String CAST_1 = BUILDER.add("cast_1", AnimationsBuilder.definition(0.84).marker("attack", 0.4));
-    public static final String CAST_DOUBLE = BUILDER.add("cast_double", AnimationsBuilder.definition(0.84).marker("attack", 0.4, 0.6));
-    public static final String CAST_2 = BUILDER.add("cast_2", AnimationsBuilder.definition(0.92).marker("attack", 0.36));
     public static final String INTERACT = BUILDER.add("interact", SWING);
+    public static final String CAST_1 = BUILDER.add("cast_1", AnimationsBuilder.definition(0.84).marker("attack", 0.4));
+    public static final String CAST_DOUBLE = BUILDER.add("cast_double", AnimationsBuilder.definition(0.84).animationId(CAST_1).marker("attack", 0.4, 0.6));
+    public static final String CAST_2 = BUILDER.add("cast_2", AnimationsBuilder.definition(0.92).marker("attack", 0.36));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMage>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(SWING, e -> 0.8f), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_1, 6, 1, e -> 1), 3),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_DOUBLE, 7, 1, e -> 1), 2),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(CAST_2, 8, 1, e -> 1), 4)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMage>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityMage> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityMage> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -56,6 +51,32 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
 
     public EntityMage(EntityType<? extends EntityMage> type, Level world) {
         super(type, world);
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(SWING).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(MonsterBehaviourUtils.inAABBRange(SWING))
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .start(CAST_1).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(9).runFor(e -> e.getRandom().nextInt(15) + 10))
+                .end(5)
+                .start(CAST_DOUBLE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(9).runFor(e -> e.getRandom().nextInt(15) + 10))
+                .end(5)
+                .start(CAST_2).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(9).runFor(e -> e.getRandom().nextInt(15) + 10))
+                .end(5)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(4, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(12))
+                .add(4, new StrafeTarget<>()).build();
     }
 
     @Override
@@ -88,6 +109,11 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
+    public AnimationHandler<EntityMage> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             Spell spell = switch (command) {
@@ -106,9 +132,12 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
         }
     }
 
-    @Override
-    public AnimationHandler<EntityMage> getAnimationHandler() {
-        return this.animationHandler;
+    public Spell getFirstSpell() {
+        return ModSpells.PARALYSIS_BALL.get();
+    }
+
+    public Spell getSecondSpell() {
+        return ModSpells.EXPANDING_QUAD_LIGHT.get();
     }
 
     @Override
@@ -125,17 +154,4 @@ public class EntityMage extends BaseMonster implements HealingPredicateEntity {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-    public Spell getFirstSpell() {
-        return ModSpells.PARALYSIS_BALL.get();
-    }
-
-    public Spell getSecondSpell() {
-        return ModSpells.EXPANDING_QUAD_LIGHT.get();
-    }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 13.5 / 16d, -5 / 16d);
-//    }
 }

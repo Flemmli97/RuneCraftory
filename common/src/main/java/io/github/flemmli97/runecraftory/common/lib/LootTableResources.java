@@ -38,5 +38,5 @@ public class LootTableResources {
             BuiltInLootTables.BASTION_TREASURE
     );
 
-    public static final ResourceKey<LootTable> WOOLED_WHITE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/wooly/white"));
+    public static final ResourceKey<LootTable> WOOLY_WHITE = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/wooly/white"));
 }

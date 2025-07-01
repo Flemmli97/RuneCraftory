@@ -20,10 +20,10 @@ public class VortexParticle extends TextureSheetParticle {
     private final Vec3[] points;
     private final float angleInc;
     private final float radInc;
-    private float currentRadius;
-    private float currentAngle;
     private final float subOffset;
     private final boolean renderOpposite;
+    private float currentRadius;
+    private float currentAngle;
 
     public VortexParticle(ClientLevel world, double x, double y, double z, float radius, float radiusInc, float angleOffset, float angleInc,
                           ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean renderOpposite, int amount) {
@@ -43,7 +43,7 @@ public class VortexParticle extends TextureSheetParticle {
         this.subOffset = 360 / (float) (amount * (renderOpposite ? 2 : 1));
         for (int i = 0; i < this.points.length; i++) {
             this.points[i] = new Vec3(radius, radius, 0)
-                    .zRot(Mth.wrapDegrees((this.currentAngle + this.subOffset * i)));
+                    .zRot(Mth.wrapDegrees((this.currentAngle + this.subOffset * i)) * Mth.DEG_TO_RAD);
         }
         this.currentRadius = radius;
         this.radInc = radiusInc;
@@ -60,7 +60,7 @@ public class VortexParticle extends TextureSheetParticle {
             this.currentRadius += this.radInc;
             for (int i = 0; i < this.points.length; i++) {
                 this.points[i] = new Vec3(this.currentRadius, this.currentRadius, 0)
-                        .zRot(Mth.wrapDegrees((this.currentAngle + this.subOffset * i)));
+                        .zRot(Mth.wrapDegrees((this.currentAngle + this.subOffset * i)) * Mth.DEG_TO_RAD);
             }
         }
     }

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.client.render.monster;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRafflesia;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
@@ -13,5 +14,10 @@ public class RenderRafflesia<T extends EntityRafflesia> extends RenderMonster<T,
 
     public RenderRafflesia(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelRafflesia<>(), TEXTURE, 0.5f);
+    }
+
+    @Override
+    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
+        super.setupRotations(entity, stack, ageInTicks, entity.getSpawnDirection().toYRot(), partialTicks, scale);
     }
 }

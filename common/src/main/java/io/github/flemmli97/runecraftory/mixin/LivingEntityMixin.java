@@ -2,9 +2,12 @@ package io.github.flemmli97.runecraftory.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
+import io.github.flemmli97.runecraftory.platform.ExtendedEffect;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -37,6 +40,20 @@ public abstract class LivingEntityMixin {
         if (map != null)
             // Can't be a method reference!
             EntityCalls.updateEquipment((LivingEntity) (Object) this, map, this.getLastHandItem(EquipmentSlot.MAINHAND), this::getLastArmorItem);
+    }
+
+    @Inject(method = "onEffectAdded", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffect;addAttributeModifiers(Lnet/minecraft/world/entity/ai/attributes/AttributeMap;I)V"))
+    private void onAddedEffect(MobEffectInstance effectInstance, Entity entity, CallbackInfo ci) {
+        if (effectInstance.getEffect().value() instanceof ExtendedEffect eff) {
+            eff.onEffectAdded((LivingEntity) (Object) this, effectInstance);
+        }
+    }
+
+    @Inject(method = "onEffectRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffect;removeAttributeModifiers(Lnet/minecraft/world/entity/ai/attributes/AttributeMap;)V"))
+    private void onAddedEffect(MobEffectInstance effectInstance, CallbackInfo ci) {
+        if (effectInstance.getEffect().value() instanceof ExtendedEffect eff) {
+            eff.onEffectRemoved((LivingEntity) (Object) this, effectInstance);
+        }
     }
 
     @Shadow

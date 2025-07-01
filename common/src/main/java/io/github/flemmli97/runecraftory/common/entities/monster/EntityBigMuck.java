@@ -1,7 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -12,26 +16,20 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 public class EntityBigMuck extends BaseMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String SLAP = BUILDER.add("slap", AnimationsBuilder.definition(1.2).marker("attack", 0.36));
-    public static final String SPORE = BUILDER.add("spore", AnimationsBuilder.definition(2.16).marker("attack", 0.96));
     public static final String INTERACT = BUILDER.add("interact", SLAP);
+    public static final String SPORE = BUILDER.add("spore", AnimationsBuilder.definition(2.16).marker("attack", 0.96));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBigMuck>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SPORE, e -> 1), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityBigMuck>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 2),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 4)), 1)
-//    );
-//
-//    public AnimatedAttackGoal<EntityBigMuck> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityBigMuck(EntityType<? extends EntityBigMuck> type, Level world) {
@@ -40,18 +38,32 @@ public class EntityBigMuck extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
+        super.applyAttributes();
     }
 
     @Override
-    public AnimationHandler<EntityBigMuck> getAnimationHandler() {
-        return this.animationHandler;
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(SLAP).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(2)
+                .start(SPORE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
     }
 
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (anim.equals(SPORE)) {
+        if (anim.is(SPORE)) {
             return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
@@ -59,7 +71,7 @@ public class EntityBigMuck extends BaseMonster {
 
     @Override
     public AABB attackBB(AnimationState anim) {
-        if (anim.equals(SPORE)) {
+        if (anim.is(SPORE)) {
             double attackSize = this.getBbWidth() * 1.5;
             return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
         }
@@ -77,6 +89,11 @@ public class EntityBigMuck extends BaseMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public AnimationHandler<EntityBigMuck> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -100,9 +117,4 @@ public class EntityBigMuck extends BaseMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 26 / 16d, -3 / 16d);
-//    }
 }

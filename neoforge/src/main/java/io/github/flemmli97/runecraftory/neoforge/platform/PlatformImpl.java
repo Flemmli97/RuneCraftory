@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.neoforge.registry.ModAttachments;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -95,8 +96,8 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public CreativeModeTab.Builder tabBuilder() {
-        return CreativeModeTab.builder();
+    public CreativeModeTab.Builder tabBuilder(ResourceLocation... after) {
+        return CreativeModeTab.builder().withTabsBefore(after);
     }
 
     @Override

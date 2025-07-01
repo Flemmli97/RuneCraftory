@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderPlate extends SimpleModelRenderer<EntityBigPlate> {
 
-    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/big_plate.png");
-    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("plate_model");
+    private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/plate.png");
+    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("plate");
 
     public RenderPlate(EntityRendererProvider.Context ctx) {
         super(ctx, new SimpleGeoModel<>(MODEL_LOCATION));

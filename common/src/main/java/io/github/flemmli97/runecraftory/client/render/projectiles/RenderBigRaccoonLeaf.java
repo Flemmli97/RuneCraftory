@@ -20,11 +20,6 @@ public class RenderBigRaccoonLeaf extends TextureRenderer<EntityBigRaccoonLeaf> 
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBigRaccoonLeaf entity) {
-        return TEX;
-    }
-
-    @Override
     public void render(EntityBigRaccoonLeaf entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.27, 0.05);
@@ -32,6 +27,11 @@ public class RenderBigRaccoonLeaf extends TextureRenderer<EntityBigRaccoonLeaf> 
         stack.mulPose(Axis.YP.rotationDegrees(entity.spinRight() ? spin : -spin));
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
+    }
+
+    @Override
+    public void adjustYawPitch(PoseStack stack, EntityBigRaccoonLeaf entity, float partialTicks, float yaw, float pitch) {
+        super.adjustYawPitch(stack, entity, partialTicks, 0, 0);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class RenderBigRaccoonLeaf extends TextureRenderer<EntityBigRaccoonLeaf> 
     }
 
     @Override
-    public void adjustYawPitch(PoseStack stack, EntityBigRaccoonLeaf entity, float partialTicks, float yaw, float pitch) {
-        super.adjustYawPitch(stack, entity, partialTicks, 0, 0);
+    public ResourceLocation getTextureLocation(EntityBigRaccoonLeaf entity) {
+        return TEX;
     }
 
     @Override

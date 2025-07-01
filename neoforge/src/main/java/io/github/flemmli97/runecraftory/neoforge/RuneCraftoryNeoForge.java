@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
@@ -107,7 +108,7 @@ public class RuneCraftoryNeoForge {
         ModActivities.ACTIVITIES.registerContent(modBus);
         ModPoiTypes.POI.registerContent(modBus);
         ModArmorMaterials.MATERIALS.registerContent(modBus);
-
+        ModMemoryTypes.MEMORYIES.registerContent(modBus);
         ModNPCActions.ACTIONS.register().registerContent(modBus);
         ModAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
         ModSounds.SOUND_EVENTS.registerContent(modBus);
@@ -122,7 +123,6 @@ public class RuneCraftoryNeoForge {
         ModDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
         ModCriteria.TRIGGERS.registerContent(modBus);
         ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent(modBus);
-        //        ModFeatures.TRUNK_PLACER.registerContent(modBus);
         ModStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
         ModStructures.STRUCTURES.registerContent(modBus);
         ModFeatures.FEATURES.registerContent(modBus);

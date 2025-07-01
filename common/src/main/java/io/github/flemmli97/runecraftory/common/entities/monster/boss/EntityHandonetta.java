@@ -1,7 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
@@ -16,6 +19,9 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -37,6 +43,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +55,7 @@ public class EntityHandonetta extends BossMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String SWIPE = BUILDER.add("swipe", AnimationsBuilder.definition(1.28).marker("attack", 0.64));
+    public static final String INTERACT = BUILDER.add("interact", SWIPE);
     public static final String FLICK = BUILDER.add("flick", AnimationsBuilder.definition(1.32).marker("attack", 0.64));
     public static final String SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(1.44).marker("attack", 0.36));
     public static final String LASER = BUILDER.add("laser", AnimationsBuilder.definition(1.24)
@@ -59,7 +69,6 @@ public class EntityHandonetta extends BossMonster {
             .marker("attack_start", 0.28).marker("attack_end", 1.04));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.56));
-    public static final String INTERACT = BUILDER.add("interact", SWIPE);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, EntityHandonetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -142,31 +151,7 @@ public class EntityHandonetta extends BossMonster {
             }
         });
     });
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityHandonetta>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(SWIPE)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, SWIPE)
-//                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(FLICK)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.1), e -> 70 + e.getRandom().nextInt(50)))
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, FLICK)
-//                            && (goal.distanceToTargetSq < 16 || goal.attacker.random.nextFloat() < 0.5)), 11),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PUNCH)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 8, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(LASER)
-//                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 9, 1), e -> 70 + e.getRandom().nextInt(50))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>nonRepeatableAttack(PLATE)
-//                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 11, 1), e -> 70 + e.getRandom().nextInt(50))), 9),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(GRAB)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 5, true, true, true), e -> 70 + e.getRandom().nextInt(50))), 8),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityHandonetta>enragedBossAttack(SHOOT)
-//                    .prepare(() -> new TimedWrappedRunner<>(new KeepDistanceRunner<>(7, 10, 1), e -> 70 + e.getRandom().nextInt(50))), 9)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityHandonetta>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(10, 8, 0.8f, 0.1f)), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityHandonetta> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityHandonetta> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 this.moveDirection = null;
@@ -175,7 +160,6 @@ public class EntityHandonetta extends BossMonster {
                 }
                 return false;
             });
-
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private Vec3 moveDirection;
 
@@ -186,34 +170,108 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new FloatingFlyNavigator(this, level);
-    }
-
-    @Override
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(ModSounds.HANDONETTA_FIGHT.get());
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
-        super.checkFallDamage(y, false, state, pos);
-    }
-
-    @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
+    protected PathNavigation createNavigation(Level level) {
+        return new FloatingFlyNavigator(this, level);
     }
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.26);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.32);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntityHandonetta>create()
+                .start(MonsterBehaviourUtils.checkedAttack(SWIPE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> (m.getTarget() != null && m.distanceToSqr(m.getTarget()) < 16) || m.getRandom().nextFloat() < 0.5)
+                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().speedMod((e, t) -> 1.1f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(11)
+                .start(MonsterBehaviourUtils.checkedAttack(FLICK)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> (m.getTarget() != null && m.distanceToSqr(m.getTarget()) < 16) || m.getRandom().nextFloat() < 0.5)
+                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().speedMod((e, t) -> 1.1f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(11)
+                .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().closeEnoughDist((e, t) -> 8))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(LASER)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<EntityHandonetta>().min(6).max(9))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(PLATE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<EntityHandonetta>().min(6).max(11))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(9)
+                .start(MonsterBehaviourUtils.checkedAttack(GRAB)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(BossMonster::isEnraged)
+                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().closeEnoughDist((e, t) -> 5))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(8)
+                .start(MonsterBehaviourUtils.checkedAttack(SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(BossMonster::isEnraged)
+                .prepare(new SetWalkTargetWithinDist<EntityHandonetta>().min(6).max(10))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(8)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(9)).build();
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        this.handleFreeTravel(vec);
+    }
+
+    @Override
+    public void push(Entity entityIn) {
+        if (this.getAnimationHandler().isCurrent(PUNCH, GRAB))
+            return;
+        super.push(entityIn);
+    }
+
+    @Override
+    public void push(double x, double y, double z) {
+        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT))
+            return;
+        super.push(x, y, z);
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        if (this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) {
+            boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPast("invis_start") : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
+            this.caughtEntities.forEach(e -> {
+                if (e.isAlive()) {
+                    if (e instanceof ServerPlayer player)
+                        player.moveTo(this.getX(), this.getY(), this.getZ());
+                    else
+                        e.setPos(this.getX(), this.getY(), this.getZ());
+                    if (invis)
+                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.asHolder(), 10, 1, true, false, false));
+                }
+            });
+        }
     }
 
     @Override
@@ -221,11 +279,6 @@ public class EntityHandonetta extends BossMonster {
         if ((this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) && this.caughtEntities.contains(source.getEntity()))
             return false;
         return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(ANGRY))) && super.hurt(source, amount);
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
@@ -237,15 +290,36 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT))
-            return;
-        super.push(x, y, z);
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        Vec3 dir = this.moveDirection;
+        if (dir == null) {
+            if (target != null)
+                dir = target.subtract(this.position());
+            else
+                dir = this.getLookAngle();
+        }
+        if (anim.is(PUNCH)) {
+            float[] rots = MathsHelper.YXRotFrom(dir);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow + 0.2, grow, grow + 0.2), rots[0], rots[1], this.position());
+        }
+        if (anim.is(GRAB)) {
+            float[] rots = MathsHelper.YXRotFrom(dir);
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow, 0, grow), rots[0], rots[1], this.position());
+        }
+        return super.calculateAttackAABB(anim, target, grow).inflate(0, grow * 2, 0);
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 2.2;
+        double length = this.getBbWidth() * 1.7;
+        if (anim.is(FLICK)) {
+            width = this.getBbWidth() * 1.6;
+            length = this.getBbWidth() * 1.8;
+        }
+        return new AABB(-width * 0.5, -0.5, 0, width * 0.5, this.getBbHeight() + 0.5, length);
     }
 
     @Override
@@ -270,29 +344,8 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (anim.equals(PUNCH)) {
-            float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
-            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow + 0.2, grow, grow + 0.2), rots[0], rots[1], this.position());
-        }
-        if (anim.equals(GRAB)) {
-            float[] rots = MathsHelper.YXRotFrom(this.moveDirection);
-            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow, 0, grow), rots[0], rots[1], this.position());
-        }
-        return super.calculateAttackAABB(anim, target, grow).inflate(0, grow * 2, 0);
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 2.2;
-        double length = this.getBbWidth() * 1.7;
-        if (anim.equals(FLICK)) {
-            width = this.getBbWidth() * 1.6;
-            length = this.getBbWidth() * 1.8;
-        }
-        return new AABB(-width * 0.5, -0.5, 0, width * 0.5, this.getBbHeight() + 0.5, length);
+    public AnimationHandler<EntityHandonetta> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -310,63 +363,40 @@ public class EntityHandonetta extends BossMonster {
     }
 
     @Override
-    public void baseTick() {
-        super.baseTick();
-        if (this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) {
-            boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPast("invis_start") : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
-            this.caughtEntities.forEach(e -> {
-                if (e.isAlive()) {
-                    if (e instanceof ServerPlayer player)
-                        player.moveTo(this.getX(), this.getY(), this.getZ());
-                    else
-                        e.setPos(this.getX(), this.getY(), this.getZ());
-                    if (invis)
-                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.asHolder(), 10, 1, true, false, false));
-                }
-            });
-        }
+    public void setEnraged(boolean flag, boolean load) {
+        super.setEnraged(flag, load);
+        if (flag && !load)
+            this.getAnimationHandler().setAnimation(ANGRY);
+    }
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+        super.checkFallDamage(y, false, state, pos);
     }
 
     private void catchEntity(LivingEntity entity) {
         this.caughtEntities.add(entity);
     }
 
-    @Override
-    public void push(Entity entityIn) {
-        if (this.getAnimationHandler().isCurrent(PUNCH, GRAB))
-            return;
-        super.push(entityIn);
+    protected void setMoveDirection(Vec3 moveDirection) {
+        this.moveDirection = moveDirection;
+        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.moveDirection);
     }
 
     @Override
-    public void travel(Vec3 vec) {
-        this.handleFreeTravel(vec);
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.VEC_3, motion -> this.moveDirection = motion);
     }
-
-    @Override
-    public AnimationHandler<EntityHandonetta> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 23.25 / 16d, -6 / 16d);
-//    }
 
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
 
-    protected void setMoveDirection(Vec3 moveDirection) {
-        this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.moveDirection);
-    }
-
     @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.moveDirection = motion);
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 
     static class HandonettaMoveController extends FreeMoveControl {

@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.entities.monster.MultiPartContainer;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -15,6 +17,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -28,8 +33,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,6 +46,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -74,6 +85,7 @@ public class EntitySkelefang extends BossMonster {
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String TAIL_SLAM = BUILDER.add("tail_slam", AnimationsBuilder.definition(2)
             .marker("attack_1", 0.72).marker("attack_2", 1.2).marker("attack_3", 1.64));
+    public static final String INTERACT = BUILDER.add("interact", TAIL_SLAM);
     public static final String NEEDLE_THROW = BUILDER.add("needle_throw", AnimationsBuilder.definition(1.16).marker("attack", 0.8));
     public static final String TAIL_SLAP = BUILDER.add("tail_slap", AnimationsBuilder.definition(0.84).marker("attack", 0.52));
     public static final String SLASH = BUILDER.add("slash", AnimationsBuilder.definition(0.96).marker("attack", 0.6));
@@ -85,7 +97,6 @@ public class EntitySkelefang extends BossMonster {
             .marker("restore", 11.5));
     public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
     public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(2).marker("roar", 0.28));
-    public static final String INTERACT = BUILDER.add("interact", TAIL_SLAM);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, EntitySkelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -188,32 +199,7 @@ public class EntitySkelefang extends BossMonster {
             }
         });
     });
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkelefang>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAM)
-//                    .cooldown(e -> e.animationCooldown(TAIL_SLAM))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 10),
-//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(NEEDLE_THROW)
-//                    .cooldown(e -> e.animationCooldown(NEEDLE_THROW))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 6), e -> 40 + e.getRandom().nextInt(20))), 9),
-//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(TAIL_SLAP)
-//                    .cooldown(e -> e.animationCooldown(TAIL_SLAP))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.remainingTailBones() > 10))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 3), e -> 40 + e.getRandom().nextInt(20))), 12),
-//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(SLASH)
-//                    .cooldown(e -> e.animationCooldown(SLASH))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.remainingRightLegBones() > 0 || goal.attacker.remainingLeftLegBones() > 0))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 4), e -> 40 + e.getRandom().nextInt(20))), 9),
-//            WeightedEntry.wrap(new GoalAttackAction<EntitySkelefang>(CHARGE)
-//                    .cooldown(e -> e.animationCooldown(CHARGE))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.1, 7), e -> 20 + e.getRandom().nextInt(20))), 11)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkelefang>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 3)), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntitySkelefang> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntitySkelefang> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (anim != null) {
@@ -236,24 +222,27 @@ public class EntitySkelefang extends BossMonster {
                 }
                 return false;
             });
-
     protected List<LivingEntity> hitEntity;
-
-    private final MultiPartContainer head;
-    private final MultiPartContainer back;
-    private final MultiPartContainer rightLeg;
-    private final MultiPartContainer leftLeg;
     private int hurtResist;
     private boolean ignoreHurt;
     private boolean commanded;
     private int needleChain;
 
+    private final MultiPartContainer head;
+    private final MultiPartContainer back;
+    private final MultiPartContainer rightLeg;
+    private final MultiPartContainer leftLeg;
+
     public EntitySkelefang(EntityType<? extends EntitySkelefang> type, Level world) {
         super(type, world);
-        this.head = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.3f));
-        this.back = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.5f));
-        this.rightLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.5f, 2.5f));
-        this.leftLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.5f, 2.5f));
+        this.head = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.3f)
+                .updatePosition(new Vec3(0, 2.15, 2.9)));
+        this.back = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.5f)
+                .updatePosition(new Vec3(0, 1, -1.5)));
+        this.leftLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 2.5f)
+                .updatePosition(new Vec3(1.2, 0, 0)));
+        this.rightLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 2.5f)
+                .updatePosition(new Vec3(-1.2, 0, 0)));
     }
 
     @Override
@@ -287,95 +276,37 @@ public class EntitySkelefang extends BossMonster {
         }
     }
 
-    public void restoreDragon() {
-        this.entityData.set(HEAD_BONES, 20);
-        this.entityData.set(TAIL_BONES, 20);
-        this.entityData.set(LEFT_LEG_BONES, 20);
-        this.entityData.set(RIGHT_LEG_BONES, 20);
-        this.entityData.set(BODY_BONES, 20);
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntitySkelefang>create()
+                .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAM)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.remainingTailBones() > 10)
+                .prepare(new SetWalkTargetToAttackTarget<EntitySkelefang>().closeEnoughDist((e, t) -> 3)).prepareOptional(new MoveToAttackTarget<>())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAP)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.remainingTailBones() > 10)
+                .prepare(new SetWalkTargetToAttackTarget<EntitySkelefang>().closeEnoughDist((e, t) -> 3))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(12)
+                .start(MonsterBehaviourUtils.checkedAttack(NEEDLE_THROW)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetToAttackTarget<EntitySkelefang>().closeEnoughDist((e, t) -> 7))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(9)
+                .start(MonsterBehaviourUtils.checkedAttack(SLASH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetToAttackTarget<EntitySkelefang>().closeEnoughDist((e, t) -> 3))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(9)
+                .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetToAttackTarget<EntitySkelefang>().closeEnoughDist((e, t) -> 7))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(11)
+                .build();
     }
 
-    public void setHeadBones(int amount) {
-        this.setHeadBones(amount, true);
-    }
-
-    private void setHeadBones(int amount, boolean withParticle) {
-        int pre = this.entityData.get(HEAD_BONES);
-        this.entityData.set(HEAD_BONES, Math.min(amount, 20));
-        if (withParticle) {
-            if (pre > 10 && amount <= 10)
-                this.level().broadcastEntityEvent(this, HEAD_DROP);
-            if (amount <= 0)
-                this.level().broadcastEntityEvent(this, NECK_DROP);
-        }
-    }
-
-    public int remainingHeadBones() {
-        return this.entityData.get(HEAD_BONES);
-    }
-
-    public void setTailBones(int amount) {
-        int pre = this.entityData.get(TAIL_BONES);
-        this.entityData.set(TAIL_BONES, Math.min(amount, 20));
-        if (pre > 10 && amount <= 10)
-            this.level().broadcastEntityEvent(this, TAIL);
-        if (amount <= 0)
-            this.level().broadcastEntityEvent(this, TAIL_BASE);
-    }
-
-    public int remainingTailBones() {
-        return this.entityData.get(TAIL_BONES);
-    }
-
-    public void setLeftLegBones(int amount) {
-        this.entityData.set(LEFT_LEG_BONES, Math.min(amount, 20));
-        if (amount <= 0)
-            this.level().broadcastEntityEvent(this, LEFT_LEG);
-    }
-
-    public int remainingLeftLegBones() {
-        return this.entityData.get(LEFT_LEG_BONES);
-    }
-
-    public void setRightLegBones(int amount) {
-        this.entityData.set(RIGHT_LEG_BONES, Math.min(amount, 20));
-        if (amount <= 0)
-            this.level().broadcastEntityEvent(this, RIGHT_LEG);
-    }
-
-    public int remainingRightLegBones() {
-        return this.entityData.get(RIGHT_LEG_BONES);
-    }
-
-    public void setBodyBones(int amount) {
-        int pre = this.entityData.get(BODY_BONES);
-        this.entityData.set(BODY_BONES, Math.min(amount, 20));
-        if (pre > 15 && amount <= 15)
-            this.level().broadcastEntityEvent(this, BACK_RIBS);
-        if (pre > 10 && amount <= 10)
-            this.level().broadcastEntityEvent(this, BACK);
-        if (pre > 5 && amount <= 5)
-            this.level().broadcastEntityEvent(this, FRONT_RIBS);
-        if (amount <= 0)
-            this.level().broadcastEntityEvent(this, FRONT);
-    }
-
-    public boolean checkIgnoreHurtOverlay() {
-        if (this.ignoreHurt) {
-            this.ignoreHurt = false;
-            return true;
-        }
-        return false;
-    }
-
-    public int remainingBodyBones() {
-        return this.entityData.get(BODY_BONES);
-    }
-
-    public boolean hasBones() {
-        return this.remainingHeadBones() > 0 || this.remainingTailBones() > 0
-                || this.remainingLeftLegBones() > 0 || this.remainingRightLegBones() > 0
-                || this.remainingBodyBones() > 0;
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()).build();
     }
 
     @Override
@@ -399,16 +330,155 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide) {
-            --this.hurtResist;
-            this.updateParts();
-            if (!this.isDeadOrDying() && !this.hasBones() && !this.getAnimationHandler().isCurrent(BEAM))
-                this.getAnimationHandler().setAnimation(BEAM);
-            if (this.isAlive() && !this.getAnimationHandler().hasAnimation() && !this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged())
-                this.setEnraged(true, false);
+    public void setEnraged(boolean flag, boolean load) {
+        super.setEnraged(flag, load);
+        if (flag && !load)
+            this.getAnimationHandler().setAnimation(ROAR);
+    }
+
+    @Override
+    protected boolean checkRage() {
+        return false;
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            super.actuallyHurt(source, damageAmount);
+            if (this.isDeadOrDying())
+                this.level().broadcastEntityEvent(this, (byte) 83);
+            return;
         }
+        if (this.hurtResist > 0)
+            return;
+        this.hurtResist = 2;
+        if (this.hasBones()) {
+            if (damageAmount > 4) {
+                int boneDamage = 7;
+                if (this.remainingTailBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingTailBones());
+                    boneDamage -= amount;
+                    this.setTailBones(this.remainingTailBones() - amount);
+                }
+                if (this.remainingLeftLegBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingLeftLegBones());
+                    boneDamage -= amount;
+                    this.setLeftLegBones(this.remainingLeftLegBones() - amount);
+                }
+                if (this.remainingRightLegBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingRightLegBones());
+                    boneDamage -= amount;
+                    this.setRightLegBones(this.remainingRightLegBones() - amount);
+                }
+                if (this.remainingHeadBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingHeadBones());
+                    boneDamage -= amount;
+                    this.setHeadBones(this.remainingHeadBones() - amount);
+                }
+                if (this.remainingBodyBones() > 0) {
+                    int amount = Math.min(boneDamage, this.remainingBodyBones());
+                    this.setBodyBones(this.remainingBodyBones() - amount);
+                }
+            }
+            if (this.isDeadOrDying())
+                this.level().broadcastEntityEvent(this, (byte) 83);
+            else
+                this.level().broadcastEntityEvent(this, (byte) 82);
+            if (!this.hasBones())
+                this.getAnimationHandler().setAnimation(BEAM);
+        } else
+            super.actuallyHurt(source, damageAmount);
+    }
+
+    public void setTailBones(int amount) {
+        int pre = this.entityData.get(TAIL_BONES);
+        this.entityData.set(TAIL_BONES, Math.min(amount, 20));
+        if (pre > 10 && amount <= 10)
+            this.level().broadcastEntityEvent(this, TAIL);
+        if (amount <= 0)
+            this.level().broadcastEntityEvent(this, TAIL_BASE);
+    }
+
+    public void setLeftLegBones(int amount) {
+        this.entityData.set(LEFT_LEG_BONES, Math.min(amount, 20));
+        if (amount <= 0)
+            this.level().broadcastEntityEvent(this, LEFT_LEG);
+    }
+
+    public void setRightLegBones(int amount) {
+        this.entityData.set(RIGHT_LEG_BONES, Math.min(amount, 20));
+        if (amount <= 0)
+            this.level().broadcastEntityEvent(this, RIGHT_LEG);
+    }
+
+    public void setHeadBones(int amount) {
+        this.setHeadBones(amount, true);
+    }
+
+    public void setBodyBones(int amount) {
+        int pre = this.entityData.get(BODY_BONES);
+        this.entityData.set(BODY_BONES, Math.min(amount, 20));
+        if (pre > 15 && amount <= 15)
+            this.level().broadcastEntityEvent(this, BACK_RIBS);
+        if (pre > 10 && amount <= 10)
+            this.level().broadcastEntityEvent(this, BACK);
+        if (pre > 5 && amount <= 5)
+            this.level().broadcastEntityEvent(this, FRONT_RIBS);
+        if (amount <= 0)
+            this.level().broadcastEntityEvent(this, FRONT);
+    }
+
+    private void setHeadBones(int amount, boolean withParticle) {
+        int pre = this.entityData.get(HEAD_BONES);
+        this.entityData.set(HEAD_BONES, Math.min(amount, 20));
+        if (withParticle) {
+            if (pre > 10 && amount <= 10)
+                this.level().broadcastEntityEvent(this, HEAD_DROP);
+            if (amount <= 0)
+                this.level().broadcastEntityEvent(this, NECK_DROP);
+        }
+    }
+
+    public void restoreDragon() {
+        this.entityData.set(HEAD_BONES, 20);
+        this.entityData.set(TAIL_BONES, 20);
+        this.entityData.set(LEFT_LEG_BONES, 20);
+        this.entityData.set(RIGHT_LEG_BONES, 20);
+        this.entityData.set(BODY_BONES, 20);
+    }
+
+    public boolean checkIgnoreHurtOverlay() {
+        if (this.ignoreHurt) {
+            this.ignoreHurt = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasBones() {
+        return this.remainingHeadBones() > 0 || this.remainingTailBones() > 0
+                || this.remainingLeftLegBones() > 0 || this.remainingRightLegBones() > 0
+                || this.remainingBodyBones() > 0;
+    }
+
+    public int remainingHeadBones() {
+        return this.entityData.get(HEAD_BONES);
+    }
+
+    public int remainingTailBones() {
+        return this.entityData.get(TAIL_BONES);
+    }
+
+    public int remainingLeftLegBones() {
+        return this.entityData.get(LEFT_LEG_BONES);
+    }
+
+    public int remainingRightLegBones() {
+        return this.entityData.get(RIGHT_LEG_BONES);
+    }
+
+    public int remainingBodyBones() {
+        return this.entityData.get(BODY_BONES);
     }
 
     @Override
@@ -513,38 +583,40 @@ public class EntitySkelefang extends BossMonster {
         }
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide) {
+            --this.hurtResist;
+            this.updateParts();
+            if (!this.isDeadOrDying() && !this.hasBones() && !this.getAnimationHandler().isCurrent(BEAM))
+                this.getAnimationHandler().setAnimation(BEAM);
+            if (this.isAlive() && !this.getAnimationHandler().hasAnimation() && !this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged())
+                this.setEnraged(true, false);
+        }
+    }
+
     private void updateParts() {
         if (this.remainingTailBones() > 0) {
-            Vec3 view = this.calculateViewVector(0, this.yBodyRot);
-            Vec3 backPos = this.position().add(view.scale(-1)).add(0, 1, 0);
-            this.back.updatePositionTo(backPos.x(), backPos.y(), backPos.z(), true);
+            this.back.tick();
         } else {
             this.back.removeEntity();
         }
         if (this.remainingHeadBones() > 10) {
-            Vec3 headPos = this.position().add(this.calculateViewVector(this.getXRot() * 0.6f, this.yBodyRot).scale(2.9).add(0, 2.15, 0));
-            this.head.updatePositionTo(headPos.x(), headPos.y(), headPos.z(), true);
+            this.head.tick();
         } else {
             this.head.removeEntity();
         }
-        Vec3 side = this.calculateViewVector(0, this.yBodyRot + 90);
         if (this.remainingLeftLegBones() > 0) {
-            Vec3 leftLegPos = this.position().add(side.scale(-1)).add(0, 0, 0);
-            this.leftLeg.updatePositionTo(leftLegPos.x(), leftLegPos.y(), leftLegPos.z(), true);
+            this.leftLeg.tick();
         } else {
             this.leftLeg.removeEntity();
         }
         if (this.remainingRightLegBones() > 0) {
-            Vec3 rightLegPos = this.position().add(side.scale(1)).add(0, 0, 0);
-            this.rightLeg.updatePositionTo(rightLegPos.x(), rightLegPos.y(), rightLegPos.z(), true);
+            this.rightLeg.tick();
         } else {
             this.rightLeg.removeEntity();
         }
-    }
-
-    @Override
-    protected boolean checkRage() {
-        return false;
     }
 
     @Override
@@ -553,65 +625,17 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    protected void actuallyHurt(DamageSource source, float damageAmount) {
-        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            super.actuallyHurt(source, damageAmount);
-            if (this.isDeadOrDying())
-                this.level().broadcastEntityEvent(this, (byte) 83);
-            return;
-        }
-        if (this.hurtResist > 0)
-            return;
-        this.hurtResist = 2;
-        if (this.hasBones()) {
-            if (damageAmount > 4) {
-                int boneDamage = 7;
-                if (this.remainingTailBones() > 0) {
-                    int amount = Math.min(boneDamage, this.remainingTailBones());
-                    boneDamage -= amount;
-                    this.setTailBones(this.remainingTailBones() - amount);
-                }
-                if (this.remainingLeftLegBones() > 0) {
-                    int amount = Math.min(boneDamage, this.remainingLeftLegBones());
-                    boneDamage -= amount;
-                    this.setLeftLegBones(this.remainingLeftLegBones() - amount);
-                }
-                if (this.remainingRightLegBones() > 0) {
-                    int amount = Math.min(boneDamage, this.remainingRightLegBones());
-                    boneDamage -= amount;
-                    this.setRightLegBones(this.remainingRightLegBones() - amount);
-                }
-                if (this.remainingHeadBones() > 0) {
-                    int amount = Math.min(boneDamage, this.remainingHeadBones());
-                    boneDamage -= amount;
-                    this.setHeadBones(this.remainingHeadBones() - amount);
-                }
-                if (this.remainingBodyBones() > 0) {
-                    int amount = Math.min(boneDamage, this.remainingBodyBones());
-                    this.setBodyBones(this.remainingBodyBones() - amount);
-                }
-            }
-            if (this.isDeadOrDying())
-                this.level().broadcastEntityEvent(this, (byte) 83);
-            else
-                this.level().broadcastEntityEvent(this, (byte) 82);
-            if (!this.hasBones())
-                this.getAnimationHandler().setAnimation(BEAM);
-        } else
-            super.actuallyHurt(source, damageAmount);
-    }
-
-    @Override
-    public String getDeathAnimation() {
-        return DEATH;
-    }
-
-    @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE)) {
             return null;
         }
         return super.directionToLookAt();
+    }
+
+    @Override
+    public int animationCooldown(String anim) {
+        int diffAdd = this.difficultyCooldown();
+        return (this.isEnraged() ? 27 + this.getRandom().nextInt(20) : 35 + this.getRandom().nextInt(25)) + diffAdd;
     }
 
     @Override
@@ -685,6 +709,11 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
+    public AnimationHandler<EntitySkelefang> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
@@ -698,26 +727,19 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ROAR);
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        if (this.hasBones())
+            return new Vec3(0, 43.5 / 16d, 7 / 16d).scale(this.getScale())
+                    .yRot(-this.getYRot() * Mth.DEG_TO_RAD);
+        return super.getPassengerAttachmentPoint(entity, dimensions, partialTick);
+    }
+
+    @Override
+    public void playAngrySound() {
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-    }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        if (this.hasBones())
-//            return new Vec3(0, 43.5 / 16d, 7 / 16d);
-//        return new Vec3(0, 30 / 16d, -3 / 16d);
-//    }
-
-    @Override
-    public AnimationHandler<EntitySkelefang> getAnimationHandler() {
-        return this.animationHandler;
     }
 
     @Override
@@ -726,17 +748,12 @@ public class EntitySkelefang extends BossMonster {
     }
 
     @Override
-    public int animationCooldown(String anim) {
-        int diffAdd = this.difficultyCooldown();
-        return (this.isEnraged() ? 27 + this.getRandom().nextInt(20) : 35 + this.getRandom().nextInt(25)) + diffAdd;
+    public String getDeathAnimation() {
+        return DEATH;
     }
 
     @Override
     public String getSleepAnimation() {
         return DEATH;
-    }
-
-    @Override
-    public void playAngrySound() {
     }
 }

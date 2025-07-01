@@ -45,10 +45,8 @@ public enum EnumSkills {
     LEADER("leadership", GainType.FAST);
 
     public static final String PREFIX = "runecraftory.skill.";
-
-    private final String translation;
-
     public final GainType gainType;
+    private final String translation;
 
     EnumSkills(String translation, GainType type) {
         this.translation = PREFIX + translation;

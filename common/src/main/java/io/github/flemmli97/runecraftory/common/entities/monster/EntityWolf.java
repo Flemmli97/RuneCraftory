@@ -1,8 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -17,6 +23,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityWolf extends LeapingMonster {
@@ -24,46 +36,105 @@ public class EntityWolf extends LeapingMonster {
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String MELEE = BUILDER.add("attack", AnimationsBuilder.definition(1.76)
             .marker("attack", 0.48, 0.84, 1.16, 1.52));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(1.12)
             .marker("attack_start", 0.36).marker("attack_end", 0.96));
-    public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWolf>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 2),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityWolf>(LEAP)
-//                    .cooldown(e -> e.animationCooldown(LEAP))
-//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityWolf>(LEAP)
-//                    .cooldown(e -> e.animationCooldown(LEAP))
-//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 4))), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWolf>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityWolf> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityWolf> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityWolf(EntityType<? extends EntityWolf> type, Level world) {
         super(type, world);
     }
 
+    public static void wolfAttack(LivingEntity attacker, Entity target) {
+        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).noKnockback().hurtResistant(1);
+        CombatUtils.mobAttack(attacker, target, source);
+    }
+
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3);
+        super.applyAttributes();
     }
-//
-//    @Override
-//    public void addGoal() {
-//        super.addGoal();
-//        this.goalSelector.removeGoal(this.wander);
-//        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
-//        this.goalSelector.addGoal(6, this.wander);
-//    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(5)).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(6, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
+    }
+
+    @Override
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                new SetRandomWalkTarget<>().speedModifier(0.7f),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
+        );
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 2.1;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
+    public void handleAttack(AnimationState anim) {
+        if (anim.is(MELEE)) {
+            this.getNavigation().stop();
+            if (anim.isAt("attack")) {
+                this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
+            }
+        } else
+            super.handleAttack(anim);
+    }
+
+    @Override
+    public AnimationHandler<? extends EntityWolf> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    protected boolean isLeapingAnim(String anim) {
+        return anim.equals(LEAP);
+    }
+
+    @Override
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
+        return super.getLeapVec(target).scale(1.1);
+    }
+
+    @Override
+    public double leapHeightMotion() {
+        return 0.2;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(LEAP);
+            else
+                this.getAnimationHandler().setAnimation(MELEE);
+        }
+    }
 
     @Override
     public double sprintSpeedThreshold() {
@@ -91,61 +162,6 @@ public class EntityWolf extends LeapingMonster {
     }
 
     @Override
-    public AnimationHandler<? extends EntityWolf> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public void handleAttack(AnimationState anim) {
-        if (anim.is(MELEE)) {
-            this.getNavigation().stop();
-            if (anim.isAt("attack")) {
-                this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
-            }
-        } else
-            super.handleAttack(anim);
-    }
-
-    @Override
-    protected boolean isLeapingAnim(String anim) {
-        return anim.equals(LEAP);
-    }
-
-    @Override
-    public Vec3 getLeapVec(@Nullable Vec3 target) {
-        return super.getLeapVec(target).scale(1.1);
-    }
-
-    @Override
-    public double leapHeightMotion() {
-        return 0.2;
-    }
-
-    public static boolean wolfAttack(LivingEntity attacker, Entity target) {
-        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).noKnockback().hurtResistant(1);
-        return CombatUtils.mobAttack(attacker, target, source);
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.4;
-        double length = this.getBbWidth() * 2.1;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
-                return;
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(LEAP);
-            else
-                this.getAnimationHandler().setAnimation(MELEE);
-        }
-    }
-
-    @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
@@ -154,9 +170,4 @@ public class EntityWolf extends LeapingMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 17 / 16d, -6 / 16d);
-//    }
 }

@@ -19,11 +19,6 @@ public class RenderSmallRaccoonLeaf extends TextureRenderer<EntitySmallRaccoonLe
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySmallRaccoonLeaf entity) {
-        return TEX;
-    }
-
-    @Override
     public void render(EntitySmallRaccoonLeaf entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.25, 0);
@@ -39,6 +34,11 @@ public class RenderSmallRaccoonLeaf extends TextureRenderer<EntitySmallRaccoonLe
         stack.mulPose(Axis.XP.rotationDegrees(40));
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
         stack.popPose();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(EntitySmallRaccoonLeaf entity) {
+        return TEX;
     }
 
     @Override

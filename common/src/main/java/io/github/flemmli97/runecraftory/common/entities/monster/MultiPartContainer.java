@@ -23,10 +23,10 @@ public class MultiPartContainer {
         }
     }
 
-    public void updatePositionTo(double x, double y, double z, boolean simple) {
+    public void tick() {
         if (this.entity == null) {
             this.entity = this.sup.get();
         }
-        this.entity.updatePositionTo(x, y, z, simple);
+        this.entity.parentTick();
     }
 }

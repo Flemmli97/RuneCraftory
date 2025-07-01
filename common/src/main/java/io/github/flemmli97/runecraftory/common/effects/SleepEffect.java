@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.effects;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.mixinhelper.MobNoAIHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,10 +13,6 @@ public class SleepEffect extends SyncedMobEffect {
 
     public SleepEffect() {
         super(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.DataType.SLEEP);
-    }
-
-    private static void applySleep(LivingEntity entity, boolean flag) {
-        Platform.INSTANCE.getEntityData(entity).setSleeping(entity, flag);
     }
 
     @Override

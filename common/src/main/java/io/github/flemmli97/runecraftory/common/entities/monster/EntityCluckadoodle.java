@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -14,9 +16,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 
 public class EntityCluckadoodle extends BaseMonster {
 
@@ -33,20 +37,33 @@ public class EntityCluckadoodle extends BaseMonster {
     }
 
     @Override
-    public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
-        return BrainActivityGroup.fightTasks(
-                new InvalidateAttackTarget<BaseMonster>(),
-                AttackBehaviourBuilder.<BaseMonster>create()
-                        .start(MELEE).prepare(new SetWalkTargetToAttackTarget<>(), new MoveToAttackTarget<>())
-                        .end(1)
-                        .build()
-        );
-    }
-
-    @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
         super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(1, new StrafeTarget<>()).build();
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 2.2;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -55,10 +72,8 @@ public class EntityCluckadoodle extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.4;
-        double length = this.getBbWidth() * 2.2;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    public AnimationHandler<EntityCluckadoodle> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -86,11 +101,6 @@ public class EntityCluckadoodle extends BaseMonster {
     }
 
     @Override
-    public AnimationHandler<EntityCluckadoodle> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
@@ -99,9 +109,4 @@ public class EntityCluckadoodle extends BaseMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 11.5 / 16d, -2 / 16d);
-//    }
 }

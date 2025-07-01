@@ -180,6 +180,11 @@
           ]
         },
         {
+          "name": "ridingPos",
+          "parent": "bodyUpper",
+          "pivot": [0, 30.25, 8.5]
+        },
+        {
           "name": "tail",
           "parent": "body",
           "pivot": [-0.5, 12.75, 8.75],
@@ -281,11 +286,6 @@
               "uv": [64, 40]
             }
           ]
-        },
-        {
-          "name": "ridingPos",
-          "parent": "body",
-          "pivot": [0, 16.25, 10.5]
         }
       ]
     }

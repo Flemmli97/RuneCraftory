@@ -1,8 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -23,55 +29,37 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class EntityMimic extends LeapingMonster {
 
-    private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
-
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String MELEE = BUILDER.add("attack", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
-    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.6).marker("attack", 0.2));
+    public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.6)
+            .marker("attack_start", 0.2).marker("attack_end", 0.48));
     public static final String THROW = BUILDER.add("throw", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
     public static final String ARROW = BUILDER.add("arrow", THROW);
     public static final String CAST = BUILDER.add("cast", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
     public static final String CLOSE = BUILDER.add("close", AnimationsBuilder.definition(0.32));
-    public static final String INTERACT = BUILDER.add("interact", MELEE);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMimic>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.8f), 8),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(LEAP)
-//                    .cooldown(e -> e.animationCooldown(LEAP))
-//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(3, 1, 3))), 8),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(THROW, 9, 3, 1, e -> 1), 4),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(THROW)
-//                    .cooldown(e -> e.animationCooldown(THROW))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 3),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(ARROW)
-//                    .cooldown(e -> e.animationCooldown(ARROW))
-//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(2, 1, 2))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityMimic>(CAST)
-//                    .cooldown(e -> e.animationCooldown(CAST))
-//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(2, 1, 2))), 6)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMimic>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 1.5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityMimic> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
     private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, ANIMS);
-    private int sleepTick = -1;
-    private boolean sleeping;
     private final List<ItemStack> throwables = List.of(
             new ItemStack(Items.APPLE),
             new ItemStack(ModItems.BATTLE_AXE.get()),
             new ItemStack(ModItems.STEEL_SWORD.get()),
             new ItemStack(ModItems.MUSHROOM.get())
     );
+    private int sleepTick = -1;
+    private boolean sleeping;
 
     public EntityMimic(EntityType<? extends EntityMimic> type, Level world) {
         super(type, world);
@@ -79,23 +67,52 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    protected void applyAttributes() {
-        super.applyAttributes();
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(AWAKE, false);
     }
 
-//    @Override
-//    public void addGoal() {
-//        this.targetSelector.addGoal(1, this.targetPlayer);
-//        this.targetSelector.addGoal(2, this.targetMobs);
-//        this.targetSelector.addGoal(0, this.hurt);
-//        this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
-//
-//        this.goalSelector.addGoal(0, this.swimGoal);
-//        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
-//        this.goalSelector.addGoal(3, this.followOwnerGoal);
-//        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
-//    }
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist((e, t) -> 1)).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7)).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifFurtherThan(4))
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7)).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(THROW).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(3)
+                .start(ARROW).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(12)).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .start(CAST).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(12)).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(6, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(3, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
+    }
+
+    @Override
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new Idle<>();
+    }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
@@ -106,30 +123,25 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.6;
-        double length = this.getBbWidth() * 1.8;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.THROW_HAND_ITEM.get() : null))
-                return;
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(THROW);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(LEAP);
-            else
-                this.getAnimationHandler().setAnimation(MELEE);
+    public void baseTick() {
+        super.baseTick();
+        if (!this.level().isClientSide) {
+            if (this.getTarget() == null) {
+                this.sleepTick--;
+            }
+            if (this.sleepTick == 0) {
+                this.entityData.set(AWAKE, false);
+                this.getAnimationHandler().setAnimation(CLOSE);
+                this.getNavigation().stop();
+            }
         }
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(AWAKE, false);
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.6;
+        double length = this.getBbWidth() * 1.8;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -151,12 +163,13 @@ public class EntityMimic extends LeapingMonster {
             if (anim.isAt("attack"))
                 ModSpells.DOUBLE_ARROW.get().use(this);
         } else {
-            if (!this.isLeapingAnim(anim.getID())) {
-                Vec3 vec32 = this.getLeapVec(this.tryGetTargetPosition(this.getTarget())).scale(0.1);
-                this.setDeltaMovement(vec32.x, 0.05f, vec32.z);
-            }
             super.handleAttack(anim);
         }
+    }
+
+    @Override
+    public AnimationHandler<? extends EntityMimic> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -165,80 +178,22 @@ public class EntityMimic extends LeapingMonster {
     }
 
     @Override
-    public Vec3 getLeapVec(@Nullable Vec3 target) {
-        return super.getLeapVec(target).scale(1.25);
-    }
-
-    @Override
     public double leapHeightMotion() {
         return 0.3;
     }
 
     @Override
-    public void setTarget(@Nullable LivingEntity livingEntity) {
-        super.setTarget(livingEntity);
-        if (livingEntity != null && !this.sleeping) {
-            this.setAwake();
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.THROW_HAND_ITEM.get() : null))
+                return;
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(THROW);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(LEAP);
+            else
+                this.getAnimationHandler().setAnimation(MELEE);
         }
-    }
-
-    @Override
-    public void baseTick() {
-        super.baseTick();
-        if (!this.level().isClientSide) {
-            if (this.getTarget() == null) {
-                this.sleepTick--;
-            }
-            if (this.sleepTick == 0) {
-                this.entityData.set(AWAKE, false);
-                this.getAnimationHandler().setAnimation(CLOSE);
-                this.getNavigation().stop();
-            }
-        }
-    }
-
-    public void setAwake() {
-        this.entityData.set(AWAKE, true);
-        this.sleepTick = 200;
-    }
-
-    @Override
-    protected float getJumpPower() {
-        if (this.getTarget() != null)
-            return 0.28f * this.getBlockJumpFactor();
-        return 0.48f * this.getBlockJumpFactor();
-    }
-
-    @Override
-    public void jumpFromGround() {
-        Vec3 vec3 = this.getDeltaMovement();
-        this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
-        this.hasImpulse = true;
-    }
-
-    public boolean isAwake() {
-        return this.entityData.get(AWAKE);
-    }
-
-    @Override
-    public AnimationHandler<? extends EntityMimic> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    private int getJumpDelay() {
-        if (this.getTarget() != null)
-            return this.random.nextInt(5) + 5;
-        return this.random.nextInt(6) + 7;
-    }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return !this.isAwake();
-    }
-
-    @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
     }
 
     @Override
@@ -252,6 +207,53 @@ public class EntityMimic extends LeapingMonster {
             }
         } else
             this.sleeping = false;
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity livingEntity) {
+        super.setTarget(livingEntity);
+        if (livingEntity != null && !this.sleeping) {
+            this.setAwake();
+        }
+    }
+
+    public void setAwake() {
+        this.entityData.set(AWAKE, true);
+        this.sleepTick = 200;
+    }
+
+    public boolean isAwake() {
+        return this.entityData.get(AWAKE);
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return !this.isAwake();
+    }
+
+    @Override
+    protected float getJumpPower() {
+        if (this.getTarget() != null)
+            return 0.24f * this.getBlockJumpFactor();
+        return 0.36f * this.getBlockJumpFactor();
+    }
+
+    @Override
+    public void jumpFromGround() {
+        Vec3 vec3 = this.getDeltaMovement();
+        this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
+        this.hasImpulse = true;
+    }
+
+    private int getJumpDelay() {
+        if (this.getTarget() != null)
+            return this.random.nextInt(5) + 4;
+        return this.random.nextInt(6) + 8;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 
     @Override

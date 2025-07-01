@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBase;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
-import io.github.flemmli97.runecraftory.client.render.layer.RiderLayerRendererExt;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.client.Minecraft;
@@ -20,21 +19,15 @@ import net.minecraft.world.phys.Vec3;
 public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, ModelRaccoonBase<T>> {
 
     private static final ResourceLocation BERSERK_TEXTURE = RuneCraftory.modRes("textures/entity/monsters/raccoon_berserk.png");
-    public static final float BERSERK_SCALE = 1.4f;
-
     private final ModelRaccoonBase<T> normalModel;
     private final ModelRaccoonBase<T> berserkModel;
 
     private boolean clone;
 
     public RenderRaccoon(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelRaccoon<>(), RuneCraftory.modRes("textures/entity/monsters/raccoon.png"), 0.5f, false);
+        super(ctx, new ModelRaccoon<>(), RuneCraftory.modRes("textures/entity/monsters/raccoon.png"), 0.5f);
         this.normalModel = this.model;
         this.berserkModel = new ModelRaccoonBerserk<>();
-        this.layers.add(new RiderLayerRendererExt<>(this, (stack, entity) -> {
-            if (entity.isBerserk())
-                stack.scale(1 / BERSERK_SCALE, 1 / BERSERK_SCALE, 1 / BERSERK_SCALE);
-        }));
     }
 
     @Override
@@ -45,7 +38,7 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
     @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         if (entity.isBerserk())
-            this.shadowRadius = 1.2f;
+            this.shadowRadius = 0.7f;
         else
             this.shadowRadius = 0.5f;
         AnimationState anim = entity.getAnimationHandler().getAnimation();
@@ -87,12 +80,5 @@ public class RenderRaccoon<T extends EntityRaccoon> extends RenderMonster<T, Mod
             stack.popPose();
         } else
             super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
-    }
-
-    @Override
-    protected void scale(T entity, PoseStack stack, float partialTick) {
-        super.scale(entity, stack, partialTick);
-        if (entity.isBerserk())
-            stack.scale(BERSERK_SCALE, BERSERK_SCALE, BERSERK_SCALE);
     }
 }

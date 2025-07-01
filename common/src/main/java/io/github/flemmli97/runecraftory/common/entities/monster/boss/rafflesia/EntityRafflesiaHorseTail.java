@@ -41,6 +41,16 @@ public class EntityRafflesiaHorseTail extends EntityRafflesiaPart implements Hea
     }
 
     @Override
+    public AnimationHandler<?> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public PartType getPartType() {
+        return PartType.HORSETAIL;
+    }
+
+    @Override
     public Vec3 offset() {
         return OFFSET;
     }
@@ -48,11 +58,6 @@ public class EntityRafflesiaHorseTail extends EntityRafflesiaPart implements Hea
     @Override
     public String attackAnim() {
         return EntityRafflesiaPart.HORSE_TAIL_ACTION;
-    }
-
-    @Override
-    public AnimationHandler<?> getAnimationHandler() {
-        return this.animationHandler;
     }
 
     @Override
@@ -67,10 +72,5 @@ public class EntityRafflesiaHorseTail extends EntityRafflesiaPart implements Hea
                 return e instanceof Enemy && e != owner.getTarget();
             return owner == null || e != owner.getTarget();
         };
-    }
-
-    @Override
-    public PartType getPartType() {
-        return PartType.HORSETAIL;
     }
 }

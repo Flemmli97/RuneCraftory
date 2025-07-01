@@ -28,11 +28,6 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T entity) {
-        return this.tex;
-    }
-
-    @Override
     protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
         super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks, scale);
         if (entity.getPlayDeathTick() > 0 && entity.getDeathAnimation() == null) {
@@ -43,6 +38,11 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
             stack.translate(0, f * 0.1, -f * entity.getBbHeight() * 0.5);
             stack.mulPose(Axis.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
         }
+    }
+
+    @Override
+    protected float getFlipDegrees(T entity) {
+        return entity.getDeathAnimation() != null ? 0 : super.getFlipDegrees(entity);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
     }
 
     @Override
-    protected float getFlipDegrees(T entity) {
-        return entity.getDeathAnimation() != null ? 0 : super.getFlipDegrees(entity);
+    public ResourceLocation getTextureLocation(T entity) {
+        return this.tex;
     }
 }

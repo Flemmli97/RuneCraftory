@@ -5,12 +5,11 @@ import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
+import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
-import io.github.flemmli97.runecraftory.client.model.SittingModel;
-import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
@@ -26,8 +25,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -39,6 +36,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
@@ -158,7 +156,7 @@ public class ClientHandlers {
         if (entity instanceof BaseMonster monster) {
             if (!Minecraft.getInstance().player.getUUID().equals(monster.getOwnerUUID()))
                 return;
-//            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster, fullParty, hasHome));
+            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster, fullParty, hasHome));
         }
     }
 
@@ -234,30 +232,10 @@ public class ClientHandlers {
         Minecraft.getInstance().setScreen(new SpawnEggScreen(hand));
     }
 
-    /**
-     * Translates a rider to the current root position. Assumes the model is either a vanilla humanoid one or a custom SittingModel
-     * In this version vanilla uses a mix of relative height and absolute value on entities for the passenger position which makes supporting all entities very hard.
-     * This changes in future versions so for now only humanoid models supported
-     * <p>
-     * Additionally in vanilla the legs simply get rotated to indicate a sitting pose while the whole model still floats in the air
-     */
-    public static void translateRider(EntityRenderer<?> entityRenderer, Entity rider, EntityModel<?> model, PoseStack poseStack) {
-        float scale = 1;
-        if (entityRenderer instanceof ScaledRenderer scaledRender) {
-            scale = scaledRender.getScale();
-        }
-        if (scale != 1)
-            poseStack.scale(1 / scale, 1 / scale, 1 / scale);
-        if (model instanceof SittingModel sittingModel)
-            sittingModel.translateSittingPosition(poseStack);
-        else {
-            if (rider instanceof LivingEntity living && living.isBaby()) {
-                poseStack.translate(0, 5 / 16d, 0);
-            } else {
-                poseStack.translate(0, 11 / 16d, 0);
-            }
-        }
-        if (scale != 1)
-            poseStack.scale(scale, scale, scale);
+    public static void translateRider(PoseStack poseStack, LivingEntity entity, Entity rider) {
+        Vec3 attach = rider.getVehicleAttachmentPoint(entity);
+        float scale = entity.getScale();
+        poseStack.scale(1 / scale, 1 / scale, 1 / scale);
+        poseStack.translate(attach.x(), attach.y(), attach.z());
     }
 }

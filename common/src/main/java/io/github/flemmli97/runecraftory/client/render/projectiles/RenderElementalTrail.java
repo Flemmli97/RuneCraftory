@@ -29,14 +29,6 @@ public class RenderElementalTrail extends TextureRenderer<EntityElementalTrail> 
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityElementalTrail entity) {
-        return switch (entity.element()) {
-            case FIRE -> FIRE;
-            default -> DARK;
-        };
-    }
-
-    @Override
     public void render(EntityElementalTrail entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         switch (entity.element()) {
@@ -54,6 +46,14 @@ public class RenderElementalTrail extends TextureRenderer<EntityElementalTrail> 
             case EARTH -> this.renderBlockModel(this.dirt, stack, buffer);
         }
         stack.popPose();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(EntityElementalTrail entity) {
+        return switch (entity.element()) {
+            case FIRE -> FIRE;
+            default -> DARK;
+        };
     }
 
     private void renderBlockModel(BlockState state, PoseStack stack, MultiBufferSource buffer) {

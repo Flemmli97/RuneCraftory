@@ -1,9 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -13,50 +18,42 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomFlyingTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
+import net.tslat.smartbrainlib.util.BrainUtils;
+import org.jetbrains.annotations.Nullable;
 
 public class EntitySkyFish extends BaseMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String SLAP = BUILDER.add("slap", AnimationsBuilder.definition(0.56).marker("attack", 0.28));
+    public static final String INTERACT = BUILDER.add("interact", SLAP);
     public static final String BEAM = BUILDER.add("beam", AnimationsBuilder.definition(0.68).marker("attack", 0.4));
     public static final String SWIPE = BUILDER.add("swipe", AnimationsBuilder.definition(0.76).marker("attack", 0.28));
-    public static final String INTERACT = BUILDER.add("interact", SLAP);
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySkyFish>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, e -> 0.6f), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(BEAM, 8, 5, 1, e -> 1), 2),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(SWIPE, 8, 5, 1, e -> 1), 1)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySkyFish>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntitySkyFish> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntitySkyFish(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
-//        this.goalSelector.removeGoal(this.wander);
-//        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
-//        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-//        //this.setPathPriority(BlockPathTypes.OPEN, 0.5f);
-//        this.goalSelector.addGoal(2, this.attack);
-//        this.moveControl = new FreeMoveControl(this, () -> false);
-//        this.goalSelector.removeGoal(this.swimGoal);
-//        this.wander.setInterval(50);
-//        this.setNoGravity(true);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.moveControl = new FreeMoveControl(this, () -> false);
+        this.setNoGravity(true);
     }
 
     @Override
@@ -66,19 +63,49 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        super.applyAttributes();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestTargetHorizontal<>(this, Player.class, 5, true, true, player -> !this.isTamed());
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(SLAP).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(2)
+                .start(BEAM).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(4).radius(4)).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(SWIPE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(4).radius(4)).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .build();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestTargetHorizontal<>(this, Mob.class, 5, true, true, this.targetPred);
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(2, new SetRandomFlyingTarget<BaseMonster>()
+                        .flightTargetPredicate((entity, pos) -> {
+                            LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
+                            if (target == null) {
+                                target = entity.getTarget();
+                            }
+                            return target != null && target.distanceToSqr(pos) <= 11 * 11 && Math.abs(target.getY() - pos.y()) < 6;
+                        }), new MoveToWalkTarget<>())
+                .add(4, new Idle<>()).build();
+    }
+
+    @Override
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(new SetRandomHoverTarget<>(),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(50, 120))
+        );
+    }
+
+    @Override
+    protected boolean canFloatInWater() {
+        return false;
     }
 
     @Override
@@ -92,9 +119,25 @@ public class EntitySkyFish extends BaseMonster {
         }
     }
 
+    private boolean belowSoldid() {
+        BlockPos pos = this.blockPosition().below();
+        return this.level().getBlockState(pos).entityCanStandOn(this.level(), pos, this);
+    }
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return false;
+    }
+
     @Override
     public void travel(Vec3 vec) {
         this.handleFreeTravel(vec);
+    }
+
+    @Override
+    public int animationCooldown(@Nullable String anim) {
+        int diffAdd = this.difficultyCooldown();
+        return this.getRandom().nextInt(30) + 20 + diffAdd;
     }
 
     @Override
@@ -117,6 +160,11 @@ public class EntitySkyFish extends BaseMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public AnimationHandler<EntitySkyFish> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -153,45 +201,13 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public AnimationHandler<EntitySkyFish> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    private boolean belowSoldid() {
-        BlockPos pos = this.blockPosition().below();
-        return this.level().getBlockState(pos).entityCanStandOn(this.level(), pos, this);
-    }
-
-    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
-
-    //==========Water stuff
 
     @Override
     public boolean isPushedByFluid() {
         return false;
     }
-
-    @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
-        return false;
-    }
-
-//    @Override
-//    public boolean canBreatheUnderwater() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean rideableUnderWater() {
-//        return false;
-//    }
-//
-//    @Override
-//    public MobType getMobType() {
-//        return MobType.WATER;
-//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -202,9 +218,4 @@ public class EntitySkyFish extends BaseMonster {
     public String getSleepAnimation() {
         return STILL;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 12 / 16d, -2 / 16d);
-//    }
 }

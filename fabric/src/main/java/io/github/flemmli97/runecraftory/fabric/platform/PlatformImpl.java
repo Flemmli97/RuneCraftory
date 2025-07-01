@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -127,7 +128,7 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public CreativeModeTab.Builder tabBuilder() {
+    public CreativeModeTab.Builder tabBuilder(ResourceLocation... after) {
         return FabricItemGroup.builder();
     }
 

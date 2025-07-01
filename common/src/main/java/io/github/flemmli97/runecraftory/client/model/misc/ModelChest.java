@@ -22,9 +22,11 @@ public class ModelChest<T extends Entity & AnimatedEntity> extends EntityModel<T
     protected final ReloadableCache<ModelPartsContainer> model;
     protected final ReloadableCache<BedrockAnimations> anim;
 
+    public ModelPartsContainer.ModelPartExtended ridingPosition;
+
     public ModelChest() {
         super();
-        this.model = GeoModelManager.getInstance().getModel(LOCATION);
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> this.ridingPosition = model.getPart("ridingPos"));
         this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 

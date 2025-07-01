@@ -140,7 +140,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public void setLevel(int lvl) {
+    public void setXPLevel(int lvl) {
         this.entityData.set(MOB_LEVEL, Mth.clamp(lvl, 1, LibConstants.MAX_MONSTER_LEVEL));
     }
 
@@ -343,7 +343,7 @@ public class GateEntity extends Mob implements IBaseMob {
                             pos = pos.below();
                         if (!notSolid) {
                             if (mob instanceof BaseMonster)
-                                ((BaseMonster) mob).setLevel(levelRand);
+                                ((BaseMonster) mob).setXPLevel(levelRand);
                             entity.absMoveTo(x, y, z, this.level().random.nextFloat() * 360.0f, 0.0f);
                             if (Platform.INSTANCE.checkSpawnPosition(mob, serverLevel, MobSpawnType.SPAWNER) && this.level().noCollision(mob)) {
                                 mob.finalizeSpawn(serverLevel, this.level().getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.SPAWNER, null);
@@ -444,7 +444,7 @@ public class GateEntity extends Mob implements IBaseMob {
             element = EnumElement.FIRE;
         } else if (key.is(BiomeTags.IS_MOUNTAIN) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WIND;
-        } else if (key.is(BiomeTags.IS_OCEAN) && this.getRandom().nextFloat() < 0.5) {
+        } else if ((key.is(RunecraftoryTags.Biomes.IS_AQUATIC) || key.is(RunecraftoryTags.Biomes.IS_COLD_OVERWORLD)) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.WATER;
         } else if (key.is(RunecraftoryTags.Biomes.IS_SANDY) && this.getRandom().nextFloat() < 0.5) {
             element = EnumElement.EARTH;

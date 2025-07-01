@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
 import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
@@ -16,11 +15,8 @@ import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
@@ -71,11 +67,12 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
             this.rightLegBase = model.getPart("legRightConnectorBase");
             this.tailBase = model.getPart("tailBase");
             this.tail = model.getPart("tail");
-            this.bone1 = model.getPart("randomBone");
-            this.bone2 = model.getPart("randomBone2");
             this.heart = model.getPart("heartYAxis");
             this.ridingPositionBones = model.getPart("ridingPosBones");
             this.ridingPositionHeart = model.getPart("ridingPosHeart");
+
+            this.bone1 = model.getPart("randomBone");
+            this.bone2 = model.getPart("randomBone2");
         });
         this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
@@ -83,11 +80,10 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         if (this.restoreProgress != -1) {
-            int newAlpha = (int) (Math.min(1, this.restoreProgress) * 255);
-            this.translateTo(poseStack, this.body);
-            this.heart.render(poseStack, buffer, packedLight, packedOverlay, color);
-            this.spineBack.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(newAlpha, color));
-            this.spineFront.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(newAlpha, color));
+            this.renderWithParentTranslation(poseStack, this.heart, buffer, packedLight, packedOverlay, color);
+            int newAlpha = FastColor.ARGB32.color((int) (Math.min(1, this.restoreProgress) * 255), color);
+            this.renderWithParentTranslation(poseStack, this.spineBack, buffer, packedLight, packedOverlay, newAlpha);
+            this.renderWithParentTranslation(poseStack, this.spineFront, buffer, packedLight, packedOverlay, newAlpha);
         } else {
             this.body.render(poseStack, buffer, packedLight, packedOverlay, color);
         }
@@ -99,8 +95,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
             this.tail.visible = true;
             this.tailBase.visible = true;
             this.ribsSpine.visible = true;
-            this.translateTo(poseStack, this.body);
-            this.spineBack.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
+            this.renderWithParentTranslation(poseStack, this.spineBack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
             this.spineBack.visible = false;
             this.tail.visible = false;
             this.tailBase.visible = false;
@@ -108,23 +103,18 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
         } else {
             if (this.translucentBackRibs) {
                 this.ribsSpine.visible = true;
-                poseStack.pushPose();
-                this.translateTo(poseStack, this.body, this.spineBack);
-                this.ribsSpine.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
-                poseStack.popPose();
+                this.renderWithParentTranslation(poseStack, this.ribsSpine, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
                 this.ribsSpine.visible = false;
             }
             if (this.translucentTailBase) {
                 this.tail.visible = true;
                 this.tailBase.visible = true;
-                this.translateTo(poseStack, this.body, this.spineBack);
-                this.tailBase.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
+                this.renderWithParentTranslation(poseStack, this.tailBase, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
                 this.tail.visible = false;
                 this.tailBase.visible = false;
             } else if (this.translucentTail) {
                 this.tail.visible = true;
-                this.translateTo(poseStack, this.body, this.spineBack, this.tailBase);
-                this.tail.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
+                this.renderWithParentTranslation(poseStack, this.tail, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
                 this.tail.visible = false;
             }
         }
@@ -133,22 +123,22 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
         if (this.translucentSpineFront) {
             this.spineFront.visible = true;
             this.ribsBody.visible = true;
-            this.translateTo(poseStack, this.body);
-            this.spineFront.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
+            this.renderWithParentTranslation(poseStack, this.spineFront, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
             this.ribsBody.visible = false;
             this.spineFront.visible = false;
         } else if (this.translucentFrontRibs) {
             this.ribsBody.visible = true;
-            this.translateTo(poseStack, this.body, this.spineFront);
-            this.ribsBody.render(poseStack, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
+            this.renderWithParentTranslation(poseStack, this.ribsBody, buffer, packedLight, packedOverlay, FastColor.ARGB32.color(translucent, color));
             this.ribsBody.visible = false;
         }
         poseStack.popPose();
     }
 
-    private void translateTo(PoseStack stack, ModelPartsContainer.ModelPartExtended... parts) {
-        for (ModelPartsContainer.ModelPartExtended part : parts)
-            part.translateAndRotate(stack);
+    private void renderWithParentTranslation(PoseStack poseStack, ModelPartsContainer.ModelPartExtended part, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+        poseStack.pushPose();
+        part.translateAndRotateWithParents(poseStack, true);
+        part.render(poseStack, buffer, packedLight, packedOverlay, color);
+        poseStack.popPose();
     }
 
     @Override
@@ -184,20 +174,13 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
 
     @Override
     public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
-        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
-            EntityModel<?> model = lR.getModel();
-            if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
-                this.body.translateAndRotate(poseStack);
-                if (entity.hasBones()) {
-                    this.ridingPositionBones.translateAndRotateWithParents(poseStack);
-                } else {
-                    this.ridingPositionHeart.translateAndRotateWithParents(poseStack);
-                }
-                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
-                return true;
-            }
+        if (entity.hasBones()) {
+            this.ridingPositionBones.translateAndRotateWithParents(poseStack);
+        } else {
+            this.ridingPositionHeart.translateAndRotateWithParents(poseStack);
         }
-        return false;
+        ClientHandlers.translateRider(poseStack, entity, rider);
+        return true;
     }
 
     public void updateFromBones(EntitySkelefang skelefang) {

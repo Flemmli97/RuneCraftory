@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -11,6 +13,10 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -35,35 +41,42 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 public class EntityThunderbolt extends BossMonster {
 
+    private static final float RANGE_THRESHOLD = 0.7f;
+    private static final float FEINT_THRESHOLD = 0.35f;
+
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String BACK_KICK = BUILDER.add("back_kick", AnimationsBuilder.definition(0.64).marker("attack", 0.32));
-    public static final String LASER_X5 = BUILDER.add("laser_x5", AnimationsBuilder.definition(1.44).marker("attack", 1.2));
-    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(0.44).marker("attack", 0.28));
-    public static final String HORN_ATTACK = BUILDER.add("horn_attack", AnimationsBuilder.definition(0.44).marker("attack", 0.24));
     public static final String BACK_KICK_HORN = BUILDER.add("back_kick_horn", BACK_KICK);
+    public static final String LASER_X5 = BUILDER.add("laser_x5", AnimationsBuilder.definition(1.44).marker("attack", 1.2));
+    public static final String LASER_AOE = BUILDER.add("laser_aoe", LASER_X5);
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(0.44).marker("attack", 0.28));
+    public static final String INTERACT = BUILDER.add("interact", STOMP);
+    public static final String HORN_ATTACK = BUILDER.add("horn_attack", AnimationsBuilder.definition(0.44).marker("attack", 0.24));
     public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.64)
             .marker("attack_start", 0.44).marker("attack_end", 1.12));
     public static final String CHARGE_2 = BUILDER.add("charge_2", CHARGE);
     public static final String CHARGE_3 = BUILDER.add("charge_3", CHARGE);
-    public static final String LASER_AOE = BUILDER.add("laser_aoe", LASER_X5);
     public static final String LASER_KICK = BUILDER.add("laser_kick", AnimationsBuilder.definition(1.2).marker("attack", 0.32));
     public static final String LASER_KICK_2 = BUILDER.add("laser_kick_2", LASER_KICK);
-    public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.72).marker("attack", 0.36));
     public static final String LASER_KICK_3 = BUILDER.add("laser_kick_3", LASER_KICK);
+    public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.72).marker("attack", 0.36));
     public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(2).marker("neigh", 0.96));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final String NEIGH = BUILDER.add("neigh", AnimationsBuilder.definition(1.16).marker("neigh", 0.48));
-    public static final String INTERACT = BUILDER.add("interact", STOMP);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    private static final float RANGE_THRESHOLD = 0.7f;
-    private static final float FEINT_THRESHOLD = 0.35f;
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, EntityThunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimationState, EntityThunderbolt> kick = (anim, entity) -> {
@@ -154,87 +167,25 @@ public class EntityThunderbolt extends BossMonster {
                 entity.playSound(ModSounds.ENTITY_THUNDERBOLT_NEIGH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         });
     });
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityThunderbolt>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(BACK_KICK)
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, BACK_KICK) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_X5)
-//                    .withCondition((goal, target, previous) -> !goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_X5) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(STOMP)
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, STOMP) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 11),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(HORN_ATTACK)
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, HORN_ATTACK) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 9),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(CHARGE)
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, CHARGE) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_AOE)
-//                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_AOE) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 8),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(LASER_KICK)
-//                    .withCondition((goal, target, previous) -> goal.attacker.isEnraged() && goal.attacker.allowAnimation(previous, LASER_KICK) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 8),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(WIND_BLADE)
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, WIND_BLADE) && !goal.attacker.feintedDeath)
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 7),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityThunderbolt>nonRepeatableAttack(WIND_BLADE)
-//                    .withCondition((goal, target, previous) -> goal.attacker.allowAnimation(previous, WIND_BLADE) && !goal.attacker.feintedDeath
-//                            && (goal.attacker.getTarget() != null && goal.attacker.getTarget().getY() - goal.attacker.getY() > 4))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1.2, 7), e -> 35 + e.getRandom().nextInt(15))), 6),
-//
-//            WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(LASER_AOE)
-//                    .cooldown(e -> e.animationCooldown(LASER_AOE) + 30)
-//                    .withCondition((goal, target, previous) -> goal.attacker.afterFeint())
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(2, 1.2, 4), e -> 35 + e.getRandom().nextInt(15))), 4),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(CHARGE)
-//                    .cooldown(e -> e.animationCooldown(CHARGE) + 40)
-//                    .withCondition((goal, target, previous) -> goal.attacker.afterFeint())
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 20),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityThunderbolt>(LASER_KICK)
-//                    .cooldown(e -> e.animationCooldown(LASER_KICK) + 50)
-//                    .withCondition((goal, target, previous) -> goal.attacker.afterFeint())
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 17)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityThunderbolt>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1.1, 0.5)), 8),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(7, 1.1f, 0.2f)), 10),
-//            WeightedEntry.wrap(new IdleAction<EntityThunderbolt>(DoNothingRunner::new)
-//                    .withCondition(((goal, target) -> goal.attacker.afterFeint())), 6)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityThunderbolt> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (!this.level().isClientSide) {
                     this.setChargeDirection(null);
-//                    if (anim == null) {
-//                        AnimatedAction chainAnim = this.chainAnim(this.getAnimationHandler().getAnimation());
-//                        this.chargeAttackSuccess = false;
-//                        this.hornAttackSuccess = false;
-//                        boolean chain = !this.commanded;
-//                        this.commanded = false;
-//                        if (chain) {
-//                            if (chainAnim != null) {
-//                                this.getAnimationHandler().setAnimation(chainAnim);
-//                                return true;
-//                            }
-//                        }
-//                    }
-                    return false;
+                    if (anim != null) {
+                        if (anim.is(CHARGE, CHARGE_2, CHARGE_3))
+                            this.chargeAttackSuccess = false;
+                        if (anim.is(HORN_ATTACK))
+                            this.hornAttackSuccess = false;
+                    }
                 }
                 return false;
             });
-
     protected boolean feintedDeath, hornAttackSuccess, chargeAttackSuccess;
     private Vec3 chargeMotion;
-    private boolean commanded;
 
     public EntityThunderbolt(EntityType<? extends BossMonster> type, Level world) {
         super(type, world);
-//        this.maxUpStep = 1;
     }
 
     @Override
@@ -243,114 +194,156 @@ public class EntityThunderbolt extends BossMonster {
                 .setMusic(ModSounds.THUNDERBOLT_FIGHT.get());
     }
 
-    private boolean afterFeint() {
-        return !this.isTamed() && this.isEnraged() && this.feintedDeath;
-    }
-
     @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.31);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(Attributes.STEP_HEIGHT.value().getDefaultValue() + 1);
         super.applyAttributes();
     }
 
-//    @Override
-//    public void addGoal() {
-//        super.addGoal();
-//        this.goalSelector.removeGoal(this.wander);
-//        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
-//        this.goalSelector.addGoal(6, this.wander);
-//    }
-
     @Override
-    public double sprintSpeedThreshold() {
-        return 0.9;
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntityThunderbolt>create()
+                .start(MonsterBehaviourUtils.checkedAttack(BACK_KICK)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(LASER_X5)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.isEnraged() && !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 4).speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(11)
+                .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<EntityThunderbolt>builder(HORN_ATTACK)
+                        .start(BACK_KICK, m -> m.hornAttackSuccess).build())).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(9)
+                .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<EntityThunderbolt>builder(CHARGE)
+                        .start(CHARGE_2, m -> !m.chargeAttackSuccess).build())
+                ).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 6)
+                        .speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(9)
+                .start(MonsterBehaviourUtils.checkedAttack(LASER_AOE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.isEnraged() && !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 4).speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(8)
+                .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<EntityThunderbolt>builder(LASER_KICK)
+                        .start(LASER_KICK_2).build())).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.isEnraged() && !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(8)
+                .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.isEnraged() && !m.feintedDeath)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 7).speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(7)
+                .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.isEnraged() && !m.feintedDeath && (m.getTarget() != null && m.getTarget().getY() - m.getY() > 4))
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 4).speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(10)
+                // After feinting death only use those below
+                .start(MonsterBehaviourUtils.checkedAttack(LASER_AOE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityThunderbolt::afterFeint)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 4).speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(8)
+                .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<EntityThunderbolt>builder(CHARGE)
+                        .start(CHARGE_2, m -> !m.chargeAttackSuccess).chain(CHARGE_3).build())
+                ).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityThunderbolt::afterFeint)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().closeEnoughDist((e, t) -> 6)
+                        .speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(11)
+                .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<EntityThunderbolt>builder(LASER_KICK)
+                        .start(LASER_KICK_2).chain(LASER_KICK_3).build())).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityThunderbolt::afterFeint)
+                .prepare(new SetWalkTargetToAttackTarget<EntityThunderbolt>().speedMod((e, t) -> 1.2f))
+                .prepareOptional(new MoveToAttackTarget<>())
+                .end(12)
+                .build();
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(FEINT, DEFEAT, NEIGH))) && super.hurt(source, amount);
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(7, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTarget<>())
+                .add(10, new StrafeTarget<BaseMonster>().strafeDistance(8)).build();
     }
 
     @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(FEINT, DEFEAT);
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                new SetRandomWalkTarget<>().speedModifier(0.7f),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
+        );
     }
 
     @Override
-    public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT))
-            return;
-        super.push(x, y, z);
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("Feint", this.feintedDeath);
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.feintedDeath = compound.getBoolean("Feint");
     }
 
     @Override
-    public void handleAttack(AnimationState anim) {
-        BiConsumer<AnimationState, EntityThunderbolt> handler = ATTACK_HANDLER.get(anim.getID());
-        if (handler != null)
-            handler.accept(anim, this);
-    }
-
-    @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (anim.equals(STOMP)) {
-            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(1.7, -0.4, 1.7), this.getYRot(), 0, this.position());
-        } //else if (anim.is(CHARGE, CHARGE_2, CHARGE_3)) {
-        // return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-        //         .inflate(grow + 1), this.getYRot(), 0, this.position());
-        //} else
-        return super.calculateAttackAABB(anim, target, grow);
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.6;
-        double length = this.getBbWidth() * 1.5;
-        if (anim.equals(HORN_ATTACK)) {
-            width = this.getBbWidth() * 1.3;
-            length = this.getBbWidth() * 1.8;
+    public void setEnraged(boolean flag, boolean load) {
+        if (flag && !load) {
+            if (!this.isEnraged()) {
+                this.getAnimationHandler().setAnimation(NEIGH);
+                this.getNavigation().stop();
+            } else {
+                this.getAnimationHandler().setAnimation(DEFEAT);
+                this.getNavigation().stop();
+                this.bossInfo.setProgress(0);
+            }
         }
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+        super.setEnraged(flag, load);
     }
 
     @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.LASER5.get() : null))
-                return;
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(LASER_X5);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(STOMP);
-            else
-                this.getAnimationHandler().setAnimation(HORN_ATTACK);
-            this.commanded = true;
-        }
+    protected void updateBossBar() {
+        if (!this.feintedDeath)
+            this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * FEINT_THRESHOLD)) / (this.getMaxHealth() * (1 - FEINT_THRESHOLD)));
+        else
+            this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.HORSE_HURT;
+    protected boolean checkRage() {
+        if (this.getHealth() / this.getMaxHealth() < FEINT_THRESHOLD)
+            return !this.feintedDeath;
+        if (this.getHealth() / this.getMaxHealth() < RANGE_THRESHOLD)
+            return !this.isEnraged();
+        return false;
     }
 
     @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.HORSE_AMBIENT;
+    protected void fullyHeal() {
+        super.fullyHeal();
+        this.feintedDeath = false;
     }
 
-    @Override
-    public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
-    }
-
-    @Override
-    public double ridingSpeedModifier() {
-        return 1.5;
+    private boolean afterFeint() {
+        return !this.isTamed() && this.isEnraged() && this.feintedDeath;
     }
 
     @Override
@@ -401,6 +394,26 @@ public class EntityThunderbolt extends BossMonster {
         }
     }
 
+    @Override
+    public double sprintSpeedThreshold() {
+        return 0.9;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(FEINT, DEFEAT, NEIGH))) && super.hurt(source, amount);
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(FEINT, DEFEAT);
+    }
+
+    @Override
+    public double ridingSpeedModifier() {
+        return 1.5;
+    }
+
     protected void feintDeath() {
         this.feintedDeath = true;
         this.getAnimationHandler().setAnimation(FEINT);
@@ -412,6 +425,18 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
+    public boolean isAlive() {
+        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrent(FEINT, DEFEAT));
+    }
+
+    @Override
+    public void push(double x, double y, double z) {
+        if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT))
+            return;
+        super.push(x, y, z);
+    }
+
+    @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_2, CHARGE_3)) {
             return this.chargeMotion;
@@ -420,58 +445,84 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("Feint", this.feintedDeath);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.feintedDeath = compound.getBoolean("Feint");
-    }
-
-    @Override
-    public void setEnraged(boolean flag, boolean load) {
-        if (flag && !load) {
-            if (!this.isEnraged()) {
-                this.getAnimationHandler().setAnimation(NEIGH);
-                this.getNavigation().stop();
-            } else {
-                this.getAnimationHandler().setAnimation(DEFEAT);
-                this.getNavigation().stop();
-                this.bossInfo.setProgress(0);
-            }
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.is(STOMP)) {
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(1.7, -0.4, 1.7), this.getYRot(), 0, this.position());
+        } else if (anim.is(CHARGE, CHARGE_2, CHARGE_3)) {
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(grow + 1), this.getYRot(), 0, this.position());
         }
-        super.setEnraged(flag, load);
+        return super.calculateAttackAABB(anim, target, grow);
     }
 
     @Override
-    protected void updateBossBar() {
-        if (!this.feintedDeath)
-            this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * FEINT_THRESHOLD)) / (this.getMaxHealth() * RANGE_THRESHOLD));
-        else
-            this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.6;
+        double length = this.getBbWidth() * 1.5;
+        if (anim.is(HORN_ATTACK)) {
+            width = this.getBbWidth() * 1.3;
+            length = this.getBbWidth() * 1.8;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
-    protected boolean checkRage() {
-        if (this.getHealth() / this.getMaxHealth() < FEINT_THRESHOLD)
-            return !this.feintedDeath;
-        if (this.getHealth() / this.getMaxHealth() < RANGE_THRESHOLD)
-            return !this.isEnraged();
-        return false;
+    public int animationCooldown(String anim) {
+        int cooldown = super.animationCooldown(anim);
+        if (anim != null && this.feintedDeath) {
+            if (anim.equals(LASER_KICK) || anim.equals(LASER_AOE) || anim.equals(CHARGE))
+                cooldown += 40;
+        }
+        return cooldown;
     }
 
     @Override
-    protected void fullyHeal() {
-        super.fullyHeal();
-        this.feintedDeath = false;
+    public void handleAttack(AnimationState anim) {
+        BiConsumer<AnimationState, EntityThunderbolt> handler = ATTACK_HANDLER.get(anim.getID());
+        if (handler != null)
+            handler.accept(anim, this);
     }
 
     @Override
-    public boolean isAlive() {
-        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrent(FEINT, DEFEAT));
+    public AnimationHandler<EntityThunderbolt> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.LASER5.get() : null))
+                return;
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(LASER_X5);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(STOMP);
+            else
+                this.getAnimationHandler().setAnimation(HORN_ATTACK);
+        }
+    }
+
+    @Override
+    public boolean allowAnimation(String prev, String other) {
+        if (this.feintedDeath)
+            return true;
+        return super.allowAnimation(prev, other);
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.HORSE_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.HORSE_HURT;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
     }
 
     @Override
@@ -486,42 +537,20 @@ public class EntityThunderbolt extends BossMonster {
         }
     }
 
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 27 / 16d, -4 / 16d);
-//    }
+    @Override
+    public void playAngrySound() {
+    }
+
+    protected void setChargeDirection(Vec3 moveDirection) {
+        this.chargeMotion = moveDirection;
+        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.chargeMotion);
+    }
 
     @Override
-    public AnimationHandler<EntityThunderbolt> getAnimationHandler() {
-        return this.animationHandler;
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.VEC_3, motion -> this.chargeMotion = motion);
     }
-//
-//    @Override
-//    public boolean allowAnimation(String prev, AnimatedAction other) {
-//        if (!this.isTamed() && this.isEnraged() && this.feintedDeath) {
-//            return other.is(CHARGE, LASER_KICK, LASER_AOE);
-//        }
-//        if (prev.equals(CHARGE_2.getID()) || prev.equals(CHARGE_3.getID()))
-//            return !other.getID().equals(CHARGE.getID());
-//        if (prev.equals(LASER_KICK_2.getID()) || prev.equals(LASER_KICK_3.getID()))
-//            return !other.getID().equals(LASER_KICK.getID());
-//        if (prev.equals(BACK_KICK_HORN.getID()))
-//            return !other.getID().equals(HORN_ATTACK.getID());
-//        return super.allowAnimation(prev, other);
-//    }
-//
-//    public AnimatedAction chainAnim(AnimatedAction anim) {
-//        if (anim == null)
-//            return null;
-//        return switch (anim.getID()) {
-//            case "laser_kick" -> this.isEnraged() && this.feintedDeath ? LASER_KICK_2 : null;
-//            case "laser_kick_2" -> this.feintedDeath ? LASER_KICK_3 : null;
-//            case "horn_attack" -> this.hornAttackSuccess ? BACK_KICK_HORN : null;
-//            case "charge" -> this.chargeAttackSuccess ? null : CHARGE_2;
-//            case "charge_2" -> this.isEnraged() && !this.chargeAttackSuccess ? CHARGE_3 : null;
-//            default -> null;
-//        };
-//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -529,17 +558,7 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public void playAngrySound() {
-    }
-
-    protected void setChargeDirection(Vec3 moveDirection) {
-        this.chargeMotion = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, motion -> this.chargeMotion = motion);
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

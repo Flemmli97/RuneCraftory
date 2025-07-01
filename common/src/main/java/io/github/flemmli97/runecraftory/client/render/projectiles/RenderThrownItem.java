@@ -16,14 +16,6 @@ public class RenderThrownItem extends ItemProjectileRenderer<EntityThrownItem> {
     }
 
     @Override
-    public ItemStack getRenderItemStack(EntityThrownItem entity) {
-        ItemStack stack = entity.getItem();
-        if (stack.getItem() instanceof ItemProp prop)
-            return prop.clientItemStack();
-        return stack;
-    }
-
-    @Override
     public void render(EntityThrownItem entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         if (entity.isRotating()) {
@@ -37,5 +29,13 @@ public class RenderThrownItem extends ItemProjectileRenderer<EntityThrownItem> {
     @Override
     public Type getRenderType(EntityThrownItem entity) {
         return Type.NORMAL;
+    }
+
+    @Override
+    public ItemStack getRenderItemStack(EntityThrownItem entity) {
+        ItemStack stack = entity.getItem();
+        if (stack.getItem() instanceof ItemProp prop)
+            return prop.clientItemStack();
+        return stack;
     }
 }

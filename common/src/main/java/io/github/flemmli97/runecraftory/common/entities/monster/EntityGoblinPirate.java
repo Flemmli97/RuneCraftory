@@ -1,8 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -15,29 +21,27 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 public class EntityGoblinPirate extends EntityGoblin {
 
-    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder(EntityGoblin.BUILDER, LEAP, SLEEP);
     public static final String DOUBLE_SLASH = BUILDER.add("double_slash", AnimationsBuilder.definition(1).marker("attack", 0.4, 0.8));
     public static final String INTERACT = BUILDER.add("interact", DOUBLE_SLASH);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinPirate>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(DOUBLE_SLASH, e -> 0.8f), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityGoblinPirate>(LEAP)
-//                    .cooldown(e -> e.animationCooldown(LEAP))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinPirate>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityGoblinPirate> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityGoblinPirate> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGoblinPirate(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
+    }
+
+    public void quickAttack(Entity target) {
+        DynamicDamage.Builder source = new DynamicDamage.Builder(this).noKnockback().hurtResistant(1);
+        CombatUtils.mobAttack(this, target, source);
     }
 
     @Override
@@ -47,20 +51,22 @@ public class EntityGoblinPirate extends EntityGoblin {
     }
 
     @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
-                return;
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(LEAP);
-            else
-                this.getAnimationHandler().setAnimation(DOUBLE_SLASH);
-        }
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(DOUBLE_SLASH).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(6)
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(6)).prepareOptional(new MoveToAttackTarget<>())
+                .end(2)
+                .build();
     }
 
     @Override
-    public AnimationHandler<EntityGoblinPirate> getAnimationHandler() {
-        return this.animationHandler;
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(4, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
     }
 
     @Override
@@ -81,9 +87,21 @@ public class EntityGoblinPirate extends EntityGoblin {
             super.handleAttack(anim);
     }
 
-    public boolean quickAttack(Entity target) {
-        DynamicDamage.Builder source = new DynamicDamage.Builder(this).noKnockback().hurtResistant(1);
-        return CombatUtils.mobAttack(this, target, source);
+    @Override
+    public AnimationHandler<EntityGoblinPirate> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(LEAP);
+            else
+                this.getAnimationHandler().setAnimation(DOUBLE_SLASH);
+        }
     }
 
     @Override

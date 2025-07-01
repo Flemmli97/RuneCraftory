@@ -21,11 +21,11 @@ public class FirstKillCondition implements LootItemCondition {
     public static final FirstKillCondition INSTANCE = new FirstKillCondition();
     public static final MapCodec<FirstKillCondition> CODEC = MapCodec.unit(INSTANCE);
 
-    public static LootItemCondition.Builder get() {
-        return () -> INSTANCE;
+    private FirstKillCondition() {
     }
 
-    private FirstKillCondition() {
+    public static LootItemCondition.Builder get() {
+        return () -> INSTANCE;
     }
 
     @Override

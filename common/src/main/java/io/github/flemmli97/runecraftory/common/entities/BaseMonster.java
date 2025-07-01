@@ -73,6 +73,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -112,7 +113,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -144,10 +146,12 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttack
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
+import net.tslat.smartbrainlib.api.core.navigation.SmoothGroundNavigation;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
+import net.tslat.smartbrainlib.util.BrainUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -160,12 +164,12 @@ import java.util.function.Predicate;
 
 public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
 
+    public static final int MOVE_TICK_MAX = 3;
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> FRIEND_POINTS_SYNC = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
-
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
             if (this.getControllingPassenger() instanceof Player)
@@ -181,6 +185,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         return false;
     };
+    private final EntityProperties prop;
     public final Predicate<LivingEntity> defendPred = (e) -> {
         if (e != this) {
             if (this.getControllingPassenger() instanceof Player)
@@ -191,19 +196,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         return false;
     };
-    private final EntityProperties prop;
 
-//    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
+    //    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
 //    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
 //    public FloatGoal swimGoal = new FloatGoal(this);
 //    public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
 //    public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
 //    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 //    public TendCropsGoal farm = new TendCropsGoal(this);
-
-    private TargetPosition targetPosition;
-    private BlockPos seedInventory, cropInventory;
-
+    private final XpLevelHolder levelPair = new XpLevelHolder();
+    private final XpLevelHolder friendlyPoints = new XpLevelHolder();
+    private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
             if (this.hasPassenger(e) || !e.canBeSeenAsEnemy())
@@ -231,35 +234,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         return false;
     };
-
-    private int playDeathTick;
-
-    private final XpLevelHolder levelPair = new XpLevelHolder();
-
+    private final float defaultScale;
     protected int tamingTick = -1;
+    protected int feedTimeOut;
+    private TargetPosition targetPosition;
+    private BlockPos seedInventory, cropInventory;
+    private int playDeathTick;
     //These 2 values are not getting saved intentionally to prevent stuff like player dying or running away
     private int brushCount, loveAttCount;
     private Runnable delayedTaming;
-    protected int feedTimeOut;
     private boolean doJumping = false;
     private int foodBuffTick;
     private Player owner;
-
     private int tpCooldown;
     private Behaviour behaviour = Behaviour.WANDER;
-
-    private final XpLevelHolder friendlyPoints = new XpLevelHolder();
-
-    private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
-
     private BarnData assignedBarn;
 
     /**
      * For movement animation interpolation
      */
     private int moveTick;
-
-    public static final int MOVE_TICK_MAX = 3;
     private boolean initAnim;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
@@ -268,9 +262,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         //Client will get default value. This is intentional
         this.prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
-//        if (!level.isClientSide) {
-//            this.addGoal();
-//        }
+        this.defaultScale = (float) (type.getSpawnAABB(0, 0, 0).getYsize() / type.getHeight());
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -282,7 +274,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return map;
     }
 
-    //private Map<Attribute, Integer> attributeRandomizer = new HashMap<>();
+    public EntityProperties getProp() {
+        return this.prop;
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new SmoothGroundNavigation(this, level);
+    }
 
     protected void applyAttributes() {
         for (Map.Entry<Holder<Attribute>, Double> att : this.prop.getBaseValues().entrySet()) {
@@ -293,46 +292,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     this.setHealth(this.getMaxHealth());
             }
         }
-    }
-
-    public void restrictToBasedOnBehaviour(@Nullable BlockPos pos, boolean keepPos) {
-        if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignBarn()) {
-            if (this.level().dimension() == this.assignedBarn.pos.dimension())
-                this.restrictTo(this.assignedBarn.pos.pos(), this.assignedBarn.getSize() + 1);
-        }
-        if (pos == null)
-            return;
-        if (keepPos)
-            pos = this.getRestrictCenter();
-        if (this.behaviourState() == Behaviour.FARM) {
-            this.restrictTo(pos, MobConfig.farmRadius + 3);
-            if (this.level() instanceof ServerLevel serverLevel)
-                FarmlandHandler.get(serverLevel.getServer()).addIrrigationPOI(serverLevel, this.getUUID(), this.blockPosition());
-        } else if (this.behaviourState() == Behaviour.WANDER)
-            this.restrictTo(pos, 9);
-    }
-
-    private BlockPos nearestBlockEntityWithInv() {
-        BlockPos blockPos = this.getRestrictCenter();
-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-        int radius = (int) this.getRestrictRadius();
-        for (int y = -1; y < 2; y++)
-            for (int x = -radius; x <= radius; x++)
-                for (int z = -radius; z <= radius; z++) {
-                    mutableBlockPos.setWithOffset(blockPos, x, y, z);
-                    if (Platform.INSTANCE.matchingInventory(this.level().getBlockEntity(mutableBlockPos), s -> true)) {
-                        return mutableBlockPos.immutable();
-                    }
-                }
-        return null;
-    }
-
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestAttackableTargetGoal<>(this, Player.class, 5, true, true, player -> !this.isTamed());
-    }
-
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, true, this.targetPred);
     }
 
     @Override
@@ -363,7 +322,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
     }
 
-    //=====Client
     @Override
     public void handleEntityEvent(byte id) {
         if (id == 10) {
@@ -486,6 +444,39 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.tickBrain(this);
+        if (!(this.getControllingPassenger() instanceof Player) && this.getMoveControl().operation != MoveControl.Operation.WAIT
+                && this.getDeltaMovement().lengthSqr() > 0.004) {
+            double d0 = this.getMoveControl().getSpeedModifier();
+            MoveType move;
+            if (d0 > this.sprintSpeedThreshold()) {
+                move = MoveType.RUN;
+            } else if (d0 <= this.crouchSpeedThreshold()) {
+                move = MoveType.SNEAK;
+            } else {
+                move = MoveType.WALK;
+            }
+            if (this.isImmobile())
+                move = MoveType.NONE;
+            this.setMovingFlag(move);
+        } else {
+            this.setMovingFlag(MoveType.NONE);
+            this.setShiftKeyDown(false);
+            this.setSprinting(false);
+        }
+    }
+
+    public double crouchSpeedThreshold() {
+        return 0.6;
+    }
+
+    public double sprintSpeedThreshold() {
+        return 1;
+    }
+
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.put("MobLevel", this.xpLevel().save());
@@ -508,9 +499,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (this.assignedBarn != null && !this.assignedBarn.isInvalidFor(this))
             GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.assignedBarn.pos).resultOrPartial(RuneCraftory.LOGGER::error)
                     .ifPresent(t -> compound.put("AssignedBarnLocation", t));
-        //CompoundTag genes = new CompoundTag();
-        //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
-        //compound.put("Genes", genes);
     }
 
     @Override
@@ -550,68 +538,927 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")], true);
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
-        //CompoundTag genes = compound.getCompound("Genes");
-        //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
-    }
-
-    //=====Animation Stuff
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return !this.isTamed();
     }
 
     @Override
-    public boolean requiresCustomPersistence() {
-        return super.requiresCustomPersistence() || this.isTamed();
+    public List<? extends ExtendedSensor<? extends BaseMonster>> getSensors() {
+        return List.of(new NearbyPlayersSensor<>(),
+                new NearbyLivingEntitySensor<BaseMonster>().setPredicate((target, entity) -> entity.targetPred.test(target)),
+                new HurtBySensor<>());
     }
 
     @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.tickBrain(this);
-        // TODO !this.canBeControlledByRider() &&
-        if (this.getMoveControl().operation != MoveControl.Operation.WAIT
-                && this.getDeltaMovement().lengthSqr() > 0.004) {
-            double d0 = this.getMoveControl().getSpeedModifier();
-            MoveType move;
-            if (d0 > this.sprintSpeedThreshold()) {
-                move = MoveType.RUN;
-            } else if (d0 <= this.crouchSpeedThreshold()) {
-                move = MoveType.SNEAK;
-            } else {
-                move = MoveType.WALK;
+    public BrainActivityGroup<? extends BaseMonster> getCoreTasks() {
+        return BrainActivityGroup.coreTasks(
+                new FloatToSurfaceOfFluid<BaseMonster>().startCondition(BaseMonster::canFloatInWater),
+                new SetRandomLookTarget<>(),
+                new SetPlayerLookTarget<>(),
+                new SetTargetFromRider<>(),
+                new FollowEntityEx<BaseMonster, Player>()
+                        .startFollowingWhen((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 8. : 12)
+                        .ignoreIfTargetingTill(20)
+                        .stopFollowingWithin((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 2. : 6)
+                        .teleportToTargetAfter((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 20. : 24)
+                        .following(BaseMonster::getOwner).speedMod(1.05f)
+                        .startCondition(m -> m.behaviourState() == Behaviour.FOLLOW || m.behaviourState() == Behaviour.FOLLOW_DISTANCE),
+                new LookAtTargetSink(40, 80));
+    }
+
+    @Override
+    public BrainActivityGroup<? extends BaseMonster> getIdleTasks() {
+        return BrainActivityGroup.idleTasks(
+                new MoveToWalkTarget<>(),
+                new FirstApplicableBehaviour<>(
+                        new TargetOrRetaliate<BaseMonster>(),
+                        new SetMoveToRestriction<BaseMonster>(),
+                        this.getWanderBehaviour()
+                )
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
+        return BrainActivityGroup.fightTasks(
+                new InvalidateAttackTarget<BaseMonster>(),
+                new FirstApplicableBehaviour<>(
+                        (ExtendedBehaviour<BaseMonster>) this.getCooldownAI()
+                                .startCondition(e -> !e.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN))
+                                .stopIf(e -> e.getAnimationHandler().hasAnimation() || !BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN)),
+                        (ExtendedBehaviour<BaseMonster>) this.getCombatAI()
+                )
+        );
+    }
+
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return new Idle<>();
+    }
+
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return new Idle<>();
+    }
+
+    @Override
+    public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
+        Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
+        map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
+                .priority(10).behaviours(
+                        new FirstApplicableBehaviour<>(
+                                new SetMoveToRestriction<>(),
+                                new FarmCrops<>())
+                )
+        );
+        return map;
+    }
+
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                new SetRandomWalkTarget<>(),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
+        );
+    }
+
+    protected boolean canFloatInWater() {
+        return true;
+    }
+
+    @Override
+    protected Brain.Provider<?> brainProvider() {
+        return new SmartBrainProvider<>(this);
+    }
+
+    public int moveTick() {
+        return this.moveTick;
+    }
+
+    public float interpolatedMoveTick(float partialTicks) {
+        return Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) MOVE_TICK_MAX, 0, 1);
+    }
+
+    public MoveType getMoveFlag() {
+        return MoveType.values()[this.entityData.get(MOVE_FLAGS)];
+    }
+
+    public void setMovingFlag(MoveType type) {
+        this.entityData.set(MOVE_FLAGS, (byte) type.ordinal());
+    }
+
+    public Behaviour behaviourState() {
+        return this.behaviour;
+    }
+
+    public boolean isStaying() {
+        return this.behaviour == Behaviour.STAY;
+    }
+
+    public void setBehaviour(Behaviour behaviour) {
+        this.setBehaviour(behaviour, false);
+    }
+
+    private void setBehaviour(Behaviour behaviour, boolean load) {
+        this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
+        this.behaviour = behaviour;
+        if (!this.level().isClientSide)
+            this.updateAI(false, load);
+    }
+
+    private void updateAI(boolean forced, boolean load) {
+        if (forced || this.isTamed()) {
+            this.getNavigation().stop();
+            if (this.behaviourState() != Behaviour.FARM) {
+                this.seedInventory = null;
+                this.cropInventory = null;
+//                if (this.behaviourState() != Behaviour.STAY) {
+//                    this.targetSelector.addGoal(1, this.targetPlayer);
+//                    this.targetSelector.addGoal(2, this.targetMobs);
+//                    this.targetSelector.addGoal(0, this.hurt);
+//                }
+//                this.goalSelector.removeGoal(this.farm);
+                if (this.level() instanceof ServerLevel serverLevel)
+                    FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
-            if (this.isImmobile())
-                move = MoveType.NONE;
-            this.setMovingFlag(move);
-            this.updateMoveAnimation();
-        } else {
-            this.setMovingFlag(MoveType.NONE);
-            this.setShiftKeyDown(false);
-            this.setSprinting(false);
+//            this.wander.setInterval(120);
+            this.getBrain().setActiveActivityIfPossible(Activity.IDLE);
+            switch (this.behaviourState()) {
+                case WANDER_HOME -> {
+                    if (this.getOwner() != null) {
+                        if (this.findNearestBarn(load)) {
+                            this.restrictToBasedOnBehaviour(null, load);
+                            BlockPos pos = this.assignedBarn.pos.pos();
+                            if (this.level().dimension() == this.assignedBarn.pos.dimension())
+                                TeleportSpell.safeTeleportTo(this, pos.getX(), pos.getY(), pos.getZ());
+                            else {
+                                ServerLevel serverLevel = this.getServer().getLevel(this.assignedBarn.pos.dimension());
+                                if (serverLevel != null)
+                                    TeleportSpell.changeDimension(this, serverLevel, pos.getX(), pos.getY(), pos.getZ());
+                            }
+                        } else {
+                            if (this.tickCount > 20)
+                                this.getOwner().displayClientMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), false);
+                            this.setBehaviour(Behaviour.WANDER);
+                        }
+//                        this.goalSelector.addGoal(6, this.wander);
+//                        this.wander.setInterval(40);
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                    }
+                }
+                case FOLLOW -> {
+                    PlayerData data = Platform.INSTANCE.getPlayerData(this.getOwner());
+                    boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
+                    if (party) {
+                        this.clearRestriction();
+//                        this.goalSelector.removeGoal(this.wander);
+                        if (this.getOwner() != null)
+                            data.party.addPartyMember(this);
+                    }
+                    this.getBrain().setActiveActivityIfPossible(ModActivities.FOLLOW.get());
+                }
+                case FOLLOW_DISTANCE -> {
+                    this.clearRestriction();
+//                    this.goalSelector.removeGoal(this.wander);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
+                }
+                case STAY -> {
+//                    this.goalSelector.addGoal(6, this.wander);
+//                    this.targetSelector.removeGoal(this.targetPlayer);
+//                    this.targetSelector.removeGoal(this.targetMobs);
+//                    this.targetSelector.removeGoal(this.hurt);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
+                }
+                case WANDER -> {
+                    this.restrictToBasedOnBehaviour(this.blockPosition(), load);
+//                    this.goalSelector.addGoal(6, this.wander);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                }
+                case FARM -> {
+                    this.restrictToBasedOnBehaviour(this.blockPosition(), load);
+//                    this.goalSelector.addGoal(3, this.farm);
+//
+//                    this.targetSelector.removeGoal(this.targetPlayer);
+//                    this.targetSelector.removeGoal(this.targetMobs);
+//                    this.targetSelector.removeGoal(this.hurt);
+
+//                    this.goalSelector.removeGoal(this.wander);
+                    this.getBrain().setActiveActivityIfPossible(Activity.WORK);
+                    BlockPos nearestInv = this.nearestBlockEntityWithInv();
+                    this.setSeedInventory(nearestInv);
+                    this.setCropInventory(nearestInv);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                }
+            }
         }
     }
 
-    public double crouchSpeedThreshold() {
-        return 0.6;
-    }
-
-    public double sprintSpeedThreshold() {
-        return 1;
+    public void restrictToBasedOnBehaviour(@Nullable BlockPos pos, boolean keepPos) {
+        if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignBarn()) {
+            if (this.level().dimension() == this.assignedBarn.pos.dimension())
+                this.restrictTo(this.assignedBarn.pos.pos(), 1);
+        }
+        if (pos == null)
+            return;
+        if (keepPos)
+            pos = this.getRestrictCenter();
+        if (this.behaviourState() == Behaviour.FARM) {
+            this.restrictTo(pos, MobConfig.farmRadius + 3);
+            if (this.level() instanceof ServerLevel serverLevel)
+                FarmlandHandler.get(serverLevel.getServer()).addIrrigationPOI(serverLevel, this.getUUID(), this.blockPosition());
+        } else if (this.behaviourState() == Behaviour.WANDER)
+            this.restrictTo(pos, 9);
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(RandomSource source, DifficultyInstance difficulty) {
+    public float getRestrictRadius() {
+        if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignedBarn != null && this.level().dimension() == this.assignedBarn.pos.dimension()) {
+            return this.assignedBarn.getSize() + 1.5f;
+        }
+        return super.getRestrictRadius();
+    }
+
+    public void handleFreeTravel(Vec3 vec) {
+        if (this.shouldFreezeTravel()) {
+            this.xxa = 0;
+            this.yya = 0;
+            this.zza = 0;
+            return;
+        }
+        if (this.getControllingPassenger() instanceof Player player) {
+            this.handlePlayerInput(player, true, this::freeTravel);
+        } else {
+            this.freeTravel(vec);
+        }
+    }
+
+    private void freeTravel(Vec3 vec) {
+        boolean currentNophysics = this.noPhysics;
+        if (!this.isAlive() || this.playDeath()) {
+            this.noPhysics = false;
+            vec = Vec3.ZERO;
+        }
+        this.moveRelative(this.getSpeed() * 0.2f, vec);
+        this.move(MoverType.SELF, this.getDeltaMovement());
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.91));
+        this.noPhysics = currentNophysics;
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
-        this.populateDefaultEquipmentSlots(this.getRandom(), difficulty);
-        this.setLevel(Mth.clamp(this.xpLevel().getLevel(), this.prop.minLevel, LibConstants.MAX_MONSTER_LEVEL));
-        //for(Attribute att : this.prop.getAttributeGains().keySet())
-        //    this.attributeRandomizer.put(att, this.rand.nextInt(5)-2);
-        return spawnData;
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getControllingPassenger() instanceof Player || this.playDeath() || this.tamingTick > 0;
+    }
+
+    @Override
+    protected float getWaterSlowDown() {
+        return 0.83F;
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.shouldFreezeTravel()) {
+            this.xxa = 0;
+            this.yya = 0;
+            this.zza = 0;
+            return;
+        }
+        if (this.getControllingPassenger() instanceof Player player) {
+            this.handlePlayerInput(player, this.isNoGravity(), this::handleLandTravel);
+        } else {
+            this.handleLandTravel(vec);
+        }
+    }
+
+    public boolean shouldFreezeTravel() {
+        return false;
+    }
+
+    protected void handlePlayerInput(Player player, boolean hovers, Consumer<Vec3> cons) {
+        if (this.getAnimationHandler().hasAnimation()) {
+            this.setMovingFlag(MoveType.NONE);
+            this.setSprinting(false);
+            cons.accept(Vec3.ZERO);
+            this.calculateEntityAnimation(false);
+            return;
+        }
+        if (!this.isControlledByLocalInstance()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setDoJumping(false);
+            this.calculateEntityAnimation(false);
+            return;
+        }
+        if (!this.level().isClientSide) {
+            if (this.adjustRotFromRider(player)) {
+                this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
+                this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
+            }
+            this.yBodyRot = this.getYRot();
+            this.yHeadRot = this.yBodyRot;
+        }
+        // For info: Vanilla speed has a constant 0.98 modifier
+        double attrSpeed = !this.onGround() && this.getAttributes().hasAttribute(Attributes.FLYING_SPEED) ? this.getAttributeValue(Attributes.FLYING_SPEED) : this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        float speed = (float) (attrSpeed / 1.3 * this.ridingSpeedModifier());
+        float strafing = (player.xxa / 0.98f) * speed * 0.8f;
+        if (player.xxa < 0)
+            strafing *= -1;
+        float forward = (player.zza / 0.98f) * speed;
+        if (player.zza < 0)
+            forward *= -0.5f;
+        float vertical = 0;
+
+        if (hovers && forward > 0) {
+            vertical = (float) Math.min(0, player.getLookAngle().y + 0.45) * speed;
+            if (player.getXRot() > 85)
+                forward = 0;
+            else if (vertical < 0)
+                forward = (float) Math.sqrt(forward * forward - vertical * vertical);
+        }
+
+        if (this.doJumping()) {
+            if (this.onGround() && !this.isFlyingEntity()) {
+                this.hasImpulse = true;
+                this.jumpFromGround();
+                if (forward > 0.0f) {
+                    float x = -Mth.sin(this.getYRot() * Mth.DEG_TO_RAD);
+                    float z = Mth.cos(this.getYRot() * Mth.DEG_TO_RAD);
+                    this.setDeltaMovement(this.getDeltaMovement().add(0.3 * x, 0, 0.3 * z));
+                }
+            } else if (this.isFlyingEntity()) {
+                vertical = speed * 0.7f;
+                if (this.getDeltaMovement().y() < vertical) {
+                    this.setDeltaMovement(new Vec3(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1, this.getDeltaMovement().z));
+                }
+            }
+        }
+
+        this.setSpeed(speed);
+        MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
+        this.setMovingFlag(type);
+        this.setSprinting(type == MoveType.RUN);
+        cons.accept(new Vec3(strafing, vertical, forward));
+
+        this.setDoJumping(false);
+        this.calculateEntityAnimation(false);
+    }
+
+    public void handleLandTravel(Vec3 vec) {
+        if (!this.isAlive() || this.playDeath()) {
+            vec = Vec3.ZERO;
+        }
+        super.travel(vec);
+    }
+
+    public void setDoJumping(boolean jump) {
+        this.doJumping = jump;
+    }
+
+    public boolean adjustRotFromRider(LivingEntity rider) {
+        return true;
+    }
+
+    private float rotateClamped(float current, float target, float maxChange) {
+        float f = Mth.degreesDifference(current, target);
+        float g = Mth.clamp(f, -maxChange, maxChange);
+        return current + g;
+    }
+
+    public double ridingSpeedModifier() {
+        return 1.3;
+    }
+
+    public boolean doJumping() {
+        return this.doJumping;
+    }
+
+    protected Vec3 directionToLookAt() {
+        return this.getAnimationHandler().hasAnimation() && this.targetPosition != null ? this.targetPosition
+                .asVec(this.position()).subtract(this.position()) : null;
+    }
+
+    protected float[] targetLookClamp() {
+        return new float[]{60, 30};
+    }
+
+    // "Disable" this as we don't use it and it will mess with the AI check
+    @Override
+    protected AABB getAttackBoundingBox() {
+        return this.getBoundingBox();
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        return CombatUtils.mobAttack(this, entity, this.damageSourceAttack());
+    }
+
+    public DynamicDamage.Builder damageSourceAttack() {
+        return new DynamicDamage.Builder(this).hurtResistant(5);
+    }
+
+    public int animationCooldown(@Nullable String anim) {
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 25 + diffAdd;
+        return this.getRandom().nextInt(20) + 15 + diffAdd;
+    }
+
+    public int difficultyCooldown() {
+        int diffAdd = 12;
+        Difficulty diff = this.level().getDifficulty();
+        if (this.level().getDifficulty() == Difficulty.HARD)
+            diffAdd = 0;
+        else if (diff == Difficulty.NORMAL)
+            diffAdd = 7;
+        return diffAdd;
+    }
+
+    @Override
+    public LivingEntity getTarget() {
+        LivingEntity brainTarget = BrainUtils.getTargetOfEntity(this);
+        return brainTarget != null ? brainTarget : super.getTarget();
+    }
+
+    public boolean attackOtherTamedMobs() {
+        return false;
+    }
+
+    public void setupAttack(AnimationDefinition anim) {
+        if (this.getTarget() != null) {
+            this.setTargetPosition(this.getTarget());
+        }
+    }
+
+    public void handleAttack(AnimationState anim) {
+        if (anim.is(this.getDeathAnimation(), this.getSleepAnimation()))
+            return;
+        this.getNavigation().stop();
+        if (anim.isAt("attack")) {
+            this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
+        }
+    }
+
+    @Override
+    public TargetPosition getTargetPosition() {
+        return this.targetPosition;
+    }
+
+    public void setTargetPosition(LivingEntity target) {
+        this.setTargetPosition(TargetPosition.of(target));
+    }
+
+    public void setTargetPosition(TargetPosition position) {
+        this.targetPosition = position;
+        if (!this.level().isClientSide)
+            S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
+    }
+
+    @Nullable
+    public Vec3 tryGetTargetPosition(LivingEntity target) {
+        if (this.getTargetPosition() != null)
+            return this.getTargetPosition()
+                    .asVec(this.position());
+        return target != null ? target.position() : null;
+    }
+
+    public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
+        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.tryGetTargetPosition(target), 0);
+        this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
+                entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
+        if (!this.level().isClientSide)
+            S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
+    }
+
+    public boolean isInAttackBox(Entity entity, String animation) {
+        OrientedBoundingBox aabb = this.prepareAttackBox(animation, entity, -0.15, false);
+        return aabb.intersects(entity.getBoundingBox());
+    }
+
+    @Override
+    public OrientedBoundingBox prepareAttackBox(String anim, Entity target, double grow, boolean debug) {
+        OrientedBoundingBox obb = this.calculateAttackAABB(this.getAnimationHandler().createDefaulted(anim),
+                target != null ? target.position() : null, grow);
+        if (debug)
+            S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTEMPT, this);
+        return obb;
+    }
+
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, @Nullable Vec3 target, double grow) {
+        float yRot = this.getYRot();
+        float xRot = this.getXRot();
+        if (this.getControllingPassenger() instanceof Player player) {
+            yRot = player.getYRot();
+            xRot = player.getXRot();
+        } else if (target != null) {
+            Vec3 dir = target.subtract(this.position()).normalize();
+            float[] xYRot = MathsHelper.YXRotFrom(dir);
+            yRot = xYRot[0];
+            xRot = -xYRot[1];
+        }
+        double off = this.getBbHeight() * 0.5;
+        return new OrientedBoundingBox(this.attackBB(anim)
+                .inflate(grow, 0, grow)
+                .move(0, -off, grow), yRot, Mth.clamp(xRot, -15, 15), this.position().add(0, off, 0));
+    }
+
+    public AABB attackBB(AnimationState anim) {
+        double range = 1;
+        return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.vehicleDependentHeight() + 0.02, range);
+    }
+
+    public final double vehicleDependentHeight() {
+        double height = this.getBbHeight();
+        Entity entity = this.getVehicle();
+        if (entity != null) {
+            height = this.getAttackBoundingBox().maxY - entity.getBoundingBox().minY;
+        }
+        return height;
+    }
+
+    public abstract void handleRidingCommand(int command);
+
+    public boolean allowAnimation(@Nullable String prev, String other) {
+        return true;
+    }
+
+    @Override
+    public void setLastHurtByMob(@Nullable LivingEntity livingBase) {
+        if (this.isDeadOrDying() && this.deathTime > 0)
+            return;
+        super.setLastHurtByMob(livingBase);
+    }
+
+    @Override
+    public boolean canBeSeenAsEnemy() {
+        return super.canBeSeenAsEnemy() && !this.playDeath();
+    }
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        if (this.isFlyingEntity() || this.getMoveControl() instanceof FlyingMoveControl) {
+            return false;
+        }
+        return super.causeFallDamage(fallDistance, multiplier, source);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof Player player && player.getUUID().equals(this.getOwnerUUID())
+                && !player.isShiftKeyDown()) {
+            return false;
+        }
+        if (this.playDeath() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))
+            return false;
+        return (source.getEntity() == null || this.canAttackFrom(source.getEntity().position())) && super.hurt(source, amount);
+    }
+
+    private boolean canAttackFrom(Vec3 pos) {
+        if (this.isTamed())
+            return true;
+        boolean result = this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
+        if (!result) {
+            this.level().playSound(null, this, SoundEvents.ANVIL_PLACE, this.getSoundSource(), 0.7f, 0.9f);
+            if (this.level() instanceof ServerLevel serverLevel) {
+                for (int i = 0; i < 6; i++)
+                    serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getRandomX(1.2), this.getRandomY(), this.getRandomZ(1.2), 0, 0, 0, 0, 0);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        super.actuallyHurt(source, damageAmount);
+        if (!this.isTamed() && source instanceof DynamicDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == EnumElement.LOVE)
+            this.loveAttCount = Math.min(100, this.loveAttCount + 1);
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.isTamed() && this.getHealth() <= 0) {
+            this.setHealth(0.01f);
+            this.setPlayDeath(true);
+        }
+    }
+
+    @Override
+    public boolean canBeAttackedBy(LivingEntity entity) {
+        if (entity instanceof Mob m && entity.getType().is(RunecraftoryTags.EntityTypes.TAMED_MONSTER_IGNORE) && this.getTarget() != m && m.getLastHurtByMob() != this)
+            return !this.isTamed();
+        return true;
+    }
+
+    @Override
+    public Predicate<LivingEntity> validTargetPredicate() {
+        return this.hitPred;
+    }
+
+    @Override
+    public void die(DamageSource cause) {
+        if (!this.level().isClientSide) {
+            if (this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
+                this.getOwner().displayClientMessage(this.getCombatTracker().getDeathMessage(), false);
+            if (this.getServer() != null && this.getOwnerUUID() != null) {
+                WorldHandler.get(this.getServer())
+                        .removeMonsterFromPlayer(this.getOwnerUUID(), this);
+                this.assignedBarn = null;
+            }
+            this.getAnimationHandler().setAnimation(null);
+            List<CombatEntry> entries = ((CombatTrackerAccessor) this.getCombatTracker()).getEntries();
+            Map<UUID, CombatRecord> merged = new HashMap<>();
+            entries.forEach(e -> {
+                if (e.source().getEntity() instanceof ServerPlayer player) {
+                    merged.compute(player.getUUID(), (id, o) -> o == null ? new CombatRecord(player, e.source(), e.damage())
+                            : new CombatRecord(player, e.source(), o.totalDamage() + e.damage())
+                    );
+                }
+            });
+            merged.values().forEach(rec -> this.onDeathDamageRecord(rec.player, rec.lastSource, rec.totalDamage));
+            this.ejectPassengers();
+        }
+        super.die(cause);
+    }
+
+    @Override
+    protected void tickDeath() {
+        if (!this.level().isClientSide && this.deathTime == 0) {
+            this.playDeathAnimation(false);
+            this.getNavigation().stop();
+        }
+        ++this.deathTime;
+        if (this.deathTime == (this.maxDeathTime() - 5)) {
+            if (!this.level().isClientSide && this.getLastHurtByMob() != null) {
+                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.xpLevel().getLevel());
+            }
+        }
+        if (this.deathTime >= this.maxDeathTime()) {
+            if (!this.level().isClientSide)
+                this.remove(RemovalReason.KILLED);
+            for (int i = 0; i < 20; ++i) {
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                this.level().addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+            }
+        }
+    }
+
+    public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
+        if (damage > this.getMaxHealth() * 0.05) {
+            Platform.INSTANCE.getPlayerData(player).increaseMobFrom(this);
+        }
+    }
+
+    protected void playDeathAnimation(boolean load) {
+        if (this.getDeathAnimation() != null) {
+            this.getAnimationHandler().setAnimation(this.getDeathAnimation());
+            if (load && this.level().isClientSide) {
+                AnimationState anim = this.getAnimationHandler().getAnimation();
+                while (!anim.done(0))
+                    anim.tick();
+            }
+        }
+    }
+
+    public int maxDeathTime() {
+        return 20;
+    }
+
+    public String getDeathAnimation() {
+        return null;
+    }
+
+    public boolean playDeath() {
+        return this.entityData.get(PLAY_DEATH_STATE);
+    }
+
+    public int getPlayDeathTick() {
+        return this.playDeathTick;
+    }
+
+    public void setPlayDeath(boolean flag) {
+        this.entityData.set(PLAY_DEATH_STATE, flag);
+        if (flag) {
+            if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
+                this.getOwner().displayClientMessage(this.getKnockoutMessage(), false);
+            this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
+                    .forEach(m -> BrainUtils.setTargetOfEntity(m, null));
+            this.getNavigation().stop();
+            this.playDeathAnimation(false);
+            this.setMovingFlag(MoveType.NONE);
+            this.setShiftKeyDown(false);
+            this.setSprinting(false);
+            this.unRide();
+        } else {
+            this.getAnimationHandler().setAnimation(null);
+        }
+    }
+
+    private Component getKnockoutMessage() {
+        DamageSource source = this.getLastDamageSource();
+        if (source != null && source.getEntity() != null)
+            return Component.translatable("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
+        return Component.translatable("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+    }
+
+    public boolean doStartRide(ServerPlayer player) {
+        if (this.rideable()) {
+            player.startRiding(this);
+            return true;
+        }
+        player.displayClientMessage(Component.translatable("runecraftory.monster.interact.ride.no"), false);
+        return false;
+    }
+
+    @Override
+    protected void addPassenger(Entity passenger) {
+        this.getNavigation().stop();
+        this.setDeltaMovement(Vec3.ZERO);
+        this.setYya(0);
+        this.setZza(0);
+        this.setXxa(0);
+        BrainUtils.setTargetOfEntity(this, null);
+        super.addPassenger(passenger);
+    }
+
+    @Override
+    protected void removePassenger(Entity passenger) {
+        if (passenger == this.getOwner())
+            this.setBehaviour(Behaviour.FOLLOW);
+        super.removePassenger(passenger);
+    }
+
+    @Override
+    public boolean rideable() {
+        return this.prop.rideable;
+    }
+
+    @Override
+    public LivingEntity getControllingPassenger() {
+        if (this.getFirstPassenger() instanceof Player player) {
+            if (this.isTamed() && this.rideable())
+                return player;
+            return null;
+        }
+        return super.getControllingPassenger();
+    }
+
+    @Override
+    public TagKey<Item> tamingItem() {
+        return RunecraftoryTags.tamingTag(this.getType());
+    }
+
+    @Override
+    public float tamingChance() {
+        return this.prop.tamingChance;
+    }
+
+    @Override
+    public boolean isTamed() {
+        return this.getOwnerUUID() != null;
+    }
+
+    protected void tameEntity(Player owner) {
+        if (!this.isAlive())
+            return;
+        this.restrictTo(this.blockPosition(), -1);
+        this.setOwner(owner);
+        this.navigation.stop();
+        BrainUtils.setTargetOfEntity(this, null);
+        this.level().broadcastEntityEvent(this, (byte) 10);
+        this.updater.setLastUpdateDay(WorldUtils.day(this.level()));
+        if (Platform.INSTANCE.getPlayerData(owner).party.isPartyFull())
+            this.setBehaviour(Behaviour.WANDER);
+        else
+            this.setBehaviour(Behaviour.FOLLOW);
+        this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
+                e -> e != this && e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
+                        && e.getTarget() == this).forEach(e -> {
+            BrainUtils.setTargetOfEntity(e, null);
+            if (e.getLastHurtByMob() == this)
+                e.setLastHurtByMob(null);
+        });
+        this.setLastHurtByMob(null);
+        if (owner instanceof ServerPlayer serverPlayer) {
+            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+            data.entityStatsTracker.tameEntity(this);
+            ModCriteria.TAME_MONSTER_TRIGGER.get().trigger(serverPlayer, this, data.entityStatsTracker);
+            LevelCalc.levelSkill(data, EnumSkills.TAMING, 10);
+            QuestHandler.getData(serverPlayer).trigger(TamingTracker.KEY, this);
+        }
+        if (this.getServer() != null) {
+            this.assignBarn();
+        }
+    }
+
+    protected float tamingMultiplier(ItemStack stack) {
+        boolean flag = stack.is(this.tamingItem());
+        return flag ? 2 : 1;
+    }
+
+    protected void untameEntity() {
+        this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
+                e -> e != this && e.getTarget() == this).forEach(e -> {
+            BrainUtils.setTargetOfEntity(e, null);
+            if (e.getLastHurtByMob() == this)
+                e.setLastHurtByMob(null);
+        });
+        if (this.getServer() != null && this.getOwnerUUID() != null) {
+            WorldHandler.get(this.getServer())
+                    .removeMonsterFromPlayer(this.getOwnerUUID(), this);
+            if (this.getOwner() != null) {
+                Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+            } else {
+                WorldHandler.get(this.getServer()).toRemovePartyMember(this);
+            }
+            this.assignedBarn = null;
+        }
+        this.setOwner(null);
+        this.setLastHurtByMob(null);
+        if (this.playDeath())
+            this.heal(this.getMaxHealth());
+        this.setBehaviour(Behaviour.WANDER);
+        this.updateAI(true, false);
+        BrainUtils.setTargetOfEntity(this, null);
+        this.getNavigation().stop();
+    }
+
+    private void playTameEffect(boolean play) {
+        SimpleParticleType particle = ParticleTypes.HEART;
+        int amount = 13;
+        if (!play) {
+            particle = ParticleTypes.SMOKE;
+            amount += 9;
+        }
+        for (int i = 0; i < amount; ++i) {
+            double d0 = this.random.nextGaussian() * 0.02;
+            double d2 = this.random.nextGaussian() * 0.02;
+            double d3 = this.random.nextGaussian() * 0.02;
+            this.level().addParticle(particle, true, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
+        }
+    }
+
+    private boolean findNearestBarn(boolean load) {
+        if (load)
+            return this.assignBarn();
+        BarnData nearest = WorldHandler.get(this.getServer()).findNearestFittingBarn(this, 5);
+        if (nearest != null) {
+            if (this.assignedBarn != null && this.assignedBarn != nearest) {
+                this.assignedBarn.removeMonster(this);
+            }
+            this.assignedBarn = nearest;
+            this.assignedBarn.addMonster(this, this.getProp().size);
+            return true;
+        } else
+            return this.assignBarn();
+    }
+
+    public BarnData getAssignedBarn() {
+        this.assignBarn();
+        return this.assignedBarn;
+    }
+
+    private boolean assignBarn() {
+        if (!this.isAlive())
+            return false;
+        if (this.assignedBarn == null || this.assignedBarn.isInvalidFor(this))
+            this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
+        if (this.assignedBarn != null) {
+            this.assignedBarn.addMonster(this, this.getProp().size);
+            return true;
+        }
+        return false;
+    }
+
+    public BlockPos getSeedInventory() {
+        if (this.seedInventory != null && !this.isWithinRestriction(this.seedInventory)) {
+            return null;
+        }
+        return this.seedInventory;
+    }
+
+    public void setSeedInventory(BlockPos seedInventory) {
+        this.seedInventory = seedInventory;
+    }
+
+    public BlockPos getCropInventory() {
+        if (this.cropInventory != null && !this.isWithinRestriction(this.cropInventory)) {
+            return null;
+        }
+        return this.cropInventory;
+    }
+
+    public void setCropInventory(BlockPos cropInventory) {
+        this.cropInventory = cropInventory;
+    }
+
+    private BlockPos nearestBlockEntityWithInv() {
+        BlockPos blockPos = this.getRestrictCenter();
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        int radius = (int) this.getRestrictRadius();
+        for (int y = -1; y < 2; y++)
+            for (int x = -radius; x <= radius; x++)
+                for (int z = -radius; z <= radius; z++) {
+                    mutableBlockPos.setWithOffset(blockPos, x, y, z);
+                    if (Platform.INSTANCE.matchingInventory(this.level().getBlockEntity(mutableBlockPos), s -> true)) {
+                        return mutableBlockPos.immutable();
+                    }
+                }
+        return null;
     }
 
     @Override
@@ -685,6 +1532,78 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return InteractionResult.PASS;
     }
 
+    public void onBrushing() {
+        Holder<Attribute> toIncrease = switch (this.random.nextInt(4)) {
+            case 1 -> ModAttributes.DEFENCE.asHolder();
+            case 2 -> ModAttributes.MAGIC_ATTACK.asHolder();
+            case 3 -> ModAttributes.MAGIC_DEFENCE.asHolder();
+            default -> Attributes.ATTACK_DAMAGE;
+        };
+        AttributeInstance inst = this.getAttribute(toIncrease);
+        if (inst != null) {
+            AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_BRUSH_MODIFIER);
+            double inc = 1;
+            if (mod != null)
+                inc += mod.amount();
+            inst.removeModifier(LibConstants.MONSTER_BRUSH_MODIFIER);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_BRUSH_MODIFIER, inc, AttributeModifier.Operation.ADD_VALUE));
+        }
+    }
+
+    @Override
+    public XpLevelHolder xpLevel() {
+        return this.levelPair;
+    }
+
+    @Override
+    public void setXPLevel(int level) {
+        this.levelPair.setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.updateStatsToLevel();
+    }
+
+    public void increaseLevel() {
+        this.levelPair.setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.updateStatsToLevel();
+    }
+
+    public void addXp(float amount) {
+        XpLevelHolder pair = this.xpLevel();
+        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
+        });
+        LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
+        if (res)
+            this.updateStatsToLevel();
+    }
+
+    public void updateStatsToLevel() {
+        if (!this.level().isClientSide)
+            LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
+        float preHealthDiff = this.getMaxHealth() - this.getHealth();
+        this.prop.getAttributeGains().forEach((att, val) -> {
+            AttributeInstance inst = this.getAttribute(att);
+            if (inst != null) {
+                val *= 0.01;
+                inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER);
+                float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
+                if (att == Attributes.MAX_HEALTH) {
+                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.15f) * 0.02f;
+                } else {
+                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.015f;
+                }
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
+                if (att == Attributes.MAX_HEALTH)
+                    this.setHealth(this.getMaxHealth() - preHealthDiff);
+            }
+        });
+    }
+
+    @Override
+    public int friendPoints(UUID player) {
+        if (player.equals(this.getOwnerUUID()))
+            return this.entityData.get(FRIEND_POINTS_SYNC);
+        return 0;
+    }
+
     public void increaseFriendPoints(int xp) {
         boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(FRIEND_POINTS_SYNC, this.friendlyPoints.getLevel()));
         if (leveledUp) {
@@ -705,137 +1624,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
     }
 
-    public void onBrushing() {
-        Holder<Attribute> toIncrease = switch (this.random.nextInt(4)) {
-            case 1 -> ModAttributes.DEFENCE.asHolder();
-            case 2 -> ModAttributes.MAGIC_ATTACK.asHolder();
-            case 3 -> ModAttributes.MAGIC_DEFENCE.asHolder();
-            default -> Attributes.ATTACK_DAMAGE;
-        };
-        AttributeInstance inst = this.getAttribute(toIncrease);
-        if (inst != null) {
-            AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_BRUSH_MODIFIER);
-            double inc = 1;
-            if (mod != null)
-                inc += mod.amount();
-            inst.removeModifier(LibConstants.MONSTER_BRUSH_MODIFIER);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_BRUSH_MODIFIER, inc, AttributeModifier.Operation.ADD_VALUE));
-        }
-    }
-
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return this.hasControllingPassenger() || !this.level().isClientSide;
-    }
-
-    @Override
-    public boolean doHurtTarget(Entity entity) {
-        return CombatUtils.mobAttack(this, entity, this.damageSourceAttack());
-    }
-
-    public DynamicDamage.Builder damageSourceAttack() {
-        return new DynamicDamage.Builder(this).hurtResistant(5);
-    }
-
-    public int animationCooldown(@Nullable String anim) {
-        int diffAdd = this.difficultyCooldown();
-        if (anim == null)
-            return this.getRandom().nextInt(20) + 25 + diffAdd;
-        return this.getRandom().nextInt(20) + 15 + diffAdd;
-    }
-
-    public int difficultyCooldown() {
-        int diffAdd = 12;
-        Difficulty diff = this.level().getDifficulty();
-        if (this.level().getDifficulty() == Difficulty.HARD)
-            diffAdd = 0;
-        else if (diff == Difficulty.NORMAL)
-            diffAdd = 7;
-        return diffAdd;
-    }
-
-    @Override
-    public TagKey<Item> tamingItem() {
-        return RunecraftoryTags.tamingTag(this.getType());
-    }
-
-    public ResourceKey<LootTable> dailyDropTable() {
-        ResourceKey<LootTable> def = this.getDefaultLootTable();
-        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_tamed_drops"));
-    }
-
-    @Override
-    public float tamingChance() {
-        return this.prop.tamingChance;
-    }
-
-    @Override
-    public boolean isTamed() {
-        return this.getOwnerUUID() != null;
-    }
-
-    @Override
-    public boolean rideable() {
-        return this.prop.rideable;
-    }
-
-    public boolean attackOtherTamedMobs() {
-        return false;
-    }
-
-    public EntityProperties getProp() {
-        return this.prop;
-    }
-
-    //=====Level Handling
-
-    @Override
-    public UUID getOwnerUUID() {
-        return this.entityData.get(OWNER_UUID).orElse(null);
-    }
-
-    @Override
-    public Player getOwner() {
-        UUID uuid = this.getOwnerUUID();
-        if (uuid != null) {
-            if (this.owner == null || !this.owner.isAlive()) {
-                if (this.level().isClientSide)
-                    this.owner = this.level().getPlayerByUUID(uuid);
-                else
-                    this.owner = this.level().getServer().getPlayerList().getPlayer(uuid);
-            }
-        } else
-            this.owner = null;
-        return this.owner;
-    }
-
-    @Override
-    public void setOwner(Player player) {
-        if (player != null)
-            this.entityData.set(OWNER_UUID, Optional.of(player.getUUID()));
-        else
-            this.entityData.set(OWNER_UUID, Optional.empty());
-    }
-
-    @Override
-    public boolean isFlyingEntity() {
-        return this.prop.flying;
-    }
-
-    @Override
-    public XpLevelHolder xpLevel() {
-        return this.levelPair;
-    }
-
-    @Override
-    public void setLevel(int level) {
-        this.levelPair.setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+    public void recalcStatsFull() {
+        this.applyAttributes();
         this.updateStatsToLevel();
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        LoaderNetwork.INSTANCE.sendToPlayer(S2CEntityLevelPkt.create(this), player);
+        this.updateFriendPointAttributeBonus();
     }
 
     @Override
@@ -846,6 +1638,74 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public int baseMoney() {
         return this.prop.money;
+    }
+
+    public void onDailyUpdate() {
+        if (this.level() instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
+            ResourceKey<LootTable> resourceLocation = this.dailyDropTable();
+            this.dropAsDailyDrop(resourceLocation);
+        }
+    }
+
+    public ResourceKey<LootTable> dailyDropTable() {
+        ResourceKey<LootTable> def = this.getDefaultLootTable();
+        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_tamed_drops"));
+    }
+
+    protected void dropAsDailyDrop(ResourceKey<LootTable> resourceLocation) {
+        LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(resourceLocation);
+        lootTable.getRandomItems(this.dailyDropContext().create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
+    }
+
+    protected LootParams.Builder dailyDropContext() {
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
+                .withParameter(LootContextParams.THIS_ENTITY, this)
+                .withParameter(LootContextParams.ORIGIN, this.position());
+        if (this.getOwnerUUID() != null)
+            builder.withOptionalParameter(LootCtxParameters.UUID_CONTEXT, this.getOwnerUUID());
+        return builder;
+    }
+
+    @Override
+    protected void populateDefaultEquipmentSlots(RandomSource source, DifficultyInstance difficulty) {
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+        this.populateDefaultEquipmentSlots(this.getRandom(), difficulty);
+        this.setXPLevel(Mth.clamp(this.xpLevel().getLevel(), this.prop.minLevel, LibConstants.MAX_MONSTER_LEVEL));
+        return spawnData;
+    }
+
+    @Override
+    public float getScale() {
+        return super.getScale() * this.defaultScale;
+    }
+
+    @Override
+    protected void sendDebugPackets() {
+        super.sendDebugPackets();
+        DebugPackets.sendEntityBrain(this);
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !this.isTamed();
+    }
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() || this.isTamed();
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        LoaderNetwork.INSTANCE.sendToPlayer(S2CEntityLevelPkt.create(this), player);
+    }
+
+    @Override
+    public void setLevelCallback(EntityInLevelCallback levelCallback) {
+        super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::getOwner, levelCallback));
     }
 
     @Override
@@ -985,436 +1845,45 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return false;
     }
 
-    public void recalcStatsFull() {
-        this.applyAttributes();
-        this.updateStatsToLevel();
-        this.updateFriendPointAttributeBonus();
+    @Override
+    public UUID getOwnerUUID() {
+        return this.entityData.get(OWNER_UUID).orElse(null);
     }
 
-    public void updateStatsToLevel() {
-        if (!this.level().isClientSide)
-            LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
-        float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        this.prop.getAttributeGains().forEach((att, val) -> {
-            AttributeInstance inst = this.getAttribute(att);
-            if (inst != null) {
-                val *= 0.01;
-                inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER);
-                float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                if (att == Attributes.MAX_HEALTH) {
-                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.15f) * 0.02f;
-                } else {
-                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.015f;
-                }
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
-                if (att == Attributes.MAX_HEALTH)
-                    this.setHealth(this.getMaxHealth() - preHealthDiff);
+    @Override
+    public Player getOwner() {
+        UUID uuid = this.getOwnerUUID();
+        if (uuid != null) {
+            if (this.owner == null || !this.owner.isAlive()) {
+                if (this.level().isClientSide)
+                    this.owner = this.level().getPlayerByUUID(uuid);
+                else
+                    this.owner = this.level().getServer().getPlayerList().getPlayer(uuid);
             }
-        });
-    }
-
-    public void increaseLevel() {
-        this.levelPair.setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
-        this.updateStatsToLevel();
-    }
-
-    public void addXp(float amount) {
-        XpLevelHolder pair = this.xpLevel();
-        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
-        });
-        LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
-        if (res)
-            this.updateStatsToLevel();
-    }
-
-    public void updateMoveAnimation() {
-    }
-
-    public XpLevelHolder getFriendlyPoints() {
-        return this.friendlyPoints;
+        } else
+            this.owner = null;
+        return this.owner;
     }
 
     @Override
-    public int friendPoints(UUID player) {
-        if (player.equals(this.getOwnerUUID()))
-            return this.entityData.get(FRIEND_POINTS_SYNC);
-        return 0;
-    }
-
-    public void onDailyUpdate() {
-        if (this.level() instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
-            ResourceKey<LootTable> resourceLocation = this.dailyDropTable();
-            this.dropAsDailyDrop(resourceLocation);
-        }
-    }
-
-    protected void dropAsDailyDrop(ResourceKey<LootTable> resourceLocation) {
-        LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(resourceLocation);
-        lootTable.getRandomItems(this.dailyDropContext().create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
-    }
-
-    protected LootParams.Builder dailyDropContext() {
-        LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
-                .withParameter(LootContextParams.THIS_ENTITY, this)
-                .withParameter(LootContextParams.ORIGIN, this.position());
-        if (this.getOwnerUUID() != null)
-            builder.withOptionalParameter(LootCtxParameters.UUID_CONTEXT, this.getOwnerUUID());
-        return builder;
-    }
-
-    //=====Movement
-
-    public int moveTick() {
-        return this.moveTick;
-    }
-
-    public float interpolatedMoveTick(float partialTicks) {
-        return Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) MOVE_TICK_MAX, 0, 1);
-    }
-
-    public void setMovingFlag(MoveType type) {
-        this.entityData.set(MOVE_FLAGS, (byte) type.ordinal());
-    }
-
-    public MoveType getMoveFlag() {
-        return MoveType.values()[this.entityData.get(MOVE_FLAGS)];
-    }
-
-    public void setDoJumping(boolean jump) {
-        this.doJumping = jump;
-    }
-
-    public boolean doJumping() {
-        return this.doJumping;
-    }
-
-    private void playTameEffect(boolean play) {
-        SimpleParticleType particle = ParticleTypes.HEART;
-        int amount = 13;
-        if (!play) {
-            particle = ParticleTypes.SMOKE;
-            amount += 9;
-        }
-        for (int i = 0; i < amount; ++i) {
-            double d0 = this.random.nextGaussian() * 0.02;
-            double d2 = this.random.nextGaussian() * 0.02;
-            double d3 = this.random.nextGaussian() * 0.02;
-            this.level().addParticle(particle, true, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
-        }
-    }
-
-    //=====Combat stuff
-
-    @Override
-    public void die(DamageSource cause) {
-        if (!this.level().isClientSide) {
-            if (this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
-                this.getOwner().displayClientMessage(this.getCombatTracker().getDeathMessage(), false);
-            if (this.getServer() != null && this.getOwnerUUID() != null) {
-                WorldHandler.get(this.getServer())
-                        .removeMonsterFromPlayer(this.getOwnerUUID(), this);
-                this.assignedBarn = null;
-            }
-            this.getAnimationHandler().setAnimation(null);
-            List<CombatEntry> entries = ((CombatTrackerAccessor) this.getCombatTracker()).getEntries();
-            Map<UUID, CombatRecord> merged = new HashMap<>();
-            entries.forEach(e -> {
-                if (e.source().getEntity() instanceof ServerPlayer player) {
-                    merged.compute(player.getUUID(), (id, o) -> o == null ? new CombatRecord(player, e.source(), e.damage())
-                            : new CombatRecord(player, e.source(), o.totalDamage() + e.damage())
-                    );
-                }
-            });
-            merged.values().forEach(rec -> this.onDeathDamageRecord(rec.player, rec.lastSource, rec.totalDamage));
-        }
-        super.die(cause);
-    }
-
-    public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
-        if (damage > this.getMaxHealth() * 0.05) {
-            Platform.INSTANCE.getPlayerData(player).increaseMobFrom(this);
-        }
+    public void setOwner(Player player) {
+        if (player != null)
+            this.entityData.set(OWNER_UUID, Optional.of(player.getUUID()));
+        else
+            this.entityData.set(OWNER_UUID, Optional.empty());
     }
 
     @Override
-    protected void tickDeath() {
-        if (!this.level().isClientSide && this.deathTime == 0) {
-            this.playDeathAnimation(false);
-            this.getNavigation().stop();
-        }
-        ++this.deathTime;
-        if (this.deathTime == (this.maxDeathTime() - 5)) {
-            if (!this.level().isClientSide && this.getLastHurtByMob() != null) {
-                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.xpLevel().getLevel());
-            }
-        }
-        if (this.deathTime >= this.maxDeathTime()) {
-            if (!this.level().isClientSide)
-                this.remove(RemovalReason.KILLED);
-            for (int i = 0; i < 20; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                this.level().addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
-            }
-        }
+    public boolean isFlyingEntity() {
+        return this.prop.flying;
     }
 
     @Override
-    public void setLastHurtByMob(@Nullable LivingEntity livingBase) {
-        if (this.isDeadOrDying() && this.deathTime > 0)
-            return;
-        super.setLastHurtByMob(livingBase);
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
     }
 
-    public boolean playDeath() {
-        return this.entityData.get(PLAY_DEATH_STATE);
-    }
-
-    public void setPlayDeath(boolean flag) {
-        this.entityData.set(PLAY_DEATH_STATE, flag);
-        if (flag) {
-            if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
-                this.getOwner().displayClientMessage(this.getKnockoutMessage(), false);
-            this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
-                    .forEach(m -> m.setTarget(null));
-            this.getNavigation().stop();
-            this.playDeathAnimation(false);
-            this.setMovingFlag(MoveType.NONE);
-            this.setShiftKeyDown(false);
-            this.setSprinting(false);
-            this.unRide();
-        } else {
-            this.getAnimationHandler().setAnimation(null);
-        }
-    }
-
-    private Component getKnockoutMessage() {
-        DamageSource source = this.getLastDamageSource();
-        if (source != null && source.getEntity() != null)
-            return Component.translatable("runecraftory.tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
-        return Component.translatable("runecraftory.tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
-    }
-
-    public int getPlayDeathTick() {
-        return this.playDeathTick;
-    }
-
-    @Override
-    public boolean canBeSeenAsEnemy() {
-        return super.canBeSeenAsEnemy() && !this.playDeath();
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof Player player && player.getUUID().equals(this.getOwnerUUID())
-                && !player.isShiftKeyDown()) {
-            return false;
-        }
-        if (this.playDeath() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))
-            return false;
-        return (source.getEntity() == null || this.canAttackFrom(source.getEntity().position())) && super.hurt(source, amount);
-    }
-
-    @Override
-    protected void actuallyHurt(DamageSource source, float damageAmount) {
-        super.actuallyHurt(source, damageAmount);
-        if (!this.isTamed() && source instanceof DynamicDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == EnumElement.LOVE)
-            this.loveAttCount = Math.min(100, this.loveAttCount + 1);
-        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.isTamed() && this.getHealth() <= 0) {
-            this.setHealth(0.01f);
-            this.setPlayDeath(true);
-        }
-    }
-
-    //=====Movement Handling
-
-    @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
-        if (this.isFlyingEntity() || this.getMoveControl() instanceof FlyingMoveControl) {
-            return false;
-        }
-        return super.causeFallDamage(fallDistance, multiplier, source);
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.hasControllingPassenger() || this.playDeath() || this.tamingTick > 0;
-    }
-
-    @Override
-    protected float getWaterSlowDown() {
-        return 0.83F;
-    }
-
-    //TODO now in entity type
-//    @Override
-//    public void positionRider(Entity passenger) {
-//        if (this.hasPassenger(passenger)) {
-//            Vec3 offset = this.passengerOffset(passenger)
-//                    .add(0, passenger.getMyRidingOffset(), 0).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
-//            passenger.setPos(this.getX() + offset.x(), this.getY() + offset.y(), this.getZ() + offset.z());
-//            if (passenger instanceof LivingEntity living) {
-//                living.yBodyRot = this.yBodyRot;
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public Vec3 getVehicleAttachmentPoint(Entity entity) {
-//        return this.getAttachments().get(EntityAttachment.VEHICLE, 0, this.getYRot());
-//    }
-
-    @Override
-    public void travel(Vec3 vec) {
-        if (this.shouldFreezeTravel()) {
-            this.xxa = 0;
-            this.yya = 0;
-            this.zza = 0;
-            return;
-        }
-        if (this.isControlledByLocalInstance() && this.getControllingPassenger() instanceof Player player) {
-            this.handlePlayerInput(player, this.isNoGravity(), this::handleLandTravel);
-        } else {
-            this.handleLandTravel(vec);
-        }
-    }
-
-    public void handleLandTravel(Vec3 vec) {
-        if (!this.isAlive() || this.playDeath()) {
-            vec = Vec3.ZERO;
-        }
-        super.travel(vec);
-    }
-
-    public void handleFreeTravel(Vec3 vec) {
-        if (this.shouldFreezeTravel()) {
-            this.xxa = 0;
-            this.yya = 0;
-            this.zza = 0;
-            return;
-        }
-        if (this.isControlledByLocalInstance() && this.getControllingPassenger() instanceof Player player) {
-            this.handlePlayerInput(player, true, this::freeTravel);
-        } else {
-            this.freeTravel(vec);
-        }
-    }
-
-    private void freeTravel(Vec3 vec) {
-        boolean currentNophysics = this.noPhysics;
-        if (!this.isAlive() || this.playDeath()) {
-            this.noPhysics = false;
-            vec = Vec3.ZERO;
-        }
-        this.moveRelative(this.getSpeed() * 0.2f, vec);
-        this.move(MoverType.SELF, this.getDeltaMovement());
-        this.setDeltaMovement(this.getDeltaMovement().scale(0.91));
-        this.noPhysics = currentNophysics;
-    }
-
-    protected void handlePlayerInput(Player player, boolean hovers, Consumer<Vec3> cons) {
-        if (this.getAnimationHandler().hasAnimation()) {
-            this.setMovingFlag(MoveType.NONE);
-            this.setSprinting(false);
-            cons.accept(Vec3.ZERO);
-            this.calculateEntityAnimation(false);
-            return;
-        }
-        if (!this.isControlledByLocalInstance()) {
-            this.setDeltaMovement(Vec3.ZERO);
-            this.setDoJumping(false);
-            this.calculateEntityAnimation(false);
-            return;
-        }
-        if (!this.level().isClientSide) {
-            if (this.adjustRotFromRider(player)) {
-                this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
-                this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
-            }
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.yBodyRot;
-        }
-        // For info: Vanilla speed has a constant 0.98 modifier
-        double attrSpeed = !this.onGround() && this.getAttributes().hasAttribute(Attributes.FLYING_SPEED) ? this.getAttributeValue(Attributes.FLYING_SPEED) : this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        float speed = (float) (attrSpeed / 1.3 * this.ridingSpeedModifier());
-        float strafing = (player.xxa / 0.98f) * speed * 0.8f;
-        if (player.xxa < 0)
-            strafing *= -1;
-        float forward = (player.zza / 0.98f) * speed;
-        if (player.zza < 0)
-            forward *= -0.5f;
-        float vertical = 0;
-
-        if (hovers && forward > 0) {
-            vertical = (float) Math.min(0, player.getLookAngle().y + 0.45) * speed;
-            if (player.getXRot() > 85)
-                forward = 0;
-            else if (vertical < 0)
-                forward = (float) Math.sqrt(forward * forward - vertical * vertical);
-        }
-
-        if (this.doJumping()) {
-            if (this.onGround() && !this.isFlyingEntity()) {
-                this.hasImpulse = true;
-                this.jumpFromGround();
-                if (forward > 0.0f) {
-                    float x = -Mth.sin(this.getYRot() * Mth.DEG_TO_RAD);
-                    float z = Mth.cos(this.getYRot() * Mth.DEG_TO_RAD);
-                    this.setDeltaMovement(this.getDeltaMovement().add(0.3 * x, 0, 0.3 * z));
-                }
-            } else if (this.isFlyingEntity()) {
-                vertical = speed * 0.7f;
-                if (this.getDeltaMovement().y() < vertical) {
-                    this.setDeltaMovement(new Vec3(this.getDeltaMovement().x, this.getDeltaMovement().y + 0.1, this.getDeltaMovement().z));
-                }
-            }
-        }
-
-        this.setSpeed(speed);
-        MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
-        this.setMovingFlag(type);
-        this.setSprinting(type == MoveType.RUN);
-        cons.accept(new Vec3(strafing, vertical, forward));
-
-        this.setDoJumping(false);
-        this.calculateEntityAnimation(false);
-    }
-
-    private float rotateClamped(float current, float target, float maxChange) {
-        float f = Mth.degreesDifference(current, target);
-        float g = Mth.clamp(f, -maxChange, maxChange);
-        return current + g;
-    }
-
-    public double ridingSpeedModifier() {
-        return 1.3;
-    }
-
-    public boolean shouldFreezeTravel() {
-        return false;
-    }
-
-    //=====Interaction
-
-    public int maxDeathTime() {
-        return 20;
-    }
-
-    protected void playDeathAnimation(boolean load) {
-        if (this.getDeathAnimation() != null) {
-            this.getAnimationHandler().setAnimation(this.getDeathAnimation());
-            if (load && this.level().isClientSide) {
-                AnimationState anim = this.getAnimationHandler().getAnimation();
-                while (!anim.done(0))
-                    anim.tick();
-            }
-        }
-    }
-
-    public String getDeathAnimation() {
-        return null;
-    }
+    public abstract void playInteractionAnimation();
 
     @Override
     public void setSleepingPos(BlockPos pos) {
@@ -1456,325 +1925,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return null;
     }
 
-    private boolean canAttackFrom(Vec3 pos) {
-        if (this.isTamed())
-            return true;
-        boolean result = this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
-        if (!result) {
-            this.level().playSound(null, this, SoundEvents.ANVIL_PLACE, this.getSoundSource(), 0.7f, 0.9f);
-            if (this.level() instanceof ServerLevel serverLevel) {
-                for (int i = 0; i < 6; i++)
-                    serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getRandomX(1.2), this.getRandomY(), this.getRandomZ(1.2), 0, 0, 0, 0, 0);
-            }
-        }
-        return result;
-    }
-
-    public void setupAttack(AnimationDefinition anim) {
-        if (this.getTarget() != null) {
-            this.setTargetPosition(this.getTarget());
-        }
-    }
-
-    public void handleAttack(AnimationState anim) {
-        if (anim.is(this.getDeathAnimation(), this.getSleepAnimation()))
-            return;
-        this.getNavigation().stop();
-        if (anim.isAt("attack")) {
-            this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
-        }
-    }
-
-    protected Vec3 directionToLookAt() {
-        return this.getAnimationHandler().hasAnimation() && this.targetPosition != null ? this.targetPosition
-                .asVec(this.position()).subtract(this.position()) : null;
-    }
-
-    protected float[] targetLookClamp() {
-        return new float[]{60, 30};
-    }
-
-    public void setTargetPosition(LivingEntity target) {
-        this.setTargetPosition(TargetPosition.of(target));
-    }
-
-    public void setTargetPosition(TargetPosition position) {
-        this.targetPosition = position;
-        if (!this.level().isClientSide)
-            S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
-    }
-
-    @Override
-    public TargetPosition getTargetPosition() {
-        return this.targetPosition;
-    }
-
-    @Nullable
-    public Vec3 tryGetTargetPosition(LivingEntity target) {
-        if (this.getTargetPosition() != null)
-            return this.getTargetPosition()
-                    .asVec(this.position());
-        return target != null ? target.position() : null;
-    }
-
-    public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(anim, this.tryGetTargetPosition(target), 0);
-        this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
-                entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
-        if (!this.level().isClientSide)
-            S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
-    }
-
-    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, @Nullable Vec3 target, double grow) {
-        float yRot = this.getYRot();
-        float xRot = this.getXRot();
-        if (target != null && !this.isControlledByLocalInstance()) {
-            Vec3 dir = target.subtract(this.position()).normalize();
-            float[] xYRot = MathsHelper.YXRotFrom(dir);
-            yRot = xYRot[0];
-            xRot = -xYRot[1];
-        } else if (this.getControllingPassenger() instanceof Player player) {
-            yRot = player.getYRot();
-            xRot = player.getXRot();
-        }
-        double off = this.getBbHeight() * 0.5;
-        return new OrientedBoundingBox(this.attackBB(anim)
-                .inflate(grow, 0, grow)
-                .move(0, -off, grow), yRot, Mth.clamp(xRot, -15, 15), this.position().add(0, off, 0));
-    }
-
-    @Override
-    public OrientedBoundingBox prepareAttackBox(String anim, Entity target, double grow, boolean debug) {
-        OrientedBoundingBox obb = this.calculateAttackAABB(this.getAnimationHandler().createDefaulted(anim),
-                target != null ? target.position() : null, grow);
-        if (debug)
-            S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTEMPT, this);
-        return obb;
-    }
-
-    public AABB attackBB(AnimationState anim) {
-        double range = 1;
-        return new AABB(-range * 0.5, -0.02, 0, range * 0.5, this.getBbHeight() + 0.02, range);
-    }
-
-    public abstract void handleRidingCommand(int command);
-
-    public boolean isStaying() {
-        return this.behaviour == Behaviour.STAY;
-    }
-
-    public void setBehaviour(Behaviour behaviour) {
-        this.setBehaviour(behaviour, false);
-    }
-
-    private void setBehaviour(Behaviour behaviour, boolean load) {
-        this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
-        this.behaviour = behaviour;
-        if (!this.level().isClientSide)
-            this.updateAI(false, load);
-    }
-
-    public Behaviour behaviourState() {
-        return this.behaviour;
-    }
-
-    public boolean doStartRide(ServerPlayer player) {
-        if (this.rideable()) {
-            player.startRiding(this);
-            return true;
-        }
-        player.displayClientMessage(Component.translatable("runecraftory.monster.interact.ride.no"), false);
-        return false;
-    }
-
-    protected float tamingMultiplier(ItemStack stack) {
-        boolean flag = stack.is(this.tamingItem());
-        return flag ? 2 : 1;
-    }
-
-    protected void tameEntity(Player owner) {
-        if (!this.isAlive())
-            return;
-        this.restrictTo(this.blockPosition(), -1);
-        this.setOwner(owner);
-        this.navigation.stop();
-        this.setTarget(null);
-        this.level().broadcastEntityEvent(this, (byte) 10);
-        this.updater.setLastUpdateDay(WorldUtils.day(this.level()));
-        if (Platform.INSTANCE.getPlayerData(owner).party.isPartyFull())
-            this.setBehaviour(Behaviour.WANDER);
-        else
-            this.setBehaviour(Behaviour.FOLLOW);
-        this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
-                e -> e != this && e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
-                        && e.getTarget() == this).forEach(e -> {
-            e.setTarget(null);
-            if (e.getLastHurtByMob() == this)
-                e.setLastHurtByMob(null);
-        });
-        this.setLastHurtByMob(null);
-        if (owner instanceof ServerPlayer serverPlayer) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
-            data.entityStatsTracker.tameEntity(this);
-            ModCriteria.TAME_MONSTER_TRIGGER.get().trigger(serverPlayer, this, data.entityStatsTracker);
-            LevelCalc.levelSkill(data, EnumSkills.TAMING, 10);
-            QuestHandler.getData(serverPlayer).trigger(TamingTracker.KEY, this);
-        }
-        if (this.getServer() != null) {
-            this.assignBarn();
-        }
-    }
-
-    private boolean findNearestBarn(boolean load) {
-        if (load)
-            return this.assignBarn();
-        BarnData nearest = WorldHandler.get(this.getServer()).findNearestFittingBarn(this, 5);
-        if (nearest != null) {
-            if (this.assignedBarn != null && this.assignedBarn != nearest) {
-                this.assignedBarn.removeMonster(this);
-            }
-            this.assignedBarn = nearest;
-            this.assignedBarn.addMonster(this, this.getProp().size);
-            return true;
-        } else
-            return this.assignBarn();
-    }
-
-    private boolean assignBarn() {
-        if (!this.isAlive())
-            return false;
-        if (this.assignedBarn == null || this.assignedBarn.isInvalidFor(this))
-            this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
-        if (this.assignedBarn != null) {
-            this.assignedBarn.addMonster(this, this.getProp().size);
-            return true;
-        }
-        return false;
-    }
-
-    public BarnData getAssignedBarn() {
-        this.assignBarn();
-        return this.assignedBarn;
-    }
-
-    protected void untameEntity() {
-        this.level().getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
-                e -> e != this && e.getTarget() == this).forEach(e -> {
-            e.setTarget(null);
-            if (e.getLastHurtByMob() == this)
-                e.setLastHurtByMob(null);
-        });
-        if (this.getServer() != null && this.getOwnerUUID() != null) {
-            WorldHandler.get(this.getServer())
-                    .removeMonsterFromPlayer(this.getOwnerUUID(), this);
-            if (this.getOwner() != null) {
-                Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
-            } else {
-                WorldHandler.get(this.getServer()).toRemovePartyMember(this);
-            }
-            this.assignedBarn = null;
-        }
-        this.setOwner(null);
-        this.setLastHurtByMob(null);
-        if (this.playDeath())
-            this.heal(this.getMaxHealth());
-        this.setBehaviour(Behaviour.WANDER);
-        this.updateAI(true, false);
-        this.setTarget(null);
-        this.getNavigation().stop();
-    }
-
-    public BlockPos getSeedInventory() {
-        if (this.seedInventory != null && !this.isWithinRestriction(this.seedInventory)) {
-            return null;
-        }
-        return this.seedInventory;
-    }
-
-    public BlockPos getCropInventory() {
-        if (this.cropInventory != null && !this.isWithinRestriction(this.cropInventory)) {
-            return null;
-        }
-        return this.cropInventory;
-    }
-
-    public void setSeedInventory(BlockPos seedInventory) {
-        this.seedInventory = seedInventory;
-    }
-
-    public void setCropInventory(BlockPos cropInventory) {
-        this.cropInventory = cropInventory;
-    }
-
-    @Override
-    protected void addPassenger(Entity passenger) {
-        this.getNavigation().stop();
-        this.setDeltaMovement(Vec3.ZERO);
-        this.setYya(0);
-        this.setZza(0);
-        this.setXxa(0);
-        this.setTarget(null);
-        super.addPassenger(passenger);
-    }
-
-    @Override
-    protected void removePassenger(Entity passenger) {
-        if (passenger == this.getOwner())
-            this.setBehaviour(Behaviour.FOLLOW);
-        super.removePassenger(passenger);
-    }
-
-    @Override
-    public LivingEntity getControllingPassenger() {
-        LivingEntity entity = super.getControllingPassenger();
-        if (entity instanceof Player && (!this.isTamed() || !this.rideable()))
-            return null;
-        return entity;
-    }
-
-    //TODO now a tag
-//    @Override
-//    public boolean dismountsUnderwater() {
-//        return !this.canBreatheUnderwater();
-//    }
-
-    public boolean adjustRotFromRider(LivingEntity rider) {
-        return true;
-    }
-
-    public abstract void playInteractionAnimation();
-
-    @Override
-    public boolean canBeAttackedBy(LivingEntity entity) {
-        if (entity instanceof Mob m && entity.getType().is(RunecraftoryTags.EntityTypes.TAMED_MONSTER_IGNORE) && this.getTarget() != m && m.getLastHurtByMob() != this)
-            return !this.isTamed();
-        return true;
-    }
-
-    @Override
-    public void setLevelCallback(EntityInLevelCallback levelCallback) {
-        super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::getOwner, levelCallback));
-    }
-
-    @Override
-    public Predicate<LivingEntity> validTargetPredicate() {
-        return this.hitPred;
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
-    }
-
-    @Override
-    public BrainActivityGroup<? extends BaseMonster> getCoreTasks() {
-        return BrainActivityGroup.coreTasks(
-                new FloatToSurfaceOfFluid<BaseMonster>().startCondition(BaseMonster::canSwim),
-                new SetRandomLookTarget<>(),
-                new SetPlayerLookTarget<>(),
-                new LookAtTargetSink(40, 80));
-    }
-
 //    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
 //    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
 //    public FloatGoal swimGoal = new FloatGoal(this);
@@ -1797,183 +1947,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 //        this.goalSelector.addGoal(6, this.wander);
 //        this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
 //    }
-//
-//    @Override
-//    protected void updateControlFlags() {
-//        boolean flag1 = !(this.getVehicle() instanceof Boat);
-//        this.goalSelector.setControlFlag(Goal.Flag.MOVE, true);
-//        this.goalSelector.setControlFlag(Goal.Flag.JUMP, flag1);
-//        this.goalSelector.setControlFlag(Goal.Flag.LOOK, true);
-//    }
-
-    private void updateAI(boolean forced, boolean load) {
-        if (forced || this.isTamed()) {
-            this.getNavigation().stop();
-            if (this.behaviourState() != Behaviour.FARM) {
-                this.seedInventory = null;
-                this.cropInventory = null;
-//                if (this.behaviourState() != Behaviour.STAY) {
-//                    this.targetSelector.addGoal(1, this.targetPlayer);
-//                    this.targetSelector.addGoal(2, this.targetMobs);
-//                    this.targetSelector.addGoal(0, this.hurt);
-//                }
-//                this.goalSelector.removeGoal(this.farm);
-                if (this.level() instanceof ServerLevel serverLevel)
-                    FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
-            }
-//            this.wander.setInterval(120);
-            switch (this.behaviourState()) {
-                case WANDER_HOME -> {
-                    if (this.getOwner() != null) {
-                        if (this.findNearestBarn(load)) {
-                            this.restrictToBasedOnBehaviour(null, load);
-                            BlockPos pos = this.assignedBarn.pos.pos();
-                            if (this.level().dimension() == this.assignedBarn.pos.dimension())
-                                TeleportSpell.safeTeleportTo(this, pos.getX(), pos.getY(), pos.getZ());
-                            else {
-                                ServerLevel serverLevel = this.getServer().getLevel(this.assignedBarn.pos.dimension());
-                                if (serverLevel != null)
-                                    TeleportSpell.changeDimension(this, serverLevel, pos.getX(), pos.getY(), pos.getZ());
-                            }
-                        } else {
-                            if (this.tickCount > 20)
-                                this.getOwner().displayClientMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), false);
-                            this.setBehaviour(Behaviour.WANDER);
-                        }
-//                        this.goalSelector.addGoal(6, this.wander);
-//                        this.wander.setInterval(40);
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
-                    }
-                }
-                case FOLLOW -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(this.getOwner());
-                    boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
-                    if (party) {
-                        this.clearRestriction();
-//                        this.goalSelector.removeGoal(this.wander);
-                        if (this.getOwner() != null)
-                            data.party.addPartyMember(this);
-                    }
-                }
-                case FOLLOW_DISTANCE -> {
-                    this.clearRestriction();
-//                    this.goalSelector.removeGoal(this.wander);
-                    if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
-                }
-                case STAY -> {
-//                    this.goalSelector.addGoal(6, this.wander);
-//                    this.targetSelector.removeGoal(this.targetPlayer);
-//                    this.targetSelector.removeGoal(this.targetMobs);
-//                    this.targetSelector.removeGoal(this.hurt);
-                    if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
-                }
-                case WANDER -> {
-                    this.restrictToBasedOnBehaviour(this.blockPosition(), load);
-//                    this.goalSelector.addGoal(6, this.wander);
-                    if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
-                }
-                case FARM -> {
-                    this.restrictToBasedOnBehaviour(this.blockPosition(), load);
-//                    this.goalSelector.addGoal(3, this.farm);
-//
-//                    this.targetSelector.removeGoal(this.targetPlayer);
-//                    this.targetSelector.removeGoal(this.targetMobs);
-//                    this.targetSelector.removeGoal(this.hurt);
-
-//                    this.goalSelector.removeGoal(this.wander);
-
-                    BlockPos nearestInv = this.nearestBlockEntityWithInv();
-                    this.setSeedInventory(nearestInv);
-                    this.setCropInventory(nearestInv);
-                    if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
-                }
-            }
-        }
-    }
-
-    @Override
-    public BrainActivityGroup<? extends BaseMonster> getIdleTasks() {
-        return BrainActivityGroup.idleTasks(
-                new MoveToWalkTarget<>(),
-                new FirstApplicableBehaviour<>(
-                        new SetTargetFromRider<>(),
-                        new TargetOrRetaliate<BaseMonster>(),
-                        new SetMoveToRestriction<BaseMonster>(),
-                        new OneRandomBehaviour<>(
-                                this.getWanderBehaviour(),
-                                new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))
-                        )
-                )
-        );
-    }
-
-    @Override
-    public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
-        return BrainActivityGroup.fightTasks(
-                new InvalidateAttackTarget<BaseMonster>(),
-                new FirstApplicableBehaviour<>(
-                        this.getCombatAI(),
-                        new OneRandomBehaviour<>(this.getIdleAI().toArray(Pair[]::new))
-                )
-        );
-    }
-
-    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
-        return new Idle<>();
-    }
-
-    public List<Pair<ExtendedBehaviour<? extends BaseMonster>, Integer>> getIdleAI() {
-        return List.of();
-    }
-
-    @Override
-    public List<? extends ExtendedSensor<? extends BaseMonster>> getSensors() {
-        return List.of(new NearbyPlayersSensor<>(),
-                new NearbyLivingEntitySensor<BaseMonster>().setPredicate((target, entity) -> entity.targetPred.test(target)),
-                new HurtBySensor<>());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
-        Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
-        map.put(Activity.REST, new BrainActivityGroup<BaseMonster>(Activity.REST).priority(20).behaviours(new Idle<>()));
-        map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
-                .priority(10).behaviours(
-                        new FirstApplicableBehaviour<>(
-                                new SetMoveToRestriction<>(),
-                                new FarmCrops<>())
-                )
-        );
-        map.put(ModActivities.FOLLOW.get(), new BrainActivityGroup<BaseMonster>(ModActivities.FOLLOW.get())
-                .priority(10).behaviours(new FollowEntityEx<BaseMonster, Player>()
-                        .startFollowingWhen(9).ignoreIfTargetingTill(20)
-                        .stopFollowingWithin(2).teleportToTargetAfter(20)
-                        .following(BaseMonster::getOwner).speedMod(1.05f)));
-        map.put(ModActivities.FOLLOW_DISTANCE.get(), new BrainActivityGroup<BaseMonster>(ModActivities.FOLLOW_DISTANCE.get())
-                .priority(10).behaviours(new FollowEntityEx<BaseMonster, Player>()
-                        .startFollowingWhen(12).ignoreIfTargetingTill(20)
-                        .stopFollowingWithin(6).teleportToTargetAfter(24)
-                        .following(BaseMonster::getOwner).speedMod(1.05f)));
-        return map;
-    }
-
-    @Override
-    protected Brain.Provider<?> brainProvider() {
-        return new SmartBrainProvider<>(this);
-    }
-
-    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
-        return new SetRandomWalkTarget<>();
-    }
-
-    protected boolean canSwim() {
-        return true;
-    }
 
     public enum Behaviour {
 
@@ -2002,6 +1975,5 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public record CombatRecord(ServerPlayer player, DamageSource lastSource, float totalDamage) {
-
     }
 }

@@ -17,11 +17,6 @@ import java.util.Set;
 
 public class SpellProperties {
 
-    public final Map<EnumSkills, Float> skillXP;
-    public final int cooldown, rpCost;
-    public final float percentage;
-    public final Set<EnumSkills> skills;
-
     public static final Codec<SpellProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
                     Codec.FLOAT.fieldOf("percentage").forGetter(d -> d.percentage),
@@ -31,8 +26,11 @@ public class SpellProperties {
                     Codec.INT.fieldOf("rp_cost").forGetter(d -> d.rpCost),
                     Codec.unboundedMap(CodecUtils.stringEnumCodec(EnumSkills.class, null), Codec.FLOAT).fieldOf("skill_xp").forGetter(d -> d.skillXP)
             ).apply(instance, (percentage, skills, cooldown, rpCost, skillXp) -> new SpellProperties(skillXp, cooldown, rpCost, percentage, skills.orElse(List.of()))));
-
     public static final SpellProperties DEFAULT_PROP = new SpellProperties(new EnumMap<>(EnumSkills.class), 20, 0, 0, List.of());
+    public final Map<EnumSkills, Float> skillXP;
+    public final int cooldown, rpCost;
+    public final float percentage;
+    public final Set<EnumSkills> skills;
 
     public SpellProperties(Map<EnumSkills, Float> skillXP, int cooldown, int rpCost, float percentage, List<EnumSkills> skills) {
         this.percentage = percentage;
@@ -53,8 +51,8 @@ public class SpellProperties {
         private final Map<EnumSkills, Float> xp = new EnumMap<>(EnumSkills.class);
 
         private final int cooldown, rpCost;
-        private float percentage;
         private final List<EnumSkills> skills = new ArrayList<>();
+        private float percentage;
 
         public Builder(int cooldown, int rpCost) {
             this.cooldown = cooldown;

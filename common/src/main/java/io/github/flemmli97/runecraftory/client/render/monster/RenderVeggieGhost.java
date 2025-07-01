@@ -1,21 +1,17 @@
 package io.github.flemmli97.runecraftory.client.render.monster;
 
 import io.github.flemmli97.runecraftory.client.model.monster.ModelVeggieGhost;
-import io.github.flemmli97.runecraftory.client.render.ScaledRenderer;
+import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityVeggieGhost;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class RenderVeggieGhost<T extends EntityVeggieGhost> extends ScaledEntityRenderer<T, ModelVeggieGhost<T>> implements ScaledRenderer {
+public class RenderVeggieGhost<T extends EntityVeggieGhost> extends RenderMonster<T, ModelVeggieGhost<T>> {
 
     public RenderVeggieGhost(EntityRendererProvider.Context ctx, ResourceLocation texture) {
-        this(ctx, texture, 1);
-    }
-
-    public RenderVeggieGhost(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale) {
-        super(ctx, new ModelVeggieGhost<>(), texture, scale, 0);
+        super(ctx, new ModelVeggieGhost<>(), texture, 0);
     }
 
     @Override

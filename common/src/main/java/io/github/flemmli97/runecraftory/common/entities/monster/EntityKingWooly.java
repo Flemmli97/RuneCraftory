@@ -32,9 +32,4 @@ public class EntityKingWooly extends EntityAggressiveWooly {
     public float getSoundVolume() {
         return 1.15f;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return super.passengerOffset(passenger).scale(2.5f);
-//    }
 }

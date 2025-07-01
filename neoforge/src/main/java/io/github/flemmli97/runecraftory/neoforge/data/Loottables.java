@@ -106,7 +106,7 @@ public class Loottables extends LootTableProvider {
         }
 
         protected void init() {
-            this.lootTables.put(LootTableResources.WOOLED_WHITE_LOOT, this.table(
+            this.lootTables.put(LootTableResources.WOOLY_WHITE, this.table(
                             new ItemLootData(ModItems.FUR_SMALL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
                     .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
             this.registerLootTable(ModEntities.WOOLY.get(), this.table(
@@ -556,7 +556,7 @@ public class Loottables extends LootTableProvider {
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
 
-            this.lootTables.put(EntityWooly.shearedLootTable(LootTableResources.WOOLED_WHITE_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
+            this.lootTables.put(EntityWooly.shearedLootTable(LootTableResources.WOOLY_WHITE), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
         }
     }
 

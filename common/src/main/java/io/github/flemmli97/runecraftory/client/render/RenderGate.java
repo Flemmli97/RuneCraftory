@@ -55,6 +55,11 @@ public class RenderGate extends EntityRenderer<GateEntity> {
     }
 
     @Override
+    protected int getBlockLightLevel(GateEntity entityIn, BlockPos pos) {
+        return 15;
+    }
+
+    @Override
     public void render(GateEntity entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
         stack.pushPose();
         float scale = 1.2f + Mth.sin(entity.tickCount * 0.1f) * 0.04f;
@@ -86,11 +91,6 @@ public class RenderGate extends EntityRenderer<GateEntity> {
     @Override
     protected boolean shouldShowName(GateEntity entity) {
         return false;
-    }
-
-    @Override
-    protected int getBlockLightLevel(GateEntity entityIn, BlockPos pos) {
-        return 15;
     }
 
     @Override

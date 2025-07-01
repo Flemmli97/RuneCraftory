@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,23 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
 
     public EntityRafflesiaPitcher(Level level, EntityRafflesia parent) {
         super(ModEntities.RAFFLESIA_PITCHER.get(), level, parent);
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        if (!this.level().isClientSide) {
+            this.getAnimationHandler().runIfNotNull(anim -> {
+                if (anim.isAt("attack")) {
+                    rafflesiaSpawning(this);
+                }
+            });
+        }
+    }
+
+    @Override
+    public AnimationHandler<?> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     public static void rafflesiaSpawning(EntityRafflesiaPart part) {
@@ -66,13 +84,13 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
                     if (e != null) {
                         EntityRafflesia owner = part.getOwner();
                         if (e instanceof Mob mob) {
-                            mob.setTarget(part.getTarget());
+                            BrainUtils.setTargetOfEntity(mob, part.getTarget());
                             if (owner != null && owner.hasRestriction())
                                 mob.restrictTo(owner.blockPosition(), (int) owner.getRestrictRadius() + 1);
                         }
                         if (e instanceof IBaseMob mob && owner != null) {
                             int level = part.getOwner().xpLevel().getLevel();
-                            mob.setLevel(level + (int) ((part.getRandom().nextDouble() - 0.5) * level * 0.1));
+                            mob.setXPLevel(level + (int) ((part.getRandom().nextDouble() - 0.5) * level * 0.1));
                         }
                         for (int p = 0; p < 5; p++)
                             serverLevel.sendParticles(ParticleTypes.CLOUD, e.getRandomX(1), e.getRandomY(), e.getRandomZ(1), 1, serverLevel.getRandom().nextGaussian() * 0.1, serverLevel.getRandom().nextGaussian() * 0.1, serverLevel.getRandom().nextGaussian() * 0.1, 0);
@@ -84,15 +102,8 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
     }
 
     @Override
-    public void baseTick() {
-        super.baseTick();
-        if (!this.level().isClientSide) {
-            this.getAnimationHandler().runIfNotNull(anim -> {
-                if (anim.isAt("attack")) {
-                    rafflesiaSpawning(this);
-                }
-            });
-        }
+    public PartType getPartType() {
+        return PartType.PITCHER;
     }
 
     @Override
@@ -106,17 +117,7 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
     }
 
     @Override
-    public AnimationHandler<?> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public int cooldown() {
         return this.getRandom().nextInt(60) + 120;
-    }
-
-    @Override
-    public PartType getPartType() {
-        return PartType.PITCHER;
     }
 }

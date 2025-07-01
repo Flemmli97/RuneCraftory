@@ -93,7 +93,7 @@
         }
       }
     },
-    "stamp": {
+    "stomp": {
       "animation_length": 0.48,
       "bones": {
         "body": {

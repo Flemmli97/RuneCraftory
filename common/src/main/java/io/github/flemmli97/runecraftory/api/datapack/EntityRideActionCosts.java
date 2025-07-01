@@ -40,9 +40,9 @@ public class EntityRideActionCosts {
     }
 
     public boolean canRun(int command, Entity entity, @Nullable Spell spell) {
-        RideActionCost cost = this.getCost(command);
         if (!(entity instanceof ServerPlayer player))
             return true;
+        RideActionCost cost = this.getCost(command);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         if (spell == null || !cost.multiplier) {
             if (cost.multiplier)

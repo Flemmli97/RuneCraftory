@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FollowEntity;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
@@ -44,5 +45,11 @@ public class FollowEntityEx<E extends PathfinderMob, T extends Entity> extends F
         if (target != null && distSqr < ignoredDist * ignoredDist)
             return false;
         return super.checkExtraStartConditions(level, entity);
+    }
+
+    @Override
+    protected void teleportToTarget(E entity, T target) {
+        super.teleportToTarget(entity, target);
+        BrainUtils.clearMemory(entity, MemoryModuleType.ATTACK_TARGET);
     }
 }

@@ -1,8 +1,17 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWaterPrioritizingWalkTarget;
+import io.github.flemmli97.runecraftory.common.entities.ai.control.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.AmphibiousNavigator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -15,58 +24,90 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
-import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 public class EntityTortas extends ChargingMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String BITE = BUILDER.add("bite", AnimationsBuilder.definition(0.56).marker("attack", 0.32));
-    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(2.5).marker("attack_start", 0));
     public static final String INTERACT = BUILDER.add("interact", BITE);
+    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(2.5).marker("attack_start", 0));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTortas>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(BITE, e -> 0.85f), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityTortas>(SPIN)
-//                    .cooldown(e -> e.animationCooldown(SPIN))
-//                    .withCondition(MonsterActionUtils.chargeCondition())
-//                    .prepare(ChargeAction::new), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityTortas>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityTortas> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    protected final PathNavigation waterNavigator;
+    protected final PathNavigation groundNavigator;
     private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, ANIMS);
-    protected final WaterBoundPathNavigation waterNavigator;
-    protected final GroundPathNavigation groundNavigator;
 
     public EntityTortas(EntityType<? extends EntityTortas> type, Level world) {
         super(type, world);
-//        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-//        this.goalSelector.addGoal(2, this.attack);
-//        this.moveControl = new SwimWalkMoveController(this);
-//        this.goalSelector.removeGoal(this.swimGoal);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.moveControl = new SwimWalkMoveController(this);
         this.waterNavigator = new AmphibiousNavigator(this, world);
-        this.groundNavigator = new GroundPathNavigation(this, world);
-//        this.goalSelector.removeGoal(this.wander);
-//        this.wander = new AmphibiousStrollGoal(this, 1, 2);
-//        this.goalSelector.addGoal(6, this.wander);
-//        this.maxUpStep = 1;
+        this.groundNavigator = this.navigation;
     }
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.18);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(Attributes.STEP_HEIGHT.value().getDefaultValue() + 1);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<ChargingMonster>create()
+                .start(BITE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(2)
+                .start(BITE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(SPIN).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetChargeTarget<>())
+                .end(3)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(4, new Idle<>()).build();
+    }
+
+    @Override
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                Pair.of(new SetWaterPrioritizingWalkTarget<>(), 10),
+                Pair.of(new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
+                        .startCondition(entity -> !entity.isSwimming()), 5),
+                Pair.of(new Idle<>().runFor(entity -> entity.getRandom().nextInt(20, 50)), 1)
+        );
+    }
+
+    @Override
+    protected boolean canFloatInWater() {
+        return false;
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.2;
+        double length = this.getBbWidth() * 1.4;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -79,33 +120,6 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public void setDoJumping(boolean jump) {
-        if (this.isInWater())
-            super.setDoJumping(jump);
-    }
-
-    @Override
-    public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isInWater()) {
-            this.handleFreeTravel(vec);
-        } else {
-            super.travel(vec);
-        }
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.2;
-        double length = this.getBbWidth() * 1.4;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
-    }
-
-    @Override
-    protected boolean isChargingAnim(String anim) {
-        return anim.equals(SPIN);
-    }
-
-    @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim != null && anim.is(SPIN)) {
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(0.2), this.getYRot(), 0, this.position());
@@ -114,53 +128,18 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
-                return;
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(SPIN);
-            else
-                this.getAnimationHandler().setAnimation(BITE);
-        }
-    }
-
-    @Override
-    public double ridingSpeedModifier() {
-        return 0.8;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.TURTLE_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.TURTLE_DEATH;
-    }
-
-    @Override
-    public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.75f;
-    }
-
-    @Override
     public AnimationHandler<EntityTortas> getAnimationHandler() {
         return this.animationHandler;
     }
 
     @Override
-    public boolean adjustRotFromRider(LivingEntity rider) {
-        return true;
+    protected boolean isChargingAnim(String anim) {
+        return anim.equals(SPIN);
     }
 
     @Override
-    protected Vec3 directionToLookAt() {
-        if (this.getAnimationHandler().isCurrent(SPIN)) {
-            return this.getDeltaMovement();
-        }
-        return super.directionToLookAt();
+    public double chargingSpeed() {
+        return 0.3f;
     }
 
     @Override
@@ -191,11 +170,64 @@ public class EntityTortas extends ChargingMonster {
         }
     }
 
-    //==========Water stuff
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(SPIN);
+            else
+                this.getAnimationHandler().setAnimation(BITE);
+        }
+    }
 
     @Override
-    public double chargingSpeed() {
-        return 0.3f;
+    public void setDoJumping(boolean jump) {
+        if (this.isInWater())
+            super.setDoJumping(jump);
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.isEffectiveAi() && this.isInWater()) {
+            this.handleFreeTravel(vec);
+        } else {
+            super.travel(vec);
+        }
+    }
+
+    @Override
+    public double ridingSpeedModifier() {
+        return 0.8;
+    }
+
+    @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(SPIN)) {
+            return this.getDeltaMovement();
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
+    public boolean adjustRotFromRider(LivingEntity rider) {
+        return true;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.TURTLE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.TURTLE_DEATH;
+    }
+
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.75f;
     }
 
     @Override
@@ -207,35 +239,18 @@ public class EntityTortas extends ChargingMonster {
         if (!this.level().isClientSide) {
             if (this.isInWater()) {
                 this.navigation = this.waterNavigator;
-//                this.wander.setInterval(2);
                 this.setSwimming(true);
             } else {
                 this.navigation = this.groundNavigator;
-//                this.wander.setInterval(100);
                 this.setSwimming(false);
             }
         }
     }
 
-//    @Override
-//    public double getPassengersRidingOffset() {
-//        return this.getBbHeight() * 0.7D;
-//    }
-
     @Override
     public boolean isPushedByFluid() {
         return false;
     }
-
-//    @Override
-//    public boolean canBreatheUnderwater() {
-//        return true;
-//    }
-//
-//    @Override
-//    public MobType getMobType() {
-//        return MobType.WATER;
-//    }
 
     @Override
     public void playInteractionAnimation() {
@@ -246,9 +261,4 @@ public class EntityTortas extends ChargingMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 11 / 16d, -4 / 16d);
-//    }
 }

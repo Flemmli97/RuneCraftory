@@ -131,6 +131,12 @@ public class ItemStat {
         return Object2DoubleSortedMaps.unmodifiable(sorted);
     }
 
+    public static AttributeModifier adjustModifier(Holder<Attribute> attribute, AttributeModifier original) {
+        if (attribute.is(RunecraftoryTags.Attributes.PERCENTAGE_DISPLAY) && original.operation() == AttributeModifier.Operation.ADD_VALUE)
+            return new AttributeModifier(original.id(), original.amount() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        return original;
+    }
+
     public ItemStat setID(ResourceLocation id) {
         if (this.id == null)
             this.id = id;
@@ -240,12 +246,6 @@ public class ItemStat {
         if (val == 0)
             return null;
         return (sign + ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(val)) + (percSign ? "%" : "");
-    }
-
-    public static AttributeModifier adjustModifier(Holder<Attribute> attribute, AttributeModifier original) {
-        if (attribute.is(RunecraftoryTags.Attributes.PERCENTAGE_DISPLAY) && original.operation() == AttributeModifier.Operation.ADD_VALUE)
-            return new AttributeModifier(original.id(), original.amount() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-        return original;
     }
 
     @Override

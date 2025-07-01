@@ -10,7 +10,7 @@ public interface IBaseMob {
 
     XpLevelHolder xpLevel();
 
-    void setLevel(int level);
+    void setXPLevel(int level);
 
     default int friendPoints(Player player) {
         return this.friendPoints(player.getUUID());

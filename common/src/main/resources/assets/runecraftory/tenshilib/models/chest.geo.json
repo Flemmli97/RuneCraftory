@@ -48,6 +48,11 @@
               "uv": [0, 41]
             }
           ]
+        },
+        {
+          "name": "ridingPos",
+          "parent": "body",
+          "pivot": [0, 7, 7]
         }
       ]
     }

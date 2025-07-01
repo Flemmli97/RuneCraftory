@@ -95,6 +95,7 @@ public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
         if (player instanceof ServerPlayer && player.isShiftKeyDown() && stack == main) {
             this.changeMode(stack);
         }
+        player.swing(InteractionHand.MAIN_HAND, true);
     }
 
     private void changeMode(ItemStack stack) {

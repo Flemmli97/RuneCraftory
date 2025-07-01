@@ -28,6 +28,10 @@ public record C2SQuestSelect(ResourceLocation quest, boolean active) implements 
         }
     };
 
+    public C2SQuestSelect() {
+        this(null, false);
+    }
+
     public static C2SQuestSelect read(RegistryFriendlyByteBuf buf) {
         return new C2SQuestSelect(buf.readBoolean() ? buf.readResourceLocation() : null, buf.readBoolean());
     }
@@ -40,10 +44,6 @@ public record C2SQuestSelect(ResourceLocation quest, boolean active) implements 
             data.reset(pkt.quest());
         else
             data.acceptQuest(pkt.quest());
-    }
-
-    public C2SQuestSelect() {
-        this(null, false);
     }
 
     @Override

@@ -19,11 +19,6 @@ public class RenderPoisonNeedle extends CrossedTextureRenderer<EntityPoisonNeedl
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityPoisonNeedle entity) {
-        return TEX;
-    }
-
-    @Override
     public void render(EntityPoisonNeedle entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.2, 0);
@@ -43,5 +38,10 @@ public class RenderPoisonNeedle extends CrossedTextureRenderer<EntityPoisonNeedl
             stack.popPose();
         }
         stack.popPose();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(EntityPoisonNeedle entity) {
+        return TEX;
     }
 }

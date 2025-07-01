@@ -607,7 +607,7 @@
       "bones": {
         "body": {
           "rotation": [-7.5, 0, 0],
-          "position": [0, -6, 0]
+          "position": [0, 0, 0]
         },
         "legLeftUp": {
           "rotation": [-60, -15, 0],

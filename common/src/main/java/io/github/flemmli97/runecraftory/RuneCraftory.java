@@ -19,6 +19,10 @@ public class RuneCraftory {
 
     public static boolean iris;
 
+    public static ResourceLocation modRes(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
+
     /**
      * Simple loot context. Needs server side entity
      */
@@ -27,9 +31,5 @@ public class RuneCraftory {
                 .withParameter(LootContextParams.ORIGIN, entity.position())
                 .create(LootContextParamSets.ADVANCEMENT_ENTITY))
                 .create(Optional.empty());
-    }
-
-    public static ResourceLocation modRes(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }

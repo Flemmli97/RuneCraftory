@@ -19,12 +19,10 @@ public enum EnumElement {
     LOVE(ChatFormatting.RED, "love", 0xfc60fc, Suppliers.memoize(() -> new ItemStack(ModItems.CRYSTAL_LOVE.get())));
 
     public static final String PREFIX = "runecraftory.element.";
-
+    public final Supplier<ItemStack> icon;
     private final String translation;
     private final ChatFormatting color;
     private final int particleColor;
-
-    public final Supplier<ItemStack> icon;
 
     EnumElement(ChatFormatting color, String key, int particleColor, Supplier<ItemStack> icon) {
         this.color = color;

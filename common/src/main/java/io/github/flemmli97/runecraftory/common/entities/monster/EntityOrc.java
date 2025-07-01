@@ -1,8 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -18,6 +22,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.function.Consumer;
 
@@ -25,22 +34,11 @@ public class EntityOrc extends BaseMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String MELEE_1 = BUILDER.add("attack_1", AnimationsBuilder.definition(1).marker("attack", 0.72));
-    public static final String MELEE_2 = BUILDER.add("attack_2", AnimationsBuilder.definition(1.04).marker("attack", 0.56));
     public static final String INTERACT = BUILDER.add("interact", MELEE_1);
+    public static final String MELEE_2 = BUILDER.add("attack_2", AnimationsBuilder.definition(1.04).marker("attack", 0.56));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE_1, e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE_2, e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f), 1)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityOrc>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityOrc> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityOrc> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityOrc(EntityType<? extends EntityOrc> type, Level world) {
@@ -54,15 +52,54 @@ public class EntityOrc extends BaseMonster {
     }
 
     @Override
-    public AnimationHandler<? extends EntityOrc> getAnimationHandler() {
-        return this.animationHandler;
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE_1).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .start(MELEE_2).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new Idle<>()).build();
     }
 
     @Override
     public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.8;
         double length = this.getBbWidth() * 2.1;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.vehicleDependentHeight() + 0.02, length);
+    }
+
+    @Override
+    public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
+        super.mobAttack(anim, target, cons);
+        if (this.getMainHandItem().is(ModItems.ORC_MAZE.get()))
+            this.playSound(ModSounds.ENTITY_ORC_BONK.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+    }
+
+    @Override
+    public AnimationHandler<? extends EntityOrc> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
+                return;
+            if (this.random.nextInt(2) == 0)
+                this.getAnimationHandler().setAnimation(MELEE_1);
+            else
+                this.getAnimationHandler().setAnimation(MELEE_2);
+        }
     }
 
     @Override
@@ -86,30 +123,6 @@ public class EntityOrc extends BaseMonster {
     }
 
     @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
-                return;
-            if (this.random.nextInt(2) == 0)
-                this.getAnimationHandler().setAnimation(MELEE_1);
-            else
-                this.getAnimationHandler().setAnimation(MELEE_2);
-        }
-    }
-
-    @Override
-    public void mobAttack(AnimationState anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        super.mobAttack(anim, target, cons);
-        if (this.getMainHandItem().is(ModItems.ORC_MAZE.get()))
-            this.playSound(ModSounds.ENTITY_ORC_BONK.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-    }
-
-//    @Override
-//    public double getPassengersRidingOffset() {
-//        return this.getBbHeight() * 0.85D;
-//    }
-
-    @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
@@ -118,9 +131,4 @@ public class EntityOrc extends BaseMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 17.5 / 16d, -7 / 16d);
-//    }
 }

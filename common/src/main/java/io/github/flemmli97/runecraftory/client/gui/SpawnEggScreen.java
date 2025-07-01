@@ -1,12 +1,22 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
+import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
+import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
+import io.github.flemmli97.runecraftory.common.network.C2SSpawnEgg;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +37,7 @@ public class SpawnEggScreen extends Screen {
     private final int sizeX = 240;
     private final int sizeY = 200;
 
+    private final List<EditBox> editBoxes = new ArrayList<>();
     private EditBox levelEditor, npcIDEditor;
     private int level;
     private ResourceLocation npcID;
@@ -54,11 +65,13 @@ public class SpawnEggScreen extends Screen {
             for (Supplier<? extends EntityType<?>> t : ensemble.entities()) {
                 Entity sub = t.get().create(Minecraft.getInstance().level);
                 if (sub instanceof LivingEntity livingSub) {
+                    livingSub.refreshDimensions();
                     list.add(livingSub);
                 }
             }
             this.entities = List.copyOf(list);
         } else if (e instanceof LivingEntity living) {
+            living.refreshDimensions();
             this.entities = List.of(living);
         } else {
             Minecraft.getInstance().setScreen(null);
@@ -66,7 +79,7 @@ public class SpawnEggScreen extends Screen {
         }
         this.leftPos = this.width / 2 - (this.sizeX / 2);
         this.topPos = this.height / 2 - (this.sizeY / 2);
-//        this.buttons();
+        this.buttons();
     }
 
     @Override
@@ -74,85 +87,90 @@ public class SpawnEggScreen extends Screen {
         super.tick();
         this.entities.forEach(entity -> entity.tickCount++);
     }
-//
-//    @Override
-//    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-//        graphics.fillGradient(this.leftPos, this.topPos, this.leftPos + this.sizeX, this.topPos + this.sizeY, -1072689136, -804253680);
-//        int xPadding = 16;
-//        int yOff = 16;
-//        this.minecraft.font.draw(graphics, Component.translatable("runecraftory.gui.level"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
-//        this.levelEditor.render(graphics, mouseX, mouseY, partialTick);
-//        yOff += 16 + 20 + 60;
-//        if (this.npcIDEditor != null) {
-//            this.minecraft.font.draw(graphics, Component.translatable("runecraftory.gui.npc.id"), this.leftPos + xPadding, this.topPos + yOff, 0xffffff);
-//            this.npcIDEditor.render(graphics, mouseX, mouseY, partialTick);
-//        }
-//        int max = Math.min(4, this.entities.size());
-//        double middle = (max - 1) / 2.;
-//        for (int i = 0; i < max; i++) {
-//            LivingEntity entity = this.entities.get(i);
-//            float scale = 1;
-//            if (entity.getBbWidth() > 1.2) {
-//                scale = 2f / entity.getBbWidth();
-//            }
-//            if (entity.getBbHeight() > 1.6) {
-//                scale = Math.min(scale, 2.4f / entity.getBbHeight());
-//            }
-//            int offset = Math.min(Math.abs(i - (int) middle), Math.abs(i - Mth.ceil(middle)));
-//            scale *= (1 - offset * 0.2);
-//            int posX = 160;
-//            int posY = 100;
-//            if (max > 1) {
-//                posX += (int) ((i - middle) * 90 * scale);
-//                posY -= offset * 15;
-//            }
 
-    /// /            InventoryScreen.renderEntityInInventory(this.leftPos + posX, this.topPos + posY, (int) (29 * scale), this.leftPos + posX - mouseX, this.topPos + (posY - 35) - mouseY, entity);
-//        }
-//        super.render(graphics, mouseX, mouseY, partialTick);
-//    }
-//
-//    protected void buttons() {
-//        int padding = 16;
-//        int yOff = padding + 12;
-//        this.levelEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 48, 16, Component.literal("")) {
-//            @Override
-//            public boolean charTyped(char codePoint, int modifiers) {
-//                if (Character.isDigit(codePoint))
-//                    return super.charTyped(codePoint, modifiers);
-//                return false;
-//            }
-//        };
-//        this.levelEditor.setResponder(s -> {
-//            try {
-//                this.level = Integer.parseInt(s);
-//            } catch (NumberFormatException ignored) {
-//            }
-//        });
-//        ItemStack stack = this.player.getItemInHand(this.hand);
-//        this.level = stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1);
-//        this.levelEditor.setValue(this.level + "");
-//        this.addWidget(this.levelEditor);
-//        yOff += 16 + 20 + 60;
-//        if (stack.getItem() instanceof NPCSpawnEgg) {
-//            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeY - 32, 16, Component.literal(""));
-//            this.npcID = NPCSpawnEgg.getNpcID(stack);
-//            if (this.npcID != null)
-//                this.npcIDEditor.setValue(this.npcID.toString());
-//            this.npcIDEditor.setResponder(s -> {
-//                try {
-//                    this.npcID = new ResourceLocation(s);
-//                } catch (ResourceLocationException ignored) {
-//                }
-//            });
-//            this.addWidget(this.npcIDEditor);
-//        }
-//        yOff += (16 + 8) * 2;
-//        this.addRenderableWidget(new Button(this.leftPos + this.sizeX / 2 - 50, this.topPos + yOff, 100, 20, Component.translatable("runecraftory.gui.save"), b -> {
-//            LoaderNetwork.INSTANCE.sendToServer(new C2SSpawnEgg(this.hand, this.level, this.npcID));
-//            this.minecraft.setScreen(null);
-//        }));
-//    }
+    @Override
+    protected void renderBlurredBackground(float partialTick) {
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
+        graphics.fillGradient(this.leftPos, this.topPos, this.leftPos + this.sizeX, this.topPos + this.sizeY, 0xc0101010, 0xc0101010);
+        int padding = 16;
+        int yOff = padding;
+        graphics.drawString(this.minecraft.font, Component.translatable("runecraftory.gui.level"), this.leftPos + padding, this.topPos + yOff, 0xffffff);
+        this.levelEditor.render(graphics, mouseX, mouseY, partialTick);
+        yOff += 16 + 20 + 60;
+        if (this.npcIDEditor != null) {
+            graphics.drawString(this.minecraft.font, Component.translatable("runecraftory.gui.npc.id"), this.leftPos + padding, this.topPos + yOff, 0xffffff);
+            this.npcIDEditor.render(graphics, mouseX, mouseY, partialTick);
+        }
+        int max = Math.min(4, this.entities.size());
+        double middle = (max - 1) / 2.;
+        for (int i = 0; i < max; i++) {
+            LivingEntity entity = this.entities.get(i);
+            int offset = Math.min(Math.abs(i - (int) middle), Math.abs(i - Mth.ceil(middle)));
+            float scale = Math.max(0.2f, 1 - offset * 0.3f);
+            int posX = this.sizeX - padding - 12;
+            int posY = padding + 12;
+            if (max > 1) {
+                posX += (int) ((i - middle) * 40 * scale);
+                posY -= offset * 15;
+            }
+            float defaultScale = 30;
+            float size = defaultScale * 3;
+            posX -= size;
+            RenderUtils.renderScaledEntityGui(graphics, this.leftPos + posX, this.topPos + posY, size,
+                    size, defaultScale * scale, 0.625f, mouseX, mouseY, entity);
+        }
+    }
+
+    protected void buttons() {
+        this.editBoxes.clear();
+        int padding = 16;
+        int yOff = padding + 12;
+        this.levelEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 48, 16, Component.literal("")) {
+            @Override
+            public boolean charTyped(char codePoint, int modifiers) {
+                if (Character.isDigit(codePoint))
+                    return super.charTyped(codePoint, modifiers);
+                return false;
+            }
+        };
+        this.levelEditor.setResponder(s -> {
+            try {
+                this.level = Integer.parseInt(s);
+            } catch (NumberFormatException ignored) {
+            }
+        });
+        this.editBoxes.add(this.levelEditor);
+        ItemStack stack = this.player.getItemInHand(this.hand);
+        this.level = stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1);
+        this.levelEditor.setValue(this.level + "");
+        this.addWidget(this.levelEditor);
+        yOff += 16 + 20 + 60;
+        if (stack.getItem() instanceof NPCSpawnEgg) {
+            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeY - 32, 16, Component.literal(""));
+            NPCSpawnData itemData = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+            this.npcID = itemData.npcDataId().orElse(null);
+            if (this.npcID != null)
+                this.npcIDEditor.setValue(this.npcID.toString());
+            this.npcIDEditor.setResponder(s -> {
+                try {
+                    this.npcID = ResourceLocation.parse(s);
+                } catch (ResourceLocationException ignored) {
+                }
+            });
+            this.addWidget(this.npcIDEditor);
+            this.editBoxes.add(this.npcIDEditor);
+        }
+        yOff += (16 + 8) * 2;
+        this.addRenderableWidget(Button.builder(Component.translatable("runecraftory.gui.save"), b -> {
+            LoaderNetwork.INSTANCE.sendToServer(new C2SSpawnEgg(this.hand, this.level, this.npcID));
+            this.minecraft.setScreen(null);
+        }).bounds(this.leftPos + this.sizeX / 2 - 50, this.topPos + yOff, 100, 20).build());
+    }
+
     @Override
     public boolean isPauseScreen() {
         return false;
@@ -160,9 +178,18 @@ public class SpawnEggScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (this.levelEditor.keyPressed(keyCode, scanCode, modifiers) || this.levelEditor.canConsumeInput()) {
+        if (this.editBoxes.stream().noneMatch(EditBox::canConsumeInput) && this.minecraft.options.keyInventory.matches(keyCode, scanCode)) {
+            this.onClose();
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        boolean click = super.mouseClicked(mouseX, mouseY, button);
+        if (!click)
+            this.setFocused(null);
+        return click;
     }
 }

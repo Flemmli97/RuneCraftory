@@ -17,11 +17,6 @@ public class RenderAppleProjectile extends ItemProjectileRenderer<EntityApplePro
     }
 
     @Override
-    public ItemStack getRenderItemStack(EntityAppleProjectile entity) {
-        return STACK;
-    }
-
-    @Override
     public void render(EntityAppleProjectile entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         this.scaleX = entity.getScale();
@@ -34,5 +29,10 @@ public class RenderAppleProjectile extends ItemProjectileRenderer<EntityApplePro
     @Override
     public Type getRenderType(EntityAppleProjectile entity) {
         return Type.NORMAL;
+    }
+
+    @Override
+    public ItemStack getRenderItemStack(EntityAppleProjectile entity) {
+        return STACK;
     }
 }

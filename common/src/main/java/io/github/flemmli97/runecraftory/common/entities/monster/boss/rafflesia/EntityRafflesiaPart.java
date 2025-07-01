@@ -48,12 +48,6 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
 
     private EntityRafflesia parent;
 
-    public EntityRafflesiaPart(EntityType<? extends Mob> entityType, Level level) {
-        super(entityType, level);
-        if (!level.isClientSide)
-            this.goalSelector.addGoal(1, this.attack);
-    }
-
     public EntityRafflesiaPart(EntityType<? extends Mob> entityType, Level level, EntityRafflesia parent) {
         this(entityType, level);
         this.parent = parent;
@@ -62,6 +56,12 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
         double health = parent.getAttributeValue(Attributes.MAX_HEALTH) * 0.5;
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(health);
         this.setHealth(this.getMaxHealth());
+    }
+
+    public EntityRafflesiaPart(EntityType<? extends Mob> entityType, Level level) {
+        super(entityType, level);
+        if (!level.isClientSide)
+            this.goalSelector.addGoal(1, this.attack);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -81,6 +81,13 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
                 return null;
             }
         };
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(PARENT, Optional.empty());
+        builder.define(SPAWN_DIRECTION, Direction.NORTH);
     }
 
     @Override
@@ -104,13 +111,6 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(PARENT, Optional.empty());
-        builder.define(SPAWN_DIRECTION, Direction.NORTH);
-    }
-
-    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         this.entityData.get(PARENT).ifPresent(uuid -> compound.putUUID("Parent", uuid));
@@ -128,14 +128,9 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
         }
     }
 
-    public void setSpawnDirection(Direction direction) {
-        this.entityData.set(SPAWN_DIRECTION, direction);
-    }
+    public abstract PartType getPartType();
 
-    @Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
+    public abstract Vec3 offset();
 
     @Nullable
     @Override
@@ -156,15 +151,20 @@ public abstract class EntityRafflesiaPart extends Mob implements AnimatedEntity,
         return this.parent;
     }
 
-    public abstract Vec3 offset();
+    public void setSpawnDirection(Direction direction) {
+        this.entityData.set(SPAWN_DIRECTION, direction);
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
 
     public abstract String attackAnim();
 
     public int cooldown() {
         return this.getRandom().nextInt(40) + 100;
     }
-
-    public abstract PartType getPartType();
 
     public enum PartType {
 

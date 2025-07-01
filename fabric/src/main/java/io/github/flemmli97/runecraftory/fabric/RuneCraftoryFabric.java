@@ -27,6 +27,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
@@ -206,6 +207,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         ModBlocks.BLOCK_ENTITY_TYPES.registerContent();
         ModMenuTypes.CONTAINERS.registerContent();
+        ModMemoryTypes.MEMORYIES.registerContent();
         ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
@@ -233,7 +235,6 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModSounds.SOUND_EVENTS.registerContent();
         ModDataComponentTypes.DATA_COMPONENTS.registerContent();
         ModCriteria.TRIGGERS.registerContent();
-//        ModFeatures.registerConfiguredFeatures();
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

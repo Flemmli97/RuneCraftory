@@ -29,6 +29,8 @@ public class ModelMimic<T extends EntityMimic> extends ModelChest<T> implements 
 
     @Override
     public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
-        return false;
+        this.ridingPosition.translateAndRotateWithParents(poseStack);
+        ClientHandlers.translateRider(poseStack, entity, rider);
+        return true;
     }
 }

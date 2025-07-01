@@ -2,9 +2,14 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -18,6 +23,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityFlowerLily extends BaseMonster {
@@ -28,18 +37,7 @@ public class EntityFlowerLily extends BaseMonster {
     public static final String INTERACT = BUILDER.add("interact", ATTACK);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityFlowerLily>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK, 9, 2, 1, e -> 1), 2),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityFlowerLily>simpleMeleeAction(LEAP, e -> 1)
-//                    .withCondition(((goal, target, previous) -> goal.distanceToTargetSq < 4)), 5)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityFlowerLily>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 1)), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityFlowerLily> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityFlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityFlowerLily(EntityType<? extends EntityFlowerLily> type, Level world) {
@@ -48,8 +46,43 @@ public class EntityFlowerLily extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(13)).prepareOptional(new MoveToAttackTarget<>())
+                .end(2)
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .end(5)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(4, new StrafeTarget<BaseMonster>().strafeDistance(11))
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
+    }
+
+    @Override
+    protected Vec3 directionToLookAt() {
+        if (this.getAnimationHandler().isCurrent(LEAP)) {
+            if (this.getDeltaMovement().lengthSqr() > 0.01)
+                return this.getDeltaMovement();
+            return null;
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        double attackSize = this.getBbWidth() * 2.1;
+        return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
     }
 
     @Override
@@ -61,19 +94,11 @@ public class EntityFlowerLily extends BaseMonster {
     }
 
     @Override
-    public AABB attackBB(AnimationState anim) {
-        double attackSize = this.getBbWidth() * 2.1;
-        return new AABB(-attackSize, -0.2, -attackSize, attackSize, this.getBbHeight() + 0.2, attackSize);
-    }
-
-    @Override
-    protected Vec3 directionToLookAt() {
-        if (this.getAnimationHandler().isCurrent(LEAP)) {
-            if (this.getDeltaMovement().lengthSqr() > 0.01)
-                return this.getDeltaMovement();
-            return null;
-        }
-        return super.directionToLookAt();
+    public int animationCooldown(@Nullable String anim) {
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(40) + 25 + diffAdd;
     }
 
     @Override
@@ -93,8 +118,9 @@ public class EntityFlowerLily extends BaseMonster {
         }
     }
 
-    protected Spell rangedAttackSpell() {
-        return ModSpells.DOUBLE_BULLET.get();
+    @Override
+    public AnimationHandler<EntityFlowerLily> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -109,22 +135,13 @@ public class EntityFlowerLily extends BaseMonster {
         }
     }
 
+    protected Spell rangedAttackSpell() {
+        return ModSpells.DOUBLE_BULLET.get();
+    }
+
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         this.playSound(ModSounds.ENTITY_FLOWER_LILY_STEP.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-    }
-
-    @Override
-    public int animationCooldown(@Nullable String anim) {
-        int diffAdd = this.difficultyCooldown();
-        if (anim == null)
-            return this.getRandom().nextInt(20) + 30 + diffAdd;
-        return this.getRandom().nextInt(40) + 25 + diffAdd;
-    }
-
-    @Override
-    public AnimationHandler<EntityFlowerLily> getAnimationHandler() {
-        return this.animationHandler;
     }
 
     @Override
@@ -136,9 +153,4 @@ public class EntityFlowerLily extends BaseMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 14 / 16d, -4 / 16d);
-//    }
 }

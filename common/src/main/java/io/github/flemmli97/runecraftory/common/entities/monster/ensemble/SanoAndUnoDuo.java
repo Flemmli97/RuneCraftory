@@ -37,7 +37,7 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
                 MobSpawnType.SPAWNER, false, false);
         UUID link = Mth.createInsecureUUID();
         if (e instanceof EntitySano sano) {
-            sano.setLevel(this.monsterLevel);
+            sano.setXPLevel(this.monsterLevel);
             sano.linkUsing(link);
             if (this.restrictRadius != -1)
                 sano.restrictTo(this.blockPosition(), this.restrictRadius);
@@ -52,7 +52,7 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
         if (e instanceof EntityUno uno) {
-            uno.setLevel(this.monsterLevel);
+            uno.setXPLevel(this.monsterLevel);
             uno.linkUsing(link);
             if (this.restrictRadius != -1)
                 uno.restrictTo(this.blockPosition(), this.restrictRadius);

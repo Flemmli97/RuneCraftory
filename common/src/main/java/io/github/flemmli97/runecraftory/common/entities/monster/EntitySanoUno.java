@@ -35,7 +35,6 @@ public abstract class EntitySanoUno extends BossMonster {
     private UUID linkedID;
 
     protected boolean reversedSwipe;
-    protected Vec3 targetPos;
 
     public EntitySanoUno(EntityType<? extends EntitySanoUno> type, Level world) {
         super(type, world);
@@ -48,14 +47,9 @@ public abstract class EntitySanoUno extends BossMonster {
                 .setMusic(ModSounds.SANO_UNO_FIGHT.get());
     }
 
-    public void linkUsing(UUID uuid) {
-        this.linkedID = uuid;
-        this.bossInfo.setMusicID(this.linkedID);
-    }
-
-    @Nullable
-    public UUID getLinkedID() {
-        return this.linkedID;
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new StaticNavigator(this, level);
     }
 
     @Override
@@ -80,9 +74,14 @@ public abstract class EntitySanoUno extends BossMonster {
         this.entityData.set(CAN_BE_REMOVED, compound.getBoolean("CanBeRemoved"));
     }
 
-    @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new StaticNavigator(this, level);
+    public void linkUsing(UUID uuid) {
+        this.linkedID = uuid;
+        this.bossInfo.setMusicID(this.linkedID);
+    }
+
+    @Nullable
+    public UUID getLinkedID() {
+        return this.linkedID;
     }
 
     @Override
@@ -165,11 +164,6 @@ public abstract class EntitySanoUno extends BossMonster {
         }
         super.remove(reason);
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 30.5 / 16d, 6 / 16d).scale(2);
-//    }
 
     @Override
     public boolean reversed() {

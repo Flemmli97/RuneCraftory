@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
@@ -10,6 +10,10 @@ import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -19,15 +23,22 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomFlyingTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
+import net.tslat.smartbrainlib.util.BrainUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -38,26 +49,15 @@ public class EntityWeagle extends BaseMonster {
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String GALE = BUILDER.add("gale", AnimationsBuilder.definition(0.96).marker("attack", 0.28));
     public static final String PECK = BUILDER.add("peck", AnimationsBuilder.definition(0.56).marker("attack", 0.2));
+    public static final String INTERACT = BUILDER.add("interact", PECK);
     public static final String SWOOP = BUILDER.add("swoop", AnimationsBuilder.definition(0.6)
             .marker("swoop_start", 0.2).marker("swoop_end", 0.48));
-    public static final String INTERACT = BUILDER.add("interact", PECK);
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(2).infinite());
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-//
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWeagle>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(PECK, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(SWOOP, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(GALE, 8, 4, 1, e -> 1), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWeagle>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 2),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new StrafingRunner<>(16, 5)), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityWeagle> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
 
     protected List<LivingEntity> hitEntity;
+    private Vec3 swoopMotion;
     private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 this.hitEntity = null;
@@ -65,44 +65,61 @@ public class EntityWeagle extends BaseMonster {
                 return false;
             });
 
-    private Vec3 swoopMotion;
-
     public EntityWeagle(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
-//        this.goalSelector.removeGoal(this.wander);
-//        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
-//        this.goalSelector.addGoal(2, this.attack);
         this.moveControl = new FreeMoveControl(this, 90, 50, FreeMoveControl.TRUE);
         this.setNoGravity(true);
     }
 
     @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new FloatingFlyNavigator(this, level);
+    }
+
+    @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.33);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        super.applyAttributes();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestTargetHorizontal<>(this, Player.class, 5, true, true, player -> !this.isTamed());
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(PECK).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .start(SWOOP).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(2)
+                .start(GALE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(2).radius(4)).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .build();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestTargetHorizontal<>(this, Mob.class, 5, true, true, this.targetPred);
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(2, new StrafeTarget<BaseMonster>().strafeDistance(7))
+                .add(5, new SetRandomFlyingTarget<BaseMonster>()
+                        .flightTargetPredicate((entity, pos) -> {
+                            LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
+                            if (target == null) {
+                                target = entity.getTarget();
+                            }
+                            return target != null && target.distanceToSqr(pos) <= 11 * 11 && Math.abs(target.getY() - pos.y()) < 6;
+                        }), new MoveToWalkTarget<>()).build();
     }
 
     @Override
-    public void travel(Vec3 vec) {
-        super.handleFreeTravel(vec);
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.5;
-        double length = this.getBbWidth() * 1.7;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                new SetRandomHoverTarget<>(),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 90))
+        );
     }
 
     @Override
@@ -111,6 +128,36 @@ public class EntityWeagle extends BaseMonster {
             return this.swoopMotion;
         }
         return super.directionToLookAt();
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        super.handleFreeTravel(vec);
+    }
+
+    @Override
+    public int animationCooldown(@Nullable String anim) {
+        if (anim != null && anim.equals(GALE)) {
+            int diffAdd = this.difficultyCooldown();
+            return this.getRandom().nextInt(40) + 50 + diffAdd;
+        }
+        return super.animationCooldown(anim);
+    }
+
+    @Override
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.is(SWOOP))
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .inflate(0.2)
+                    .inflate(grow), this.getYRot(), 0, this.position().add(this.getDeltaMovement()));
+        return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.5;
+        double length = this.getBbWidth() * 1.7;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
     }
 
     @Override
@@ -143,21 +190,8 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable String anim) {
-        if (anim != null && anim.equals(GALE)) {
-            int diffAdd = this.difficultyCooldown();
-            return this.getRandom().nextInt(40) + 20 + diffAdd;
-        }
-        return super.animationCooldown(anim);
-    }
-
-    @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (anim.is(SWOOP))
-            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(0.2)
-                    .inflate(grow), this.getYRot(), 0, this.position().add(this.getDeltaMovement()));
-        return super.calculateAttackAABB(anim, target, grow);
+    public AnimationHandler<EntityWeagle> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -174,26 +208,27 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new FloatingFlyNavigator(this, level);
+    protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.VEC_3, charge -> this.swoopMotion = charge);
+    }
+
+    public void setSwoopMotion(Vec3 swoopMotion) {
+        this.swoopMotion = swoopMotion;
+        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.swoopMotion);
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
     @Override
     protected void onFlap() {
         this.playSound(ModSounds.ENTITY_WEAGLE_FLAP.get(), this.getSoundVolume(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-    }
-
-    @Override
-    public AnimationHandler<EntityWeagle> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
-    }
-
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
     @Override
@@ -209,21 +244,5 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public String getSleepAnimation() {
         return SLEEP;
-    }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 16 / 16d, -1 / 16d);
-//    }
-
-    public void setSwoopMotion(Vec3 swoopMotion) {
-        this.swoopMotion = swoopMotion;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.swoopMotion);
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.swoopMotion = charge);
     }
 }

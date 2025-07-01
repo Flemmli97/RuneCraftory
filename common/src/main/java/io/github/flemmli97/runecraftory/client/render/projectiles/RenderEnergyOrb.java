@@ -107,6 +107,10 @@ public class RenderEnergyOrb extends SimpleModelRenderer<EntityHomingEnergyOrb> 
         return new Vec3(x, y, z);
     }
 
+    private static void vertex(VertexConsumer vertexConsumer, PoseStack.Pose pose, float x, float y, float z, int r, int g, int b, float u, float v) {
+        vertexConsumer.addVertex(pose, x, y, z).setColor(r, g, b, 200).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, 0.0f, 1.0f, 0.0f);
+    }
+
     @Override
     public void translate(EntityHomingEnergyOrb entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
         super.translate(entity, stack, 0, 0, partialTicks);
@@ -118,10 +122,6 @@ public class RenderEnergyOrb extends SimpleModelRenderer<EntityHomingEnergyOrb> 
         float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + this.yawOffset();
         float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + this.pitchOffset();
         this.layer.render(stack, buffer, packedLight, entity, 0, 0, partialTicks, entity.tickCount, yaw, pitch);
-    }
-
-    private static void vertex(VertexConsumer vertexConsumer, PoseStack.Pose pose, float x, float y, float z, int r, int g, int b, float u, float v) {
-        vertexConsumer.addVertex(pose, x, y, z).setColor(r, g, b, 200).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, 0.0f, 1.0f, 0.0f);
     }
 
     @Override

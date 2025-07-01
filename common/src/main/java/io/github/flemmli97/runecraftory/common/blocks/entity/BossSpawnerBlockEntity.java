@@ -108,7 +108,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                 } else if (!this.noNearby())
                     return;
                 if (entity instanceof IBaseMob mob)
-                    mob.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
+                    mob.setXPLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
                 entity.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 5, this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (entity instanceof Mob mob) {
                     mob.restrictTo(this.worldPosition, 13);

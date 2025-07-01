@@ -231,6 +231,10 @@
         },
         "head": {
           "rotation": [-70, 0, 0]
+        },
+        "ridingPos": {
+          "rotation": [-90, 0, 0],
+          "position": [0, 0, -2]
         }
       }
     },

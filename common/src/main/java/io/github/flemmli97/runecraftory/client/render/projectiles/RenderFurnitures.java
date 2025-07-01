@@ -149,10 +149,6 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         dispatcher.renderSingleBlock(state, stack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
     }
 
-    private VertexConsumer simpleConsumer(MultiBufferSource buffer, ResourceLocation tex) {
-        return buffer.getBuffer(RenderType.entityCutout(tex));
-    }
-
     private void renderModel(PoseStack stack, VertexConsumer ivertexbuilder, int packedLight, ModelPart... parts) {
         stack.scale(-1, -1, 1);
         stack.translate(0.0, -1.501f, 0.0);
@@ -165,5 +161,9 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         stack.translate(0.0, -1.501f, 0.0);
         for (ReloadableCache<ModelPartsContainer> part : parts)
             part.get().getRoot().render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
+    }
+
+    private VertexConsumer simpleConsumer(MultiBufferSource buffer, ResourceLocation tex) {
+        return buffer.getBuffer(RenderType.entityCutout(tex));
     }
 }

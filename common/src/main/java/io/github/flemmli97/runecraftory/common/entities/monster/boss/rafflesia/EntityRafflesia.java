@@ -1,11 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -34,6 +37,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -55,13 +59,13 @@ public class EntityRafflesia extends BossMonster {
     public static final String PARA_BREATH_REV = BUILDER.add("paralysis_breath_2", POISON_BREATH);
     public static final String SLEEP_BREATH = BUILDER.add("sleep_breath", POISON_BREATH);
     public static final String SLEEP_BREATH_REV = BUILDER.add("sleep_breath_2", POISON_BREATH);
+    public static final String INTERACT = BUILDER.add("interact", POISON_BREATH);
     public static final String WIND_BLADE_X8 = BUILDER.add("casting", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
     public static final String WIND_BLADE_X16 = BUILDER.add("wind_blade_x16", WIND_BLADE_X8);
     public static final String RESUMMON = BUILDER.add("resummon", WIND_BLADE_X8);
     public static final String STATUS_CIRCLE = BUILDER.add("status_circle", WIND_BLADE_X8);
-    public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
     public static final String ANGRY = BUILDER.add("roar", WIND_BLADE_X8);
-    public static final String INTERACT = BUILDER.add("interact", POISON_BREATH);
+    public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, EntityRafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -81,48 +85,7 @@ public class EntityRafflesia extends BossMonster {
         b.put(RESUMMON, cons);
         b.put(STATUS_CIRCLE, cons);
     });
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRafflesia>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH)
-//                    .cooldown(e -> e.animationCooldown(POISON_BREATH))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(POISON_BREATH_REV)
-//                    .cooldown(e -> e.animationCooldown(POISON_BREATH_REV))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH)
-//                    .cooldown(e -> e.animationCooldown(PARA_BREATH))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(PARA_BREATH_REV)
-//                    .cooldown(e -> e.animationCooldown(PARA_BREATH_REV))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH)
-//                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(SLEEP_BREATH_REV)
-//                    .cooldown(e -> e.animationCooldown(SLEEP_BREATH_REV))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X8)
-//                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X8))
-//                    .withCondition(((goal, target, previous) -> !goal.attacker.isEnraged()))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(WIND_BLADE_X16)
-//                    .cooldown(e -> e.animationCooldown(WIND_BLADE_X16))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(STATUS_CIRCLE)
-//                    .cooldown(e -> e.animationCooldown(STATUS_CIRCLE))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged()))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 8),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRafflesia>(RESUMMON)
-//                    .cooldown(e -> e.animationCooldown(RESUMMON))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.getHorseTail() == null || goal.attacker.getPitcher() == null || goal.attacker.getFlower() == null))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 7)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityRafflesia>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityRafflesia> attack2 = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private boolean mirrorAttack;
 
     private final AnimationHandler<EntityRafflesia> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -142,15 +105,6 @@ public class EntityRafflesia extends BossMonster {
         super(type, world);
     }
 
-    public static Vec3 rotateVec(Direction dir, Vec3 v) {
-        return switch (dir) {
-            case NORTH -> v.multiply(-1, 1, -1);
-            case EAST -> new Vec3(v.z(), v.y(), -v.x());
-            case WEST -> new Vec3(-v.z(), v.y(), -v.x());
-            default -> v;
-        };
-    }
-
     public static boolean isMirrorAttack(AnimationDefinition anim) {
         return anim != null && anim.is(POISON_BREATH_REV, PARA_BREATH_REV, SLEEP_BREATH_REV);
     }
@@ -159,6 +113,15 @@ public class EntityRafflesia extends BossMonster {
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(null, this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(ModSounds.RAFFLESIA_FIGHT.get());
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(HORSE_TAIL, Optional.empty());
+        builder.define(FLOWER, Optional.empty());
+        builder.define(PITCHER, Optional.empty());
+        builder.define(SPAWN_DIRECTION, Direction.NORTH);
     }
 
     @Override
@@ -172,23 +135,6 @@ public class EntityRafflesia extends BossMonster {
         };
     }
 
-    public void useAttack(AnimationState anim) {
-        if (anim.is(RESUMMON))
-            this.respawnParts();
-        if (anim.is(WIND_BLADE_X8))
-            ModSpells.WIND_CIRCLE_X8.get().use(this);
-        if (anim.is(WIND_BLADE_X16))
-            ModSpells.WIND_CIRCLE_X16.get().use(this);
-        if (anim.is(POISON_BREATH, POISON_BREATH_REV))
-            ModSpells.RAFFLESIA_POISON.get().use(this);
-        if (anim.is(PARA_BREATH, PARA_BREATH_REV))
-            ModSpells.RAFFLESIA_PARA.get().use(this);
-        if (anim.is(SLEEP_BREATH, SLEEP_BREATH_REV))
-            ModSpells.RAFFLESIA_SLEEP.get().use(this);
-        if (anim.is(STATUS_CIRCLE))
-            ModSpells.RAFFLESIA_CIRCLE.get().use(this);
-    }
-
     @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
@@ -196,45 +142,30 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(HORSE_TAIL, Optional.empty());
-        builder.define(FLOWER, Optional.empty());
-        builder.define(PITCHER, Optional.empty());
-        builder.define(SPAWN_DIRECTION, Direction.NORTH);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        this.entityData.get(HORSE_TAIL).ifPresent(uuid -> compound.putUUID("HeadBones", uuid));
-        this.entityData.get(FLOWER).ifPresent(uuid -> compound.putUUID("Flower", uuid));
-        this.entityData.get(PITCHER).ifPresent(uuid -> compound.putUUID("Pitcher", uuid));
-        compound.putInt("SpawnDirection", this.entityData.get(SPAWN_DIRECTION).ordinal());
-        compound.putInt("SummonCooldown", this.summonCooldown);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.hasUUID("HorseTail"))
-            this.entityData.set(HORSE_TAIL, Optional.of(compound.getUUID("HorseTail")));
-        if (compound.hasUUID("Flower"))
-            this.entityData.set(FLOWER, Optional.of(compound.getUUID("Flower")));
-        if (compound.hasUUID("Pitcher"))
-            this.entityData.set(PITCHER, Optional.of(compound.getUUID("Pitcher")));
-        try {
-            this.entityData.set(SPAWN_DIRECTION, Direction.values()[compound.getInt("SpawnDirection")]);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-        }
-        this.summonCooldown = compound.getInt("SummonCooldown");
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
-        this.entityData.set(SPAWN_DIRECTION, this.getDirection());
-        this.respawnParts();
-        return super.finalizeSpawn(level, difficulty, reason, spawnData);
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntityRafflesia>create()
+                .start(MonsterBehaviourUtils.checkedAttack(POISON_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(POISON_BREATH_REV)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(PARA_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(PARA_BREATH_REV)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(SLEEP_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(SLEEP_BREATH_REV)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE_X8)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.isEnraged())
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE_X16)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(BossMonster::isEnraged)
+                .end(6)
+                .start(MonsterBehaviourUtils.checkedAttack(RESUMMON)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRafflesia::noPartsLeft)
+                .end(7)
+                .build();
     }
 
     @Override
@@ -264,6 +195,60 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        this.entityData.get(HORSE_TAIL).ifPresent(uuid -> compound.putUUID("HeadBones", uuid));
+        this.entityData.get(FLOWER).ifPresent(uuid -> compound.putUUID("Flower", uuid));
+        this.entityData.get(PITCHER).ifPresent(uuid -> compound.putUUID("Pitcher", uuid));
+        compound.putInt("SpawnDirection", this.entityData.get(SPAWN_DIRECTION).ordinal());
+        compound.putInt("SummonCooldown", this.summonCooldown);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.hasUUID("HorseTail"))
+            this.entityData.set(HORSE_TAIL, Optional.of(compound.getUUID("HorseTail")));
+        if (compound.hasUUID("Flower"))
+            this.entityData.set(FLOWER, Optional.of(compound.getUUID("Flower")));
+        if (compound.hasUUID("Pitcher"))
+            this.entityData.set(PITCHER, Optional.of(compound.getUUID("Pitcher")));
+        try {
+            this.entityData.set(SPAWN_DIRECTION, Direction.values()[compound.getInt("SpawnDirection")]);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
+        this.summonCooldown = compound.getInt("SummonCooldown");
+    }
+
+    @Override
+    public void setEnraged(boolean flag, boolean load) {
+        super.setEnraged(flag, load);
+        if (flag && !load)
+            this.getAnimationHandler().setAnimation(ANGRY);
+    }
+
+    @Override
+    public void playAngrySound() {
+        this.playSound(ModSounds.ENTITY_RAFFLESIA_ANGRY.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+        this.entityData.set(SPAWN_DIRECTION, this.getDirection());
+        this.respawnParts();
+        return super.finalizeSpawn(level, difficulty, reason, spawnData);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return !(this.getAnimationHandler().isCurrent(ANGRY)) && super.hurt(source, amount);
+    }
+
+    private boolean noPartsLeft() {
+        return this.getHorseTail() == null || this.getPitcher() == null || this.getFlower() == null;
+    }
+
+    @Override
     public void setupAttack(AnimationDefinition anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
@@ -273,6 +258,23 @@ public class EntityRafflesia extends BossMonster {
         }
     }
 
+    public void useAttack(AnimationState anim) {
+        if (anim.is(RESUMMON))
+            this.respawnParts();
+        if (anim.is(WIND_BLADE_X8))
+            ModSpells.WIND_CIRCLE_X8.get().use(this);
+        if (anim.is(WIND_BLADE_X16))
+            ModSpells.WIND_CIRCLE_X16.get().use(this);
+        if (anim.is(POISON_BREATH, POISON_BREATH_REV))
+            ModSpells.RAFFLESIA_POISON.get().use(this);
+        if (anim.is(PARA_BREATH, PARA_BREATH_REV))
+            ModSpells.RAFFLESIA_PARA.get().use(this);
+        if (anim.is(SLEEP_BREATH, SLEEP_BREATH_REV))
+            ModSpells.RAFFLESIA_SLEEP.get().use(this);
+        if (anim.is(STATUS_CIRCLE))
+            ModSpells.RAFFLESIA_CIRCLE.get().use(this);
+    }
+
     @Override
     public void handleAttack(AnimationState anim) {
         BiConsumer<AnimationState, EntityRafflesia> handler = ATTACK_HANDLER.get(anim.getID());
@@ -280,8 +282,21 @@ public class EntityRafflesia extends BossMonster {
             handler.accept(anim, this);
     }
 
-    public Direction getSpawnDirection() {
-        return this.entityData.get(SPAWN_DIRECTION);
+    @Override
+    public AnimationHandler<EntityRafflesia> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.RAFFLESIA_POISON.get() : ModSpells.RAFFLESIA_PARA.get()))
+                return;
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(POISON_BREATH);
+            else
+                this.getAnimationHandler().setAnimation(PARA_BREATH);
+        }
     }
 
     private void respawnParts() {
@@ -310,59 +325,6 @@ public class EntityRafflesia extends BossMonster {
         this.summonCooldown = this.random.nextInt(200) + 300;
     }
 
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !(this.getAnimationHandler().isCurrent(ANGRY)) && super.hurt(source, amount);
-    }
-
-    @Override
-    public String getDeathAnimation() {
-        return DEATH;
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.RAFFLESIA_POISON.get() : ModSpells.RAFFLESIA_PARA.get()))
-                return;
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(POISON_BREATH);
-            else
-                this.getAnimationHandler().setAnimation(PARA_BREATH);
-        }
-    }
-
-    @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
-    }
-
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
-    }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
-
-    @Override
-    public AnimationHandler<EntityRafflesia> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
-    }
-
-    @Override
-    public String getSleepAnimation() {
-        return DEATH;
-    }
-
     public EntityRafflesiaPart getHorseTail() {
         UUID uuid = this.entityData.get(HORSE_TAIL).orElse(null);
         if (uuid != null) {
@@ -375,6 +337,15 @@ public class EntityRafflesia extends BossMonster {
         } else
             this.horseTailEntity = null;
         return this.horseTailEntity;
+    }
+
+    public static Vec3 rotateVec(Direction dir, Vec3 v) {
+        return switch (dir) {
+            case NORTH -> v.multiply(-1, 1, -1);
+            case EAST -> new Vec3(v.z(), v.y(), -v.x());
+            case WEST -> new Vec3(-v.z(), v.y(), -v.x());
+            default -> v;
+        };
     }
 
     public EntityRafflesiaPart getFlower() {
@@ -405,6 +376,23 @@ public class EntityRafflesia extends BossMonster {
         return this.pitcherEntity;
     }
 
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+    public Direction getSpawnDirection() {
+        return this.entityData.get(SPAWN_DIRECTION);
+    }
+
+    public boolean mirrorAttack() {
+        return this.mirrorAttack;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    }
+
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
@@ -412,16 +400,17 @@ public class EntityRafflesia extends BossMonster {
     }
 
     @Override
-    public void playAngrySound() {
-        this.playSound(ModSounds.ENTITY_RAFFLESIA_ANGRY.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 
-    public boolean mirrorAttack() {
-        return this.mirrorAttack;
+    @Override
+    public String getDeathAnimation() {
+        return DEATH;
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 43 / 16d, 3.5 / 16d);
-//    }
+
+    @Override
+    public String getSleepAnimation() {
+        return DEATH;
+    }
 }

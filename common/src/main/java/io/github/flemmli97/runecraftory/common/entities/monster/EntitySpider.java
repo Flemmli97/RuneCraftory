@@ -1,7 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -16,60 +20,71 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
+import net.tslat.smartbrainlib.api.core.navigation.SmoothWallClimberNavigation;
 
 public class EntitySpider extends BaseMonster {
 
-    private static final EntityDataAccessor<Boolean> CLIMBING_SYNC = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
-
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String MELEE = BUILDER.add("attack", AnimationsBuilder.definition(0.6).marker("attack", 0.48));
-    public static final String WEBSHOT = BUILDER.add("webshot", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
     public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String WEBSHOT = BUILDER.add("webshot", AnimationsBuilder.definition(0.68).marker("attack", 0.36));
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySpider>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(MELEE, e -> 0.7f), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedStrafingAction(WEBSHOT, 7, 1, e -> 1), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySpider>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 5),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(9, 3)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntitySpider> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, ANIMS);
-
-    public int climbingTicker = -1;
     public static final int CLIMB_MAX = 9;
+    private static final EntityDataAccessor<Boolean> CLIMBING_SYNC = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
+    private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, ANIMS);
+    public int climbingTicker = -1;
 
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);
     }
 
     @Override
-    protected void applyAttributes() {
-        super.applyAttributes();
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
-    }
-
-    @Override
     protected PathNavigation createNavigation(Level level) {
-        return new WallClimberNavigation(this, level);
+        return new SmoothWallClimberNavigation(this, level);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(CLIMBING_SYNC, false);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(WEBSHOT).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(8))
+                .end(7)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(5, new SetWalkTargetToAttackTarget<>(), new MoveToAttackTarget<>())
+                .add(3, new SetRandomWalkTarget<>(), new MoveToAttackTarget<>())
+                .add(3, new Idle<>()).build();
     }
 
     @Override
@@ -84,6 +99,14 @@ public class EntitySpider extends BaseMonster {
             this.climbingTicker = Math.max(this.climbingTicker - 1, -1);
     }
 
+    public boolean isClimbing() {
+        return this.entityData.get(CLIMBING_SYNC);
+    }
+
+    public void setClimbing(boolean climbing) {
+        this.entityData.set(CLIMBING_SYNC, climbing);
+    }
+
     @Override
     public boolean onClimbable() {
         return this.isClimbing();
@@ -94,44 +117,6 @@ public class EntitySpider extends BaseMonster {
         if (!state.is(Blocks.COBWEB)) {
             super.makeStuckInBlock(state, motionMultiplier);
         }
-    }
-
-    public boolean isClimbing() {
-        return this.entityData.get(CLIMBING_SYNC);
-    }
-
-    public void setClimbing(boolean climbing) {
-        this.entityData.set(CLIMBING_SYNC, climbing);
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.SPIDER_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.SPIDER_HURT;
-    }
-
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SoundEvents.SPIDER_STEP, 0.15f, 1.0f);
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.SPIDER_DEATH;
-    }
-
-    @Override
-    public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.3f;
-    }
-
-    @Override
-    public AnimationHandler<EntitySpider> getAnimationHandler() {
-        return this.animationHandler;
     }
 
     @Override
@@ -155,6 +140,11 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
+    public AnimationHandler<EntitySpider> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 1 ? ModSpells.WEB_SHOT.get() : null))
@@ -167,14 +157,34 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.SPIDER_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.SPIDER_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.SPIDER_DEATH;
+    }
+
+    @Override
     protected int calculateFallDamage(float distance, float damageMultiplier) {
         return (int) ((super.calculateFallDamage(distance, damageMultiplier) - 3) * 0.5);
     }
 
-//    @Override
-//    public MobType getMobType() {
-//        return MobType.ARTHROPOD;
-//    }
+    @Override
+    public float getVoicePitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.3f;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(SoundEvents.SPIDER_STEP, 0.15f, 1.0f);
+    }
 
     @Override
     public void playInteractionAnimation() {
@@ -185,9 +195,4 @@ public class EntitySpider extends BaseMonster {
     public String getSleepAnimation() {
         return STILL;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 10 / 16d, 3.5 / 16d);
-//    }
 }

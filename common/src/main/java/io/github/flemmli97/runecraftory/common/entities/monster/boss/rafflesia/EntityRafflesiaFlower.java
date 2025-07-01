@@ -34,6 +34,16 @@ public class EntityRafflesiaFlower extends EntityRafflesiaPart {
     }
 
     @Override
+    public AnimationHandler<?> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public PartType getPartType() {
+        return PartType.FLOWER;
+    }
+
+    @Override
     public Vec3 offset() {
         return OFFSET;
     }
@@ -44,17 +54,7 @@ public class EntityRafflesiaFlower extends EntityRafflesiaPart {
     }
 
     @Override
-    public AnimationHandler<?> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public int cooldown() {
         return this.getRandom().nextInt(60) + 120;
-    }
-
-    @Override
-    public PartType getPartType() {
-        return PartType.FLOWER;
     }
 }

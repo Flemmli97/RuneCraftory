@@ -1,0 +1,59 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.unknown",
+        "texture_width": 4,
+        "texture_height": 4,
+        "visible_bounds_width": 2,
+        "visible_bounds_height": 2.5,
+        "visible_bounds_offset": [0, 0.75, 0]
+      },
+      "bones": [
+        {
+          "name": "head",
+          "pivot": [0, 24, 0]
+        },
+        {
+          "name": "hat",
+          "pivot": [0, 24, 0]
+        },
+        {
+          "name": "body",
+          "pivot": [0, 24, 0]
+        },
+        {
+          "name": "left_arm",
+          "pivot": [5, 22, 0],
+          "cubes": [
+            {
+              "origin": [6, 12.5, -2.5],
+              "size": [1, 1, 1],
+              "uv": [0, 0]
+            }
+          ]
+        },
+        {
+          "name": "right_arm",
+          "pivot": [-5, 22, 0],
+          "cubes": [
+            {
+              "origin": [-7, 12.5, -2.5],
+              "size": [1, 1, 1],
+              "uv": [0, 0]
+            }
+          ]
+        },
+        {
+          "name": "left_leg",
+          "pivot": [1.9, 12, 0]
+        },
+        {
+          "name": "right_leg",
+          "pivot": [-1.9, 12, 0]
+        }
+      ]
+    }
+  ]
+}

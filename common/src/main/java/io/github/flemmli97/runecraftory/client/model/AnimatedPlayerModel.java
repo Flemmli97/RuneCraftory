@@ -30,6 +30,8 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("player");
 
     protected final ReloadableCache<ModelPartsContainer> model;
+    protected final ReloadableCache<BedrockAnimations> anim;
+
     protected ModelPartsContainer.ModelPartExtended head;
     protected ModelPartsContainer.ModelPartExtended body;
     protected ModelPartsContainer.ModelPartExtended rightArm;
@@ -38,8 +40,6 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
     protected ModelPartsContainer.ModelPartExtended leftArmItem;
     protected ModelPartsContainer.ModelPartExtended rightLeg;
     protected ModelPartsContainer.ModelPartExtended leftLeg;
-
-    protected final ReloadableCache<BedrockAnimations> anim;
 
     public AnimatedPlayerModel() {
         super();
@@ -81,6 +81,17 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
         return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
+    private void setup(HumanoidModel<?> model) {
+        PartPose body = model.body.storePose();
+        this.getModel().resetPoses();
+        this.body.loadPose(body);
+        this.leftArm.loadPose(TransformationHelper.withoutParent(body, model.leftArm.storePose()));
+        this.rightArm.loadPose(TransformationHelper.withoutParent(body, model.rightArm.storePose()));
+        this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
+        this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
+        this.head.loadPose(TransformationHelper.withoutParent(body, model.head.storePose()));
+    }
+
     private boolean doAnimation(AttackActionHandler handler, float partialTicks, boolean mirror) {
         AnimationState current = handler.getAnimation();
         AnimationState last = handler.getLastAnimation();
@@ -96,17 +107,6 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
             }
         }
         return changed;
-    }
-
-    private void setup(HumanoidModel<?> model) {
-        PartPose body = model.body.storePose();
-        this.getModel().resetPoses();
-        this.body.loadPose(body);
-        this.leftArm.loadPose(TransformationHelper.withoutParent(body, model.leftArm.storePose()));
-        this.rightArm.loadPose(TransformationHelper.withoutParent(body, model.rightArm.storePose()));
-        this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
-        this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
-        this.head.loadPose(TransformationHelper.withoutParent(body, model.head.storePose()));
     }
 
     public void copyTo(HumanoidModel<?> model) {

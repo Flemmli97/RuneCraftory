@@ -72,7 +72,6 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
-import io.github.flemmli97.runecraftory.client.render.monster.ScaledEntityRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderAppleProjectile;
@@ -250,7 +249,7 @@ public class ClientRegister {
         consumer.register(ModEntities.WOOLY.get(), RenderWooly::new);
         consumer.register(ModEntities.ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.ORC.get())));
         consumer.register(ModEntities.ORC_ARCHER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.ORC.get())));
-        registerScaled(consumer, ModEntities.ANT.get(), ModelAnt::new, 0.7f, 0.6f);
+        register(consumer, ModEntities.ANT.get(), ModelAnt::new, 0.8f);
         register(consumer, ModEntities.BEETLE.get(), ModelBeetle::new, 0.6f);
         register(consumer, ModEntities.BIG_MUCK.get(), ModelBigMuck::new, 0.6f);
         register(consumer, ModEntities.BUFFAMOO.get(), ModelBuffamoo::new, 0.8f);
@@ -263,15 +262,15 @@ public class ClientRegister {
         consumer.register(ModEntities.GOBLIN.get(), RenderGoblin::new);
         consumer.register(ModEntities.GOBLIN_ARCHER.get(), RenderGoblin::new);
         consumer.register(ModEntities.DUCK.get(), ctx -> new RenderDuck<>(ctx, mobTexture(ModEntities.DUCK.get()), mobTexture(ModEntities.DUCK.get(), "_asleep")));
-        registerScaled(consumer, ModEntities.FAIRY.get(), ModelFairy::new, 0.75f, 0.3f);
+        register(consumer, ModEntities.FAIRY.get(), ModelFairy::new, 0.3f);
         consumer.register(ModEntities.GHOST.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST.get())));
         consumer.register(ModEntities.SPIRIT.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.SPIRIT.get())));
-        consumer.register(ModEntities.GHOST_RAY.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST_RAY.get()), 1.4f));
+        consumer.register(ModEntities.GHOST_RAY.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST_RAY.get())));
         consumer.register(ModEntities.SPIDER.get(), RenderSpider::new);
         register(consumer, ModEntities.SHADOW_PANTHER.get(), ModelPanther::new, 0.85f);
         register(consumer, ModEntities.MONSTER_BOX.get(), ModelMimic::new, 0.6f);
         register(consumer, ModEntities.GOBBLE_BOX.get(), ModelMimic::new, 0.6f);
-        registerScaled(consumer, ModEntities.KILLER_ANT.get(), ModelAnt::new, 1, 0.8f);
+        register(consumer, ModEntities.KILLER_ANT.get(), ModelAnt::new, 0.8f);
         consumer.register(ModEntities.HIGH_ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
         consumer.register(ModEntities.ORC_HUNTER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
         register(consumer, ModEntities.HORNET.get(), ModelHornet::new);
@@ -282,7 +281,7 @@ public class ClientRegister {
         register(consumer, ModEntities.MINO.get(), ModelMino::new, 0.7f);
         register(consumer, ModEntities.TRICKY_MUCK.get(), ModelBigMuck::new, 0.6f);
         register(consumer, ModEntities.FLOWER_LILY.get(), ModelFlowerLily::new);
-        consumer.register(ModEntities.KING_WOOLY.get(), ctx -> new RenderWooly<>(ctx, 2.5f, 1.2f));
+        consumer.register(ModEntities.KING_WOOLY.get(), RenderWooly::new);
         register(consumer, ModEntities.BUFFALOO.get(), ModelBuffaloo::new, 0.8f);
         consumer.register(ModEntities.GOBLIN_PIRATE.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_PIRATE.get())));
         consumer.register(ModEntities.GOBLIN_GANGSTER.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_GANGSTER.get())));
@@ -297,7 +296,7 @@ public class ClientRegister {
         register(consumer, ModEntities.NAPPIE.get(), ModelNappie::new, 0.7f);
         register(consumer, ModEntities.MALM_TIGER.get(), ModelPalmCat::new);
         register(consumer, ModEntities.LITTLE_EMPEROR.get(), ModelMage::new, 0.4f);
-        registerScaled(consumer, ModEntities.DEMON.get(), ModelDemon::new, 0.85f);
+        register(consumer, ModEntities.DEMON.get(), ModelDemon::new);
         register(consumer, ModEntities.ARCH_DEMON.get(), ModelDemon::new);
         register(consumer, ModEntities.MINOTAUR.get(), ModelMinotaur::new, 0.95f);
         register(consumer, ModEntities.MINOTAUR_KING.get(), ModelMinotaur::new, 0.95f);
@@ -306,14 +305,14 @@ public class ClientRegister {
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, 1.1f);
         register(consumer, ModEntities.MARIONETTA.get(), ModelMarionetta::new);
         register(consumer, ModEntities.HANDONETTA.get(), ModelHandonetta::new, 1);
-        consumer.register(ModEntities.DEAD_TREE.get(), ctx -> new RenderDeadTree<>(ctx, 2));
+        consumer.register(ModEntities.DEAD_TREE.get(), RenderDeadTree::new);
         register(consumer, ModEntities.CHIMERA.get(), ModelChimera::new, 0.8f);
         consumer.register(ModEntities.RACCOON.get(), RenderRaccoon::new);
         consumer.register(ModEntities.SKELEFANG.get(), RenderSkelefang::new);
         consumer.register(ModEntities.RAFFLESIA.get(), RenderRafflesia::new);
-        registerScaled(consumer, ModEntities.GRIMOIRE.get(), ModelGrimoire::new, 1.5f, 1.3f);
-        registerScaled(consumer, ModEntities.SANO.get(), ModelSanoUno::new, 2, 1.9f);
-        registerScaled(consumer, ModEntities.UNO.get(), ModelSanoUno::new, 2, 1.9f);
+        register(consumer, ModEntities.GRIMOIRE.get(), ModelGrimoire::new, 1.3f);
+        register(consumer, ModEntities.SANO.get(), ModelSanoUno::new, 1.5f);
+        register(consumer, ModEntities.UNO.get(), ModelSanoUno::new, 1.5f);
         register(consumer, ModEntities.SARCOPHAGUS.get(), ModelSarcophagus::new, 0);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
@@ -327,13 +326,13 @@ public class ClientRegister {
             private final ItemStack stack = new ItemStack(ModItems.STONE_ROUND.get());
 
             @Override
-            public ItemStack getRenderItemStack(EntityStone entity) {
-                return this.stack;
+            public Type getRenderType(EntityStone entity) {
+                return Type.NORMAL;
             }
 
             @Override
-            public Type getRenderType(EntityStone entity) {
-                return Type.NORMAL;
+            public ItemStack getRenderItemStack(EntityStone entity) {
+                return this.stack;
             }
         });
         consumer.register(ModEntities.STATUS_BALL.get(), EmptyRender::new);
@@ -412,24 +411,12 @@ public class ClientRegister {
         return manager -> new RenderMonster<>(manager, model.get(), texture, shadow);
     }
 
-    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRenderScaled(Supplier<M> model, ResourceLocation texture, float shadow, float scale) {
-        return manager -> new ScaledEntityRenderer<>(manager, model.get(), texture, scale, shadow);
-    }
-
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Supplier<M> model) {
         register(consumer, reg, model, 0.5f);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Supplier<M> model, float shadow) {
         consumer.register(reg, getMonsterRender(model, mobTexture(reg), shadow));
-    }
-
-    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void registerScaled(EntityRendererRegister consumer, EntityType<T> reg, Supplier<M> model, float scale) {
-        registerScaled(consumer, reg, model, scale, 0.5f);
-    }
-
-    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void registerScaled(EntityRendererRegister consumer, EntityType<T> reg, Supplier<M> model, float scale, float shadow) {
-        consumer.register(reg, getMonsterRenderScaled(model, mobTexture(reg), shadow, scale));
     }
 
     public static ResourceLocation mobTexture(EntityType<?> reg) {

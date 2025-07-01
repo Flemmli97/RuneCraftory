@@ -826,7 +826,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    public void setLevel(int level) {
+    public void setXPLevel(int level) {
         this.xpLevel().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
         this.updateStatsToLevel();
     }
@@ -1456,7 +1456,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         if (childIDs.isEmpty()) {
             baby.randomizeData(null, true);
         } else {
-            baby.setLevel(1);
+            baby.setXPLevel(1);
             baby.setNPCData(DataPackHandler.INSTANCE.npcDataManager().get(childIDs.get(this.random.nextInt(childIDs.size()))), false);
         }
         UUID father;
@@ -1678,7 +1678,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         }
         this.applyAttributes(!load);
         if (this.xpLevel().getLevel() < this.data.baseLevel()) {
-            this.setLevel(this.data.baseLevel());
+            this.setXPLevel(this.data.baseLevel());
         }
         this.refreshDimensions();
         if (!this.level().isClientSide)

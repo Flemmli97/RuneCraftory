@@ -4,10 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
-import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
-import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.EntityModel;
@@ -18,7 +16,6 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("wooly_wool");
 
     private final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> anim;
 
     public ModelPartsContainer.ModelPartExtended bodyMain;
     public ModelPartsContainer.ModelPartExtended body;
@@ -39,7 +36,6 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
             this.feetLeftBase = model.getPart("feetLeftBase");
             this.feetRightBase = model.getPart("feetRightBase");
         });
-        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
     @Override
@@ -56,6 +52,16 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
         return this.model.get();
     }
 
+    public void syncModel(ModelWooly<T> model) {
+        this.sync(this.bodyMain, model.bodyMain);
+        this.sync(this.body, model.body);
+        this.sync(this.bodyUp, model.bodyUp);
+        this.sync(this.armLeftBase, model.armLeftBase);
+        this.sync(this.armRightBase, model.armRightBase);
+        this.sync(this.feetLeftBase, model.feetLeftBase);
+        this.sync(this.feetRightBase, model.feetRightBase);
+    }
+
     private void sync(ModelPartsContainer.ModelPartExtended model, ModelPartsContainer.ModelPartExtended other) {
         model.xRot = other.xRot;
         model.yRot = other.yRot;
@@ -66,15 +72,5 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
         model.xScale = other.xScale;
         model.yScale = other.yScale;
         model.zScale = other.zScale;
-    }
-
-    public void syncModel(ModelWooly<T> model) {
-        this.sync(this.bodyMain, model.bodyMain);
-        this.sync(this.body, model.body);
-        this.sync(this.bodyUp, model.bodyUp);
-        this.sync(this.armLeftBase, model.armLeftBase);
-        this.sync(this.armRightBase, model.armRightBase);
-        this.sync(this.feetLeftBase, model.feetLeftBase);
-        this.sync(this.feetRightBase, model.feetRightBase);
     }
 }

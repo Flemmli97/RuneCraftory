@@ -2,11 +2,16 @@ package io.github.flemmli97.runecraftory.common.entities.monster.wisp;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetSetClampedFloatingMoveTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -18,15 +23,17 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class EntityWispBase extends BaseMonster {
@@ -40,21 +47,6 @@ public abstract class EntityWispBase extends BaseMonster {
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWispBase>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(ATTACK_FAR, 7, 3, 1, e -> 1), 2),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityWispBase>(ATTACK_CLOSE)
-//                    .cooldown(e -> e.animationCooldown(ATTACK_CLOSE))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityWispBase>(VANISH)
-//                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 6)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWispBase>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new StayWithinHeightAction<>(2.0, new RandomMoveAroundRunner<>(7, 4))), 1),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new StayWithinHeightAction<>(2.0, new DoNothingRunner<>())), 3)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityWispBase> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private boolean vanishNext;
 
     private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -84,20 +76,37 @@ public abstract class EntityWispBase extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.2);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+        super.applyAttributes();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestTargetNoLoS<>(this, Player.class, 5, false, player -> !this.isTamed());
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(ATTACK_FAR).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(2)).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(ATTACK_CLOSE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(3)
+                .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(8)
+                .build();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestTargetNoLoS<>(this, Mob.class, 5, false, this.targetPred);
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder().add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTarget<>())
+                .add(6, new Idle<>()).build();
+    }
+
+    @Override
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                new SetRandomHoverTarget<>(),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 90))
+        );
     }
 
     @Override
@@ -108,6 +117,26 @@ public abstract class EntityWispBase extends BaseMonster {
         if (ret)
             this.vanishNext = this.getRandom().nextFloat() < 0.4;
         return ret;
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.getFirstPassenger() instanceof LivingEntity entity) {
+            this.noPhysics = entity.noPhysics;
+        } else {
+            this.noPhysics = !this.playDeath();
+            if (this.getY() < this.level().getMinBuildHeight() + 1)
+                vec = new Vec3(vec.x, 0.006, vec.z);
+        }
+        this.handleFreeTravel(vec);
+    }
+
+    @Override
+    public int animationCooldown(@Nullable String anim) {
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(40) + 25 + diffAdd;
     }
 
     @Override
@@ -143,6 +172,11 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
+    public AnimationHandler<EntityWispBase> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), this.getSpellFor(command)))
@@ -157,33 +191,33 @@ public abstract class EntityWispBase extends BaseMonster {
     protected abstract Spell getSpellFor(int command);
 
     @Override
-    protected SoundEvent getAmbientSound() {
-        return ModSounds.ENTITY_WISP_AMBIENT.get();
+    public boolean allowAnimation(@Nullable String prev, String other) {
+        if (other.equals(VANISH))
+            return this.shouldVanishNext(prev);
+        return super.allowAnimation(prev, other);
     }
 
-    @Override
-    public int animationCooldown(@Nullable String anim) {
-        int diffAdd = this.difficultyCooldown();
-        if (anim == null)
-            return this.getRandom().nextInt(20) + 30 + diffAdd;
-        return this.getRandom().nextInt(40) + 25 + diffAdd;
+    public boolean shouldVanishNext(String prev) {
+        LivingEntity target = this.getTarget();
+        if (target != null && target.distanceToSqr(this) > 140)
+            return true;
+        return !prev.equals(VANISH) && this.vanishNext;
     }
 
-    @Override
-    public AnimationHandler<EntityWispBase> getAnimationHandler() {
-        return this.animationHandler;
-    }
+    public abstract void attackFar(LivingEntity target);
 
-    @Override
-    public void travel(Vec3 vec) {
-        if (this.getFirstPassenger() instanceof LivingEntity entity) {
-            this.noPhysics = entity.noPhysics;
-        } else {
-            this.noPhysics = !this.playDeath();
-            if (this.getY() < this.level().getMinBuildHeight() + 1)
-                vec = new Vec3(vec.x, 0.006, vec.z);
+    public abstract void attackClose(LivingEntity target);
+
+    private void teleport(double x, double y, double z) {
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
+            mutableBlockPos.move(Direction.DOWN);
         }
-        this.handleFreeTravel(vec);
+        BlockState blockState = this.level().getBlockState(mutableBlockPos);
+        if (!blockState.blocksMotion()) {
+            y = this.getY();
+        }
+        this.teleportTo(x, y + 1, z);
     }
 
     private void teleportTowards(Entity entity) {
@@ -200,27 +234,9 @@ public abstract class EntityWispBase extends BaseMonster {
         }
     }
 
-    private void teleport(double x, double y, double z) {
-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
-            mutableBlockPos.move(Direction.DOWN);
-        }
-        BlockState blockState = this.level().getBlockState(mutableBlockPos);
-        if (!blockState.blocksMotion()) {
-            y = this.getY();
-        }
-        this.teleportTo(x, y + 1, z);
-    }
-
-    public abstract void attackFar(LivingEntity target);
-
-    public abstract void attackClose(LivingEntity target);
-
-    public boolean shouldVanishNext(String prev) {
-        LivingEntity target = this.getTarget();
-        if (target != null && target.distanceToSqr(this) > 140)
-            return true;
-        return !prev.equals(VANISH) && this.vanishNext;
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.ENTITY_WISP_AMBIENT.get();
     }
 
     @Override
@@ -232,9 +248,4 @@ public abstract class EntityWispBase extends BaseMonster {
     public String getSleepAnimation() {
         return STILL;
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 10 / 16d, -3 / 16d);
-//    }
 }

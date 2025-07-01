@@ -45,13 +45,31 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
             this.tag(RunecraftoryTags.EntityTypes.BOSS_MONSTERS)
                     .add(sup.get());
         }
+
         this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
                 .add(ModEntities.GATE.get())
-                .add(ModEntities.SKY_FISH.get());
+                .add(ModEntities.SKY_FISH.get())
+                .add(ModEntities.TORTAS.get());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER)
+                .add(ModEntities.SKY_FISH.get())
+                .add(ModEntities.TORTAS.get());
         this.tag(EntityTypeTags.AQUATIC)
-                .add(ModEntities.SKY_FISH.get());
+                .add(ModEntities.SKY_FISH.get())
+                .add(ModEntities.TORTAS.get());
         this.tag(EntityTypeTags.ARTHROPOD)
-                .add(ModEntities.ANT.get());
+                .add(ModEntities.ANT.get())
+                .add(ModEntities.KILLER_ANT.get())
+                .add(ModEntities.BEETLE.get())
+                .add(ModEntities.SPIDER.get())
+                .add(ModEntities.HORNET.get())
+                .add(ModEntities.SCORPION.get());
+        this.tag(EntityTypeTags.UNDEAD)
+                .add(ModEntities.GHOST.get())
+                .add(ModEntities.GHOST_RAY.get())
+                .add(ModEntities.SPIRIT.get())
+                .add(ModEntities.IGNIS.get())
+                .add(ModEntities.TOMATO_GHOST.get())
+                .add(ModEntities.SKELEFANG.get());
 
         this.tag(RunecraftoryTags.EntityTypes.RAFFLESIA_SUMMONS)
                 .add(ModEntities.HORNET.get())

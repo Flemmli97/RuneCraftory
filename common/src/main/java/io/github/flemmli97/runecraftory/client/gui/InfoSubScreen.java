@@ -33,6 +33,11 @@ public class InfoSubScreen extends InfoScreen {
     }
 
     @Override
+    protected ResourceLocation texture() {
+        return InfoScreen.SKILLS;
+    }
+
+    @Override
     protected void buttons() {
         this.addRenderableWidget(new TexturedButton(this.leftPos + 8, this.topPos + 103, 12, 12,
                 Component.literal("<"), b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN)))
@@ -40,11 +45,6 @@ public class InfoSubScreen extends InfoScreen {
         this.addRenderableWidget(new SelectableListWidget(this.leftPos + 27, this.topPos + 124, 160, 65, this.font, Arrays.stream(EnumSkills.values())
                 .<SelectableEntry>map(SkillListEntry::new).toList())
                 .withPadding(1));
-    }
-
-    @Override
-    protected ResourceLocation texture() {
-        return InfoScreen.SKILLS;
     }
 
     private class SkillListEntry implements SelectableEntry {

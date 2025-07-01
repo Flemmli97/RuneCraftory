@@ -1,6 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -14,32 +19,27 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StayWithinDistanceOfAttackTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 public class EntityOrcArcher extends EntityOrc {
 
-    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder(EntityOrc.BUILDER, SLEEP);
     public static final String MELEE = BUILDER.add("kick", AnimationsBuilder.definition(0.92).marker("attack", 0.58));
-    public static final String RANGED = BUILDER.add("bow", AnimationsBuilder.definition(1).marker("attack", 0.6));
     public static final String INTERACT = BUILDER.add("interact", MELEE);
+    public static final String RANGED = BUILDER.add("bow", AnimationsBuilder.definition(1).marker("attack", 0.6));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityOrc>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(MELEE, e -> 0.6f), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityOrc>simpleRangedStrafingAction(RANGED, 8, 1, e -> 1)
-//                    .withCondition(ActionUtils.chanced(e -> e.getType() == ModEntities.ORC.get() ? 0.85f : 0.95f,
-//                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 4)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityOrc>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityOrc> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityOrcArcher(EntityType<? extends EntityOrcArcher> type, Level level) {
@@ -50,6 +50,31 @@ public class EntityOrcArcher extends EntityOrc {
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(MonsterBehaviourUtils.inAABBRange(MELEE))
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .start(RANGED).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(e -> e.getMainHandItem().getItem() instanceof BowItem)
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(10))
+                .end(7)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(3, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(15))
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new Idle<>()).build();
     }
 
     @Override
@@ -101,7 +126,7 @@ public class EntityOrcArcher extends EntityOrc {
 
     private void shootArrow(LivingEntity target) {
         EntityMobArrow arrow = new EntityMobArrow(this.level(), this, 0.8f);
-        arrow.shootAtEntity(target, 1.3f, 14 - this.level().getDifficulty().getId() * 4);
+        arrow.shootAtEntity(target, 1.3f, 7 - this.level().getDifficulty().getId() * 2);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level().addFreshEntity(arrow);
     }

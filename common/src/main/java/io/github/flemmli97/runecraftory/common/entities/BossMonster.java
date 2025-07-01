@@ -344,4 +344,11 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     public void playAngrySound() {
         this.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
     }
+
+    @Override
+    public boolean allowAnimation(String prev, String other) {
+        if (prev == null)
+            return super.allowAnimation(null, other);
+        return !prev.equals(other);
+    }
 }

@@ -1,12 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -14,10 +20,15 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -26,28 +37,14 @@ public class EntityMinotaur extends ChargingMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String SWING = BUILDER.add("swing", AnimationsBuilder.definition(1.08).marker("attack", 0.72));
+    public static final String INTERACT = BUILDER.add("interact", SWING);
     public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(1.48)
             .marker("attack_start", 0.24).marker("attack_end", 1.28).marker("reset", 0.84));
     public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(2.64)
             .marker("attack_start", 0.64).marker("attack_end", 2.2));
-    public static final String INTERACT = BUILDER.add("interact", SWING);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityMinotaur>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SPIN, e -> 1), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityMinotaur>(CHARGE)
-//                    .cooldown(e -> e.animationCooldown(CHARGE))
-//                    .withCondition(MonsterActionUtils.chargeCondition())
-//                    .prepare(ChargeAction::new), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityMinotaur>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityMinotaur> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityMinotaur> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private Vec3 spinDirection;
@@ -71,6 +68,32 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<ChargingMonster>create()
+                .start(SWING).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(7)
+                .start(SPIN).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetChargeTarget<>())
+                .end(3)
+                .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifFurtherThan(4))
+                .prepare(new SetChargeTarget<>())
+                .end(8)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(6, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
+    }
+
+    @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.is(SPIN)) {
             return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, this.position());
@@ -87,6 +110,16 @@ public class EntityMinotaur extends ChargingMonster {
         double width = this.getBbWidth() * 1.6;
         double length = this.getBbWidth() * 2.1;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
+    public DynamicDamage.Builder damageSourceAttack() {
+        DynamicDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(CHARGE))
+            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(2);
+        else if (this.getAnimationHandler().isCurrent(SWING))
+            source.withChangedAttribute(ModAttributes.STUN.asHolder(), 30);
+        return source;
     }
 
     @Override
@@ -116,25 +149,25 @@ public class EntityMinotaur extends ChargingMonster {
         } else {
             if (anim.is(SWING) && anim.isAt("attack")) {
                 S2CScreenShake.sendAround(this, 16, 5, 3);
-//                this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 0.9f);
+                this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1.0f, 0.9f);
             }
             super.handleAttack(anim);
         }
     }
 
     @Override
-    public DynamicDamage.Builder damageSourceAttack() {
-        DynamicDamage.Builder source = super.damageSourceAttack();
-        if (this.getAnimationHandler().isCurrent(CHARGE))
-            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(2);
-        else if (this.getAnimationHandler().isCurrent(SWING))
-            source.withChangedAttribute(ModAttributes.STUN.asHolder(), 30);
-        return source;
+    public AnimationHandler<? extends EntityMinotaur> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
     protected boolean isChargingAnim(String anim) {
         return anim.equals(CHARGE);
+    }
+
+    @Override
+    public double chargingSpeed() {
+        return 0.45f;
     }
 
     @Override
@@ -160,16 +193,6 @@ public class EntityMinotaur extends ChargingMonster {
     }
 
     @Override
-    public AnimationHandler<? extends EntityMinotaur> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public double chargingSpeed() {
-        return 0.45f;
-    }
-
-    @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
@@ -178,9 +201,4 @@ public class EntityMinotaur extends ChargingMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 37 / 16d, -7 / 16d);
-//    }
 }

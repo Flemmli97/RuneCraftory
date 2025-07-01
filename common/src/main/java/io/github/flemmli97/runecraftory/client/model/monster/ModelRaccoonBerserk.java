@@ -4,18 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -66,18 +61,8 @@ public class ModelRaccoonBerserk<T extends EntityRaccoon> extends ModelRaccoonBa
 
     @Override
     public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
-        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
-            EntityModel<?> model = lR.getModel();
-            if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
-                this.ridingPosition.translateAndRotateWithParents(poseStack);
-                if (entity.isBerserk())
-                    poseStack.scale(1 / 1.4f, 1 / 1.4f, 1 / 1.4f);
-                ClientHandlers.translateRider(entityRenderer, rider, model, poseStack);
-                if (entity.isBerserk())
-                    poseStack.scale(1.4f, 1.4f, 1.4f);
-                return true;
-            }
-        }
-        return false;
+        this.ridingPosition.translateAndRotateWithParents(poseStack);
+        ClientHandlers.translateRider(poseStack, entity, rider);
+        return true;
     }
 }

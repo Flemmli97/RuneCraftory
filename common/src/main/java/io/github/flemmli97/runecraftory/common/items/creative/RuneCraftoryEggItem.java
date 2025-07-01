@@ -36,7 +36,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof IBaseMob mob) {
-            mob.setLevel(stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
+            mob.setXPLevel(stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
         }
         //Temporary fix for Forge-Bug-#7730
         if (e.getBbWidth() > 0.7 && e.getBbWidth() < 1) {

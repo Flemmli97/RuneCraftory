@@ -2,38 +2,63 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
+import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.GroundShakeParticleSpawner;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.entity.EntityAttachments;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.SequentialBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class EntityRaccoon extends BossMonster {
+
+    private static final EntityDataAccessor<Integer> CLONE_INDEX = SynchedEntityData.defineId(EntityRaccoon.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> BERSERK = SynchedEntityData.defineId(EntityRaccoon.class, EntityDataSerializers.BOOLEAN);
 
     public static final Vec3[] CLONE_POS = new Vec3[]{
             new Vec3(-4, 0, 0),
@@ -41,17 +66,17 @@ public class EntityRaccoon extends BossMonster {
             new Vec3(4, 0, 0),
             new Vec3(0, 0, 4)
     };
-    private static final EntityDataAccessor<Boolean> BERSERK = SynchedEntityData.defineId(EntityRaccoon.class, EntityDataSerializers.BOOLEAN);
-    //    private static final EntityDataAccessor<Optional<Vec3>> CLONE_CENTER = SynchedEntityData.defineId(EntityRaccoon.class, CustomDataSerializers.OPTIONAL_VEC);
-    private static final EntityDataAccessor<Integer> CLONE_INDEX = SynchedEntityData.defineId(EntityRaccoon.class, EntityDataSerializers.INT);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String DOUBLE_PUNCH = BUILDER.add("double_punch", AnimationsBuilder.definition(0.88).marker("attack", 0.4, 0.68));
+    public static final String INTERACT = BUILDER.add("interact", DOUBLE_PUNCH);
     public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(0.92).marker("attack", 0.56));
+    public static final String INTERACT_BERSERK = BUILDER.add("interact_berserk", PUNCH);
     public static final String JUMP = BUILDER.add("jump", AnimationsBuilder.definition(1.08)
             .marker("jump", 0.2).infinite());
     public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.4).marker("attack", 0.24));
-    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(1.36).marker("attack", 0.56, 1.12));
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(1.36)
+            .marker("attack_1", 0.56).marker("attack_2", 1.12));
     public static final String LEAF_SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
     public static final String LEAF_BOOMERANG = BUILDER.add("spinning_shoot", LEAF_SHOOT);
     public static final String LEAF_SHOT_CLONE = BUILDER.add("leaf_clone", AnimationsBuilder.definition(0.88)
@@ -65,8 +90,6 @@ public class EntityRaccoon extends BossMonster {
     public static final String TRANSFORM = BUILDER.add("transform", AnimationsBuilder.definition(1.5));
     public static final String UNTRANSFORM = BUILDER.add("untransform", AnimationsBuilder.definition(2.2)
             .marker("knockback_start", 1).marker("knockback_end", 1.5));
-    public static final String INTERACT = BUILDER.add("interact", DOUBLE_PUNCH);
-    public static final String INTERACT_BERSERK = BUILDER.add("interact_berserk", PUNCH);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, EntityRaccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -120,9 +143,9 @@ public class EntityRaccoon extends BossMonster {
                     }
                 }
                 // Stuck check. Or e.g. if in water
-//                if (anim.isPast(6.0) && (!entity.getFeetBlockState().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
-//                    entity.getAnimationHandler().setAnimation(LAND);
-//                }
+                if (anim.isPast(6.0) && (!entity.getBlockStateOn().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
+                    entity.getAnimationHandler().setAnimation(LAND);
+                }
             }
         });
         b.put(LAND, (anim, entity) -> {
@@ -132,17 +155,17 @@ public class EntityRaccoon extends BossMonster {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 8, 3);
                 entity.level().addFreshEntity(new GroundShakeParticleSpawner(entity.level(), entity, 360, entity.getBbWidth() * 1.8));
-//                entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
+                entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
         b.put(STOMP, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.isAt("attack")) {
+            if (anim.isAt("attack_1") || anim.isAt("attack_2")) {
                 DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.asHolder(), 50);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 8, 3);
-//                entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
+                entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), entity.getSoundSource(), 1.0f, 0.9f);
             }
         });
         b.put(LEAF_SHOOT, (anim, entity) -> {
@@ -187,17 +210,18 @@ public class EntityRaccoon extends BossMonster {
         });
         b.put(CLONE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.isAt(0.05)) {
+            if (anim.isAt(0.1)) {
                 entity.playAngrySound();
                 Vec3 center = entity.getTarget() == null ? entity.position() : (entity.distanceToSqr(entity.getTarget()) < 144 ? entity.getTarget().position()
                         : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));
-//                entity.entityData.set(CLONE_CENTER, Optional.of(center));
+                entity.setClonePos(center);
                 int id = entity.random.nextInt(CLONE_POS.length);
                 Vec3 pos = CLONE_POS[id];
                 entity.entityData.set(CLONE_INDEX, id);
                 entity.teleportTo(center.x() + pos.x, center.y() + pos.y, center.z() + pos.z);
             }
-//            entity.entityData.get(CLONE_CENTER).ifPresent(pos -> entity.lookAt(EntityAnchorArgument.Anchor.FEET, pos));
+            if (entity.cloneCenter != null)
+                entity.lookAt(EntityAnchorArgument.Anchor.FEET, entity.cloneCenter);
         });
         b.put(UNTRANSFORM, (anim, entity) -> {
             if (entity.onGround() && anim.isPast("knockback_start") && !anim.isPast("knockback_end")) {
@@ -205,77 +229,27 @@ public class EntityRaccoon extends BossMonster {
             }
         });
     });
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityRaccoon>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(DOUBLE_PUNCH)
-//                    .cooldown(e -> e.animationCooldown(DOUBLE_PUNCH))
-//                    .withCondition(((goal, target, previous) -> !goal.attacker.isBerserk()))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(4, 1.2, 5), e -> 20 + e.getRandom().nextInt(10))), 20),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(DOUBLE_PUNCH)
-//                    .cooldown(e -> e.animationCooldown(DOUBLE_PUNCH))
-//                    .withCondition(((goal, target, previous) -> !goal.attacker.isBerserk()))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1.2), e -> 35 + e.getRandom().nextInt(15))), 17),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(PUNCH)
-//                    .cooldown(e -> e.animationCooldown(PUNCH))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !PUNCH.getID().equals(previous)))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 20),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(JUMP)
-//                    .cooldown(e -> e.animationCooldown(JUMP))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !JUMP.getID().equals(previous)))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetRunner<>(1, 6), e -> 25 + e.getRandom().nextInt(10))), 18),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(STOMP)
-//                    .cooldown(e -> e.animationCooldown(STOMP))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !STOMP.getID().equals(previous)))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 18),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(LEAF_SHOOT)
-//                    .cooldown(e -> e.animationCooldown(LEAF_SHOOT))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !LEAF_SHOOT.getID().equals(previous)))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 17),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(LEAF_BOOMERANG)
-//                    .cooldown(e -> e.animationCooldown(LEAF_BOOMERANG))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !LEAF_BOOMERANG.getID().equals(previous)))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveAwayRunner<>(3, 1, 5), e -> 25 + e.getRandom().nextInt(10))), 18),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(ROAR)
-//                    .cooldown(e -> e.animationCooldown(ROAR))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !ROAR.getID().equals(previous)))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 5),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(BARRAGE)
-//                    .cooldown(e -> e.animationCooldown(BARRAGE))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isBerserk() && !BARRAGE.getID().equals(previous)))
-//                    .prepare(() -> new TimedWrappedRunner<>(new MoveToTargetAttackRunner<>(1), e -> 25 + e.getRandom().nextInt(10))), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityRaccoon>(CLONE)
-//                    .cooldown(e -> e.animationCooldown(CLONE))
-//                    .withCondition(((goal, target, previous) -> goal.attacker.isEnraged() && !CLONE.getID().equals(previous)))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 15)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityRaccoon>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveToTargetRunner<>(1, 0.5))
-//                    .withCondition(((goal, target) -> goal.attacker.isBerserk())), 10),
-//            WeightedEntry.wrap(new IdleAction<EntityRaccoon>(() -> new MoveAwayRunner<>(1, 1, 5))
-//                    .withCondition(((goal, target) -> !goal.attacker.isBerserk())), 11)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityRaccoon> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
-    private boolean clone;
+
+    private final AnimationHandler<EntityRaccoon> animationHandler = new AnimationHandler<>(this, ANIMS)
+            .withChangeListener(anim -> {
+                if (this.level().isClientSide) {
+                    this.setClonePos(null);
+                    this.jumpDir = null;
+                    if (anim == null && this.getAnimationHandler().isCurrent(CLONE)) {
+                        this.getAnimationHandler().setAnimation(this.getRandom().nextBoolean() ? LEAF_SHOT_CLONE : LEAF_BOOMERANG);
+                        return true;
+                    }
+                }
+                return false;
+            });
+    private Vec3 cloneCenter;
     private Vec3 jumpDir;
 
     private int hit;
     private int hitCountdown = -1;
 
-    private final AnimationHandler<EntityRaccoon> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .withChangeListener(anim -> {
-                if (CLONE.equals(anim)) {
-                    this.clone = true;
-                } else if (anim != null) {
-                    this.clone = false;
-//                    this.entityData.set(CLONE_CENTER, Optional.empty());
-                }
-                this.jumpDir = null;
-                if (anim == null && this.clone) {
-                    this.getAnimationHandler().setAnimation(this.getRandom().nextBoolean() ? LEAF_SHOT_CLONE : LEAF_BOOMERANG);
-                    return true;
-                }
-                return false;
-            });
+    private final EntityDimensions berserkDimensions = EntityDimensions.scalable(1.4f, 2.5f)
+            .withAttachments(EntityAttachments.builder().attach(EntityAttachment.PASSENGER, new Vec3(0, 30 / 16d, -7 / 16d)));
 
     public EntityRaccoon(EntityType<? extends EntityRaccoon> type, Level world) {
         super(type, world);
@@ -291,8 +265,87 @@ public class EntityRaccoon extends BossMonster {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(BERSERK, false);
-//        builder.define(CLONE_CENTER, Optional.empty());
         builder.define(CLONE_INDEX, 0);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        if (BERSERK.equals(key)) {
+            this.refreshDimensions();
+        }
+        super.onSyncedDataUpdated(key);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.24);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntityRaccoon>create()
+                .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.isBerserk())
+                .prepare(new SetWalkTargetAwayFromTarget<EntityRaccoon>().speedMod((e, t) -> 1.2f)).prepareOptional(new MoveToAttackTarget<>())
+                .end(20)
+                .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.isBerserk())
+                .prepare(new SetWalkTargetToAttackTarget<EntityRaccoon>().speedMod((e, t) -> 1.2f)).prepareOptional(new MoveToAttackTarget<>())
+                .end(17)
+                .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(20)
+                .start(MonsterBehaviourUtils.checkedAttack(JUMP)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .prepare(new SetWalkTargetToAttackTarget<EntityRaccoon>().closeEnoughDist((e, t) -> 8)).prepareOptional(new MoveToAttackTarget<>())
+                .end(18)
+                .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(18)
+                .start(MonsterBehaviourUtils.checkedAttack(LEAF_SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .prepare(new SetWalkTargetAwayFromTarget<EntityRaccoon>().speedMod(1.1f).minDist(3).radius(5)).prepareOptional(new MoveToAttackTarget<>())
+                .end(17)
+                .start(MonsterBehaviourUtils.checkedAttack(LEAF_BOOMERANG)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .prepare(new SetWalkTargetAwayFromTarget<EntityRaccoon>().speedMod(1.1f).minDist(3).radius(5)).prepareOptional(new MoveToAttackTarget<>())
+                .end(18)
+                .start(MonsterBehaviourUtils.checkedAttack(ROAR)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .end(4)
+                .start(MonsterBehaviourUtils.checkedAttack(BARRAGE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(EntityRaccoon::isBerserk)
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .start(MonsterBehaviourUtils.checkedAttack(CLONE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> m.isEnraged() && m.isBerserk())
+                .end(7)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return new OneRandomBehaviour<>(
+                DummyBehaviour.opt(new SequentialBehaviour<EntityRaccoon>(new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()))
+                        .startCondition(EntityRaccoon::isBerserk),
+                DummyBehaviour.opt(new SequentialBehaviour<EntityRaccoon>(new SetWalkTargetAwayFromTarget<>()
+                        .minDist(4).radius(6).speedMod(1.1f), new MoveToWalkTarget<>())).startCondition(m -> !m.isBerserk())
+        );
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        if (!this.level().isClientSide) {
+            --this.hitCountdown;
+            if (this.isAlive() && !this.isBerserk() && (this.hitCountdown == 0 || this.hit >= 5)) {
+                this.setBerserk(true, false);
+                this.hit = 0;
+            }
+        }
     }
 
     @Override
@@ -306,30 +359,41 @@ public class EntityRaccoon extends BossMonster {
         return this.entityData.get(BERSERK);
     }
 
-    public Optional<Vec3> cloneCenter() {
-        return Optional.empty();//this.entityData.get(CLONE_CENTER);
-    }
-
-    public int cloneIndex() {
-        return this.entityData.get(CLONE_INDEX);
-    }
-
-    @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.24);
-        super.applyAttributes();
-    }
-
-    @Override
-    public void baseTick() {
-        super.baseTick();
-        if (!this.level().isClientSide) {
-            --this.hitCountdown;
-            if (this.isAlive() && !this.isBerserk() && (this.hitCountdown == 0 || this.hit >= 5)) {
-                this.setBerserk(true, false);
-                this.hit = 0;
-            }
+    public void setBerserk(boolean flag, boolean load) {
+        this.entityData.set(BERSERK, flag);
+        this.refreshDimensions();
+        if (!load) {
+            if (flag)
+                this.getAnimationHandler().setAnimation(TRANSFORM);
+            else
+                this.getAnimationHandler().setAnimation(UNTRANSFORM);
         }
+    }
+
+    @Override
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        if (this.isBerserk())
+            return this.berserkDimensions.scale(this.getAgeScale());
+        return super.getDefaultDimensions(pose);
+    }
+
+    @Override
+    public float getScale() {
+        if (this.isBerserk())
+            return super.getScale() * 1.4f;
+        return super.getScale();
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("Berserk", this.isBerserk());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setBerserk(compound.getBoolean("Berserk"), true);
     }
 
     @Override
@@ -361,121 +425,10 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        if (BERSERK.equals(key)) {
-            this.refreshDimensions();
-        }
-        super.onSyncedDataUpdated(key);
-    }
-
-    public void setBerserk(boolean flag, boolean load) {
-        this.entityData.set(BERSERK, flag);
-        this.refreshDimensions();
-        if (!load) {
-            if (flag)
-                this.getAnimationHandler().setAnimation(TRANSFORM);
-            else
-                this.getAnimationHandler().setAnimation(UNTRANSFORM);
-        }
-    }
-
-//    @Override
-//    public EntityDimensions getDimensions(Pose pose) {
-//        if (this.isBerserk())
-//            return pose == Pose.SLEEPING ? SLEEPING_DIMENSIONS : EntityDimensions.fixed(1.65f, 3.35f).scale(this.getScale());
-//        return super.getDimensions(pose);
-//    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(CLONE, TRANSFORM, UNTRANSFORM, ANGRY, ROAR, DEFEAT);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.setBerserk(compound.getBoolean("Berserk"), true);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("Berserk", this.isBerserk());
-    }
-
-    @Override
     public void push(double x, double y, double z) {
         if (this.getAnimationHandler().isCurrent(ANGRY, ROAR, DEFEAT))
             return;
         super.push(x, y, z);
-    }
-
-    @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
-    }
-
-    @Override
-    public void handleAttack(AnimationState anim) {
-        this.getNavigation().stop();
-        BiConsumer<AnimationState, EntityRaccoon> handler = ATTACK_HANDLER.get(anim.getID());
-        if (handler != null)
-            handler.accept(anim, this);
-    }
-
-    @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-//        if (anim.equals(JUMP, LAND)) {
-//            return new OrientedBoundingBox(this.attackBB(anim), 0, 0, this.position());
-//        }
-//        if (anim.equals(STOMP)) {
-//            double reach = this.getBbWidth() * 0.55;
-//            Vec3 dir;
-//            float offset = anim.isAt("attack") ? -90 : 90;
-//            if (this.getControllingPassenger() instanceof Player player)
-//                dir = Vec3.directionFromRotation(player.getXRot(), player.getYRot() + offset);
-//            else
-//                dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
-//            Vec3 attackPos = this.position().add(dir.scale(reach));
-//            return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, attackPos);
-//        }
-        return super.calculateAttackAABB(anim, target, grow);
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-//        if (anim.equals(JUMP, LAND)) {
-//            double attackSize = this.getBbWidth() * 1.5;
-//            return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);
-//        }
-//        if (anim.equals(STOMP)) {
-//            return new AABB(-1.8, -0.5, -2.2, 1.8, 2, 2.2);
-//        }
-        double width = this.getBbWidth() * 1.4;
-        double length = this.getBbWidth() * 1.5;
-//        if (anim.is(DOUBLE_PUNCH)) {
-//            width = this.getBbWidth() * 1.5;
-//            length = this.getBbWidth() * 1.7;
-//        }
-//        if (anim.is(PUNCH)) {
-//            width = this.getBbWidth() * 1.5;
-//            length = this.getBbWidth() * 1.6;
-//        }
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.SMALL_LEAF_SPELL_X3.get() : null))
-                return;
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(LEAF_SHOOT);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(JUMP);
-            else
-                this.getAnimationHandler().setAnimation(DOUBLE_PUNCH);
-        }
     }
 
     @Override
@@ -492,19 +445,104 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(CLONE, TRANSFORM, UNTRANSFORM, ANGRY, ROAR, DEFEAT);
+    }
+
+    @Override
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (anim.is(JUMP, LAND)) {
+            return new OrientedBoundingBox(this.attackBB(anim), 0, 0, this.position());
+        }
+        if (anim.is(STOMP)) {
+            double reach = this.getBbWidth() * 0.55;
+            Vec3 dir;
+            float offset = anim.isAt("attack_1") ? -90 : 90;
+            if (this.getControllingPassenger() instanceof Player player)
+                dir = Vec3.directionFromRotation(player.getXRot(), player.getYRot() + offset);
+            else
+                dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot() + offset);
+            Vec3 attackPos = this.position().add(dir.scale(reach));
+            return new OrientedBoundingBox(this.attackBB(anim), this.getYRot(), 0, attackPos);
+        }
+        return super.calculateAttackAABB(anim, target, grow);
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        if (anim.is(JUMP, LAND)) {
+            double attackSize = this.getBbWidth() * 1.5;
+            return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);
+        }
+        if (anim.is(STOMP)) {
+            return new AABB(-1.8, -0.5, -2.2, 1.8, 2, 2.2);
+        }
+        double width = this.getBbWidth() * 1.4;
+        double length = this.getBbWidth() * 1.5;
+        if (anim.is(DOUBLE_PUNCH)) {
+            width = this.getBbWidth() * 1.5;
+            length = this.getBbWidth() * 1.7;
+        }
+        if (anim.is(PUNCH)) {
+            width = this.getBbWidth() * 1.5;
+            length = this.getBbWidth() * 1.6;
+        }
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
+    public void handleAttack(AnimationState anim) {
+        this.getNavigation().stop();
+        BiConsumer<AnimationState, EntityRaccoon> handler = ATTACK_HANDLER.get(anim.getID());
+        if (handler != null)
+            handler.accept(anim, this);
+    }
+
+    @Override
     public AnimationHandler<EntityRaccoon> getAnimationHandler() {
         return this.animationHandler;
     }
 
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        if (this.isBerserk())
-//            return new Vec3(0, 16.25 / 16d, -10.5 / 16d).scale(1.4);
-//        return new Vec3(0, 17 / 16d, -5 / 16d);
-//    }
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.SMALL_LEAF_SPELL_X3.get() : null))
+                return;
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(LEAF_SHOOT);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(JUMP);
+            else
+                this.getAnimationHandler().setAnimation(DOUBLE_PUNCH);
+        }
+    }
+
+    public void setClonePos(Vec3 pos) {
+        this.cloneCenter = pos;
+        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.cloneCenter);
+    }
+
+    public Optional<Vec3> cloneCenter() {
+        return Optional.ofNullable(this.cloneCenter);
+    }
+
+    public int cloneIndex() {
+        return this.entityData.get(CLONE_INDEX);
+    }
+
+    @Override
+    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
+        super.onUpdate(data);
+        data.runIf(SyncableDatas.VEC_3, motion -> this.cloneCenter = motion);
+    }
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+        this.getAnimationHandler().setAnimation(this.isBerserk() ? INTERACT_BERSERK : INTERACT);
+    }
+
+    @Override
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

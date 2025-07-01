@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
@@ -9,6 +11,11 @@ import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetSetClampedFloatingMoveTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -22,16 +29,20 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -41,50 +52,20 @@ public class EntityGhost extends ChargingMonster {
     public static final String DARKBALL = BUILDER.add("darkball", AnimationsBuilder.definition(0.64).marker("attack", 0.28));
     public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.2).marker("attack_start", 0.36));
     public static final String SWING = BUILDER.add("swing", AnimationsBuilder.definition(0.52).marker("attack", 0.24));
-    public static final String VANISH = BUILDER.add("vanish", AnimationsBuilder.definition(5).marker("teleport", 2.5));
     public static final String INTERACT = BUILDER.add("interact", SWING);
+    public static final String VANISH = BUILDER.add("vanish", AnimationsBuilder.definition(5).marker("teleport", 2.5));
     public static final String STILL = BUILDER.add("still", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGhost>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleRangedEvadingAction(DARKBALL, 9, 1, 1, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SWING, e -> 1), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityGhost>(CHARGE)
-//                    .cooldown(e -> e.animationCooldown(CHARGE))
-//                    .withCondition(MonsterActionUtils.chargeCondition())
-//                    .prepare(ChargeAction::new), 2),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityGhost>(VANISH)
-//                    .withCondition(((goal, target, previous) -> goal.attacker.shouldVanishNext(previous)))
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 4)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGhost>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityGhost> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private boolean vanishNext;
 
     public EntityGhost(EntityType<? extends EntityGhost> type, Level world) {
         super(type, world);
-//        this.goalSelector.removeGoal(this.wander);
-//        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
-//        this.goalSelector.removeGoal(this.swimGoal);
-//        this.goalSelector.addGoal(2, this.attack);
         this.setNoGravity(true);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);
-    }
-
-    @Override
-    protected Consumer<AnimationDefinition> animatedActionConsumer() {
-        return anim -> {
-            super.animatedActionConsumer().accept(anim);
-            if (anim != null && anim.is(VANISH))
-                this.vanishNext = this.getRandom().nextFloat() < 0.6;
-        };
     }
 
     @Override
@@ -100,20 +81,62 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.31);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+        super.applyAttributes();
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestTargetNoLoS<>(this, Player.class, 5, false, player -> !this.isTamed());
+    protected Consumer<AnimationDefinition> animatedActionConsumer() {
+        return anim -> {
+            super.animatedActionConsumer().accept(anim);
+            if (anim != null && anim.is(VANISH))
+                this.vanishNext = this.getRandom().nextFloat() < 0.6;
+        };
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestTargetNoLoS<>(this, Mob.class, 5, false, this.targetPred);
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<ChargingMonster>create()
+                .start(DARKBALL).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(2)).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(SWING).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepareOptional(new SetWalkTargetToAttackTarget<ChargingMonster>()
+                        .closeEnoughDist((e, t) -> 3), new MoveToWalkTarget<>(), new SetChargeTarget<>())
+                .end(4)
+                .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(9)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTarget<>())
+                .add(6, new Idle<>()).build();
+    }
+
+    @Override
+    protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
+        return new OneRandomBehaviour<>(
+                new SetRandomHoverTarget<>(),
+                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 90))
+        );
+    }
+
+    @Override
+    protected boolean canFloatInWater() {
+        return false;
+    }
+
+    @Override
+    public boolean hasLineOfSight(Entity entity) {
+        return true;
     }
 
     @Override
@@ -127,11 +150,15 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public DynamicDamage.Builder damageSourceAttack() {
-        DynamicDamage.Builder source = super.damageSourceAttack();
-        if (this.getAnimationHandler().isCurrent(CHARGE))
-            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(1);
-        return source;
+    public void travel(Vec3 vec) {
+        if (this.getFirstPassenger() instanceof LivingEntity entity) {
+            this.noPhysics = entity.noPhysics;
+        } else {
+            this.noPhysics = !this.playDeath();
+            if (this.getY() < this.level().getMinBuildHeight() + 1)
+                vec = new Vec3(vec.x, 0.006, vec.z);
+        }
+        this.handleFreeTravel(vec);
     }
 
     @Override
@@ -139,6 +166,14 @@ public class EntityGhost extends ChargingMonster {
         double width = this.getBbWidth() * 2.9;
         double length = this.getBbWidth() * 2.5;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
+    public DynamicDamage.Builder damageSourceAttack() {
+        DynamicDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(CHARGE))
+            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(1);
+        return source;
     }
 
     @Override
@@ -153,25 +188,6 @@ public class EntityGhost extends ChargingMonster {
             else
                 this.getAnimationHandler().setAnimation(SWING);
         }
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return ModSounds.ENTITY_GHOST_AMBIENT.get();
-    }
-
-    @Override
-    public AnimationHandler<EntityGhost> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public boolean handleChargeMovement(AnimationState anim) {
-        if (this.getChargeMotion() != null) {
-            this.setDeltaMovement(this.getChargeMotion().x * 0.98f, this.getDeltaMovement().y, this.getChargeMotion().z * 0.98f);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -199,26 +215,54 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
+    public AnimationHandler<EntityGhost> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
     protected boolean isChargingAnim(String anim) {
         return anim.equals(CHARGE);
     }
 
     @Override
-    public void travel(Vec3 vec) {
-        if (this.getFirstPassenger() instanceof LivingEntity entity) {
-            this.noPhysics = entity.noPhysics;
-        } else {
-            this.noPhysics = !this.playDeath();
-            if (this.getY() < this.level().getMinBuildHeight() + 1)
-                vec = new Vec3(vec.x, 0.006, vec.z);
+    public boolean handleChargeMovement(AnimationState anim) {
+        if (this.getChargeMotion() != null) {
+            this.setDeltaMovement(this.getChargeMotion().x * 0.98f, this.getDeltaMovement().y, this.getChargeMotion().z * 0.98f);
+            return true;
         }
-        this.handleFreeTravel(vec);
+        return false;
     }
 
     @Override
-    public Vec3 getChargeTo(AnimationState anim) {
+    public Vec3 getChargeTo(String animation) {
         return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET)
                 .scale(this.chargingSpeed());
+    }
+
+    @Override
+    public boolean allowAnimation(@Nullable String prev, String other) {
+        if (other.equals(VANISH))
+            return this.shouldVanishNext(prev);
+        return super.allowAnimation(prev, other);
+    }
+
+    public boolean shouldVanishNext(String prev) {
+        LivingEntity target = this.getTarget();
+        if (target != null && target.distanceToSqr(this) > 140)
+            return true;
+        return this.random.nextFloat() < 0.2f || !prev.equals(VANISH) && this.vanishNext;
+    }
+
+    private void teleport(double x, double y, double z) {
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
+        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
+            mutableBlockPos.move(Direction.DOWN);
+        }
+        BlockState blockState = this.level().getBlockState(mutableBlockPos);
+        if (!blockState.blocksMotion()) {
+            y = this.getY();
+        }
+        this.teleportTo(x, y + 1, z);
     }
 
     private void teleportTowards(Entity entity) {
@@ -235,23 +279,9 @@ public class EntityGhost extends ChargingMonster {
         }
     }
 
-    private void teleport(double x, double y, double z) {
-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos(x, y, z);
-        while (mutableBlockPos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutableBlockPos).blocksMotion()) {
-            mutableBlockPos.move(Direction.DOWN);
-        }
-        BlockState blockState = this.level().getBlockState(mutableBlockPos);
-        if (!blockState.blocksMotion()) {
-            y = this.getY();
-        }
-        this.teleportTo(x, y + 1, z);
-    }
-
-    public boolean shouldVanishNext(String prev) {
-        LivingEntity target = this.getTarget();
-        if (target != null && target.distanceToSqr(this) > 140)
-            return true;
-        return this.random.nextFloat() < 0.2f || !prev.equals(VANISH) && this.vanishNext;
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.ENTITY_GHOST_AMBIENT.get();
     }
 
     @Override
@@ -262,15 +292,5 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public String getSleepAnimation() {
         return STILL;
-    }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 11.5 / 16d, -10 / 16d);
-//    }
-
-    @Override
-    public boolean hasLineOfSight(Entity entity) {
-        return true;
     }
 }

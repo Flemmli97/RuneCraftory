@@ -1,5 +1,10 @@
 {
   "values": [
-    "runecraftory:ant"
+    "runecraftory:ant",
+    "runecraftory:killer_ant",
+    "runecraftory:beetle",
+    "runecraftory:spider",
+    "runecraftory:hornet",
+    "runecraftory:scorpion"
   ]
 }

@@ -1,8 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -15,29 +21,22 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 public class EntityBuffamoo extends ChargingMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String CHARGE_ATTACK = BUILDER.add("charge", AnimationsBuilder.definition(2.2)
             .marker("attack_start", 0.72).marker("attack_end", 1.92));
-    public static final String STAMP = BUILDER.add("stamp", AnimationsBuilder.definition(0.48).marker("attack", 0.28));
-    public static final String INTERACT = BUILDER.add("interact", STAMP);
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(0.48).marker("attack", 0.28));
+    public static final String INTERACT = BUILDER.add("interact", STOMP);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityBuffamoo>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(STAMP, e -> 1), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityBuffamoo>(CHARGE_ATTACK)
-//                    .cooldown(e -> e.animationCooldown(CHARGE_ATTACK))
-//                    .prepare(ChargeAction::new), 1)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityBuffamoo>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(8, 4)), 2),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityBuffamoo> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityBuffamoo> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityBuffamoo(EntityType<? extends EntityBuffamoo> type, Level world) {
@@ -46,8 +45,31 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<ChargingMonster>create()
+                .start(STOMP).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(CHARGE_ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetChargeTarget<>())
+                .end(2)
+                .start(CHARGE_ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifFurtherThan(4))
+                .prepare(new SetChargeTarget<>())
+                .end(3)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(3, new Idle<>()).build();
     }
 
     @Override
@@ -58,6 +80,37 @@ public class EntityBuffamoo extends ChargingMonster {
     }
 
     @Override
+    public DynamicDamage.Builder damageSourceAttack() {
+        DynamicDamage.Builder source = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(CHARGE_ATTACK))
+            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(2);
+        else if (this.getAnimationHandler().isCurrent(STOMP))
+            source.withChangedAttribute(ModAttributes.STUN.asHolder(), 20);
+        return source;
+    }
+
+    @Override
+    public AnimationHandler<EntityBuffamoo> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    protected boolean isChargingAnim(String anim) {
+        return anim.equals(CHARGE_ATTACK);
+    }
+
+    @Override
+    public double chargingSpeed() {
+        return 0.28f;
+    }
+
+    @Override
+    public void doWhileCharge() {
+        if (this.tickCount % 3 == 0)
+            this.level().playSound(null, this.blockPosition(), SoundEvents.COW_STEP, this.getSoundSource(), 1, this.getRandom().nextFloat() * 0.2F);
+    }
+
+    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), null))
@@ -65,13 +118,13 @@ public class EntityBuffamoo extends ChargingMonster {
             if (command == 1)
                 this.getAnimationHandler().setAnimation(CHARGE_ATTACK);
             else
-                this.getAnimationHandler().setAnimation(STAMP);
+                this.getAnimationHandler().setAnimation(STOMP);
         }
     }
 
     @Override
-    protected boolean isChargingAnim(String anim) {
-        return anim.equals(CHARGE_ATTACK);
+    public SoundSource getSoundSource() {
+        return SoundSource.HOSTILE;
     }
 
     @Override
@@ -90,37 +143,6 @@ public class EntityBuffamoo extends ChargingMonster {
     }
 
     @Override
-    public AnimationHandler<EntityBuffamoo> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public DynamicDamage.Builder damageSourceAttack() {
-        DynamicDamage.Builder source = super.damageSourceAttack();
-        if (this.getAnimationHandler().isCurrent(CHARGE_ATTACK))
-            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(2);
-        else if (this.getAnimationHandler().isCurrent(STAMP))
-            source.withChangedAttribute(ModAttributes.STUN.asHolder(), 20);
-        return source;
-    }
-
-    @Override
-    public void doWhileCharge() {
-        if (this.tickCount % 3 == 0)
-            this.level().playSound(null, this.blockPosition(), SoundEvents.COW_STEP, this.getSoundSource(), 1, this.getRandom().nextFloat() * 0.2F);
-    }
-
-    @Override
-    public SoundSource getSoundSource() {
-        return SoundSource.HOSTILE;
-    }
-
-    @Override
-    public double chargingSpeed() {
-        return 0.28f;
-    }
-
-    @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
@@ -129,9 +151,4 @@ public class EntityBuffamoo extends ChargingMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-//
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 23 / 16d, -2 / 16d);
-//    }
 }

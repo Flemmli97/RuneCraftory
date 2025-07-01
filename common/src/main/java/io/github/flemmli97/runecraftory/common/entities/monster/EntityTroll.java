@@ -1,20 +1,29 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.function.Consumer;
 
@@ -22,23 +31,12 @@ public class EntityTroll extends BaseMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
+    public static final String INTERACT = BUILDER.add("interact", PUNCH);
     public static final String DOUBLE_PUNCH = BUILDER.add("double_fist_punch", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
     public static final String SLAM = BUILDER.add("fist_slam", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
-    public static final String INTERACT = BUILDER.add("interact", PUNCH);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityTroll>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(PUNCH, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(DOUBLE_PUNCH, e -> 1), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAM, e -> 1), 1)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityTroll>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 4)), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityTroll> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityTroll> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityTroll(EntityType<? extends EntityTroll> type, Level world) {
@@ -47,8 +45,30 @@ public class EntityTroll extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.23);
+        super.applyAttributes();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(PUNCH).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(DOUBLE_PUNCH).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(SLAM).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(5, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
     }
 
     @Override
@@ -75,7 +95,7 @@ public class EntityTroll extends BaseMonster {
         super.mobAttack(anim, target, cons);
         if (anim.is(SLAM)) {
             S2CScreenShake.sendAround(this, 16, 10, 2);
-//            this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
+            this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1.0f, 1.0f);
         }
     }
 
@@ -85,6 +105,11 @@ public class EntityTroll extends BaseMonster {
         if (this.getAnimationHandler().isCurrent(SLAM, DOUBLE_PUNCH))
             source.withChangedAttribute(ModAttributes.STUN.asHolder(), 30);
         return source;
+    }
+
+    @Override
+    public AnimationHandler<EntityTroll> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -102,11 +127,6 @@ public class EntityTroll extends BaseMonster {
     }
 
     @Override
-    public AnimationHandler<EntityTroll> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(INTERACT);
     }
@@ -115,9 +135,4 @@ public class EntityTroll extends BaseMonster {
     public String getSleepAnimation() {
         return SLEEP;
     }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 37 / 16d, -6 / 16d);
-//    }
 }

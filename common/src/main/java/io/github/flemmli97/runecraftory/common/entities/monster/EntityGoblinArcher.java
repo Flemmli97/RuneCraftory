@@ -1,7 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -15,38 +20,30 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StayWithinDistanceOfAttackTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.joml.Vector3d;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
-    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder(EntityGoblin.BUILDER, SLEEP);
     public static final String BOW = BUILDER.add("bow", AnimationsBuilder.definition(0.8).marker("attack", 0.52));
     public static final String TRIPLE = BUILDER.add("triple", BOW);
     public static final String KICK = BUILDER.add("kick", AnimationsBuilder.definition(0.56).marker("attack", 0.32));
     public static final String INTERACT = BUILDER.add("interact", KICK);
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityGoblinArcher>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 0.6f), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(BOW, 8, 1, e -> 1)
-//                    .withCondition(ActionUtils.chanced(e -> 1,
-//                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 6),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityGoblinArcher>simpleRangedStrafingAction(TRIPLE, 8, 1, e -> 1)
-//                    .withCondition(ActionUtils.chanced(e -> 1,
-//                            (goal, target, previous) -> goal.attacker.getMainHandItem().getItem() instanceof BowItem)), 3)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityGoblinArcher>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new KeepDistanceRunner<>(4, 10, 1)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(16, 5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(DoNothingRunner::new), 2)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityGoblinArcher> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGoblinArcher(EntityType<? extends EntityGoblin> type, Level level) {
@@ -60,29 +57,29 @@ public class EntityGoblinArcher extends EntityGoblin {
     }
 
     @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.TRIPLE_ARROW.get() : null))
-                return;
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(TRIPLE);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(BOW);
-            else
-                this.getAnimationHandler().setAnimation(KICK);
-        }
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(KICK).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(MonsterBehaviourUtils.inAABBRange(KICK))
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(BOW).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(e -> e.getMainHandItem().getItem() instanceof BowItem)
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(10))
+                .end(7)
+                .start(TRIPLE).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(e -> e.getMainHandItem().getItem() instanceof BowItem)
+                .prepare(new StrafeTarget<BaseMonster>().strafeDistance(10))
+                .end(4)
+                .build();
     }
 
     @Override
-    public AnimationHandler<EntityGoblinArcher> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public AABB attackBB(AnimationState anim) {
-        double width = this.getBbWidth() * 1.3;
-        double length = this.getBbWidth() * 1.7;
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(3, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(15))
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new Idle<>()).build();
     }
 
     @Override
@@ -114,6 +111,32 @@ public class EntityGoblinArcher extends EntityGoblin {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public AABB attackBB(AnimationState anim) {
+        double width = this.getBbWidth() * 1.3;
+        double length = this.getBbWidth() * 1.7;
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
+    public AnimationHandler<EntityGoblinArcher> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (!this.getProp().rideActionCosts.canRun(command, this.getControllingPassenger(), command == 2 ? ModSpells.TRIPLE_ARROW.get() : null))
+                return;
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(TRIPLE);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(BOW);
+            else
+                this.getAnimationHandler().setAnimation(KICK);
+        }
     }
 
     private void shootArrow(LivingEntity target) {

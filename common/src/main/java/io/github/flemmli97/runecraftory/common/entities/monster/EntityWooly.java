@@ -1,9 +1,15 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -30,12 +36,14 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityWooly extends LeapingMonster {
-
-    private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String SLAP = BUILDER.add("slap", AnimationsBuilder.definition(0.76).marker("attack", 0.28, 0.56));
@@ -45,50 +53,56 @@ public class EntityWooly extends LeapingMonster {
     public static final String INTERACT = BUILDER.add("interact", HEADBUTT);
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityWooly>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(SLAP, EntityWooly::attackChance), 2),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
-//                    .cooldown(e -> e.animationCooldown(KICK))
-//                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
-//                    .prepare(() -> new WrappedRunner<>(new MoveAwayRunner<>(1.5, 1, 4))), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityWooly>(KICK)
-//                    .cooldown(e -> e.animationCooldown(KICK))
-//                    .withCondition(ActionUtils.chanced(EntityWooly::attackChance))
-//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 3))), 1),
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeAction(HEADBUTT, EntityWooly::attackChance), 2)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityWooly>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 1),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(10, 5)), 2),
-//            WeightedEntry.wrap(new IdleAction<EntityWooly>(DoNothingRunner::new)
-//                    .duration(e -> e.getRandom().nextInt(10) + 15), 3)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityWooly> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+    protected static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
         super(type, level);
+        boolean sheared = this.getRandom().nextFloat() < 0.05;
+        this.entityData.set(SPAWNSHEARED, sheared);
+        this.entityData.set(SHEARED, sheared);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.22);
+        super.applyAttributes();
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        boolean sheared = this.getRandom().nextFloat() < 0.05;
-        builder.define(SPAWNSHEARED, sheared);
-        builder.define(SHEARED, sheared);
+        builder.define(SPAWNSHEARED, false);
+        builder.define(SHEARED, false);
     }
 
     @Override
-    protected boolean isLeapingAnim(String anim) {
-        return anim.equals(KICK);
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<BaseMonster>create()
+                .start(SLAP).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .start(HEADBUTT).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(1)
+                .start(KICK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepareOptional(new SetWalkTargetToAttackTarget<BaseMonster>()
+                        .closeEnoughDist((e, t) -> 3), new MoveToWalkTarget<>())
+                .end(1)
+                .start(KICK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepareOptional(new SetWalkTargetAwayFromTarget<BaseMonster>().radius(5, 4), new MoveToWalkTarget<>())
+                .end(1)
+                .build()
+                .startCondition(MonsterBehaviourUtils.chancedStart(this::attackChance));
     }
 
     @Override
-    protected void applyAttributes() {
-        super.applyAttributes();
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.22);
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(5, new Idle<>()).build();
     }
 
     @Override
@@ -122,13 +136,31 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
+    public int animationCooldown(@Nullable String anim) {
+        int diffAdd = this.difficultyCooldown();
+        if (anim == null)
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(30) + 30 + diffAdd;
+    }
+
+    @Override
     public AABB attackBB(AnimationState anim) {
         double width = this.getBbWidth() * 1.4;
         double length = this.getBbWidth() * 1.9;
-        if (anim.equals(HEADBUTT) || anim.equals(KICK)) {
+        if (anim.is(HEADBUTT) || anim.is(KICK)) {
             length *= 1.5;
         }
-        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+        return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.vehicleDependentHeight() + 0.02, length);
+    }
+
+    @Override
+    public AnimationHandler<EntityWooly> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    protected boolean isLeapingAnim(String anim) {
+        return anim.equals(KICK);
     }
 
     @Override
@@ -151,6 +183,41 @@ public class EntityWooly extends LeapingMonster {
         this.entityData.set(SPAWNSHEARED, false);
     }
 
+    protected float attackChance() {
+        return this.getEntityData().get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0;
+    }
+
+    public void shear(Player player, ItemStack used) {
+        LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(shearedLootTable(this.getDefaultLootTable()));
+        lootTable.getRandomItems(this.dailyDropContext()
+                .withOptionalParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
+                .withOptionalParameter(LootContextParams.TOOL, used).create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
+        this.setSheared(true);
+        this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
+        this.gameEvent(GameEvent.SHEAR, player);
+    }
+
+    public static ResourceKey<LootTable> shearedLootTable(ResourceKey<LootTable> def) {
+        return ResourceKey.create(Registries.LOOT_TABLE,
+                ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_sheared_drops"));
+    }
+
+    @Override
+    protected ResourceKey<LootTable> getDefaultLootTable() {
+        if (this.isSheared())
+            return super.getDefaultLootTable();
+        else
+            return LootTableResources.WOOLY_WHITE;
+    }
+
+    public boolean isSheared() {
+        return this.entityData.get(SHEARED);
+    }
+
+    public void setSheared(boolean flag) {
+        this.entityData.set(SHEARED, flag);
+    }
+
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return SoundEvents.SHEEP_HURT;
@@ -167,49 +234,10 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    public int animationCooldown(@Nullable String anim) {
-        int diffAdd = this.difficultyCooldown();
-        if (anim == null)
-            return this.getRandom().nextInt(20) + 30 + diffAdd;
-        return this.getRandom().nextInt(30) + 30 + diffAdd;
-    }
-
-    @Override
-    public AnimationHandler<EntityWooly> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public void onDailyUpdate() {
         super.onDailyUpdate();
         if (!this.entityData.get(SPAWNSHEARED) || this.isTamed())
             this.setSheared(false);
-    }
-
-    @Override
-    protected ResourceKey<LootTable> getDefaultLootTable() {
-        if (this.isSheared())
-            return super.getDefaultLootTable();
-        else
-            return LootTableResources.WOOLED_WHITE_LOOT;
-    }
-
-    public boolean isSheared() {
-        return this.entityData.get(SHEARED);
-    }
-
-    public void setSheared(boolean flag) {
-        this.entityData.set(SHEARED, flag);
-    }
-
-    public void shear(Player player, ItemStack used) {
-        LootTable lootTable = this.level().getServer().reloadableRegistries().getLootTable(shearedLootTable(this.getDefaultLootTable()));
-        lootTable.getRandomItems(this.dailyDropContext()
-                .withOptionalParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
-                .withOptionalParameter(LootContextParams.TOOL, used).create(LootCtxParameters.MONSTER_INTERACTION), this::spawnAtLocation);
-        this.setSheared(true);
-        this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
-        this.gameEvent(GameEvent.SHEAR, player);
     }
 
     @Override
@@ -220,19 +248,5 @@ public class EntityWooly extends LeapingMonster {
     @Override
     public String getSleepAnimation() {
         return SLEEP;
-    }
-
-//    @Override
-//    public Vec3 passengerOffset(Entity passenger) {
-//        return new Vec3(0, 13.5 / 16d, -6 / 16d);
-//    }
-
-    protected float attackChance() {
-        return this.getEntityData().get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0;
-    }
-
-    public static ResourceKey<LootTable> shearedLootTable(ResourceKey<LootTable> def) {
-        return ResourceKey.create(Registries.LOOT_TABLE,
-                ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(), def.location().getPath() + "_sheared_drops"));
     }
 }

@@ -1,10 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySanoUno;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.spells.FireWallSpell;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -13,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -53,28 +57,12 @@ public class EntitySano extends EntitySanoUno {
                 Vec3 from = FireWallSpell.offset(entity);
                 Vec3 dir = entity.getTarget() != null ? EntityUtils.getStraightProjectileTarget(from, entity.getTarget()).subtract(from).normalize() : entity.getLookAngle();
                 dir = dir.scale(10).add(entity.random.nextGaussian() * 2.3, -Math.abs(entity.random.nextGaussian()) * 0.6, entity.random.nextGaussian() * 2.3);
-                entity.targetPos = entity.position().add(dir);
+                entity.setTargetPosition(TargetPosition.of(entity.position().add(dir)));
                 ModSpells.FIRE_WALL.get().use(entity);
             }
         });
     });
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntitySano>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_3X)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIREBALL_BARRAGE)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(EXPLOSION)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntitySano>nonRepeatableAttack(FIRE_BREATH)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntitySano>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<EntitySano>(DoNothingRunner::new)
-//                    .duration(e -> e.getRandom().nextInt(20) + 35), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntitySano> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntitySano> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private EntityUno other;
@@ -84,8 +72,17 @@ public class EntitySano extends EntitySanoUno {
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntitySano>create()
+                .start(MonsterBehaviourUtils.checkedAttack(FIREBALL_3X)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(FIREBALL_BARRAGE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(EXPLOSION)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(FIRE_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .build();
     }
 
     @Override
@@ -93,6 +90,11 @@ public class EntitySano extends EntitySanoUno {
         BiConsumer<AnimationState, EntitySano> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
+    }
+
+    @Override
+    public AnimationHandler<EntitySano> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -110,11 +112,6 @@ public class EntitySano extends EntitySanoUno {
     }
 
     @Override
-    public AnimationHandler<EntitySano> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public EntityUno getLinked() {
         if (this.other != null && !this.other.isRemoved()) {
             return this.other;
@@ -122,9 +119,14 @@ public class EntitySano extends EntitySanoUno {
         if (this.getLinkedID() != null) {
             List<EntityUno> results = this.level().getEntities(EntityTypeTest.forClass(EntityUno.class), this.getBoundingBox().inflate(64), e -> this.getLinkedID().equals(e.getLinkedID()));
             if (!results.isEmpty()) {
-                this.other = results.get(0);
+                this.other = results.getFirst();
             }
         }
         return this.other;
+    }
+
+    @Override
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

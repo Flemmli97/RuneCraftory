@@ -16,12 +16,12 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 public class HammerRemainderRecipe extends ShapelessRecipe {
 
-    public HammerRemainderRecipe(String group, CraftingBookCategory category, ItemStack result, NonNullList<Ingredient> ingredients) {
-        super(group, category, result, ingredients);
-    }
-
     public HammerRemainderRecipe(ShapelessRecipe wrapped) {
         this(wrapped.getGroup(), wrapped.category(), ((ShapelessRecipeAccessor) wrapped).getResult(), wrapped.getIngredients());
+    }
+
+    public HammerRemainderRecipe(String group, CraftingBookCategory category, ItemStack result, NonNullList<Ingredient> ingredients) {
+        super(group, category, result, ingredients);
     }
 
     @Override

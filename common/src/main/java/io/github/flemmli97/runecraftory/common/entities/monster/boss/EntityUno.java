@@ -1,8 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySanoUno;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -10,6 +13,7 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -54,22 +58,6 @@ public class EntityUno extends EntitySanoUno {
         });
     });
 
-    //    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityUno>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(WATER_LASER)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(WATER_LASER_2)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(ICEBALLS_5)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10),
-//            WeightedEntry.wrap(MonsterActionUtils.<EntityUno>nonRepeatableAttack(HOMING_WATER_WAVE)
-//                    .prepare(() -> new WrappedRunner<>(new DoNothingRunner<>(true))), 10)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityUno>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<EntityUno>(DoNothingRunner::new)
-//                    .duration(e -> e.getRandom().nextInt(20) + 35), 1)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityUno> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
     private final AnimationHandler<EntityUno> animationHandler = new AnimationHandler<>(this, ANIMS);
     private EntitySano other;
 
@@ -78,8 +66,17 @@ public class EntityUno extends EntitySanoUno {
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<EntitySano>create()
+                .start(MonsterBehaviourUtils.checkedAttack(WATER_LASER)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(WATER_LASER_2)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(ICEBALLS_5)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .start(MonsterBehaviourUtils.checkedAttack(HOMING_WATER_WAVE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .end(10)
+                .build();
     }
 
     @Override
@@ -87,6 +84,11 @@ public class EntityUno extends EntitySanoUno {
         BiConsumer<AnimationState, EntityUno> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
+    }
+
+    @Override
+    public AnimationHandler<EntityUno> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -104,11 +106,6 @@ public class EntityUno extends EntitySanoUno {
     }
 
     @Override
-    public AnimationHandler<EntityUno> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public EntitySano getLinked() {
         if (this.other != null && !this.other.isRemoved()) {
             return this.other;
@@ -116,9 +113,14 @@ public class EntityUno extends EntitySanoUno {
         if (this.getLinkedID() != null) {
             List<EntitySano> results = this.level().getEntities(EntityTypeTest.forClass(EntitySano.class), this.getBoundingBox().inflate(64), e -> this.getLinkedID().equals(e.getLinkedID()));
             if (!results.isEmpty()) {
-                this.other = results.get(0);
+                this.other = results.getFirst();
             }
         }
         return this.other;
+    }
+
+    @Override
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

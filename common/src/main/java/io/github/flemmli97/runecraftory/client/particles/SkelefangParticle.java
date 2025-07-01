@@ -81,7 +81,7 @@ public class SkelefangParticle extends Particle {
                 mZ += part.z;
             }
             Vec3 offset = new Vec3(mX, mY - 22.75, mZ)
-                    .yRot(Mth.wrapDegrees(this.initialRotY));
+                    .yRot(Mth.wrapDegrees(this.initialRotY) * Mth.DEG_TO_RAD);
             this.setPos(this.x + offset.x() * 1 / 16d, this.y - offset.y() * 1 / 16d, this.z - offset.z() * 1 / 16d);
             this.xo = this.x;
             this.yo = this.y;

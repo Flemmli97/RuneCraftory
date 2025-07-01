@@ -14,15 +14,11 @@ import java.util.function.Consumer;
 
 public interface AttackActionHandler {
 
-    LivingEntity getEntity();
-
     boolean doWeaponAttack(AttackAction action, ItemStack stack, @Nullable Spell spell);
 
     void tick();
 
     <T> void store(DataKey<T> key, T value);
-
-    <T> T get(DataKey<T> key);
 
     default <T> void clear(DataKey<T> key) {
         this.clearWith(key, key.onClear() == null ? null : val -> key.onClear().accept(this.getEntity(), val));
@@ -30,32 +26,32 @@ public interface AttackActionHandler {
 
     <T> void clearWith(DataKey<T> key, @Nullable Consumer<T> apply);
 
-    AttackAction getCurrentAction();
+    LivingEntity getEntity();
 
     float getCurrentTransitionProgress(float partialTicks);
 
     float getLastTransitionProgress(float partialTicks);
 
-    AnimationState getAnimation();
-
     AnimationState getLastAnimation();
-
-    void setComboCount(int count);
 
     int getComboCount();
 
-    boolean isScheduledAction();
+    void setComboCount(int count);
 
-    Set<LivingEntity> getHitEntityTracker();
+    boolean isScheduledAction();
 
     default boolean isCurrentAnimationDone() {
         AnimationState anim = this.getAnimation();
         return anim == null || anim.done(0);
     }
 
+    AnimationState getAnimation();
+
     default void resetHitEntityTracker() {
         this.getHitEntityTracker().clear();
     }
+
+    Set<LivingEntity> getHitEntityTracker();
 
     default void addHitEntityTracker(Collection<LivingEntity> list) {
         this.getHitEntityTracker().addAll(list);
@@ -65,9 +61,13 @@ public interface AttackActionHandler {
         return this.getCurrentAction().isInvulnerable(entity, this);
     }
 
+    AttackAction getCurrentAction();
+
     default void applyMoveDirection() {
         Vec3 move = this.get(DataKey.MOVE_DIRECTION);
         if (move != null)
             this.getEntity().setDeltaMovement(move);
     }
+
+    <T> T get(DataKey<T> key);
 }

@@ -1,7 +1,15 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -11,31 +19,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.function.Predicate;
 
 public class EntityNappie extends EntityPommePomme implements HealingPredicateEntity {
 
-    public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
+    public static final AnimationsBuilder BUILDER = new AnimationsBuilder(EntityPommePomme.BUILDER, KICK, CHARGE_ATTACK, INTERACT, SLEEP);
     public static final String HEAL = BUILDER.add("cast", AnimationsBuilder.definition(0.72).marker("attack", 0.32));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
-    //
-//    private static final List<WeightedEntry.Wrapper<GoalAttackAction<EntityPommePomme>>> ATTACKS = List.of(
-//            WeightedEntry.wrap(MonsterActionUtils.simpleMeleeActionInRange(KICK, e -> 1), 5),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityPommePomme>(HEAL)
-//                    .cooldown(e -> e.animationCooldown(HEAL))
-//                    .prepare(() -> new WrappedRunner<>(new MoveToTargetRunner<>(1, 12))), 1),
-//            WeightedEntry.wrap(new GoalAttackAction<EntityPommePomme>(CHARGE_ATTACK)
-//                    .cooldown(e -> e.animationCooldown(CHARGE_ATTACK))
-//                    .withCondition(MonsterActionUtils.chargeCondition())
-//                    .prepare(ChargeAction::new), 10)
-//    );
-//    private static final List<WeightedEntry.Wrapper<IdleAction<EntityPommePomme>>> IDLE_ACTIONS = List.of(
-//            WeightedEntry.wrap(new IdleAction<>(() -> new MoveToTargetRunner<>(1, 0.5)), 3),
-//            WeightedEntry.wrap(new IdleAction<>(() -> new RandomMoveAroundRunner<>(12, 5)), 5)
-//    );
-//
-//    public final AnimatedAttackGoal<EntityPommePomme> attack = new AnimatedAttackGoal<>(this, ATTACKS, IDLE_ACTIONS);
+
     private final AnimationHandler<EntityNappie> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -51,6 +46,32 @@ public class EntityNappie extends EntityPommePomme implements HealingPredicateEn
 
     public EntityNappie(EntityType<? extends EntityNappie> type, Level world) {
         super(type, world);
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
+        return AttackBehaviourBuilder.<ChargingMonster>create()
+                .start(KICK).play(MonsterBehaviourUtils.requireInRangePlay())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .end(4)
+                .start(HEAL).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(4)).prepareOptional(new MoveToAttackTarget<>())
+                .end(5)
+                .start(CHARGE_ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetChargeTarget<>())
+                .end(2)
+                .start(CHARGE_ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifFurtherThan(5))
+                .prepare(new SetChargeTarget<>())
+                .end(3)
+                .build();
+    }
+
+    @Override
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(2, new SetWalkTargetAwayFromTarget<>(), new MoveToWalkTarget<>())
+                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()).build();
     }
 
     @Override

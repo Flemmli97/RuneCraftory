@@ -40,10 +40,9 @@ public abstract class ChargingMonster extends BaseMonster {
     protected Consumer<AnimationDefinition> animatedActionConsumer() {
         return anim -> {
             if (!this.level().isClientSide) {
+                this.getAttribute(Attributes.STEP_HEIGHT).removeModifier(CHARGING_STEP);
                 if (anim != null && this.isChargingAnim(anim.id())) {
                     this.getAttribute(Attributes.STEP_HEIGHT).addTransientModifier(new AttributeModifier(CHARGING_STEP, 1, AttributeModifier.Operation.ADD_VALUE));
-                } else {
-                    this.getAttribute(Attributes.STEP_HEIGHT).removeModifier(CHARGING_STEP);
                 }
                 if (this.isChargingAnimation()) {
                     this.hitEntity = null;
@@ -75,10 +74,25 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     @Override
+    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
+        if (!this.isChargingAnim(anim.getID()))
+            return super.calculateAttackAABB(anim, target, grow);
+        double width = this.getBbWidth();
+        double speed = Math.max(width, this.getDeltaMovement().length() - width);
+        float yRot = 0;
+        if (this.chargeMotion != null) {
+            yRot = MathsHelper.YRotFrom(this.chargeMotion);
+        }
+        return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                .inflate(0.2)
+                .inflate(grow).expandTowards(0, 0, speed), yRot, 0, this.position());
+    }
+
+    @Override
     public void handleAttack(AnimationState anim) {
         if (this.isChargingAnim(anim.getID())) {
             if (this.chargeMotion == null) {
-                this.setChargeMotion(this.getChargeTo(anim));
+                this.setChargeMotion(this.getChargeTo(anim.getAnimation()));
             }
             this.getNavigation().stop();
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
@@ -99,46 +113,31 @@ public abstract class ChargingMonster extends BaseMonster {
         }
     }
 
+    @Override
+    public void push(Entity entity) {
+        if (this.isChargingAnimation())
+            return;
+        super.push(entity);
+    }
+
     protected abstract boolean isChargingAnim(String anim);
 
-    protected boolean fixedYaw() {
-        return this.isChargingAnimation();
-    }
-
-    @Override
-    public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
-        if (!this.isChargingAnim(anim.getID()))
-            return super.calculateAttackAABB(anim, target, grow);
-        double width = this.getBbWidth();
-        double speed = Math.max(width, this.getDeltaMovement().length() - width);
-        float yRot = 0;
-        if (this.chargeMotion != null) {
-            yRot = MathsHelper.YRotFrom(this.chargeMotion);
-        }
-        return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                .inflate(0.2)
-                .inflate(grow).expandTowards(0, 0, speed), yRot, 0, this.position());
-    }
-
-    @Override
-    public boolean adjustRotFromRider(LivingEntity rider) {
-        return !this.isChargingAnimation();
-    }
-
-    public void setChargeMotion(Vec3 chargeMotion) {
-        this.chargeMotion = chargeMotion;
-        S2CMobUpdate.send(this, SyncableDatas.MOTION_DIR, this.chargeMotion);
+    private boolean isChargingAnimation() {
+        AnimationState anim = this.getAnimationHandler().getAnimation();
+        return anim != null && this.isChargingAnim(anim.getID());
     }
 
     public Vec3 getChargeMotion() {
         return this.chargeMotion;
     }
 
-    @Override
-    public void push(Entity entity) {
-        if (this.isChargingAnimation())
-            return;
-        super.push(entity);
+    public Vec3 getChargeTo(String anim) {
+        return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
+                .scale(this.chargingSpeed());
+    }
+
+    public double chargingSpeed() {
+        return 0.4;
     }
 
     public boolean handleChargeMovement(AnimationState anim) {
@@ -150,26 +149,25 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     public void doWhileCharge() {
-
     }
 
-    public double chargingSpeed() {
-        return 0.4;
+    protected boolean fixedYaw() {
+        return this.isChargingAnimation();
     }
 
-    public Vec3 getChargeTo(AnimationState anim) {
-        return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
-                .scale(this.chargingSpeed());
+    @Override
+    public boolean adjustRotFromRider(LivingEntity rider) {
+        return !this.isChargingAnimation();
     }
 
-    private boolean isChargingAnimation() {
-        AnimationState anim = this.getAnimationHandler().getAnimation();
-        return anim != null && this.isChargingAnim(anim.getID());
+    public void setChargeMotion(Vec3 chargeMotion) {
+        this.chargeMotion = chargeMotion;
+        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.chargeMotion);
     }
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         super.onUpdate(data);
-        data.runIf(SyncableDatas.MOTION_DIR, charge -> this.chargeMotion = charge);
+        data.runIf(SyncableDatas.VEC_3, charge -> this.chargeMotion = charge);
     }
 }

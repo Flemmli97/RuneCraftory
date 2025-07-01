@@ -29,7 +29,7 @@ public class SpellInvOverlayGui {
             int y = ClientConfig.DisplayPosition.BOTTOMLEFT
                     .positionY(this.mc.getWindow().getGuiScaledHeight(), 44, 8);
             RenderSystem.enableBlend();
-            graphics.blitSprite(RuneCraftory.modRes("hud/spell_slots"), x, y, 44, 44);
+            graphics.blitSprite(TEXTURE, x, y, 44, 44);
             RenderSystem.disableBlend();
             for (int a = 0; a < 2; ++a) {
                 this.renderHotbarItem(graphics, x + 3 + 22 * a, y + 3, tracker, inv.getItem(a));

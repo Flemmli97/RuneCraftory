@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.tenshilib.loader.LoaderInitializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -64,7 +65,7 @@ public interface Platform {
 
     <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, RegistryFriendlyByteBuf, T> create);
 
-    CreativeModeTab.Builder tabBuilder();
+    CreativeModeTab.Builder tabBuilder(ResourceLocation... after);
 
     boolean matchingInventory(BlockEntity blockEntity, Predicate<ItemStack> func);
 
