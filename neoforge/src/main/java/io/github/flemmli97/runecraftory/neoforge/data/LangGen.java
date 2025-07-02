@@ -34,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
 import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -51,6 +52,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -223,7 +225,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.item.attribute", "%s: %s");
         this.add("runecraftory.tooltip.item.attribute.percentage", "%s: %s%");
 
-        this.add("runecraftory.tooltip.food.header", "When eaten");
+        this.add("runecraftory.tooltip.item.eaten", "When eaten");
 
         this.add("runecraftory.tooltip.item.spawn", "Right click in air to change mob level");
         this.add("runecraftory.tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
@@ -275,15 +277,9 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
 
-        this.add("itemGroup.runecraftory.weapons_tools", "Weapons and Tools");
-        this.add("itemGroup.runecraftory.equipment", "Armor");
-        this.add("itemGroup.runecraftory.upgrade", "Materials");
-        this.add("itemGroup.runecraftory.blocks", "Rune Craftory Blocks");
-        this.add("itemGroup.runecraftory.medicine", "Medicine");
-        this.add("itemGroup.runecraftory.cast", "Spells and Rune-Skills");
-        this.add("itemGroup.runecraftory.food", "Food");
-        this.add("itemGroup.runecraftory.crops", "Farming");
-        this.add("itemGroup.runecraftory.monsters", "Monsters");
+        for (RegistryEntrySupplier<CreativeModeTab, ? extends CreativeModeTab> tab : ModCreativeModTabs.CREATIVE_MODE_TABS.getEntries()) {
+            this.add("itemGroup." + tab.getID().getNamespace() + "." + tab.getID().getPath(), this.simpleTranslation(tab.getID().getPath()));
+        }
 
         this.add("runecraftory.keycategory", "Runecraftory");
         this.add("runecraftory.key.spell_1", "Interaction Key 1");
@@ -796,7 +792,8 @@ public class LangGen implements DataProvider {
                 .collect(Collectors.joining(" "))
                 .replaceAll("Plus($| )", "+")
                 .replace("Four Leaf", "4-Leaf")
-                .replace("Pom Pom", "Pom-Pom");
+                .replace("Pom Pom", "Pom-Pom")
+                .replace("And", "&");
     }
 
     private static String patchouliEntity(ResourceLocation res) {

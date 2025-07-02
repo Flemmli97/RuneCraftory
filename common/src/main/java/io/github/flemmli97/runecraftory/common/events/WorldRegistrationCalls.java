@@ -1,21 +1,26 @@
 package io.github.flemmli97.runecraftory.common.events;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.features.config.BiomeFilteredConfig;
 import io.github.flemmli97.runecraftory.common.world.features.config.ChancedBlockClusterConfig;
+import io.github.flemmli97.runecraftory.mixinhelper.StructureTemplateModifier;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -35,6 +40,8 @@ import net.minecraft.world.level.levelgen.placement.CountOnEveryLayerPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -44,6 +51,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class WorldRegistrationCalls {
+
+    public static final String[] VANILLA_VILLAGES = new String[]{"plains", "desert", "savanna", "snowy", "taiga"};
 
     public static List<HerbFeatureEntry> defaultHerbEntries() {
         ImmutableList.Builder<HerbFeatureEntry> builder = new ImmutableList.Builder<>();
@@ -148,6 +157,30 @@ public class WorldRegistrationCalls {
 
     public static MobSpawnSettings.SpawnerData gateSetting() {
         return new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1);
+    }
+
+    public static void addVillageStructures(MinecraftServer server) {
+        Registry<StructureTemplatePool> pools = server.registryAccess().registry(Registries.TEMPLATE_POOL).orElseThrow();
+        for (String s : WorldRegistrationCalls.VANILLA_VILLAGES) {
+            if (!s.equals("savanna") && !s.equals("desert")) {
+                // Add a big street to the villages streets pool. These are for bigger houses
+                StructureTemplatePool streetsPool = pools.get(ResourceLocation.withDefaultNamespace("village/" + s + "/streets"));
+                StructureTemplatePool bigStreet = pools.get(RuneCraftory.modRes("npc/streets/big_street_" + s));
+                if (bigStreet != null)
+                    addToPool(streetsPool, ((StructureTemplateModifier) bigStreet).runecraftory$getRawTemplates());
+            }
+            StructureTemplatePool housePool = pools.get(ResourceLocation.withDefaultNamespace("village/" + s + "/houses"));
+            StructureTemplatePool npcHouses = pools.get(ModStructures.NPC_HOUSES);
+            if (npcHouses != null)
+                addToPool(housePool, ((StructureTemplateModifier) npcHouses).runecraftory$getRawTemplates());
+        }
+    }
+
+    private static void addToPool(StructureTemplatePool pool, List<Pair<StructurePoolElement, Integer>> houses) {
+        if (pool == null)
+            return;
+        for (Pair<StructurePoolElement, Integer> p : houses)
+            ((StructureTemplateModifier) pool).runecraftory$addPoolElement(p);
     }
 
     public interface FeatureRegister {

@@ -74,7 +74,7 @@ public class EntityRaccoon extends BossMonster {
     public static final String INTERACT_BERSERK = BUILDER.add("interact_berserk", PUNCH);
     public static final String JUMP = BUILDER.add("jump", AnimationsBuilder.definition(1.08)
             .marker("jump", 0.2).infinite());
-    public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.4).marker("attack", 0.24));
+    public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.28).marker("attack", 0.12));
     public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(1.36)
             .marker("attack_1", 0.56).marker("attack_2", 1.12));
     public static final String LEAF_SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(0.88).marker("attack", 0.44));

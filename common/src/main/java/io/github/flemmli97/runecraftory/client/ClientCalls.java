@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -42,6 +43,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -158,19 +160,11 @@ public class ClientCalls {
 
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
         if (!stack.isEmpty()) {
-            boolean showTooltip = true;
-//            if (stack.hasTag()) {
-//                CompoundTag tag = stack.getTag();
-//                if (tag.contains("HideFlags", 99))
-//                    showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
-//                if (tag.getCompound(RuneCraftory.MODID).contains(LibNBT.CRAFTING_BONUS) && tooltip.get(0) instanceof MutableComponent mut)
-//                    mut.withStyle(ChatFormatting.AQUA);
-//            }
-            if (showTooltip) {
-                Pair<List<Component>, List<Component>> p = injectAdditionalTooltip(stack, flag);
-                tooltip.addAll(1, p.getFirst());
-                tooltip.addAll(p.getSecond());
-            }
+            if (stack.has(ModDataComponentTypes.CRAFTING_BONUS.get()) && tooltip.getFirst() instanceof MutableComponent mut)
+                mut.withStyle(ChatFormatting.AQUA);
+            Pair<List<Component>, List<Component>> p = injectAdditionalTooltip(stack, flag);
+            tooltip.addAll(1, p.getFirst());
+            tooltip.addAll(p.getSecond());
         }
     }
 
@@ -197,7 +191,8 @@ public class ClientCalls {
                     debug.add(Component.translatable("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
             } else if (stack.has(DataComponents.FOOD)) {
                 tooltip.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
-                MutableComponent comp = Component.literal(" ").append(Component.translatable(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId())).append(Component.literal(": " + EntityUtils.getRPFromVanillaFood(stack)));
+                MutableComponent comp = CommonComponents.space()
+                        .append(Component.translatable("runecraftory.tooltip.item.attribute", Component.translatable(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId()), EntityUtils.getRPFromVanillaFood(stack)));
                 tooltip.add(comp.withStyle(ChatFormatting.AQUA));
             }
         }

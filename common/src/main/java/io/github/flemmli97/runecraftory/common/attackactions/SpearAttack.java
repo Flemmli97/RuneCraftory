@@ -15,10 +15,16 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -89,15 +95,14 @@ public class SpearAttack extends AttackAction {
                             .executeAttack();
                     Vec3 pos = entity.position().add(0, -1, 0);
                     BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
-                    Vec3 axis = new Vec3(0, 1, 0);
-                    Vec3 dir2 = new Vec3(0, 0, 1).scale(1);
-//                    for (int i = -180; i < 180; i += 15) {
-//                        Vec3 scaled = MathUtils.rotate(axis, dir2, i);
-//                        mut.set(Mth.floor(pos.x() + dir2.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir2.z()));
-//                        BlockState state = entity.level().getBlockState(mut);
-//                        if (state.getRenderShape() != RenderShape.INVISIBLE && entity.level() instanceof ServerLevel serverLevel)
-//                            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + scaled.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + scaled.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
-//                    }
+                    Vec3 particlePos = new Vec3(0, 0, 1);
+                    for (int i = -180; i < 180; i += 15) {
+                        Vec3 scaled = particlePos.yRot(i * Mth.DEG_TO_RAD);
+                        mut.set(Mth.floor(pos.x() + particlePos.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + particlePos.z()));
+                        BlockState state = entity.level().getBlockState(mut);
+                        if (state.getRenderShape() != RenderShape.INVISIBLE && entity.level() instanceof ServerLevel serverLevel)
+                            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + scaled.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + scaled.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                    }
                     entity.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
             }

@@ -54,6 +54,11 @@ public class EntityElementalBall extends BaseProjectile {
     }
 
     @Override
+    public float radius() {
+        return 0.5f;
+    }
+
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (key == ELEMENT_DATA) {

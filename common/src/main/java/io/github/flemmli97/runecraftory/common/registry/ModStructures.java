@@ -9,7 +9,9 @@ import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 public class ModStructures {
@@ -22,20 +24,7 @@ public class ModStructures {
 
     public static final RegistryEntrySupplier<StructureProcessorType<?>, StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURE_PROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<?>, StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURE_PROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);
-//
-//    public static final Map<ResourceLocation, Holder<StructureProcessorList>> NPC_PROCESSOR_LIST = registerNPCProcessorLists();
-//
-//    public static <T extends FeatureConfiguration> RegistryEntrySupplier<StructureFeature<T>> register(String name, Supplier<StructureFeature<T>> sup) {
-//        return STRUCTURES.register(name, sup);
-//    }
-//
-//    private static Map<ResourceLocation, Holder<StructureProcessorList>> registerNPCProcessorLists() {
-//        ImmutableMap.Builder<ResourceLocation, Holder<StructureProcessorList>> map = ImmutableMap.builder();
-//        for (ResourceLocation shop : ModNPCJobs.DEFAULT_JOB_ID) {
-//            Holder<StructureProcessorList> holder = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, RuneCraftory.modRes("npc_" + shop.getPath()),
-//                    new StructureProcessorList(ImmutableList.of(new NPCDataProcessor(shop))));
-//            map.put(shop, holder);
-//        }
-//        return map.build();
-//    }
+
+    public static final ResourceKey<StructureTemplatePool> NPC_HOUSES = ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/houses"));
+    public static final ResourceKey<StructureTemplatePool> NPC_BIG_HOUSES = ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/houses"));
 }

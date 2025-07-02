@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.tenshilib.client.render.BeamRenderer;
+import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class RenderWaterLaser extends BeamRenderer<EntityWaterLaser> {
+public class RenderWaterLaser extends BeamRenderer<BeamEntity> {
 
     private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/water_laser.png");
 
@@ -19,17 +19,17 @@ public class RenderWaterLaser extends BeamRenderer<EntityWaterLaser> {
     }
 
     @Override
-    public ResourcePair startTexture(EntityWaterLaser entity) {
+    public ResourcePair startTexture(BeamEntity entity) {
         return null;
     }
 
     @Override
-    public ResourcePair endTexture(EntityWaterLaser entity) {
+    public ResourcePair endTexture(BeamEntity entity) {
         return null;
     }
 
     @Override
-    public float widthFunc(EntityWaterLaser entity) {
+    public float widthFunc(BeamEntity entity) {
         return super.widthFunc(entity) / this.widthMod;
     }
 
@@ -39,7 +39,7 @@ public class RenderWaterLaser extends BeamRenderer<EntityWaterLaser> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityWaterLaser entity) {
+    public ResourceLocation getTextureLocation(BeamEntity entity) {
         return TEX;
     }
 }

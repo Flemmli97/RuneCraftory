@@ -72,12 +72,12 @@ public class StructureWorldGen implements DataProvider {
         this.verifier = verifier;
     }
 
-    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<T> key) {
+    public static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<T> key) {
         return Holder.Reference.createStandAlone(provider.lookupOrThrow(key.registryKey()),
                 key);
     }
 
-    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<Registry<T>> key, ResourceLocation location) {
+    public static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<Registry<T>> key, ResourceLocation location) {
         return Holder.Reference.createStandAlone(provider.lookupOrThrow(key),
                 ResourceKey.create(key, location));
     }

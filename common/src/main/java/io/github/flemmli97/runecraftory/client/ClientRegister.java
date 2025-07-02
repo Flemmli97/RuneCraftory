@@ -354,6 +354,7 @@ public class ClientRegister {
         consumer.register(ModEntities.ROCK_SPEAR.get(), RenderRockSpear::new);
         consumer.register(ModEntities.WIND_BLADE.get(), RenderWindBlade::new);
         consumer.register(ModEntities.WATER_LASER.get(), RenderWaterLaser::new);
+        consumer.register(ModEntities.SWIPING_WATER_LASER.get(), RenderWaterLaser::new);
         consumer.register(ModEntities.LIGHT_BALL.get(), EmptyRender::new);
         consumer.register(ModEntities.DARK_BALL.get(), EmptyRender::new);
         consumer.register(ModEntities.DARKNESS.get(), RenderDarkness::new);

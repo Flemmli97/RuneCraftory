@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.events;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
@@ -42,6 +43,7 @@ import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
+import io.github.flemmli97.runecraftory.mixinhelper.AttributeInstanceExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -50,7 +52,6 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -146,12 +147,6 @@ public class EntityCalls {
      * * Makes it so if entity is NOT using a weapon all damage buffs from equipment is removed
      */
     public static void updateEquipment(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem, Function<EquipmentSlot, ItemStack> lastArmor) {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            // Readd attack damage to unchanged slots. This is to make sure the client gets send the correct data
-            if (!changed.containsKey(slot)) {
-                reAddAttackDamage(entity, entity.getItemBySlot(slot), slot);
-            }
-        }
         for (Map.Entry<EquipmentSlot, ItemStack> entry : changed.entrySet()) {
             if (entry.getKey().getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                 ItemStack now = entry.getValue();
@@ -164,39 +159,22 @@ public class EntityCalls {
             float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
             recalcOffhandBonus(entity, shieldEfficiency);
         }
-        // Telling the client the attribute values before damage is removed so players know the potential damage
+        // Sync attributes to client. Vanilla only does it for a few
         if (entity instanceof ServerPlayer serverPlayer) {
             EntityUtils.sendAttributesTo(serverPlayer, serverPlayer);
         }
         // If player doesnt have a weapon now we remove all attack damage modifiers
-        if (!ItemNBT.isWeapon(entity.getMainHandItem())) {
-            AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-            if (inst != null)
-                for (EquipmentSlot slot : EquipmentSlot.values()) {
-                    ResourceLocation id = LibConstants.EQUIPMENT_MODIFIERS.get(slot);
-                    if (id != null)
-                        inst.removeModifier(id);
-                }
-            inst = entity.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
-            if (inst != null)
-                for (EquipmentSlot slot : EquipmentSlot.values()) {
-                    ResourceLocation id = LibConstants.EQUIPMENT_MODIFIERS.get(slot);
-                    if (id != null)
-                        inst.removeModifier(id);
-                }
+        boolean weapon = ItemNBT.isWeapon(entity.getMainHandItem());
+        AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (inst != null) {
+            ((AttributeInstanceExtension) inst)
+                    .runecraftory$setAttributeModifierFilter(weapon ? null : mod -> !mod.id().getNamespace().equals(RuneCraftory.MODID));
         }
-    }
-
-    private static void reAddAttackDamage(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
-        stack.forEachModifier(slot, (att, mod) -> {
-            if (att.unwrapKey().map(Attributes.ATTACK_DAMAGE::is).orElse(false) || att.is(ModAttributes.MAGIC_ATTACK.getKey())) {
-                AttributeInstance attributeInstance = entity.getAttribute(att);
-                if (attributeInstance != null) {
-                    attributeInstance.removeModifier(mod.id());
-                    attributeInstance.addTransientModifier(mod);
-                }
-            }
-        });
+        inst = entity.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
+        if (inst != null) {
+            ((AttributeInstanceExtension) inst)
+                    .runecraftory$setAttributeModifierFilter(weapon ? null : mod -> !mod.id().getNamespace().equals(RuneCraftory.MODID));
+        }
     }
 
     private static void recalcOffhandBonus(LivingEntity entity, float efficiency) {

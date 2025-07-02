@@ -8,6 +8,7 @@
     "AbstractContainerMenuAccessor",
     "AttributeAccessor",
     "AttributeMapAccessor",
+    "AttributeInstanceMixin",
     "BiomeAccessor",
     "BiomeMixin",
     "BlockBehaviourMixin",

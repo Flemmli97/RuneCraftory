@@ -631,11 +631,13 @@ public class CombatUtils {
     }
 
     public static double getRange(LivingEntity entity, double bonus) {
-        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_RANGE.asHolder()) + bonus);
+        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_RANGE.asHolder()) + bonus)
+                * entity.getScale();
     }
 
     public static double getWidth(LivingEntity entity, double bonus) {
-        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_WIDTH.asHolder()) + bonus);
+        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_WIDTH.asHolder()) + bonus)
+                * entity.getScale();
     }
 
     public static int getSpellLevelFromStack(ItemStack stack) {

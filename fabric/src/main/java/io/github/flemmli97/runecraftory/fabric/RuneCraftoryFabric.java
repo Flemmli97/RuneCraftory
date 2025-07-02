@@ -172,7 +172,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         CropGrowEvent.EVENT.register((WorldCalls::disableVanillaCrop));
         ServerChunkEvents.CHUNK_LOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkLoad(world, chunk.getPos())));
         ServerChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkUnLoad(world, chunk.getPos())));
-
+        ServerLifecycleEvents.SERVER_STARTING.register(WorldRegistrationCalls::addVillageStructures);
         LootTableEvents.MODIFY.register(((id, builder, source, provider) -> {
             if (LootTableResources.VANILLA_CHESTS.contains(id))
                 builder.withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableResources.CHEST_LOOT_SPELLS)));

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class MathsHelper {
 
@@ -41,5 +42,16 @@ public class MathsHelper {
         }
 
         return angle + f;
+    }
+
+    public static Vec3 getUp(Vec3 vec3) {
+        float[] yxRot = MathsHelper.YXRotFrom(vec3);
+        return Vec3.directionFromRotation(yxRot[1] - 90, yxRot[0]);
+    }
+
+    public static Vector3d rotateOnUp(Vec3 vec3, double angle) {
+        Vec3 up = getUp(vec3);
+        return new Vector3d(vec3.x(), vec3.y(), vec3.z())
+                .rotateAxis(angle, up.x(), up.y(), up.z());
     }
 }

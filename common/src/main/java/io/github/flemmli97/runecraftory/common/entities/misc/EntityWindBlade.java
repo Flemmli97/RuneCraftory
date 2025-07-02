@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.loader.TenshiLibEventCalls;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -120,19 +121,11 @@ public class EntityWindBlade extends BaseProjectile {
         Vec3 pos = this.position();
         Vec3 to = pos.add(this.getDeltaMovement());
         BlockHitResult raytraceresult = this.level().clip(new ClipContext(pos, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-        if (raytraceresult.getType() == HitResult.Type.BLOCK) {
+        if (raytraceresult.getType() == HitResult.Type.BLOCK && !TenshiLibEventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
             BlockPos blockpos = raytraceresult.getBlockPos();
             BlockState blockstate = this.level().getBlockState(blockpos);
-//            if (blockstate.is(Blocks.NETHER_PORTAL)) {
-//                this.handleInsidePortal(blockpos);
-//            } else if (blockstate.is(Blocks.END_GATEWAY)) {
-//                BlockEntity tileentity = this.level().getBlockEntity(blockpos);
-//                if (tileentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-//                    TheEndGatewayBlockEntity.teleportEntity(this.level(), blockpos, blockstate, this, (TheEndGatewayBlockEntity) tileentity);
-//                }
-//            } else if (!EventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
-//                this.onBlockHit(raytraceresult);
-//            }
+            blockstate.onProjectileHit(this.level(), blockstate, raytraceresult, this);
+            this.onBlockHit(raytraceresult);
         }
     }
 

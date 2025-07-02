@@ -259,6 +259,7 @@ public class EntitySarcophagus extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(LIGHT_2X)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(LIGHT_4X)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(BossMonster::isEnraged)
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SHINE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged())

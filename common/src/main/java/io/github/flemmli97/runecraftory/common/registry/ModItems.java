@@ -579,13 +579,13 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_EMERALD = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_SAPPHIRE = brokenMineral(EnumMineralTier.SAPPHIRE);
 
-    public static final RegistryEntrySupplier<Item, Item> RAW_TIN = register("raw_tin", () -> new Item(new Item.Properties()), ModCreativeModTabs.UPGRADE_ITEMS);
+    public static final RegistryEntrySupplier<Item, Item> RAW_TIN = register("raw_tin", () -> new Item(new Item.Properties()), ModCreativeModTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> TIN_INGOT = mat("tin_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> BRONZE_DUST = register("bronze_dust", () -> new Item(new Item.Properties()), ModCreativeModTabs.UPGRADE_ITEMS);
+    public static final RegistryEntrySupplier<Item, Item> BRONZE_DUST = register("bronze_dust", () -> new Item(new Item.Properties()), ModCreativeModTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> BRONZE_INGOT = mat("bronze_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> RAW_SILVER = register("raw_silver", () -> new Item(new Item.Properties()), ModCreativeModTabs.UPGRADE_ITEMS);
+    public static final RegistryEntrySupplier<Item, Item> RAW_SILVER = register("raw_silver", () -> new Item(new Item.Properties()), ModCreativeModTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> SILVER_INGOT = mat("silver_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> RAW_PLATINUM = register("raw_platinum", () -> new Item(new Item.Properties()), ModCreativeModTabs.UPGRADE_ITEMS);
+    public static final RegistryEntrySupplier<Item, Item> RAW_PLATINUM = register("raw_platinum", () -> new Item(new Item.Properties()), ModCreativeModTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> PLATINUM_INGOT = mat("platinum_ingot", Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> ORICHALCUM = mat("orichalcum", Rarity.UNCOMMON, Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> DRAGONIC = mat("dragonic_stone", Rarity.UNCOMMON, Texture.Y);
@@ -979,9 +979,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> SWORD_SEEDS = seed("sword", () -> ModBlocks.SWORD_CROP);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> DUNGEON_SEEDS = seed("dungeon", () -> ModBlocks.DUNGEON);
 
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> APPLE_SAPLING = register("apple_sapling", () -> new ItemNameBlockItem(ModBlocks.APPLE_SAPLING.get(), new Item.Properties()), ModCreativeModTabs.CROPS);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> ORANGE_SAPLING = register("orange_sapling", () -> new ItemNameBlockItem(ModBlocks.ORANGE_SAPLING.get(), new Item.Properties()), ModCreativeModTabs.CROPS);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GRAPE_SAPLING = register("grape_sapling", () -> new ItemNameBlockItem(ModBlocks.GRAPE_SAPLING.get(), new Item.Properties()), ModCreativeModTabs.CROPS);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> APPLE_SAPLING = register("apple_sapling", () -> new ItemNameBlockItem(ModBlocks.APPLE_SAPLING.get(), new Item.Properties()), ModCreativeModTabs.FARMING);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> ORANGE_SAPLING = register("orange_sapling", () -> new ItemNameBlockItem(ModBlocks.ORANGE_SAPLING.get(), new Item.Properties()), ModCreativeModTabs.FARMING);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GRAPE_SAPLING = register("grape_sapling", () -> new ItemNameBlockItem(ModBlocks.GRAPE_SAPLING.get(), new Item.Properties()), ModCreativeModTabs.FARMING);
 
     public static final RegistryEntrySupplier<Item, ItemMedicine> ROUNDOFF = medicine("roundoff", false);
     public static final RegistryEntrySupplier<Item, ItemMedicine> PARA_GONE = medicine("para_gone", false);
@@ -1528,7 +1528,7 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().rarity(rarity)), ModCreativeModTabs.UPGRADE_ITEMS);
+        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().rarity(rarity)), ModCreativeModTabs.MATERIALS);
         if (Platform.INSTANCE.isDatagen()) {
             if (rarity == Rarity.COMMON)
                 TIER_1_CHEST.add(sup);
@@ -1587,7 +1587,7 @@ public class ModItems {
     }
 
     private static RegistryEntrySupplier<Item, ItemNameBlockItem> seed(String name, Supplier<Supplier<? extends Block>> block) {
-        RegistryEntrySupplier<Item, ItemNameBlockItem> sup = register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties()), ModCreativeModTabs.CROPS);
+        RegistryEntrySupplier<Item, ItemNameBlockItem> sup = register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties()), ModCreativeModTabs.FARMING);
         if (Platform.INSTANCE.isDatagen())
             SEEDS.add(sup);
         return sup;
@@ -1616,9 +1616,9 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item, Item> sup;
         if (small != null)
-            sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), ModCreativeModTabs.CROPS);
+            sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), ModCreativeModTabs.FARMING);
         else
-            sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)), ModCreativeModTabs.CROPS);
+            sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)), ModCreativeModTabs.FARMING);
         if (Platform.INSTANCE.isDatagen()) {
             TIER_1_CHEST.add(sup);
             if (small != null)

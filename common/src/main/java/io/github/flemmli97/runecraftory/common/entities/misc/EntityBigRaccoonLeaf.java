@@ -4,13 +4,13 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -25,14 +25,8 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
     private static final EntityDataAccessor<Boolean> SPIN = SynchedEntityData.defineId(EntityBigRaccoonLeaf.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> INITIAL_YAW = SynchedEntityData.defineId(EntityBigRaccoonLeaf.class, EntityDataSerializers.FLOAT);
 
-    //Diameter of circle
-    private double diameter;
-    //The axis to circle around to
-    private Vec3 axis;
-    //Shooting direction
-    private Vec3 dir;
-    private Vec3 center;
-    private float sumAngles;
+    private Vec3 shootDir, center, axis;
+    private float circleRadius;
 
     public EntityBigRaccoonLeaf(EntityType<? extends BaseProjectile> type, Level world) {
         super(type, world);
@@ -48,12 +42,20 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         super.shoot(x, y, z, velocity, inaccuracy);
         this.entityData.set(INITIAL_YAW, this.getYRot());
-        this.dir = this.getDeltaMovement();
-        this.axis = this.calculateUpVector(-this.getViewXRot(1), -this.getViewYRot(1));
+        this.shootDir = this.getDeltaMovement();
+        this.center = this.position().add(this.shootDir);
+        this.axis = MathsHelper.getUp(this.getDeltaMovement());
     }
 
-    public void setDiameter(double diameter) {
-        this.diameter = Math.max(diameter, 1);
+    public void setCenter(float radius) {
+        Vec3 dir = this.getShootDir().normalize().scale(radius);
+        this.center = this.position().add(dir);
+        this.axis = MathsHelper.getUp(dir);
+        this.circleRadius = radius;
+    }
+
+    private Vec3 getShootDir() {
+        return this.shootDir == null ? this.getDeltaMovement() : this.shootDir;
     }
 
     @Override
@@ -75,29 +77,21 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
 
     @Override
     public void tick() {
-        super.tick();
         if (!this.level().isClientSide) {
-            if (this.diameter > 0) {
-                Vec3 toCenterDir = this.dir.normalize().scale(this.diameter * 0.5);
-                if (this.center == null) {
-                    this.center = this.position().add(toCenterDir);
-                }
-                float angle = (float) ((2 * Math.PI / this.livingTickMax()) * this.dir.length());
-                if (!this.spinRight())
-                    angle *= -1;
-                if (this.sumAngles == 0)
-                    this.sumAngles += angle * 3;
-                Vector3d point = new Vector3d(this.axis.x, this.axis.y, this.axis.z)
-                        .rotateAxis(this.sumAngles * Mth.DEG_TO_RAD, -toCenterDir.x, -toCenterDir.y, -toCenterDir.z);
-                this.sumAngles += angle;
-                Vec3 newPos = new Vec3(point.x(), point.y(), point.z())
-                        .add(this.center);
-                this.setDeltaMovement(newPos.subtract(this.position()));
-                this.hasImpulse = true;
-            }
-            if (this.sumAngles >= Math.PI * 2)
-                this.discard();
+            Vec3 dir = this.position().subtract(this.center)
+                    .normalize().scale(this.circleRadius);
+            float angle = (float) (2 * Math.PI / this.livingTickMax());
+            if (!this.spinRight())
+                angle *= -1;
+            if (this.firstTick)
+                angle *= 2;
+            Vector3d point = new Vector3d(dir.x, dir.y, dir.z)
+                    .rotateAxis(angle, this.axis.x(), this.axis.y(), this.axis.z());
+            Vec3 newPos = this.center.add(point.x(), point.y(), point.z());
+            this.setDeltaMovement(newPos.subtract(this.position()));
+            this.hasImpulse = true;
         }
+        super.tick();
     }
 
     public void withRightSpin(boolean spin) {
@@ -132,23 +126,16 @@ public class EntityBigRaccoonLeaf extends BaseProjectile {
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.diameter = compound.getDouble("Diameter");
         ListTag listTag = compound.getList("Axis", Tag.TAG_DOUBLE);
         this.axis = new Vec3(listTag.getDouble(0), listTag.getDouble(1), listTag.getDouble(2));
-        listTag = compound.getList("Direction", Tag.TAG_DOUBLE);
-        this.dir = new Vec3(listTag.getDouble(0), listTag.getDouble(1), listTag.getDouble(2));
         listTag = compound.getList("Center", Tag.TAG_DOUBLE);
         this.center = new Vec3(listTag.getDouble(0), listTag.getDouble(1), listTag.getDouble(2));
-        this.sumAngles = compound.getFloat("Angles");
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putDouble("Diameter", this.diameter);
         compound.put("Axis", this.newDoubleList(this.axis.x, this.axis.y, this.axis.z));
-        compound.put("Direction", this.newDoubleList(this.dir.x, this.dir.y, this.dir.z));
         compound.put("Center", this.newDoubleList(this.center.x, this.center.y, this.center.z));
-        compound.putDouble("Angles", this.sumAngles);
     }
 }

@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -16,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,17 +26,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.UUID;
 import java.util.function.Predicate;
 
 public class EntityWaterLaser extends BaseBeam {
 
-    private static final EntityDataAccessor<Float> YAW_MOTION_VAL = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Integer> MAX_LIVING_TICK = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> POSITION_YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RANGE = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> MAX_LIVING_TICK = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.INT);
+
+    private static final EntityDataAccessor<Float> YAW_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Vector3f> OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.VECTOR3);
+    private static final EntityDataAccessor<Boolean> ROTATION_FROM_OFFSET = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.BOOLEAN);
 
     private final Object2IntMap<Entity> hitEntities = new Object2IntOpenHashMap<>();
     private float accumulatedRot;
@@ -48,14 +52,10 @@ public class EntityWaterLaser extends BaseBeam {
         super(ModEntities.WATER_LASER.get(), level, shooter);
     }
 
-    public EntityWaterLaser(Level level, LivingEntity shooter, float yawMotion) {
+    public EntityWaterLaser(Level level, LivingEntity shooter, Vector3f offset) {
         super(ModEntities.WATER_LASER.get(), level, shooter);
-        this.entityData.set(YAW_MOTION_VAL, yawMotion);
-    }
-
-    public void setRotationToDirWithOffset(double dirX, double dirY, double dirZ, float acc, float yawOffset) {
-        super.setRotationToDir(dirX, dirY, dirZ, acc);
-        this.setYRot(this.getYRot() + yawOffset);
+        this.entityData.set(OFFSET, offset);
+        this.updateYawPitch();
     }
 
     public EntityWaterLaser setMaxTicks(int ticks) {
@@ -65,10 +65,7 @@ public class EntityWaterLaser extends BaseBeam {
 
     public void setYawOffset(float offset) {
         this.entityData.set(YAW_OFFSET, offset);
-    }
-
-    public void setPositionYawOffset(float offset) {
-        this.entityData.set(POSITION_YAW_OFFSET, offset);
+        this.updateYawPitch();
     }
 
     public void setTwinId(UUID other) {
@@ -77,6 +74,21 @@ public class EntityWaterLaser extends BaseBeam {
 
     public void setRange(float range) {
         this.entityData.set(RANGE, range);
+    }
+
+    public void setRotationFromOffset() {
+        this.entityData.set(ROTATION_FROM_OFFSET, true);
+        this.updateYawPitch();
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MAX_LIVING_TICK, 20);
+        builder.define(YAW_OFFSET, 0f);
+        builder.define(OFFSET, new Vector3f());
+        builder.define(RANGE, 9f);
+        builder.define(ROTATION_FROM_OFFSET, false);
     }
 
     @Override
@@ -101,16 +113,32 @@ public class EntityWaterLaser extends BaseBeam {
 
     @Override
     public void updateYawPitch() {
-        if (this.getHitVecFromShooter() && this.getOwner() != null) {
+        if ((this.getHitVecFromShooter() || this.firstTick) && this.getOwner() != null) {
             Entity e = this.getOwner();
             float yRot = this.getYRot();
             float xRot = this.getXRot();
-            this.setXRot(e.getXRot());
-            this.setYRot(e.getYRot() + this.entityData.get(YAW_OFFSET));
-            this.xRotO = e.xRotO;
-            this.yRotO = e.yRotO + this.entityData.get(YAW_OFFSET);
-            Vec3 vec = e.getLookAngle().yRot(this.entityData.get(POSITION_YAW_OFFSET));
-            this.setPos(e.getX() + vec.x(), e.getY() + (double) e.getEyeHeight() - 0.10000000149011612D + vec.y(), e.getZ() + vec.z());
+            float[] yxRot;
+            Vector3f offset = this.entityData.get(OFFSET)
+                    .rotateY(-(e.getYRot() + this.entityData.get(YAW_OFFSET)) * Mth.DEG_TO_RAD, new Vector3f());
+            if (this.entityData.get(ROTATION_FROM_OFFSET)) {
+                float pitch = e.getXRot();
+                Vec3 look = Vec3.directionFromRotation(pitch, e.getYRot()).scale(offset.length());
+                Vec3 up = Vec3.directionFromRotation(pitch - 90, e.getYRot());
+                offset = new Vector3f((float) look.x(), (float) look.y(), (float) look.z())
+                        .rotateAxis(this.entityData.get(YAW_OFFSET) * Mth.DEG_TO_RAD, (float) up.x(), (float) up.y(), (float) up.z(), new Vector3f());
+                yxRot = MathsHelper.YXRotFrom(offset.x(), offset.y(), offset.z());
+            } else {
+                yxRot = new float[]{e.getYRot() + this.entityData.get(YAW_OFFSET), e.getXRot()};
+            }
+            this.xRotO = this.getXRot();
+            this.yRotO = this.getYRot();
+            this.setXRot(yxRot[1]);
+            this.setYRot(yxRot[0]);
+            if (this.firstTick) {
+                this.xRotO = this.getXRot();
+                this.yRotO = this.getYRot();
+            }
+            this.setPos(e.getX() + offset.x(), e.getY() + e.getEyeHeight() - 0.1 + offset.y(), e.getZ() + offset.z());
             this.accumulatedRot += Math.abs(this.getYRot() - yRot) + Math.abs(this.getXRot() - xRot);
         }
     }
@@ -121,30 +149,12 @@ public class EntityWaterLaser extends BaseBeam {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(YAW_MOTION_VAL, 0f);
-        builder.define(MAX_LIVING_TICK, 20);
-        builder.define(YAW_OFFSET, 0f);
-        builder.define(POSITION_YAW_OFFSET, 0f);
-        builder.define(RANGE, 9f);
-    }
-
-    @Override
     public void tick() {
-        float yRot = this.getYRot();
-        if (this.entityData.get(YAW_MOTION_VAL) != 0) {
-            this.setYRot(this.getYRot() + this.entityData.get(YAW_MOTION_VAL));
-            this.hit = null;
-        }
         if (this.accumulatedRot > 15) {
             this.hitEntities.clear();
             this.accumulatedRot = 0;
         }
         super.tick();
-        if (this.entityData.get(YAW_MOTION_VAL) != 0) {
-            this.yRotO = yRot;
-        }
         if (this.getOwner() instanceof ServerPlayer player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             AnimationState action = data.getWeaponHandler().getAnimation();
@@ -178,20 +188,31 @@ public class EntityWaterLaser extends BaseBeam {
 
     @Override
     public boolean canStartDamage() {
-        return true;//(this.livingTicks - 1) % 5 == 0;
+        return true;
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.entityData.set(YAW_OFFSET, compound.getFloat("YawOffset"));
         this.entityData.set(RANGE, compound.getFloat("Range"));
+        this.entityData.set(MAX_LIVING_TICK, compound.getInt("MaxTicks"));
+        this.entityData.set(YAW_OFFSET, compound.getFloat("YawOffset"));
+        this.entityData.set(OFFSET, new Vector3f(compound.getFloat("OffsetX"),
+                compound.getFloat("OffsetY"),
+                compound.getFloat("OffsetZ")));
+        this.entityData.set(ROTATION_FROM_OFFSET, compound.getBoolean("RotationFromOffset"));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
+        compound.putFloat("Range", this.entityData.get(RANGE));
+        compound.putInt("MaxTicks", this.entityData.get(MAX_LIVING_TICK));
         compound.putFloat("YawOffset", this.entityData.get(YAW_OFFSET));
-        compound.putFloat("Float", this.entityData.get(RANGE));
+        Vector3f offset = this.entityData.get(OFFSET);
+        compound.putFloat("OffsetX", offset.x());
+        compound.putFloat("OffsetY", offset.y());
+        compound.putFloat("OffsetZ", offset.z());
+        compound.putBoolean("RotationFromOffset", this.entityData.get(ROTATION_FROM_OFFSET));
     }
 }

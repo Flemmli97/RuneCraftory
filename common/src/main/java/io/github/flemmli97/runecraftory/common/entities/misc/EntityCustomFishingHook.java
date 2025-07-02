@@ -202,10 +202,10 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         this.setDeltaMovement(this.getDeltaMovement().normalize().scale(blockHitResult.distanceTo(this)));
     }
 
-//    @Override
-//    public boolean canChangeDimensions() {
-//        return false;
-//    }
+    @Override
+    public boolean canChangeDimensions(Level oldLevel, Level newLevel) {
+        return false;
+    }
 
     @Override
     protected Entity.MovementEmission getMovementEmission() {

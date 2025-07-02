@@ -249,7 +249,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell, TornadoSpell> TORNADO = registerSpell("tornado", TornadoSpell::new, new SpellProperties.Builder(60, 75).percentageCost(0.1f).withXPGain(EnumSkills.WIND, 5));
     public static final RegistryEntrySupplier<Spell, WaterLaserSwipe> WATER_SWIPE = registerSpell("water_swipe", () -> new WaterLaserSwipe(10, 25), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
     public static final RegistryEntrySupplier<Spell, WaterLaserSwipe> WATER_SWIPE_140 = registerSpell("water_swipe_140", () -> new WaterLaserSwipe(12, 70), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
-    public static final RegistryEntrySupplier<Spell, WaterLaserSwipe> WATER_SWIPE_360 = registerSpell("water_swipe_360", () -> new WaterLaserSwipe(18, 180), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
+    public static final RegistryEntrySupplier<Spell, WaterLaserSwipe> WATER_SWIPE_360 = registerSpell("water_swipe_360", () -> new WaterLaserSwipe(16, 180), new SpellProperties.Builder(50, 40).withXPGain(EnumSkills.WATER, 5));
     public static final RegistryEntrySupplier<Spell, FireWallSpell> FIRE_WALL = registerSpell("fire_wall", FireWallSpell::new, new SpellProperties.Builder(60, 80).percentageCost(0.05f).withXPGain(EnumSkills.FIRE, 5));
     public static final RegistryEntrySupplier<Spell, IceBallDropSpell> ICE_BALL_DROP = registerSpell("ice_ball_drop", IceBallDropSpell::new, new SpellProperties.Builder(50, 70).withXPGain(EnumSkills.WATER, 5));
     public static final RegistryEntrySupplier<Spell, IceTrailSpell> ICE_TRAIL = registerSpell("ice_trail", () -> new IceTrailSpell(true), new SpellProperties.Builder(60, 75).withXPGain(EnumSkills.WATER, 5));

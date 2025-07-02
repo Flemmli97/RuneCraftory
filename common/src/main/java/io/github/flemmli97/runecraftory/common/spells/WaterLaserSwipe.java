@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntitySwipingWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
@@ -23,9 +23,9 @@ public class WaterLaserSwipe extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        float motion = (this.angle * 2) / this.duration;
-        motion = entity instanceof MobAttackExt ext && ext.reversed() ? motion : -motion;
-        EntityWaterLaser laser = new EntityWaterLaser(level, entity, motion).setMaxTicks(this.duration);
+        float angle = this.angle * 2;
+        angle = entity instanceof MobAttackExt ext && ext.reversed() ? angle : -angle;
+        EntitySwipingWaterLaser laser = new EntitySwipingWaterLaser(level, entity, angle).setMaxTicks(this.duration);
         Vec3 target = ProjectileUtil.getAimTarget(entity);
         Vec3 dir;
         if (target != null) {

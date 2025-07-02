@@ -729,9 +729,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     BrainUtils.setMemory(this, ModMemoryTypes.FARMING.get(), Unit.INSTANCE);
                     BlockPos nearestInv = this.nearestBlockEntityWithInv();
                     if (this.getSeedInventory() == null)
-                    this.setSeedInventory(nearestInv);
+                        this.setSeedInventory(nearestInv);
                     if (this.getCropInventory() == null)
-                    this.setCropInventory(nearestInv);
+                        this.setCropInventory(nearestInv);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
                 }

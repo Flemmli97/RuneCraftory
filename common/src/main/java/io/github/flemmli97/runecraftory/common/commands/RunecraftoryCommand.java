@@ -82,11 +82,11 @@ public class RunecraftoryCommand {
                 .then(Commands.literal("spell").requires(src -> src.hasPermission(2))
                         .then(Commands.literal("cast")
                                 .then(Commands.argument("spell", ResourceArgument.resource(buildContext, ModSpells.SPELL_REGISTRY_KEY)).executes(ctx -> RunecraftoryCommand.castSpell(ctx, Set.of(ctx.getSource().getEntityOrException())))
-                                        .then(Commands.argument("for", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, EntityArgument.getEntities(ctx, "as"))))))
+                                        .then(Commands.argument("as", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, EntityArgument.getEntities(ctx, "as"))))))
                         .then(Commands.literal("apply")
                                 .then(Commands.argument("spell", ResourceArgument.resource(buildContext, ModSpells.SPELL_REGISTRY_KEY))
                                         .then(Commands.argument("tier", IntegerArgumentType.integer(1, 3)).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, Set.of(ctx.getSource().getEntityOrException())))
-                                                .then(Commands.argument("for", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, EntityArgument.getEntities(ctx, "as")))))))
+                                                .then(Commands.argument("as", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, EntityArgument.getEntities(ctx, "as")))))))
                 )
         );
     }

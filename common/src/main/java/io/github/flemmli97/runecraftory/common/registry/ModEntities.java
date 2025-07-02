@@ -55,6 +55,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStarfall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntitySwipingWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThiccLightningBolt;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThrownItem;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
@@ -1496,6 +1497,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityFireball>> FIRE_BALL = reg(EntityType.Builder.<EntityFireball>of(EntityFireball::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), RuneCraftory.modRes("fireball"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityExplosionSpell>> EXPLOSION = reg(EntityType.Builder.<EntityExplosionSpell>of(EntityExplosionSpell::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("explosion"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityWaterLaser>> WATER_LASER = reg(EntityType.Builder.<EntityWaterLaser>of(EntityWaterLaser::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("water_laser"));
+    public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntitySwipingWaterLaser>> SWIPING_WATER_LASER = reg(EntityType.Builder.<EntitySwipingWaterLaser>of(EntitySwipingWaterLaser::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("swiping_water_laser"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityRockSpear>> ROCK_SPEAR = reg(EntityType.Builder.<EntityRockSpear>of(EntityRockSpear::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4), RuneCraftory.modRes("rock_spear"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityWindBlade>> WIND_BLADE = reg(EntityType.Builder.<EntityWindBlade>of(EntityWindBlade::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("wind_blade"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<EntityLightBall>> LIGHT_BALL = reg(EntityType.Builder.<EntityLightBall>of(EntityLightBall::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), RuneCraftory.modRes("light_ball"));

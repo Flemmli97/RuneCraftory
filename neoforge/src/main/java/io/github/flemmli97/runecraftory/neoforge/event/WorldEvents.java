@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.neoforge.event;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
+import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -10,6 +11,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 public class WorldEvents {
@@ -44,5 +46,10 @@ public class WorldEvents {
             FarmlandHandler.get(level.getServer()).onChunkUnLoad(level, event.getChunk().getPos());
         else if (event.getLevel().isClientSide())
             ClientFarmlandHandler.INSTANCE.onChunkUnLoad(event.getChunk().getPos());
+    }
+
+    @SubscribeEvent
+    public void onServerStart(ServerAboutToStartEvent event) {
+        WorldRegistrationCalls.addVillageStructures(event.getServer());
     }
 }

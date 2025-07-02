@@ -210,8 +210,6 @@ public class ClientMixinUtils {
                 z += vec3.z() - camZ;
                 poseStack.translate(x, y, z);
                 poseStack.translate(0, 0.1, 0.1);
-                float rot = Mth.lerp(partialTicks, player.yRotO, player.getYRot());
-                poseStack.mulPose(Axis.YP.rotationDegrees(rot + 180));
                 ItemRenderContext = true;
                 playerRenderer.render(player, 0, partialTicks, poseStack, buffer, combinedLight);
                 ItemRenderContext = false;
