@@ -117,10 +117,6 @@ public abstract class EntitySanoUno extends BossMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-    }
-
-    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 

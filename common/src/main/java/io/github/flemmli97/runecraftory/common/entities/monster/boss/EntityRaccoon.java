@@ -537,8 +537,8 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(this.isBerserk() ? INTERACT_BERSERK : INTERACT);
+    public String getInteractAnimation() {
+        return this.isBerserk() ? INTERACT_BERSERK : INTERACT;
     }
 
     @Override

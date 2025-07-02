@@ -37,8 +37,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
@@ -209,10 +207,7 @@ public class EntityChimera extends BossMonster {
 
     @Override
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
-        return new OneRandomBehaviour<>(
-                new SetRandomWalkTarget<>().speedModifier(0.7f),
-                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
-        );
+        return new SetRandomWalkTarget<BaseMonster>().speedModifier(0.7f);
     }
 
     @Override
@@ -330,8 +325,8 @@ public class EntityChimera extends BossMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

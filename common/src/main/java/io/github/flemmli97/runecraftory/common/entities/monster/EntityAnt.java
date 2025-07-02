@@ -80,8 +80,8 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

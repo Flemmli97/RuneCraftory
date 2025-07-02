@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
@@ -31,7 +30,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
@@ -52,7 +50,7 @@ public class EntityTortas extends ChargingMonster {
     public EntityTortas(EntityType<? extends EntityTortas> type, Level world) {
         super(type, world);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
-        this.moveControl = new SwimWalkMoveController(this);
+        this.moveControl = new SwimWalkMoveController(this, 1.2);
         this.waterNavigator = new AmphibiousNavigator(this, world);
         this.groundNavigator = this.navigation;
     }
@@ -90,12 +88,12 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
-        return new OneRandomBehaviour<>(
-                Pair.of(new SetWaterPrioritizingWalkTarget<>(), 10),
-                Pair.of(new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
-                        .startCondition(entity -> !entity.isSwimming()), 5),
-                Pair.of(new Idle<>().runFor(entity -> entity.getRandom().nextInt(20, 50)), 1)
-        );
+        return new SetWaterPrioritizingWalkTarget<>();
+    }
+
+    @Override
+    protected int wanderChance() {
+        return this.isSwimming() ? 5 : 100;
     }
 
     @Override
@@ -253,8 +251,8 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

@@ -28,7 +28,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomFlyingTarget;
@@ -98,9 +97,12 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
-        return new OneRandomBehaviour<>(new SetRandomHoverTarget<>(),
-                new Idle<>().runFor(entity -> entity.getRandom().nextInt(50, 120))
-        );
+        return new SetRandomHoverTarget<>();
+    }
+
+    @Override
+    protected int wanderChance() {
+        return 50;
     }
 
     @Override
@@ -210,8 +212,8 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

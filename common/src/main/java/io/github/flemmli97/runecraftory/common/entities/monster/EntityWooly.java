@@ -241,8 +241,8 @@ public class EntityWooly extends LeapingMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

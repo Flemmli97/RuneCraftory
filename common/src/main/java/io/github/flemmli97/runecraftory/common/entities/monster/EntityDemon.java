@@ -148,8 +148,8 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

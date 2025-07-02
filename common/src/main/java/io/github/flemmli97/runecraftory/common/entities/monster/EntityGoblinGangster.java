@@ -104,7 +104,7 @@ public class EntityGoblinGangster extends EntityGoblin {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 }

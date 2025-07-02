@@ -12,10 +12,9 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FarmCrops;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
 import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -35,10 +34,10 @@ import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
-import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -63,6 +62,7 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -88,6 +88,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Unit;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -114,6 +115,7 @@ import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
@@ -137,7 +139,6 @@ import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
@@ -165,11 +166,13 @@ import java.util.function.Predicate;
 public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
 
     public static final int MOVE_TICK_MAX = 3;
+
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> FRIEND_POINTS_SYNC = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
+
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
             if (this.getControllingPassenger() instanceof Player)
@@ -185,28 +188,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         return false;
     };
-    private final EntityProperties prop;
-    public final Predicate<LivingEntity> defendPred = (e) -> {
-        if (e != this) {
-            if (this.getControllingPassenger() instanceof Player)
-                return false;
-            if (this.isTamed())
-                return !e.getUUID().equals(this.getOwnerUUID()) && !this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
-            return true;
-        }
-        return false;
-    };
-
-    //    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
-//    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
-//    public FloatGoal swimGoal = new FloatGoal(this);
-//    public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
-//    public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
-//    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
-//    public TendCropsGoal farm = new TendCropsGoal(this);
-    private final XpLevelHolder levelPair = new XpLevelHolder();
-    private final XpLevelHolder friendlyPoints = new XpLevelHolder();
-    private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
             if (this.hasPassenger(e) || !e.canBeSeenAsEnemy())
@@ -234,12 +215,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         return false;
     };
+
+    private final EntityProperties prop;
     private final float defaultScale;
+
+    private final XpLevelHolder levelPair = new XpLevelHolder();
+    private final XpLevelHolder friendlyPoints = new XpLevelHolder();
+    private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
+
     protected int tamingTick = -1;
     protected int feedTimeOut;
     private TargetPosition targetPosition;
     private BlockPos seedInventory, cropInventory;
     private int playDeathTick;
+
     //These 2 values are not getting saved intentionally to prevent stuff like player dying or running away
     private int brushCount, loveAttCount;
     private Runnable delayedTaming;
@@ -249,6 +238,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private int tpCooldown;
     private Behaviour behaviour = Behaviour.WANDER;
     private BarnData assignedBarn;
+    private Pair<String, Runnable> scheduledAnimationHandling;
 
     /**
      * For movement animation interpolation
@@ -259,7 +249,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
         this.moveControl = new MoveControllerPlus(this);
-        //Client will get default value. This is intentional
+        // Client will get default value. This is intentional
         this.prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
         this.defaultScale = (float) (type.getSpawnAABB(0, 0, 0).getYsize() / type.getHeight());
@@ -400,11 +390,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 }
             }
         } else {
-            if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
+            if (!this.playDeath() && TendCrops.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level().addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
-        if (this.getAnimationHandler().getAnimation() == null)
+        AnimationState animation = this.getAnimationHandler().getAnimation();
+        if (animation == null) {
             this.targetPosition = null;
+        }
+        if (animation == null || (this.scheduledAnimationHandling != null && !this.scheduledAnimationHandling.getFirst().equals(animation.getID()))) {
+            this.scheduledAnimationHandling = null;
+        }
     }
 
     @Override
@@ -448,7 +443,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         super.customServerAiStep();
         this.tickBrain(this);
         if (!(this.getControllingPassenger() instanceof Player) && this.getMoveControl().operation != MoveControl.Operation.WAIT
-                && this.getDeltaMovement().lengthSqr() > 0.004) {
+                && this.getDeltaMovement().lengthSqr() > 0.0005) {
             double d0 = this.getMoveControl().getSpeedModifier();
             MoveType move;
             if (d0 > this.sprintSpeedThreshold()) {
@@ -520,12 +515,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (compound.contains("SeedInventory")) {
             int[] arr = compound.getIntArray("SeedInventory");
             if (arr.length == 3)
-                this.seedInventory = new BlockPos(arr[0], arr[1], arr[2]);
+                this.setSeedInventory(new BlockPos(arr[0], arr[1], arr[2]));
         }
         if (compound.contains("CropInventory")) {
             int[] arr = compound.getIntArray("CropInventory");
             if (arr.length == 3)
-                this.cropInventory = new BlockPos(arr[0], arr[1], arr[2]);
+                this.setCropInventory(new BlockPos(arr[0], arr[1], arr[2]));
         }
         if (compound.contains("AssignedBarnLocation")) {
             if (this.getServer() != null)
@@ -543,7 +538,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public List<? extends ExtendedSensor<? extends BaseMonster>> getSensors() {
         return List.of(new NearbyPlayersSensor<>(),
-                new NearbyLivingEntitySensor<BaseMonster>().setPredicate((target, entity) -> entity.targetPred.test(target)),
+                new NearbyLivingEntitySensor<BaseMonster>()
+                        .setPredicate((target, entity) -> entity.targetPred.test(target))
+                        .setScanRate(e -> 10),
                 new HurtBySensor<>());
     }
 
@@ -571,7 +568,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 new FirstApplicableBehaviour<>(
                         new TargetOrRetaliate<BaseMonster>(),
                         new SetMoveToRestriction<BaseMonster>(),
-                        this.getWanderBehaviour()
+                        this.getWanderBehaviour().startCondition(m -> m.getRandom().nextInt(m.wanderChance()) == 0)
                 )
         );
     }
@@ -586,36 +583,45 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                                 .startCondition(e -> !e.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN))
                                 .stopIf(e -> e.getAnimationHandler().hasAnimation() || !BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN)),
                         (ExtendedBehaviour<BaseMonster>) this.getCombatAI()
-                )
+                ).startCondition(m -> m.getTarget() != null && m.isWithinRestriction(m.getTarget().blockPosition()))
         );
-    }
-
-    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
-        return new Idle<>();
     }
 
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return new Idle<>();
     }
 
+    public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
+        return new Idle<>();
+    }
+
     @Override
     public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
+        map.put(Activity.REST, new BrainActivityGroup<BaseMonster>(Activity.REST).priority(20).behaviours(new Idle<>())
+                .onlyStartWithMemoryStatus(ModMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
         map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
-                .priority(10).behaviours(
+                .priority(20).behaviours(
+                        new MoveToWalkTarget<>(),
                         new FirstApplicableBehaviour<>(
                                 new SetMoveToRestriction<>(),
-                                new FarmCrops<>())
-                )
+                                new TendCrops<>())
+                ).onlyStartWithMemoryStatus(ModMemoryTypes.FARMING.get(), MemoryStatus.VALUE_PRESENT)
         );
         return map;
     }
 
+    @Override
+    public List<Activity> getActivityPriorities() {
+        return ObjectArrayList.of(Activity.REST, Activity.WORK, Activity.FIGHT, Activity.IDLE);
+    }
+
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
-        return new OneRandomBehaviour<>(
-                new SetRandomWalkTarget<>(),
-                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 80))
-        );
+        return new SetRandomWalkTarget<>();
+    }
+
+    protected int wanderChance() {
+        return this.behaviourState() == Behaviour.WANDER_HOME ? 40 : 120;
     }
 
     protected boolean canFloatInWater() {
@@ -666,19 +672,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (forced || this.isTamed()) {
             this.getNavigation().stop();
             if (this.behaviourState() != Behaviour.FARM) {
-                this.seedInventory = null;
-                this.cropInventory = null;
-//                if (this.behaviourState() != Behaviour.STAY) {
-//                    this.targetSelector.addGoal(1, this.targetPlayer);
-//                    this.targetSelector.addGoal(2, this.targetMobs);
-//                    this.targetSelector.addGoal(0, this.hurt);
-//                }
-//                this.goalSelector.removeGoal(this.farm);
+                this.setSeedInventory(null);
+                this.setCropInventory(null);
                 if (this.level() instanceof ServerLevel serverLevel)
                     FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
-//            this.wander.setInterval(120);
-            this.getBrain().setActiveActivityIfPossible(Activity.IDLE);
+            BrainUtils.clearMemory(this, ModMemoryTypes.FARMING.get());
+            BrainUtils.clearMemory(this, ModMemoryTypes.STAYING.get());
             switch (this.behaviourState()) {
                 case WANDER_HOME -> {
                     if (this.getOwner() != null) {
@@ -697,8 +697,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                                 this.getOwner().displayClientMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), false);
                             this.setBehaviour(Behaviour.WANDER);
                         }
-//                        this.goalSelector.addGoal(6, this.wander);
-//                        this.wander.setInterval(40);
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
                     }
                 }
@@ -707,44 +705,32 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
                     if (party) {
                         this.clearRestriction();
-//                        this.goalSelector.removeGoal(this.wander);
                         if (this.getOwner() != null)
                             data.party.addPartyMember(this);
                     }
-                    this.getBrain().setActiveActivityIfPossible(ModActivities.FOLLOW.get());
                 }
                 case FOLLOW_DISTANCE -> {
                     this.clearRestriction();
-//                    this.goalSelector.removeGoal(this.wander);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
                 }
                 case STAY -> {
-//                    this.goalSelector.addGoal(6, this.wander);
-//                    this.targetSelector.removeGoal(this.targetPlayer);
-//                    this.targetSelector.removeGoal(this.targetMobs);
-//                    this.targetSelector.removeGoal(this.hurt);
+                    BrainUtils.setMemory(this, ModMemoryTypes.STAYING.get(), Unit.INSTANCE);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
                 }
                 case WANDER -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
-//                    this.goalSelector.addGoal(6, this.wander);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
                 }
                 case FARM -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
-//                    this.goalSelector.addGoal(3, this.farm);
-//
-//                    this.targetSelector.removeGoal(this.targetPlayer);
-//                    this.targetSelector.removeGoal(this.targetMobs);
-//                    this.targetSelector.removeGoal(this.hurt);
-
-//                    this.goalSelector.removeGoal(this.wander);
-                    this.getBrain().setActiveActivityIfPossible(Activity.WORK);
+                    BrainUtils.setMemory(this, ModMemoryTypes.FARMING.get(), Unit.INSTANCE);
                     BlockPos nearestInv = this.nearestBlockEntityWithInv();
+                    if (this.getSeedInventory() == null)
                     this.setSeedInventory(nearestInv);
+                    if (this.getCropInventory() == null)
                     this.setCropInventory(nearestInv);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
@@ -988,6 +974,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void handleAttack(AnimationState anim) {
+        if (anim.is(this.getInteractAnimation())) {
+            if (this.scheduledAnimationHandling != null && anim.is(this.scheduledAnimationHandling.getFirst())
+                    && anim.isAt("attack")) {
+                this.scheduledAnimationHandling.getSecond().run();
+            }
+            return;
+        }
         if (anim.is(this.getDeathAnimation(), this.getSleepAnimation()))
             return;
         this.getNavigation().stop();
@@ -1461,6 +1454,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return null;
     }
 
+    public String getInteractAnimation() {
+        return null;
+    }
+
+    public void runInteractHandling(Runnable runnable) {
+        if (this.getInteractAnimation() != null) {
+            this.getAnimationHandler().setAnimation(this.getInteractAnimation());
+            this.scheduledAnimationHandling = Pair.of(this.getInteractAnimation(), runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         boolean clientSide = this.level().isClientSide;
@@ -1640,6 +1646,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return this.prop.money;
     }
 
+    @Override
+    public boolean isFlyingEntity() {
+        return this.prop.flying;
+    }
+
     public void onDailyUpdate() {
         if (this.level() instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
             ResourceKey<LootTable> resourceLocation = this.dailyDropTable();
@@ -1706,64 +1717,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public void setLevelCallback(EntityInLevelCallback levelCallback) {
         super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::getOwner, levelCallback));
-    }
-
-    @Override
-    public boolean applyFoodEffect(ItemStack stack) {
-        if (this.level().isClientSide)
-            return false;
-        if (stack.getItem() == ModItems.OBJECT_X.get())
-            ItemObjectX.applyEffect(this, stack);
-        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
-        if (food == null) {
-            net.minecraft.world.food.FoodProperties mcFood = stack.get(DataComponents.FOOD);
-            this.eat(this.level(), stack);
-            if (mcFood != null) {
-                this.heal(mcFood.nutrition() * 0.5f);
-                return true;
-            }
-            return false;
-        }
-        this.eat(this.level(), stack);
-        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
-        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
-            this.removeFoodEffect();
-            for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getSecond().entrySet()) {
-                AttributeInstance inst = this.getAttribute(entry.getKey());
-                if (inst == null)
-                    continue;
-                inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER_MULTI, entry.getValue(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-            }
-            for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getFirst().entrySet()) {
-                AttributeInstance inst = this.getAttribute(entry.getKey());
-                if (inst == null)
-                    continue;
-                inst.removeModifier(LibConstants.FOOD_MODIFIER);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
-            }
-            this.foodBuffTick = food.duration();
-        }
-        EntityUtils.foodHealing(this, food.getHPGain());
-        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
-        if (food.potionHeals() != null)
-            for (Holder<MobEffect> s : food.potionHeals()) {
-                this.removeEffect(s);
-            }
-        if (food.potionApply() != null)
-            for (SimpleEffect s : food.potionApply()) {
-                this.addEffect(s.create());
-            }
-        return true;
-    }
-
-    @Override
-    public void removeFoodEffect() {
-        ((AttributeMapAccessor) this.getAttributes())
-                .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(LibConstants.FOOD_MODIFIER);
-                    inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
-                });
     }
 
     @Override
@@ -1846,6 +1799,64 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
+    public boolean applyFoodEffect(ItemStack stack) {
+        if (this.level().isClientSide)
+            return false;
+        if (stack.getItem() == ModItems.OBJECT_X.get())
+            ItemObjectX.applyEffect(this, stack);
+        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
+        if (food == null) {
+            net.minecraft.world.food.FoodProperties mcFood = stack.get(DataComponents.FOOD);
+            this.eat(this.level(), stack);
+            if (mcFood != null) {
+                this.heal(mcFood.nutrition() * 0.5f);
+                return true;
+            }
+            return false;
+        }
+        this.eat(this.level(), stack);
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
+            this.removeFoodEffect();
+            for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getSecond().entrySet()) {
+                AttributeInstance inst = this.getAttribute(entry.getKey());
+                if (inst == null)
+                    continue;
+                inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER_MULTI, entry.getValue(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            }
+            for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getFirst().entrySet()) {
+                AttributeInstance inst = this.getAttribute(entry.getKey());
+                if (inst == null)
+                    continue;
+                inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
+            }
+            this.foodBuffTick = food.duration();
+        }
+        EntityUtils.foodHealing(this, food.getHPGain());
+        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
+        if (food.potionHeals() != null)
+            for (Holder<MobEffect> s : food.potionHeals()) {
+                this.removeEffect(s);
+            }
+        if (food.potionApply() != null)
+            for (SimpleEffect s : food.potionApply()) {
+                this.addEffect(s.create());
+            }
+        return true;
+    }
+
+    @Override
+    public void removeFoodEffect() {
+        ((AttributeMapAccessor) this.getAttributes())
+                .getAttributes().values().forEach(inst -> {
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
+                });
+    }
+
+    @Override
     public UUID getOwnerUUID() {
         return this.entityData.get(OWNER_UUID).orElse(null);
     }
@@ -1874,16 +1885,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
-    public boolean isFlyingEntity() {
-        return this.prop.flying;
-    }
-
-    @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
         data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
     }
-
-    public abstract void playInteractionAnimation();
 
     @Override
     public void setSleepingPos(BlockPos pos) {
@@ -1925,29 +1929,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return null;
     }
 
-//    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
-//    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
-//    public FloatGoal swimGoal = new FloatGoal(this);
-//    public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
-//    public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
-//    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
-//    public TendCropsGoal farm = new TendCropsGoal(this);
-
-//    public void addGoal() {
-//        this.targetSelector.addGoal(1, this.targetPlayer);
-//        this.targetSelector.addGoal(2, this.targetMobs);
-//        this.targetSelector.addGoal(0, this.hurt);
-//        this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
-//
-//        this.goalSelector.addGoal(0, this.swimGoal);
-//        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
-//        this.goalSelector.addGoal(1, this.followOwnerGoal);
-//        this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
-//        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1));
-//        this.goalSelector.addGoal(6, this.wander);
-//        this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
-//    }
-
     public enum Behaviour {
 
         WANDER("runecraftory.monster.interact.wander", false),
@@ -1975,5 +1956,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public record CombatRecord(ServerPlayer player, DamageSource lastSource, float totalDamage) {
+
     }
 }

@@ -37,7 +37,6 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
@@ -123,10 +122,7 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
-        return new OneRandomBehaviour<>(
-                new SetRandomHoverTarget<>(),
-                new Idle<>().runFor(entity -> entity.getRandom().nextInt(40, 90))
-        );
+        return new SetRandomHoverTarget<>();
     }
 
     @Override
@@ -285,8 +281,8 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 
     @Override

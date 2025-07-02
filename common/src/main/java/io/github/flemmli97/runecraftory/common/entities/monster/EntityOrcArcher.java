@@ -139,7 +139,7 @@ public class EntityOrcArcher extends EntityOrc {
     }
 
     @Override
-    public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(INTERACT);
+    public String getInteractAnimation() {
+        return INTERACT;
     }
 }
