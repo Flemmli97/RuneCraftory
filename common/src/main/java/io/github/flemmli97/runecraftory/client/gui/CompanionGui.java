@@ -68,9 +68,9 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         GuiGraphicsExtension.drawCenteredString(graphics, this.font, (int) this.entity.getHealth() + "/" + (int) this.entity.getMaxHealth(),
                 this.leftPos + barX + (102 + 1) * 0.5f, this.topPos + 20, 0xffffff, false);
         GuiUtils.drawBorderedBar(graphics, EXPERIENCE, this.leftPos + barX, this.topPos + 32, 102, 11, exp, 1, 1);
-        graphics.drawString(this.font, this.levelTxt, this.leftPos + 83, this.topPos + 38, 0, false);
+        graphics.drawString(this.font, this.levelTxt, this.leftPos + 83, this.topPos + 34, 0, false);
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + this.entity.xpLevel().getLevel(),
-                this.leftPos + barX + 178, this.topPos + 38, 0, false);
+                this.leftPos + barX + 97, this.topPos + 34, 0, false);
 
         int statX = 177;
         int statY = 46;

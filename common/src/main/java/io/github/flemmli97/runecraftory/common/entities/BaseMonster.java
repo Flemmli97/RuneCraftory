@@ -701,12 +701,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     }
                 }
                 case FOLLOW -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(this.getOwner());
-                    boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
-                    if (party) {
-                        this.clearRestriction();
-                        if (this.getOwner() != null)
+                    if (this.getOwner() != null) {
+                        PlayerData data = Platform.INSTANCE.getPlayerData(this.getOwner());
+                        boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
+                        if (party) {
+                            this.clearRestriction();
                             data.party.addPartyMember(this);
+                        }
                     }
                 }
                 case FOLLOW_DISTANCE -> {

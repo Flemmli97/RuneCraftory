@@ -15,6 +15,7 @@ dependencies {
     modCompileOnly "mezz.jei:jei-1.21.1-fabric:${jei_version}"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:${rei_version}"
+    modImplementation "maven.modrinth:jade:${project.jade_fabric}"
 }
 
 sourceSets.main.resources {

@@ -22,8 +22,6 @@ dependencies {
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_api}"
     modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-${project.minecraft_version}:${project.sbl_version}"
 
-//    modImplementation "curse.maven:jade-324717:4573438"
-
     modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-fabric") {
         transitive = false
     }
@@ -32,6 +30,7 @@ dependencies {
 
 //    modRuntimeOnly "mezz.jei:jei-1.21.1-fabric:${jei_version}"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    modRuntimeOnly "maven.modrinth:jade:${project.jade_fabric}"
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.7-fabric"
 }

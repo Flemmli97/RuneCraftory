@@ -42,13 +42,12 @@ dependencies {
     modRuntimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
+    modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}")
+
     modRuntimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
-//    modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}") {
-//        transitive = false
-//    }
-//    modImplementation "curse.maven:jade-324717:4800837"
+    modRuntimeOnly "maven.modrinth:jade:${project.jade_neoforge}"
 //    modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
 
     // Mods useful for testing things

@@ -34,6 +34,7 @@ import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.runecraftory.neoforge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
+import io.github.flemmli97.runecraftory.neoforge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.neoforge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.neoforge.registry.ModAttachments;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -74,7 +75,7 @@ public class RuneCraftoryNeoForge {
         modBus.addListener(this::attributesAdd);
         modBus.addListener(this::spawnPlacement);
         modBus.addListener(PacketHandler::register);
-//        modBus.addListener(TOP::enqueueIMC);
+        modBus.addListener(TOP::enqueueIMC);
         if (FMLEnvironment.dist == Dist.CLIENT)
             ClientEvents.register(modBus);
 
@@ -85,8 +86,6 @@ public class RuneCraftoryNeoForge {
         forgeBus.register(new EntityEvents());
         forgeBus.register(new WorldEvents());
 
-//        if (ModList.get().isLoaded("jade"))
-//            NeoForge.EVENT_BUS.addListener(JadePlugin::multipartHandler);
         for (Map.Entry<IConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();
             container.registerConfig(loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
