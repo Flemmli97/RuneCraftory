@@ -46,7 +46,7 @@ public class JadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerBlockDataProvider(new IServerDataProvider<BlockAccessor>() {
+        registration.registerBlockDataProvider(new IServerDataProvider<>() {
             @Override
             public void appendServerData(CompoundTag compoundTag, BlockAccessor accessor) {
                 if (accessor.getBlockEntity() instanceof MonsterBarnBlockEntity barn) {

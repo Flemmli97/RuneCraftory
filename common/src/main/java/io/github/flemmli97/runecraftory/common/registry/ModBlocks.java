@@ -78,9 +78,9 @@ public class ModBlocks {
     public static final EnumMap<EnumMineralTier, RegistryEntrySupplier<Block, ?>> BROKEN_MINERAL_MAP = new EnumMap<>(EnumMineralTier.class);
 
     public static final RegistryEntrySupplier<Block, BlockForge> FORGE = BLOCKS.register("forge", () -> new BlockForge(BlockBehaviour.Properties.of().sound(SoundType.METAL).noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block, BlockCooking> COOKING = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block, BlockChemistry> CHEMISTRY = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block, BlockAccessory> ACCESSORY = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockAccessory> ACCESSORY_WORKBENCH = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockChemistry> CHEMISTRY_SET = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
+    public static final RegistryEntrySupplier<Block, BlockCooking> COOKING_TABLE = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
 
     public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_IRON = mineral(EnumMineralTier.IRON, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
     public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_TIN = mineral(EnumMineralTier.TIN, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
@@ -244,10 +244,10 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES.getKey()));
 
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BrokenMineralBlockEntity>> BROKEN_MINERAL_TILE = brokenMineralTile("broken_mineral_tile", BROKEN_MINERAL_MAP.values());
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> BlockEntityType.Builder.of(AccessoryBlockEntity::new, ACCESSORY.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> BlockEntityType.Builder.of(AccessoryBlockEntity::new, ACCESSORY_WORKBENCH.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ForgingBlockEntity>> FORGING_TILE = BLOCK_ENTITY_TYPES.register("forge_tile", () -> BlockEntityType.Builder.of(ForgingBlockEntity::new, FORGE.get()).build(null));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ChemistryBlockEntity>> CHEMISTRY_TILE = BLOCK_ENTITY_TYPES.register("chemistry_tile", () -> BlockEntityType.Builder.of(ChemistryBlockEntity::new, CHEMISTRY.get()).build(null));
-    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<CookingBlockEntity>> COOKING_TILE = BLOCK_ENTITY_TYPES.register("cooking_tile", () -> BlockEntityType.Builder.of(CookingBlockEntity::new, COOKING.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ChemistryBlockEntity>> CHEMISTRY_TILE = BLOCK_ENTITY_TYPES.register("chemistry_tile", () -> BlockEntityType.Builder.of(ChemistryBlockEntity::new, CHEMISTRY_SET.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<CookingBlockEntity>> COOKING_TILE = BLOCK_ENTITY_TYPES.register("cooking_tile", () -> BlockEntityType.Builder.of(CookingBlockEntity::new, COOKING_TABLE.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BossSpawnerBlockEntity>> BOSS_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("spawner_tile", () -> BlockEntityType.Builder.of(BossSpawnerBlockEntity::new, BOSS_SPAWNER.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<SingleTimeSpawner>> SINGLE_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("single_spawner_tile", () -> BlockEntityType.Builder.of(SingleTimeSpawner::new, SINGLE_SPAWN_BLOCK.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> BlockEntityType.Builder.of(MonsterBarnBlockEntity::new, MONSTER_BARN.get()).build(null));

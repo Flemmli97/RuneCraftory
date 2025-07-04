@@ -157,9 +157,9 @@ public class BlockStatesGen extends BlockStateProvider {
                     );
         });
         this.craftingModel(ModBlocks.FORGE);
-        this.craftingModel(ModBlocks.ACCESSORY);
-        this.craftingModel(ModBlocks.COOKING);
-        this.craftingModel(ModBlocks.CHEMISTRY);
+        this.craftingModel(ModBlocks.ACCESSORY_WORKBENCH);
+        this.craftingModel(ModBlocks.COOKING_TABLE);
+        this.craftingModel(ModBlocks.CHEMISTRY_SET);
         //this.simpleBlock(ModBlocks.board.get());
         this.simpleBlock(ModBlocks.BOSS_SPAWNER.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPAWNER).getPath())));
         this.simpleBlock(ModBlocks.SINGLE_SPAWN_BLOCK.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPAWNER).getPath())));

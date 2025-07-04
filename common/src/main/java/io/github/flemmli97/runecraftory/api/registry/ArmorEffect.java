@@ -23,9 +23,7 @@ public class ArmorEffect {
             stack.get(ModDataComponentTypes.ARMOR_EFFECT.get()).triggerEvent(stack, cons);
             return;
         }
-        DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).flatMap(ItemStat::getArmorEffect).ifPresent(eff -> {
-            cons.accept(eff.value());
-        });
+        DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).flatMap(ItemStat::getArmorEffect).ifPresent(eff -> cons.accept(eff.value()));
     }
 
     public boolean canBeAppliedTo(ItemStack stack) {

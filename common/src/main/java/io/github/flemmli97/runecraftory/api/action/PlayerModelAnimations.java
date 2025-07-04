@@ -147,8 +147,7 @@ public class PlayerModelAnimations {
                 .marker("attack", 0.44).marker("up", 0.08).marker("down", 0.36);
         default -> AnimationsBuilder.definition(0.56)
                 .marker("attack", 0.44).marker("move", 0.12).marker("done", 0.44);
-            }
-    );
+    });
     public static final String GUST = BUILDER.add("gust", AnimationsBuilder.definition(0.92)
             .marker("attack", 0.6).marker("jump", 0.12));
     public static final String RAIL_STRIKE = BUILDER.add("rail_strike", AnimationsBuilder.definition(1.56)

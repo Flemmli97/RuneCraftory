@@ -12,7 +12,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -68,7 +67,6 @@ public class BlockParticle extends Particle {
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);
         int light = this.level.getBrightness(LightLayer.SKY, pos);
         stack.translate(-0.5, 0, -0.5);
-        CustomParticleRenderTypes.batchType(ItemBlockRenderTypes.getRenderType(this.state, false));
         this.dispatcher.renderSingleBlock(this.state, stack, Minecraft.getInstance().renderBuffers().bufferSource(), LightTexture.pack(block, light), OverlayTexture.NO_OVERLAY);
     }
 

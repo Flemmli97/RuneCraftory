@@ -127,23 +127,23 @@ public class EntityWeaponHandler<T extends LivingEntity & AnimatedEntity> implem
     }
 
     @Override
-    public <T> void store(DataKey<T> key, T value) {
+    public <D> void store(DataKey<D> key, D value) {
         this.dataMap.put(key, value);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(DataKey<T> key) {
-        return (T) this.dataMap.getOrDefault(key, key.defaultValue());
+    public <D> D get(DataKey<D> key) {
+        return (D) this.dataMap.getOrDefault(key, key.defaultValue());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> void clearWith(DataKey<T> key, @Nullable Consumer<T> apply) {
+    public <D> void clearWith(DataKey<D> key, @Nullable Consumer<D> apply) {
         if (apply == null) {
             this.dataMap.remove(key);
         } else {
-            apply.accept((T) this.dataMap.remove(key));
+            apply.accept((D) this.dataMap.remove(key));
         }
     }
 

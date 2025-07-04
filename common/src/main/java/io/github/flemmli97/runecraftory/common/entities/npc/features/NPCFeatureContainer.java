@@ -46,9 +46,7 @@ public class NPCFeatureContainer {
 
     public void toBuffer(RegistryFriendlyByteBuf buf) {
         buf.writeInt(this.map.size());
-        this.map.forEach((type, feat) -> {
-            NPCFeature.STREAM_CODEC.encode(buf, feat);
-        });
+        this.map.forEach((type, feat) -> NPCFeature.STREAM_CODEC.encode(buf, feat));
     }
 
     public NPCFeatureContainer fromBuffer(RegistryFriendlyByteBuf buf) {

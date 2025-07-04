@@ -51,11 +51,6 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
-
     //Since the recipes arent registered this should be fine
     @Override
     public RecipeSerializer<?> getSerializer() {

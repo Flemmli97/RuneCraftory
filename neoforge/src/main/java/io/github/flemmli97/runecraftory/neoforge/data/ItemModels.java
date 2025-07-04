@@ -58,8 +58,8 @@ public class ItemModels extends ItemModelProvider {
         List<RegistryEntrySupplier<Item, ?>> hats = ModItems.hatItems();
 
         for (RegistryEntrySupplier<Item, ?> sup : ModItems.ITEMS.getEntries()) {
-            if (sup == ModItems.MEDICINAL_HERB || sup == ModItems.ITEM_BLOCK_FORGE || sup == ModItems.ITEM_BLOCK_ACCESS
-                    || sup == ModItems.ITEM_BLOCK_CHEM || sup == ModItems.ITEM_BLOCK_COOKING || sup == ModItems.QUEST_BOARD
+            if (sup == ModItems.MEDICINAL_HERB || sup == ModItems.FORGE || sup == ModItems.ACCESSORY_WORKBENCH
+                    || sup == ModItems.CHEMISTRY_SET || sup == ModItems.COOKING_TABLE || sup == ModItems.QUEST_BOARD
                     || sup == ModItems.ORC_MAZE
                     || sup == ModItems.STRAW_HAT || sup == ModItems.FANCY_HAT || hats.contains(sup))
                 continue;

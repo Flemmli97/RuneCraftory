@@ -122,10 +122,16 @@ public class RunecraftoryTags {
         public static final TagKey<Item> BOOTS = tag("equipment/boots");
         public static final TagKey<Item> SHIELDS = tag("equipment/shields");
 
+        public static final TagKey<Item> FORGING_BLACKLIST = tag("forging_attribute_upgrade_blacklist");
+        public static final TagKey<Item> ACCESSORY_BLACKLIST = tag("accessory_attribute_upgrade_blacklist");
+        public static final TagKey<Item> CHEMISTRY_BLACKLIST = tag("chemistry_attribute_upgrade_blacklist");
+        public static final TagKey<Item> COOKING_BLACKLIST = tag("cooking_attribute_upgrade_blacklist");
+        public static final TagKey<Item> ONE_TIME_UPGRADE = tag("one_time_upgrade");
+
         public static final TagKey<Item> QUICKHARVEST_BYPASS = tag("quick_harvest_bypass");
 
-        public static final TagKey<Item> SIMPLE = tag("food/simple");
-        public static final TagKey<Item> FRIED = tag("food/fried");
+        public static final TagKey<Item> FOOD_SIMPLE = tag("food/simple");
+        public static final TagKey<Item> FOOD_FRIED = tag("food/fried");
         public static final TagKey<Item> POT = tag("food/pot");
         public static final TagKey<Item> STEAMED = tag("food/steamed");
         public static final TagKey<Item> KNIFE = tag("food/knife");

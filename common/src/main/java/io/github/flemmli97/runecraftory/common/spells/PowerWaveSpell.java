@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +23,7 @@ public class PowerWaveSpell extends WeaponSpell {
             EntityPowerWave wave = new EntityPowerWave(level, entity);
             wave.setPos(wave.getX(), entity.getY() + entity.getBbHeight() * 0.1, wave.getZ());
             wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
-            ProjectileUtil.shoot(entity, wave, 0.9f, 0);
+            ProjectileUtils.shoot(entity, wave, 0.9f, 0);
             level.addFreshEntity(wave);
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), entity.getSoundSource(), 1.4f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
         }

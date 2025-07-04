@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -19,7 +19,7 @@ public class SlashSpell extends Spell {
             return false;
         EntitySlashResidue slash = new EntitySlashResidue(level, entity);
         Vec3 pos = entity.position();
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 target = ProjectileUtils.getAimTarget(entity);
         Vec3 dir;
         if (target != null) {
             dir = target.subtract(pos).normalize().scale(1.2);

@@ -16,7 +16,7 @@ public class ForgingRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.ITEM_BLOCK_FORGE.get());
+        return new ItemStack(ModItems.FORGE.get());
     }
 
     @Override

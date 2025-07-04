@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +28,7 @@ public class MultiFireballSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         Vec3 pos = entity.position().add(0, entity.getEyeHeight() - 0.1, 0);
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 target = ProjectileUtils.getAimTarget(entity);
         Vec3 dir;
         if (target != null) {
             dir = target.subtract(pos);

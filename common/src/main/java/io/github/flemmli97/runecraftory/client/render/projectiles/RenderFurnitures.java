@@ -126,9 +126,6 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
                 this.renderModel(stack, Sheets.CHEST_LOCATION.buffer(buffer, RenderType::entityCutout), packedLight, this.chestBottom, this.chestLid, this.chestLock);
             }
             case CHAIR -> this.renderModel(stack, this.simpleConsumer(buffer, TEX_CHAIR), packedLight, this.chair);
-            /*case PAINTING -> {
-
-            }*/
             case WOOLYPLUSH ->
                     this.renderModel(stack, this.simpleConsumer(buffer, TEX_WOOLY), packedLight, this.woolyPlush);
             case CHIPSQUEEKPLUSH ->
@@ -156,6 +153,7 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
             part.render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
     }
 
+    @SafeVarargs
     private void renderModel(PoseStack stack, VertexConsumer ivertexbuilder, int packedLight, ReloadableCache<ModelPartsContainer>... parts) {
         stack.scale(-1, -1, 1);
         stack.translate(0.0, -1.501f, 0.0);

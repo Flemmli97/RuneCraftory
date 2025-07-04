@@ -69,7 +69,7 @@ public class UpgradeOutputSlot extends Slot {
         data.useRunePoints(this.container.rpCost(), true);
         switch (this.container.craftingType()) {
             case FORGE -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.FORGING, toUpgrade, material);
-            case ARMOR -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.CRAFTING, toUpgrade, material);
+            case ACCESSORY_WORKBENCH -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.CRAFTING, toUpgrade, material);
         }
         ItemStack ing1 = this.ingredientInv.getItem(0);
         ItemStack ing2 = this.ingredientInv.getItem(1);
@@ -101,7 +101,6 @@ public class UpgradeOutputSlot extends Slot {
 
     @Override
     public boolean mayPickup(Player player) {
-        return CraftingUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getItem(0), this.ingredientInv.getItem(1))
-                && (player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.container.rpCost());
+        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.container.rpCost();
     }
 }

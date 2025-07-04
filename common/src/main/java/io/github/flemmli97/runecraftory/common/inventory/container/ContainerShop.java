@@ -10,6 +10,7 @@ import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,13 +24,32 @@ import net.minecraft.world.level.Level;
 
 public class ContainerShop extends AbstractContainerMenu {
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, Data> DATA_STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public Data decode(RegistryFriendlyByteBuf buf) {
+            int entity = buf.readInt();
+            int size = buf.readInt();
+            NonNullList<ItemStack> list = NonNullList.create();
+            for (int i = 0; i < size; i++)
+                list.add(ItemStack.STREAM_CODEC.decode(buf));
+            return new Data(entity, list);
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, Data data) {
+            buf.writeInt(data.entity());
+            buf.writeInt(data.list().size());
+            data.list().forEach(stack -> ItemStack.STREAM_CODEC.encode(buf, stack));
+        }
+    };
+
     private final InventoryShop invShop;
     private final DataSlot price;
     private final DataSlot next;
     private final DataSlot prev;
 
-    public ContainerShop(int windowID, Inventory playerInv, RegistryFriendlyByteBuf buffer) {
-        this(windowID, playerInv, read(playerInv.player.level(), buffer));
+    public ContainerShop(int windowID, Inventory playerInv, Data data) {
+        this(windowID, playerInv, read(playerInv.player.level(), data));
     }
 
     public ContainerShop(int windowID, Inventory playerInv, InventoryShop invShop) {
@@ -167,14 +187,10 @@ public class ContainerShop extends AbstractContainerMenu {
         return this.invShop.npc;
     }
 
-    private static InventoryShop read(Level level, RegistryFriendlyByteBuf buf) {
-        Entity entity = level.getEntity(buf.readInt());
+    private static InventoryShop read(Level level, Data data) {
+        Entity entity = level.getEntity(data.entity());
         if (entity instanceof EntityNPCBase npc) {
-            NonNullList<ItemStack> list = NonNullList.create();
-            int size = buf.readInt();
-            for (int i = 0; i < size; i++)
-                list.add(ItemStack.STREAM_CODEC.decode(buf));
-            return new InventoryShop(npc, list);
+            return new InventoryShop(npc, data.list());
         }
         return null;
     }
@@ -197,5 +213,9 @@ public class ContainerShop extends AbstractContainerMenu {
 
     public boolean hasPrev() {
         return this.prev.get() == 1;
+    }
+
+    public record Data(int entity, NonNullList<ItemStack> list) {
+
     }
 }

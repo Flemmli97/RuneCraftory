@@ -16,6 +16,7 @@ import java.util.Map;
 @Mixin(ModelManager.class)
 public abstract class ModelManagerMixin {
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @WrapOperation(method = "loadModels",
             at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;asMap()Ljava/util/Map;"),
             remap = false)

@@ -32,7 +32,7 @@ public class NPCJob {
         this.hasWorkSchedule = builder.hasWorkSchedule;
         this.poiType = builder.poiType;
         if (this.poiType != null) {
-            if (!builder.allowCashPOI || this.poiType == ModPoiTypes.CASH_REGISTER)
+            if (!builder.allowCashPOI || ModPoiTypes.CASH_REGISTER.asHolder().is(this.poiType))
                 this.predicate = t -> t.is(this.poiType);
             else
                 this.predicate = t -> t.is(this.poiType) || t.is(ModPoiTypes.CASH_REGISTER.getKey());

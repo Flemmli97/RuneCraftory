@@ -35,7 +35,7 @@ public class ItemAttributeData {
         @Override
         public void encode(RegistryFriendlyByteBuf buf, ItemAttributeData component) {
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, component.baseStats);
-            StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, component.baseStats);
+            StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, component.stats);
         }
     };
 
@@ -49,7 +49,7 @@ public class ItemAttributeData {
         this.stats = stats;
         Object2DoubleAVLTreeMap<Holder<Attribute>> map = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
         map.putAll(this.baseStats);
-        map.putAll(this.stats);
+        this.stats.forEach((attribute, value) -> map.put(attribute, map.getOrDefault(attribute, 0d) + value));
         this.totalStats = Object2DoubleSortedMaps.unmodifiable(map);
     }
 
@@ -57,13 +57,9 @@ public class ItemAttributeData {
         return new ItemAttributeData(baseStats, this.getStats());
     }
 
-    public ItemAttributeData of(Map<Holder<Attribute>, Double> stats) {
-        return new ItemAttributeData(this.getBaseStats(), stats);
-    }
-
-    public ItemAttributeData add(Holder<Attribute> attribute, double value) {
+    public ItemAttributeData add(Map<Holder<Attribute>, Double> stats) {
         Map<Holder<Attribute>, Double> map = new HashMap<>(this.stats);
-        map.put(attribute, map.getOrDefault(attribute, 0d) + value);
+        stats.forEach((attribute, value) -> map.put(attribute, map.getOrDefault(attribute, 0d) + value));
         return new ItemAttributeData(this.getBaseStats(), map);
     }
 

@@ -27,7 +27,6 @@ public class ParticleGen extends ParticleDescriptionProvider {
         this.spriteSet(ModParticles.SHORT_LIGHT.get(), ModParticles.LIGHT.getID());
         this.spriteSet(ModParticles.STATIC_LIGHT.get(), ModParticles.LIGHT.getID());
         this.spriteSet(ModParticles.CIRCLING_LIGHT.get(), ModParticles.LIGHT.getID());
-        this.spriteSet(ModParticles.VORTEX.get(), ModParticles.LIGHT.getID());
         this.spriteSet(ModParticles.CROSS.get());
         this.spriteSet(ModParticles.BLINK.get());
         this.spriteSet(ModParticles.SMOKE.get(), 4);

@@ -47,6 +47,10 @@ public class ItemTagGen extends ItemTagsProvider {
             }
         });
 
+        this.tag(RunecraftoryTags.Items.ONE_TIME_UPGRADE)
+                .add(ModItems.RACCOON_LEAF.get())
+                .add(ModItems.GLITTA_AUGITE.get());
+
         this.tag(RunecraftoryTags.Items.SLIME)
                 .add(ModItems.GLUE.get());
 

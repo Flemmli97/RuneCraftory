@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementalCircleSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class ElementalCircleSpell extends Spell {
         ElementalCircleSummoner summoner = new ElementalCircleSummoner(level, entity, this.element);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1));
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.4, 0);
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {
             position.add(entity.getLookAngle().scale(5));
         }

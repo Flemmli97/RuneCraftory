@@ -158,10 +158,6 @@ public class EntityUtils {
         return monster.tamingChance() * GeneralConfig.tamingMultiplier * tamingBonus - lvlPenalty;
     }
 
-    public static NullPointerException playerDataException() {
-        return new NullPointerException("Player capability is null. This shouldn't be");
-    }
-
     public static EntityType<?> trySpawnTreasureChest(GateEntity spawner) {
         if (spawner.getRandom().nextFloat() < MobConfig.treasureChance) {
             if (spawner.getRandom().nextFloat() < MobConfig.mimicChance) {

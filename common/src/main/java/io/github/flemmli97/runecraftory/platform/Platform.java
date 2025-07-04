@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.tenshilib.loader.LoaderInitializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -50,7 +51,7 @@ public interface Platform {
     void openGuiMenu(ServerPlayer player, MenuProvider provider);
 
     default void openGuiMenu(ServerPlayer player, MenuProvider provider, BlockPos pos) {
-        this.openGuiMenu(player, provider, b -> b.writeBlockPos(pos));
+        this.openGuiMenu(player, provider, b -> BlockPos.STREAM_CODEC.encode(b, pos));
     }
 
     void openGuiMenu(ServerPlayer player, MenuProvider provider, Consumer<RegistryFriendlyByteBuf> writer);
@@ -63,7 +64,7 @@ public interface Platform {
 
     <T extends AbstractContainerMenu> MenuType<T> menuType(BiFunction<Integer, Inventory, T> create);
 
-    <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, RegistryFriendlyByteBuf, T> create);
+    <T extends AbstractContainerMenu, D> MenuType<T> menuType(TriFunction<Integer, Inventory, D, T> create, StreamCodec<RegistryFriendlyByteBuf, D> codec);
 
     CreativeModeTab.Builder tabBuilder(ResourceLocation... after);
 

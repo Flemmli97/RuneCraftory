@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTornado;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ public class TornadoSpell extends Spell {
         EntityTornado tornado = new EntityTornado(level, entity);
         tornado.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         Vec3 pos = entity.position();
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {
             target = pos.add(entity.getLookAngle().scale(10));
         }

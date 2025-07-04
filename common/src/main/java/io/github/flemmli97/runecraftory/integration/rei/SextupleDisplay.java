@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.integration.rei;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -37,7 +37,7 @@ public class SextupleDisplay extends BasicDisplay {
         super(inputs, outputs, location);
         this.recipe = (RecipeHolder<SextupleRecipe>) location.flatMap(resourceLocation -> RecipeManagerContext.getInstance().getRecipeManager().byKey(resourceLocation))
                 .orElse(null);
-        this.type = CraftingIdentifier.get(EnumCrafting.values()[tag.getInt("CraftingType")]);
+        this.type = CraftingIdentifier.get(CraftingType.values()[tag.getInt("CraftingType")]);
     }
 
     public boolean shouldShowDisplay(boolean asIngredient) {

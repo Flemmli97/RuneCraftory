@@ -44,7 +44,7 @@ public class ItemLevelLootFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public LootItemFunctionType<ItemLevelLootFunction> getType() {
         return ModLootRegistries.ITEM_LEVEL.get();
     }
 

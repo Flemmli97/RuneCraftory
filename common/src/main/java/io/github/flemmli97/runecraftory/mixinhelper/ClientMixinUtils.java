@@ -183,7 +183,7 @@ public class ClientMixinUtils {
         ItemModelProps.HELD_TYPE = 0;
     }
 
-    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
+    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             if (data != null) {
@@ -195,7 +195,7 @@ public class ClientMixinUtils {
                 if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT))
                     return true;
                 player.resetAttackStrengthTicker();
-                poseStack = new PoseStack();
+                PoseStack poseStack = new PoseStack();
                 poseStack.pushPose();
                 Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
                 double camX = camPos.x();

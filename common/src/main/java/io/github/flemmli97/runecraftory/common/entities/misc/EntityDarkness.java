@@ -38,11 +38,6 @@ public class EntityDarkness extends BaseDamageCloud {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-    }
-
-    @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
         boolean flag = CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.DARK).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
         if (flag) {

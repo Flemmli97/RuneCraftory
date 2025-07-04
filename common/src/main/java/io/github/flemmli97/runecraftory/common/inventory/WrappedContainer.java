@@ -4,12 +4,20 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.function.Consumer;
+
 public class WrappedContainer implements Container {
 
     protected final Container container;
+    protected final Consumer<Container> listener;
 
     public WrappedContainer(Container container) {
+        this(container, null);
+    }
+
+    public WrappedContainer(Container container, Consumer<Container> listener) {
         this.container = container;
+        this.listener = listener;
     }
 
     @Override
@@ -29,17 +37,22 @@ public class WrappedContainer implements Container {
 
     @Override
     public ItemStack removeItem(int slot, int count) {
-        return this.container.removeItem(slot, count);
+        ItemStack stack = this.container.removeItem(slot, count);
+        this.setChanged();
+        return stack;
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int index) {
-        return this.container.removeItemNoUpdate(index);
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack stack = this.container.removeItemNoUpdate(slot);
+        this.setChanged();
+        return stack;
     }
 
     @Override
     public void setItem(int slot, ItemStack stack) {
         this.container.setItem(slot, stack);
+        this.setChanged();
     }
 
     @Override
@@ -50,6 +63,9 @@ public class WrappedContainer implements Container {
     @Override
     public void setChanged() {
         this.container.setChanged();
+        if (this.listener != null) {
+            this.listener.accept(this);
+        }
     }
 
     @Override

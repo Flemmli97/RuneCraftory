@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThiccLightningBolt;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public class BigLightningBoltSpell extends Spell {
             return false;
         EntityThiccLightningBolt bolt = new EntityThiccLightningBolt(level, entity);
         bolt.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
-        ProjectileUtil.shoot(entity, bolt, 0.2f, 0);
+        ProjectileUtils.shoot(entity, bolt, 0.2f, 0);
         level.addFreshEntity(bolt);
         playSound(entity, ModSounds.SPELL_GENERIC_ELECTRIC_ZAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
         return true;

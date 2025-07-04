@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class DarkBallSpell extends Spell {
         EntityDarkBall ball = new EntityDarkBall(level, entity, this.type);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.type == EntityDarkBall.Type.BALL ? 1 : 0.9f));
         float vel = this.type == EntityDarkBall.Type.BALL ? 0.09f : 0.23f;
-        Vec3 target = ProjectileUtil.getAimTarget(entity, ball.position());
+        Vec3 target = ProjectileUtils.getAimTarget(entity, ball.position());
         if (target != null) {
             ball.shootAtPos(target, vel, 0);
         } else {

@@ -138,6 +138,8 @@ public class EntityCalls {
             onPlayerLoad(player);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(Platform.INSTANCE.getPlayerData(player)), player);
         }
+        if (!living.level().isClientSide)
+            updateWeaponState(living);
     }
 
     /**
@@ -164,6 +166,10 @@ public class EntityCalls {
             EntityUtils.sendAttributesTo(serverPlayer, serverPlayer);
         }
         // If player doesnt have a weapon now we remove all attack damage modifiers
+        updateWeaponState(entity);
+    }
+
+    private static void updateWeaponState(LivingEntity entity) {
         boolean weapon = ItemNBT.isWeapon(entity.getMainHandItem());
         AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {

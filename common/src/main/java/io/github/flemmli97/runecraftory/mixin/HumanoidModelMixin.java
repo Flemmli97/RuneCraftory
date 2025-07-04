@@ -39,13 +39,13 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
         this.runecraftory$defaultPoses = builder.build();
     }
 
-    @Inject(method = "setupAnim", at = @At("HEAD"))
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("HEAD"))
     private void setupModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo info) {
         if (ClientMixinUtils.shouldAnimate(entity))
             this.runecraftory$defaultPoses.forEach(p -> p.getFirst().loadPose(p.getSecond()));
     }
 
-    @Inject(method = "setupAnim", at = @At("RETURN"))
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("RETURN"))
     private void modifyModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo info) {
         ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this);
     }

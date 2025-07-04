@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -11,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -21,31 +21,32 @@ public class CraftingUtils {
 
     public static final Random RAND = new Random();
 
-    public static RecipeType<SextupleRecipe> getType(EnumCrafting type) {
+    public static RecipeType<SextupleRecipe> getType(CraftingType type) {
         return switch (type) {
             case FORGE -> ModCrafting.FORGE.get();
-            case ARMOR -> ModCrafting.ARMOR.get();
-            case CHEM -> ModCrafting.CHEMISTRY.get();
+            case ACCESSORY_WORKBENCH -> ModCrafting.ARMOR.get();
+            case CHEMISTRY_SET -> ModCrafting.CHEMISTRY.get();
             default -> ModCrafting.COOKING.get();
         };
     }
 
-    public static boolean canUpgrade(Player player, EnumCrafting type, ItemStack stack, ItemStack ingredient) {
-        return upgradeCost(type, Platform.INSTANCE.getPlayerData(player), stack, ingredient, true) >= 0;
+    public static Pair<Integer, ItemStack> getUpgradeResult(ItemStack stack, PlayerData data, ItemStack ingredient, CraftingType type) {
+        int cost = CraftingUtils.upgradeCost(type, data, stack, ingredient);
+        if (cost < 0)
+            return Pair.of(cost, ItemStack.EMPTY);
+        return Pair.of(cost, ItemNBT.addUpgradeItem(stack.copy(), ingredient, false, type));
     }
 
-    public static int upgradeCost(EnumCrafting type, PlayerData data, ItemStack stack, ItemStack ingredient) {
-        return upgradeCost(type, data, stack, ingredient, false);
-    }
-
-    public static int upgradeCost(EnumCrafting type, PlayerData data, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
+    public static int upgradeCost(CraftingType type, PlayerData data, ItemStack stack, ItemStack ingredient) {
         if (!GeneralConfig.useRp)
             return 0;
+        if (stack.isEmpty())
+            return -1;
         return DataPackHandler.INSTANCE.itemStatManager().get(ingredient.getItem()).map(stat -> {
             if (stat.getDiff() <= 0)
                 return -1;
-            if (onlyIngredient || !stack.isEmpty()) {
-                int skillLevel = type == EnumCrafting.FORGE ? data.getSkillLevel(EnumSkills.FORGING).getLevel() : data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
+            if (!stack.isEmpty()) {
+                int skillLevel = type == CraftingType.FORGE ? data.getSkillLevel(EnumSkills.FORGING).getLevel() : data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
                 int result;
                 if (skillLevel >= stat.getDiff()) {
                     result = stat.getDiff() * 2 + (ItemNBT.itemLevel(stack) - 1) * 2;
@@ -61,7 +62,40 @@ public class CraftingUtils {
         }).orElse(-1);
     }
 
-    public static int craftingCost(EnumCrafting type, PlayerData data, SextupleRecipe recipe, NonNullList<ItemStack> bonusItems, boolean unlocked) {
+    public static void giveCraftingXPTo(PlayerData data, EnumSkills skill, SextupleRecipe recipe) {
+        if (GeneralConfig.skillXpMultiplier == 0)
+            return;
+        data.increaseSkill(skill, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
+    }
+
+    private static float xpForCrafting(EnumSkills skill, SextupleRecipe recipe, int skillLevel) {
+        float mult = LevelCalc.getSkillXpMultiplier(skill);
+        float xp = (recipe.getCraftingLevel() * 2 + 10) * mult;
+        if (skillLevel > recipe.getCraftingLevel())
+            xp -= 2 * skillLevel - recipe.getCraftingLevel();
+        else
+            xp += (recipe.getCraftingLevel() - skillLevel) * recipe.getCraftingLevel();
+        if (xp < 1)
+            xp = 1;
+        return xp;
+    }
+
+    public static void giveUpgradeXPTo(PlayerData data, EnumSkills skill, ItemStack equip, ItemStack upgrade) {
+        if (GeneralConfig.skillXpMultiplier == 0)
+            return;
+        data.increaseSkill(skill, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
+    }
+
+    private static float xpForUpgrade(EnumSkills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
+        float mult = LevelCalc.getSkillXpMultiplier(skill) * 1.5f;
+        int difficulty = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
+        float xp = mult * (10 + ItemNBT.itemLevel(equip));
+        if (skillLevel < difficulty)
+            xp += 2 * difficulty - skillLevel;
+        return xp;
+    }
+
+    public static int craftingCost(CraftingType type, PlayerData data, SextupleRecipe recipe, NonNullList<ItemStack> bonusItems, boolean unlocked) {
         if (!GeneralConfig.useRp)
             return 0;
         if (GeneralConfig.recipeSystem.baseCost) {
@@ -77,9 +111,9 @@ public class CraftingUtils {
         }
         int skillLevel = switch (type) {
             case FORGE -> data.getSkillLevel(EnumSkills.FORGING).getLevel();
-            case ARMOR -> data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
-            case CHEM -> data.getSkillLevel(EnumSkills.CHEMISTRY).getLevel();
-            case COOKING -> data.getSkillLevel(EnumSkills.COOKING).getLevel();
+            case ACCESSORY_WORKBENCH -> data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
+            case CHEMISTRY_SET -> data.getSkillLevel(EnumSkills.CHEMISTRY).getLevel();
+            case COOKING_TABLE -> data.getSkillLevel(EnumSkills.COOKING).getLevel();
         };
         int lvlDifference = recipe.getCraftingLevel() - skillLevel;
         int cost = recipe.getCraftingLevel() * 2;
@@ -104,45 +138,8 @@ public class CraftingUtils {
         return cost;
     }
 
-    public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing, EnumCrafting type) {
-        return ItemNBT.addUpgradeItem(stack.copy(), ing, false, type);
-    }
-
-    private static float xpForCrafting(EnumSkills skill, SextupleRecipe recipe, int skillLevel) {
-        float mult = LevelCalc.getSkillXpMultiplier(skill);
-        float xp = (recipe.getCraftingLevel() * 2 + 10) * mult;
-        if (skillLevel > recipe.getCraftingLevel())
-            xp -= 2 * skillLevel - recipe.getCraftingLevel();
-        else
-            xp += (recipe.getCraftingLevel() - skillLevel) * recipe.getCraftingLevel();
-        if (xp < 1)
-            xp = 1;
-        return xp;
-    }
-
-    public static void giveCraftingXPTo(PlayerData data, EnumSkills skill, SextupleRecipe recipe) {
-        if (GeneralConfig.skillXpMultiplier == 0)
-            return;
-        data.increaseSkill(skill, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
-    }
-
-    private static float xpForUpgrade(EnumSkills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
-        float mult = LevelCalc.getSkillXpMultiplier(skill) * 1.5f;
-        int difficulty = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
-        float xp = mult * (10 + ItemNBT.itemLevel(equip));
-        if (skillLevel < difficulty)
-            xp += 2 * difficulty - skillLevel;
-        return xp;
-    }
-
-    public static void giveUpgradeXPTo(PlayerData data, EnumSkills skill, ItemStack equip, ItemStack upgrade) {
-        if (GeneralConfig.skillXpMultiplier == 0)
-            return;
-        data.increaseSkill(skill, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
-    }
-
-    public static ItemStack getCraftingOutput(ItemStack stack, PlayerBoundCraftingContainer inv, SextupleRecipe.MatchResult materials, EnumCrafting type) {
-        if (type == EnumCrafting.COOKING) {
+    public static ItemStack getCraftingOutput(ItemStack stack, PlayerBoundCraftingContainer inv, SextupleRecipe.MatchResult materials, CraftingType type) {
+        if (type == CraftingType.COOKING_TABLE) {
             for (ItemStack base : materials.recipeMatches()) {
                 ItemNBT.addFoodBonusItem(stack, base);
             }

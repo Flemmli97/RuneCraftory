@@ -11,7 +11,7 @@ import java.util.Optional;
 public record SyncedFamilyData(Optional<Component> father, Optional<Component> mother, Optional<Component> partner,
                                FamilyEntry.Relationship relationship, boolean canProcreate) {
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, SyncedFamilyData> STREAM_CODEC = new StreamCodec<RegistryFriendlyByteBuf, SyncedFamilyData>() {
+    public static final StreamCodec<RegistryFriendlyByteBuf, SyncedFamilyData> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public SyncedFamilyData decode(RegistryFriendlyByteBuf buf) {
             return new SyncedFamilyData(ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC).decode(buf),

@@ -1,8 +1,7 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
@@ -18,25 +17,23 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
-    private static final ResourceLocation FORGING = RuneCraftory.modRes("textures/gui/forging_upgrade.png");
-    private static final ResourceLocation CRAFTING = RuneCraftory.modRes("textures/gui/crafting_upgrade.png");
-    private static final ResourceLocation BARS = RuneCraftory.modRes("textures/gui/bars.png");
+    private static final ResourceLocation FORGING = RuneCraftory.modRes("textures/gui/container/forging_upgrade.png");
+    private static final ResourceLocation CRAFTING = RuneCraftory.modRes("textures/gui/container/crafting_upgrade.png");
 
+    public static final ResourceLocation RUNEPOINTS = RuneCraftory.modRes("widget/runepoints_bar");
+    public static final ResourceLocation RUNEPOINTS_BORDER = RuneCraftory.modRes("widget/runepoints_bar_border");
+
+    protected final PlayerData data;
     private final EnumSkills skill;
 
     public UpgradeGui(ContainerUpgrade container, Inventory inv, Component name) {
         super(container, inv, name);
-        this.skill = switch (this.menu.craftingType()) {
-            case FORGE -> EnumSkills.FORGING;
-            case ARMOR -> EnumSkills.CRAFTING;
-            case CHEM -> EnumSkills.CHEMISTRY;
-            case COOKING -> EnumSkills.COOKING;
-        };
+        this.data = Platform.INSTANCE.getPlayerData(inv.player);
+        this.skill = this.menu.craftingType().skill;
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
@@ -44,12 +41,11 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = FORGING;
-        if (this.menu.craftingType() == EnumCrafting.ARMOR)
+        if (this.menu.craftingType() == CraftingType.ACCESSORY_WORKBENCH)
             texture = CRAFTING;
         graphics.blit(texture, this.leftPos, this.topPos, 0, 0, 176, 166);
-        PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player);
         if (this.menu.rpCost() >= 0) {
-            int rpMax = data != null ? data.getMaxRunePoints() : 0;
+            int rpMax = this.data.getMaxRunePoints();
             MutableComponent cost = Component.literal("" + this.menu.rpCost());
             int yOffset = 0;
             if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
@@ -58,21 +54,17 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             }
             GuiGraphicsExtension.drawCenteredString(graphics, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 0, false);
         }
-        if (data != null) {
-            PoseStack stack = graphics.pose();
-            stack.pushPose();
-            float scale = 0.8f;
-            int xPos = this.leftPos;
-            int yPos = this.topPos - 12;
-            stack.translate(xPos, yPos, 0);
-            stack.scale(scale, scale, scale);
-            graphics.blit(BARS, 0, 0, 131, 74, 96, 29);
-            int runePointsWidth = Math.min(76, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 76.0f));
-            graphics.blit(BARS, 17, 3, 18, 40, runePointsWidth, 9);
-            GuiGraphicsExtension.drawCenteredString(graphics, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0xffffff, false);
-            stack.popPose();
-            graphics.drawString(this.font, Component.translatable("runecraftory.gui.display.level", data.getSkillLevel(this.skill).getLevel()),
-                    this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);
-        }
+        int xPos = this.leftPos;
+        int yPos = this.topPos - 13;
+        int barWidth = 102;
+        int runeWidth = Math.min(100, (int) (this.data.getRunePoints() / (float) this.data.getMaxRunePoints() * 100.0f));
+        graphics.blitSprite(RUNEPOINTS_BORDER, xPos, yPos, barWidth, 11);
+        GuiUtils.drawBorderedBar(graphics, RUNEPOINTS,
+                xPos, yPos, barWidth, 11, runeWidth, 1, 1);
+        GuiGraphicsExtension.drawCenteredString(graphics, this.font, this.data.getRunePoints() + "/" + this.data.getMaxRunePoints(),
+                xPos + (barWidth + 1) * 0.5f, yPos + 2, 0xffffff, false);
+
+        graphics.drawString(this.font, Component.translatable("runecraftory.gui.display.level", this.data.getSkillLevel(this.skill).getLevel()),
+                this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040, false);
     }
 }

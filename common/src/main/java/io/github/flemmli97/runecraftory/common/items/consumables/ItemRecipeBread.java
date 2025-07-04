@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
@@ -39,9 +39,9 @@ import java.util.Map;
 
 public class ItemRecipeBread extends Item {
 
-    private final EnumCrafting type;
+    private final CraftingType type;
 
-    public ItemRecipeBread(EnumCrafting type, Properties props) {
+    public ItemRecipeBread(CraftingType type, Properties props) {
         super(props);
         this.type = type;
     }
@@ -60,7 +60,7 @@ public class ItemRecipeBread extends Item {
             // Group equal recipes together. E.g. if an item has multiple variants of a recipe
             Map<Pair<Item, Integer>, List<RecipeHolder<SextupleRecipe>>> grouped = new HashMap<>();
             player.getServer().getRecipeManager().getAllRecipesFor(CraftingUtils.getType(this.type))
-                    .stream().filter(r -> canUnlockRecipe(level, r, data, this.getSkill()))
+                    .stream().filter(r -> canUnlockRecipe(level, r, data, this.type.skill))
                     .forEach(r -> grouped.computeIfAbsent(Pair.of(r.value().getResultItem(level.registryAccess()).getItem(), r.value().getCraftingLevel()), k -> new ArrayList<>())
                             .add(r));
             Collection<RecipeHolder<SextupleRecipe>> unlocked = new ArrayList<>();
@@ -92,15 +92,6 @@ public class ItemRecipeBread extends Item {
     @Override
     public boolean isFoil(ItemStack stack) {
         return true;
-    }
-
-    private EnumSkills getSkill() {
-        return switch (this.type) {
-            case FORGE -> EnumSkills.FORGING;
-            case ARMOR -> EnumSkills.CRAFTING;
-            case CHEM -> EnumSkills.CHEMISTRY;
-            default -> EnumSkills.COOKING;
-        };
     }
 
     private static boolean canUnlockRecipe(Level level, RecipeHolder<SextupleRecipe> r, PlayerData data, EnumSkills skill) {

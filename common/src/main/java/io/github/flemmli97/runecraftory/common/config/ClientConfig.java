@@ -17,7 +17,7 @@ public class ClientConfig {
     public static int creativeInventoryOffsetY = 22;
 
     public static int farmlandX = 2;
-    public static int farmlandY = -2;
+    public static int farmlandY = 2;
     public static DisplayPosition farmlandPosition = DisplayPosition.BOTTOMLEFT;
 
     public static HealthRPRenderType renderHealthRpBar = HealthRPRenderType.BOTH;

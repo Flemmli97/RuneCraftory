@@ -29,9 +29,7 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
 
     public ModelFlowerLily() {
         super();
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
-            this.ridingPosition = model.getPart("ridingPos");
-        });
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> this.ridingPosition = model.getPart("ridingPos"));
         this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 

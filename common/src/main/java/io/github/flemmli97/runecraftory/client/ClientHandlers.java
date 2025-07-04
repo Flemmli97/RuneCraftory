@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
@@ -188,8 +189,8 @@ public class ClientHandlers {
     }
 
     public static void updateCurrentRecipeIndex(int index) {
-//        if (Minecraft.getInstance().screen instanceof CraftingGui gui)
-//            gui.setScrollValue(index);
+        if (Minecraft.getInstance().screen instanceof CraftingGui gui)
+            gui.setSelectedRecipe(index);
     }
 
     public static void handleTriggers(S2CTriggers.TriggerType type, BlockPos pos) {

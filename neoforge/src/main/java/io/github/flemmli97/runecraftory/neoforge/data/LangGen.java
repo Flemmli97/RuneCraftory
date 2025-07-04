@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
@@ -59,7 +59,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -73,7 +73,7 @@ import java.util.stream.Stream;
  */
 public class LangGen implements DataProvider {
 
-    private final Map<String, String> data = new LinkedHashMap<>();
+    private final Map<String, String> data = new HashMap<>();
     private final PackOutput packOutput;
     private final String modid, locale;
 
@@ -166,10 +166,10 @@ public class LangGen implements DataProvider {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
-        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.FORGE.getId(), "Forging");
-        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.ARMOR.getId(), "Crafting");
-        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.CHEM.getId(), "Chemistry");
-        this.add(CraftingBlockEntity.DISPLAY_PREFIX + EnumCrafting.COOKING.getId(), "Cooking");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + CraftingType.FORGE.getId(), "Forging");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + CraftingType.ACCESSORY_WORKBENCH.getId(), "Crafting");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + CraftingType.CHEMISTRY_SET.getId(), "Chemistry");
+        this.add(CraftingBlockEntity.DISPLAY_PREFIX + CraftingType.COOKING_TABLE.getId(), "Cooking");
 
         this.add(BlockShippingBin.NAME, "Shipping Bin");
         this.add(ContainerInfoScreen.TITLE, "Info Screen");
@@ -223,7 +223,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.item.difficulty", "Upgrade Difficulty: %s");
         this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
         this.add("runecraftory.tooltip.item.attribute", "%s: %s");
-        this.add("runecraftory.tooltip.item.attribute.percentage", "%s: %s%");
+        this.add("runecraftory.tooltip.item.attribute.percentage", "%s: %s%%");
 
         this.add("runecraftory.tooltip.item.eaten", "When eaten");
 
@@ -870,7 +870,6 @@ public class LangGen implements DataProvider {
             throw new IllegalStateException("Duplicate translation key " + key);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public void addPatchouliEntityDesc(List<RegistryEntrySupplier<EntityType<?>, ?>> list, RegistryEntrySupplier<EntityType<?>, ?> sup, String value) {
         list.add(sup);
         this.add(patchouliEntity(sup.getID()), value);

@@ -29,9 +29,7 @@ public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implemen
 
     public ModelHornet() {
         super();
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
-            this.ridingPosition = model.getPart("ridingPos");
-        });
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> this.ridingPosition = model.getPart("ridingPos"));
         this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 

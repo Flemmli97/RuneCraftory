@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.recipes;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -17,10 +17,10 @@ public class SextupleRecipeBuilder {
     private final int level, addCost;
     private final NonNullList<Ingredient> ingredients = NonNullList.create();
     private final SextupleRecipe.Serializer.Factory<?> factory;
-    private final EnumCrafting type;
+    private final CraftingType type;
     private String group;
 
-    private SextupleRecipeBuilder(EnumCrafting type, ItemStack item, int level, int addCost, SextupleRecipe.Serializer.Factory<?> factory) {
+    private SextupleRecipeBuilder(CraftingType type, ItemStack item, int level, int addCost, SextupleRecipe.Serializer.Factory<?> factory) {
         this.type = type;
         this.result = item;
         this.level = level;
@@ -28,23 +28,23 @@ public class SextupleRecipeBuilder {
         this.factory = factory;
     }
 
-    public static SextupleRecipeBuilder create(EnumCrafting type, ItemLike item, int level) {
+    public static SextupleRecipeBuilder create(CraftingType type, ItemLike item, int level) {
         return create(type, item, 1, level);
     }
 
-    public static SextupleRecipeBuilder create(EnumCrafting type, ItemLike item, int count, int level) {
+    public static SextupleRecipeBuilder create(CraftingType type, ItemLike item, int count, int level) {
         return create(type, new ItemStack(item, count), level, 1);
     }
 
-    public static SextupleRecipeBuilder create(EnumCrafting type, ItemLike item, int count, int level, int addCost) {
+    public static SextupleRecipeBuilder create(CraftingType type, ItemLike item, int count, int level, int addCost) {
         return create(type, new ItemStack(item, count), level, addCost);
     }
 
-    public static SextupleRecipeBuilder create(EnumCrafting type, ItemStack item, int level, int addCost) {
+    public static SextupleRecipeBuilder create(CraftingType type, ItemStack item, int level, int addCost) {
         SextupleRecipe.Serializer.Factory<?> factory = switch (type) {
             case FORGE -> ForgingRecipe::new;
-            case ARMOR -> ArmorRecipe::new;
-            case CHEM -> ChemistryRecipe::new;
+            case ACCESSORY_WORKBENCH -> ArmorRecipe::new;
+            case CHEMISTRY_SET -> ChemistryRecipe::new;
             default -> CookingRecipe::new;
         };
         return new SextupleRecipeBuilder(type, item, level, addCost, factory);

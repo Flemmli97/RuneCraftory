@@ -15,17 +15,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record StaffData(Optional<Spell> tier1, Optional<Spell> tier2, Optional<Spell> tier3, int chargeTime) {
+public record StaffData(Optional<Holder<Spell>> tier1, Optional<Holder<Spell>> tier2, Optional<Holder<Spell>> tier3,
+                        int chargeTime) {
 
     public static final StaffData DEFAULT = new StaffData(Optional.empty(), Optional.empty(), Optional.empty(), 0);
     public static final Codec<StaffData> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("first_spell").forGetter(StaffData::tier1),
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("second_spell").forGetter(StaffData::tier2),
-                    ModSpells.SPELLS.registry().byNameCodec().optionalFieldOf("third_spell").forGetter(StaffData::tier3),
+            instance.group(ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("first_spell").forGetter(StaffData::tier1),
+                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("second_spell").forGetter(StaffData::tier2),
+                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("third_spell").forGetter(StaffData::tier3),
                     Codec.INT.fieldOf("charge_time").forGetter(d -> d.chargeTime)
             ).apply(instance, StaffData::new));
-    private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Spell>> SPELL_CODEC = ByteBufCodecs.optional(
-            ByteBufCodecs.registry(ModSpells.SPELLS.registry().key()));
+    private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Spell>>> SPELL_CODEC = ByteBufCodecs.optional(
+            ByteBufCodecs.holderRegistry(ModSpells.SPELLS.registry().key()));
     public static final StreamCodec<RegistryFriendlyByteBuf, StaffData> STREAM_CODEC = new StreamCodec<>() {
 
         @Override
@@ -45,23 +46,23 @@ public record StaffData(Optional<Spell> tier1, Optional<Spell> tier2, Optional<S
         }
     };
 
-    public StaffData setTier1Spell(@Nullable Spell spell) {
-        return new StaffData(Optional.ofNullable(spell), this.tier2, this.tier3, spell != null ? spell.coolDown() : this.chargeTime);
+    public StaffData setTier1Spell(@Nullable Holder<Spell> spell) {
+        return new StaffData(Optional.ofNullable(spell), this.tier2, this.tier3, spell != null ? spell.value().coolDown() : this.chargeTime);
     }
 
-    public StaffData setTier2Spell(@Nullable Spell spell) {
-        return new StaffData(this.tier1, Optional.ofNullable(spell), this.tier3, spell != null && this.tier1.isEmpty() ? spell.coolDown() : this.chargeTime);
+    public StaffData setTier2Spell(@Nullable Holder<Spell> spell) {
+        return new StaffData(this.tier1, Optional.ofNullable(spell), this.tier3, spell != null && this.tier1.isEmpty() ? spell.value().coolDown() : this.chargeTime);
     }
 
-    public StaffData setTier3Spell(@Nullable Spell spell) {
-        return new StaffData(this.tier1, this.tier2, Optional.ofNullable(spell), spell != null && this.tier1.isEmpty() && this.tier2.isEmpty() ? spell.coolDown() : this.chargeTime);
+    public StaffData setTier3Spell(@Nullable Holder<Spell> spell) {
+        return new StaffData(this.tier1, this.tier2, Optional.ofNullable(spell), spell != null && this.tier1.isEmpty() && this.tier2.isEmpty() ? spell.value().coolDown() : this.chargeTime);
     }
 
     public Spell fromChargeLevel(ItemStack stack, int level) {
         Spell spell = switch (level) {
-            case 3 -> this.tier3.orElse(null);
-            case 2 -> this.tier2.orElse(null);
-            case 1 -> this.tier1.orElse(null);
+            case 3 -> this.tier3.map(Holder::value).orElse(null);
+            case 2 -> this.tier2.map(Holder::value).orElse(null);
+            case 1 -> this.tier1.map(Holder::value).orElse(null);
             default -> null;
         };
         if (spell == null) {

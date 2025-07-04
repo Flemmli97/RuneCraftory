@@ -79,9 +79,9 @@ public class BlockTagGen extends IntrinsicHolderTagsProvider<Block> {
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(sup.get());
         }
 
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.FORGE.get(), ModBlocks.COOKING.get(), ModBlocks.CHEMISTRY.get(),
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.FORGE.get(), ModBlocks.COOKING_TABLE.get(), ModBlocks.CHEMISTRY_SET.get(),
                 ModBlocks.BOSS_SPAWNER.get(), ModBlocks.CASH_REGISTER.get());
-        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SHIPPING.get(), ModBlocks.ACCESSORY.get(), ModBlocks.QUEST_BOARD.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SHIPPING.get(), ModBlocks.ACCESSORY_WORKBENCH.get(), ModBlocks.QUEST_BOARD.get());
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.MONSTER_BARN.get());
 
         this.tag(RunecraftoryTags.Blocks.FARMLAND).add(Blocks.FARMLAND).add(ModBlocks.TREE_SOIL.get());

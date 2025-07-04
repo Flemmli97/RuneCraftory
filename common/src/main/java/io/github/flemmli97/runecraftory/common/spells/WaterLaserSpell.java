@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,7 +30,7 @@ public class WaterLaserSpell extends Spell {
         laser.setMaxTicks(entity instanceof Player ? Mth.ceil(PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.WATER_LASER_ONE).length()) : 15);
         laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         laser.setRange(this.range);
-        ProjectileUtil.shoot(entity, laser, 0);
+        ProjectileUtils.shoot(entity, laser, 0);
         level.addFreshEntity(laser);
         playSound(entity, ModSounds.SPELL_GENERIC_WATER.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 
-public class ProjectileUtil {
+public class ProjectileUtils {
 
     public static void shoot(LivingEntity shooter, AdvancedProjectile projectile, float velocity, float inaccuracy) {
         Vec3 target = getAimTarget(shooter, projectile.position());

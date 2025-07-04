@@ -3,13 +3,16 @@ package io.github.flemmli97.runecraftory.common.utils;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.components.ArmorEffectData;
+import io.github.flemmli97.runecraftory.common.components.FoodAttributeData;
 import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.ListItemStackHolder;
+import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -32,6 +35,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -96,11 +100,11 @@ public class ItemNBT {
         FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (props == null)
             return Pair.of(new TreeMap<>(ModAttributes.SORTED), new TreeMap<>(ModAttributes.SORTED));
-        ItemAttributeData data = stack.get(ModDataComponentTypes.FOOD_BUFF.get());
+        FoodAttributeData data = stack.get(ModDataComponentTypes.FOOD_BUFF.get());
         if (data == null) {
             return Pair.of(props.effects(), props.effectsMultiplier());
         }
-        return Pair.of(data.getBaseStats(), data.getStats());
+        return Pair.of(data.getFlatStats(), data.getMultiplierStats());
     }
 
     public static void setElement(EnumElement element, ItemStack stack) {
@@ -116,10 +120,10 @@ public class ItemNBT {
         return isWeapon(stack) ? DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
 
-    public static ItemStack addUpgradeItem(ItemStack stack, ItemStack upgrade, boolean crafting, EnumCrafting type) {
+    public static ItemStack addUpgradeItem(ItemStack stack, ItemStack upgrade, boolean crafting, CraftingType type) {
         int level = itemLevel(stack);
         if (upgrade.isEmpty() || !ItemNBT.shouldHaveStats(stack) || level >= 10)
-            return stack;
+            return ItemStack.EMPTY;
         ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).orElse(null);
         if (ItemNBT.shouldHaveStats(upgrade)) {
             if (!crafting || stack.has(ModDataComponentTypes.ORIGINAL_ITEM.get()))
@@ -166,11 +170,11 @@ public class ItemNBT {
         if (!crafting) {
             ListItemStackHolder upgrades = stack.getOrDefault(ModDataComponentTypes.UPGRADES.get(), ListItemStackHolder.DEFAULT);
             int similar = upgrades.matchesItem(upgrade);
-            efficiency = similar > 0 ? (float) (1 - Math.pow(0.5, similar)) : 1;
-            stack.set(ModDataComponentTypes.UPGRADES.get(), upgrades.add(upgrade.copy()));
+            efficiency = similar > 0 ? (float) (Math.pow(0.5, similar)) : 1;
+            stack.set(ModDataComponentTypes.UPGRADES.get(), upgrades.add(upgrade));
         } else {
             ListItemStackHolder bonus = stack.getOrDefault(ModDataComponentTypes.CRAFTING_BONUS.get(), ListItemStackHolder.DEFAULT);
-            stack.set(ModDataComponentTypes.UPGRADES.get(), bonus.add(upgrade.copy()));
+            stack.set(ModDataComponentTypes.UPGRADES.get(), bonus.add(upgrade));
         }
         //Special Item Tags
         if (upgrade.getItem() == ModItems.GLASS.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
@@ -180,16 +184,13 @@ public class ItemNBT {
         boolean hasObjectX = stack.getOrDefault(ModDataComponentTypes.OBJECT_X.get(), false);
         if (upgrade.getItem() == ModItems.OBJECT_X.get())
             stack.set(ModDataComponentTypes.OBJECT_X.get(), !hasObjectX);
-        if (type == EnumCrafting.FORGE && upgrade.getItem() == ModItems.INVIS_STONE.get())
+        if (type == CraftingType.FORGE && upgrade.getItem() == ModItems.INVIS_STONE.get())
             stack.set(ModDataComponentTypes.INVISIBLE.get(), Unit.INSTANCE);
-        if (type == EnumCrafting.FORGE && upgrade.is(RunecraftoryTags.Items.SCALES))
+        if (type == CraftingType.FORGE && upgrade.is(RunecraftoryTags.Items.SCALES))
             stack.set(ModDataComponentTypes.DRAGON_SCALE.get(), Unit.INSTANCE);
         if (crafting && upgrade.getItem() == ModItems.LIGHT_ORE.get() && !stack.has(ModDataComponentTypes.ORIGINAL_ITEM.get()))
             stack.set(ModDataComponentTypes.LIGHT_ORE.get(), true);
-        if (upgrade.getItem() == ModItems.GLITTA_AUGITE.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
-            stack.set(ModDataComponentTypes.GLITTA_AUGITE.get(), Unit.INSTANCE);
-        if (upgrade.getItem() == ModItems.RACCOON_LEAF.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
-            stack.set(ModDataComponentTypes.RACCOON_LEAF.get(), Unit.INSTANCE);
+
         // Apply double/tenfold steel. Works only once
         boolean applyDoubleSteel = stack.getOrDefault(ModDataComponentTypes.DOUBLE_STEEL.get(), false);
         if (!stack.has(ModDataComponentTypes.DOUBLE_STEEL.get())) {
@@ -207,176 +208,134 @@ public class ItemNBT {
         }
 
         if (stat != null) {
-//            if (!tag.contains(LibNBT.BASE) && !stat.itemStats().isEmpty()) {
-//                ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
-//                if (base != null) {
-//                    CompoundTag statsTag = new CompoundTag();
-//                    for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
-//                        if (entry.getKey() == ModAttributes.ATTACK_RANGE.get()) {
-//                            if (upgrade.getItem() == ModItems.RACCOON_LEAF.get() && tag.getBoolean(LibNBT.RACCOON_LEAF))
-//                                continue;
-//                            if (upgrade.getItem() == ModItems.GLITTA_AUGITE.get() && tag.getBoolean(LibNBT.GLITTA_AUGITE))
-//                                continue;
-//                        }
-//                        statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
-//                    }
-//                    tag.put(LibNBT.BASE, statsTag);
-//                }
-//            }
-//
-//            List<ResourceLocation> blacklist = List.of();
-//            if (type == EnumCrafting.FORGE)
-//                blacklist = ARMOR_ONLY;
-//            if (type == EnumCrafting.ARMOR)
-//                blacklist = WEAPON_ONLY;
-//            CompoundTag statCompound = tag.getCompound(LibNBT.STATS);
-//            for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
-//                if (blacklist.contains(Registry.ATTRIBUTE.getKey(entry.getKey())))
-//                    continue;
-//                double amount = entry.getValue() * efficiency;
-//                if (hasObjectX)
-//                    amount *= -1;
-//                if (applyDoubleSteel)
-//                    amount *= 2;
-//                if (applyTenSteel)
-//                    amount *= 8;
-//                updateStatIncrease(entry.getKey(), amount, statCompound);
-//            }
-//            tag.put(LibNBT.STATS, statCompound);
-//            if (!tag.contains(LibNBT.ELEMENT))
-//                tag.putString(LibNBT.ELEMENT, getElement(stack).toString());
-//            if (isWeapon(stack)) {
-//                EnumElement current = getElement(stack);
-//                if (stat.element() != EnumElement.NONE) {
-//                    if (current == EnumElement.NONE) {
-//                        tag.putString(LibNBT.ELEMENT, stat.element().toString());
-//                    } else
-//                        tag.putString(LibNBT.ELEMENT, EnumElement.NONE.toString());
-//                }
-//            }
-//            if (stack.getItem() instanceof ItemStaffBase) {
-//                Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
-//                    if (stat.getTier1Spell() != null)
-//                        data.setTier1Spell(stat.getTier1Spell());
-//                    if (stat.getTier2Spell() != null)
-//                        data.setTier2Spell(stat.getTier2Spell());
-//                    if (stat.getTier3Spell() != null)
-//                        data.setTier3Spell(stat.getTier3Spell());
-//                });
-//            }
-//            if (stat.getArmorEffect() != null && stat.getArmorEffect().canBeAppliedTo(stack))
-//                Platform.INSTANCE.getArmorEffects(stack).ifPresent(data -> data.addArmorEffects(stat.getArmorEffect()));
+            ItemAttributeData stats = stack.getOrDefault(ModDataComponentTypes.STATS.get(), ItemAttributeData.DEFAULT);
+            if (stats.getBaseStats().isEmpty()) {
+                ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
+                if (base != null && !base.itemStats().isEmpty()) {
+                    stats = stats.base(base.itemStats());
+                }
+            }
+            boolean applyUpgradeStat = !upgrade.is(type.upgradeBlacklist) &&
+                    (!upgrade.is(RunecraftoryTags.Items.ONE_TIME_UPGRADE)
+                            || stack.getOrDefault(ModDataComponentTypes.UPGRADES.get(), ListItemStackHolder.DEFAULT).matchesItem(upgrade) == 0);
+
+            if (applyUpgradeStat) {
+                TagKey<Attribute> blacklist = null;
+                if (type == CraftingType.FORGE)
+                    blacklist = RunecraftoryTags.Attributes.WEAPON_ONLY;
+                if (type == CraftingType.ACCESSORY_WORKBENCH)
+                    blacklist = RunecraftoryTags.Attributes.ARMOR_ONLY;
+                Map<Holder<Attribute>, Double> upgradeStats = new HashMap<>();
+                for (Map.Entry<Holder<Attribute>, Double> entry : stat.itemStats().entrySet()) {
+                    if (blacklist != null && entry.getKey().is(blacklist))
+                        continue;
+                    double amount = entry.getValue() * efficiency;
+                    if (hasObjectX)
+                        amount *= -1;
+                    if (applyDoubleSteel)
+                        amount *= 2;
+                    if (applyTenSteel)
+                        amount *= 8;
+                    upgradeStats.put(entry.getKey(), amount);
+                }
+                stats = stats.add(upgradeStats);
+            }
+            stack.set(ModDataComponentTypes.STATS.get(), stats);
+            if (isWeapon(stack)) {
+                setElement(stat.element(), stack);
+            }
+            if (stack.getItem() instanceof ItemStaffBase) {
+                stack.update(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT, data -> {
+                    if (stat.getTier1Spell().isPresent())
+                        data = data.setTier1Spell(stat.getTier1Spell().get());
+                    if (stat.getTier2Spell().isPresent())
+                        data = data.setTier2Spell(stat.getTier2Spell().get());
+                    if (stat.getTier3Spell().isPresent())
+                        data = data.setTier3Spell(stat.getTier3Spell().get());
+                    return data;
+                });
+            }
+            if (stat.getArmorEffect().isPresent() && stat.getArmorEffect().get().value().canBeAppliedTo(stack)) {
+                stack.update(ModDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT, data -> data.add(stat.getArmorEffect().get()));
+            }
         }
         return stack;
     }
 
-    private static ItemStack changeBaseItemTo(ItemStack stack, ItemStack toApply, EnumCrafting crafting) {
-//        ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(toApply.getItem()).orElse(null);
-//        CompoundTag tag = new CompoundTag();
-//        //Setup base stuff
-//        if (stat != null) {
-//            if (!stat.itemStats().isEmpty()) {
-//                ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(toApply.getItem()).orElse(null);
-//                if (base != null) {
-//                    CompoundTag statsTag = new CompoundTag();
-//                    Map<Attribute, Double> origin = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
-//                            .map(ItemStat::itemStats).orElse(Map.of());
-//                    for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
-//                        if (NON_INHERITABLE.contains(Registry.ATTRIBUTE.getKey(entry.getKey())))
-//                            statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), origin.getOrDefault(entry.getKey(), 5d));
-//                        else
-//                            statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
-//                    }
-//                    tag.put(LibNBT.BASE, statsTag);
-//                }
-//            }
-//            tag.putString(LibNBT.ELEMENT, stat.element().toString());
-//            if (stack.getItem() instanceof ItemStaffBase) {
-//                Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
-//                    if (stat.getTier1Spell() != null)
-//                        data.setTier1Spell(stat.getTier1Spell());
-//                    if (stat.getTier2Spell() != null)
-//                        data.setTier2Spell(stat.getTier2Spell());
-//                    if (stat.getTier3Spell() != null)
-//                        data.setTier3Spell(stat.getTier3Spell());
-//                });
-//            }
-//            if (stat.getArmorEffect() != null && stat.getArmorEffect().canBeAppliedTo(stack))
-//                Platform.INSTANCE.getArmorEffects(stack).ifPresent(data -> data.addArmorEffects(stat.getArmorEffect()));
-//        }
-//        tag.putString(LibNBT.ORIGINITEM, Registry.ITEM.getKey(toApply.getItem()).toString());
-//        CompoundTag stackTag = stack.getOrCreateTag();
-//        stackTag.put(RuneCraftory.MODID, tag);
-//        //Reapply all items used to craft the applied item
-//        CompoundTag other = ItemNBT.getItemNBT(toApply);
-//        if (other != null) {
-//            ListTag bonus = other.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
-//            bonus.forEach(t -> {
-//                CompoundTag nbt = (CompoundTag) t;
-//                Item item = Registry.ITEM.get(new ResourceLocation(nbt.getString("Id")));
-//                if (item != Items.AIR)
-//                    addUpgradeItem(stack, new ItemStack(item), true, crafting);
-//            });
-//        }
+    private static ItemStack changeBaseItemTo(ItemStack stack, ItemStack toApply, CraftingType crafting) {
+        ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(toApply.getItem()).orElse(null);
+        //Setup base stuff
+        if (stat != null) {
+            ItemAttributeData stats = stack.getOrDefault(ModDataComponentTypes.STATS.get(), ItemAttributeData.DEFAULT);
+            ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
+            if (base != null) {
+                Map<Holder<Attribute>, Double> baseStats = new HashMap<>();
+                Map<Holder<Attribute>, Double> origin = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem())
+                        .map(ItemStat::itemStats).orElse(Map.of());
+                for (Map.Entry<Holder<Attribute>, Double> entry : base.itemStats().entrySet()) {
+                    if (entry.getKey().is(RunecraftoryTags.Attributes.NON_INHERITABLE)) {
+                        if (origin.containsKey(entry.getKey()))
+                            baseStats.put(entry.getKey(), origin.get(entry.getKey()));
+                    } else
+                        baseStats.put(entry.getKey(), entry.getValue());
+                }
+                stack.set(ModDataComponentTypes.STATS.get(), stats.base(baseStats));
+            }
+            stack.set(ModDataComponentTypes.ELEMENT.get(), stat.element());
+            if (stack.getItem() instanceof ItemStaffBase) {
+                stack.update(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT, data -> {
+                    if (stat.getTier1Spell().isPresent())
+                        data = data.setTier1Spell(stat.getTier1Spell().get());
+                    if (stat.getTier2Spell().isPresent())
+                        data = data.setTier2Spell(stat.getTier2Spell().get());
+                    if (stat.getTier3Spell().isPresent())
+                        data = data.setTier3Spell(stat.getTier3Spell().get());
+                    return data;
+                });
+            }
+            if (stat.getArmorEffect().isPresent() && stat.getArmorEffect().get().value().canBeAppliedTo(stack)) {
+                stack.update(ModDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT, data -> data.add(stat.getArmorEffect().get()));
+            }
+        }
+        stack.set(ModDataComponentTypes.ORIGINAL_ITEM.get(), new ItemStackHolder(toApply));
+        // Reapply all items used to craft the applied item
+        ListItemStackHolder bonus = toApply.get(ModDataComponentTypes.CRAFTING_BONUS.get());
+        if (bonus != null) {
+            bonus.forEach(added -> addUpgradeItem(stack, added, true, crafting));
+        }
         return stack;
     }
 
     public static ItemStack addFoodBonusItem(ItemStack stack, ItemStack stackToAdd) {
-        if (stackToAdd.isEmpty())
-            return stack;
-//        CompoundTag tag = getItemNBT(stack);
-//        if (tag == null)
-//            tag = new CompoundTag();
-//        ListTag bonus = tag.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
-//        CompoundTag bonusItem = new CompoundTag();
-//        bonusItem.putString("Id", Registry.ITEM.getKey(stackToAdd.getItem()).toString());
-//        bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
-//        bonus.add(bonusItem);
-//        tag.put(LibNBT.CRAFTING_BONUS, bonus);
-//
-//        FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stackToAdd.getItem());
-//        if (props != null) {
-//            if (!tag.contains(LibNBT.FOOD_STATS)) {
-//                FoodProperties base = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
-//                if (base != null) {
-//                    CompoundTag statsTag = new CompoundTag();
-//                    for (Map.Entry<Attribute, Double> entry : base.effects().entrySet()) {
-//                        statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
-//                    }
-//                    tag.put(LibNBT.FOOD_STATS, statsTag);
-//                    statsTag = new CompoundTag();
-//                    for (Map.Entry<Attribute, Double> entry : base.effectsMultiplier().entrySet()) {
-//                        statsTag.putDouble(Registry.ATTRIBUTE.getKey(entry.getKey()).toString(), entry.getValue());
-//                    }
-//                    tag.put(LibNBT.FOOD_STATS_MULT, statsTag);
-//                }
-//            }
-//            boolean hasObjectX = tag.getBoolean(LibNBT.OBJECT_X);
-//            if (stackToAdd.getItem() == ModItems.OBJECT_X.get())
-//                tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
-//            for (Map.Entry<Attribute, Double> entry : props.cookingBonus().entrySet()) {
-//                double amount = entry.getValue();
-//                if (hasObjectX)
-//                    amount *= -1;
-//                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FOOD_STATS));
-//            }
-//            for (Map.Entry<Attribute, Double> entry : props.cookingBonusPercent().entrySet()) {
-//                double amount = entry.getValue();
-//                if (hasObjectX)
-//                    amount *= -1;
-//                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FOOD_STATS_MULT));
-//            }
-//        }
-//        CompoundTag stackTag = stack.getOrCreateTag();
-//        stackTag.put(RuneCraftory.MODID, tag);
+        ListItemStackHolder bonus = stack.getOrDefault(ModDataComponentTypes.CRAFTING_BONUS.get(), ListItemStackHolder.DEFAULT);
+        stack.set(ModDataComponentTypes.UPGRADES.get(), bonus.add(stackToAdd));
+
+        FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stackToAdd.getItem());
+        boolean hasObjectX = stack.getOrDefault(ModDataComponentTypes.OBJECT_X.get(), false);
+        if (stackToAdd.getItem() == ModItems.OBJECT_X.get())
+            stack.set(ModDataComponentTypes.OBJECT_X.get(), !hasObjectX);
+        if (props != null) {
+            FoodAttributeData stats = stack.getOrDefault(ModDataComponentTypes.FOOD_BUFF.get(), FoodAttributeData.DEFAULT);
+            Map<Holder<Attribute>, Double> flatStats = new HashMap<>();
+            for (Map.Entry<Holder<Attribute>, Double> entry : props.cookingBonus().entrySet()) {
+                double amount = entry.getValue();
+                if (hasObjectX)
+                    amount *= -1;
+                flatStats.put(entry.getKey(), amount);
+            }
+            stats = stats.add(flatStats);
+            Map<Holder<Attribute>, Double> multStats = new HashMap<>();
+            for (Map.Entry<Holder<Attribute>, Double> entry : props.cookingBonusPercent().entrySet()) {
+                double amount = entry.getValue();
+                if (hasObjectX)
+                    amount *= -1;
+                multStats.put(entry.getKey(), amount);
+            }
+            stats = stats.addMultiplier(multStats);
+            stack.set(ModDataComponentTypes.FOOD_BUFF.get(), stats);
+        }
         return stack;
     }
-
-//    public static void updateStatIncrease(Attribute attribute, double amount, CompoundTag stats) {
-//        String att = Registry.ATTRIBUTE.getKey(attribute).toString();
-//        double oldValue = stats.getDouble(att);
-//        stats.putDouble(att, oldValue + Math.floor(amount));
-//    }
 
     public static boolean shouldHaveStats(ItemStack stack) {
         return stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD) || stack.is(RunecraftoryTags.Items.EQUIPMENT);

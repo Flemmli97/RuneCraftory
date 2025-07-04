@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.neoforge.registry.ModAttachments;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -91,8 +92,8 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, RegistryFriendlyByteBuf, T> create) {
-        return new MenuType<>((IContainerFactory<T>) create::apply, FeatureFlagSet.of());
+    public <T extends AbstractContainerMenu, D> MenuType<T> menuType(TriFunction<Integer, Inventory, D, T> create, StreamCodec<RegistryFriendlyByteBuf, D> codec) {
+        return new MenuType<>((IContainerFactory<T>) (i, inv, buf) -> create.apply(i, inv, codec.decode(buf)), FeatureFlagSet.of());
     }
 
     @Override

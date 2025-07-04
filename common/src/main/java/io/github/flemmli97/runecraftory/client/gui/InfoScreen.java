@@ -56,6 +56,12 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
     }
 
     @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(this.texture(), this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         int iconX = 110;
@@ -121,11 +127,5 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         this.addRenderableWidget(new TexturedButton(this.leftPos + 8 + 13, this.topPos + 103, 12, 12,
                 Component.literal(">"), b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.SUB)))
                 .withSprite(SpriteResources.PAGE_BUTTON));
-    }
-
-    @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(graphics, mouseX, mouseY);
     }
 }

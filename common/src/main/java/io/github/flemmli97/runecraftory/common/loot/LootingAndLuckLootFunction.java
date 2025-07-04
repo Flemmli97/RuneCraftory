@@ -62,7 +62,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public LootItemFunctionType<LootingAndLuckLootFunction> getType() {
         return ModLootRegistries.LUCK_AND_LOOTING.get();
     }
 

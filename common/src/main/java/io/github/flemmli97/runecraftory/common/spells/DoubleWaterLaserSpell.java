@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +32,7 @@ public class DoubleWaterLaserSpell extends Spell {
             return false;
         Vec3 dir = entity.getLookAngle();
         Vec3 pos = entity.position().add(0, entity.getEyeHeight() - 0.1, 0);
-        Vec3 targetPos = ProjectileUtil.getAimTarget(entity);
+        Vec3 targetPos = ProjectileUtils.getAimTarget(entity);
         if (targetPos != null) {
             dir = targetPos.subtract(pos);
         }

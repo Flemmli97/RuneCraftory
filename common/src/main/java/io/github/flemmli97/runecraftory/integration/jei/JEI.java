@@ -47,10 +47,10 @@ public class JEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.FORGING.identifier(), ModItems.ITEM_BLOCK_FORGE.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.COOKING.identifier(), ModItems.ITEM_BLOCK_COOKING.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.ARMOR.identifier(), ModItems.ITEM_BLOCK_ACCESS.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.CHEMISTRY.identifier(), ModItems.ITEM_BLOCK_CHEM.get())
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.FORGING.identifier(), ModItems.FORGE.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.COOKING.identifier(), ModItems.COOKING_TABLE.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.ARMOR.identifier(), ModItems.ACCESSORY_WORKBENCH.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.CHEMISTRY.identifier(), ModItems.CHEMISTRY_SET.get())
         );
     }
 
@@ -81,10 +81,10 @@ public class JEI implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_FORGE.get()), CraftingIdentifier.FORGING.identifier());
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_ACCESS.get()), CraftingIdentifier.ARMOR.identifier());
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_COOKING.get()), CraftingIdentifier.COOKING.identifier());
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ITEM_BLOCK_CHEM.get()), CraftingIdentifier.CHEMISTRY.identifier());
+        registration.addRecipeCatalyst(new ItemStack(ModItems.FORGE.get()), CraftingIdentifier.FORGING.identifier());
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ACCESSORY_WORKBENCH.get()), CraftingIdentifier.ARMOR.identifier());
+        registration.addRecipeCatalyst(new ItemStack(ModItems.COOKING_TABLE.get()), CraftingIdentifier.COOKING.identifier());
+        registration.addRecipeCatalyst(new ItemStack(ModItems.CHEMISTRY_SET.get()), CraftingIdentifier.CHEMISTRY.identifier());
     }
 
     @Override

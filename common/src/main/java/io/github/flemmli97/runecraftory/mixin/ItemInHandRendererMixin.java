@@ -17,7 +17,7 @@ public abstract class ItemInHandRendererMixin {
 
     @Inject(method = "renderItem", at = @At("HEAD"), cancellable = true)
     private void onRender(LivingEntity entity, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int seed, CallbackInfo info) {
-        if (ClientMixinUtils.onRenderHeldItem(entity, itemStack, displayContext, leftHand, poseStack, buffer, seed))
+        if (ClientMixinUtils.onRenderHeldItem(entity, itemStack, displayContext, leftHand, buffer, seed))
             info.cancel();
     }
 }

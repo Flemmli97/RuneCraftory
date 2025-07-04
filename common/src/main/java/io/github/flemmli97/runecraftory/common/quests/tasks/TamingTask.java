@@ -54,7 +54,7 @@ public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
     @Override
     public MutableComponent translation(ServerPlayer player) {
         if (this.description.isEmpty() && this.simple()) {
-            return this.predicates.get(0).getTranslation(this.getId().toString(),
+            return this.predicates.getFirst().getTranslation(this.getId().toString(),
                     this.amount.getInt(null));
         }
         return Component.translatable(this.description);

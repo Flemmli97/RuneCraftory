@@ -54,7 +54,7 @@ public class ShippingTask implements QuestTask<ShippingTask.SkillLevelTaskResolv
     @Override
     public MutableComponent translation(ServerPlayer player) {
         if (this.description.isEmpty() && this.simple()) {
-            return this.itemPredicates.get(0).getTranslation(this.getId().toString(), this.amount.getInt(null));
+            return this.itemPredicates.getFirst().getTranslation(this.getId().toString(), this.amount.getInt(null));
         }
         return Component.translatable(this.description);
     }

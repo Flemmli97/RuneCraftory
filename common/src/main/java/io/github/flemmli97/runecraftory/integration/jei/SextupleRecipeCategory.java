@@ -2,7 +2,8 @@ package io.github.flemmli97.runecraftory.integration.jei;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
+import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -31,11 +32,11 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 
 public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipeCategory<RecipeHolder<T>> {
 
-    public static final RecipeType<RecipeHolder<SextupleRecipe>> FORGING = createHolder(RuneCraftory.MODID, EnumCrafting.FORGE.getId() + "_category");
-    public static final RecipeType<RecipeHolder<SextupleRecipe>> COOKING = createHolder(RuneCraftory.MODID, EnumCrafting.COOKING.getId() + "_category");
-    public static final RecipeType<RecipeHolder<SextupleRecipe>> ARMOR = createHolder(RuneCraftory.MODID, EnumCrafting.ARMOR.getId() + "_category");
-    public static final RecipeType<RecipeHolder<SextupleRecipe>> CHEMISTRY = createHolder(RuneCraftory.MODID, EnumCrafting.CHEM.getId() + "_category");
-    public static final ResourceLocation GUI = RuneCraftory.modRes("textures/gui/crafting.png");
+    public static final RecipeType<RecipeHolder<SextupleRecipe>> FORGING = createHolder(RuneCraftory.MODID, CraftingType.FORGE.getId() + "_category");
+    public static final RecipeType<RecipeHolder<SextupleRecipe>> COOKING = createHolder(RuneCraftory.MODID, CraftingType.COOKING_TABLE.getId() + "_category");
+    public static final RecipeType<RecipeHolder<SextupleRecipe>> ARMOR = createHolder(RuneCraftory.MODID, CraftingType.ACCESSORY_WORKBENCH.getId() + "_category");
+    public static final RecipeType<RecipeHolder<SextupleRecipe>> CHEMISTRY = createHolder(RuneCraftory.MODID, CraftingType.CHEMISTRY_SET.getId() + "_category");
+    public static final ResourceLocation GUI = RuneCraftory.modRes("textures/gui/container/crafting.png");
 
     public static <R extends Recipe<?>> RecipeType<RecipeHolder<R>> createHolder(String nameSpace, String path) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(nameSpace, path);
@@ -52,7 +53,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     public SextupleRecipeCategory(IGuiHelper guiHelper, RecipeType<RecipeHolder<T>> recipeType, Item icon) {
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(icon));
         this.recipeType = recipeType;
-        this.title = Component.translatable("runecraftory.tile.crafting." + this.recipeType.getUid().getPath().replace("_category", ""));
+        this.title = Component.translatable(CraftingBlockEntity.DISPLAY_PREFIX + this.recipeType.getUid().getPath().replace("_category", ""));
         this.background = guiHelper.createDrawable(GUI, 19, 20, 119, 42);
     }
 

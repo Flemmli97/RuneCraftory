@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class BigLeafSpell extends Spell {
         for (int i = 0; i < leafs; i++) {
             EntityBigRaccoonLeaf leaf = new EntityBigRaccoonLeaf(level, entity);
             leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
-            ProjectileUtil.shoot(entity, leaf, 1, 0);
+            ProjectileUtils.shoot(entity, leaf, 1, 0);
             leaf.setCenter(i % 2 == 0 ? 2.5f : 4);
             leaf.withRightSpin(i % 2 == 0);
             level.addFreshEntity(leaf);

@@ -47,18 +47,6 @@ public class PlatformImpl implements Platform {
 
     public static MinecraftServer CURRENT_SERVER;
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, RegistryFriendlyByteBuf> IDENTITY = new StreamCodec<>() {
-        @Override
-        public RegistryFriendlyByteBuf decode(RegistryFriendlyByteBuf buf) {
-            return new RegistryFriendlyByteBuf(buf.copy(), buf.registryAccess());
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, RegistryFriendlyByteBuf data) {
-            buf.writeBytes(data);
-        }
-    };
-
     @Override
     public boolean isDatagen() {
         return false;
@@ -123,8 +111,8 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public <T extends AbstractContainerMenu> MenuType<T> menuType(TriFunction<Integer, Inventory, RegistryFriendlyByteBuf, T> create) {
-        return new ExtendedScreenHandlerType<>(create::apply, IDENTITY);
+    public <T extends AbstractContainerMenu, D> MenuType<T> menuType(TriFunction<Integer, Inventory, D, T> create, StreamCodec<RegistryFriendlyByteBuf, D> codec) {
+        return new ExtendedScreenHandlerType<>(create::apply, codec);
     }
 
     @Override

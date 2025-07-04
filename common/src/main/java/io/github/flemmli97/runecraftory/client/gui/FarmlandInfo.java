@@ -55,7 +55,7 @@ public class FarmlandInfo {
 
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        int sY = 60 + (cropBlock ? 40 : 0);
+        int sY = 61 + (cropBlock ? 40 : 0);
         int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
         int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
         graphics.blitSprite(TEXTURE, xPos, yPos, 100, sY);
@@ -66,25 +66,25 @@ public class FarmlandInfo {
             MutableComponent growth = Component.literal(data.ageProgress() + "%");
             if (data.ageProgress() == 100)
                 growth.withStyle(ChatFormatting.GREEN);
-            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000);
-            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000);
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000, false);
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000, false);
             MutableComponent giant = Component.literal(data.cropSizeProgress() + "%");
             if (data.cropSizeProgress() == 100)
                 giant.withStyle(ChatFormatting.GREEN);
-            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000);
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000, false);
             yPos += 10 * 4;
         }
         MutableComponent growth = Component.literal(this.formattedValue(data.growth()));
         if (data.growth() <= 0.5)
             growth.withStyle(ChatFormatting.RED);
-        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.speed", growth), xPos, yPos, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.speed", growth), xPos, yPos, 0x000000, false);
         MutableComponent health = Component.literal(data.health() + "");
         if (data.health() <= 10)
             health.withStyle(ChatFormatting.RED);
-        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000);
-        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000);
-        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000);
-        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000, false);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000, false);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000, false);
+        graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000, false);
     }
 
     private String formattedValue(float f) {

@@ -14,6 +14,6 @@ public class CodecHelper {
 
     public static <T> Codec<List<T>> listOrSingle(Codec<T> codec) {
         return Codec.either(codec, codec.listOf())
-                .xmap(e -> e.map(List::of, l -> l), l -> l.size() == 1 ? Either.left(l.get(0)) : Either.right(l));
+                .xmap(e -> e.map(List::of, l -> l), l -> l.size() == 1 ? Either.left(l.getFirst()) : Either.right(l));
     }
 }

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class FurnitureThrowSpell extends Spell {
             double yRand = entity.getY() + (entity.getRandom().nextDouble()) * 2;
             double zRand = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 13;
             furniture.setPos(xRand, yRand, zRand);
-            Vec3 target = ProjectileUtil.getAimTarget(entity);
+            Vec3 target = ProjectileUtils.getAimTarget(entity);
             if (target == null) {
                 target = furniture.position().add(entity.getLookAngle().scale(5));
             }

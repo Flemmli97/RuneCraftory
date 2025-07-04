@@ -155,7 +155,7 @@ public class FoodProperties {
 
     public List<Component> texts(ItemStack stack) {
         List<Component> list = new ArrayList<>();
-        list.add(Component.translatable("runecraftory.tooltip.food.header").withStyle(ChatFormatting.GRAY));
+        list.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
 
         Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
         Map<Holder<Attribute>, Double> effects = foodStats.getFirst();
@@ -171,7 +171,7 @@ public class FoodProperties {
                     .withStyle(ChatFormatting.AQUA);
             if (entry.getKey().is(ModAttributes.HEALTH_GAIN.getKey()) || entry.getKey().is(ModAttributes.RUNE_POINTS_GAIN.getKey()))
                 hpRpGain.add(comp);
-            else if (entry.getKey().value() == Attributes.MAX_HEALTH || entry.getKey().is(ModAttributes.MAX_RUNEPOINTS.getKey()))
+            else if (entry.getKey().value() == Attributes.MAX_HEALTH.value() || entry.getKey().is(ModAttributes.MAX_RUNEPOINTS.getKey()))
                 hpRpIncrease.add(comp);
             else
                 attributes.add(CommonComponents.space().append(comp));
@@ -183,7 +183,7 @@ public class FoodProperties {
                     .withStyle(ChatFormatting.AQUA);
             if (entry.getKey().is(ModAttributes.HEALTH_GAIN.getKey()) || entry.getKey().is(ModAttributes.RUNE_POINTS_GAIN.getKey()))
                 hpRpGain.add(comp);
-            else if (entry.getKey().value() == Attributes.MAX_HEALTH || entry.getKey().is(ModAttributes.MAX_RUNEPOINTS.getKey()))
+            else if (entry.getKey().value() == Attributes.MAX_HEALTH.value() || entry.getKey().is(ModAttributes.MAX_RUNEPOINTS.getKey()))
                 hpRpIncrease.add(comp);
             else
                 attributes.add(CommonComponents.space().append(comp));

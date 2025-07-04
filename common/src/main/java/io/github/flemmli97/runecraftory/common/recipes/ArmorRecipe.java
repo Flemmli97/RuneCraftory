@@ -16,7 +16,7 @@ public class ArmorRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.ITEM_BLOCK_ACCESS.get());
+        return new ItemStack(ModItems.ACCESSORY_WORKBENCH.get());
     }
 
     @Override

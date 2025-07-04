@@ -15,6 +15,10 @@ public record ItemStackHolder(ItemStack stack) {
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackHolder> STREAM_CODEC = StreamCodec.composite(ItemStack.STREAM_CODEC,
             d -> d.stack, ItemStackHolder::new);
 
+    public ItemStackHolder(ItemStack stack) {
+        this.stack = stack.copy();
+    }
+
     @Override
     public ItemStack stack() {
         return this.stack.copy();

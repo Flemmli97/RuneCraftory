@@ -136,7 +136,6 @@ public class SkelefangParticle extends Particle {
         BlockPos pos = BlockPos.containing(this.x, this.y, this.z);
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);
         int light = this.level.getBrightness(LightLayer.SKY, pos);
-        CustomParticleRenderTypes.batchType(RENDER_TYPE);
         VertexConsumer consumer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RENDER_TYPE);
         MODEL.renderAsParticle(stack, consumer, this.boneType, LightTexture.pack(block, light),
                 OverlayTexture.NO_OVERLAY, FastColor.ARGB32.color((int) (alpha * 255), CommonColors.WHITE));

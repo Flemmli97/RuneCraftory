@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class StatusBallSpell extends Spell {
         ball.setType(this.type);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         ball.setPos(entity.getX(), entity.getY() + 0.4, entity.getZ());
-        Vec3 target = ProjectileUtil.getAimTarget(entity);
+        Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target != null) {
             ball.shootAtPos(target, 0.13f, 7 - level.getDifficulty().getId() * 2);
         } else {

@@ -54,7 +54,7 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     @Override
     public MutableComponent translation(ServerPlayer player) {
         if (this.description.isEmpty() && this.simple()) {
-            EnumSkills skill = this.skills.get(0);
+            EnumSkills skill = this.skills.getFirst();
             return Component.translatable(this.getId().toString(), skill, this.range.getInt(null));
         }
         return Component.translatable(this.description);

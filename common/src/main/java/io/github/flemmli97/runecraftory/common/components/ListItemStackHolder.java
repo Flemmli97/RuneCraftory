@@ -8,9 +8,10 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class ListItemStackHolder {
+public class ListItemStackHolder implements Iterable<ItemStack> {
 
     public static final ListItemStackHolder DEFAULT = new ListItemStackHolder(List.of());
     public static final Codec<ListItemStackHolder> CODEC = RecordCodecBuilder.create((instance) ->
@@ -22,12 +23,12 @@ public class ListItemStackHolder {
     private final List<ItemStack> stacks;
 
     public ListItemStackHolder(List<ItemStack> stacks) {
-        this.stacks = stacks;
+        this.stacks = stacks.stream().map(ItemStack::copy).toList();
     }
 
     public ListItemStackHolder add(ItemStack add) {
         List<ItemStack> stacks = new ArrayList<>(this.stacks);
-        stacks.add(add);
+        stacks.add(add.copy());
         return new ListItemStackHolder(stacks);
     }
 
@@ -53,5 +54,10 @@ public class ListItemStackHolder {
     @Override
     public int hashCode() {
         return this.stacks.hashCode();
+    }
+
+    @Override
+    public Iterator<ItemStack> iterator() {
+        return this.stacks.stream().map(ItemStack::copy).iterator();
     }
 }

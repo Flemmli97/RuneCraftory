@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonL
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +26,7 @@ public class SmallLeafSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         Vec3 pos = new EntitySmallRaccoonLeaf(level, entity).position();
-        Vec3 target = ProjectileUtil.getAimTarget(entity, pos);
+        Vec3 target = ProjectileUtils.getAimTarget(entity, pos);
         Vec3 dir;
         if (target != null) {
             dir = target.subtract(pos);

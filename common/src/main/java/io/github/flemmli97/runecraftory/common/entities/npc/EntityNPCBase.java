@@ -1018,11 +1018,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         }
     }
 
-    @Override
-    protected void tickDeath() {
-        super.tickDeath();
-    }
-
     public boolean playDeath() {
         return this.entityData.get(PLAY_DEATH_STATE);
     }
@@ -1407,7 +1402,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public ServerPlayer getLastInteractedPlayer() {
         if (this.interactingPlayers.isEmpty())
             return null;
-        return this.interactingPlayers.get(this.interactingPlayers.size() - 1);
+        return this.interactingPlayers.getLast();
     }
 
     public boolean procreateWith(Entity other) {
@@ -1587,11 +1582,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                 public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
                     return new ContainerShop(i, inventory, new InventoryShop(EntityNPCBase.this, shopList));
                 }
-            }, buf -> {
-                buf.writeInt(EntityNPCBase.this.getId());
-                buf.writeInt(shopList.size());
-                shopList.forEach(stack -> ItemStack.STREAM_CODEC.encode(buf, stack));
-            });
+            }, buf -> ContainerShop.DATA_STREAM_CODEC.encode(buf, new ContainerShop.Data(EntityNPCBase.this.getId(), shopList)));
         }
     }
 

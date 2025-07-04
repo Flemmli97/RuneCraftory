@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
@@ -60,15 +60,15 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
                 .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(RunecraftoryTags.Items.UPGRADABLE_HELD));
         if (!base.isEmpty()) {
             stack.set(ModDataComponentTypes.LIGHT_ORE.get(), true);
-            ItemNBT.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? EnumCrafting.ARMOR : EnumCrafting.FORGE);
+            ItemNBT.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         }
         List<Pair<ItemStack, ItemStat>> bonus = DataPackHandler.INSTANCE.itemStatManager()
                 .all(s -> !s.is(RunecraftoryTags.Items.WEAPONS) && !s.is(RunecraftoryTags.Items.EQUIPMENT));
         int bonusAmount = ctx.getRandom().nextInt(3) + 1;
         for (int i = 0; i < bonusAmount; i++)
-            ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), true, equipment ? EnumCrafting.ARMOR : EnumCrafting.FORGE);
+            ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         for (int i = 1; i < level; i++) {
-            ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), false, equipment ? EnumCrafting.ARMOR : EnumCrafting.FORGE);
+            ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), false, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         }
         return stack;
     }

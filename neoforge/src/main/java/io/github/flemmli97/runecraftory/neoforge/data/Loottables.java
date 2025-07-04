@@ -838,9 +838,9 @@ public class Loottables extends LootTableProvider {
             this.add(ModBlocks.BAMBOO_SPROUT.get(), LootTable.lootTable().withPool(herbLoot(ModItems.BAMBOO_SPROUT.get())));
 
             this.add(ModBlocks.FORGE.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.COOKING.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.CHEMISTRY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.ACCESSORY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.COOKING_TABLE.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.CHEMISTRY_SET.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
 
             this.dropSelf(ModBlocks.SHIPPING.get());
             this.dropSelf(ModBlocks.CASH_REGISTER.get());
@@ -865,7 +865,7 @@ public class Loottables extends LootTableProvider {
             }
             ModBlocks.MINERAL_MAP.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
 
-            this.add(ModBlocks.ACCESSORY.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
 
             this.loots.forEach(biConsumer);
         }

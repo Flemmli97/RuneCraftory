@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
@@ -138,13 +138,13 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
         MatchResult matches = calculateMatches(this, stacks);
         if (matches == null)
             return null;
-        EnumCrafting type = EnumCrafting.FORGE;
+        CraftingType type = CraftingType.FORGE;
         if (this.getType() == ModCrafting.ARMOR.get())
-            type = EnumCrafting.ARMOR;
+            type = CraftingType.ACCESSORY_WORKBENCH;
         if (this.getType() == ModCrafting.CHEMISTRY.get())
-            type = EnumCrafting.CHEM;
+            type = CraftingType.CHEMISTRY_SET;
         if (this.getType() == ModCrafting.COOKING.get())
-            type = EnumCrafting.COOKING;
+            type = CraftingType.COOKING_TABLE;
         ItemStack trueOutput = CraftingUtils.getCraftingOutput(this.getResultItem(inv.getPlayer().registryAccess()), inv, matches, type);
         return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(ModItems.UNKNOWN.get()), matches.bonusItems());
     }
@@ -241,9 +241,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
                     buf.writeInt(recipe.getCraftingLevel());
                     buf.writeInt(recipe.getAdditionalCost());
                     ItemStack.STREAM_CODEC.encode(buf, recipe.getRecipeOutput());
-                    buf.writeCollection(recipe.getIngredients(), (b, i) -> {
-                        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, i);
-                    });
+                    buf.writeCollection(recipe.getIngredients(), (b, i) -> Ingredient.CONTENTS_STREAM_CODEC.encode(buf, i));
                 }
             };
         }

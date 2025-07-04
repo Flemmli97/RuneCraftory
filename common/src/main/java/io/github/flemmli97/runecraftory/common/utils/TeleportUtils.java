@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 public class TeleportUtils {
 
-    public static boolean safeDimensionTeleport(Mob entity, ServerLevel newLevel, BlockPos target) {
+    public static void safeDimensionTeleport(Mob entity, ServerLevel newLevel, BlockPos target) {
         BlockPos safe = null;
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
@@ -31,7 +31,7 @@ public class TeleportUtils {
             }
         }
         if (safe == null)
-            return false;
+            return;
         float yaw = entity.getYRot();
         float pitch = entity.getXRot();
         entity.unRide();
@@ -43,15 +43,14 @@ public class TeleportUtils {
             old.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
             newLevel.addDuringTeleport(entity);
         } else
-            return false;
+            return;
         newLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
         for (int i = 0; i < 32; ++i) {
             newLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + newLevel.random.nextDouble() * 2.0, entity.getZ(), 0, newLevel.random.nextGaussian(), 0.0, newLevel.random.nextGaussian(), 1);
         }
-        return true;
     }
 
-    public static boolean tryTeleportAround(Mob entity, Entity target) {
+    public static void tryTeleportAround(Mob entity, Entity target) {
         BlockPos blockPos = target.blockPosition();
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
@@ -61,13 +60,12 @@ public class TeleportUtils {
             if (validTeleportPlace(entity, pos, s -> true)) {
                 entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, entity.getYRot(), entity.getXRot());
                 entity.getNavigation().stop();
-                return true;
+                return;
             }
         }
-        return false;
     }
 
-    public static boolean tryTeleportAround(Mob entity, BlockPos target) {
+    public static void tryTeleportAround(Mob entity, BlockPos target) {
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
             int y = randomIntInclusive(entity.getRandom(), -1, 2);
@@ -76,10 +74,9 @@ public class TeleportUtils {
             if (validTeleportPlace(entity, pos, s -> true)) {
                 entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, entity.getYRot(), entity.getXRot());
                 entity.getNavigation().stop();
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     public static boolean validTeleportPlace(Mob entity, BlockPos pos, Predicate<BlockState> validPos) {

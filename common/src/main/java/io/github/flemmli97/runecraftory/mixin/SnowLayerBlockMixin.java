@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
+import io.github.flemmli97.runecraftory.common.utils.SeasonUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -15,5 +16,6 @@ public abstract class SnowLayerBlockMixin {
 
     @Inject(method = "randomTick", at = @At(value = "RETURN"))
     private void meltingTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo info) {
+        SeasonUtils.doSnowMelt(state, level, pos, random);
     }
 }

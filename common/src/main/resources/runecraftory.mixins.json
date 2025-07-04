@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "compat.CompatJei",
-    "AbstractContainerMenuAccessor",
     "AttributeAccessor",
     "AttributeMapAccessor",
     "AttributeInstanceMixin",
@@ -33,7 +32,6 @@
     "MobMixin",
     "PlayerMixin",
     "PoiTypeAccessor",
-    "PoolsMixin",
     "RandomizableCBEMixin",
     "ShapelessRecipeAccessor",
     "ServerLevelMixin",
@@ -58,7 +56,6 @@
     "HumanoidModelMixin",
     "ItemInHandRendererMixin",
     "ItemRendererMixin",
-    "ParticleEngineMixin",
     "LocalPlayerMixin",
     "LanguageManagerMixin",
     "LevelRendererMixin",

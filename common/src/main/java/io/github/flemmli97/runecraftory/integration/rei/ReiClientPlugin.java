@@ -17,13 +17,13 @@ public class ReiClientPlugin implements REIClientPlugin {
     @Override
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new SextupleCategory(CraftingIdentifier.FORGING));
-        registry.addWorkstations(CraftingIdentifier.FORGING.identifier(), EntryStacks.of(ModItems.ITEM_BLOCK_FORGE.get()));
+        registry.addWorkstations(CraftingIdentifier.FORGING.identifier(), EntryStacks.of(ModItems.FORGE.get()));
         registry.add(new SextupleCategory(CraftingIdentifier.CHEMISTRY));
-        registry.addWorkstations(CraftingIdentifier.CHEMISTRY.identifier(), EntryStacks.of(ModItems.ITEM_BLOCK_CHEM.get()));
+        registry.addWorkstations(CraftingIdentifier.CHEMISTRY.identifier(), EntryStacks.of(ModItems.CHEMISTRY_SET.get()));
         registry.add(new SextupleCategory(CraftingIdentifier.COOKING));
-        registry.addWorkstations(CraftingIdentifier.COOKING.identifier(), EntryStacks.of(ModItems.ITEM_BLOCK_COOKING.get()));
+        registry.addWorkstations(CraftingIdentifier.COOKING.identifier(), EntryStacks.of(ModItems.COOKING_TABLE.get()));
         registry.add(new SextupleCategory(CraftingIdentifier.ARMOR));
-        registry.addWorkstations(CraftingIdentifier.ARMOR.identifier(), EntryStacks.of(ModItems.ITEM_BLOCK_ACCESS.get()));
+        registry.addWorkstations(CraftingIdentifier.ARMOR.identifier(), EntryStacks.of(ModItems.ACCESSORY_WORKBENCH.get()));
     }
 
     @Override

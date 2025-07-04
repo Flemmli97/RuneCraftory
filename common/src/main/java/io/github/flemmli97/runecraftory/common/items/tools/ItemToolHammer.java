@@ -134,7 +134,7 @@ public class ItemToolHammer extends PickaxeItem {
         BlockState state = world.getBlockState(pos);
         if (canHammer && state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
-                if (((ServerPlayer) entity).gameMode.destroyBlock(pos)) {
+                if (serverPlayer.gameMode.destroyBlock(pos)) {
                     world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
                     serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, world.getBlockState(pos)));
                     return HammerState.BREAK;

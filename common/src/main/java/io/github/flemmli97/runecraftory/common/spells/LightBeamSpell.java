@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBeam;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public class LightBeamSpell extends Spell {
             return false;
         EntityLightBeam beam = new EntityLightBeam(level, entity);
         beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
-        ProjectileUtil.shoot(entity, beam, 1);
+        ProjectileUtils.shoot(entity, beam, 1);
         level.addFreshEntity(beam);
         playSound(entity, ModSounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

@@ -306,6 +306,7 @@ public class RunecraftoryCommand {
         return i;
     }
 
+    @SuppressWarnings("unchecked")
     private static int castSpell(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
         Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
@@ -318,6 +319,7 @@ public class RunecraftoryCommand {
         return success;
     }
 
+    @SuppressWarnings("unchecked")
     private static int applySpellTo(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
         Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
@@ -328,9 +330,9 @@ public class RunecraftoryCommand {
                 if (stack.getItem() instanceof ItemStaffBase) {
                     StaffData data = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT);
                     stack.set(ModDataComponentTypes.STAFF.get(), switch (tier) {
-                        case 3 -> data.setTier3Spell(spell.value());
-                        case 2 -> data.setTier2Spell(spell.value());
-                        default -> data.setTier1Spell(spell.value());
+                        case 3 -> data.setTier3Spell(spell);
+                        case 2 -> data.setTier2Spell(spell);
+                        default -> data.setTier1Spell(spell);
                     });
                     success++;
                 }

@@ -55,7 +55,6 @@ import io.github.flemmli97.runecraftory.client.particles.RuneyParticle;
 import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
 import io.github.flemmli97.runecraftory.client.particles.SkelefangParticle;
 import io.github.flemmli97.runecraftory.client.particles.TornadoParticle;
-import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.RenderRuney;
@@ -446,7 +445,6 @@ public class ClientRegister {
         consumer.register(ModParticles.SMOKE.get(), ColoredParticle.LightParticleFactory::new);
         consumer.register(ModParticles.STATIC_LIGHT.get(), ColoredParticle.NoGravityParticleFactory::new);
         consumer.register(ModParticles.CIRCLING_LIGHT.get(), CirclingParticle.CirclingFactoryBase::new);
-        consumer.register(ModParticles.VORTEX.get(), VortexParticle.VortexFactoryBase::new);
         consumer.register(ModParticles.WIND.get(), ColoredParticle.NoGravityParticleFactory::new);
         consumer.register(ModParticles.SLEEP.get(), HeartParticle.Provider::new);
         consumer.register(ModParticles.POISON.get(), HeartParticle.Provider::new);

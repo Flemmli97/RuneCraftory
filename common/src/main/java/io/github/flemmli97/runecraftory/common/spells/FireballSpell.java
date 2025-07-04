@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ProjectileUtil;
+import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +26,7 @@ public class FireballSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityFireball ball = new EntityFireball(level, entity, this.big);
-        ProjectileUtil.shoot(entity, ball, 1, 0);
+        ProjectileUtils.shoot(entity, ball, 1, 0);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.big ? 1 : 0.8f));
         level.addFreshEntity(ball);
         playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

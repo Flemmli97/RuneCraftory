@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public abstract class UpgradingCraftingBlockEntity extends CraftingBlockEntity {
 
     private final SaveItemContainer upgradeContainer;
 
-    public UpgradingCraftingBlockEntity(BlockEntityType<?> blockEntityType, EnumCrafting type, BlockPos blockPos, BlockState blockState) {
+    public UpgradingCraftingBlockEntity(BlockEntityType<?> blockEntityType, CraftingType type, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, type, blockPos, blockState);
         this.upgradeContainer = new SaveItemContainer(this, 2) {
             @Override

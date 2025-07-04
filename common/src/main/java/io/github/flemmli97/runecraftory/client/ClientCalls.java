@@ -116,9 +116,7 @@ public class ClientCalls {
                     x += ClientConfig.creativeInventoryOffsetX;
                     y += ClientConfig.creativeInventoryOffsetY;
                 }
-                cons.accept(new InfoButton(x, y, screen, b -> {
-                    LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN));
-                }));
+                cons.accept(new InfoButton(x, y, screen, b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN))));
             }
         }
     }

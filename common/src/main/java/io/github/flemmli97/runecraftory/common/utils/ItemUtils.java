@@ -32,10 +32,6 @@ public class ItemUtils {
         spawnItemAtEntity(player, hammer);
     }
 
-    public static int getChargeAmount(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP).getTierLevel();
-    }
-
     public static int getChargeTime(LivingEntity entity) {
         return Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
     }

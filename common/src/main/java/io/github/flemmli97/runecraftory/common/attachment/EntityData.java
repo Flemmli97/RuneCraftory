@@ -34,7 +34,7 @@ public class EntityData {
     public SleepState getSleepState(LivingEntity entity) {
         if (!this.isSleeping())
             return SleepState.NONE;
-        if (entity instanceof SleepingEntity sleeping && sleeping.hasSleepingAnimation())
+        if (entity instanceof SleepingEntity sleepingEntity && sleepingEntity.hasSleepingAnimation())
             return SleepState.CUSTOM;
         return SleepState.VANILLA;
     }

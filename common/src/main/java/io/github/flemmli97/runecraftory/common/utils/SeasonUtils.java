@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SeasonUtils {
@@ -43,14 +42,14 @@ public class SeasonUtils {
 
     // Unused atm. TODO: Have a way to mark player placed snow so that doesnt melt
     public static void doSnowMelt(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (GeneralConfig.seasonedSnow && random.nextInt(5) == 0) {
-            Biome biome = level.getBiome(pos).value();
-            float def = ((BiomeAccessor) (Object) biome).biomeTemp(pos);
-            float seasonal = seasonBasedTemp(level, pos, biome);
-            if (def != seasonal && seasonal < 0.15) {
-                SnowLayerBlock.dropResources(state, level, pos);
-                level.removeBlock(pos, false);
-            }
-        }
+//        if (GeneralConfig.seasonedSnow && random.nextInt(5) == 0) {
+//            Biome biome = level.getBiome(pos).value();
+//            float def = ((BiomeAccessor) (Object) biome).biomeTemp(pos);
+//            float seasonal = seasonBasedTemp(level, pos, biome);
+//            if (def != seasonal && seasonal < 0.15) {
+//                SnowLayerBlock.dropResources(state, level, pos);
+//                level.removeBlock(pos, false);
+//            }
+//        }
     }
 }

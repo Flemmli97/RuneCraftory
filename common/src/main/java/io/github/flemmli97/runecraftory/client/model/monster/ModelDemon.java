@@ -35,7 +35,6 @@ public class ModelDemon<T extends EntityDemon> extends EntityModel<T> implements
             this.ridingPosition = model.getPart("ridingPos");
         });
         this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
-        ;
     }
 
     @Override

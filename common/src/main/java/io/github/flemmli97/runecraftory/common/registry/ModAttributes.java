@@ -22,9 +22,9 @@ public class ModAttributes {
     public static final Collection<RegistryEntrySupplier<Attribute, ?>> PLAYER_ATTRIBUTES = new ArrayList<>();
 
     public static final Comparator<Holder<Attribute>> SORTED = (h1, h2) -> {
-        if (h1.value() == Attributes.MAX_HEALTH && h2.value() != Attributes.MAX_HEALTH)
+        if (h1.value() == Attributes.MAX_HEALTH.value() && h2.value() != Attributes.MAX_HEALTH.value())
             return -1;
-        if (h1.value() != Attributes.MAX_HEALTH && h2.value() == Attributes.MAX_HEALTH)
+        if (h1.value() != Attributes.MAX_HEALTH.value() && h2.value() == Attributes.MAX_HEALTH.value())
             return 1;
         if (h1.value() instanceof OrderedAttribute o1) {
             if (h2.value() instanceof OrderedAttribute o2)

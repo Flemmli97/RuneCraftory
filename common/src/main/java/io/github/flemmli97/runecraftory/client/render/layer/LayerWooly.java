@@ -28,7 +28,7 @@ public class LayerWooly<T extends EntityWooly> extends RenderLayer<T, ModelWooly
     public void render(PoseStack stack, MultiBufferSource buf, int light, T wooly, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!wooly.isSheared() && !wooly.isInvisible()) {
             int color = CommonColors.WHITE;
-            if (wooly.hasCustomName() && "jeb_".equals(wooly.getName().getContents())) {
+            if (wooly.hasCustomName() && "jeb_".equals(wooly.getName().getString())) {
                 int tick = wooly.tickCount / 25 + wooly.getId();
                 int colorCount = DyeColor.values().length;
                 int l = tick % colorCount;

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.core.BlockPos;
@@ -23,10 +23,10 @@ public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
     public static final String DISPLAY_PREFIX = "runecraftory.container.crafting.";
 
     private final SaveItemContainer container;
-    private final EnumCrafting type;
+    private final CraftingType type;
     private int craftingIndex;
 
-    public CraftingBlockEntity(BlockEntityType<?> blockEntityType, EnumCrafting type, BlockPos blockPos, BlockState blockState) {
+    public CraftingBlockEntity(BlockEntityType<?> blockEntityType, CraftingType type, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
         this.type = type;
         this.container = new SaveItemContainer(this, 6);
@@ -76,7 +76,7 @@ public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
         this.craftingIndex = 0;
     }
 
-    public EnumCrafting craftingType() {
+    public CraftingType craftingType() {
         return this.type;
     }
 }

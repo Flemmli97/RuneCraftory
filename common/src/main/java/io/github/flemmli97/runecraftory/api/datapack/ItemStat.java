@@ -235,7 +235,7 @@ public class ItemStat {
 
     private static String format(Holder<Attribute> att, double n) {
         String sign = n > 0 ? "+" : "";
-        if (att.value() == Attributes.MOVEMENT_SPEED) {
+        if (att.value() == Attributes.MOVEMENT_SPEED.value()) {
             double val = ((int) (n * 100)) / 100d;
             if (val == 0)
                 return null;

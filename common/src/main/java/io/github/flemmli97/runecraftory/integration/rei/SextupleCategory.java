@@ -36,10 +36,10 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
     @Override
     public Renderer getIcon() {
         return switch (this.identifier.craftingType()) {
-            case FORGE -> EntryStacks.of(ModItems.ITEM_BLOCK_FORGE.get());
-            case ARMOR -> EntryStacks.of(ModItems.ITEM_BLOCK_ACCESS.get());
-            case CHEM -> EntryStacks.of(ModItems.ITEM_BLOCK_CHEM.get());
-            case COOKING -> EntryStacks.of(ModItems.ITEM_BLOCK_COOKING.get());
+            case FORGE -> EntryStacks.of(ModItems.FORGE.get());
+            case ACCESSORY_WORKBENCH -> EntryStacks.of(ModItems.ACCESSORY_WORKBENCH.get());
+            case CHEMISTRY_SET -> EntryStacks.of(ModItems.CHEMISTRY_SET.get());
+            case COOKING_TABLE -> EntryStacks.of(ModItems.COOKING_TABLE.get());
         };
     }
 
@@ -70,7 +70,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
                     .tooltip(Component.translatable("runecraftory.recipe_integration.locked"))));
         }
         widgets.add(Widgets.createSlot(new Point(bounds.getX() + 97, bounds.getY() + 15))
-                .backgroundEnabled(false).entries(display.getOutputEntries().get(0)));
+                .backgroundEnabled(false).entries(display.getOutputEntries().getFirst()));
         return widgets;
     }
 

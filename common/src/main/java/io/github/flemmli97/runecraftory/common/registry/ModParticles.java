@@ -34,7 +34,6 @@ public class ModParticles {
     public static final RegistryEntrySupplier<ParticleType<?>, ParticleType<ColoredParticleData>> BLINK = registerColoredParticleType("blink", false);
     public static final RegistryEntrySupplier<ParticleType<?>, ParticleType<ColoredParticleData>> STATIC_LIGHT = registerColoredParticleType("static_light", false);
     public static final RegistryEntrySupplier<ParticleType<?>, ParticleTypeContainer<ColoredParticleData4f>> CIRCLING_LIGHT = register("circling_light", false, ColoredParticleData4f::codec4f, ColoredParticleData4f::streamCodec4f);
-    public static final RegistryEntrySupplier<ParticleType<?>, ParticleTypeContainer<ColoredParticleData4f>> VORTEX = register("vortex", false, ColoredParticleData4f::codec4f, ColoredParticleData4f::streamCodec4f);
     public static final RegistryEntrySupplier<ParticleType<?>, ParticleType<ColoredParticleData>> WIND = registerColoredParticleType("wind", false);
     public static final RegistryEntrySupplier<ParticleType<?>, SimpleParticleType> LIGHTNING = register("lightning", false);
     public static final RegistryEntrySupplier<ParticleType<?>, ParticleTypeContainer<ColoredParticleData4f>> TORNADO = register("tornado", false, ColoredParticleData4f::codec4f, ColoredParticleData4f::streamCodec4f);

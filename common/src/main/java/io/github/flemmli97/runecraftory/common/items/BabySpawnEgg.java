@@ -131,8 +131,6 @@ public class BabySpawnEgg extends Item {
         }
         Entity e = type.create(level, EntityType.createDefaultStackConfig(level, stack, player), pos, spawnType, updateLocation, doCollisionOffset);
         if (e instanceof EntityNPCBase npc) {
-//            if (forgeCheck && EventCalls.INSTANCE.specialSpawnCall((Mob) e, level, pos.getX(), pos.getY(), pos.getZ(), null, spawnType))
-//                return null;
             npc.tryUpdateName(Component.literal(data.name().get()));
             npc.getFamily().setFather(data.father());
             npc.getFamily().setMother(data.mother());
