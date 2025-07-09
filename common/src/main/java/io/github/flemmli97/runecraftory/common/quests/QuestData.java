@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.impls.progression.EntityTracker;
@@ -74,7 +75,7 @@ public class QuestData implements PlayerQuestData {
 
     @Override
     public long getRandomSeed(@Nullable ResourceLocation quest) {
-        return 0;
+        return this.dailySeed;
     }
 
     public boolean acceptQuest(ResourceLocation id) {
@@ -89,7 +90,7 @@ public class QuestData implements PlayerQuestData {
             return false;
         }
         this.currentQuests.add(new QuestProgress(quest, this, 0));
-//        this.player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_YES, this.player.getSoundSource(), this.player.getX(), this.player.getY(), this.player.getZ(), 1, 1.2f));
+        EntityUtils.playSoundForPlayer(this.player, SoundEvents.VILLAGER_YES, 1, 1.2f);
         return true;
     }
 
@@ -126,24 +127,18 @@ public class QuestData implements PlayerQuestData {
                 }
                 case PARTIAL_COMPLETE -> completion.put(prog.getQuest().id, QuestState.PARTIAL_COMPLETE);
                 case PARTIAL -> {
-//                    this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                    EntityUtils.playSoundForPlayer(this.player, SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
                     tasks.forEach(t -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                             t.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
                 }
                 case NOTHING -> {
-//                    this.player.level.playSound(null, this.player.getX(), this.player.getY(), this.player.getZ(), SoundEvents.VILLAGER_NO, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                    EntityUtils.playSoundForPlayer(this.player, SoundEvents.VILLAGER_NO, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
                 }
             }
         }
         this.currentQuests.removeAll(completed);
         return completion;
     }
-
-//    @Override
-//    public RandomS getRandom(@Nullable ResourceLocation quest) {
-//        this.questRandom.setSeed(this.dailySeed);
-//        return this.questRandom;
-//    }
 
     @Override
     public void addTickableProgress(QuestProgress progress) {

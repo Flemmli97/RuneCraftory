@@ -1,0 +1,25 @@
+{
+  "type": "runecraftory:fruit_tree_sprout",
+  "config": {
+    "foliage_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "runecraftory:grape_leaves",
+        "Properties": {
+          "distance": "7",
+          "persistent": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    "trunk_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "runecraftory:grape_wood",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    }
+  }
+}

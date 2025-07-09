@@ -101,7 +101,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                     }
                     if (this.combatTick > 600 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
                         BlockPos restrict = this.getRestrictCenter();
-                        if (this.level().dimension().equals(this.restrictDimension)) {
+                        if (this.level().dimension() == this.restrictDimension) {
                             TeleportSpell.safeTeleportTo(this, restrict.getX(), restrict.getY(), restrict.getZ());
                         } else {
                             ServerLevel serverLevel = this.getServer().getLevel(this.restrictDimension);

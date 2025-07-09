@@ -18,18 +18,8 @@ public abstract class CameraMixin {
     @WrapOperation(method = "setRotation", at = @At(value = "INVOKE", target = "Lorg/joml/Quaternionf;rotationYXZ(FFF)Lorg/joml/Quaternionf;", remap = false))
     private Quaternionf cameraInject(Quaternionf instance, float angleY, float angleX, float angleZ, Operation<Quaternionf> original) {
         float[] rotations = new float[]{angleY, angleX, angleZ};
-        boolean[] changed = {false};
         ClientCalls.renderShaking((Camera) (Object) this, angleY, angleX, 0, this.partialTickTime,
-                f -> {
-                    rotations[0] = f;
-                    changed[0] = true;
-                }, f -> {
-                    rotations[1] = f;
-                    changed[0] = true;
-                }, f -> {
-                    rotations[2] = f;
-                    changed[0] = true;
-                });
+                f -> rotations[0] = f, f -> rotations[1] = f, f -> rotations[2] = f);
         return original.call(instance, rotations[0], rotations[1], rotations[2]);
     }
 }

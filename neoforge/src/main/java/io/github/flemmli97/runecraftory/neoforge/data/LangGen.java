@@ -40,13 +40,16 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.core.Holder;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
@@ -189,6 +192,9 @@ public class LangGen implements DataProvider {
         for (RegistryEntrySupplier<MobEffect, ?> reg : ModEffects.EFFECTS.getEntries()) {
             this.add(reg.get(), this.simpleTranslation(reg.getID()));
         }
+        for (RegistryEntrySupplier<SoundEvent, ? extends SoundEvent> reg : ModSounds.SOUND_EVENTS.getEntries()) {
+            this.add(reg.asHolder());
+        }
 
         for (EnumDay day : EnumDay.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));
@@ -218,8 +224,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.generic.no", "No");
 
         this.add("runecraftory.tooltip.item.level", "Level: %s");
-        this.add("runecraftory.tooltip.item.buy", "Buy: %s$");
-        this.add("runecraftory.tooltip.item.sell", "Sell: %s$");
+        this.add("runecraftory.tooltip.item.buy", "Buy: %sG");
+        this.add("runecraftory.tooltip.item.sell", "Sell: %sG");
         this.add("runecraftory.tooltip.item.difficulty", "Upgrade Difficulty: %s");
         this.add("runecraftory.tooltip.item.upgrade", "Upgrade");
         this.add("runecraftory.tooltip.item.attribute", "%s: %s");
@@ -482,7 +488,7 @@ public class LangGen implements DataProvider {
         this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
         this.add(Smith.BARN_ACTION_SUCCESS, "Thank you %s for your purchase.");
         this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
-        this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
+        this.add(Smith.BARN_COST, "A barn costs %1$sG and following materials:");
         this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
         this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
 
@@ -498,13 +504,13 @@ public class LangGen implements DataProvider {
         this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
         this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
-        this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
+        this.add(BathhouseAttendant.BATH_COST, "Cost: %sG");
 
         this.add(Doctor.CURE_ACTION, "Cure");
         this.add(Doctor.CURE_ACTION_DESC, "Cure all negative status effects");
         this.add(Doctor.CURE_ACTION_SUCCESS, "There you go. Please take more care in the future.");
         this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
-        this.add(Doctor.CURE_COST, "Cost: %s$");
+        this.add(Doctor.CURE_COST, "Cost: %sG");
 
         this.add("runecraftory.npc.schedule.work", "From: %1$s - %2$s");
         this.add("runecraftory.npc.schedule.work.2", "And: %1$s - %2$s");
@@ -855,6 +861,12 @@ public class LangGen implements DataProvider {
 
     public void add(MobEffect key, String name) {
         this.add(key.getDescriptionId(), name);
+    }
+
+    public void add(Holder<SoundEvent> key) {
+        String path = key.getKey().location().getPath();
+        path.substring(path.indexOf(".")).replace(".", "_");
+        this.add(key.getKey().location().toString(), this.simpleTranslation(path.substring(path.indexOf(".")).replace(".", "_")));
     }
 
     public void addEntityType(Supplier<? extends EntityType<?>> key, String name) {

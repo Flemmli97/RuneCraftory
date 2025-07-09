@@ -12,11 +12,8 @@ import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.AttackMeleeAction;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.PartyTargetAction;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.RunAwayAction;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.SpellAttackAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SerializableBehaviours;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.ColorSetting;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
@@ -31,12 +28,14 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFea
 import io.github.flemmli97.runecraftory.common.entities.npc.features.TypedIndexRange;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Unit;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -62,27 +61,45 @@ public class NPCDataGen extends NPCDataProvider {
     @Override
     protected void add(HolderLookup.Provider provider) {
         ResourceLocation genericAttack = this.addAttackActions(RuneCraftory.modRes("generic_melee_attack"), new NPCAttackActions.Builder()
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new AttackMeleeAction(UniformGenerator.between(30, 80)))));
+                .addSequence(1)
+                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .timeout(UniformGenerator.between(30, 80))
+                .end());
 
         ResourceLocation meleeAndFireball = this.addAttackActions(RuneCraftory.modRes("melee_fireball_attack"), new NPCAttackActions.Builder()
-                .addAction(new NPCAttackActions.ActionBuilder(5)
-                        .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(UniformGenerator.between(25, 40), 7))
-                        .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
+                .addSequence(5)
+                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .timeout(UniformGenerator.between(30, 80))
+                .end()
+                .addSequence(1)
+                .add(ModNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
+                .add(ModNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(ModSpells.FIREBALL.get())))
+                .timeout(UniformGenerator.between(50, 100))
+                .end());
         ResourceLocation meleeAndHeal = this.addAttackActions(RuneCraftory.modRes("melee_heal_attack"), new NPCAttackActions.Builder()
-                .addAction(new NPCAttackActions.ActionBuilder(5)
-                        .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(UniformGenerator.between(25, 40), 7))
-                        .action(new PartyTargetAction(ModSpells.CURE_ALL.get(), false, UniformGenerator.between(20, 40)))));
+                .addSequence(5)
+                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .timeout(UniformGenerator.between(30, 80))
+                .end()
+                .addSequence(1)
+                .add(ModNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 4, 7)))
+                .add(ModNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(ModSpells.CURE_ALL.get())))
+                .timeout(UniformGenerator.between(40, 80))
+                .end());
         ResourceLocation meleeAndWater = this.addAttackActions(RuneCraftory.modRes("melee_water_attack"), new NPCAttackActions.Builder()
-                .addAction(new NPCAttackActions.ActionBuilder(5)
-                        .action(new AttackMeleeAction(UniformGenerator.between(30, 80))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(UniformGenerator.between(25, 40), 7))
-                        .action(new SpellAttackAction(ModSpells.WATER_LASER.get(), 8, false, UniformGenerator.between(20, 40), UniformGenerator.between(10, 20)))));
+                .addSequence(5)
+                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .timeout(UniformGenerator.between(30, 80))
+                .end()
+                .addSequence(1)
+                .add(ModNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
+                .add(ModNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(ModSpells.WATER_LASER.get())))
+                .timeout(UniformGenerator.between(50, 100))
+                .end());
 
         ResourceLocation trashGift = this.addGiftData(RuneCraftory.modRes("trash"),
                 GiftData.builder(RunecraftoryTags.Items.GENERIC_TRASH, "runecraftory.gift.trash", "Trash"));

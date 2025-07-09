@@ -31,7 +31,7 @@ public class S2CEntityDataSyncAll implements CustomPacketPayload {
         }
     };
 
-    private boolean sleeping, paralysis, cold, poison, stunned;
+    private final boolean sleeping, paralysis, cold, poison, stunned;
     private final int entityID;
 
     public S2CEntityDataSyncAll(LivingEntity entity) {

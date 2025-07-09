@@ -31,7 +31,6 @@
     "MobAccessor",
     "MobMixin",
     "PlayerMixin",
-    "PoiTypeAccessor",
     "RandomizableCBEMixin",
     "ShapelessRecipeAccessor",
     "ServerLevelMixin",

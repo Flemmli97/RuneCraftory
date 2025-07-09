@@ -1,11 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 
@@ -44,5 +41,4 @@ public class SyncableDatas {
 
     public static final SyncableEntityData.SyncedEntityData<MobAttackExt.TargetPosition> TARGET_POS = SyncableEntityData.register(RuneCraftory.modRes("target_position"), TARGET_POSITION);
     public static final SyncableEntityData.SyncedEntityData<Vec3> VEC_3 = SyncableEntityData.register(RuneCraftory.modRes("vec_3"), VEC3);
-    public static final SyncableEntityData.SyncedEntityData<NPCJob> NPC_JOB = SyncableEntityData.register(RuneCraftory.modRes("npc_job"), ByteBufCodecs.registry(ModNPCJobs.JOB_REGISTRY_KEY));
 }

@@ -1,44 +1,44 @@
-{
-  "actions": [
-    {
-      "concurrent_actions": [
-        {
-          "type": "runecraftory:melee_attack",
-          "cooldown": 20.0,
-          "speed": 1.2,
-          "walk_time": {
-            "type": "minecraft:uniform",
-            "max": 80.0,
-            "min": 30.0
-          }
-        }
-      ],
-      "weight": 5
+[
+  {
+    "cooldown": 20.0,
+    "sequence": [
+      {
+        "type": "runecraftory:walk_to",
+        "close_enough": 1,
+        "walk_speed": 1.0
+      },
+      {
+        "type": "runecraftory:attack_with_weapon"
+      }
+    ],
+    "time_out": {
+      "type": "minecraft:uniform",
+      "max": 80.0,
+      "min": 30.0
     },
-    {
-      "concurrent_actions": [
-        {
-          "type": "runecraftory:run_away",
-          "duration": {
-            "type": "minecraft:uniform",
-            "max": 40.0,
-            "min": 25.0
-          },
-          "max_dist": 7.0,
-          "speed": 1.3
-        },
-        {
-          "type": "runecraftory:party_target_action",
-          "cooldown": {
-            "type": "minecraft:uniform",
-            "max": 40.0,
-            "min": 20.0
-          },
-          "ignore_seal": false,
-          "spell": "runecraftory:cure_all"
-        }
-      ],
-      "weight": 1
-    }
-  ]
-}
+    "weight": 5
+  },
+  {
+    "cooldown": 20.0,
+    "sequence": [
+      {
+        "type": "runecraftory:keep_distance",
+        "max": 7.0,
+        "min": 4.0,
+        "walk_speed": 1.0
+      },
+      {
+        "type": "runecraftory:attack_with_spell",
+        "amount": 1.0,
+        "ignore_seal": false,
+        "spell": "runecraftory:cure_all"
+      }
+    ],
+    "time_out": {
+      "type": "minecraft:uniform",
+      "max": 80.0,
+      "min": 40.0
+    },
+    "weight": 1
+  }
+]

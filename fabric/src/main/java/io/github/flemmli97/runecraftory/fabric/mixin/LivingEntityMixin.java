@@ -64,7 +64,4 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
     public void runecraftory$effectCuringProcess(boolean inProgress) {
         this.runecraftory$EffectCuringProcess = inProgress;
     }
-
-    @Shadow
-    protected abstract void onEffectRemoved(MobEffectInstance effect);
 }

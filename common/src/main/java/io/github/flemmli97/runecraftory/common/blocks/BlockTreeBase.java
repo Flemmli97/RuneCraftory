@@ -1,10 +1,14 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.mixinhelper.LevelSnapshotHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -17,40 +21,50 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Growable {
 
-    public static final MapCodec<BlockTreeBase> CODEC = simpleCodec(BlockTreeBase::new);
+    public static final MapCodec<BlockTreeBase> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(propertiesCodec(),
+                    ResourceKey.codec(Registries.CONFIGURED_FEATURE).fieldOf("stump").forGetter(d -> d.stump),
+                    ResourceKey.codec(Registries.CONFIGURED_FEATURE).fieldOf("stage_1").forGetter(d -> d.stage1),
+                    ResourceKey.codec(Registries.CONFIGURED_FEATURE).fieldOf("stage_2").forGetter(d -> d.stage2),
+                    LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("seed").forGetter(d -> d.sapling)
+            ).apply(inst, BlockTreeBase::new));
 
     public static final int MAX_AGE = 4;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
 
-//    private final Supplier<ConfiguredFeature<?, ?>> stump;
-//    private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1;
-//    private final Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2;
-//    private final Supplier<? extends Item> seedItem;
+    private final ResourceKey<ConfiguredFeature<?, ?>> stump;
+    private final ResourceKey<ConfiguredFeature<?, ?>> stage1;
+    private final ResourceKey<ConfiguredFeature<?, ?>> stage2;
+    protected final LazyResolvedRegistryEntry<Item> sapling;
 
-    public BlockTreeBase(Properties properties) {
+    public BlockTreeBase(Properties properties, ResourceKey<ConfiguredFeature<?, ?>> stump, ResourceKey<ConfiguredFeature<?, ?>> stage1,
+                         ResourceKey<ConfiguredFeature<?, ?>> stage2, ResourceKey<Item> seed) {
         super(properties);
+        this.stump = stump;
+        this.stage1 = stage1;
+        this.stage2 = stage2;
+        this.sapling = new LazyResolvedRegistryEntry<>(seed);
     }
 
-    public BlockTreeBase(Properties properties, Supplier<ConfiguredFeature<?, ?>> stump, Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree1,
-                         Supplier<ConfiguredFeature<TreeConfiguration, ?>> tree2, Supplier<? extends Item> seedItem) {
-        super(properties);
-//        this.stump = stump;
-//        this.tree1 = tree1;
-//        this.tree2 = tree2;
-//        this.seedItem = seedItem;
+    private BlockTreeBase(BlockBehaviour.Properties prop, ResourceKey<ConfiguredFeature<?, ?>> stump, ResourceKey<ConfiguredFeature<?, ?>> stage1,
+                          ResourceKey<ConfiguredFeature<?, ?>> stage2, LazyResolvedRegistryEntry<Item> seed) {
+        super(prop);
+        this.stump = stump;
+        this.stage1 = stage1;
+        this.stage2 = stage2;
+        this.sapling = seed;
     }
 
     @Override
@@ -63,34 +77,36 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
     }
 
     public boolean growTree(ServerLevel level, BlockPos pos, BlockState state, RandomSource rand) {
-        return false;
-//        return switch (state.getValue(AGE)) {
-//            case 2 -> {
-//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-//                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-//                    tree.onRemove(level, false);
-//                }
-//                boolean result = this.tree2.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
-//                yield result;
-//            }
-//            case 1 -> {
-//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-//                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-//                    tree.onRemove(level, false);
-//                }
-//                boolean result = this.tree1.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-//                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
-//                yield result;
-//            }
-//            case 0 -> this.stump.get().place(level, level.getChunkSource().getGenerator(), rand, pos);
-//            default -> {
-//                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-//                    tree.update(level);
-//                }
-//                yield false;
-//            }
-//        };
+        return switch (state.getValue(AGE)) {
+            case 2 -> {
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
+                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+                    tree.onRemove(level, false);
+                }
+                boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
+                        .getOrThrow(this.stage2).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
+                yield result;
+            }
+            case 1 -> {
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
+                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+                    tree.onRemove(level, false);
+                }
+                boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
+                        .getOrThrow(this.stage1).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
+                ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
+                yield result;
+            }
+            case 0 -> level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
+                    .getOrThrow(this.stump).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
+            default -> {
+                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+                    tree.update(level);
+                }
+                yield false;
+            }
+        };
     }
 
     @Override

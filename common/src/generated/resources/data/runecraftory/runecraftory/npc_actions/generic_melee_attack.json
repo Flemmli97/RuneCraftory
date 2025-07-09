@@ -1,19 +1,21 @@
-{
-  "actions": [
-    {
-      "concurrent_actions": [
-        {
-          "type": "runecraftory:melee_attack",
-          "cooldown": 20.0,
-          "speed": 1.2,
-          "walk_time": {
-            "type": "minecraft:uniform",
-            "max": 80.0,
-            "min": 30.0
-          }
-        }
-      ],
-      "weight": 1
-    }
-  ]
-}
+[
+  {
+    "cooldown": 20.0,
+    "sequence": [
+      {
+        "type": "runecraftory:walk_to",
+        "close_enough": 1,
+        "walk_speed": 1.0
+      },
+      {
+        "type": "runecraftory:attack_with_weapon"
+      }
+    ],
+    "time_out": {
+      "type": "minecraft:uniform",
+      "max": 80.0,
+      "min": 30.0
+    },
+    "weight": 1
+  }
+]

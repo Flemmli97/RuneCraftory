@@ -29,7 +29,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -113,20 +113,18 @@ public class RuneCraftoryFabric implements ModInitializer {
 
 //        SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
 
-        DataPackHandler.addListeners(listener -> {
-            ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
-                @Override
-                public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                    listener.insertRegistryAccess(reg);
-                    return listener.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
-                }
+        DataPackHandler.addListeners(listener -> ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                listener.insertRegistryAccess(reg);
+                return listener.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+            }
 
-                @Override
-                public ResourceLocation getFabricId() {
-                    return listener.id();
-                }
-            });
-        });
+            @Override
+            public ResourceLocation getFabricId() {
+                return listener.id();
+            }
+        }));
 //        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
 
         ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
@@ -219,7 +217,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
         ModPoiTypes.POI.registerContent();
-        ModNPCActions.ACTIONS.register().registerContent();
+        ModNPCBehaviour.BEHAVIOURS.register().registerContent();
         ModAttackActions.ATTACK_ACTIONS.register().registerContent();
         ModArmorEffects.ARMOR_EFFECTS.register().registerContent();
         ModNPCLooks.NPC_FEATURES.register().registerContent();

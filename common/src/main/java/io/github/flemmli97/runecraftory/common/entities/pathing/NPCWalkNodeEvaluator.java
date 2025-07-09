@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,12 +39,12 @@ public class NPCWalkNodeEvaluator extends WalkNodeEvaluator {
         }
         return node;
     }
-//
-//    @Override
-//    protected PathType evaluateBlockPathType(BlockGetter level, boolean canOpenDoors, boolean canEnterDoors, BlockPos pos, PathType nodeType) {
-//        PathType t = super.evaluateBlockPathType(level, canOpenDoors, canEnterDoors, pos, nodeType);
-//        if (t == PathType.UNPASSABLE_RAIL)
-//            return PathType.OPEN;
-//        return t;
-//    }
+
+    @Override
+    public PathType getPathType(PathfindingContext context, int x, int y, int z) {
+        PathType type = super.getPathType(context, x, y, z);
+        if (type == PathType.UNPASSABLE_RAIL)
+            return PathType.OPEN;
+        return type;
+    }
 }

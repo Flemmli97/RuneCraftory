@@ -63,7 +63,7 @@ public class UpgradeOutputSlot extends Slot {
             ModCriteria.CHANGE_ELEMENT.get().trigger(serverPlayer);
         PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
         if (stack.getItem() instanceof ItemStaffBase) {
-            if (DataPackHandler.INSTANCE.itemStatManager().get(material.getItem()).map(s -> s.getTier1Spell() != null || s.getTier2Spell() != null || s.getTier3Spell() != null).orElse(false))
+            if (DataPackHandler.INSTANCE.itemStatManager().get(material.getItem()).map(s -> s.getTier1Spell().isPresent() || s.getTier2Spell().isPresent() || s.getTier3Spell().isPresent()).orElse(false))
                 ModCriteria.CHANGE_SPELL.get().trigger(serverPlayer);
         }
         data.useRunePoints(this.container.rpCost(), true);

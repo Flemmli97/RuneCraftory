@@ -34,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
+import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -89,6 +90,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Unit;
+import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -111,7 +113,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -137,8 +138,12 @@ import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
+import net.tslat.smartbrainlib.api.core.behaviour.AllApplicableBehaviours;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtAttackTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
@@ -442,6 +447,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public void customServerAiStep() {
         super.customServerAiStep();
         this.tickBrain(this);
+        if (this.tickCount % 10 == 0) {
+            if (this.isStaying()) {
+                BrainUtils.setMemory(this, ModMemoryTypes.STAYING.get(), Unit.INSTANCE);
+            } else {
+                BrainUtils.clearMemory(this, ModMemoryTypes.STAYING.get());
+            }
+        }
         if (!(this.getControllingPassenger() instanceof Player) && this.getMoveControl().operation != MoveControl.Operation.WAIT
                 && this.getDeltaMovement().lengthSqr() > 0.0005) {
             double d0 = this.getMoveControl().getSpeedModifier();
@@ -548,8 +560,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public BrainActivityGroup<? extends BaseMonster> getCoreTasks() {
         return BrainActivityGroup.coreTasks(
                 new FloatToSurfaceOfFluid<BaseMonster>().startCondition(BaseMonster::canFloatInWater),
-                new SetRandomLookTarget<>(),
-                new SetPlayerLookTarget<>(),
                 new SetTargetFromRider<>(),
                 new FollowEntityEx<BaseMonster, Player>()
                         .startFollowingWhen((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 8. : 12)
@@ -557,8 +567,22 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         .stopFollowingWithin((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 2. : 6)
                         .teleportToTargetAfter((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 20. : 24)
                         .following(BaseMonster::getOwner).speedMod(1.05f)
+                        .speedMod(1.1f)
                         .startCondition(m -> m.behaviourState() == Behaviour.FOLLOW || m.behaviourState() == Behaviour.FOLLOW_DISTANCE),
-                new LookAtTargetSink(40, 80));
+                this.lookBehaviour(),
+                new LookAtTarget<>().runFor(entity -> entity.getRandom().nextIntBetweenInclusive(40, 100))
+                        .whenStopping(m -> BrainUtils.clearMemory(m, MemoryModuleType.LOOK_TARGET)));
+    }
+
+    protected ExtendedBehaviour<? extends BaseMonster> lookBehaviour() {
+        return new AllApplicableBehaviours<BaseMonster>(
+                new LookAtAttackTarget<>(),
+                new OneRandomBehaviour<>(
+                        new SetRandomLookTarget<>().lookChance(ConstantFloat.of(1)),
+                        new SetPlayerLookTarget<>()
+                ).startCondition(m -> m.getRandom().nextFloat() < 0.1 && !BrainUtils.hasMemory(m, MemoryModuleType.WALK_TARGET))
+        ).startCondition(e -> !BrainUtils.hasMemory(e, MemoryModuleType.ATTACK_TARGET)
+                && !e.isSleeping() && !e.playDeath());
     }
 
     @Override
@@ -598,7 +622,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
-        map.put(Activity.REST, new BrainActivityGroup<BaseMonster>(Activity.REST).priority(20).behaviours(new Idle<>())
+        map.put(ModActivities.STAY.get(), new BrainActivityGroup<BaseMonster>(ModActivities.STAY.get()).priority(20).behaviours(new Idle<>())
                 .onlyStartWithMemoryStatus(ModMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
         map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
                 .priority(20).behaviours(
@@ -613,7 +637,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public List<Activity> getActivityPriorities() {
-        return ObjectArrayList.of(Activity.REST, Activity.WORK, Activity.FIGHT, Activity.IDLE);
+        return ObjectArrayList.of(ModActivities.STAY.get(), Activity.WORK, Activity.FIGHT, Activity.IDLE);
     }
 
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
@@ -654,6 +678,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public boolean isStaying() {
+        if (!this.isTamed()) {
+            return false;
+        }
+        if (this.isInWaterOrBubble() && !this.canBreatheUnderwater()) {
+            return false;
+        }
+        if (!this.onGround() && !this.isNoGravity()) {
+            return false;
+        }
         return this.behaviour == Behaviour.STAY;
     }
 
@@ -678,7 +711,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
             BrainUtils.clearMemory(this, ModMemoryTypes.FARMING.get());
-            BrainUtils.clearMemory(this, ModMemoryTypes.STAYING.get());
             switch (this.behaviourState()) {
                 case WANDER_HOME -> {
                     if (this.getOwner() != null) {
@@ -716,7 +748,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
                 }
                 case STAY -> {
-                    BrainUtils.setMemory(this, ModMemoryTypes.STAYING.get(), Unit.INSTANCE);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
                 }
@@ -929,7 +960,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     // "Disable" this as we don't use it and it will mess with the AI check
     @Override
     protected AABB getAttackBoundingBox() {
-        return this.getBoundingBox();
+        return this.getBoundingBox().inflate(0.5);
     }
 
     @Override
@@ -1837,14 +1868,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
         EntityUtils.foodHealing(this, food.getHPGain());
         EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
-        if (food.potionHeals() != null)
+        if (food.potionHeals() != null) {
             for (Holder<MobEffect> s : food.potionHeals()) {
                 this.removeEffect(s);
             }
-        if (food.potionApply() != null)
+        }
+        if (food.potionApply() != null) {
             for (SimpleEffect s : food.potionApply()) {
                 this.addEffect(s.create());
             }
+        }
         return true;
     }
 

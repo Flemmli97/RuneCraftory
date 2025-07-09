@@ -74,8 +74,8 @@ public class BlockMonsterBarn extends BaseEntityBlock {
         if (!player.level().isClientSide && owner != null) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             if (data.onBarnFailMine(pos))
-                player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
-                        .getProfileCache().get(owner).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
+                player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner",
+                        player.getServer().getProfileCache().get(owner).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
         }
         return 0;
     }
@@ -100,8 +100,8 @@ public class BlockMonsterBarn extends BaseEntityBlock {
             } else if (owner != null) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
                 if (data.onBarnFailMine(pos))
-                    player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner", player.getServer()
-                            .getProfileCache().get(owner).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
+                    player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner",
+                            player.getServer().getProfileCache().get(owner).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
             }
             return ItemInteractionResult.CONSUME;
         }

@@ -16,12 +16,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.schedule.Activity;
+import net.tslat.smartbrainlib.api.core.schedule.SmartBrainSchedule;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class NPCSchedule {
 
@@ -40,6 +43,10 @@ public class NPCSchedule {
         this(npc, new Schedule(random));
     }
 
+    public static WrappedSchedule forBrain(Supplier<NPCSchedule> sup) {
+        return new WrappedSchedule(sup);
+    }
+
     public Activity getActivity(ServerLevel level) {
         if (!this.npc.getShop().hasSchedule)
             return Activity.IDLE;
@@ -49,7 +56,7 @@ public class NPCSchedule {
             return Activity.REST;
         if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getShop().hasWorkSchedule) {
             if (dayTime < this.schedule.workTime)
-                return ModActivities.EARLYIDLE.get();
+                return ModActivities.EARLY_IDLE.get();
             if (dayTime < this.schedule.breakTime)
                 return Activity.WORK;
             if (dayTime < this.schedule.workTimeAfter)
@@ -84,11 +91,10 @@ public class NPCSchedule {
     }
 
     public List<Component> viewSchedule() {
+        if (!this.npc.getShop().hasSchedule || !this.npc.getShop().hasWorkSchedule) {
+            return List.of();
+        }
         if (this.view == null) {
-            if (!this.npc.getShop().hasSchedule || !this.npc.getShop().hasWorkSchedule) {
-                this.view = ImmutableList.of();
-                return this.view;
-            }
             List<Component> newList = new ArrayList<>();
             boolean noBreaks = this.schedule.breakTime == this.schedule.workTimeAfter;
             newList.add(Component.translatable("runecraftory.npc.schedule.work", this.formatTime(this.schedule.workTime), noBreaks ? this.formatTime(this.schedule.doneWorkTime) : this.formatTime(this.schedule.breakTime)));
@@ -213,6 +219,20 @@ public class NPCSchedule {
 
         public Collection<EnumDay> getWorkDays() {
             return ImmutableSet.copyOf(this.workDays);
+        }
+    }
+
+    public static class WrappedSchedule extends SmartBrainSchedule {
+
+        private final Supplier<NPCSchedule> schedule;
+
+        public WrappedSchedule(Supplier<NPCSchedule> schedule) {
+            this.schedule = schedule;
+        }
+
+        @Override
+        public Activity tick(LivingEntity brainOwner) {
+            return this.schedule.get().getActivity((ServerLevel) brainOwner.level());
         }
     }
 }

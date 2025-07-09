@@ -85,7 +85,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + this.entity.friendPoints(this.minecraft.player),
                 this.leftPos + statX, this.topPos + statY + 13 * 4, 0, false);
 
-        RenderUtils.renderScaledEntityGui(graphics, this.leftPos + 13, this.topPos + 18, 52, 72, 27, 0, mouseX, mouseY, this.entity);
+        RenderUtils.renderScaledEntityGui(graphics, this.leftPos + 13, this.topPos + 18, 52, 72, 27, 3 / 16f, mouseX, mouseY, this.entity);
     }
 
     protected abstract void buttons();

@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionMan
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;

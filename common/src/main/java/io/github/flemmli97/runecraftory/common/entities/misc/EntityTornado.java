@@ -64,7 +64,7 @@ public class EntityTornado extends BaseDamageCloud {
             for (int i = 0; i < 8; i++) {
                 this.level().addParticle(new ColoredParticleData4f.Builder((49 + this.random.nextInt(25)) / 255F, (150 + this.random.nextInt(40)) / 255F, (18 + this.random.nextInt(25)) / 255F, 1)
                                 .withScale(0.2f).circle(0, 10).expandCircle(0.015f)
-                        .withOffset(this.random.nextInt(360))
+                                .withOffset(this.random.nextInt(360))
                                 .withSpeed(0.2f).build(ModParticles.TORNADO.get()),
                         this.position().x() + delta.x() + this.random.nextDouble() * 0.6 - 0.3,
                         this.position().y() - 0.1,

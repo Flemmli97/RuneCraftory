@@ -60,13 +60,10 @@ public class SetWalkTargetWithinDist<E extends PathfinderMob> extends ExtendedBe
             BrainUtils.setMemory(brain, MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityTracker(target, false), this.speedMod.apply(entity, target), (int) this.min));
         } else if (distSqr <= this.min * this.min) {
             int range = (int) (this.max - this.min);
-            for (int i = 0; i < 10; i++) {
-                Vec3 posAway = DefaultRandomPos.getPosAway(entity, range, range, target.position());
-                if (posAway != null) {
-                    BrainUtils.setMemory(brain, MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
-                    BrainUtils.setMemory(brain, MemoryModuleType.WALK_TARGET, new WalkTarget(posAway, this.speedMod.apply(entity, target), 0));
-                    break;
-                }
+            Vec3 posAway = DefaultRandomPos.getPosAway(entity, range, range, target.position());
+            if (posAway != null) {
+                BrainUtils.setMemory(brain, MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
+                BrainUtils.setMemory(brain, MemoryModuleType.WALK_TARGET, new WalkTarget(posAway, this.speedMod.apply(entity, target), 0));
             }
         } else {
             BrainUtils.clearMemory(brain, MemoryModuleType.WALK_TARGET);

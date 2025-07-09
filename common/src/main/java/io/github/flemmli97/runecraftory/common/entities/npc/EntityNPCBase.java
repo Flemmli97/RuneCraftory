@@ -1,13 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
 import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
@@ -18,20 +19,18 @@ import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
-import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
-import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.LookAtInteractingPlayerGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
-import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFindPOI;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFollowGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCWanderGoal;
-import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetFromMemory;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.AcquirePOITask;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.InvalidatePOITask;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.LookAtInteractingPlayer;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.OpenDoors;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetRainShelterTarget;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetWalkAroundPoiTarget;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SleepInBed;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
@@ -45,7 +44,6 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityLevelPkt;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
@@ -57,7 +55,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -72,12 +72,15 @@ import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToRestriction;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -93,6 +96,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -100,11 +104,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Unit;
+import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -120,14 +127,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Npc;
@@ -149,6 +155,33 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
+import net.tslat.smartbrainlib.api.SmartBrainOwner;
+import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
+import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
+import net.tslat.smartbrainlib.api.core.behaviour.AllApplicableBehaviours;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtAttackTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.InvalidateMemory;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.AvoidEntity;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
+import net.tslat.smartbrainlib.api.core.navigation.SmoothGroundNavigation;
+import net.tslat.smartbrainlib.api.core.schedule.SmartBrainSchedule;
+import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
+import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
+import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
+import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
+import net.tslat.smartbrainlib.util.BrainUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -160,28 +193,16 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt, MobUpdateHandler {
+public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt, SmartBrainOwner<EntityNPCBase> {
 
     public static final float PATH_FIND_LENGTH = 100;
 
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
-
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
-            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
-
-    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, PlayerModelAnimations.ANIMS).withChangeListener(anim -> {
-        if (this.getTarget() != null) {
-            this.lookAt(this.getTarget(), 360, 90);
-            this.targetPosition = TargetPosition.of(this.getTarget());
-        }
-        return false;
-    });
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -208,25 +229,24 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         }
         return false;
     };
-
-    public NearestAttackableTargetGoal<Mob> targetMobs = new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, true, this.targetPred);
-    public NPCWanderGoal wander = new NPCWanderGoal(this);
-    public HurtByTargetGoal hurt = new HurtByTargetGoal(this);
+    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, PlayerModelAnimations.ANIMS).withChangeListener(anim -> {
+        if (this.getTarget() != null) {
+            this.lookAt(this.getTarget(), 360, 90);
+            this.targetPosition = TargetPosition.of(this.getTarget());
+        }
+        return false;
+    });
 
     private final XpLevelHolder levelPair = new XpLevelHolder();
 
     private NPCJob shop = ModNPCJobs.NONE.get();
-
-    public boolean ignoreInit;
     private NPCData data = NPCData.DEFAULT_DATA;
     private NPCLook look = NPCLook.DEFAULT_LOOK;
     public final NPCFeatureContainer lookFeatures = new NPCFeatureContainer();
-    private NPCAttackActions attackActions = NPCAttackActions.DEFAULT;
+    private NPCAttackActions attackActions;
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
     private Map<String, GiftData> gifts;
     private final Random dataRandom = new Random();
-
-    private Activity activity = Activity.IDLE;
 
     private int foodBuffTick;
     private int playDeathTick;
@@ -240,15 +260,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     private Player entityToFollow;
     private UUID entityToFollowUUID;
 
-    private int sleepCooldown, tpCooldown;
+    private int tpCooldown;
 
     private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
     private int interactionMoveCooldown;
 
-    private final NPCSchedule schedule;
-
-    private BlockPos prevRestriction = BlockPos.ZERO;
-    private int prevRestrictionRadius = -1;
+    private final NPCSchedule schedule = new NPCSchedule(this, this.getRandom());
 
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
@@ -259,13 +276,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         super(type, level);
         this.levelPair.setLevel(LibConstants.BASE_LEVEL, LevelCalc::xpAmountForLevelUp);
         this.applyAttributes(true);
-        if (!level.isClientSide)
-            this.addGoal();
-        this.schedule = new NPCSchedule(this, this.getRandom());
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.24)
+        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.FOLLOW_RANGE, 32);
         for (RegistryEntrySupplier<Attribute, ?> att : ModAttributes.ENTITY_ATTRIBUTES)
             map.add(att.asHolder());
@@ -273,6 +287,27 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             map.add(att.asHolder());
         map.add(ModAttributes.ATTACK_RANGE.asHolder(), 1.5);
         return map;
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        GroundPathNavigation nav = new SmoothGroundNavigation(this, level) {
+
+            @Override
+            @Nullable
+            protected Path createPath(Set<BlockPos> targets, int regionOffset, boolean offsetUpward, int accuracy) {
+                return this.createPath(targets, regionOffset, offsetUpward, accuracy, PATH_FIND_LENGTH); //Increased pathfinding range
+            }
+
+            @Override
+            protected PathFinder createPathFinder(int i) {
+                this.nodeEvaluator = new NPCWalkNodeEvaluator();
+                this.nodeEvaluator.setCanPassDoors(true);
+                return new PathFinder(this.nodeEvaluator, i);
+            }
+        };
+        nav.setCanOpenDoors(true);
+        return nav;
     }
 
     protected void applyAttributes(boolean regenHealth) {
@@ -313,23 +348,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     public void recalcStatsFull() {
         this.applyAttributes(true);
-    }
-
-    public void addGoal() {
-        this.targetSelector.addGoal(1, this.targetMobs);
-        this.targetSelector.addGoal(0, this.hurt);
-
-        this.goalSelector.addGoal(0, new NPCFindPOI(this));
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(0, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYNPC));
-        this.goalSelector.addGoal(1, new AvoidWhenNotFollowing(this, LivingEntity.class, 8, 1.3, 1.2));
-        this.goalSelector.addGoal(1, new LookAtInteractingPlayerGoal(this));
-        this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(3, new RandomLookGoalAlive(this));
-        this.goalSelector.addGoal(2, new NPCAttackGoal<>(this));
-        this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.15, 9, 3, 20));
-        this.goalSelector.addGoal(4, this.wander);
+        this.updateStatsToLevel();
     }
 
     @Override
@@ -354,29 +373,291 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    protected Brain.Provider<?> brainProvider() {
-        return Brain.provider(MEMORY_TYPES, ImmutableList.of());
+    public List<? extends ExtendedSensor<? extends EntityNPCBase>> getSensors() {
+        return List.of(new NearbyPlayersSensor<>(),
+                new NearbyLivingEntitySensor<EntityNPCBase>()
+                        .setPredicate((target, entity) -> entity.targetPred.test(target))
+                        .setScanRate(e -> 10),
+                new HurtBySensor<>());
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
-        GroundPathNavigation nav = new GroundPathNavigation(this, level) {
+    public BrainActivityGroup<? extends EntityNPCBase> getCoreTasks() {
+        return BrainActivityGroup.coreTasks(
+                new FloatToSurfaceOfFluid<EntityNPCBase>(),
+                new InvalidatePOITask<>(MemoryModuleType.HOME, PoiTypes.HOME, EntityNPCBase::releaseBedPoi)
+                        .isStillValid(AcquirePOITask.bedPredicate()),
+                new AcquirePOITask<EntityNPCBase>(MemoryModuleType.HOME, PoiTypes.HOME).canAquire(AcquirePOITask.bedPredicate()
+                                .and(AcquirePOITask.withinRangeOf(EntityNPCBase::getWorkPlace)))
+                        .onAqcuire(e -> e.level().broadcastEntityEvent(this, (byte) 14)),
+                new InvalidatePOITask<>(MemoryModuleType.JOB_SITE,
+                        m -> this.getShop().matches(m),
+                        EntityNPCBase::releaseWorkplacePoi),
+                new AcquirePOITask<EntityNPCBase>(MemoryModuleType.JOB_SITE, m -> this.getShop().matches(m)).canAquire(AcquirePOITask.withinRangeOf(EntityNPCBase::getBedPos))
+                        .onAqcuire(e -> e.level().broadcastEntityEvent(this, (byte) 15))
+                        .startCondition(m -> m.getShop().hasPoi()),
+                new InvalidatePOITask<>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING, EntityNPCBase::releaseMeetingPoi),
+                new AcquirePOITask<EntityNPCBase>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING),
+                new InvalidateMemory<>(MemoryModuleType.HIDING_PLACE).invalidateIf((e, p) -> !e.level().isRaining()),
+                new FollowEntityEx<EntityNPCBase, Player>()
+                        .startFollowingWhen((e, f) -> e.behaviourState() == EntityNPCBase.Behaviour.FOLLOW ? 8. : 12)
+                        .ignoreIfTargetingTill(20)
+                        .stopFollowingWithin((e, f) -> e.behaviourState() == EntityNPCBase.Behaviour.FOLLOW ? 2. : 6)
+                        .teleportToTargetAfter((e, f) -> e.behaviourState() == EntityNPCBase.Behaviour.FOLLOW ? 20. : 24)
+                        .following(EntityNPCBase::followEntity).speedMod(1.05f)
+                        .speedMod(1.1f)
+                        .startCondition(m -> m.behaviourState() == EntityNPCBase.Behaviour.FOLLOW || m.behaviourState() == EntityNPCBase.Behaviour.FOLLOW_DISTANCE),
+                new OpenDoors<>(),
+                new AvoidEntity<EntityNPCBase>().avoiding(p -> p == BrainUtils.getMemory(this, MemoryModuleType.HURT_BY_ENTITY))
+                        .speedModifier(1.2f).startCondition(m -> m.followEntity() == null),
+                this.lookBehaviour(),
+                new LookAtTarget<>().runFor(entity -> entity.getRandom().nextIntBetweenInclusive(40, 100))
+                        .whenStopping(m -> BrainUtils.clearMemory(m, MemoryModuleType.LOOK_TARGET))
+        );
+    }
 
-            @Override
-            @Nullable
-            protected Path createPath(Set<BlockPos> targets, int regionOffset, boolean offsetUpward, int accuracy) {
-                return this.createPath(targets, regionOffset, offsetUpward, accuracy, PATH_FIND_LENGTH); //Increased pathfinding range
-            }
+    protected ExtendedBehaviour<? extends EntityNPCBase> lookBehaviour() {
+        return new AllApplicableBehaviours<>(
+                new LookAtInteractingPlayer(),
+                new LookAtAttackTarget<>(),
+                new OneRandomBehaviour<>(
+                        new SetRandomLookTarget<>().lookChance(ConstantFloat.of(1)),
+                        new SetPlayerLookTarget<>()
+                ).startCondition(m -> m.getRandom().nextFloat() < 0.1 && !BrainUtils.hasMemory(m, MemoryModuleType.WALK_TARGET))
+        ).startCondition(e -> !BrainUtils.hasMemory(e, MemoryModuleType.ATTACK_TARGET)
+                && !e.isSleeping() && !e.playDeath());
+    }
 
-            @Override
-            protected PathFinder createPathFinder(int i) {
-                this.nodeEvaluator = new NPCWalkNodeEvaluator();
-                this.nodeEvaluator.setCanPassDoors(true);
-                return new PathFinder(this.nodeEvaluator, i);
-            }
-        };
-        nav.setCanOpenDoors(true);
-        return nav;
+    @Override
+    public BrainActivityGroup<? extends EntityNPCBase> getIdleTasks() {
+        return BrainActivityGroup.idleTasks(
+                new MoveToWalkTarget<>(),
+                new FirstApplicableBehaviour<>(
+                        new SetRainShelterTarget<>(),
+                        new TargetOrRetaliate<EntityNPCBase>(),
+                        new SetMoveToRestriction<EntityNPCBase>(),
+                        new SetRandomWalkTarget<>().startCondition(m -> !m.level().isRaining() && m.getRandom().nextInt(120) == 0)
+                )
+        );
+    }
+
+    @Override
+    public BrainActivityGroup<? extends EntityNPCBase> getFightTasks() {
+        return BrainActivityGroup.fightTasks(
+                new InvalidateAttackTarget<EntityNPCBase>(),
+                this.getAttackActions().create()
+        );
+    }
+
+    @Override
+    public Map<Activity, BrainActivityGroup<? extends EntityNPCBase>> getAdditionalTasks() {
+        Map<Activity, BrainActivityGroup<? extends EntityNPCBase>> map = new HashMap<>();
+        map.put(ModActivities.STAY.get(), new BrainActivityGroup<EntityNPCBase>(ModActivities.STAY.get()).priority(20)
+                .onlyStartWithMemoryStatus(ModMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT)
+                .behaviours(new Idle<>()));
+        map.put(Activity.REST, new BrainActivityGroup<EntityNPCBase>(Activity.REST).priority(15)
+                .onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT)
+                .behaviours(new SleepInBed<>(), new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, EntityNPCBase::releaseBedPoi), new MoveToWalkTarget<>()));
+        map.put(ModActivities.EARLY_IDLE.get(), new BrainActivityGroup<EntityNPCBase>(ModActivities.EARLY_IDLE.get()).priority(15)
+                .onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT)
+                .behaviours(new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, EntityNPCBase::releaseBedPoi)
+                        .closeEnough(10), new MoveToWalkTarget<>(), new SetWalkAroundPoiTarget<>(MemoryModuleType.HOME, 10).startCondition(m -> m.getRandom().nextInt(120) == 0)));
+        map.put(Activity.WORK, new BrainActivityGroup<EntityNPCBase>(Activity.WORK).priority(15)
+                .onlyStartWithMemoryStatus(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT)
+                .behaviours(new SetWalkTargetFromMemory<>(MemoryModuleType.JOB_SITE, EntityNPCBase::releaseWorkplacePoi)
+                        .closeEnough(3), new MoveToWalkTarget<>(), new SetWalkAroundPoiTarget<>(MemoryModuleType.JOB_SITE, 3).startCondition(m -> m.getRandom().nextInt(120) == 0)));
+        map.put(Activity.MEET, new BrainActivityGroup<EntityNPCBase>(Activity.MEET).priority(15)
+                .onlyStartWithMemoryStatus(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)
+                .behaviours(new SetRainShelterTarget<>(),
+                        new AllApplicableBehaviours<>(new SetWalkTargetFromMemory<>(MemoryModuleType.MEETING_POINT, EntityNPCBase::releaseMeetingPoi).closeEnough(8),
+                                new SetWalkAroundPoiTarget<>(MemoryModuleType.MEETING_POINT, 8).startCondition(m -> m.getRandom().nextInt(60) == 0)
+                        ).startCondition(e -> !e.level().isRaining()),
+                        new MoveToWalkTarget<>()));
+        return map;
+    }
+
+    @Override
+    public SmartBrainSchedule getSchedule() {
+        // Returns null on init so this is why
+        return NPCSchedule.forBrain(() -> this.schedule);
+    }
+
+    @Override
+    public List<Activity> getActivityPriorities() {
+        return ObjectArrayList.of(ModActivities.STAY.get(), Activity.FIGHT, Activity.IDLE);
+    }
+
+    @Override
+    public Set<Activity> getScheduleIgnoringActivities() {
+        return ObjectArraySet.of(Activity.FIGHT, ModActivities.STAY.get());
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void refreshBrain(ServerLevel serverLevel) {
+        Brain<EntityNPCBase> brain = (Brain<EntityNPCBase>) this.getBrain();
+        brain.stopAll(serverLevel, this);
+        CompoundTag memories = this.saveMemories();
+        NbtOps nbtOps = NbtOps.INSTANCE;
+        this.brain = this.makeBrain(new Dynamic<>(nbtOps, nbtOps.createMap(ImmutableMap.of(nbtOps.createString("memories"), nbtOps.emptyMap()))));
+        this.readMemories(memories);
+    }
+
+    @Override
+    protected Brain.Provider<?> brainProvider() {
+        return new SmartBrainProvider<>(this, true);
+    }
+
+    public void setBehaviour(Behaviour behaviour) {
+        this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
+        this.behaviour = behaviour;
+        if (!this.level().isClientSide)
+            this.onSetBehaviour();
+    }
+
+    private void onSetBehaviour() {
+        if (this.behaviourState().following) {
+            if (this.followEntity() != null)
+                Platform.INSTANCE.getPlayerData(this.followEntity()).party.addPartyMember(this);
+        } else {
+            if (this.followEntity() != null)
+                Platform.INSTANCE.getPlayerData(this.followEntity()).party.removePartyMember(this);
+            this.setTarget(null);
+        }
+        this.getNavigation().stop();
+    }
+
+    public Behaviour behaviourState() {
+        return this.behaviour;
+    }
+
+    public boolean isStaying() {
+        if (this.isInWaterOrBubble() || !this.onGround()) {
+            return false;
+        }
+        return !this.interactingPlayers.isEmpty() || this.interactionMoveCooldown > 0 || this.behaviourState() == Behaviour.STAY;
+    }
+
+    public void interactWithPlayer(ServerPlayer player) {
+        this.interactingPlayers.add(player);
+        this.getNavigation().stop();
+    }
+
+    public void decreaseInteractingPlayers(ServerPlayer player) {
+        this.interactingPlayers.remove(player);
+        this.interactionMoveCooldown = 40;
+    }
+
+    public ServerPlayer getLastInteractedPlayer() {
+        if (this.interactingPlayers.isEmpty())
+            return null;
+        return this.interactingPlayers.getLast();
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.put("BrainMemories", this.saveMemories());
+        compound.put("MobLevel", this.xpLevel().save());
+        compound.putInt("FoodBuffTick", this.foodBuffTick);
+        compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
+        compound.put("RelationManager", this.relationManager.save());
+        if (this.entityToFollowUUID != null)
+            compound.putUUID("EntityToFollow", this.entityToFollowUUID);
+        compound.putInt("Behaviour", this.behaviourState().ordinal());
+        compound.put("NPCData", this.saveNPCData());
+        compound.put("DailyUpdater", this.updater.save());
+        compound.putInt("ProcreationCooldown", this.procreationCooldown);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.readMemories(compound.getCompound("BrainMemories"));
+        this.levelPair.read(compound.getCompound("MobLevel"));
+        this.foodBuffTick = compound.getInt("FoodBuffTick");
+        this.setPlayDeath(compound.getBoolean("PlayDeath"));
+        this.relationManager.load(compound.getCompound("RelationManager"));
+        if (compound.hasUUID("EntityToFollow"))
+            this.entityToFollowUUID = compound.getUUID("EntityToFollow");
+        try {
+            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
+        if (compound.contains("NPCData"))
+            this.loadNpcData(compound.getCompound("NPCData"));
+        this.updater.read(compound.getCompound("DailyUpdater"));
+        this.procreationCooldown = compound.getInt("ProcreationCooldown");
+    }
+
+    protected CompoundTag saveMemories() {
+        CompoundTag tag = new CompoundTag();
+        GlobalPos bed = this.getBedPos();
+        if (bed != null)
+            tag.put("BedPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, bed).getOrThrow());
+        GlobalPos job = this.getWorkPlace();
+        if (job != null)
+            tag.put("JobPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, job).getOrThrow());
+        GlobalPos meeting = this.getMeetingPos();
+        if (meeting != null)
+            tag.put("MeetingPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, meeting).getOrThrow());
+        return tag;
+    }
+
+    protected void readMemories(CompoundTag tag) {
+        GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("BedPos"))
+                .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.HOME, pos));
+        GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("JobPos"))
+                .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.JOB_SITE, pos));
+        GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("MeetingPos"))
+                .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.MEETING_POINT, pos));
+    }
+
+    private CompoundTag saveNPCData() {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
+        tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
+        tag.put("Profession", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getShop())
+                .getOrThrow());
+        tag.putBoolean("Male", this.isMale());
+        tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
+        tag.putInt("Birthday", this.getBirthday().getSecond());
+        tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
+        tag.put("Schedule", this.schedule.save());
+        tag.put("LookFeatures", this.lookFeatures.save(this.registryAccess()));
+        CompoundTag gifts = new CompoundTag();
+        this.gifts.forEach((s, g) -> gifts.putString(s, DataPackHandler.INSTANCE.giftManager().getId(g).toString()));
+        tag.put("GiftData", gifts);
+        return tag;
+    }
+
+    private void loadNpcData(CompoundTag tag) {
+        NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(ResourceLocation.parse(tag.getString("Data")));
+        this.look = DataPackHandler.INSTANCE.npcLookManager().get(ResourceLocation.parse(tag.getString("Look")));
+        this.setShop(ModNPCJobs.JOBS.registry().byNameCodec().parse(NbtOps.INSTANCE, tag.get("Profession"))
+                .getOrThrow());
+        this.setMale(tag.getBoolean("Male"));
+        try {
+            EnumSeason month = EnumSeason.values()[tag.getInt("BirthdayMonth")];
+            this.birthday = Pair.of(month, tag.getInt("Birthday"));
+        } catch (IllegalArgumentException e) {
+            this.getBirthday();
+        }
+        this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(ResourceLocation.parse(tag.getString("Combat")));
+        this.schedule.load(tag.getCompound("Schedule"));
+        try {
+            this.lookFeatures.read(tag.getCompound("LookFeatures"), this.registryAccess());
+        } catch (Exception e) {
+            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
+        }
+        CompoundTag gifts = tag.getCompound("GiftData");
+        ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
+        gifts.getAllKeys().forEach(key -> {
+            GiftData giftData = DataPackHandler.INSTANCE.giftManager().get(ResourceLocation.parse(gifts.getString(key)));
+            if (giftData != null)
+                b.put(key, giftData);
+        });
+        this.gifts = b.build();
+        this.setNPCData(data, true);
     }
 
     @Override
@@ -403,15 +684,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             }
             --this.interactionMoveCooldown;
             this.updater.tick();
-            this.updateActivity();
             this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
             if (this.foodBuffTick == 0) {
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
-            --this.sleepCooldown;
-            if (this.getSleepingPos().map(pos -> !pos.closerToCenterThan(this.position(), 1) || this.getActivity() != Activity.REST).orElse(false))
-                this.stopSleeping();
         }
         if (this.getAnimationHandler().getAnimation() == null)
             this.targetPosition = null;
@@ -429,7 +706,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                 Player follow = this.followEntity();
                 if (follow != null) {
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
-                    if (follow.level().dimension() != this.level().dimension()) {
+                    if (!follow.level().dimension().equals(this.level().dimension())) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level(), follow.blockPosition());
                         teleported = true;
                         this.tpCooldown = 20;
@@ -470,35 +747,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    public void setCustomName(@Nullable Component name) {
-        super.setCustomName(name);
-        if (this.getServer() != null) {
-            this.getFamily().updateName(this);
-            WorldHandler.get(this.getServer())
-                    .npcHandler.addNPC(this);
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.tickBrain(this);
+        if (this.tickCount % 10 == 0) {
+            if (this.isStaying()) {
+                BrainUtils.setMemory(this, ModMemoryTypes.STAYING.get(), Unit.INSTANCE);
+            } else {
+                BrainUtils.clearMemory(this, ModMemoryTypes.STAYING.get());
+            }
         }
-    }
-
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!(player instanceof ServerPlayer serverPlayer))
-            return InteractionResult.CONSUME;
-        if (this.isSleeping())
-            return InteractionResult.CONSUME;
-        if (this.getEntityToFollowUUID() != null && this.getEntityToFollowUUID().equals(serverPlayer.getUUID())) {
-            EntityUtils.sendAttributesTo(this, serverPlayer);
-        }
-        LoaderNetwork.INSTANCE.sendToPlayer(new S2CUpdateNPCData(this, this.relationManager.getFriendPointData(player.getUUID()).save()), serverPlayer);
-        LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
-        this.interactWithPlayer(serverPlayer);
-        this.lookAt(serverPlayer, 30, 30);
-        return InteractionResult.CONSUME;
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getPickResult() {
-        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -518,6 +776,44 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             double f = this.random.nextGaussian() * 0.02;
             this.level().addParticle(particleData, this.getRandomX(1.0), this.getRandomY() + 1.0, this.getRandomZ(1.0), d, e, f);
         }
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (!(player instanceof ServerPlayer serverPlayer))
+            return InteractionResult.CONSUME;
+        if (this.isSleeping())
+            return InteractionResult.CONSUME;
+        if (this.getEntityToFollowUUID() != null && this.getEntityToFollowUUID().equals(serverPlayer.getUUID())) {
+            EntityUtils.sendAttributesTo(this, serverPlayer);
+        }
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CUpdateNPCData(this, this.relationManager.getFriendPointData(player.getUUID()).save()), serverPlayer);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
+        this.interactWithPlayer(serverPlayer);
+        this.lookAt(serverPlayer, 30, 30);
+        return InteractionResult.CONSUME;
+    }
+
+    @Override
+    public void setCustomName(@Nullable Component name) {
+        super.setCustomName(name);
+        if (this.getServer() != null) {
+            this.getFamily().updateName(this);
+            WorldHandler.get(this.getServer())
+                    .npcHandler.addNPC(this);
+        }
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
+    }
+
+    @Override
+    public boolean onGivingItem(Player player, ItemStack stack) {
+        this.giftItem(player, stack);
+        return true;
     }
 
     public void giftItem(Player player, ItemStack stack) {
@@ -611,7 +907,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         if (slot != EquipmentSlot.MAINHAND || ItemNBT.isWeapon(stack) || stack.getItem() instanceof SwordItem || stack.getItem() instanceof AxeItem) {
             ItemStack copy = stack.copy();
             copy.setCount(1);
-            this.setItemSlot(slot, copy);
+            this.setItemSlot(slot == null ? EquipmentSlot.MAINHAND : slot, copy);
         }
         this.applyFoodEffect(stack);
         stack.setCount(count);
@@ -777,36 +1073,31 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.neededParentQuests);
     }
 
-    /**
-     * Gets the family of this npc. Returns null on client
-     */
-    @Nullable
-    public FamilyEntry getFamily() {
-        if (this.getServer() != null) {
-            return FamilyHandler.get(this.getServer())
-                    .getOrCreateEntry(this);
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.playDeath() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            return false;
         }
-        return null;
+        if (this.followEntity() != null && source.getEntity() != null) {
+            Player follow = this.followEntity();
+            if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).party.isPartyMember(source.getEntity()))
+                return false;
+        }
+        return super.hurt(source, amount);
     }
 
-    /**
-     * The player partner if npc is in a relationship with a player
-     */
-    @Nullable
-    public Player getPartner() {
-        FamilyEntry family = this.getFamily();
-        if (family != null) {
-            if (family.getPartner() != null && family.hasPlayerRelationShip())
-                return this.getServer().getPlayerList().getPlayer(family.getPartner());
+    @Override
+    protected void actuallyHurt(DamageSource source, float damageAmount) {
+        super.actuallyHurt(source, damageAmount);
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            FamilyEntry family;
+            if (this.getHealth() <= 0 && (this.followEntity() != null
+                    || ((family = this.getFamily()) != null && family.getPartner() != null && FamilyHandler.get(this.getServer())
+                    .getFamily(family.getPartner()).map(FamilyEntry::isPlayer).orElse(false)))) {
+                this.setHealth(0.01f);
+                this.setPlayDeath(true);
+            }
         }
-        return null;
-    }
-
-    public FamilyEntry.Relationship relationFor(UUID player) {
-        FamilyEntry entry = this.getFamily();
-        if (entry != null && player.equals(entry.getPartner()))
-            return entry.getRelationship();
-        return FamilyEntry.Relationship.NONE;
     }
 
     @Override
@@ -821,173 +1112,50 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    public XpLevelHolder xpLevel() {
-        return this.levelPair;
+    protected AABB getAttackBoundingBox() {
+        double reach = this.getAttributeValue(ModAttributes.ATTACK_RANGE.asHolder()) - (Math.sqrt(2.04) - 0.6);
+        return super.getAttackBoundingBox().inflate(reach);
+    }
+
+    public void handleAttack(AnimationState anim) {
+        this.getNavigation().stop();
     }
 
     @Override
-    public void setXPLevel(int level) {
-        this.xpLevel().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
-        this.updateStatsToLevel();
-    }
-
-    public void increaseLevel() {
-        this.xpLevel().setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
-        this.updateStatsToLevel();
-    }
-
-    public void addXp(float amount) {
-        boolean res = this.xpLevel().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
-        });
-        LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
-        if (res)
-            this.updateStatsToLevel();
-    }
-
-    public void updateStatsToLevel() {
-        if (!this.level().isClientSide)
-            LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
-        float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        ((AttributeMapAccessor) this.getAttributes()).getAttributes()
-                .forEach((att, inst) -> inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER));
-        if (this.data != null) {
-            Map<Holder<Attribute>, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
-            gain.forEach((att, val) -> {
-                val *= 0.01;
-                AttributeInstance inst = this.getAttribute(att);
-                if (inst != null) {
-                    float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                    if (att == Attributes.MAX_HEALTH) {
-                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.12f) * 0.015f;
-                    } else {
-                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.01f;
-                    }
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
-                    if (att == Attributes.MAX_HEALTH)
-                        this.setHealth(this.getMaxHealth() - preHealthDiff);
-                }
-            });
-            return;
-        }
-        int levelOffset = 1;
-        AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
-        if (inst != null) {
-            float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
-            this.setHealth(this.getMaxHealth() - preHealthDiff);
-        }
-        inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (inst != null) {
-            float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
-        }
-        inst = this.getAttribute(ModAttributes.DEFENCE.asHolder());
-        if (inst != null) {
-            float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
-        }
-        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
-        if (inst != null) {
-            float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
-        }
-        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder());
-        if (inst != null) {
-            float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
-        }
+    public AnimationHandler<?> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
-    public int friendPoints(UUID uuid) {
-        return this.relationManager.getFriendPointData(uuid).points.getLevel();
-    }
-
-    public int talkCount(UUID uuid) {
-        return this.relationManager.getFriendPointData(uuid).getTalkCount();
-    }
-
-    public void updateFriendPointsFrom(Player player, CompoundTag tag) {
-        this.relationManager.getFriendPointData(player.getUUID()).load(tag);
+    public Predicate<LivingEntity> validTargetPredicate() {
+        return this.hitPred;
     }
 
     @Override
-    public int baseXP() {
-        return 0;
-    }
-
-    @Override
-    public int baseMoney() {
-        return 0;
-    }
-
-    @Override
-    public boolean applyFoodEffect(ItemStack stack) {
-        if (this.level().isClientSide)
-            return false;
-        if (stack.getItem() == ModItems.OBJECT_X.get())
-            ItemObjectX.applyEffect(this, stack);
-        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
-        if (food == null) {
-            net.minecraft.world.food.FoodProperties mcFood = stack.get(DataComponents.FOOD);
-            this.eat(this.level(), stack);
-            if (mcFood != null) {
-                this.heal(mcFood.nutrition() * 0.5f);
-                return true;
-            }
-            return false;
-        }
-        this.eat(this.level(), stack);
-//        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-//        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
-//            this.removeFoodEffect();
-//            for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
-//                AttributeInstance inst = this.getAttribute(entry.getKey());
-//                if (inst == null)
-//                    continue;
-//                inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
-//                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
-//            }
-//            for (Map.Entry<Attribute, Double> entry : foodStats.getFirst().entrySet()) {
-//                AttributeInstance inst = this.getAttribute(entry.getKey());
-//                if (inst == null)
-//                    continue;
-//                inst.removeModifier(LibConstants.FOOD_UUID);
-//                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
-//            }
-//            this.foodBuffTick = food.duration();
-//        }
-//        EntityUtils.foodHealing(this, food.getHPGain());
-//        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
-//        if (food.potionHeals() != null)
-//            for (MobEffect s : food.potionHeals()) {
-//                this.removeEffect(s);
-//            }
-//        if (food.potionApply() != null)
-//            for (SimpleEffect s : food.potionApply()) {
-//                this.addEffect(s.create());
-//            }
-        return true;
-    }
-
-    @Override
-    public void removeFoodEffect() {
-        ((AttributeMapAccessor) this.getAttributes())
-                .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(LibConstants.FOOD_MODIFIER);
-                    inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
-                });
-    }
-
-    @Override
-    public boolean onGivingItem(Player player, ItemStack stack) {
-        this.giftItem(player, stack);
-        return true;
+    public TargetPosition getTargetPosition() {
+        return this.targetPosition;
     }
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(S2CEntityLevelPkt.create(this), player);
+    }
+
+    @Override
+    public void setLevelCallback(EntityInLevelCallback levelCallback) {
+        super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::followEntity, levelCallback));
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+        this.randomizeData(null, true);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData);
     }
 
     @Override
@@ -1000,15 +1168,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    public void setLevelCallback(EntityInLevelCallback levelCallback) {
-        super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::followEntity, levelCallback));
-    }
-
-    @Override
     public void remove(RemovalReason reason) {
-        this.releasePOI(this.getBedPos());
-        this.releasePOI(this.getWorkPlace());
-        this.releasePOI(this.getMeetingPos());
+        this.releaseBedPoi();
+        this.releaseWorkplacePoi();
+        this.releaseMeetingPoi();
         super.remove(reason);
         if (this.getServer() != null) {
             NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
@@ -1057,149 +1220,198 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.playDeath() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            return false;
-        }
-        if (this.followEntity() != null && source.getEntity() != null) {
-            Player follow = this.followEntity();
-            if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).party.isPartyMember(source.getEntity()))
-                return false;
-        }
-        return super.hurt(source, amount);
-    }
-
-    @Override
-    protected void actuallyHurt(DamageSource source, float damageAmount) {
-        super.actuallyHurt(source, damageAmount);
-        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            FamilyEntry family;
-            if (this.getHealth() <= 0 && (this.followEntity() != null
-                    || ((family = this.getFamily()) != null && family.getPartner() != null && FamilyHandler.get(this.getServer())
-                    .getFamily(family.getPartner()).map(FamilyEntry::isPlayer).orElse(false)))) {
-                this.setHealth(0.01f);
-                this.setPlayDeath(true);
-            }
-        }
-    }
-
-    @Override
     protected boolean isImmobile() {
         return super.isImmobile() || this.isVehicle() || this.playDeath();
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.put("MobLevel", this.xpLevel().save());
-        compound.putInt("FoodBuffTick", this.foodBuffTick);
-        compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
-
-        compound.put("RelationManager", this.relationManager.save());
-
-        if (this.entityToFollowUUID != null)
-            compound.putUUID("EntityToFollow", this.entityToFollowUUID);
-        compound.putInt("Behaviour", this.behaviourState().ordinal());
-        compound.put("NPCData", this.saveNPCData());
-        compound.put("DailyUpdater", this.updater.save());
-        compound.putInt("ProcreationCooldown", this.procreationCooldown);
+    public XpLevelHolder xpLevel() {
+        return this.levelPair;
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.levelPair.read(compound.getCompound("MobLevel"));
-        this.foodBuffTick = compound.getInt("FoodBuffTick");
-        this.setPlayDeath(compound.getBoolean("PlayDeath"));
+    public void setXPLevel(int level) {
+        this.xpLevel().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.updateStatsToLevel();
+    }
 
-        this.relationManager.load(compound.getCompound("RelationManager"));
+    public void increaseLevel() {
+        this.xpLevel().setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.updateStatsToLevel();
+    }
 
-        if (compound.hasUUID("EntityToFollow"))
-            this.entityToFollowUUID = compound.getUUID("EntityToFollow");
-        try {
-            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
+    public void addXp(float amount) {
+        boolean res = this.xpLevel().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
+        });
+        LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
+        if (res)
+            this.updateStatsToLevel();
+    }
+
+    public void updateStatsToLevel() {
+        if (!this.level().isClientSide)
+            LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
+        float preHealthDiff = this.getMaxHealth() - this.getHealth();
+        ((AttributeMapAccessor) this.getAttributes()).getAttributes()
+                .forEach((att, inst) -> inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER));
+        if (this.data != null) {
+            Map<Holder<Attribute>, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
+            gain.forEach((att, val) -> {
+                val *= 0.01;
+                AttributeInstance inst = this.getAttribute(att);
+                if (inst != null) {
+                    float multiplier = 1;
+                    if (att == Attributes.MAX_HEALTH) {
+                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.12f) * 0.015f;
+                    } else {
+                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.01f;
+                    }
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
+                    if (att == Attributes.MAX_HEALTH)
+                        this.setHealth(this.getMaxHealth() - preHealthDiff);
+                }
+            });
+            return;
         }
-        if (compound.contains("NPCData"))
-            this.loadNpcData(compound.getCompound("NPCData"));
-        this.updater.read(compound.getCompound("DailyUpdater"));
-        this.procreationCooldown = compound.getInt("ProcreationCooldown");
+        int levelOffset = 1;
+        AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
+        if (inst != null) {
+            float multiplier = 1;
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            this.setHealth(this.getMaxHealth() - preHealthDiff);
+        }
+        inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (inst != null) {
+            float multiplier = 1;
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+        }
+        inst = this.getAttribute(ModAttributes.DEFENCE.asHolder());
+        if (inst != null) {
+            float multiplier = 1;
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+        }
+        inst = this.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
+        if (inst != null) {
+            float multiplier = 1;
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+        }
+        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder());
+        if (inst != null) {
+            float multiplier = 1;
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+        }
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
-        if (!this.ignoreInit)
-            this.randomizeData(null, true);
-        return super.finalizeSpawn(level, difficulty, reason, spawnData);
+    public int friendPoints(UUID uuid) {
+        return this.relationManager.getFriendPointData(uuid).points.getLevel();
     }
 
-    public void handleAttack(AnimationState anim) {
-        this.getNavigation().stop();
-    }
-
-    public void npcAttack(Consumer<LivingEntity> cons) {
-        this.attackableEntites().forEach(cons);
-    }
-
-    public List<LivingEntity> attackableEntites() {
-//        ItemStack held = this.getMainHandItem();
-//        if (held.getItem() instanceof IAOEWeapon weapon) {
-//            return RayTraceUtils.getEntitiesIn(this,
-//                    weapon.attackOBB(this, held, false),
-//                    true, EntityTypeTest.forClass(LivingEntity.class), this.hitPred);
-//        }
-//        LivingEntity target = this.getTarget();
-//        if (target == null)
-//            return List.of();
-//        double range = this.getMeleeAttackRangeSqr(target);
-//        if (this.distanceToSqr(target.getX(), target.getY(), target.getZ()) <= range)
-//            return List.of(target);
-        return List.of();
-    }
-
-//
-//    @Override
-//    public double getMeleeAttackRangeSqr(LivingEntity target) {
-//        double reachSqr = this.getAttributeValue(ModAttributes.ATTACK_RANGE.asHolder()) - 0.3 + target.getBbWidth() * 0.5;
-//        reachSqr = reachSqr * reachSqr;
-//        return reachSqr;
-//    }
-
-    @Override
-    public void startSleeping(BlockPos pos) {
-        if (this.sleepCooldown <= 0)
-            super.startSleeping(pos);
+    public int talkCount(UUID uuid) {
+        return this.relationManager.getFriendPointData(uuid).getTalkCount();
     }
 
     @Override
-    public void stopSleeping() {
-        super.stopSleeping();
-        this.sleepCooldown = 60;
+    public int baseXP() {
+        return 0;
     }
 
+    @Override
+    public int baseMoney() {
+        return 0;
+    }
+
+    /**
+     * Gets the family of this npc. Returns null on client
+     */
     @Nullable
-    @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+    public FamilyEntry getFamily() {
+        if (this.getServer() != null) {
+            return FamilyHandler.get(this.getServer())
+                    .getOrCreateEntry(this);
+        }
         return null;
     }
 
-    @Override
-    public AnimationHandler<?> getAnimationHandler() {
-        return this.animationHandler;
+    /**
+     * The player partner if npc is in a relationship with a player
+     */
+    @Nullable
+    public Player getPartner() {
+        FamilyEntry family = this.getFamily();
+        if (family != null) {
+            if (family.getPartner() != null && family.hasPlayerRelationShip())
+                return this.getServer().getPlayerList().getPlayer(family.getPartner());
+        }
+        return null;
+    }
+
+    public FamilyEntry.Relationship relationFor(UUID player) {
+        FamilyEntry entry = this.getFamily();
+        if (entry != null && player.equals(entry.getPartner()))
+            return entry.getRelationship();
+        return FamilyEntry.Relationship.NONE;
     }
 
     @Override
-    public boolean hasRestriction() {
-        return super.hasRestriction() && this.getEntityToFollowUUID() == null;
+    public boolean applyFoodEffect(ItemStack stack) {
+        if (this.level().isClientSide)
+            return false;
+        if (stack.getItem() == ModItems.OBJECT_X.get())
+            ItemObjectX.applyEffect(this, stack);
+        FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
+        if (food == null) {
+            net.minecraft.world.food.FoodProperties mcFood = stack.get(DataComponents.FOOD);
+            this.eat(this.level(), stack);
+            if (mcFood != null) {
+                this.heal(mcFood.nutrition() * 0.5f);
+                return true;
+            }
+            return false;
+        }
+        this.eat(this.level(), stack);
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
+            this.removeFoodEffect();
+            for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getSecond().entrySet()) {
+                AttributeInstance inst = this.getAttribute(entry.getKey());
+                if (inst == null)
+                    continue;
+                inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER_MULTI, entry.getValue(), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            }
+            for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getFirst().entrySet()) {
+                AttributeInstance inst = this.getAttribute(entry.getKey());
+                if (inst == null)
+                    continue;
+                inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, entry.getValue(), AttributeModifier.Operation.ADD_VALUE));
+            }
+            this.foodBuffTick = food.duration();
+        }
+        EntityUtils.foodHealing(this, food.getHPGain());
+        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
+        if (food.potionHeals() != null) {
+            for (Holder<MobEffect> s : food.potionHeals()) {
+                this.removeEffect(s);
+            }
+        }
+        if (food.potionApply() != null) {
+            for (SimpleEffect s : food.potionApply()) {
+                this.addEffect(s.create());
+            }
+        }
+        return true;
     }
 
-//    @Override
-//    public EntityDimensions getDimensions(Pose pose) {
-//        SizeFeatureType.SizeFeature feat = this.lookFeatures.getFeature(ModNPCLooks.SIZE.get());
-//        if (feat != null)
-//            return super.getDimensions(pose).scale(feat.size());
-//        return super.getDimensions(pose);
-//    }
+    @Override
+    public void removeFoodEffect() {
+        ((AttributeMapAccessor) this.getAttributes())
+                .getAttributes().values().forEach(inst -> {
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER);
+                    inst.removeModifier(LibConstants.FOOD_MODIFIER_MULTI);
+                });
+    }
 
     public NPCJob getShop() {
         return this.shop;
@@ -1207,49 +1419,21 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     public void setShop(NPCJob shop) {
         this.shop = shop;
-        if (!this.level().isClientSide) {
-            S2CMobUpdate.send(this, SyncableDatas.NPC_JOB, this.shop);
+    }
+
+    public void handleUpdatePacket(Player player, CompoundTag friendPoints, CompoundTag schedule, NPCJob job) {
+        if (this.level().isClientSide) {
+            this.relationManager.getFriendPointData(player.getUUID()).load(friendPoints);
+            this.schedule.load(schedule);
+            this.setShop(job);
         }
-    }
-
-    public boolean isShopDefined() {
-        return !this.data.profession().isEmpty();
-    }
-
-    public boolean updateActivity() {
-        if (this.tickCount % 20 == 0 && this.level() instanceof ServerLevel serverLevel && this.interactingPlayers.isEmpty()) {
-            Activity prev = this.activity;
-            this.activity = this.getActivityForTime(serverLevel);
-            if (this.activity == ModActivities.EARLYIDLE.get() && this.getBedPos() != null && this.getBedPos().dimension() == this.level().dimension()) {
-                if (!this.getRestrictCenter().equals(this.getBedPos().pos())) {
-                    this.prevRestriction = this.getRestrictCenter();
-                    this.prevRestrictionRadius = (int) this.getRestrictRadius();
-                    this.restrictTo(this.getBedPos().pos(), 10);
-                }
-            } else if (this.prevRestrictionRadius >= 0) {
-                this.restrictTo(this.prevRestriction, this.prevRestrictionRadius);
-                this.prevRestriction = BlockPos.ZERO;
-                this.prevRestrictionRadius = -1;
-            }
-            return prev != this.activity;
-        }
-        return false;
-    }
-
-    public void syncActivity(CompoundTag tag) {
-        if (this.level().isClientSide)
-            this.schedule.load(tag);
     }
 
     public Activity getActivity() {
-        return this.activity;
+        return this.getBrain().getActiveNonCoreActivity().orElse(null);
     }
 
-    public Activity getActivityForTime(ServerLevel serverLevel) {
-        return this.schedule.getActivity(serverLevel);
-    }
-
-    public NPCSchedule getSchedule() {
+    public NPCSchedule getNPCSchedule() {
         return this.schedule;
     }
 
@@ -1257,28 +1441,44 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         return this.getBrain().getMemory(MemoryModuleType.JOB_SITE).orElse(null);
     }
 
-    public void setWorkPlace(GlobalPos pos) {
-        if (pos != null)
-            this.level().broadcastEntityEvent(this, (byte) 15);
-        this.getBrain().setMemory(MemoryModuleType.JOB_SITE, pos);
+    public void releaseWorkplacePoi() {
+        if (this.getShop().hasPoi())
+            this.releasePoi(MemoryModuleType.JOB_SITE, this.getShop()::matches);
     }
 
     public GlobalPos getBedPos() {
         return this.getBrain().getMemory(MemoryModuleType.HOME).orElse(null);
     }
 
-    public void setBedPos(GlobalPos pos) {
-        if (pos != null)
-            this.level().broadcastEntityEvent(this, (byte) 14);
-        this.getBrain().setMemory(MemoryModuleType.HOME, pos);
+    public void releaseBedPoi() {
+        this.releasePoi(MemoryModuleType.HOME, h -> h.is(PoiTypes.HOME));
     }
 
     public GlobalPos getMeetingPos() {
         return this.getBrain().getMemory(MemoryModuleType.MEETING_POINT).orElse(null);
     }
 
-    public void setMeetingPos(GlobalPos pos) {
-        this.getBrain().setMemory(MemoryModuleType.MEETING_POINT, pos);
+    public void releaseMeetingPoi() {
+        this.releasePoi(MemoryModuleType.MEETING_POINT, h -> h.is(PoiTypes.MEETING));
+    }
+
+    public void releasePoi(MemoryModuleType<GlobalPos> memory, Predicate<Holder<PoiType>> test) {
+        if (this.level() instanceof ServerLevel level) {
+            MinecraftServer server = level.getServer();
+            GlobalPos current = BrainUtils.getMemory(this, memory);
+            BrainUtils.clearMemory(this, memory);
+            if (current != null) {
+                ServerLevel serverLevel = level.dimension().equals(current.dimension()) ? level : server.getLevel(current.dimension());
+                if (serverLevel != null) {
+                    PoiManager poiManager = serverLevel.getPoiManager();
+                    Optional<Holder<PoiType>> opt = poiManager.getType(current.pos());
+                    if (opt.isPresent() && test.test(opt.get())) {
+                        poiManager.release(current.pos());
+                        DebugPackets.sendPoiTicketCountPacket(serverLevel, current.pos());
+                    }
+                }
+            }
+        }
     }
 
     public ShopState canTrade() {
@@ -1304,20 +1504,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
             return pos.pos().closerToCenterThan(this.position(), range);
         }
         return false;
-    }
-
-    public void releasePOI(GlobalPos globalPos) {
-        if (globalPos == null)
-            return;
-        ServerLevel serverLevel = globalPos.dimension() != this.level().dimension() ? this.level().getServer().getLevel(globalPos.dimension()) : (ServerLevel) this.level();
-        if (serverLevel == null) {
-            return;
-        }
-        PoiManager poiManager = serverLevel.getPoiManager();
-        if (poiManager.exists(globalPos.pos(), p -> true)) {
-            poiManager.release(globalPos.pos());
-            DebugPackets.sendPoiTicketCountPacket(serverLevel, globalPos.pos());
-        }
     }
 
     public Player followEntity() {
@@ -1362,47 +1548,30 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         return true;
     }
 
-    public void setBehaviour(Behaviour behaviour) {
-        this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
-        this.behaviour = behaviour;
-        if (!this.level().isClientSide)
-            this.onSetBehaviour();
+    @Override
+    public boolean hasRestriction() {
+        return super.hasRestriction() && this.getEntityToFollowUUID() == null;
     }
 
-    private void onSetBehaviour() {
-        if (this.behaviourState().following) {
-            if (this.followEntity() != null)
-                Platform.INSTANCE.getPlayerData(this.followEntity()).party.addPartyMember(this);
-        } else {
-            if (this.followEntity() != null)
-                Platform.INSTANCE.getPlayerData(this.followEntity()).party.removePartyMember(this);
-            this.setTarget(null);
-        }
-        this.getNavigation().stop();
+    @Override
+    public void stopSleeping() {
+        super.stopSleeping();
+        BrainUtils.setMemory(this, MemoryModuleType.LAST_WOKEN, this.level().getGameTime());
     }
 
-    public Behaviour behaviourState() {
-        return this.behaviour;
+    @Override
+    public float getScale() {
+        float size = super.getScale();
+        SizeFeatureType.SizeFeature feat = this.lookFeatures.getFeature(ModNPCLooks.SIZE.get());
+        if (feat != null)
+            return size * feat.size();
+        return size;
     }
 
-    public boolean isStaying() {
-        return !this.interactingPlayers.isEmpty() || this.interactionMoveCooldown > 0 || this.behaviourState() == Behaviour.STAY;
-    }
-
-    public void interactWithPlayer(ServerPlayer player) {
-        this.interactingPlayers.add(player);
-        this.getNavigation().stop();
-    }
-
-    public void decreaseInteractingPlayers(ServerPlayer player) {
-        this.interactingPlayers.remove(player);
-        this.interactionMoveCooldown = 40;
-    }
-
-    public ServerPlayer getLastInteractedPlayer() {
-        if (this.interactingPlayers.isEmpty())
-            return null;
-        return this.interactingPlayers.getLast();
+    @Nullable
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+        return null;
     }
 
     public boolean procreateWith(Entity other) {
@@ -1420,15 +1589,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         this.procreationProgress = 60;
         this.procreationEntity = other;
         return true;
-    }
-
-    public void tryUpdateName(Component component) {
-        if (this.data.name() == null)
-            this.setCustomName(component);
-    }
-
-    public Optional<String> getDataName() {
-        return Optional.ofNullable(this.data.name());
     }
 
     public boolean canProcreate() {
@@ -1473,6 +1633,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         return true;
     }
 
+    public void tryUpdateName(Component component) {
+        if (this.data.name() == null)
+            this.setCustomName(component);
+    }
+
+    public Optional<String> getDataName() {
+        return Optional.ofNullable(this.data.name());
+    }
+
     public boolean isMale() {
         return this.entityData.get(MALE);
     }
@@ -1499,7 +1668,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     public NPCAttackActions getAttackActions() {
         if (this.attackActions == null) {
-            if (this.data == NPCData.DEFAULT_DATA)
+            if (this.data == null || this.data == NPCData.DEFAULT_DATA || this.data.combatActions() == null)
                 this.attackActions = NPCAttackActions.DEFAULT;
             else {
                 List<ResourceLocation> actions = this.data.combatActions();
@@ -1614,6 +1783,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         this.data = data;
         this.dataRandom.setSeed(this.getUUID().hashCode());
         if (!load) {
+            this.releaseWorkplacePoi();
             this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
                     : ModNPCJobs.JOBS.registry().getRandom(this.random).map(Holder::value).get());
             this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
@@ -1671,78 +1841,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         if (this.xpLevel().getLevel() < this.data.baseLevel()) {
             this.setXPLevel(this.data.baseLevel());
         }
+        this.refreshBrain((ServerLevel) this.level());
         this.refreshDimensions();
         if (!this.level().isClientSide)
             LoaderNetwork.INSTANCE.sendToTracking(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
     }
 
-    private CompoundTag saveNPCData() {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
-        tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
-        tag.put("Profession", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getShop())
-                .getOrThrow());
-        tag.putBoolean("Male", this.isMale());
-        tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
-        tag.putInt("Birthday", this.getBirthday().getSecond());
-        tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
-        tag.put("Schedule", this.schedule.save());
-        tag.put("LookFeatures", this.lookFeatures.save(this.registryAccess()));
-        CompoundTag gifts = new CompoundTag();
-        this.gifts.forEach((s, g) -> gifts.putString(s, DataPackHandler.INSTANCE.giftManager().getId(g).toString()));
-        tag.put("GiftData", gifts);
-        return tag;
-    }
-
-    private void loadNpcData(CompoundTag tag) {
-        NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(ResourceLocation.parse(tag.getString("Data")));
-        this.look = DataPackHandler.INSTANCE.npcLookManager().get(ResourceLocation.parse(tag.getString("Look")));
-        this.setShop(ModNPCJobs.JOBS.registry().byNameCodec().parse(NbtOps.INSTANCE, tag.get("Profession"))
-                .getOrThrow());
-        this.setMale(tag.getBoolean("Male"));
-        try {
-            EnumSeason month = EnumSeason.values()[tag.getInt("BirthdayMonth")];
-            this.birthday = Pair.of(month, tag.getInt("Birthday"));
-        } catch (IllegalArgumentException e) {
-            this.getBirthday();
-        }
-        this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(ResourceLocation.parse(tag.getString("Combat")));
-        this.schedule.load(tag.getCompound("Schedule"));
-        try {
-            this.lookFeatures.read(tag.getCompound("LookFeatures"), this.registryAccess());
-        } catch (Exception e) {
-            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
-        }
-        CompoundTag gifts = tag.getCompound("GiftData");
-        ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
-        gifts.getAllKeys().forEach(key -> {
-            GiftData giftData = DataPackHandler.INSTANCE.giftManager().get(ResourceLocation.parse(gifts.getString(key)));
-            if (giftData != null)
-                b.put(key, giftData);
-        });
-        this.gifts = b.build();
-        this.setNPCData(data, true);
-    }
-
     @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        LoaderNetwork.INSTANCE.sendToPlayer(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), player);
-        LoaderNetwork.INSTANCE.sendToPlayer(S2CEntityLevelPkt.create(this), player);
-    }
-
-    @Override
-    public Predicate<LivingEntity> validTargetPredicate() {
-        return this.hitPred;
-    }
-
-    @Override
-    public TargetPosition getTargetPosition() {
-        return this.targetPosition;
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        data.runIf(SyncableDatas.NPC_JOB, job -> this.shop = job);
+    protected void sendDebugPackets() {
+        super.sendDebugPackets();
+        DebugPackets.sendEntityBrain(this);
     }
 
     public enum Behaviour {

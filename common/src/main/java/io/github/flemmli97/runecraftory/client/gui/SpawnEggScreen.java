@@ -16,7 +16,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -106,22 +105,26 @@ public class SpawnEggScreen extends Screen {
             this.npcIDEditor.render(graphics, mouseX, mouseY, partialTick);
         }
         int max = Math.min(4, this.entities.size());
-        double middle = (max - 1) / 2.;
         for (int i = 0; i < max; i++) {
             LivingEntity entity = this.entities.get(i);
-            int offset = Math.min(Math.abs(i - (int) middle), Math.abs(i - Mth.ceil(middle)));
-            float scale = Math.max(0.2f, 1 - offset * 0.3f);
+            float scale = 1;
+            float size = 80 * scale;
             int posX = this.sizeX - padding - 12;
             int posY = padding + 12;
             if (max > 1) {
-                posX += (int) ((i - middle) * 40 * scale);
-                posY -= offset * 15;
+                int idx = i;
+                if (max % 2 == 1) {
+                    idx -= 1;
+                }
+                int offset = (int) (Math.ceil((idx + 1.) / 2) * (idx % 2 == 0 ? -1 : 1));
+                int abs = Math.max(0, Math.abs(offset) - 1);
+                scale = Math.max(0.2f, 1 - abs * 0.3f);
+                posX += offset * 30;
+                posY -= abs * 15;
             }
-            float defaultScale = 30;
-            float size = defaultScale * 3;
             posX -= size;
             RenderUtils.renderScaledEntityGui(graphics, this.leftPos + posX, this.topPos + posY, size,
-                    size, defaultScale * scale, 0.625f, mouseX, mouseY, entity);
+                    size, 30 * scale, 0, mouseX, mouseY, entity);
         }
     }
 
@@ -157,7 +160,7 @@ public class SpawnEggScreen extends Screen {
                 this.npcIDEditor.setValue(this.npcID.toString());
             this.npcIDEditor.setResponder(s -> {
                 try {
-                    this.npcID = ResourceLocation.parse(s);
+                    this.npcID = s.isEmpty() ? null : ResourceLocation.parse(s);
                 } catch (ResourceLocationException ignored) {
                 }
             });

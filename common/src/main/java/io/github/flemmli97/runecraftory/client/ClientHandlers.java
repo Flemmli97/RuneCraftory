@@ -7,9 +7,14 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCCompanionGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCDialogueGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
+import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -127,7 +132,7 @@ public class ClientHandlers {
     }
 
     public static void simpleToast(Component title, Component subtitle) {
-//        Minecraft.getInstance().getToasts().addToast(new QuestToast(title, subtitle));
+        Minecraft.getInstance().getToasts().addToast(new QuestToast(title, subtitle));
     }
 
     public static void setToThirdPerson(boolean reset) {
@@ -164,20 +169,20 @@ public class ClientHandlers {
     public static void openNPCChat(int id, ShopState isShopOpen, SyncedFamilyData family, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof EntityNPCBase npc) {
-//            if (followState == 1)
-//                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
-//            else
-//                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions, quest));
+            if (followState == 1)
+                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
+            else
+                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions, quest));
         }
     }
 
     public static void handleShopRespone(Component txt) {
-//        if (Minecraft.getInstance().screen instanceof NPCShopGui shop) {
-//            if (txt != null)
-//                shop.drawBubble(txt);
-//            else
-//                shop.updateButtons();
-//        }
+        if (Minecraft.getInstance().screen instanceof NPCShopGui shop) {
+            if (txt != null)
+                shop.drawBubble(txt);
+            else
+                shop.updateButtons();
+        }
     }
 
     public static AnimatedPlayerModel<?> getAnimatedPlayerModel() {
@@ -216,13 +221,13 @@ public class ClientHandlers {
     }
 
     public static void updateNPCDialogue(EntityNPCBase npc, ConversationContext convCtx, String conversationID, Component component, Map<String, Component> data, List<Component> actions) {
-//        if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
-//            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
-//        } else {
-//            NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
-//            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
-//            Minecraft.getInstance().setScreen(gui);
-//        }
+        if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
+            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
+        } else {
+            NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
+            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
+            Minecraft.getInstance().setScreen(gui);
+        }
     }
 
     public static void openQuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {

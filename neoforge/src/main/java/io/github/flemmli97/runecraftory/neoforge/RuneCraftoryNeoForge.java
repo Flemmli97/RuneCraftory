@@ -22,7 +22,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -108,7 +108,7 @@ public class RuneCraftoryNeoForge {
         ModPoiTypes.POI.registerContent(modBus);
         ModArmorMaterials.MATERIALS.registerContent(modBus);
         ModMemoryTypes.MEMORYIES.registerContent(modBus);
-        ModNPCActions.ACTIONS.register().registerContent(modBus);
+        ModNPCBehaviour.BEHAVIOURS.register().registerContent(modBus);
         ModAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
         ModSounds.SOUND_EVENTS.registerContent(modBus);
         ModArmorEffects.ARMOR_EFFECTS.register().registerContent(modBus);

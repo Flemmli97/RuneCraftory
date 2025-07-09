@@ -2,13 +2,12 @@ package io.github.flemmli97.runecraftory.common.datapack.manager.npc;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.actions.NPCAttackActions;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -57,8 +56,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener implement
         map.forEach((fres, el) -> {
             if (!fres.equals(DEFAULT_ID)) {
                 try {
-                    JsonObject obj = el.getAsJsonObject();
-                    builder.put(fres, NPCAttackActions.CODEC.parse(ops, obj).getOrThrow());
+                    builder.put(fres, NPCAttackActions.CODEC.parse(ops, el).getOrThrow());
                 } catch (Exception ex) {
                     RuneCraftory.LOGGER.error("Couldn't parse npc actions json {} {}", fres, ex);
                     ex.fillInStackTrace();

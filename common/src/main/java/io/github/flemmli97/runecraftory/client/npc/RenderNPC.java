@@ -74,7 +74,12 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     }
 
     public static boolean isSlim(EntityNPCBase npc) {
-        String skin = npc.getLook().playerSkin();
+        NPCLook look = npc.getLook();
+        if (look == NPCLook.DEFAULT_LOOK) {
+            return DefaultPlayerSkin.get(npc.getUUID())
+                    .model() == PlayerSkin.Model.SLIM;
+        }
+        String skin = look.playerSkin();
         if (skin != null) {
             PlayerSkin.Model skinMeta = PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getSkinMeta();
             return skinMeta == PlayerSkin.Model.SLIM;
@@ -85,11 +90,15 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     public static ResourceLocation getTextureFromLook(EntityNPCBase npc, NPCTextureLayer.LayerType type, @Nullable String subType) {
         NPCLook look = npc.getLook();
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
+            if (look == NPCLook.DEFAULT_LOOK) {
+                return DefaultPlayerSkin.get(npc.getUUID())
+                        .texture();
+            }
             String skin = look.playerSkin();
             if (skin != null) {
                 return PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getLocation();
             }
-        } else if (look.playerSkin() != null) {
+        } else if (look.playerSkin() != null || look == NPCLook.DEFAULT_LOOK) {
             // Ignore other layers if using a player skin
             return EMPTY;
         }

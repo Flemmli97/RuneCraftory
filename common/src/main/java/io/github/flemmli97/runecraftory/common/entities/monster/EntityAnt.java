@@ -49,7 +49,7 @@ public class EntityAnt extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
                 .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>()).build();
     }
 
