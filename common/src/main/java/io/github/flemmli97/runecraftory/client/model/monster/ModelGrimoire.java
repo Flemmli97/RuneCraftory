@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityGrimoire;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
@@ -53,11 +53,9 @@ public class ModelGrimoire<T extends EntityGrimoire> extends EntityModel<T> impl
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (!entity.onGround())
                 this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks);
-            else if (entity.moveTick() > 0) {
-                if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
-                    this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-                else
-                    this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            else if (entity.isMoving()) {
+                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.WALK, partialTicks));
+                this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
             }
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);

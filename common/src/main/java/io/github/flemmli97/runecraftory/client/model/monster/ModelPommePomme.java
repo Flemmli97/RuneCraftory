@@ -50,7 +50,7 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (anim == null || !anim.is(EntityPommePomme.SLEEP))
                 this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.moveTick() > 0)
+            if (entity.isMoving())
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);

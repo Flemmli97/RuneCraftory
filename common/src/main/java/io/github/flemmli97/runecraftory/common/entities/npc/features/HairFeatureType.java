@@ -21,9 +21,9 @@ public record HairFeatureType(TypedIndexRange types,
                     ColorSetting.CODEC.fieldOf("colors").forGetter(d -> d.color)
             ).apply(inst, HairFeatureType::new));
     public static MapCodec<HairFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(Codec.STRING.fieldOf("type").forGetter(HairFeature::hair),
+            inst.group(Codec.STRING.fieldOf("style").forGetter(HairFeature::hair),
                     Codec.INT.fieldOf("index").forGetter(HairFeature::index),
-                    Codec.INT.fieldOf("color").forGetter(HairFeature::index)
+                    Codec.INT.fieldOf("color").forGetter(HairFeature::color)
             ).apply(inst, HairFeature::new));
     public static final StreamCodec<ByteBuf, HairFeature> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, HairFeature::hair, ByteBufCodecs.INT, HairFeature::index,

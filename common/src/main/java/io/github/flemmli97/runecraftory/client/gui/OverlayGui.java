@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
@@ -41,8 +42,8 @@ public class OverlayGui {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int guiWidth = this.mc.getWindow().getGuiScaledWidth();
         int guiHeight = this.mc.getWindow().getGuiScaledHeight();
+        PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player);
         if (ClientConfig.renderHealthRpBar != ClientConfig.HealthRPRenderType.NONE) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player);
             int barWidth = 76;
             int yHeight = ClientConfig.renderHealthRpBar == ClientConfig.HealthRPRenderType.BOTH ? 2 * 9 + 12 : 9;
             int xPos = ClientConfig.healthBarWidgetPosition.positionX(guiWidth, barWidth, ClientConfig.healthBarWidgetX) + 1;
@@ -63,12 +64,18 @@ public class OverlayGui {
             CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
             EnumSeason season = calendar.currentSeason();
             int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 64, ClientConfig.seasonDisplayX);
-            int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 32, ClientConfig.seasonDisplayY);
+            int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 32 + 15 + 4, ClientConfig.seasonDisplayY);
             graphics.blitSprite(DATE.get(season), xPos, yPos, 64, 32);
             GuiGraphicsExtension.drawCenteredString(graphics, this.mc.font,
                     Component.translatable("runecraftory.gui.date.format", Component.translatable(calendar.currentDay().translation()), calendar.date())
                             .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD),
                     xPos + 32, yPos + 15, 0, false);
+            Component money = Component.literal(data.getMoney() + "")
+                    .withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD);
+            yPos += 32 + 4;
+            xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, this.mc.font.width(money), ClientConfig.seasonDisplayX + 4);
+            graphics.blitSprite(SpriteResources.MONEY_ICON, xPos, yPos, 15, 15);
+            graphics.drawString(this.mc.font, money, xPos + 20, yPos + 4, 0);
         }
     }
 }

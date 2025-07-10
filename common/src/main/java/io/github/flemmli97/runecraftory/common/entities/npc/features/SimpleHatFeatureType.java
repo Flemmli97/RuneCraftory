@@ -18,7 +18,7 @@ public record SimpleHatFeatureType(
 
     public static final MapCodec<SimpleHatFeatureType> TYPE_CODEC = Codec.STRING.listOf().fieldOf("hats")
             .xmap(SimpleHatFeatureType::new, SimpleHatFeatureType::hats);
-    public static MapCodec<SimpleHatFeature> CODEC = Codec.STRING.fieldOf("type").xmap(SimpleHatFeature::new, SimpleHatFeature::hat);
+    public static MapCodec<SimpleHatFeature> CODEC = Codec.STRING.fieldOf("hat").xmap(SimpleHatFeature::new, SimpleHatFeature::hat);
     public static final StreamCodec<ByteBuf, SimpleHatFeature> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(SimpleHatFeature::new, SimpleHatFeature::hat);
 
     @Override

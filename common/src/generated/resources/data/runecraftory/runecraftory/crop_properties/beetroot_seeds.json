@@ -3,7 +3,6 @@
   "best_season": [
     "SPRING"
   ],
-  "giant_crop": "minecraft:air",
   "growth": 5,
   "item": "minecraft:beetroot_seeds",
   "max_drops": 3,

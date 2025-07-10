@@ -21,7 +21,7 @@ public class ModelMimic<T extends EntityMimic> extends ModelChest<T> implements 
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.isAwake())
                 this.anim.get().doAnimation(this, "open_idle", entity.tickCount, partialTicks);
-            if (entity.moveTick() > 0)
+            if (entity.isMoving())
                 this.anim.get().doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);

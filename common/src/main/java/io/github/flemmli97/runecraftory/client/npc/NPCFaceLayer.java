@@ -23,7 +23,7 @@ public class NPCFaceLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A
         A layerModel = this.getModel(entity);
         this.setup(layerModel);
         this.textureType = null;
-        if (entity.tickCount % 50 <= 2 || entity.isSleeping() || entity.isDeadOrDying() || entity.playDeath())
+        if (entity.tickCount % 70 <= 2 || entity.isSleeping() || entity.isDeadOrDying() || entity.playDeath())
             this.textureType = "eyes_closed";
         this.layer = LayerType.IRIS_LAYER;
         this.actualRender(poseStack, buffer, packedLight, entity, layerModel);

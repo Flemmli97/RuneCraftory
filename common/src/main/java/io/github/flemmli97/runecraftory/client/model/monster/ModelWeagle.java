@@ -49,7 +49,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (entity.moveTick() > 0) {
+            if (entity.isMoving()) {
                 this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             } else if (!entity.getAnimationHandler().isCurrent(EntityWeagle.SLEEP))
                 this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);

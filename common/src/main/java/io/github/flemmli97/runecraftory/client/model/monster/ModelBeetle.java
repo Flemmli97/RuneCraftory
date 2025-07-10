@@ -52,7 +52,7 @@ public class ModelBeetle<T extends EntityBeetle> extends EntityModel<T> implemen
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (!entity.onGround())
                 this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks);
-            else if (entity.moveTick() > 0)
+            else if (entity.isMoving())
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);

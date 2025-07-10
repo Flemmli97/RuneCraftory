@@ -12,8 +12,7 @@ import java.util.List;
 public record IndexedColorSetting(List<Integer> indices, ColorSetting color) {
 
     public static final Codec<IndexedColorSetting> CODEC = RecordCodecBuilder.create(inst ->
-            inst.group(
-                    Codec.INT.listOf().fieldOf("indices").forGetter(d -> d.indices),
+            inst.group(Codec.INT.listOf().fieldOf("indices").forGetter(d -> d.indices),
                     ColorSetting.CODEC.fieldOf("colors").forGetter(d -> d.color)
             ).apply(inst, IndexedColorSetting::new));
 

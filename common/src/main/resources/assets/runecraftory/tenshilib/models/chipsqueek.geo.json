@@ -207,7 +207,8 @@
         {
           "name": "ridingPos",
           "parent": "body",
-          "pivot": [0, 11, 3.5]
+          "pivot": [0, 11, 3.5],
+          "rotation": [25, 0, 0]
         }
       ]
     }

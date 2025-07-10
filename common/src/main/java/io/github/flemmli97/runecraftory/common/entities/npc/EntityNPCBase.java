@@ -616,8 +616,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         CompoundTag tag = new CompoundTag();
         tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
         tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
-        tag.put("Profession", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getShop())
-                .getOrThrow());
+        tag.put("Profession", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getShop()).getOrThrow());
         tag.putBoolean("Male", this.isMale());
         tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
         tag.putInt("Birthday", this.getBirthday().getSecond());
@@ -645,7 +644,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(ResourceLocation.parse(tag.getString("Combat")));
         this.schedule.load(tag.getCompound("Schedule"));
         try {
-            this.lookFeatures.read(tag.getCompound("LookFeatures"), this.registryAccess());
+            this.lookFeatures.read(tag.get("LookFeatures"), this.registryAccess());
         } catch (Exception e) {
             this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
         }

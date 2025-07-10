@@ -22,6 +22,8 @@ import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdate
 import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IExtendedMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateTracker;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
@@ -170,7 +172,7 @@ import java.util.function.Predicate;
 
 public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
 
-    public static final int MOVE_TICK_MAX = 3;
+    public static final int MOVE_TICK_MAX = 4;
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
@@ -245,10 +247,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private BarnData assignedBarn;
     private Pair<String, Runnable> scheduledAnimationHandling;
 
-    /**
-     * For movement animation interpolation
-     */
-    private int moveTick;
+    private final MoveStateTracker moveStateTracker = new MoveStateTracker(MOVE_TICK_MAX, this::getMoveFlag);
     private boolean initAnim;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
@@ -355,11 +354,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.yBodyRot = this.getYRot();
             this.yHeadRot = this.getYRot();
         }
-        if (this.getMoveFlag() != MoveType.NONE) {
-            this.moveTick = Math.min(MOVE_TICK_MAX, ++this.moveTick);
-        } else {
-            this.moveTick = Math.max(0, --this.moveTick);
-        }
+        this.moveStateTracker.tick();
         if (!this.level().isClientSide) {
             this.updater.tick();
             if (this.tamingTick > 0 || this.isNoAi()) {
@@ -657,12 +652,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new SmartBrainProvider<>(this);
     }
 
-    public int moveTick() {
-        return this.moveTick;
+    public boolean isMoving() {
+        return this.getMoveFlag() != MoveType.NONE;
     }
 
     public float interpolatedMoveTick(float partialTicks) {
-        return Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) MOVE_TICK_MAX, 0, 1);
+        return this.moveStateTracker.interpolatedMoveTick(partialTicks);
+    }
+
+    public float interpolatedMoveTickOf(MoveType moveType, float partialTicks) {
+        return this.moveStateTracker.interpolatedMoveTickOf(moveType, partialTicks);
     }
 
     public MoveType getMoveFlag() {
@@ -960,7 +959,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     // "Disable" this as we don't use it and it will mess with the AI check
     @Override
     protected AABB getAttackBoundingBox() {
-        return this.getBoundingBox().inflate(0.5);
+        return this.getBoundingBox();//.inflate(0.5);
     }
 
     @Override
@@ -1980,13 +1979,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.interactKey = interactKey;
             this.following = following;
         }
-    }
-
-    public enum MoveType {
-        NONE,
-        WALK,
-        RUN,
-        SNEAK
     }
 
     public record CombatRecord(ServerPlayer player, DamageSource lastSource, float totalDamage) {

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityChipsqueek;
 import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
@@ -51,12 +50,8 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.moveTick() > 0) {
+            if (entity.isMoving()) {
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-            }
-            if (entity.moveTick() < 1) {
-                float lerp = Mth.clamp((entity.moveTick() + (entity.getMoveFlag() != BaseMonster.MoveType.NONE ? partialTicks : -partialTicks)) / (float) BaseMonster.MOVE_TICK_MAX, 0, 1);
-                this.ridingPosition.xRot = (1 - lerp) * 20 * Mth.DEG_TO_RAD;
             }
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);

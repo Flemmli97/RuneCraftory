@@ -62,8 +62,12 @@ public class EntityWolf extends LeapingMonster {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
-                .end(4)
+                .end(5)
                 .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(5)).prepareOptional(new MoveToAttackTarget<>())
+                .end(3)
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifFurtherThan(5))
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(5)).prepareOptional(new MoveToAttackTarget<>())
                 .end(3)
                 .build();

@@ -3,7 +3,6 @@
   "best_season": [
     "AUTUMN"
   ],
-  "giant_crop": "minecraft:air",
   "growth": 5,
   "item": "minecraft:wheat_seeds",
   "max_drops": 3,

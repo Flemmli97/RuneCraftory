@@ -49,7 +49,7 @@ public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implemen
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (entity.moveTick() > 0)
+            if (entity.isMoving())
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
