@@ -89,7 +89,7 @@ public class BlockTagGen extends IntrinsicHolderTagsProvider<Block> {
         this.tag(RunecraftoryTags.Blocks.BARN_GROUND).add(Blocks.HAY_BLOCK);
 
         this.tag(RunecraftoryTags.Blocks.MINERAL_GEN_PLACE).addTag(BlockTags.DIRT).addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(BlockTags.SAND).addTag(RunecraftoryTags.Blocks.STONE)
-                .addTag(BlockTags.BASE_STONE_NETHER).addTag(RunecraftoryTags.Blocks.ENDSTONES);
+                .addTag(BlockTags.BASE_STONE_NETHER).addOptionalTag(RunecraftoryTags.Blocks.ENDSTONES);
 
         this.tag(BlockTags.LOGS)
                 .add(ModBlocks.APPLE_TREE.get())

@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.client.gui.NPCDialogueGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
+import io.github.flemmli97.runecraftory.client.gui.QuestGui;
 import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
@@ -231,7 +232,7 @@ public class ClientHandlers {
     }
 
     public static void openQuestGui(boolean hasActive, List<ClientSideQuestDisplay> quests) {
-//        Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
+        Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
     }
 
     public static void openSpawneggGui(InteractionHand hand) {

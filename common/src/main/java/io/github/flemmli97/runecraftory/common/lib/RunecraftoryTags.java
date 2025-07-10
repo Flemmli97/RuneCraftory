@@ -78,7 +78,7 @@ public class RunecraftoryTags {
         public static final TagKey<Item> FEATHERS = tagCommon("feathers");
         public static final TagKey<Item> SHELLS_BONES = tag("shells_bones");
         public static final TagKey<Item> STONES = tag("stones");
-        public static final TagKey<Item> STRINGS = tagCommon("string");
+        public static final TagKey<Item> STRINGS = tagCommon("strings");
         public static final TagKey<Item> SHARDS = tag("shards");
         public static final TagKey<Item> FURS = tag("furs");
         public static final TagKey<Item> POWDERS = tag("powders");

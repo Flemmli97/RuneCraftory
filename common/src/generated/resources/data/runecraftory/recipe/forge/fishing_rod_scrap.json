@@ -3,7 +3,7 @@
   "crafting_cost": 0,
   "ingredients": [
     {
-      "tag": "c:string"
+      "tag": "c:strings"
     },
     {
       "tag": "runecraftory:sticks"

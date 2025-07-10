@@ -19,7 +19,7 @@
     "main": [
       "io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric"
     ],
-    "client": [
+    "tenshilib_client": [
       "io.github.flemmli97.runecraftory.fabric.client.RuneCraftoryFabricClient"
     ],"rei_client": [
       "io.github.flemmli97.runecraftory.integration.rei.ReiClientPlugin"

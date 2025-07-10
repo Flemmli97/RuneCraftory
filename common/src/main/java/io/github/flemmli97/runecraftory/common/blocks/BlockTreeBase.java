@@ -135,7 +135,7 @@ public class BlockTreeBase extends RotatedPillarBlock implements EntityBlock, Gr
 
     @Override
     public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return ItemStack.EMPTY;//new ItemStack(this.seedItem.get());
+        return new ItemStack(this.sapling.get(level.registryAccess()));
     }
 
     @Override

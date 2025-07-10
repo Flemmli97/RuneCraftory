@@ -21,8 +21,7 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                               Map<String, Conversation> conversations) {
 
     public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
-            inst.group(
-                    Codec.STRING.optionalFieldOf("fallback_key").forGetter(d -> Optional.of(d.fallbackKey())),
+            inst.group(Codec.STRING.optionalFieldOf("fallback_key").forGetter(d -> Optional.of(d.fallbackKey())),
                     Codec.unboundedMap(Codec.STRING, Conversation.CODEC).fieldOf("conversations").forGetter(d -> d.conversations)
             ).apply(inst, (fallback, convs) -> new ConversationSet(fallback.orElse(""), convs)));
 

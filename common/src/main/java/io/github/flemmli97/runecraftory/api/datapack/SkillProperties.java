@@ -11,14 +11,12 @@ public record SkillProperties(int maxLevel, float healthIncrease, float rpIncrea
 
     public static final Codec<SkillProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    Codec.FLOAT.fieldOf("vit_increase").forGetter(d -> d.vitIncrease),
-                    Codec.FLOAT.fieldOf("intel_increase").forGetter(d -> d.intelIncrease),
-                    Codec.FLOAT.fieldOf("xp_multiplier").forGetter(d -> d.xpMultiplier),
-
                     Codec.INT.fieldOf("max_level").forGetter(d -> d.maxLevel),
                     Codec.FLOAT.fieldOf("health_increase").forGetter(d -> d.healthIncrease),
                     Codec.FLOAT.fieldOf("rp_increase").forGetter(d -> d.rpIncrease),
-                    Codec.FLOAT.fieldOf("str_increase").forGetter(d -> d.strIncrease)
-            ).apply(instance, (vitIncrease, intelIncrease, xpMultiplier, maxLevel, healthIncrease, rpIncrease, strIncrease) ->
-                    new SkillProperties(maxLevel, healthIncrease, rpIncrease, strIncrease, vitIncrease, intelIncrease, xpMultiplier)));
+                    Codec.FLOAT.fieldOf("str_increase").forGetter(d -> d.strIncrease),
+                    Codec.FLOAT.fieldOf("vit_increase").forGetter(d -> d.vitIncrease),
+                    Codec.FLOAT.fieldOf("intel_increase").forGetter(d -> d.intelIncrease),
+                    Codec.FLOAT.fieldOf("xp_multiplier").forGetter(d -> d.xpMultiplier)
+            ).apply(instance, SkillProperties::new));
 }

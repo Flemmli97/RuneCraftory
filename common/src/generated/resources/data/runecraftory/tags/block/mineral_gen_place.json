@@ -5,6 +5,9 @@
     "#minecraft:sand",
     "#c:stones",
     "#minecraft:base_stone_nether",
-    "#c:end_stones"
+    {
+      "id": "#c:end_stones",
+      "required": false
+    }
   ]
 }

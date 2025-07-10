@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import net.fabricmc.api.ClientModInitializer;
+import io.github.flemmli97.tenshilib.fabric.client.ClientSetupModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -36,10 +36,10 @@ import net.minecraft.world.inventory.MenuType;
 
 import java.util.function.Function;
 
-public class RuneCraftoryFabricClient implements ClientModInitializer {
+public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
 
     @Override
-    public void onInitializeClient() {
+    public void clientSetup() {
         //ClientRegister
         ClientRegister.init();
 
@@ -69,7 +69,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
         ClientTickEvents.START_CLIENT_TICK.register(client -> ClientCalls.clientTick());
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> ClientCalls.initSkillTab(screen, Screens.getButtons(screen)::add));
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> ClientCalls.tooltipEvent(stack, lines, flag));
-        WorldRenderEvents.END.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
+        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
         ModItems.ITEMS.getEntries().forEach(e -> {
             ArmorModels.ArmorModelGetter r = ArmorModels.ARMOR_GETTER.get(e.getID());
             if (r != null)

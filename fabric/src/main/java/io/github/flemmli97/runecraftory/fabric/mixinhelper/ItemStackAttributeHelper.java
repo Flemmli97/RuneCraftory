@@ -14,10 +14,10 @@ public class ItemStackAttributeHelper {
         List<ItemAttributeModifiers.Entry> entries = new ArrayList<>(data.modifiers());
         boolean[] modified = {false};
         ItemNBT.modifyAttribute(stack, entry -> {
-            entries.add(entry);
+            entries.remove(entry);
             modified[0] = true;
         }, entry -> {
-            entries.remove(entry);
+            entries.add(entry);
             modified[0] = true;
         });
         if (modified[0]) {

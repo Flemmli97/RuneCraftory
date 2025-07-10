@@ -18,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerMixin implements PlayerDataGetter {
 
     @Unique
-    private final PlayerData runecraftoryPlayerData = new PlayerData((Player) (Object) this);
+    private final PlayerData runecraftory$PlayerData = new PlayerData((Player) (Object) this);
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void loadData(CompoundTag compound, CallbackInfo info) {
         if (compound.contains(RuneCraftory.MODID + ":player_data"))
-            this.runecraftoryPlayerData.readFromNBT(compound.getCompound(RuneCraftory.MODID + ":data"));
+            this.runecraftory$PlayerData.readFromNBT(compound.getCompound(RuneCraftory.MODID + ":data"));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
     private void saveData(CompoundTag compound, CallbackInfo info) {
-        compound.put(RuneCraftory.MODID + ":player_data", this.runecraftoryPlayerData.writeToNBTPlain(new CompoundTag()));
+        compound.put(RuneCraftory.MODID + ":player_data", this.runecraftory$PlayerData.writeToNBTPlain(new CompoundTag()));
     }
 
     @ModifyVariable(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getDamageAfterArmorAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F"), argsOnly = true)
@@ -49,6 +49,6 @@ public abstract class PlayerMixin implements PlayerDataGetter {
 
     @Override
     public PlayerData runecraftory$getPlayerData() {
-        return this.runecraftoryPlayerData;
+        return this.runecraftory$PlayerData;
     }
 }

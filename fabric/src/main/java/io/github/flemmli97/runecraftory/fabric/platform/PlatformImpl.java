@@ -187,7 +187,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public boolean entityTickPre(LivingEntity entity) {
-        return true;
+        return false;
     }
 
     @Override

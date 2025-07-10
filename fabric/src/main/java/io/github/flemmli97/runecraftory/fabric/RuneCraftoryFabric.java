@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
@@ -74,12 +75,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.neoforged.fml.config.IConfigSpec;
@@ -104,14 +108,12 @@ public class RuneCraftoryFabric implements ModInitializer {
         this.initContent();
         for (Map.Entry<IConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();
-            NeoForgeConfigRegistry.INSTANCE.register(loader.configName(), loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
+            NeoForgeConfigRegistry.INSTANCE.register(RuneCraftory.MODID, loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
         }
         PacketHandler.register();
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> PlatformImpl.CURRENT_SERVER = server);
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> PlatformImpl.CURRENT_SERVER = null);
-
-//        SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
 
         DataPackHandler.addListeners(listener -> ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
             @Override
@@ -125,9 +127,6 @@ public class RuneCraftoryFabric implements ModInitializer {
                 return listener.id();
             }
         }));
-//        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
-
-        ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
 
         //MobCalls
         ServerEntityEvents.ENTITY_LOAD.register(((entity, world) -> {
@@ -160,8 +159,6 @@ public class RuneCraftoryFabric implements ModInitializer {
         WorldRegistrationCalls.createFeatures(null, feat ->
                 BiomeModifications.addFeature(ctx -> ctx.getBiomeRegistryEntry().is(feat.tag()),
                         feat.decoration(), ResourceKey.create(Registries.PLACED_FEATURE, feat.placedFeature())));
-        MobSpawnSettings.SpawnerData gateSetting = WorldRegistrationCalls.gateSetting();
-        BiomeModifications.addSpawn(t -> true, gateSetting.type.getCategory(), gateSetting.type, gateSetting.getWeight().asInt(), gateSetting.minCount, gateSetting.maxCount);
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.dimension() == Level.OVERWORLD) {
                 WorldCalls.daily(world);
@@ -189,6 +186,10 @@ public class RuneCraftoryFabric implements ModInitializer {
         });
 
         CommonSetupEvent.EVENT.register(listener -> listener.enqueue(RuneCraftory.MODID, () -> {
+            ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
+            MobSpawnSettings.SpawnerData gateSetting = WorldRegistrationCalls.gateSetting();
+            BiomeModifications.addSpawn(t -> true, gateSetting.type.getCategory(), gateSetting.type, gateSetting.getWeight().asInt(), gateSetting.minCount, gateSetting.maxCount);
+            SpawnPlacements.register(ModEntities.GATE.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
             this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
             this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
         }));
@@ -197,8 +198,6 @@ public class RuneCraftoryFabric implements ModInitializer {
     }
 
     public void initContent() {
-        ModBlocks.BLOCKS.getEntries();
-        ModItems.ITEMS.getEntries();
         ModEntities.ENTITIES.registerContent();
         ModBlocks.BLOCKS.registerContent();
         ModItems.ITEMS.registerContent();

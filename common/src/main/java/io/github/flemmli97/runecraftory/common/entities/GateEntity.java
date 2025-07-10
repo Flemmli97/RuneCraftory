@@ -76,7 +76,9 @@ public class GateEntity extends Mob implements IBaseMob {
     private static final EntityDataAccessor<String> ELEMENT_TYPE = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> MOB_LEVEL = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
+
     private static final ResourceLocation ATTRIBUTE_LEVEL_MOD = RuneCraftory.modRes("gate_level_modifier");
+
     public int rotate, clientRenderTick;
     private final List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
@@ -124,51 +126,24 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public boolean checkSpawnObstruction(LevelReader level) {
-        return level.isUnobstructed(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ELEMENT_TYPE, "none");
+        builder.define(MOB_LEVEL, LibConstants.BASE_LEVEL);
+        builder.define(ELEMENT, 0);
     }
 
     @Override
-    public XpLevelHolder xpLevel() {
-        this.expPair.setLevel(this.entityData.get(MOB_LEVEL), l -> 0);
-        return this.expPair;
-    }
-
-    @Override
-    public int friendPoints(UUID uuid) {
-        return -1;
-    }
-
-    @Override
-    public void setXPLevel(int lvl) {
-        this.entityData.set(MOB_LEVEL, Mth.clamp(lvl, 1, LibConstants.MAX_MONSTER_LEVEL));
-    }
-
-    @Override
-    public int baseXP() {
-        return MobConfig.gateXp;
-    }
-
-    @Override
-    public int baseMoney() {
-        return MobConfig.gateMoney;
-    }
-
-    @Override
-    public boolean applyFoodEffect(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public void removeFoodEffect() {
-    }
-
-    public EnumElement getElement() {
-        return this.type;
-    }
-
-    public String elementName() {
-        return this.entityData.get(ELEMENT_TYPE);
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (this.level().isClientSide) {
+            if (key.equals(MOB_LEVEL)) {
+                this.updateStatsToLevel();
+            }
+            if (key.equals(ELEMENT)) {
+                this.type = EnumElement.values()[this.entityData.get(ELEMENT)];
+            }
+        }
     }
 
     private void updateAttributes() {
@@ -179,11 +154,12 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(ELEMENT_TYPE, "none");
-        builder.define(MOB_LEVEL, LibConstants.BASE_LEVEL);
-        builder.define(ELEMENT, 0);
+    public boolean checkSpawnObstruction(LevelReader level) {
+        return level.isUnobstructed(this);
+    }
+
+    public EnumElement getElement() {
+        return this.type;
     }
 
     @Override
@@ -218,91 +194,6 @@ public class GateEntity extends Mob implements IBaseMob {
                 this.spawnDelay *= 0.4;
             }
         }
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("MobLevel", this.entityData.get(MOB_LEVEL));
-        compound.put("Spawns", BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf().encodeStart(NbtOps.INSTANCE, this.spawnList).getOrThrow());
-        compound.putString("Element", this.type.toString());
-        compound.putBoolean("FirstSpawn", this.initialSpawn);
-        compound.putInt("MaxNearby", this.maxNearby);
-        compound.putInt("SpawnDelay", this.spawnDelay);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains("MobLevel")) {
-            this.entityData.set(MOB_LEVEL, compound.getInt("MobLevel"));
-        }
-        this.spawnList.clear();
-        if (compound.contains("Spawns"))
-            this.spawnList.addAll(BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf()
-                    .parse(NbtOps.INSTANCE, compound.get("Spawns")).getOrThrow());
-        if (compound.contains("Element")) {
-            String el = compound.getString("Element");
-            try {
-                this.type = EnumElement.valueOf(el);
-                this.entityData.set(ELEMENT_TYPE, this.type.getTranslation());
-                this.entityData.set(ELEMENT, this.type.ordinal());
-            } catch (IllegalArgumentException e) {
-                RuneCraftory.LOGGER.error("Unable to set element type for gate entity {}", this);
-            }
-        }
-        this.initialSpawn = compound.getBoolean("FirstSpawn");
-        this.maxNearby = compound.getInt("MaxNearby");
-        this.spawnDelay = compound.getInt("SpawnDelay");
-    }
-
-    @Override
-    protected ResourceKey<LootTable> getDefaultLootTable() {
-        return getGateLootLocation(this.getElement());
-    }
-
-    @Override
-    public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        return true;//this.world.getDifficulty() != Difficulty.PEACEFUL && super.canSpawn(world, reason) && this.world.getEntitiesWithinAABB(GateEntity.class, this.getBoundingBox().grow(48.0)).size() < 2;
-    }
-
-    @Override
-    public Iterable<ItemStack> getArmorSlots() {
-        return NonNullList.withSize(4, ItemStack.EMPTY);
-    }
-
-    @Override
-    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
-        Holder<Biome> biome = level.getBiome(this.blockPosition());
-        this.type = this.getType(level, biome);
-        LevelCalc.GateLevelResult gateLevel = LevelCalc.levelFromPos(level.getLevel(), this.position());
-        this.entityData.set(MOB_LEVEL, gateLevel.level());
-        this.entityData.set(ELEMENT_TYPE, this.type.getTranslation());
-        this.entityData.set(ELEMENT, this.type.ordinal());
-        this.spawnList.addAll(DataPackHandler.INSTANCE.gateSpawnsManager().pickRandomMobs(level.getLevel(), this, biome, this.random,
-                this.random.nextInt(3) + 1, this.blockPosition(), gateLevel.nearby()));
-        this.setPos(this.getX(), this.getY() + 1, this.getZ());
-        this.updateStatsToLevel();
-        this.spawnMobs(Math.max(1, this.maxNearby - 2));
-        this.spawnDelay = this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
-        //Cant check during spawn conditions since gate level isnt set there yet
-        if (this.spawnList.isEmpty() && reason != MobSpawnType.SPAWN_EGG && reason != MobSpawnType.COMMAND)
-            this.removeCauseEmptyList = true;
-        return spawnData;
-    }
-
-    @Override
-    public HumanoidArm getMainArm() {
-        return HumanoidArm.RIGHT;
     }
 
     private boolean spawnMobs(int count) {
@@ -362,6 +253,132 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("MobLevel", this.entityData.get(MOB_LEVEL));
+        compound.put("Spawns", BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf().encodeStart(NbtOps.INSTANCE, this.spawnList).getOrThrow());
+        compound.putString("Element", this.type.toString());
+        compound.putBoolean("FirstSpawn", this.initialSpawn);
+        compound.putInt("MaxNearby", this.maxNearby);
+        compound.putInt("SpawnDelay", this.spawnDelay);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("MobLevel")) {
+            this.entityData.set(MOB_LEVEL, compound.getInt("MobLevel"));
+        }
+        this.spawnList.clear();
+        if (compound.contains("Spawns"))
+            this.spawnList.addAll(BuiltInRegistries.ENTITY_TYPE.byNameCodec().listOf()
+                    .parse(NbtOps.INSTANCE, compound.get("Spawns")).getOrThrow());
+        if (compound.contains("Element")) {
+            String el = compound.getString("Element");
+            try {
+                this.type = EnumElement.valueOf(el);
+                this.entityData.set(ELEMENT_TYPE, this.type.getTranslation());
+                this.entityData.set(ELEMENT, this.type.ordinal());
+            } catch (IllegalArgumentException e) {
+                RuneCraftory.LOGGER.error("Unable to set element type for gate entity {}", this);
+            }
+        }
+        this.initialSpawn = compound.getBoolean("FirstSpawn");
+        this.maxNearby = compound.getInt("MaxNearby");
+        this.spawnDelay = compound.getInt("SpawnDelay");
+    }
+
+    @Override
+    public XpLevelHolder xpLevel() {
+        this.expPair.setLevel(this.entityData.get(MOB_LEVEL), l -> 0);
+        return this.expPair;
+    }
+
+    @Override
+    public int friendPoints(UUID uuid) {
+        return -1;
+    }
+
+    @Override
+    public void setXPLevel(int lvl) {
+        this.entityData.set(MOB_LEVEL, Mth.clamp(lvl, 1, LibConstants.MAX_MONSTER_LEVEL));
+        this.updateStatsToLevel();
+    }
+
+    @Override
+    public int baseXP() {
+        return MobConfig.gateXp;
+    }
+
+    @Override
+    public int baseMoney() {
+        return MobConfig.gateMoney;
+    }
+
+    @Override
+    public boolean applyFoodEffect(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public void removeFoodEffect() {
+    }
+
+    @Override
+    protected ResourceKey<LootTable> getDefaultLootTable() {
+        return getGateLootLocation(this.getElement());
+    }
+
+    @Override
+    public Iterable<ItemStack> getArmorSlots() {
+        return NonNullList.withSize(4, ItemStack.EMPTY);
+    }
+
+    @Override
+    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+        Holder<Biome> biome = level.getBiome(this.blockPosition());
+        this.type = this.getType(level, biome);
+        LevelCalc.GateLevelResult gateLevel = LevelCalc.levelFromPos(level.getLevel(), this.position());
+        this.entityData.set(MOB_LEVEL, gateLevel.level());
+        this.entityData.set(ELEMENT_TYPE, this.type.getTranslation());
+        this.entityData.set(ELEMENT, this.type.ordinal());
+        this.spawnList.addAll(DataPackHandler.INSTANCE.gateSpawnsManager().pickRandomMobs(level.getLevel(), this, biome, this.random,
+                this.random.nextInt(3) + 1, this.blockPosition(), gateLevel.nearby()));
+        this.setPos(this.getX(), this.getY() + 1, this.getZ());
+        this.updateStatsToLevel();
+        this.spawnMobs(Math.max(1, this.maxNearby - 2));
+        this.spawnDelay = this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
+        //Cant check during spawn conditions since gate level isnt set there yet
+        if (this.spawnList.isEmpty() && reason != MobSpawnType.SPAWN_EGG && reason != MobSpawnType.COMMAND)
+            this.removeCauseEmptyList = true;
+        return spawnData;
+    }
+
+    private void updateStatsToLevel() {
+        this.getAttribute(Attributes.MAX_HEALTH).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADD_VALUE));
+        this.getAttribute(ModAttributes.DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(ModAttributes.DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADD_VALUE));
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADD_VALUE));
+        this.setHealth(this.getMaxHealth());
+    }
+
+    @Override
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
+    }
+
+    @Override
     protected float getDamageAfterArmorAbsorb(DamageSource source, float damageAmount) {
         float reduce = 0.0f;
         if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
@@ -392,19 +409,6 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        super.onSyncedDataUpdated(key);
-        if (this.level().isClientSide) {
-            if (key.equals(MOB_LEVEL)) {
-                this.updateStatsToLevel();
-            }
-            if (key.equals(ELEMENT)) {
-                this.type = EnumElement.values()[this.entityData.get(ELEMENT)];
-            }
-        }
-    }
-
-    @Override
     public boolean isInWall() {
         return false;
     }
@@ -422,16 +426,6 @@ public class GateEntity extends Mob implements IBaseMob {
 
     public boolean canBeCollidedWith(Entity other) {
         return other instanceof Player;
-    }
-
-    private void updateStatsToLevel() {
-        this.getAttribute(Attributes.MAX_HEALTH).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADD_VALUE));
-        this.getAttribute(ModAttributes.DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADD_VALUE));
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADD_VALUE));
-        this.setHealth(this.getMaxHealth());
     }
 
     private EnumElement getType(ServerLevelAccessor level, Holder<Biome> key) {

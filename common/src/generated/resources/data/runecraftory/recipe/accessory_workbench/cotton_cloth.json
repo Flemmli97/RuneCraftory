@@ -9,7 +9,7 @@
       "item": "runecraftory:old_bandage"
     },
     {
-      "tag": "c:string"
+      "tag": "c:strings"
     }
   ],
   "required_level": 13,

@@ -222,7 +222,6 @@ public class FoodProperties {
         private final List<SimpleEffect> potionApply = new ArrayList<>();
         private final List<Holder<MobEffect>> potionRemove = new ArrayList<>();
         private final int duration;
-        //private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease;
 
         public Builder(int duration) {
             this.duration = duration;

@@ -16,7 +16,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -34,12 +33,12 @@ public class CropProperties {
                     BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("giant_crop").forGetter(CropProperties::getGiantVersion),
                     CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING).listOf().fieldOf("best_season").forGetter(d -> List.copyOf(d.bestSeasons)),
                     CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING).listOf().fieldOf("bad_season").forGetter(d -> List.copyOf(d.badSeasons))
-            ).apply(instance, (growth, drops, regrowable, giant, best, bad) -> new CropProperties(growth, drops, regrowable, giant.orElse(Blocks.AIR), best, bad)));
+            ).apply(instance, CropProperties::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, CropProperties> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public CropProperties decode(RegistryFriendlyByteBuf buf) {
             return new CropProperties(buf.readInt(), buf.readInt(), buf.readBoolean(),
-                    ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.BLOCK)).decode(buf).orElse(null),
+                    ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.BLOCK)).decode(buf),
                     buf.readEnumSet(EnumSeason.class), buf.readEnumSet(EnumSeason.class))
                     .setID(buf.readResourceLocation());
         }
@@ -63,12 +62,12 @@ public class CropProperties {
     private final int maxDrops;
     private final boolean regrowable;
 
-    private final Block giantVersion;
+    private final Optional<Block> giantVersion;
 
     private ResourceLocation id;
     private List<Component> translationTexts;
 
-    public CropProperties(int growth, int maxDrops, boolean regrowable, Block giantVersion, Collection<EnumSeason> bestSeasons, Collection<EnumSeason> badSeasons) {
+    public CropProperties(int growth, int maxDrops, boolean regrowable, Optional<Block> giantVersion, Collection<EnumSeason> bestSeasons, Collection<EnumSeason> badSeasons) {
         this.growth = growth;
         this.maxDrops = maxDrops;
         this.giantVersion = giantVersion;
@@ -108,7 +107,7 @@ public class CropProperties {
     }
 
     public Optional<Block> getGiantVersion() {
-        return Optional.ofNullable(this.giantVersion);
+        return this.giantVersion;
     }
 
     public float seasonMultiplier(EnumSeason season) {
@@ -132,7 +131,7 @@ public class CropProperties {
                                 .append(Component.translatable(season.translationKey()).withStyle(season.getColor()));
                     }
                 }
-                list.add(Component.translatable("runecraftory.tooltip.crops.season.best", txt));
+                list.add(Component.translatable("runecraftory.tooltip.crops.season.best", txt).withStyle(ChatFormatting.GRAY));
             }
             EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeasons);
             badSeasons.removeAll(this.bestSeasons);
@@ -146,7 +145,7 @@ public class CropProperties {
                                 .append(Component.translatable(season.translationKey()).withStyle(season.getColor()));
                     }
                 }
-                list.add(Component.translatable("runecraftory.tooltip.crops.season.bad", txt));
+                list.add(Component.translatable("runecraftory.tooltip.crops.season.bad", txt).withStyle(ChatFormatting.GRAY));
             }
             MutableComponent growth = Component.translatable("runecraftory.tooltip.crops.growth", this.growth()).withStyle(ChatFormatting.GOLD);
             Component harvest = Component.translatable("runecraftory.tooltip.crops.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
@@ -180,7 +179,7 @@ public class CropProperties {
         private final int growth, maxDrops;
         private final boolean regrowable;
 
-        private Block giantVersion = Blocks.AIR;
+        private Block giantVersion;
 
         public Builder(int growth, int maxDrops, boolean regrowable) {
             this.growth = growth;
@@ -204,7 +203,7 @@ public class CropProperties {
         }
 
         public CropProperties build() {
-            return new CropProperties(this.growth, this.maxDrops, this.regrowable, this.giantVersion, this.bestSeason, this.badSeason);
+            return new CropProperties(this.growth, this.maxDrops, this.regrowable, Optional.ofNullable(this.giantVersion), this.bestSeason, this.badSeason);
         }
     }
 }

@@ -6,10 +6,10 @@
       "item": "minecraft:hay_block"
     },
     {
-      "tag": "c:string"
+      "tag": "c:strings"
     },
     {
-      "tag": "c:string"
+      "tag": "c:strings"
     }
   ],
   "required_level": 12,
