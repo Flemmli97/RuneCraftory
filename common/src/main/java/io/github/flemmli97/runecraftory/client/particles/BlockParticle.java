@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.particles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.particles.BlockStateParticleData;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -57,7 +56,6 @@ public class BlockParticle extends Particle {
         float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
         float z = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
         PoseStack stack = new PoseStack();
-        this.irisFix(stack, renderInfo, partialTicks);
         stack.translate(x, y, z);
         stack.mulPose(Axis.YP.rotationDegrees(180.0F - this.yaw));
         stack.mulPose(Axis.XP.rotationDegrees(this.pitch));
@@ -68,18 +66,6 @@ public class BlockParticle extends Particle {
         int light = this.level.getBrightness(LightLayer.SKY, pos);
         stack.translate(-0.5, 0, -0.5);
         this.dispatcher.renderSingleBlock(this.state, stack, Minecraft.getInstance().renderBuffers().bufferSource(), LightTexture.pack(block, light), OverlayTexture.NO_OVERLAY);
-    }
-
-    /**
-     * Iris does some stuff with camera caching etc. which makes it so we need to do this
-     */
-    private void irisFix(PoseStack stack, Camera renderInfo, float partialTicks) {
-        if (!RuneCraftory.iris)
-            return;
-        stack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastPitch, renderInfo.getXRot())));
-        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, this.cameraLastYaw, renderInfo.getYRot() - 180)));
-        this.cameraLastPitch = renderInfo.getXRot();
-        this.cameraLastYaw = renderInfo.getYRot() - 180;
     }
 
     @Override

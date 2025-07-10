@@ -17,8 +17,6 @@ public class RuneCraftory {
     public static final String MODID = "runecraftory";
     public static final Logger LOGGER = LogManager.getLogger(RuneCraftory.MODID);
 
-    public static boolean iris;
-
     public static ResourceLocation modRes(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }

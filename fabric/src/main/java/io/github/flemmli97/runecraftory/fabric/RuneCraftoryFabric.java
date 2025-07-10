@@ -63,7 +63,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -102,8 +101,6 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        RuneCraftory.iris = FabricLoader.getInstance().isModLoaded("iris");
-
         this.initContent();
         for (Map.Entry<IConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();

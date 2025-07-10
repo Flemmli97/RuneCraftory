@@ -48,7 +48,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfig;
@@ -67,8 +66,6 @@ import java.util.Map;
 public class RuneCraftoryNeoForge {
 
     public RuneCraftoryNeoForge(IEventBus modBus, ModContainer container) {
-        RuneCraftory.iris = ModList.get().isLoaded("iris");
-
         modBus.addListener(this::common);
         modBus.addListener(this::conf);
         modBus.addListener(this::attributes);

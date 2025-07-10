@@ -302,7 +302,7 @@ public class ClientCalls {
     }
 
     public static boolean invis(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).isInvis();
+        return Platform.INSTANCE.getEntityData(entity).isInvisible();
     }
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
@@ -327,12 +327,13 @@ public class ClientCalls {
         boolean stunned = Platform.INSTANCE.getEntityData(entity).isStunned();
         if (!stunned)
             return;
-        Vec3 dir = Vec3.directionFromRotation(0, entity.getViewYRot(partialTicks) + 90).scale(0.1);
-        float pT = Minecraft.getInstance().player.tickCount * 10 - partialTicks;
-        stack.translate(Mth.sin(pT) * dir.x(), 0, Mth.sin(pT) * dir.z());
+        float yRot = Mth.lerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
+        Vec3 dir = Vec3.directionFromRotation(0, yRot + 90).scale(0.1);
+        float pT = Mth.sin(Minecraft.getInstance().player.tickCount * 10 - partialTicks);
+        stack.translate(pT * dir.x(), 0, pT * dir.z());
     }
 
-    public static boolean onBlockHighlightRender(Level level, PoseStack poseStack, VertexConsumer consumer, Entity entity, double camX, double camY, double camZ, BlockPos pos, BlockState state) {
+    public static void onBlockHighlightRender(Level level, PoseStack poseStack, VertexConsumer consumer, Entity entity, double camX, double camY, double camZ, BlockPos pos, BlockState state) {
         if (entity instanceof LivingEntity living && living.getMainHandItem().getItem() instanceof ItemFertilizer) {
             boolean targetingCrop = level.getBlockState(pos).getBlock() instanceof BushBlock;
             ItemFertilizer.getOtherForTargeted(entity.getDirection(), pos)
@@ -346,7 +347,6 @@ public class ClientCalls {
                             renderShape(poseStack, consumer, state1.getShape(level, p, CollisionContext.of(entity)), p.getX() - camX, p.getY() - camY, p.getZ() - camZ, 0.0F, 0.0F, 0.0F, 0.4F);
                     });
         }
-        return false;
     }
 
     /**
