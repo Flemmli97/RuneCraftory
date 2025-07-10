@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -39,10 +38,6 @@ public interface Platform {
     Platform INSTANCE = LoaderInitializer.getImplInstance(Platform.class,
             "io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl",
             "io.github.flemmli97.runecraftory.neoforge.platform.PlatformImpl");
-
-    boolean isDatagen();
-
-    MinecraftServer getCurrentServer();
 
     PlayerData getPlayerData(Player player);
 

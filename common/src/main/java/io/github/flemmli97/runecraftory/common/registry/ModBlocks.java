@@ -31,8 +31,8 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEnt
 import io.github.flemmli97.runecraftory.common.blocks.entity.SingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -257,7 +257,7 @@ public class ModBlocks {
         RegistryEntrySupplier<Block, BlockMineral> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of().lightLevel(s -> 1).strength(5, 10)
                 .requiresCorrectToolForDrops()));
         MINERAL_MAP.put(name, reg);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             GENERATION_TAGS.put(reg, new RunecraftoryTags.Biomes.BiomeGenerationTags(whitelist, blacklist));
         }
         return reg;
@@ -278,7 +278,7 @@ public class ModBlocks {
     public static RegistryEntrySupplier<Block, BlockGiantCrop> giantCrop(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed, RegistryEntrySupplier<Block, ?> crop) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         CROPS.add(reg);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             GIANT_CROP_MAP.put(crop, reg);
         return reg;
     }
@@ -292,7 +292,7 @@ public class ModBlocks {
     public static RegistryEntrySupplier<Block, BlockGiantCrop> giantFlower(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed, RegistryEntrySupplier<Block, ?> flower) {
         RegistryEntrySupplier<Block, BlockGiantCrop> reg = BLOCKS.register(name, () -> new BlockGiantCrop(cropProps(), giant.get(), seed.get()));
         FLOWERS.add(reg);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             GIANT_CROP_MAP.put(flower, reg);
         return reg;
     }
@@ -300,7 +300,7 @@ public class ModBlocks {
     public static RegistryEntrySupplier<Block, BlockHerb> herb(String name, List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist, BlockHerb.GroundTypes... types) {
         RegistryEntrySupplier<Block, BlockHerb> reg = BLOCKS.register(name, () -> new BlockHerb(plantProps(), types));
         HERBS.add(reg);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             GENERATION_TAGS.put(reg, new RunecraftoryTags.Biomes.BiomeGenerationTags(whitelist, blacklist));
         }
         return reg;

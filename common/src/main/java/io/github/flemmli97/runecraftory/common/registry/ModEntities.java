@@ -140,8 +140,8 @@ import io.github.flemmli97.runecraftory.common.items.creative.RuneCraftoryEggIte
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -1618,7 +1618,7 @@ public class ModEntities {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regBoss(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> sup = regMonster(v, name, primary, secondary, flying, props);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             BOSSES.add((RegistryEntrySupplier) sup);
         return sup;
     }
@@ -1627,7 +1627,7 @@ public class ModEntities {
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> sup = regWithEgg(v, name, primary, secondary);
         MONSTERS.add((RegistryEntrySupplier) sup);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DEFAULT_MOB_PROPERTIES.put(name, props);
         if (flying)
             FLYING_MONSTERS.add((RegistryEntrySupplier) sup);
@@ -1639,7 +1639,7 @@ public class ModEntities {
     }
 
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props, GateSpawnData.Builder builder) {
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DEFAULT_SPAWN_DATA.put(name, builder.build(name));
         return regMonster(v, name, primary, secondary, flying, props);
     }

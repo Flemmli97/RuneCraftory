@@ -94,8 +94,8 @@ import io.github.flemmli97.runecraftory.common.spells.WebShotSpell;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeBarrageSpell;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeCircle;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeSpell;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -268,7 +268,7 @@ public class ModSpells {
 
     private static <T extends Spell> RegistryEntrySupplier<Spell, T> registerSpell(String name, Supplier<T> sup, SpellProperties.Builder properties) {
         RegistryEntrySupplier<Spell, T> entry = SPELLS.register().register(name, sup);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DEFAULT_PROPERTIES.put(entry, properties.build());
         return entry;
     }

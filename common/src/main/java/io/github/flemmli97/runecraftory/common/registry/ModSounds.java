@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
@@ -96,7 +96,7 @@ public class ModSounds {
 
     private static RegistryEntrySupplier<SoundEvent, SoundEvent> register(String name, int variations) {
         RegistryEntrySupplier<SoundEvent, SoundEvent> res = SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(RuneCraftory.modRes(name)));
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             VARIATIONS.put(res.getID(), variations);
         return res;
     }

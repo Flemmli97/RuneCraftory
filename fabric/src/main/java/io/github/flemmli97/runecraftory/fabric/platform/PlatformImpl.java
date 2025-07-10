@@ -14,7 +14,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -44,18 +43,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PlatformImpl implements Platform {
-
-    public static MinecraftServer CURRENT_SERVER;
-
-    @Override
-    public boolean isDatagen() {
-        return false;
-    }
-
-    @Override
-    public MinecraftServer getCurrentServer() {
-        return CURRENT_SERVER;
-    }
 
     @Override
     public PlayerData getPlayerData(Player player) {

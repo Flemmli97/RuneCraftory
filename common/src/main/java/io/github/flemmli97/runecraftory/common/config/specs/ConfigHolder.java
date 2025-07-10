@@ -5,8 +5,8 @@ import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import net.neoforged.fml.config.IConfigSpec;
 
 import java.io.File;
@@ -87,8 +87,8 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
 
         GeneralConfig.debugAttack = spec.debugAttack.get();
 
-        if (Platform.INSTANCE.getCurrentServer() != null)
-            LoaderNetwork.INSTANCE.sendToAll(new S2CSyncConfig(), Platform.INSTANCE.getCurrentServer());
+        if (TenshiLibCrossPlat.INSTANCE.getCurrentServer() != null)
+            LoaderNetwork.INSTANCE.sendToAll(new S2CSyncConfig(), TenshiLibCrossPlat.INSTANCE.getCurrentServer());
     }
 
     public static void loadClient(ClientConfigSpec spec) {

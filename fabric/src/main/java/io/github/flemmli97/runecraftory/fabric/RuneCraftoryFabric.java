@@ -41,7 +41,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
-import io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.fabric.loader.events.CommonSetupEvent;
 import io.github.flemmli97.tenshilib.fabric.loader.events.EntityAttributeModifierEvent;
@@ -111,9 +110,6 @@ public class RuneCraftoryFabric implements ModInitializer {
             NeoForgeConfigRegistry.INSTANCE.register(RuneCraftory.MODID, loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
         }
         PacketHandler.register();
-
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> PlatformImpl.CURRENT_SERVER = server);
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> PlatformImpl.CURRENT_SERVER = null);
 
         DataPackHandler.addListeners(listener -> ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(listener.id(), reg -> new IdentifiableResourceReloadListener() {
             @Override

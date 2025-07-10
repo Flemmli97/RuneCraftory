@@ -41,8 +41,8 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.component.DataComponents;
@@ -1249,7 +1249,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
@@ -1259,7 +1259,7 @@ public class ModItems {
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)
                 .component(ModDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.WATERINGCANS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
@@ -1269,7 +1269,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
@@ -1279,7 +1279,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
@@ -1289,7 +1289,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
@@ -1298,7 +1298,7 @@ public class ModItems {
         RegistryEntrySupplier<Item, ItemToolFishingRod> sup = register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(new Item.Properties()
                 .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier).stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISHING_RODS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
@@ -1314,7 +1314,7 @@ public class ModItems {
         RegistryEntrySupplier<Item, ItemShortSwordBase> sup = register(name, () -> new ItemShortSwordBase(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SHORT_SWORD))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1334,7 +1334,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.LONG_SWORD))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.LONGSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1354,7 +1354,7 @@ public class ModItems {
                 .stacksTo(1)
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.SPEAR))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SPEARS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1374,7 +1374,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1394,7 +1394,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.HAMMER_AXE))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMERS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1414,7 +1414,7 @@ public class ModItems {
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.DUAL_BLADES))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.DUALBLADES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1434,7 +1434,7 @@ public class ModItems {
                 .stacksTo(1)
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.GLOVES))), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISTS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1452,7 +1452,7 @@ public class ModItems {
         RegistryEntrySupplier<Item, ItemStaffBase> sup = register(name, () -> new ItemStaffBase(starterElement, amount, new Item.Properties()
                 .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
                 .component(ModDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(ModAttackActions.STAFF)).stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.STAFFS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
         }
@@ -1470,7 +1470,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties().stacksTo(1), RuneCraftory.modRes(name), useItemTexture), ModCreativeModTabs.EQUIPMENT);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             switch (slot) {
                 case BOOTS ->
@@ -1493,7 +1493,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item, ShieldItem> sup = register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1)), ModCreativeModTabs.EQUIPMENT);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHIELDS, t -> new ArrayList<>()).add(sup);
         }
@@ -1529,7 +1529,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().rarity(rarity)), ModCreativeModTabs.MATERIALS);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             if (rarity == Rarity.COMMON)
                 TIER_1_CHEST.add(sup);
         }
@@ -1538,7 +1538,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, ItemMedicine> medicine(String name, boolean affectStats) {
         RegistryEntrySupplier<Item, ItemMedicine> sup = register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(FOOD_PROP).stacksTo(16)), ModCreativeModTabs.MEDICINE);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_2_CHEST.add(sup);
         return sup;
     }
@@ -1550,7 +1550,7 @@ public class ModItems {
                 return UseAnim.DRINK;
             }
         }, ModCreativeModTabs.MEDICINE);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_2_CHEST.add(sup);
         return sup;
     }
@@ -1563,7 +1563,7 @@ public class ModItems {
         RegistryEntrySupplier<Item, ItemSpell> ret = register(name, () -> canHold ?
                 new ItemHoldSpell(sup.get(), new Item.Properties().stacksTo(1)) :
                 new ItemSpell(sup.get(), new Item.Properties().stacksTo(1)), ModCreativeModTabs.SPELLS);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(ret);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SPELLS, t -> new ArrayList<>()).add(ret);
             if (type == 2)
@@ -1581,14 +1581,14 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties()), ModCreativeModTabs.FOOD);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;
     }
 
     private static RegistryEntrySupplier<Item, ItemNameBlockItem> seed(String name, Supplier<Supplier<? extends Block>> block) {
         RegistryEntrySupplier<Item, ItemNameBlockItem> sup = register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties()), ModCreativeModTabs.FARMING);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             SEEDS.add(sup);
         return sup;
     }
@@ -1608,7 +1608,7 @@ public class ModItems {
             else
                 sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)));
             NOTEX.add(sup);
-            if (Platform.INSTANCE.isDatagen()) {
+            if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
                 if (small != null)
                     GIANT_CROPS.add(sup);
             }
@@ -1619,7 +1619,7 @@ public class ModItems {
             sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), ModCreativeModTabs.FARMING);
         else
             sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)), ModCreativeModTabs.FARMING);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_1_CHEST.add(sup);
             if (small != null)
                 GIANT_CROPS.add(sup);
@@ -1635,7 +1635,7 @@ public class ModItems {
 
     private static RegistryEntrySupplier<Item, BlockItem> herb(String name, Supplier<Supplier<? extends Block>> block) {
         RegistryEntrySupplier<Item, BlockItem> sup = register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(LOW_FOOD_PROP)), ModCreativeModTabs.MEDICINE);
-        if (Platform.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;
     }
@@ -1653,7 +1653,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().food(foodProp)), ModCreativeModTabs.FOOD);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(sup);
             FOOD.add(sup);
             for (TagKey<Item> tag : tags) {
@@ -1681,7 +1681,7 @@ public class ModItems {
                 return UseAnim.DRINK;
             }
         }, ModCreativeModTabs.FOOD);
-        if (Platform.INSTANCE.isDatagen()) {
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(sup);
             FOOD.add(sup);
             for (TagKey<Item> tag : tags) {

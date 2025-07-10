@@ -40,8 +40,5 @@
     "tenshilib": ">=${tenshilib_version}",
     "forgeconfigapiport": ">=${forge_config_api}",
     "smartbrainlib": ">=${sbl_version}"
-  },
-  "breaks": {
-    "simplequests": "<${simplequest_api_version}"
   }
 }
