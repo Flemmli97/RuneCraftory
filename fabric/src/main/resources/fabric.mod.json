@@ -37,7 +37,9 @@
   "depends": {
     "fabric": ">=${fabric_version}",
     "minecraft": ">=${mcversion}",
-    "tenshilib": ">=${tenshilib_version}"
+    "tenshilib": ">=${tenshilib_version}",
+    "forgeconfigapiport": ">=${forge_config_api}",
+    "smartbrainlib": ">=${sbl_version}"
   },
   "breaks": {
     "simplequests": "<${simplequest_api_version}"

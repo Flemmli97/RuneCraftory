@@ -17,6 +17,8 @@ loom {
 
 ext {
     mod_meta.tenshilib_version = tenshilib_version
+    mod_meta.forge_config_api = forge_config_api
+    mod_meta.sbl_version = sbl_version
 }
 
 repositories {
