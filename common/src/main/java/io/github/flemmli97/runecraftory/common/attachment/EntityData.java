@@ -16,7 +16,7 @@ import java.util.HashSet;
 
 public class EntityData {
 
-    private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, invis, orthoView, enteredBath;
+    private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, orthoView, enteredBath;
     private int disabledState;
 
     public EntityCustomFishingHook fishingHook;
@@ -24,6 +24,9 @@ public class EntityData {
     private ItemStack main, off;
 
     public float sleepYRot;
+
+    private int invisible;
+    private boolean invisibleFlag;
 
     private final HashSet<Holder<ArmorEffect>> armorFlags = new HashSet<>();
 
@@ -99,15 +102,17 @@ public class EntityData {
         return this.stunned;
     }
 
-    public void setInvis(LivingEntity entity, boolean flag) {
-        this.invis = flag;
-        if (!entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invis), entity);
+    public void setInvis(LivingEntity entity, int duration) {
+        this.invisible = duration;
+        boolean pre = this.invisibleFlag;
+        this.invisibleFlag = duration > 0;
+        if (this.invisibleFlag != pre && !entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), entity);
         }
     }
 
-    public boolean isInvis() {
-        return this.invis;
+    public boolean isInvisible() {
+        return this.invisibleFlag;
     }
 
     public void setOrthoView(LivingEntity entity, boolean flag) {
@@ -172,6 +177,16 @@ public class EntityData {
             }
             if (!this.isSilent) {
                 entity.setSilent(false);
+            }
+        }
+    }
+
+    public void tick(LivingEntity entity) {
+        if (--this.invisible <= 0 && !entity.level().isClientSide()) {
+            boolean pre = this.invisibleFlag;
+            this.invisibleFlag = this.invisible > 0;
+            if (this.invisibleFlag != pre && !entity.level().isClientSide) {
+                LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), entity);
             }
         }
     }

@@ -354,6 +354,7 @@ public class EntityCalls {
             if (disabled && !mob.getNavigation().isDone())
                 mob.getNavigation().stop();
         }
+        Platform.INSTANCE.getEntityData(entity).tick(entity);
     }
 
     // Blocking normally at Entity#tick wont work due to overrides etc.

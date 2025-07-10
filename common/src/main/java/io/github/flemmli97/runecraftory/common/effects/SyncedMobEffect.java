@@ -24,8 +24,8 @@ public class SyncedMobEffect extends MobEffect implements ExtendedEffect {
             case POISON -> data.setPoison(entity, flag);
             case SLEEP -> data.setSleeping(entity, flag);
             case PARALYSIS -> data.setParalysis(entity, flag);
+            case STUN -> data.setStunned(entity, flag);
             case COLD -> data.setCold(entity, flag);
-            case INVIS -> data.setInvis(entity, flag);
             case ORTHOVIEW -> data.setOrthoView(entity, flag);
         }
     }

@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.loader.TenshiLibEventCalls;
+import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -121,7 +121,7 @@ public class EntityWindBlade extends BaseProjectile {
         Vec3 pos = this.position();
         Vec3 to = pos.add(this.getDeltaMovement());
         BlockHitResult raytraceresult = this.level().clip(new ClipContext(pos, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-        if (raytraceresult.getType() == HitResult.Type.BLOCK && !TenshiLibEventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
+        if (raytraceresult.getType() == HitResult.Type.BLOCK && !TenshiLibCrossPlat.INSTANCE.projectileImpactEvent(this, raytraceresult)) {
             BlockPos blockpos = raytraceresult.getBlockPos();
             BlockState blockstate = this.level().getBlockState(blockpos);
             blockstate.onProjectileHit(this.level(), blockstate, raytraceresult, this);

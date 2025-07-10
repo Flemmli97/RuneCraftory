@@ -100,13 +100,14 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, Anima
         }
 
         --this.tickLeft;
-        this.caughtEntities.forEach(e -> {
-            if (e.isAlive()) {
-                e.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
-                e.hurtMarked = true;
-                EntityData data = Platform.INSTANCE.getEntityData(e);
+        this.caughtEntities.forEach(entity -> {
+            if (entity.isAlive()) {
+                Platform.INSTANCE.getEntityData(entity).setInvis(entity, 10);
+                entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
+                entity.hurtMarked = true;
+                EntityData data = Platform.INSTANCE.getEntityData(entity);
                 if (!data.isOrthoView())
-                    data.setOrthoView(e, true);
+                    data.setOrthoView(entity, true);
             }
         });
         if (!this.level().isClientSide) {
@@ -119,7 +120,10 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, Anima
                     this.caughtEntities.forEach(e -> CombatUtils.mobAttack(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier));
             }
             if (this.tickLeft <= 0) {
-                this.caughtEntities.forEach(e -> Platform.INSTANCE.getEntityData(e).setOrthoView(e, false));
+                this.caughtEntities.forEach(entity -> {
+                    Platform.INSTANCE.getEntityData(entity).setInvis(entity, 0);
+                    Platform.INSTANCE.getEntityData(entity).setOrthoView(entity, false);
+                });
                 this.discard();
             }
         }

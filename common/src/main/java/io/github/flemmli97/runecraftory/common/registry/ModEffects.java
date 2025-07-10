@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.effects.SleepEffect;
 import io.github.flemmli97.runecraftory.common.effects.SteelHeartEffect;
 import io.github.flemmli97.runecraftory.common.effects.StunEffect;
 import io.github.flemmli97.runecraftory.common.effects.SyncedMobEffect;
-import io.github.flemmli97.runecraftory.common.effects.TrueInvis;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
@@ -33,6 +32,4 @@ public class ModEffects {
     public static final RegistryEntrySupplier<MobEffect, SleepEffect> SLEEP = EFFECTS.register("sleeping", SleepEffect::new);
     public static final RegistryEntrySupplier<MobEffect, SteelHeartEffect> STEEL_HEART = EFFECTS.register("steel_heart", SteelHeartEffect::new);
     public static final RegistryEntrySupplier<MobEffect, StunEffect> STUNNED = EFFECTS.register("stunned", StunEffect::new);
-
-    public static final RegistryEntrySupplier<MobEffect, TrueInvis> TRUE_INVIS = EFFECTS.register("true_invisibility", TrueInvis::new);
 }
