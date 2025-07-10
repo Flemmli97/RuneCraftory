@@ -15,6 +15,7 @@ import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.ToIntBiFunction;
 
 public class MonsterBehaviourUtils {
 
@@ -80,6 +81,16 @@ public class MonsterBehaviourUtils {
                     Entity target = BrainUtils.getTargetOfEntity(entity);
                     return target == null || entity.isInAttackBox(target, anim.animation());
                 });
+    }
+
+    public static <E extends LivingEntity> ToIntBiFunction<E, LivingEntity> closeEnough(int dist) {
+        return (entity, target) -> {
+            int close = dist;
+            if (target != null) {
+                close += Mth.ceil(target.getBbWidth() * 0.5);
+            }
+            return close;
+        };
     }
 
     public static <E extends LivingEntity> Predicate<E> ifCloserThan(double dist) {

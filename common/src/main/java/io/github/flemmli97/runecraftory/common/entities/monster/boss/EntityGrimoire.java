@@ -189,7 +189,7 @@ public class EntityGrimoire extends BossMonster {
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<BossMonster>().speedMod((e, t) -> 1.1f)
-                        .closeEnoughDist((e, t) -> 6))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())

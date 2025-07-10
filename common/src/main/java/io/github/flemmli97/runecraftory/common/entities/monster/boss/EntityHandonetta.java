@@ -12,13 +12,13 @@ import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
@@ -32,7 +32,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -146,7 +145,7 @@ public class EntityHandonetta extends BossMonster {
                 S2CScreenShake.sendAround(entity, 24, 4, 1);
             }
             if (anim.isPast("attack_end") && !entity.caughtEntities.isEmpty()) {
-                entity.caughtEntities.forEach(e -> e.removeEffect(ModEffects.TRUE_INVIS.asHolder()));
+                Platform.INSTANCE.getEntityData(entity).setInvis(entity, 0);
                 entity.caughtEntities.clear();
             }
         });
@@ -202,7 +201,7 @@ public class EntityHandonetta extends BossMonster {
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().closeEnoughDist((e, t) -> 8))
+                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -215,7 +214,7 @@ public class EntityHandonetta extends BossMonster {
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(GRAB)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
-                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().closeEnoughDist((e, t) -> 5))
+                .prepare(new SetWalkTargetToAttackTarget<EntityHandonetta>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(5)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -261,14 +260,14 @@ public class EntityHandonetta extends BossMonster {
         super.baseTick();
         if (this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) {
             boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPast("invis_start") : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
-            this.caughtEntities.forEach(e -> {
-                if (e.isAlive()) {
-                    if (e instanceof ServerPlayer player)
+            this.caughtEntities.forEach(entity -> {
+                if (entity.isAlive()) {
+                    if (entity instanceof ServerPlayer player)
                         player.moveTo(this.getX(), this.getY(), this.getZ());
                     else
-                        e.setPos(this.getX(), this.getY(), this.getZ());
+                        entity.setPos(this.getX(), this.getY(), this.getZ());
                     if (invis)
-                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.asHolder(), 10, 1, true, false, false));
+                        Platform.INSTANCE.getEntityData(entity).setInvis(entity, 10);
                 }
             });
         }

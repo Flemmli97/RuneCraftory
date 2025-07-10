@@ -66,7 +66,7 @@ public class EntityLeafBall extends BaseMonster {
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(6)).prepareOptional(new MoveToAttackTarget<>())
                 .end(6)
                 .start(SLEEP_ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist((e, t) -> 5)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(5))).prepareOptional(new MoveToAttackTarget<>())
                 .end(4)
                 .build();
     }

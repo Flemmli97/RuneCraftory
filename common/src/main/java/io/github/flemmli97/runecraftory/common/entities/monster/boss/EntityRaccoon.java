@@ -299,7 +299,7 @@ public class EntityRaccoon extends BossMonster {
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(JUMP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(EntityRaccoon::isBerserk)
-                .prepare(new SetWalkTargetToAttackTarget<EntityRaccoon>().closeEnoughDist((e, t) -> 8)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<EntityRaccoon>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8))).prepareOptional(new MoveToAttackTarget<>())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(EntityRaccoon::isBerserk)

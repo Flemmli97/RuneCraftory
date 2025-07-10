@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
@@ -45,6 +46,10 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
             this.tag(RunecraftoryTags.EntityTypes.BOSS_MONSTERS)
                     .add(sup.get());
         }
+        this.tag(RunecraftoryTags.EntityTypes.BOSSES)
+                .addTag(RunecraftoryTags.EntityTypes.BOSS_MONSTERS);
+        this.tag(Tags.EntityTypes.BOSSES)
+                .addTag(RunecraftoryTags.EntityTypes.BOSS_MONSTERS);
 
         this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
                 .add(ModEntities.GATE.get())

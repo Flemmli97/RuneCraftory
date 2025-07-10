@@ -56,7 +56,7 @@ public class EntityDuck extends ChargingMonster {
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
                 .end(5)
                 .start(DIVE).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<ChargingMonster>().closeEnoughDist((e, t) -> 6)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<ChargingMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(6))).prepareOptional(new MoveToAttackTarget<>())
                 .prepare(new SetChargeTarget<>())
                 .end(3)
                 .build();

@@ -164,7 +164,7 @@ public class EntityChimera extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<EntityChimera>builder(LEAP)
                         .start(BITE, m -> m.chargeAttackSuccess).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<EntityChimera>().speedMod((e, t) -> 1.1f)
-                        .closeEnoughDist((e, t) -> 4)).prepareOptional(new MoveToAttackTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(4))).prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(FIRE_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<EntityChimera>().speedMod((e, t) -> 1.1f)

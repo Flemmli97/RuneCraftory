@@ -80,7 +80,7 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(9)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(LIGHT).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist((e, t) -> 12)).prepareOptional(new MoveToWalkTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(12))).prepareOptional(new MoveToWalkTarget<>())
                 .end(3)
                 .start(HEAL).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(2)

@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -33,7 +32,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -117,10 +115,7 @@ public class EntityMarionetta extends BossMonster {
                         .normalize().scale(1.2).add(0, 0.85, 0);
                 EntityMarionettaTrap trap = new EntityMarionettaTrap(entity.level(), entity);
                 trap.setDamageMultiplier(0.9f);
-                entity.caughtEntities.forEach(e -> {
-                    e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.asHolder(), 100, 1, true, false, false));
-                    trap.addCaughtEntity(e);
-                });
+                entity.caughtEntities.forEach(trap::addCaughtEntity);
                 trap.setDeltaMovement(throwVec);
                 entity.level().addFreshEntity(trap);
                 entity.caughtEntities.clear();
@@ -195,12 +190,12 @@ public class EntityMarionetta extends BossMonster {
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(SPIN)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<EntityMarionetta>()
-                        .closeEnoughDist((e, t) -> 6).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(CHEST_ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<EntityMarionetta>()
-                        .closeEnoughDist((e, t) -> 6).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(STUFFED_ANIMALS)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -210,7 +205,7 @@ public class EntityMarionetta extends BossMonster {
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(DARK_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<EntityMarionetta>()
-                        .closeEnoughDist((e, t) -> 6).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(6)
                 .start(MonsterBehaviourUtils.checkedAttack(FURNITURE)).play(MonsterBehaviourUtils.cooldownedPlay())

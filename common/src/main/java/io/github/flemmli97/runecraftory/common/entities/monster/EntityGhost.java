@@ -106,7 +106,7 @@ public class EntityGhost extends ChargingMonster {
                 .end(5)
                 .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetToAttackTarget<ChargingMonster>()
-                        .closeEnoughDist((e, t) -> 3), new MoveToWalkTarget<>(), new SetChargeTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTarget<>(), new SetChargeTarget<>())
                 .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(9)

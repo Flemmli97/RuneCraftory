@@ -82,7 +82,7 @@ public class EntityMimic extends LeapingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
-                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist((e, t) -> 1)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(1))).prepareOptional(new MoveToAttackTarget<>())
                 .end(4)
                 .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7)).prepareOptional(new MoveToAttackTarget<>())

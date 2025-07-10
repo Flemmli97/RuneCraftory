@@ -959,7 +959,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     // "Disable" this as we don't use it and it will mess with the AI check
     @Override
     protected AABB getAttackBoundingBox() {
-        return this.getBoundingBox();//.inflate(0.5);
+        return this.getBoundingBox().inflate(0.5);
     }
 
     @Override

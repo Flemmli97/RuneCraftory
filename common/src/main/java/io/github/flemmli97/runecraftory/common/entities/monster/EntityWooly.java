@@ -88,7 +88,7 @@ public class EntityWooly extends LeapingMonster {
                 .end(1)
                 .start(KICK).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetToAttackTarget<BaseMonster>()
-                        .closeEnoughDist((e, t) -> 3), new MoveToWalkTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTarget<>())
                 .end(1)
                 .start(KICK).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetAwayFromTarget<BaseMonster>().radius(5, 4), new MoveToWalkTarget<>())
