@@ -35,7 +35,7 @@ public class DynamicDamage extends DamageSource {
     public DynamicDamage(Holder<DamageType> type, Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock,
                          float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage,
                          Map<Holder<Attribute>, Double> attributesChange, Set<TagKey<DamageType>> dynamicTags) {
-        super(type, cause, attacker);
+        super(type, attacker, cause == null ? attacker : cause);
         this.element = element;
         this.knock = knock;
         this.knockAmount = knockBackAmount;
@@ -124,7 +124,7 @@ public class DynamicDamage extends DamageSource {
 
         private EnumElement element = EnumElement.NONE;
         private KnockBackType knock = KnockBackType.VANILLA;
-        private Entity trueSource;
+        private Entity source;
         private float knockAmount;
         private int protection = 10;
         private DamageCategory dmg = DamageCategory.NORMAL;
@@ -138,7 +138,7 @@ public class DynamicDamage extends DamageSource {
 
         public Builder(Entity attacker, Entity source) {
             this.cause = attacker;
-            this.trueSource = source;
+            this.source = source;
         }
 
         public Builder element(EnumElement el) {
@@ -208,7 +208,7 @@ public class DynamicDamage extends DamageSource {
                     type = ModDamageType.PHYSICAL_PROJECTILE;
             }
             return new DynamicDamage(provider.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(type),
-                    this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection,
+                    this.cause, this.source, this.element, this.knock, this.knockAmount, this.protection,
                     this.dmg == DamageCategory.FAINT, this.dmg == DamageCategory.FIXED,
                     this.attributesChange, tags);
         }

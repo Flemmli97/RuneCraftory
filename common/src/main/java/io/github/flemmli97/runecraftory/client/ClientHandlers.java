@@ -116,15 +116,22 @@ public class ClientHandlers {
         return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player).getWeaponHandler().isItemSwapBlocked()) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
-    // Unused atm
     public static boolean disableKeys(int key, int scanCode) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.screen instanceof ChatScreen)
+        if (mc.player == null || mc.screen instanceof ChatScreen || !EntityUtils.isDisabled(mc.player))
             return false;
         return key != GLFW.GLFW_KEY_ESCAPE
+                // Enable movement keys as movement is already blocked and upon enabling they should have the correct state
+                && !mc.options.keyUp.matches(key, scanCode)
+                && !mc.options.keyDown.matches(key, scanCode)
+                && !mc.options.keyLeft.matches(key, scanCode)
+                && !mc.options.keyRight.matches(key, scanCode)
+                && !mc.options.keyShift.matches(key, scanCode)
+                && !mc.options.keySprint.matches(key, scanCode)
+                // Allow these too
                 && !mc.options.keyInventory.matches(key, scanCode)
                 && !mc.options.keyChat.matches(key, scanCode)
-                && !mc.options.keyCommand.matches(key, scanCode) && EntityUtils.isDisabled(mc.player);
+                && !mc.options.keyCommand.matches(key, scanCode);
     }
 
     public static void recipeToast(Collection<ResourceLocation> recipes) {
@@ -148,14 +155,6 @@ public class ClientHandlers {
     public static void trySetPerspective(LivingEntity entity, boolean flag) {
         if (entity == Minecraft.getInstance().getCameraEntity())
             setToThirdPerson(!flag);
-    }
-
-    public static boolean orthorgraphicCam() {
-        Entity entity = Minecraft.getInstance().getCameraEntity();
-        if (entity instanceof LivingEntity living) {
-            return Platform.INSTANCE.getEntityData(living).isOrthoView();
-        }
-        return false;
     }
 
     public static void openCompanionGui(int id, boolean fullParty, boolean hasHome) {

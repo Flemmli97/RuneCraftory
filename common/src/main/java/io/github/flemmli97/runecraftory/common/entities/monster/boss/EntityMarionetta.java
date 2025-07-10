@@ -230,12 +230,16 @@ public class EntityMarionetta extends BossMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        this.caughtEntities.forEach(e -> {
-            if (e.isAlive()) {
-                if (e instanceof ServerPlayer player)
+        this.caughtEntities.forEach(entity -> {
+            if (entity.isAlive()) {
+                if (entity instanceof ServerPlayer player) {
+                    Vec3 dir = this.position().add(0, this.getBbHeight() + 0.2, 0).subtract(player.position());
+                    player.setDeltaMovement(dir);
                     player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
+                }
                 else
-                    e.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
+                    entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
+                entity.hurtMarked = true;
             }
         });
     }

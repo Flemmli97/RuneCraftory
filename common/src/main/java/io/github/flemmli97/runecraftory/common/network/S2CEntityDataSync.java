@@ -40,7 +40,7 @@ public record S2CEntityDataSync(int entityID,
                 case PARALYSIS -> data.setParalysis(living, pkt.flag);
                 case COLD -> data.setCold(living, pkt.flag);
                 case INVIS -> data.setInvis(living, pkt.flag ? 1 : 0);
-                case ORTHOVIEW -> data.setOrthoView(living, pkt.flag);
+                case ORTHOVIEW -> data.setThirdPersonView(living, pkt.flag);
                 case STUN -> data.setStunned(living, pkt.flag);
             }
         }

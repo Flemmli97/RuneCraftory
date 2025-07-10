@@ -26,7 +26,7 @@ public class SyncedMobEffect extends MobEffect implements ExtendedEffect {
             case PARALYSIS -> data.setParalysis(entity, flag);
             case STUN -> data.setStunned(entity, flag);
             case COLD -> data.setCold(entity, flag);
-            case ORTHOVIEW -> data.setOrthoView(entity, flag);
+            case ORTHOVIEW -> data.setThirdPersonView(entity, flag);
         }
     }
 

@@ -45,7 +45,7 @@ public class EntityData {
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
         this.updateAiState(entity, flag);
-        this.setOrthoView(entity, flag);
+        this.setThirdPersonView(entity, flag);
         this.sleepYRot = entity.yBodyRot;
         if (!entity.level().isClientSide) {
             LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.SLEEP, this.sleeping), entity);
@@ -115,7 +115,7 @@ public class EntityData {
         return this.invisibleFlag;
     }
 
-    public void setOrthoView(LivingEntity entity, boolean flag) {
+    public void setThirdPersonView(LivingEntity entity, boolean flag) {
         this.orthoView = flag;
         if (!entity.level().isClientSide) {
             LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.ORTHOVIEW, this.orthoView), entity);
@@ -123,7 +123,7 @@ public class EntityData {
             ClientHandlers.trySetPerspective(entity, flag);
     }
 
-    public boolean isOrthoView() {
+    public boolean thirdPersonView() {
         return this.orthoView;
     }
 
@@ -151,9 +151,8 @@ public class EntityData {
         return this.enteredBath;
     }
 
-    public EntityData setEnteredBath(boolean enteredBath) {
+    public void setEnteredBath(boolean enteredBath) {
         this.enteredBath = enteredBath;
-        return this;
     }
 
     private void updateAiState(LivingEntity entity, boolean increase) {

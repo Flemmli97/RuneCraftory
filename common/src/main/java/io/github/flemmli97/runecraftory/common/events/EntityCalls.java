@@ -137,9 +137,8 @@ public class EntityCalls {
         if (living instanceof ServerPlayer player) {
             onPlayerLoad(player);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(Platform.INSTANCE.getPlayerData(player)), player);
-        }
-        if (!living.level().isClientSide)
             updateWeaponState(living);
+        }
     }
 
     /**
@@ -161,12 +160,12 @@ public class EntityCalls {
             float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
             recalcOffhandBonus(entity, shieldEfficiency);
         }
-        // Sync attributes to client. Vanilla only does it for a few
         if (entity instanceof ServerPlayer serverPlayer) {
+            // Sync attributes to client. Vanilla only does it for a few
             EntityUtils.sendAttributesTo(serverPlayer, serverPlayer);
+            // If player doesnt have a weapon now we remove all attack damage modifiers
+            updateWeaponState(entity);
         }
-        // If player doesnt have a weapon now we remove all attack damage modifiers
-        updateWeaponState(entity);
     }
 
     private static void updateWeaponState(LivingEntity entity) {

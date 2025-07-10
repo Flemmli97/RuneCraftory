@@ -69,7 +69,7 @@ public class EntityFurniture extends BaseProjectile {
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         this.refreshDimensions();
-        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(4).element(EnumElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(3).element(EnumElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         if (att)
             this.discard();
         return att;
@@ -80,11 +80,11 @@ public class EntityFurniture extends BaseProjectile {
         if (!this.isAlive()) {
             return null;
         } else {
-            return this.entityCollision(from, to, this::canHit);
+            return this.entityCollision(this::canHit);
         }
     }
 
-    private EntityHitResult entityCollision(Vec3 from, Vec3 to, Predicate<Entity> pred) {
+    private EntityHitResult entityCollision(Predicate<Entity> pred) {
         double distVar = Double.MAX_VALUE;
         Entity ret = null;
         AABB entityBB = this.getBoundingBox();

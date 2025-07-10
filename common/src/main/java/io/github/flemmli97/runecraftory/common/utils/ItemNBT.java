@@ -18,7 +18,6 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.mixinhelper.PlayerExtended;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
@@ -29,7 +28,6 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -60,10 +58,6 @@ public class ItemNBT {
                     .orElse(Map.of());
         }
         return stats.getTotalStats();
-    }
-
-    public static boolean shouldHideVanillaAttributeTooltip(ItemStack stack, EquipmentSlotGroup slotGroup, Player player) {
-        return getStatsAttributes(stack) != null && player != null && !((PlayerExtended) player).runcraftory$hasActualShiftKeyDown();
     }
 
     public static void modifyAttribute(ItemStack stack, Consumer<ItemAttributeModifiers.Entry> remove, Consumer<ItemAttributeModifiers.Entry> add) {

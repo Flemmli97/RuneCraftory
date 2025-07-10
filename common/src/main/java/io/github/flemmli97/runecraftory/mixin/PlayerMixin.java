@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
 import io.github.flemmli97.runecraftory.mixinhelper.MixinUtils;
-import io.github.flemmli97.runecraftory.mixinhelper.PlayerExtended;
 import io.github.flemmli97.runecraftory.mixinhelper.PrevEntityPosition;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin implements PrevEntityPosition, PlayerExtended {
+public abstract class PlayerMixin implements PrevEntityPosition {
 
     @Unique
     private double runecraftory$oldMPosX1, runecraftory$oldMPosX2;
