@@ -1,3 +1,9 @@
+RuneCraftory 2.0.0
+================
+- Update to 1.21.1
+- Overhauled various UIs
+- All mobs now use brains instead of goals
+
 RuneCraftory 1.11.1
 ================
 - Update for library changes
