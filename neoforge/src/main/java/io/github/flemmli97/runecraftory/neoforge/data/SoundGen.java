@@ -28,7 +28,7 @@ public class SoundGen extends SoundDefinitionsProvider {
                 this.add(sup.get());
         }
         for (ModSounds.BGMHolder bgm : ModSounds.BGM) {
-            this.addBgmWith(bgm.sound().get(), bgm.bgm());
+            this.addBgmWith(bgm.sound().get(), bgm.bgm().location());
         }
     }
 
@@ -48,7 +48,8 @@ public class SoundGen extends SoundDefinitionsProvider {
     }
 
     private void addBgmWith(SoundEvent event, ResourceLocation sound) {
-        this.add(event, definition().subtitle(event.getLocation().toString()).with(SoundDefinition.Sound.sound(sound, SoundDefinition.SoundType.SOUND)
+        this.add(event, definition().subtitle(event.getLocation().toString())
+                .with(SoundDefinition.Sound.sound(sound, SoundDefinition.SoundType.SOUND)
                 .stream()));
     }
 }

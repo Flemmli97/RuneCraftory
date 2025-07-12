@@ -2,7 +2,7 @@
   "bgm.ambrosia_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "name": "runecraftory:bgm/tatakai-no-tabiji-o-seiku",
         "stream": true
       }
     ],
@@ -11,7 +11,7 @@
   "bgm.chimera_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/area-12",
+        "name": "runecraftory:bgm/kesshi-no-tatakai-ni-idomu-monotachi",
         "stream": true
       }
     ],
@@ -20,7 +20,7 @@
   "bgm.dead_tree_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/area-12",
+        "name": "runecraftory:bgm/janguru-de-no-tatakai",
         "stream": true
       }
     ],
@@ -29,7 +29,7 @@
   "bgm.grimoire_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/area-12",
+        "name": "runecraftory:bgm/battle-determination",
         "stream": true
       }
     ],
@@ -56,7 +56,7 @@
   "bgm.raccoon_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/aiwa-konomunede-kuchiteyuku",
+        "name": "runecraftory:bgm/escape",
         "stream": true
       }
     ],
@@ -65,7 +65,7 @@
   "bgm.rafflesia_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/catch-them-all",
+        "name": "runecraftory:bgm/dragon",
         "stream": true
       }
     ],
@@ -74,7 +74,7 @@
   "bgm.sano_uno_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "name": "runecraftory:bgm/gokumon-oni-rasetsu",
         "stream": true
       }
     ],
@@ -101,7 +101,7 @@
   "bgm.thunderbolt_fight": {
     "sounds": [
       {
-        "name": "runecraftory:bgm/cruising-down-8bit-lane",
+        "name": "runecraftory:bgm/tatakai-no-tabiji-o-seiku",
         "stream": true
       }
     ],

@@ -236,9 +236,9 @@ public class EntityMarionetta extends BossMonster {
                     Vec3 dir = this.position().add(0, this.getBbHeight() + 0.2, 0).subtract(player.position());
                     player.setDeltaMovement(dir);
                     player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
-                }
-                else
+                } else {
                     entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
+                }
                 entity.hurtMarked = true;
             }
         });
