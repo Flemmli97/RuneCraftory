@@ -50,6 +50,6 @@ public class SoundGen extends SoundDefinitionsProvider {
     private void addBgmWith(SoundEvent event, ResourceLocation sound) {
         this.add(event, definition().subtitle(event.getLocation().toString())
                 .with(SoundDefinition.Sound.sound(sound, SoundDefinition.SoundType.SOUND)
-                .stream()));
+                        .stream()));
     }
 }

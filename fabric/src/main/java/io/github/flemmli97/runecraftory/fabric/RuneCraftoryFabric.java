@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.fabric;
 
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
@@ -102,6 +103,16 @@ public class RuneCraftoryFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         this.initContent();
+        NeoForgeModConfigEvents.loading(RuneCraftory.MODID).register(config -> {
+            ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(config.getSpec());
+            if (holder != null)
+                holder.reloadConfig();
+        });
+        NeoForgeModConfigEvents.reloading(RuneCraftory.MODID).register(config -> {
+            ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(config.getSpec());
+            if (holder != null)
+                holder.reloadConfig();
+        });
         for (Map.Entry<IConfigSpec, ConfigHolder<?>> confs : ConfigHolder.CONFIGS.entrySet()) {
             ConfigHolder<?> loader = confs.getValue();
             NeoForgeConfigRegistry.INSTANCE.register(RuneCraftory.MODID, loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());

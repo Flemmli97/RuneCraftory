@@ -18,7 +18,7 @@ public class ItemArmorBase extends ArmorItem implements DynamicArmorTextureItem 
 
     public ItemArmorBase(ArmorItem.Type slot, Properties properties, ResourceLocation id, boolean useItemTexture) {
         super(ModArmorMaterials.GENERIC_MATERIAL.asHolder(), slot, properties);
-        this.armorPath = useItemTexture ? ITEM_PATH : ResourceLocation.fromNamespaceAndPath(id.getPath(), ARMOR_MODEL_PATH + id.getPath() + ".png");
+        this.armorPath = useItemTexture ? ITEM_PATH : ResourceLocation.fromNamespaceAndPath(id.getNamespace(), ARMOR_MODEL_PATH + id.getPath() + ".png");
     }
 
     @Override

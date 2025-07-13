@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.fabric.client;
 
-import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.BossBarTracker;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
+import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.tenshilib.fabric.client.ClientSetupModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -30,7 +30,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
@@ -71,9 +70,9 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> ClientCalls.tooltipEvent(stack, lines, flag));
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
         ModItems.ITEMS.getEntries().forEach(e -> {
-            ArmorModels.ArmorModelGetter r = ArmorModels.ARMOR_GETTER.get(e.getID());
-            if (r != null)
-                ArmorRenderer.register(new ArmorRendererImpl(r, ResourceLocation.fromNamespaceAndPath(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
+            if (e.get() instanceof ItemArmorBase) {
+                ArmorRenderer.register(new ArmorRendererImpl(), e.get());
+            }
         });
         ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
         CoreShaderRegistrationCallback.EVENT.register(reg -> RunecraftoryShaders.registerShader(reg::register));

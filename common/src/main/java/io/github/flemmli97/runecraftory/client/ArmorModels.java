@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,8 +35,8 @@ import java.util.Map;
 
 public class ArmorModels {
 
-    public static final Map<ResourceLocation, ArmorModelGetter> ARMOR_GETTER = getArmorRenderer();
-    private static final Map<ResourceLocation, FirstPersonArmorRenderer> FIRST_PERSON_GETTER = getFirstPersonHandRenderer();
+    private static final Map<Item, ArmorModelGetter> ARMOR_GETTER = getArmorRenderer();
+    private static final Map<Item, FirstPersonArmorRenderer> FIRST_PERSON_GETTER = getFirstPersonHandRenderer();
 
     private static final ArmorSimpleItemModel ITEM_MODEL = new ArmorSimpleItemModel();
     private static final CustomHumanoidArmorModel<?> PIYO_SANDALS_MODEL = new CustomHumanoidArmorModel<>(RuneCraftory.modRes("armor/piyo_sandals"));
@@ -46,9 +45,9 @@ public class ArmorModels {
     private static HumanoidModel<?> INNER;
     private static HumanoidModel<?> OUTER;
 
-    private static Map<ResourceLocation, ArmorModelGetter> getArmorRenderer() {
-        ImmutableMap.Builder<ResourceLocation, ArmorModelGetter> builder = ImmutableMap.builder();
-        builder.put(ModItems.MAGIC_EARRINGS.getID(), ((entityLiving, itemStack, slot, origin) -> {
+    private static Map<Item, ArmorModelGetter> getArmorRenderer() {
+        ImmutableMap.Builder<Item, ArmorModelGetter> builder = ImmutableMap.builder();
+        builder.put(ModItems.MAGIC_EARRINGS.get(), ((entityLiving, itemStack, slot, origin) -> {
             origin.setAllVisible(false);
             origin.head.visible = true;
             origin.hat.visible = true;
@@ -65,14 +64,14 @@ public class ArmorModels {
             return null;
         });
         for (RegistryEntrySupplier<Item, ?> sup : bracelets())
-            builder.put(sup.getID(), bracelet);
+            builder.put(sup.get(), bracelet);
         ArmorModelGetter normalItemModel = (entityLiving, itemStack, slot, origin) -> {
             ITEM_MODEL.setProperties(entityLiving, itemStack, origin.getHead(), ArmorSimpleItemModel.TRANSLATE_TO_HEAD);
             return ITEM_MODEL;
         };
         for (RegistryEntrySupplier<Item, ?> sup : ModItems.ribbons())
-            builder.put(sup.getID(), normalItemModel);
-        builder.put(ModItems.PIYO_SANDALS.getID(), ((entityLiving, itemStack, slot, origin) -> {
+            builder.put(sup.get(), normalItemModel);
+        builder.put(ModItems.PIYO_SANDALS.get(), ((entityLiving, itemStack, slot, origin) -> {
             PIYO_SANDALS_MODEL.copyFrom(origin);
             PIYO_SANDALS_MODEL.setAllVisible(false);
             PIYO_SANDALS_MODEL.leftLeg.visible = true;
@@ -80,7 +79,7 @@ public class ArmorModels {
             return PIYO_SANDALS_MODEL;
         }));
         for (RegistryEntrySupplier<Item, ?> sup : ModItems.hatItems())
-            builder.put(sup.getID(), normalItemModel);
+            builder.put(sup.get(), normalItemModel);
         ArmorModelGetter rings = ((entityLiving, itemStack, slot, origin) -> {
             RINGS_MODEL.copyFrom(origin);
             RINGS_MODEL.setAllVisible(false);
@@ -93,13 +92,13 @@ public class ArmorModels {
             return RINGS_MODEL;
         });
         for (RegistryEntrySupplier<Item, ?> sup : rings())
-            builder.put(sup.getID(), rings);
+            builder.put(sup.get(), rings);
         return builder.build();
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private static Map<ResourceLocation, FirstPersonArmorRenderer> getFirstPersonHandRenderer() {
-        ImmutableMap.Builder<ResourceLocation, FirstPersonArmorRenderer> builder = ImmutableMap.builder();
+    private static Map<Item, FirstPersonArmorRenderer> getFirstPersonHandRenderer() {
+        ImmutableMap.Builder<Item, FirstPersonArmorRenderer> builder = ImmutableMap.builder();
         FirstPersonArmorRenderer bracelet = (player, stack, right, origin, poseStack, buffer, light) -> {
             origin.copyPropertiesTo((HumanoidModel) OUTER);
             OUTER.setAllVisible(false);
@@ -110,7 +109,7 @@ public class ArmorModels {
             renderModelPart(OUTER, player, buffer, stack, poseStack, light);
         };
         for (RegistryEntrySupplier<Item, ?> sup : bracelets())
-            builder.put(sup.getID(), bracelet);
+            builder.put(sup.get(), bracelet);
         FirstPersonArmorRenderer rings = (player, stack, right, origin, poseStack, buffer, light) -> {
             RINGS_MODEL.copyFrom(origin);
             RINGS_MODEL.setAllVisible(false);
@@ -121,7 +120,7 @@ public class ArmorModels {
             renderModelPart(RINGS_MODEL, player, buffer, stack, poseStack, light);
         };
         for (RegistryEntrySupplier<Item, ?> sup : rings())
-            builder.put(sup.getID(), rings);
+            builder.put(sup.get(), rings);
         return builder.build();
     }
 
@@ -136,15 +135,11 @@ public class ArmorModels {
     }
 
     public static ArmorModelGetter fromItemStack(ItemStack stack) {
-        if (stack.getItem() instanceof ItemArmorBase armor)
-            return ARMOR_GETTER.get(armor.armorPath);
-        return null;
+        return ARMOR_GETTER.get(stack.getItem());
     }
 
     public static FirstPersonArmorRenderer getFirstPersonRenderer(ItemStack stack) {
-        if (stack.getItem() instanceof ItemArmorBase armor)
-            return FIRST_PERSON_GETTER.get(armor.armorPath);
-        return null;
+        return FIRST_PERSON_GETTER.get(stack.getItem());
     }
 
     public static HumanoidModel<?> getDefaultArmorModel(EquipmentSlot slot) {

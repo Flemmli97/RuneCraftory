@@ -17,5 +17,6 @@ public class ModArmorMaterials {
     public static final LoaderRegister<ArmorMaterial> MATERIALS = LoaderRegistryAccess.INSTANCE.of(Registries.ARMOR_MATERIAL, RuneCraftory.MODID);
 
     public static final RegistryEntrySupplier<ArmorMaterial, ArmorMaterial> GENERIC_MATERIAL = MATERIALS.register("generic", () ->
-            new ArmorMaterial(Map.of(), 0, SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.EMPTY, List.of(), 0, 0));
+            new ArmorMaterial(Map.of(), 0, SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.EMPTY,
+                    List.of(new ArmorMaterial.Layer(RuneCraftory.modRes("dynamic_armor_texture"))), 0, 0));
 }

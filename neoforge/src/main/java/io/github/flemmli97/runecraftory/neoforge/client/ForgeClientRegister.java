@@ -56,7 +56,7 @@ public class ForgeClientRegister {
     @SubscribeEvent
     public static void initClientItemProps(RegisterClientExtensionsEvent event) {
         ModItems.ITEMS.getEntries().forEach(e -> {
-            if (e.get() instanceof ItemArmorBase)
+            if (e.get() instanceof ItemArmorBase) {
                 event.registerItem(new IClientItemExtensions() {
                     @Override
                     public Model getGenericArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> original) {
@@ -67,6 +67,7 @@ public class ForgeClientRegister {
                         return model != null ? model : original;
                     }
                 }, e.get());
+            }
         });
     }
 

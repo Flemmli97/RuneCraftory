@@ -67,7 +67,8 @@ public class RuneCraftoryNeoForge {
 
     public RuneCraftoryNeoForge(IEventBus modBus, ModContainer container) {
         modBus.addListener(this::common);
-        modBus.addListener(this::conf);
+        modBus.addListener(this::confLoad);
+        modBus.addListener(this::confReload);
         modBus.addListener(this::attributes);
         modBus.addListener(this::attributesAdd);
         modBus.addListener(this::spawnPlacement);
@@ -152,7 +153,13 @@ public class RuneCraftoryNeoForge {
         }
     }
 
-    public void conf(ModConfigEvent event) {
+    public void confLoad(ModConfigEvent.Loading event) {
+        ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(event.getConfig().getSpec());
+        if (holder != null)
+            holder.reloadConfig();
+    }
+
+    public void confReload(ModConfigEvent.Reloading event) {
         ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(event.getConfig().getSpec());
         if (holder != null)
             holder.reloadConfig();
