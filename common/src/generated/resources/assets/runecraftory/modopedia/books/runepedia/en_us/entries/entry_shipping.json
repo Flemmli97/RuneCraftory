@@ -1,0 +1,27 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:shipping_bin"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Shipping Items",
+          "template": "modopedia:page/headered_text",
+          "text": "The shipping bin is your method of earning money. Crafting it allows you to sell items.\nEvery $(c:gold)$(b)morning$() all sellable items in the shipping bin will be sold.\nThe shipping bin inventory is global for each player just like an enderchest although storing items is $(c:red)not$() recommended in it!"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "recipe": "runecraftory:shipping_bin",
+          "template": "modopedia:page/crafting"
+        }
+      ]
+    }
+  ],
+  "title": "Shipping Items"
+}

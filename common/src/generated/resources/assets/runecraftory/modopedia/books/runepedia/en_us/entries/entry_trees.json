@@ -1,0 +1,48 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:apple_sapling"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Trees"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "type": "modopedia:showcase",
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:apple_sapling"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:grape_sapling"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:orange_sapling"
+            }
+          ],
+          "y": 22
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "You might come across some special saplings that are unlike the other saplings. These saplings act similar to $(c:darkgreen)crops$() instead and need to be planted on farmland.\nThe saplings take a long time to grow but once fully grown will bear fruit everyday you can harvest.\nAnother major difference is that these trees are $(c:red)unbreakable$() except for the base of the tree.\nBreaking the base will also remove the tree!"
+        }
+      ]
+    }
+  ],
+  "title": "Trees"
+}

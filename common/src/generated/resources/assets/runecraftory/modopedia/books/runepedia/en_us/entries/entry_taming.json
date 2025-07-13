@@ -1,0 +1,88 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:monster_barn"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Taming",
+          "template": "modopedia:page/headered_text",
+          "text": "It is possible to tame monsters and the process is fairly straight forward.\nFirst you need to setup a place for your monsters to live. A $(c:#db8c04)monster barn$() is the perfect place for that and can be bought by blacksmith npcs."
+        },
+        {
+          "type": "modopedia:showcase",
+          "height": 90,
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:monster_barn"
+            }
+          ],
+          "scale": 0.8,
+          "width": 90,
+          "y": 60
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Simply placing down the block isn't enough though. The barn requires a minimum ground of 5x5 (and up to 11x11) of $(c:#db8c04)haybales$() with it in the center.\nThe bigger this area the more space it will have. Most monsters additionally require a roof over their head. Any block with a collision count.\nThe roof needs to be at least $(c:darkred)3 blocks high$() and be able to $(c:darkred)fit$() the monster you want to house."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "If you have your monster barn setup you can then go ahead and try and tame the monster. For that simply throw an item at them. This will consume the item and after a while particles appear indicating the success (or not).\nMonsters might have one or more favorite items that results in a higher chance of success and bosses can $(c:red)$(b)only$() be tamed by giving them their favorite items."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "You can further increase the chance with various other methods. One simple way is using a $(c:darkpurple)brush$() on the monster.\n\nIf you finally managed to tame the monster there are various things you can do now:\n ▶ Shift-right-clicking opens up a menu for the monster.\n ▶ When ridden pressing any spell keys will perform an attack using it."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": " ▶ Brushing your monster daily helps in raising your friendship.\n ▶ You can strengthen your monster by giving them an item everyday. This also raises your friendship.\n\nGiving your monster food will have them obtain the same benefit as with a player making it an easy way to heal or buff your monsters."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "A tamed monster will $(c:darkpurple)faint$() instead of dying when reaching critical health and healing them through any means will bring them back up.\n\nLastly $(b)shift-right-click$() a tamed monster with a vanilla stick will release them again."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Tamed monster can also help you with $(c:darkgreen)farming crops$().\nUpon setting them into farming mode they will tend to the crops in a certain radius around the initial position.\nThe $(c:darkpurple)nearest inventory$() block will also be bound to their action and they will deposit harvested crops into that inventory and if seeds are in it they can also plant them."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "While holding a $(c:darkpurple)monster command staff$() and opening the monster menu you can configure additional things like area of actions and inventory for the entity.\nRight clicking a block while e.g. configuring the home position will set the home position to that place.\n\nDo note that farming is a taxing task and without help they won't be able to keep going forever!"
+        }
+      ]
+    }
+  ],
+  "title": "Taming"
+}

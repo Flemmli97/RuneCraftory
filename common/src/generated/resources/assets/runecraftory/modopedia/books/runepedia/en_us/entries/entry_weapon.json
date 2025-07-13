@@ -1,0 +1,222 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:short_dagger"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Weapons",
+          "template": "modopedia:page/headered_text",
+          "text": "The mod adds a plethora of weapons and you will find a short explanation of each weapon type here.\nBy reaching at least level 5 for a weapon type you are able to use a charge attack. Simply hold right click and release after a while to use it. This will consume a bit of runepoints though."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Short Swords"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:broad_sword"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Weapons with a shorter reach and attack power but quite fast with a small attack area. The closest to vanilla swords.",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Long Swords"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:claymore"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Longer reach and more attack power but kinda slow. Has a decent attack area.",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Spears"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:spear"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Long reach and fairly quick with a special charge attack: After charging and releasing repeatedly right click to keep attacking",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Axe/Hammers"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:battle_axe"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Slow but strong and with bigger reach. Not to be confused with their tool variants though.\nAxes usually have a high crit rate while hammers a high stun chance.",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Dual Blades"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:short_dagger"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Dual blades are two handed weapons with fast attack speed.\nSince these require both of your hands you will not be able to use offhand items or profit from their bonuses.",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Fists"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:leather_glove"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Dual weapons. Fast but with shorter reach. Charge attack will push you into the direction you are looking and during that hitting any mobs in your way",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Staffs"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:rod"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "A magic weapon. Each staff has a base spell used per weapon swing. Additionally upgrading a staff with items can give it spells too. \nTo use them simply hold right click. A staff can have a maximum of 3 spells attached to it.",
+          "y": 44
+        }
+      ]
+    }
+  ],
+  "title": "Weapons"
+}

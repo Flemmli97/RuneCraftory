@@ -7,6 +7,8 @@ import io.github.flemmli97.runecraftory.common.recipes.HammerRemainderRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.LevelUpUpgradeRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipeBuilder;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import net.favouriteless.modopedia.common.init.MDataComponents;
+import net.favouriteless.modopedia.common.init.MItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.PackOutput;
@@ -16,6 +18,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -30,8 +33,14 @@ public class RecipesGen extends RecipeProvider {
 
     @Override
     protected void buildRecipes(RecipeOutput output) {
-//        output.accept(this.patchouliShapelessBook(RuneCraftory.modRes("book"), RuneCraftory.modRes("runecraftory_book"),
-//                Ingredient.of(Items.BOOK), Ingredient.of(Items.SHORT_GRASS), Ingredient.of(Items.STONE)));
+        ItemStack book = new ItemStack(MItems.BOOK.get());
+        book.set(MDataComponents.BOOK.get(), RuneCraftory.modRes("runepedia"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, book)
+                .requires(Ingredient.of(Items.BOOK))
+                .requires(Ingredient.of(Items.SHORT_GRASS))
+                .requires(Ingredient.of(Items.STONE))
+                .unlockedBy("book", has(Items.BOOK))
+                .save(output, RuneCraftory.MODID + ":runepedia");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.WHITE_WOOL)
                 .requires(ModItems.FUR_SMALL.get(), 4)

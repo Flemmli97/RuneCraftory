@@ -1,0 +1,13 @@
+{
+  "entries": [
+    "entry_npc",
+    "entry_npc_professions",
+    "entry_quests"
+  ],
+  "icon": {
+    "count": 1,
+    "id": "minecraft:player_head"
+  },
+  "landing_text": "Villagers? They should be familiar... or are they? Somehow they look different than.",
+  "title": "Villagers"
+}

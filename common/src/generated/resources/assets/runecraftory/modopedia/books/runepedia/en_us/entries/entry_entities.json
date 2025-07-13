@@ -1,0 +1,27 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:wooly_spawn_egg"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Monsters",
+          "template": "modopedia:page/headered_text",
+          "text": "The mobs in this mod don't spawn by themself but through $(c:lightpurple)gates$() that appear through the world.\nGates are ripples in space that connects this world to the forest of beginnings, the home of monsters. \nThe type of monsters a gate spawns depends on the biome and a gate will continue to spawn monsters till it is destroyed."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Scattered throughough the world are also particularly $(c:red)strong monsters$() that can be fought once per day.\nWord has it that defeating these monsters causes the gates around the player to get stronger.\n\nMonsters are strangely averse to loud noises as placing a $(c:darkpurple)bell block$() will prevent gates from appearing in a 48 block radius around it."
+        }
+      ]
+    }
+  ],
+  "title": "Monsters"
+}

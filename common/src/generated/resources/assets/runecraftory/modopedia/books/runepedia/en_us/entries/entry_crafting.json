@@ -1,0 +1,192 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:forge"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Crafting",
+          "template": "modopedia:page/headered_text",
+          "text": "This mod adds 4 additional blocks that are used to craft various items.\nEvery crafting process requires a certain amount of $(c:blue)RP$(). Recipes that you haven't unlocked yet will require more $(c:blue)RP$() than those you have.You will not be able to craft an item if the required $(c:blue)RP$() is higher than your total $(c:blue)RP$()."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "To unlock recipe you need to eat recipe breads. You can also just try experimenting as crafting a locked recipe will unlock it.\n"
+        },
+        {
+          "type": "modopedia:item_gallery",
+          "display": {
+            "type": "modopedia:grid",
+            "centered": true,
+            "columns": 4,
+            "displays": [
+              {
+                "type": "modopedia:simple",
+                "item": {
+                  "count": 1,
+                  "id": "runecraftory:forging_bread"
+                }
+              },
+              {
+                "type": "modopedia:simple",
+                "item": {
+                  "count": 1,
+                  "id": "runecraftory:accessory_bread"
+                }
+              },
+              {
+                "type": "modopedia:simple",
+                "item": {
+                  "count": 1,
+                  "id": "runecraftory:medicine_bread"
+                }
+              },
+              {
+                "type": "modopedia:simple",
+                "item": {
+                  "count": 1,
+                  "id": "runecraftory:cooking_bread"
+                }
+              }
+            ],
+            "padding": 18
+          },
+          "x": 50,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Weapon and tools can be upgraded in the forge while armor can be upgraded in the accessory workbench.\nOpen the upgrade gui by shift right clicking on the crafting device. An item can be upgraded a maximum of $(c:red)9$() times. Holding shift while hovering over an item will tell you what stat it gives. Using the same item multiple times causes a $(c:red)diminishing$() returns effect so try use different items!"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Forge"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "type": "modopedia:showcase",
+          "height": 50,
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:forge"
+            }
+          ],
+          "scale": 0.8,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "The forge is used to craft all weapons and tools. During crafting you can add up to 3 bonus items that will act the same as if you upgraded the weapon/tool with it.",
+          "y": 78
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Accessory Workbench"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "type": "modopedia:showcase",
+          "height": 50,
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:accessory_workbench"
+            }
+          ],
+          "scale": 0.8,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Use the accessory workbench to make various armor pieces. Same as the forge you can use up to 3 additional items here to increase the stats.",
+          "y": 78
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Chemistry Set"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "type": "modopedia:showcase",
+          "height": 50,
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:chemistry_set"
+            }
+          ],
+          "scale": 0.8,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "A chemistry set allows you to create potions and other pharmacy items.",
+          "y": 78
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Cooking Table"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "type": "modopedia:showcase",
+          "height": 50,
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:cooking_table"
+            }
+          ],
+          "scale": 0.8,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "The cooking table is as the name implies used to make all kinds of food. Some items can also be used as additional items for a better end product.",
+          "y": 78
+        }
+      ]
+    }
+  ],
+  "title": "Crafting"
+}

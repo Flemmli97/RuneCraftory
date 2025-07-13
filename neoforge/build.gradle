@@ -40,6 +40,9 @@ dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-neoforge"
     modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${project.minecraft_version}:${project.sbl_version}"
     modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge")
+
+    implementation "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia}"
+
     // Jar-Jar not added otherwise
     modRuntimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"

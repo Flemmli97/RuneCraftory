@@ -1,0 +1,91 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:cash_register"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "General Store",
+          "template": "modopedia:page/headered_text",
+          "text": "The general store sells mostly seeds, vegetables and fruits"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Florist",
+          "template": "modopedia:page/headered_text",
+          "text": "Here you can buy flowers and seeds an also fertilizer for your crops"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Blacksmith",
+          "template": "modopedia:page/headered_text",
+          "text": "The blacksmith sells weapons, tools and armor as well as monster barns"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Doctor",
+          "template": "modopedia:page/headered_text",
+          "text": "You can buy medicine and herbs here. Doctors can also cure you of status conditions if you have any"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Cook",
+          "template": "modopedia:page/headered_text",
+          "text": "Buy food and recipe breads here. The cook only has a certain amount of recipe breads each day"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Magic Shop",
+          "template": "modopedia:page/headered_text",
+          "text": "Sells various spells here."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Rune ability Store",
+          "template": "modopedia:page/headered_text",
+          "text": "Sells various rune abilities here."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Bath house",
+          "template": "modopedia:page/headered_text",
+          "text": "Bath houses offer a way to regen your $(c:darkred)HP$() and $(c:blue)RP$().\nBy talking to the bath house attendant you can obtain an effect which will regen $(c:darkred)HP$() & $(c:blue)RP$() if you go into hot water.\n\nGoing out of the water will remove the effect immediately!"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "header": "Travelling merchant",
+          "template": "modopedia:page/headered_text",
+          "text": "Sells miscellaneous items. WIP"
+        }
+      ]
+    }
+  ],
+  "title": "Professions"
+}

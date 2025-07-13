@@ -1,0 +1,53 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "minecraft:player_head"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Villagers",
+          "template": "modopedia:page/headered_text",
+          "text": "Like their big nosed fellows villagers appear in villages. Similarly you can obtain various goods from them albeit using money instead of emerald.\n\n\nUnlike their vanilla counterpart you won't be able to buy products all the time though."
+        },
+        {
+          "type": "modopedia:image",
+          "height": 15,
+          "images": [
+            "runecraftory:textures/book/money.png"
+          ],
+          "width": 15,
+          "x": 80,
+          "y": 70
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "For a villager to operate a shop they require a $(c:blue)bed$() and a $(c:blue)workplace$() that is not too far away from it.\nAdditionally a shop is only open during opening hours. You can check the requirements by simply talking to them.\nHovering over their $(c:red)job$() will highlight what the villager is missing.\n\nThese villagers are also much more capable than usual."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "By interacting with them you will notice that they offer much more than simple trades.\nYou can converse with them and even give them gifts to befriend them. Both of these action increases your friendship with them but note that it only works $(c:red)once$() per day!\nTo give a gift to a villager simply $(c:darkpurple)throw$() the item at them.\nBy gifting them equipment they will automatically equip them too."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Befriending them allows you to make them follow you around and provide assistant in combat.\n\nAdditionally it also allows you to develope a relationship with them.\nIf you think your relationship has progressed far enough you can make a $(c:#cd38e0)love letter$() to start dating them or an $(c:gold)engagement ring$() to propose to them."
+        }
+      ]
+    }
+  ],
+  "title": "Villagers"
+}

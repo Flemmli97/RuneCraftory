@@ -1,0 +1,18 @@
+{
+  "entries": [
+    "entry_runepoints",
+    "entry_calendar",
+    "entry_crafting",
+    "entry_minerals",
+    "entry_shipping",
+    "entry_entities",
+    "entry_taming",
+    "entry_party"
+  ],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:icon_0"
+  },
+  "landing_text": "This section provides a guide of core mechanics of this mod",
+  "title": "Introduction"
+}

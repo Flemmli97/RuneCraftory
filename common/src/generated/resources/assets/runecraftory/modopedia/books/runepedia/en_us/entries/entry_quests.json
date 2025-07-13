@@ -1,0 +1,27 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:quest_board"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Quests",
+          "template": "modopedia:page/headered_text",
+          "text": "Crafting a quest board and placing it in the world will allow nearby NPCs to post quests for you to complete. Try doing them as they usually give you useful information and/or rewards.\nAfter accepting a quest talk to the NPC to progress through it.\nSome NPCs also require you to complete certain quests before being able to marry them. (WIP ATM)"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "recipe": "runecraftory:quest_board",
+          "template": "modopedia:recipe/crafting"
+        }
+      ]
+    }
+  ],
+  "title": "Quests"
+}

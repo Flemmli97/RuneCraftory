@@ -1,0 +1,87 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:ore_iron"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Minerals",
+          "template": "modopedia:page/headered_text",
+          "text": "Cluster of minerals spawn all over the world. These mineral clusters can be mined with an iron pickaxe or above but its best mined with the $(c:darkpurple)mining hammers$() from this mod. Better hammers and mining skill decrease the chance of the mineral breaking and increase the chance to get rarer materials from it."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Some materials even are impossible to get unless you have a high enough mining skill.\nMinerals regenerate after a day has passed.\nIf you want to completly get rid of a mineral mine a broken one while shifting."
+        },
+        {
+          "type": "modopedia:showcase",
+          "height": 30,
+          "items": [
+            {
+              "count": 1,
+              "id": "runecraftory:ore_iron"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_tin"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_silver"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_gold"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_diamond"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_platinum"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_orichalcum"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_dragonic"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_amethyst"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_aquamarine"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_ruby"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_emerald"
+            },
+            {
+              "count": 1,
+              "id": "runecraftory:ore_sapphire"
+            }
+          ],
+          "scale": 0.5,
+          "y": 90
+        }
+      ]
+    }
+  ],
+  "title": "Minerals"
+}

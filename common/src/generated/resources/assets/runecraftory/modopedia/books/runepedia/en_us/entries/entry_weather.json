@@ -1,0 +1,27 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "minecraft:sunflower"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Weather",
+          "template": "modopedia:page/headered_text",
+          "text": "The weather is an important factor in agriculture.\nUnlike vanilla the weather now  only changes during certain times of the day.\n\nThere are 4 weather types with their effects listed below:\n ▶ $(c:green)Sunny$(): Normal sunny day without any special properties equivalent to vanillas normal weather"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": " ▶ $(c:blue)Rain$(): Farmland will automatically get watered\n ▶ $(c:darkaqua)Storming$(): Farmland will automatically get watered but the defence gets reduced over time. If defence drops to 0 the crops can get destroyed by the storm so pay attention\n ▶ $(c:gold)Runey$(): Like sunny days but crops get get a growth spurt at the start.\n\nIf it gets cold enough it might also snow in places where it normally wouldn't."
+        }
+      ]
+    }
+  ],
+  "title": "Weather"
+}

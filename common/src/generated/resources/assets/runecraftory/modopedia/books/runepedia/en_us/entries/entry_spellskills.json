@@ -1,0 +1,28 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:teleport"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Spells and Skills",
+          "template": "modopedia:page/headered_text",
+          "text": "A plethora of spells and rune abilities can be found all over the world. Every spell and rune ability will require runepoints to use them.\nPutting them in the spell slots allows you to easily cast them by pressing the corresponding spell key.\nHolding a mismatched weapon when using rune abilities reduces their efficiency"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "recipe1": "runecraftory:fireball",
+          "recipe2": "runecraftory:teleport",
+          "template": "modopedia:page/double_crafting"
+        }
+      ]
+    }
+  ],
+  "title": "Spells and Skills"
+}

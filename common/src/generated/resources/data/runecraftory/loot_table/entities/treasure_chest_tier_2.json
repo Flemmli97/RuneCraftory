@@ -530,11 +530,11 @@
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:armory_bread"
+          "name": "runecraftory:accessory_bread"
         },
         {
           "type": "minecraft:item",
-          "name": "runecraftory:chemistry_bread"
+          "name": "runecraftory:medicine_bread"
         },
         {
           "type": "minecraft:item",

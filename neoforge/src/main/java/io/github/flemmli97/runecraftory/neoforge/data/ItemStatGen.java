@@ -2078,8 +2078,8 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.FORGING_BREAD.get(), 600, 100, 1);
         this.addStat(ModItems.COOKING_BREAD.get(), 600, 100, 1);
-        this.addStat(ModItems.CHEMISTRY_BREAD.get(), 600, 100, 1);
-        this.addStat(ModItems.ARMOR_BREAD.get(), 600, 100, 1);
+        this.addStat(ModItems.MEDICINE_BREAD.get(), 600, 100, 1);
+        this.addStat(ModItems.ACCESSORY_BREAD.get(), 600, 100, 1);
 
         this.addStat(ModItems.RICE.get(), 100, 30, 0);
         this.addStat(ModItems.RICE_FLOUR.get(), 120, 35, 0);

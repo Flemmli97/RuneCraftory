@@ -1216,8 +1216,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, Item> MEALY_APPLE = food("mealy_apple", Texture.Y, LOW_FOOD_PROP);
 
     public static final RegistryEntrySupplier<Item, ItemRecipeBread> FORGING_BREAD = register("forging_bread", () -> new ItemRecipeBread(CraftingType.FORGE, new Item.Properties().stacksTo(16)), ModCreativeModTabs.FOOD);
-    public static final RegistryEntrySupplier<Item, ItemRecipeBread> ARMOR_BREAD = register("armory_bread", () -> new ItemRecipeBread(CraftingType.ACCESSORY_WORKBENCH, new Item.Properties().stacksTo(16)), ModCreativeModTabs.FOOD);
-    public static final RegistryEntrySupplier<Item, ItemRecipeBread> CHEMISTRY_BREAD = register("chemistry_bread", () -> new ItemRecipeBread(CraftingType.CHEMISTRY_SET, new Item.Properties().stacksTo(16)), ModCreativeModTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> ACCESSORY_BREAD = register("accessory_bread", () -> new ItemRecipeBread(CraftingType.ACCESSORY_WORKBENCH, new Item.Properties().stacksTo(16)), ModCreativeModTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> MEDICINE_BREAD = register("medicine_bread", () -> new ItemRecipeBread(CraftingType.CHEMISTRY_SET, new Item.Properties().stacksTo(16)), ModCreativeModTabs.FOOD);
     public static final RegistryEntrySupplier<Item, ItemRecipeBread> COOKING_BREAD = register("cooking_bread", () -> new ItemRecipeBread(CraftingType.COOKING_TABLE, new Item.Properties().stacksTo(16)), ModCreativeModTabs.FOOD);
 
     public static final RegistryEntrySupplier<Item, BlockItem> SHIPPING_BIN = blockItem("shipping_bin", () -> ModBlocks.SHIPPING);

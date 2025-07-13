@@ -575,8 +575,8 @@ public class Loottables extends LootTableProvider {
                 tier1.add(LootItem.lootTableItem(item.get()));
             }
             tier1.add(LootItem.lootTableItem(ModItems.FORGING_BREAD.get()));
-            tier1.add(LootItem.lootTableItem(ModItems.ARMOR_BREAD.get()));
-            tier1.add(LootItem.lootTableItem(ModItems.CHEMISTRY_BREAD.get()));
+            tier1.add(LootItem.lootTableItem(ModItems.ACCESSORY_BREAD.get()));
+            tier1.add(LootItem.lootTableItem(ModItems.MEDICINE_BREAD.get()));
             tier1.add(LootItem.lootTableItem(ModItems.COOKING_BREAD.get()));
             output.accept(LootTableResources.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
 
@@ -585,8 +585,8 @@ public class Loottables extends LootTableProvider {
                 tier2.add(LootItem.lootTableItem(item.get()));
             }
             tier2.add(LootItem.lootTableItem(ModItems.FORGING_BREAD.get()));
-            tier2.add(LootItem.lootTableItem(ModItems.ARMOR_BREAD.get()));
-            tier2.add(LootItem.lootTableItem(ModItems.CHEMISTRY_BREAD.get()));
+            tier2.add(LootItem.lootTableItem(ModItems.ACCESSORY_BREAD.get()));
+            tier2.add(LootItem.lootTableItem(ModItems.MEDICINE_BREAD.get()));
             tier2.add(LootItem.lootTableItem(ModItems.COOKING_BREAD.get()));
             output.accept(LootTableResources.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
 

@@ -2,6 +2,8 @@ package io.github.flemmli97.runecraftory.neoforge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
+import io.github.flemmli97.runecraftory.neoforge.data.book.BookContentGen;
+import io.github.flemmli97.runecraftory.neoforge.data.book.BookGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.AttributeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.BiomeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.BlockTagGen;
@@ -88,7 +90,8 @@ public class DataEvent {
         data.addProvider(true, new StructureBossGen(packOutput, verifier, provider));
         data.addProvider(true, new StructureWorldGen(packOutput, provider, verifier));
         data.addProvider(true, new FeatureWorldGen(packOutput, provider));
-//            data.addProvider(true, new PatchouliGen(packOutput));
+        data.addProvider(true, new BookGen(provider, packOutput));
+        data.addProvider(true, new BookContentGen(provider, packOutput));
     }
 
     protected static class IgnoreFileHelper extends ExistingFileHelper {

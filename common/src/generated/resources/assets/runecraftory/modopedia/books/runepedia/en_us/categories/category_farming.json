@@ -1,0 +1,14 @@
+{
+  "entries": [
+    "entry_farming",
+    "entry_trees",
+    "entry_fertilizer",
+    "entry_weather"
+  ],
+  "icon": {
+    "count": 1,
+    "id": "minecraft:farmland"
+  },
+  "landing_text": "An overview and guide about the agricultural aspects",
+  "title": "Agriculture"
+}

@@ -1,0 +1,222 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:hoe_scrap"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Tools",
+          "template": "modopedia:page/headered_text",
+          "text": "Here is an overview of the tools from this mod. You can use tools as weapons but they are noticeably weaker. The higher tier the tool is the more powerful the charge ability will be."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Hoe"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:hoe_scrap"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Used to till the earth turning it into farmland to grow crops just like their vanilla counterparts",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Wateringcan"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:watering_can_scrap"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "You need a watering can to water farmland. Right click on water blocks to fill it up. Without this tool farmlands will always be dry (unless the rain blesses you)",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Sickle"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:sickle_scrap"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Can be used to clear out grass more easily",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Hammer"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:hammer_scrap"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Acts like a pickaxe but you can also use it to flatten farmland turning it back into dirt. It also gets additional benefits when breaking minerals.",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Axe"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:axe_scrap"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "For now acts just like vanilla axes",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Fishing Rod"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:fishing_rod_scrap"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Similiar to vanilla fishing rod. Throw it into a body of water to start fishing. The body of water needs to be at least $(c:darkgreen)2 blocks deep and 3x3 wide$(). Higher tier fishing rods increases the speed to catch a fish while the more charge it has the easier it is to catch a fish.",
+          "y": 44
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:header",
+          "text": "Magnifying Glass"
+        },
+        {
+          "type": "modopedia:separator",
+          "y": 10
+        },
+        {
+          "display": {
+            "type": "modopedia:simple",
+            "item": {
+              "count": 1,
+              "id": "runecraftory:magnifying_glass"
+            }
+          },
+          "template": "modopedia:framed_item_gallery",
+          "x": 42,
+          "y": 22
+        },
+        {
+          "type": "modopedia:text",
+          "text": "Useful to inspect the quality of the soil. If used as upgrade material will pass on its function to the upgraded tool.",
+          "y": 44
+        }
+      ]
+    }
+  ],
+  "title": "Tools"
+}

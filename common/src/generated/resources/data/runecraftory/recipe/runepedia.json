@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "minecraft:short_grass"
+    },
+    {
+      "item": "minecraft:stone"
+    }
+  ],
+  "result": {
+    "components": {
+      "modopedia:book": "runecraftory:runepedia"
+    },
+    "count": 1,
+    "id": "modopedia:book"
+  }
+}

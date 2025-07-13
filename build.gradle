@@ -29,5 +29,9 @@ subprojects {
         maven {
             url = "https://api.modrinth.com/maven"
         }
+        maven {
+            name = 'Favouriteless Maven'
+            url 'https://maven.favouriteless.net/releases'
+        }
     }
 }

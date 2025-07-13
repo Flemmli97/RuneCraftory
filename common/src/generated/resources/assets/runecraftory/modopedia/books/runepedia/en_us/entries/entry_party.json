@@ -1,0 +1,19 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "minecraft:lead"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Party System",
+          "template": "modopedia:page/headered_text",
+          "text": "You might have noticed that sometimes you can't make monsters or npc follow you. This is due to the $(c:darkpurple)party system$() which allows only a maximum of 3 entities (monster + npc) to follow you at the same time.\nParty members will follow you and teleport if too far regardless of where you are, even across dimensions."
+        }
+      ]
+    }
+  ],
+  "title": "Party System"
+}

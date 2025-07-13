@@ -1,0 +1,27 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:red_grass"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Calendar",
+          "template": "modopedia:page/headered_text",
+          "text": "RuneCraftory adds an advancing calendar to the game. A date is defined by the day and a season. A year is divided by 4 seasons each with 30 days. Keeping track of the season is important in order to successfully grow crops."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "While crops won't die if grown out of season their growth speed are affected majorly depending on the current season and their preference.\nIf its getting colder biomes which usually don't have snow can experience snowfall too."
+        }
+      ]
+    }
+  ],
+  "title": "Calendar"
+}

@@ -1,0 +1,27 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:mystery_potion"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Rune points",
+          "template": "modopedia:page/headered_text",
+          "text": "$(c:blue)Rune points (RP)$() can be seen as your stamina or mana. Nearly all actions require rune points to use. Keep track of your current rune points when performing actions as running out of rune points will make use of your $(c:darkred)HP$()!\n\nThere are multiple ways of replenishing runepoints. Most notable ones include resting and eating food."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Increasing your max runepoints can be done by increasing your skills. Some food also give a temporary boost to your runepoints."
+        }
+      ]
+    }
+  ],
+  "title": "Rune points"
+}

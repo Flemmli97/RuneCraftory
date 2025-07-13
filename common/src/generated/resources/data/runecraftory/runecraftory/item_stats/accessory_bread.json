@@ -1,7 +1,7 @@
 {
   "buy_price": 600,
   "element": "NONE",
-  "item": "runecraftory:armory_bread",
+  "item": "runecraftory:accessory_bread",
   "item_stats": {},
   "monster_bonus": {},
   "sell_price": 100,

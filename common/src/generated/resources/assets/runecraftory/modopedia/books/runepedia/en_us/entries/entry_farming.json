@@ -1,0 +1,60 @@
+{
+  "assigned_items": [],
+  "icon": {
+    "count": 1,
+    "id": "runecraftory:turnip_seeds"
+  },
+  "pages": [
+    {
+      "components": [
+        {
+          "header": "Getting Started",
+          "template": "modopedia:page/headered_text",
+          "text": "To get started with growing crops you first need a $(c:darkpurple)hoe$(), a $(c:darkpurple)watering can$() and of course $(c:darkpurple)crop seeds$() to plant. Then simply till the land to turn it into farmland.\nAfter that plant the crops on the farmland and water it with a watering can. Unlike vanilla having water near farmland will $(c:red)not$() irrigate it!\nDry farmland will also not turn back into dirt."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "The crops will grow every day and you will also need to keep watering them each day till they are fully grown. Crops can $(b)wilt$() if you forget to water them and by not watering wilted crops they will turn into $(c:#a85207)withered grass$() so make sure to keep them hydrated.\nAfter a few days the crops will mature and are then ready for harvest. As a QOL you can simply $(c:darkpurple)right click$() the crops to harvest them.\n"
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Crops will get a growth bonus if they are planted in their $(c:gold)preferred$() season and if planted in the $(c:red)wrong$() season will grow slower.\nNote that affected crops will not grow the vanilla way!\nYou can see if they are affected by simply look if they have additional tooltip info attached to them."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Additionally crops will grow REGARDLESS of if the chunk is loaded or not. While this means you don't need to be nearby for the crops to grow it also means that unless regularly watering them they have a high chance to wilt if you are gone for a while.\nYou can mitigate this problem by having your $(c:blue)$(el:entry_taming)monster companions$() help you out."
+        }
+      ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Lastly a $(c:darkpurple)magnifying glass$() is a very important tool as it allows you to see the stats of the farmland.\nYou can use items to increase the soil quality (see $(el:blue)$(el:entry_fertilizer)here$())."
+        },
+        {
+          "type": "modopedia:image",
+          "height": 58,
+          "images": [
+            "runecraftory:textures/book/magnifying_example.png"
+          ],
+          "width": 100,
+          "y": 75
+        }
+      ]
+    }
+  ],
+  "title": "Getting Started"
+}
