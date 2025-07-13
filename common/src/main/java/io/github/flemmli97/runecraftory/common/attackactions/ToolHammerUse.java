@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
-import io.github.flemmli97.runecraftory.api.action.ComboContainer;
-import io.github.flemmli97.runecraftory.api.action.DataKey;
-import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
+import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -44,8 +44,8 @@ public class ToolHammerUse extends AttackAction {
                     .count();
             if (amount > 0 && entity instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                LevelCalc.useRP(data, range * 15, true, 0, true, EnumSkills.MINING);
-                LevelCalc.levelSkill(data, EnumSkills.MINING, (range + 1) * 10);
+                LevelCalc.useRP(data, range * 15, true, 0, true, Skills.MINING);
+                LevelCalc.levelSkill(data, Skills.MINING, (range + 1) * 10);
             }
         }
     }

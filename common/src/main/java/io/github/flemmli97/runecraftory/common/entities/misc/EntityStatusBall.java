@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.particles.DurationalParticleData;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -153,7 +153,7 @@ public class EntityStatusBall extends BaseDamageCloud {
 
     public enum Type {
 
-        SLEEP(b -> b.magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.asHolder(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
+        SLEEP(b -> b.magic().element(ItemElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.asHolder(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
         MUSHROOM_POISON(b -> b.magic().withChangedAttribute(ModAttributes.POISON.asHolder(), 50), new Vector3f(112 / 255F, 201 / 255F, 95 / 255F), 40),
         PARALYSIS(b -> b.magic().withChangedAttribute(ModAttributes.PARALYSIS.asHolder(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
         RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(ModAttributes.SLEEP.asHolder(), 10)

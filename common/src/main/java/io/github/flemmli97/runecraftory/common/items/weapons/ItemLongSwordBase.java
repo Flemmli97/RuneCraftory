@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
@@ -40,7 +40,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
         if (entity instanceof ServerPlayer player)
             player.sweepAttack();
         if (performRightClickAction(stack, entity, 0) && entity instanceof ServerPlayer player) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.LONGSWORD, 7);
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.LONGSWORD, 7);
         }
     }
 
@@ -85,7 +85,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.LONGSWORD_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.LONGSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.LONGSWORD_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);

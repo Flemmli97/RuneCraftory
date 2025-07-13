@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
@@ -30,16 +30,16 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     public static final QuestEntryKey<SkillLevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("skill_level"));
     public static final MapCodec<SkillLevelTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
-                    ExtraCodecs.nonEmptyList(CodecUtils.stringEnumCodec(EnumSkills.class, null).listOf()).fieldOf("skill").forGetter(d -> d.skills),
+                    ExtraCodecs.nonEmptyList(CodecUtils.stringEnumCodec(Skills.class, null).listOf()).fieldOf("skill").forGetter(d -> d.skills),
                     NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
             ).apply(instance, SkillLevelTask::new));
 
     private final String description;
 
-    private final List<EnumSkills> skills;
+    private final List<Skills> skills;
     private final NumberProvider range;
 
-    public SkillLevelTask(String description, List<EnumSkills> skills, NumberProvider range) {
+    public SkillLevelTask(String description, List<Skills> skills, NumberProvider range) {
         this.description = description;
         this.skills = skills;
         this.range = range;
@@ -54,7 +54,7 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     @Override
     public MutableComponent translation(ServerPlayer player) {
         if (this.description.isEmpty() && this.simple()) {
-            EnumSkills skill = this.skills.getFirst();
+            Skills skill = this.skills.getFirst();
             return Component.translatable(this.getId().toString(), skill, this.range.getInt(null));
         }
         return Component.translatable(this.description);
@@ -68,14 +68,14 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     @Override
     public SkillLevelTaskResolved resolve(PlayerQuestData data, QuestProgress progress, QuestBase base) {
         LootContext ctx = SimpleQuestsAPI.createContext(data, base.id);
-        EnumSkills skills = this.skills.get(ctx.getRandom().nextInt(this.skills.size()));
+        Skills skills = this.skills.get(ctx.getRandom().nextInt(this.skills.size()));
         return new SkillLevelTaskResolved(skills, this.range.getInt(ctx));
     }
 
-    public record SkillLevelTaskResolved(EnumSkills skill, int level) implements ResolvedQuestTask {
+    public record SkillLevelTaskResolved(Skills skill, int level) implements ResolvedQuestTask {
 
         public static final MapCodec<SkillLevelTaskResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
-                instance.group(CodecUtils.stringEnumCodec(EnumSkills.class, null).fieldOf("skill").forGetter(d -> d.skill),
+                instance.group(CodecUtils.stringEnumCodec(Skills.class, null).fieldOf("skill").forGetter(d -> d.skill),
                         ExtraCodecs.POSITIVE_INT.fieldOf("level").forGetter(d -> d.level)
                 ).apply(instance, SkillLevelTaskResolved::new));
 

@@ -44,9 +44,6 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTroll;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
-import io.github.flemmli97.runecraftory.client.npc.NPCFeatureRenderers;
-import io.github.flemmli97.runecraftory.client.npc.NPCTextureLayer;
-import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.client.particles.BlockParticle;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
@@ -71,6 +68,9 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
+import io.github.flemmli97.runecraftory.client.render.npc.NPCFeatureRenderers;
+import io.github.flemmli97.runecraftory.client.render.npc.NPCTextureLayer;
+import io.github.flemmli97.runecraftory.client.render.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderAppleProjectile;
@@ -115,6 +115,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModFluids;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -144,6 +145,8 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
@@ -153,9 +156,11 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.material.Fluid;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.BiConsumer;
@@ -165,11 +170,31 @@ import java.util.function.Supplier;
 
 public class ClientRegister {
 
+    public static final int HOT_SPRING_BASE = 0xff40b5e1;
+    public static final int HOT_SPRING_HUE = 0xff60c9f1;
+
     private static final BlockColor CROP_COLOR = (blockState, blockAndTintGetter, blockPos, i) -> {
         if (blockState.getValue(BlockCrop.WILTED))
             return 0xdc680a;
         return -1;
     };
+    public static final ColorResolver HOT_SPRING_COLOR = (biome, d, e) -> waterBlend(biome.getWaterColor());
+
+    private static int waterBlend(int source) {
+        int r = blendChannel(source >> 16 & 255, ClientRegister.HOT_SPRING_HUE >> 16 & 255);
+        int g = blendChannel(source >> 8 & 255, ClientRegister.HOT_SPRING_HUE >> 8 & 255);
+        int b = blendChannel(source & 255, ClientRegister.HOT_SPRING_HUE & 255);
+        return FastColor.ARGB32.color(r, g, b);
+    }
+
+    private static int blendChannel(int source, int overlay) {
+        float sourcePercent = source / 255f;
+        float overlayPercent = overlay / 255f;
+        if (sourcePercent < 0.5) {
+            return (int) Mth.clamp(2 * sourcePercent * overlayPercent * 255, 0, 255);
+        }
+        return (int) Mth.clamp((1 - 2 * (1 - sourcePercent) * (1 - overlayPercent)) * 255, 0, 255);
+    }
 
     public static void init() {
         ClientHandlers.OVERLAY = new OverlayGui(Minecraft.getInstance());
@@ -184,7 +209,7 @@ public class ClientRegister {
         consumer.accept(ClientHandlers.SPELL_4 = new TriggerKeyBind(RuneCraftory.MODID + ".key.spell_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
     }
 
-    public static void setupRenderLayers(BiConsumer<Block, RenderType> consumer) {
+    public static void setupBlockRenderLayers(BiConsumer<Block, RenderType> consumer) {
         ModBlocks.BLOCKS.getEntries().forEach(reg -> {
             if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
                 consumer.accept(reg.get(), RenderType.cutout());
@@ -197,8 +222,12 @@ public class ClientRegister {
             if (reg.get() instanceof BlockTreeSapling)
                 consumer.accept(reg.get(), RenderType.cutout());
         });
-
         consumer.accept(ModBlocks.BOSS_SPAWNER.get(), RenderType.cutout());
+    }
+
+    public static void setupFluidRenderLayers(BiConsumer<Fluid, RenderType> consumer) {
+        consumer.accept(ModFluids.FLOWING_HOT_SPRING_WATER.get(), RenderType.translucent());
+        consumer.accept(ModFluids.HOT_SPRING_WATER.get(), RenderType.translucent());
     }
 
     public static void registerItemProps(ItemModelPropsRegister register) {

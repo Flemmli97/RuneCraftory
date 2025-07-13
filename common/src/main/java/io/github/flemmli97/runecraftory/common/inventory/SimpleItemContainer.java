@@ -1,0 +1,125 @@
+package io.github.flemmli97.runecraftory.common.inventory;
+
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.inventory.StackedContentsCompatible;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+public class SimpleItemContainer implements Container, StackedContentsCompatible {
+
+    protected final NonNullList<ItemStack> stacks;
+    private final BlockEntity blockEntity;
+
+    public SimpleItemContainer(int size) {
+        this(null, size);
+    }
+
+    public SimpleItemContainer(BlockEntity blockEntity, int size) {
+        this.stacks = NonNullList.withSize(size, ItemStack.EMPTY);
+        this.blockEntity = blockEntity;
+    }
+
+    @Override
+    public int getContainerSize() {
+        return this.stacks.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : this.stacks) {
+            if (!stack.isEmpty())
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int index) {
+        this.validateSlotIndex(index);
+        return this.stacks.get(index);
+    }
+
+    @Override
+    public ItemStack removeItem(int index, int count) {
+        this.validateSlotIndex(index);
+        ItemStack stack = this.stacks.get(index);
+        if (stack.isEmpty())
+            return ItemStack.EMPTY;
+        return stack.split(count);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int index) {
+        this.validateSlotIndex(index);
+        ItemStack stack = this.stacks.get(index);
+        if (stack.isEmpty())
+            return ItemStack.EMPTY;
+        this.stacks.set(index, ItemStack.EMPTY);
+        return stack;
+    }
+
+    @Override
+    public void setItem(int index, ItemStack stack) {
+        this.validateSlotIndex(index);
+        if (!stack.isEmpty() && !this.canPlaceItem(index, stack))
+            return;
+        int max = this.getMaxStackSize(index);
+        if (stack.getCount() < max) {
+            this.stacks.set(index, stack);
+        } else {
+            ItemStack copy = stack.copy();
+            copy.setCount(max);
+            this.stacks.set(index, copy);
+            stack.shrink(max);
+        }
+        this.setChanged();
+    }
+
+    @Override
+    public void setChanged() {
+        if (this.blockEntity != null && !this.blockEntity.isRemoved())
+            this.blockEntity.setChanged();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
+    }
+
+    @Override
+    public void clearContent() {
+        this.stacks.clear();
+        this.setChanged();
+    }
+
+    @Override
+    public void fillStackedContents(StackedContents helper) {
+        for (ItemStack stack : this.stacks)
+            helper.accountSimpleStack(stack);
+    }
+
+    protected void validateSlotIndex(int index) {
+        if (index < 0 || index >= this.stacks.size())
+            throw new RuntimeException("Slot " + index + " not in valid range - [0," + this.stacks.size() + ")");
+    }
+
+    public int getMaxStackSize(int index) {
+        return 64;
+    }
+
+    public void load(CompoundTag compound, HolderLookup.Provider provider) {
+        ContainerHelper.loadAllItems(compound, this.stacks, provider);
+    }
+
+    public CompoundTag save(HolderLookup.Provider provider) {
+        CompoundTag compound = new CompoundTag();
+        ContainerHelper.saveAllItems(compound, this.stacks, provider);
+        return compound;
+    }
+}

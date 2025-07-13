@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.neoforge.data.worldgen.structures;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.NPCDataProcessor;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
@@ -39,17 +39,17 @@ public class TemplatePoolGen extends CodecBasedProvider<StructureTemplatePool> {
 
         this.add(ModStructures.NPC_BIG_HOUSES.location(), new StructureTemplatePool(
                 StructureWorldGen.create(provider, Pools.EMPTY),
-                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house", this.npcProcessor(ModNPCJobs.BATHHOUSE.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/restaurant", this.npcProcessor(ModNPCJobs.COOK.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
+                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house", this.npcProcessor(ModNPCProfessions.BATHHOUSE_ATTENDANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/restaurant", this.npcProcessor(ModNPCProfessions.CHEF.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
 
         this.add(ModStructures.NPC_HOUSES.location(), new StructureTemplatePool(
                 StructureWorldGen.create(provider, Pools.EMPTY),
-                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", this.npcProcessor(ModNPCJobs.GENERAL.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", this.npcProcessor(ModNPCJobs.FLOWER.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", this.npcProcessor(ModNPCJobs.SMITH.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", this.npcProcessor(ModNPCJobs.DOCTOR.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", this.npcProcessor(ModNPCJobs.MAGIC.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", this.npcProcessor(ModNPCJobs.RUNE_SKILLS.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
+                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", this.npcProcessor(ModNPCProfessions.GENERAL_STORE.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", this.npcProcessor(ModNPCProfessions.FLORIST.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", this.npcProcessor(ModNPCProfessions.BLACKSMITH.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", this.npcProcessor(ModNPCProfessions.DOCTOR.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", this.npcProcessor(ModNPCProfessions.SPELL_MERCHANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", this.npcProcessor(ModNPCProfessions.RUNE_ABILITIES_MERCHANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
 
         for (String s : WorldRegistrationCalls.VANILLA_VILLAGES) {
             this.add(RuneCraftory.modRes("npc/streets/big_street_" + s), new StructureTemplatePool(
@@ -71,7 +71,7 @@ public class TemplatePoolGen extends CodecBasedProvider<StructureTemplatePool> {
         this.contents.put(id, pool);
     }
 
-    private Holder<StructureProcessorList> npcProcessor(Holder<NPCJob> shop) {
+    private Holder<StructureProcessorList> npcProcessor(Holder<NPCProfession> shop) {
         return Holder.direct(new StructureProcessorList(List.of(
                 new NPCDataProcessor(shop.unwrapKey().orElseThrow().location())
         )));

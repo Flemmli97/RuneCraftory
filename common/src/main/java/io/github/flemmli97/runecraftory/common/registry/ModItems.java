@@ -2,16 +2,15 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlockTier;
 import io.github.flemmli97.runecraftory.common.components.AttackActionData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.CraftingBlockItem;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.QuestBoardItem;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
@@ -41,6 +40,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
@@ -53,6 +53,7 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -97,36 +98,36 @@ public class ModItems {
 
     private static final FoodProperties GIANT_CROP_FOOD_PROP = new FoodProperties(2, 0.5f, true, 2.4f, Optional.empty(), List.of());
 
-    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_SCRAP = hoe(EnumToolTier.SCRAP);
-    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_IRON = hoe(EnumToolTier.IRON);
-    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_SILVER = hoe(EnumToolTier.SILVER);
-    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_GOLD = hoe(EnumToolTier.GOLD);
-    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_PLATINUM = hoe(EnumToolTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_SCRAP = wateringCan(EnumToolTier.SCRAP);
-    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_IRON = wateringCan(EnumToolTier.IRON);
-    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_SILVER = wateringCan(EnumToolTier.SILVER);
-    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_GOLD = wateringCan(EnumToolTier.GOLD);
-    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_PLATINUM = wateringCan(EnumToolTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_SCRAP = sickle(EnumToolTier.SCRAP);
-    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_IRON = sickle(EnumToolTier.IRON);
-    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_SILVER = sickle(EnumToolTier.SILVER);
-    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_GOLD = sickle(EnumToolTier.GOLD);
-    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_PLATINUM = sickle(EnumToolTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_SCRAP = hammerTool(EnumToolTier.SCRAP);
-    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_IRON = hammerTool(EnumToolTier.IRON);
-    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_SILVER = hammerTool(EnumToolTier.SILVER);
-    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_GOLD = hammerTool(EnumToolTier.GOLD);
-    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_PLATINUM = hammerTool(EnumToolTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_SCRAP = axeTool(EnumToolTier.SCRAP);
-    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_IRON = axeTool(EnumToolTier.IRON);
-    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_SILVER = axeTool(EnumToolTier.SILVER);
-    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_GOLD = axeTool(EnumToolTier.GOLD);
-    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_PLATINUM = axeTool(EnumToolTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_SCRAP = fishingRod(EnumToolTier.SCRAP);
-    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_IRON = fishingRod(EnumToolTier.IRON);
-    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_SILVER = fishingRod(EnumToolTier.SILVER);
-    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_GOLD = fishingRod(EnumToolTier.GOLD);
-    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_PLATINUM = fishingRod(EnumToolTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_SCRAP = hoe(ToolItemTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_IRON = hoe(ToolItemTier.IRON);
+    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_SILVER = hoe(ToolItemTier.SILVER);
+    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_GOLD = hoe(ToolItemTier.GOLD);
+    public static final RegistryEntrySupplier<Item, ItemToolHoe> HOE_PLATINUM = hoe(ToolItemTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_SCRAP = wateringCan(ToolItemTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_IRON = wateringCan(ToolItemTier.IRON);
+    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_SILVER = wateringCan(ToolItemTier.SILVER);
+    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_GOLD = wateringCan(ToolItemTier.GOLD);
+    public static final RegistryEntrySupplier<Item, ItemToolWateringCan> WATERING_CAN_PLATINUM = wateringCan(ToolItemTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_SCRAP = sickle(ToolItemTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_IRON = sickle(ToolItemTier.IRON);
+    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_SILVER = sickle(ToolItemTier.SILVER);
+    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_GOLD = sickle(ToolItemTier.GOLD);
+    public static final RegistryEntrySupplier<Item, ItemToolSickle> SICKLE_PLATINUM = sickle(ToolItemTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_SCRAP = hammerTool(ToolItemTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_IRON = hammerTool(ToolItemTier.IRON);
+    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_SILVER = hammerTool(ToolItemTier.SILVER);
+    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_GOLD = hammerTool(ToolItemTier.GOLD);
+    public static final RegistryEntrySupplier<Item, ItemToolHammer> HAMMER_PLATINUM = hammerTool(ToolItemTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_SCRAP = axeTool(ToolItemTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_IRON = axeTool(ToolItemTier.IRON);
+    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_SILVER = axeTool(ToolItemTier.SILVER);
+    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_GOLD = axeTool(ToolItemTier.GOLD);
+    public static final RegistryEntrySupplier<Item, ItemToolAxe> AXE_PLATINUM = axeTool(ToolItemTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_SCRAP = fishingRod(ToolItemTier.SCRAP);
+    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_IRON = fishingRod(ToolItemTier.IRON);
+    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_SILVER = fishingRod(ToolItemTier.SILVER);
+    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_GOLD = fishingRod(ToolItemTier.GOLD);
+    public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_PLATINUM = fishingRod(ToolItemTier.PLATINUM);
     public static final RegistryEntrySupplier<Item, ItemCommandStaff> MOB_STAFF = register("monster_command_staff", () -> new ItemCommandStaff(new Item.Properties().stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
     public static final RegistryEntrySupplier<Item, Item> BRUSH = register("brush", () -> new Item(new Item.Properties().stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
     public static final RegistryEntrySupplier<Item, Item> GLASS = register("magnifying_glass", () -> new Item(new Item.Properties().stacksTo(1)
@@ -348,42 +349,42 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, ItemGloveBase> BAZAL_KATAR = gloves("bazal_katar", Texture.N);
     public static final RegistryEntrySupplier<Item, ItemGloveBase> FENRIR = gloves("fenrir", Texture.N);
 
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> ROD = staff("rod", EnumElement.FIRE, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> AMETHYST_ROD = staff("amethyst_rod", EnumElement.EARTH, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> AQUAMARINE_ROD = staff("aquamarine_rod", EnumElement.WATER, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> FRIENDLY_ROD = staff("friendly_rod", EnumElement.LOVE, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> LOVE_LOVE_ROD = staff("love_love_rod", EnumElement.LOVE, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> STAFF = staff("staff", EnumElement.EARTH, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> EMERALD_ROD = staff("emerald_rod", EnumElement.WIND, 1, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> SILVER_STAFF = staff("silver_staff", EnumElement.DARK, 2, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> FLARE_STAFF = staff("flare_staff", EnumElement.FIRE, 2, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> RUBY_ROD = staff("ruby_rod", EnumElement.FIRE, 2, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> SAPPHIRE_ROD = staff("sapphire_rod", EnumElement.LIGHT, 2, Texture.Y);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> EARTH_STAFF = staff("earth_staff", EnumElement.EARTH, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> LIGHTNING_WAND = staff("lightning_wand", EnumElement.WIND, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> ICE_STAFF = staff("ice_staff", EnumElement.WATER, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> DIAMOND_ROD = staff("diamond_rod", EnumElement.DARK, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> WIZARDS_STAFF = staff("wizards_staff", EnumElement.LIGHT, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGES_STAFF = staff("mages_staff", EnumElement.EARTH, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> SHOOTING_STAR_STAFF = staff("shooting_star_staff", EnumElement.LIGHT, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> HELL_BRANCH = staff("hell_branch", EnumElement.DARK, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> CRIMSON_STAFF = staff("crimson_staff", EnumElement.FIRE, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> BUBBLE_STAFF = staff("bubble_staff", EnumElement.WATER, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> GAIA_ROD = staff("gaia_rod", EnumElement.EARTH, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> CYCLONE_ROD = staff("cyclone_rod", EnumElement.WIND, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> STORM_WAND = staff("storm_wand", EnumElement.WIND, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> RUNE_STAFF = staff("rune_staff", EnumElement.LIGHT, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGES_STAFF_PLUS = staff("mages_staff_plus", EnumElement.LOVE, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGIC_BROOM = staff("magic_broom", EnumElement.WIND, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGIC_SHOT = staff("magic_shot", EnumElement.LOVE, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> HELL_CURSE = staff("hell_curse", EnumElement.DARK, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> ALGERNON = staff("algernon", EnumElement.EARTH, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> SORCERES_WAND = staff("sorceres_wand", EnumElement.LIGHT, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> BASKET = staff("basket", EnumElement.LOVE, 1, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> GOLDEN_TURNIP_STAFF = staff("golden_turnip_staff", EnumElement.LOVE, 2, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> SWEET_POTATO_STAFF = staff("sweet_potato_staff", EnumElement.LOVE, 1, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> ELVISH_HARP = staff("elvish_harp", EnumElement.LOVE, 3, Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemStaffBase> SYRINGE = staff("syringe", EnumElement.WATER, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> ROD = staff("rod", ItemElement.FIRE, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> AMETHYST_ROD = staff("amethyst_rod", ItemElement.EARTH, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> AQUAMARINE_ROD = staff("aquamarine_rod", ItemElement.WATER, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> FRIENDLY_ROD = staff("friendly_rod", ItemElement.LOVE, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> LOVE_LOVE_ROD = staff("love_love_rod", ItemElement.LOVE, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> STAFF = staff("staff", ItemElement.EARTH, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> EMERALD_ROD = staff("emerald_rod", ItemElement.WIND, 1, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> SILVER_STAFF = staff("silver_staff", ItemElement.DARK, 2, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> FLARE_STAFF = staff("flare_staff", ItemElement.FIRE, 2, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> RUBY_ROD = staff("ruby_rod", ItemElement.FIRE, 2, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> SAPPHIRE_ROD = staff("sapphire_rod", ItemElement.LIGHT, 2, Texture.Y);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> EARTH_STAFF = staff("earth_staff", ItemElement.EARTH, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> LIGHTNING_WAND = staff("lightning_wand", ItemElement.WIND, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> ICE_STAFF = staff("ice_staff", ItemElement.WATER, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> DIAMOND_ROD = staff("diamond_rod", ItemElement.DARK, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> WIZARDS_STAFF = staff("wizards_staff", ItemElement.LIGHT, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGES_STAFF = staff("mages_staff", ItemElement.EARTH, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> SHOOTING_STAR_STAFF = staff("shooting_star_staff", ItemElement.LIGHT, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> HELL_BRANCH = staff("hell_branch", ItemElement.DARK, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> CRIMSON_STAFF = staff("crimson_staff", ItemElement.FIRE, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> BUBBLE_STAFF = staff("bubble_staff", ItemElement.WATER, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> GAIA_ROD = staff("gaia_rod", ItemElement.EARTH, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> CYCLONE_ROD = staff("cyclone_rod", ItemElement.WIND, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> STORM_WAND = staff("storm_wand", ItemElement.WIND, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> RUNE_STAFF = staff("rune_staff", ItemElement.LIGHT, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGES_STAFF_PLUS = staff("mages_staff_plus", ItemElement.LOVE, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGIC_BROOM = staff("magic_broom", ItemElement.WIND, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> MAGIC_SHOT = staff("magic_shot", ItemElement.LOVE, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> HELL_CURSE = staff("hell_curse", ItemElement.DARK, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> ALGERNON = staff("algernon", ItemElement.EARTH, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> SORCERES_WAND = staff("sorceres_wand", ItemElement.LIGHT, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> BASKET = staff("basket", ItemElement.LOVE, 1, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> GOLDEN_TURNIP_STAFF = staff("golden_turnip_staff", ItemElement.LOVE, 2, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> SWEET_POTATO_STAFF = staff("sweet_potato_staff", ItemElement.LOVE, 1, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> ELVISH_HARP = staff("elvish_harp", ItemElement.LOVE, 3, Texture.N);
+    public static final RegistryEntrySupplier<Item, ItemStaffBase> SYRINGE = staff("syringe", ItemElement.WATER, 2, Texture.N);
 
     public static final RegistryEntrySupplier<Item, Item> LOVE_LETTER = register("love_letter", () -> new Item(new Item.Properties().stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
     public static final RegistryEntrySupplier<Item, Item> DIVORCE_PAPER = register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
@@ -552,32 +553,32 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, CraftingBlockItem> CHEMISTRY_SET = register("chemistry_set", () -> new CraftingBlockItem(ModBlocks.CHEMISTRY_SET.get(), new Item.Properties()), ModCreativeModTabs.BLOCKS);
     public static final RegistryEntrySupplier<Item, CraftingBlockItem> COOKING_TABLE = register("cooking_table", () -> new CraftingBlockItem(ModBlocks.COOKING_TABLE.get(), new Item.Properties()), ModCreativeModTabs.BLOCKS);
 
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_IRON = mineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_TIN = mineral(EnumMineralTier.TIN);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_SILVER = mineral(EnumMineralTier.SILVER);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_GOLD = mineral(EnumMineralTier.GOLD);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_PLATINUM = mineral(EnumMineralTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_ORICHALCUM = mineral(EnumMineralTier.ORICHALCUM);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_DIAMOND = mineral(EnumMineralTier.DIAMOND);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_DRAGONIC = mineral(EnumMineralTier.DRAGONIC);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_AQUAMARINE = mineral(EnumMineralTier.AQUAMARINE);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_AMETHYST = mineral(EnumMineralTier.AMETHYST);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_RUBY = mineral(EnumMineralTier.RUBY);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_EMERALD = mineral(EnumMineralTier.EMERALD);
-    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_SAPPHIRE = mineral(EnumMineralTier.SAPPHIRE);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_IRON = brokenMineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_TIN = brokenMineral(EnumMineralTier.TIN);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_SILVER = brokenMineral(EnumMineralTier.SILVER);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_GOLD = brokenMineral(EnumMineralTier.GOLD);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_PLATINUM = brokenMineral(EnumMineralTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_ORICHALCUM = brokenMineral(EnumMineralTier.ORICHALCUM);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_DIAMOND = brokenMineral(EnumMineralTier.DIAMOND);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_DRAGONIC = brokenMineral(EnumMineralTier.DRAGONIC);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_AQUAMARINE = brokenMineral(EnumMineralTier.AQUAMARINE);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_AMETHYST = brokenMineral(EnumMineralTier.AMETHYST);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_RUBY = brokenMineral(EnumMineralTier.RUBY);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_EMERALD = brokenMineral(EnumMineralTier.EMERALD);
-    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_SAPPHIRE = brokenMineral(EnumMineralTier.SAPPHIRE);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_IRON = mineral(MineralBlockTier.IRON);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_TIN = mineral(MineralBlockTier.TIN);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_SILVER = mineral(MineralBlockTier.SILVER);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_GOLD = mineral(MineralBlockTier.GOLD);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_PLATINUM = mineral(MineralBlockTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_ORICHALCUM = mineral(MineralBlockTier.ORICHALCUM);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_DIAMOND = mineral(MineralBlockTier.DIAMOND);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_DRAGONIC = mineral(MineralBlockTier.DRAGONIC);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_AQUAMARINE = mineral(MineralBlockTier.AQUAMARINE);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_AMETHYST = mineral(MineralBlockTier.AMETHYST);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_RUBY = mineral(MineralBlockTier.RUBY);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_EMERALD = mineral(MineralBlockTier.EMERALD);
+    public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_SAPPHIRE = mineral(MineralBlockTier.SAPPHIRE);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_IRON = brokenMineral(MineralBlockTier.IRON);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_TIN = brokenMineral(MineralBlockTier.TIN);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_SILVER = brokenMineral(MineralBlockTier.SILVER);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_GOLD = brokenMineral(MineralBlockTier.GOLD);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_PLATINUM = brokenMineral(MineralBlockTier.PLATINUM);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_ORICHALCUM = brokenMineral(MineralBlockTier.ORICHALCUM);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_DIAMOND = brokenMineral(MineralBlockTier.DIAMOND);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_DRAGONIC = brokenMineral(MineralBlockTier.DRAGONIC);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_AQUAMARINE = brokenMineral(MineralBlockTier.AQUAMARINE);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_AMETHYST = brokenMineral(MineralBlockTier.AMETHYST);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_RUBY = brokenMineral(MineralBlockTier.RUBY);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_EMERALD = brokenMineral(MineralBlockTier.EMERALD);
+    public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_SAPPHIRE = brokenMineral(MineralBlockTier.SAPPHIRE);
 
     public static final RegistryEntrySupplier<Item, Item> RAW_TIN = register("raw_tin", () -> new Item(new Item.Properties()), ModCreativeModTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> TIN_INGOT = mat("tin_ingot", Texture.Y);
@@ -1225,6 +1226,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item, BlockItem> CASH_REGISTER = blockItem("cash_register", () -> ModBlocks.CASH_REGISTER);
     public static final RegistryEntrySupplier<Item, BlockItem> MONSTER_BARN = blockItem("monster_barn", () -> ModBlocks.MONSTER_BARN);
     public static final RegistryEntrySupplier<Item, QuestBoardItem> QUEST_BOARD = register("quest_board", () -> new QuestBoardItem(ModBlocks.QUEST_BOARD.get(), new Item.Properties()), ModCreativeModTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, BucketItem> HOT_SPRING_BUCKET = register("hot_spring_bucket", () -> new BucketItem(ModFluids.HOT_SPRING_WATER.get(), new Item.Properties().stacksTo(1)), ModCreativeModTabs.BLOCKS);
 
     public static final RegistryEntrySupplier<Item, Item> ICON_0 = register("icon_0", () -> new Item(new Item.Properties()));
     public static final RegistryEntrySupplier<Item, ItemDebug> DEBUG = register("debug_item", () -> new ItemDebug(new Item.Properties()));
@@ -1244,19 +1246,19 @@ public class ModItems {
 
     public static final RegistryEntrySupplier<Item, BabySpawnEgg> NPC_BABY = register("baby", () -> new BabySpawnEgg(new Item.Properties().stacksTo(1)));
 
-    private static RegistryEntrySupplier<Item, ItemToolHoe> hoe(EnumToolTier tier) {
+    private static RegistryEntrySupplier<Item, ItemToolHoe> hoe(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolHoe> sup = register("hoe_" + tier.getName(), () -> new ItemToolHoe(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemToolWateringCan> wateringCan(EnumToolTier tier) {
+    private static RegistryEntrySupplier<Item, ItemToolWateringCan> wateringCan(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolWateringCan> sup = register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)
                 .component(ModDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
@@ -1264,39 +1266,39 @@ public class ModItems {
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemToolSickle> sickle(EnumToolTier tier) {
+    private static RegistryEntrySupplier<Item, ItemToolSickle> sickle(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolSickle> sup = register("sickle_" + tier.getName(), () -> new ItemToolSickle(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemToolHammer> hammerTool(EnumToolTier tier) {
+    private static RegistryEntrySupplier<Item, ItemToolHammer> hammerTool(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolHammer> sup = register("hammer_" + tier.getName(), () -> new ItemToolHammer(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemToolAxe> axeTool(EnumToolTier tier) {
+    private static RegistryEntrySupplier<Item, ItemToolAxe> axeTool(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolAxe> sup = register("axe_" + tier.getName(), () -> new ItemToolAxe(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemToolFishingRod> fishingRod(EnumToolTier tier) {
+    private static RegistryEntrySupplier<Item, ItemToolFishingRod> fishingRod(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolFishingRod> sup = register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(new Item.Properties()
-                .component(DataComponents.RARITY, tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
+                .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(ModDataComponentTypes.TOOL_TIER.get(), tier).stacksTo(1)), ModCreativeModTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISHING_RODS, t -> new ArrayList<>()).add(sup);
@@ -1441,7 +1443,7 @@ public class ModItems {
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, ItemStaffBase> staff(String name, EnumElement starterElement, int amount, Texture texture) {
+    private static RegistryEntrySupplier<Item, ItemStaffBase> staff(String name, ItemElement starterElement, int amount, Texture texture) {
         if (texture == Texture.N) {
             RegistryEntrySupplier<Item, ItemStaffBase> sup = register(name, () -> new ItemStaffBase(starterElement, amount, new Item.Properties()
                     .component(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
@@ -1508,12 +1510,12 @@ public class ModItems {
         return register(name, () -> new BlockItem(block.get().get(), new Item.Properties()), group);
     }
 
-    private static RegistryEntrySupplier<Item, BlockItem> mineral(EnumMineralTier tier) {
+    private static RegistryEntrySupplier<Item, BlockItem> mineral(MineralBlockTier tier) {
         Supplier<Block> block = () -> ModBlocks.MINERAL_MAP.get(tier).get();
         return register("ore_" + tier.getSerializedName(), () -> new BlockItem(block.get(), new Item.Properties()), ModCreativeModTabs.BLOCKS);
     }
 
-    private static RegistryEntrySupplier<Item, BlockItem> brokenMineral(EnumMineralTier tier) {
+    private static RegistryEntrySupplier<Item, BlockItem> brokenMineral(MineralBlockTier tier) {
         Supplier<Block> block = () -> ModBlocks.BROKEN_MINERAL_MAP.get(tier).get();
         return register("ore_broken_" + tier.getSerializedName(), () -> new BlockItem(block.get(), new Item.Properties()));
     }

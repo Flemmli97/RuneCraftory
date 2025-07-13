@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -21,7 +21,7 @@ public class ItemSkillUp extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (!world.isClientSide) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            for (EnumSkills skill : EnumSkills.values())
+            for (Skills skill : Skills.values())
                 data.increaseSkill(skill, LevelCalc.xpAmountForSkillLevelUp(skill, data.getSkillLevel(skill).getLevel()) - data.getSkillLevel(skill).getXp());
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));

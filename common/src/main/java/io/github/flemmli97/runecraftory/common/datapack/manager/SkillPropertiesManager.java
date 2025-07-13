@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.datapack.manager;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
 import net.minecraft.core.HolderLookup;
@@ -24,31 +24,31 @@ public class SkillPropertiesManager extends SimpleJsonResourceReloadListener imp
     public static final ResourceLocation ID = RuneCraftory.modRes("skills");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
-    private Map<EnumSkills, SkillProperties> propertiesMap = new EnumMap<>(EnumSkills.class);
+    private Map<Skills, SkillProperties> propertiesMap = new EnumMap<>(Skills.class);
 
     public SkillPropertiesManager() {
         super(DataPackHandler.GSON, DIRECTORY);
     }
 
-    public SkillProperties getPropertiesFor(EnumSkills skills) {
+    public SkillProperties getPropertiesFor(Skills skills) {
         return this.propertiesMap.getOrDefault(skills, SkillProperties.DEFAULT);
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
-        EnumMap<EnumSkills, SkillProperties> propertiesBuilder = new EnumMap<>(EnumSkills.class);
+        EnumMap<Skills, SkillProperties> propertiesBuilder = new EnumMap<>(Skills.class);
         data.forEach((key, el) -> {
             try {
                 SkillProperties props = SkillProperties.CODEC.parse(JsonOps.INSTANCE, el).getOrThrow();
-                EnumSkills skills = EnumSkills.valueOf(key.getPath().toUpperCase(Locale.ROOT));
+                Skills skills = Skills.valueOf(key.getPath().toUpperCase(Locale.ROOT));
                 propertiesBuilder.put(skills, props);
             } catch (Exception ex) {
                 RuneCraftory.LOGGER.error("Couldn't parse skill properties json {} {}", key, ex);
                 ex.fillInStackTrace();
             }
         });
-        List<EnumSkills> missing = new ArrayList<>();
-        for (EnumSkills skill : EnumSkills.values()) {
+        List<Skills> missing = new ArrayList<>();
+        for (Skills skill : Skills.values()) {
             if (propertiesBuilder.containsKey(skill))
                 continue;
             missing.add(skill);

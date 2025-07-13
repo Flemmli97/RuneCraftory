@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.netty.buffer.ByteBuf;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class IndexedColorSettingType implements NPCFeatureHolder<IndexedColorSettingType.IndexedColorFeature> {
+public class IndexedColorSettingType implements NPCFeature.NPCFeatureHolder<IndexedColorSettingType.IndexedColorFeature> {
 
     public static final Function<Supplier<NPCFeatureType<IndexedColorFeature>>, MapCodec<IndexedColorSettingType>> TYPE_CODEC = type -> RecordCodecBuilder.mapCodec(inst ->
             inst.group(Codec.INT.listOf().fieldOf("indices").forGetter(d -> d.indices),

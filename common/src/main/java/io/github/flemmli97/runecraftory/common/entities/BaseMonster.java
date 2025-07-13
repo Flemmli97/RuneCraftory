@@ -3,11 +3,10 @@ package io.github.flemmli97.runecraftory.common.entities;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -18,14 +17,15 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
 import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.entities.utils.CommonMonsterHandler;
 import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdater;
 import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
-import io.github.flemmli97.runecraftory.common.entities.utils.IExtendedMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateTracker;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -50,9 +50,9 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.BarnData;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.BarnData;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -170,7 +170,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, IExtendedMob, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, CommonMonsterHandler, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
 
     public static final int MOVE_TICK_MAX = 4;
 
@@ -1151,7 +1151,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     protected void actuallyHurt(DamageSource source, float damageAmount) {
         super.actuallyHurt(source, damageAmount);
-        if (!this.isTamed() && source instanceof DynamicDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == EnumElement.LOVE)
+        if (!this.isTamed() && source instanceof DynamicDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == ItemElement.LOVE)
             this.loveAttCount = Math.min(100, this.loveAttCount + 1);
         if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.isTamed() && this.getHealth() <= 0) {
             this.setHealth(0.01f);
@@ -1361,7 +1361,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
             data.entityStatsTracker.tameEntity(this);
             ModCriteria.TAME_MONSTER_TRIGGER.get().trigger(serverPlayer, this, data.entityStatsTracker);
-            LevelCalc.levelSkill(data, EnumSkills.TAMING, 10);
+            LevelCalc.levelSkill(data, Skills.TAMING, 10);
             QuestHandler.getData(serverPlayer).trigger(TamingTracker.KEY, this);
         }
         if (this.getServer() != null) {

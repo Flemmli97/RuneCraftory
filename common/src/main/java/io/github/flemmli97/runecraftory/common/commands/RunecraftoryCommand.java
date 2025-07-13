@@ -8,8 +8,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
@@ -23,7 +23,7 @@ import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.commands.CommandBuildContext;
@@ -56,7 +56,7 @@ public class RunecraftoryCommand {
         dispatcher.register(Commands.literal("runecraftory")
                 .then(Commands.literal("skill").requires(src -> src.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.players())
-                                .then(Commands.argument("skill", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.concat(Stream.of(EnumSkills.values()).map(Object::toString), Stream.of("ALL")), builder))
+                                .then(Commands.argument("skill", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.concat(Stream.of(Skills.values()).map(Object::toString), Stream.of("ALL")), builder))
                                         .then(Commands.literal("add")
                                                 .then(Commands.literal("level").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillLevel)))
                                                 .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillXP))))
@@ -73,7 +73,7 @@ public class RunecraftoryCommand {
                                 .then(Commands.literal("id").then(Commands.argument("id", ResourceLocationArgument.id())
                                         .suggests(RunecraftoryCommand::allRecipes).executes(RunecraftoryCommand::unlockRecipe)))))
                 .then(Commands.literal("recalcStats").requires(src -> src.hasPermission(2)).then(Commands.argument("entities", EntityArgument.entities()).executes(RunecraftoryCommand::recalcStats)))
-                .then(Commands.literal("weather").requires(src -> src.hasPermission(2)).then(Commands.argument("weather", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(EnumWeather.values()).map(Object::toString), builder)).executes(RunecraftoryCommand::setWeather)))
+                .then(Commands.literal("weather").requires(src -> src.hasPermission(2)).then(Commands.argument("weather", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(Weather.values()).map(Object::toString), builder)).executes(RunecraftoryCommand::setWeather)))
                 .then(Commands.literal("reset").requires(src -> src.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.players())
                                 .then(Commands.literal("all").executes(RunecraftoryCommand::resetAll))
@@ -98,7 +98,7 @@ public class RunecraftoryCommand {
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                for (EnumSkills skill : EnumSkills.values()) {
+                for (Skills skill : Skills.values()) {
                     XpLevelHolder skLvl = data.getSkillLevel(skill);
                     data.setSkillLevel(skill, skLvl.getLevel() + amount, skLvl.getXp(), true);
                 }
@@ -107,7 +107,7 @@ public class RunecraftoryCommand {
             }
             return ret;
         }
-        EnumSkills skill = EnumSkills.read(s);
+        Skills skill = Skills.read(s);
         if (skill == null) {
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.no", s), false);
             return 0;
@@ -129,14 +129,14 @@ public class RunecraftoryCommand {
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                for (EnumSkills skill : EnumSkills.values())
+                for (Skills skill : Skills.values())
                     data.increaseSkill(skill, amount);
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
                 ret++;
             }
             return ret;
         }
-        EnumSkills skill = EnumSkills.read(s);
+        Skills skill = Skills.read(s);
         if (skill == null) {
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.no", s), false);
             return 0;
@@ -156,14 +156,14 @@ public class RunecraftoryCommand {
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                for (EnumSkills skill : EnumSkills.values())
+                for (Skills skill : Skills.values())
                     data.setSkillLevel(skill, amount, 0, true);
                 ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.lvl.set", s, player.getName(), amount), false);
                 ret++;
             }
             return ret;
         }
-        EnumSkills skill = EnumSkills.read(s);
+        Skills skill = Skills.read(s);
         if (skill == null) {
             ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.skill.no", s), false);
             return 0;
@@ -273,15 +273,15 @@ public class RunecraftoryCommand {
     }
 
     private static int setWeather(CommandContext<CommandSourceStack> ctx) {
-        EnumWeather weather;
+        Weather weather;
         String s = StringArgumentType.getString(ctx, "weather");
         try {
-            weather = EnumWeather.valueOf(s);
+            weather = Weather.valueOf(s);
         } catch (IllegalArgumentException e) {
             ctx.getSource().sendFailure(Component.translatable("runecraftory.command.weather.no", s));
             return 0;
         }
-        CalendarImpl.get(ctx.getSource().getLevel()).updateWeatherTo(ctx.getSource().getLevel(), weather);
+        Calendar.get(ctx.getSource().getLevel()).updateWeatherTo(ctx.getSource().getLevel(), weather);
         ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.set.weather", Component.translatable(weather.translation)), false);
         return 1;
     }

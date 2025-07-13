@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -46,14 +46,14 @@ public class DailyPlayerUpdater {
     public void onGiveMonsterItem() {
         if (!this.gaveMonsterItem) {
             this.gaveMonsterItem = true;
-            LevelCalc.levelSkill(this.data, EnumSkills.TAMING, 4);
+            LevelCalc.levelSkill(this.data, Skills.TAMING, 4);
         }
     }
 
     public void onFoodEaten() {
         if (!this.ateFood) {
             this.ateFood = true;
-            LevelCalc.levelSkill(this.data, EnumSkills.EATING, 50);
+            LevelCalc.levelSkill(this.data, Skills.EATING, 50);
         }
     }
 

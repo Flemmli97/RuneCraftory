@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -60,7 +60,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
     private static final EntityDataAccessor<Boolean> DATA_BITING = SynchedEntityData.defineId(EntityCustomFishingHook.class, EntityDataSerializers.BOOLEAN);
 
     private boolean inFishingSpot, inSand;
-    private EnumElement element = EnumElement.NONE;
+    private ItemElement element = ItemElement.NONE;
 
     private FluidState currentFluidState;
 
@@ -91,7 +91,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         this.nibbleBonus = charge;
     }
 
-    public void setElement(EnumElement element) {
+    public void setElement(ItemElement element) {
         this.element = element;
     }
 
@@ -190,8 +190,8 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             this.canAttack = null;
             if (this.getOwner() instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                LevelCalc.levelSkill(data, EnumSkills.FISHING, 10);
-                LevelCalc.levelSkill(data, EnumSkills.WATER, 1);
+                LevelCalc.levelSkill(data, Skills.FISHING, 10);
+                LevelCalc.levelSkill(data, Skills.WATER, 1);
             }
         }
         return att;
@@ -377,7 +377,7 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
         if (this.nibble > 0) {
             //For now using vanilla loottables
             float luck = this.luck + owner.getLuck() + this.difficultyBonus * 0.5f
-                    + Platform.INSTANCE.getPlayerData(owner).getSkillLevel(EnumSkills.FISHING).getLevel() * 0.02f;
+                    + Platform.INSTANCE.getPlayerData(owner).getSkillLevel(Skills.FISHING).getLevel() * 0.02f;
             LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
                     .withParameter(LootContextParams.ORIGIN, this.position())
                     .withParameter(LootContextParams.TOOL, stack)
@@ -400,9 +400,9 @@ public class EntityCustomFishingHook extends AdvancedProjectile {
             }
             if (this.getOwner() instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                LevelCalc.useRP(data, 10 * (this.nibbleBonus + 1), true, 0, true, EnumSkills.FISHING);
-                LevelCalc.levelSkill(data, EnumSkills.FISHING, 25);
-                LevelCalc.levelSkill(data, EnumSkills.WATER, 5);
+                LevelCalc.useRP(data, 10 * (this.nibbleBonus + 1), true, 0, true, Skills.FISHING);
+                LevelCalc.levelSkill(data, Skills.FISHING, 25);
+                LevelCalc.levelSkill(data, Skills.WATER, 5);
             }
         }
 

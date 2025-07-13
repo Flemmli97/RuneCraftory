@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -60,7 +60,7 @@ public class EntityRockSpear extends BaseBeam {
 
     @Override
     public void onImpact(EntityHitResult entityHitResult) {
-        CombatUtils.damageWithFaintAndCrit(this.getOwner(), entityHitResult.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().element(EnumElement.EARTH).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
+        CombatUtils.damageWithFaintAndCrit(this.getOwner(), entityHitResult.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().element(ItemElement.EARTH).hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 
     @Override

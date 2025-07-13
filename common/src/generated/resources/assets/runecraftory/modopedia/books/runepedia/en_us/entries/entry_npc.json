@@ -28,7 +28,7 @@
       "components": [
         {
           "type": "modopedia:text",
-          "text": "For a villager to operate a shop they require a $(c:blue)bed$() and a $(c:blue)workplace$() that is not too far away from it.\nAdditionally a shop is only open during opening hours. You can check the requirements by simply talking to them.\nHovering over their $(c:red)job$() will highlight what the villager is missing.\n\nThese villagers are also much more capable than usual."
+          "text": "For a villager to operate a shop they require a $(c:blue)bed$() and a $(c:blue)workplace$() that is not too far away from it.\nAdditionally a shop is only open during opening hours. You can check the requirements by simply talking to them.\nHovering over their $(c:red)profession$() will highlight what the villager is missing.\n\nThese villagers are also much more capable than usual."
         }
       ]
     },

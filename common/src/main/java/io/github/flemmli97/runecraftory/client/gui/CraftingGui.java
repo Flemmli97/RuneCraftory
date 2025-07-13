@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import io.github.flemmli97.runecraftory.common.network.C2SSelectRecipeCrafting;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.gui.widget.list.SelectableEntry;
@@ -37,7 +37,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     public static final ResourceLocation SCROLLBAR_DISABLED = RuneCraftory.modRes("widget/scrollbar_disabled");
 
     protected final PlayerData data;
-    private final EnumSkills skill;
+    private final Skills skill;
 
     private SelectableListWidget recipes;
     private long lastChange;

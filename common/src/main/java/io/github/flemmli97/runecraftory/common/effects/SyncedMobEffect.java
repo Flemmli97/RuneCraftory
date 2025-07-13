@@ -22,11 +22,11 @@ public class SyncedMobEffect extends MobEffect implements ExtendedEffect {
         EntityData data = Platform.INSTANCE.getEntityData(entity);
         switch (type) {
             case POISON -> data.setPoison(entity, flag);
-            case SLEEP -> data.setSleeping(entity, flag);
-            case PARALYSIS -> data.setParalysis(entity, flag);
-            case STUN -> data.setStunned(entity, flag);
-            case COLD -> data.setCold(entity, flag);
-            case ORTHOVIEW -> data.setThirdPersonView(entity, flag);
+            case SLEEP -> data.setSleeping(flag);
+            case PARALYSIS -> data.setParalysis(flag);
+            case STUN -> data.setStunned(flag);
+            case COLD -> data.setCold(flag);
+            case ORTHOVIEW -> data.setThirdPersonView(flag);
         }
     }
 

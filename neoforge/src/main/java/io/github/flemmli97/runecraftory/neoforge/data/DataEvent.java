@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.neoforge.data.tags.BiomeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.BlockTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.DamageTypeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.EntityTagGen;
+import io.github.flemmli97.runecraftory.neoforge.data.tags.FluidTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.ItemTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.FeatureWorldGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
@@ -55,14 +56,14 @@ public class DataEvent {
 
         IgnoreFileHelper ignore = new IgnoreFileHelper(fileHelper);
 
-        data.addProvider(true, new DamageTypeGen(packOutput, provider, fileHelper));
-
         data.addProvider(true, new AttributeTagGen(packOutput, provider));
         data.addProvider(true, new BiomeTagGen(packOutput, provider, fileHelper));
         BlockTagGen blocks = new BlockTagGen(packOutput, provider, fileHelper);
         data.addProvider(true, blocks);
+        data.addProvider(true, new DamageTypeGen(packOutput, provider, fileHelper));
         data.addProvider(true, new DamageTypeTagGen(packOutput, provider, fileHelper));
         data.addProvider(true, new EntityTagGen(packOutput, provider, fileHelper));
+        data.addProvider(true, new FluidTagGen(packOutput, provider, fileHelper));
         data.addProvider(true, new ItemTagGen(packOutput, provider, blocks.contentsGetter(), fileHelper));
 
         data.addProvider(true, new AdvancementGen(packOutput, provider, fileHelper));

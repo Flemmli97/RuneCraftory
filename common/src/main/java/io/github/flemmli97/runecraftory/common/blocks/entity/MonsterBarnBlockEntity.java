@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.blocks.entity;
 
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.world.BarnData;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.common.world.data.BarnData;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

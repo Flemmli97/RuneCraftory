@@ -42,7 +42,7 @@
   ],
   "neutral_gift_response": "npc.cook.2.gift.default",
   "profession": [
-    "runecraftory:cook"
+    "runecraftory:chef"
   ],
   "quest_handler": {
     "required_quests": [],

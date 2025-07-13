@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -104,7 +104,7 @@ public class EntityDarkBall extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(EnumElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(ItemElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 
     @Override

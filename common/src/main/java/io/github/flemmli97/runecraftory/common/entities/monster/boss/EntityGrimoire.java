@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
@@ -9,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTarg
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -125,7 +125,7 @@ public class EntityGrimoire extends BossMonster {
         });
         b.put(CHARGE_LAND, (anim, entity) -> {
             if (anim.isAt("attack")) {
-                DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(EnumElement.WIND).hurtResistant(5);
+                DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(ItemElement.WIND).hurtResistant(5);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 4, 3);
                 entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), entity.getSoundSource(), 1.0f, 0.9f);

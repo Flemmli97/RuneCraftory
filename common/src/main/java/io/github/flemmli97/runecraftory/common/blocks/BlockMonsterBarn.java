@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

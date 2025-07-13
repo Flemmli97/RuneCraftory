@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
@@ -58,7 +58,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        if (player.isCreative() || data.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5) {
+        if (player.isCreative() || data.getSkillLevel(Skills.SPEAR).getLevel() >= 5) {
             if (player instanceof ServerPlayer) {
                 if (data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get(), false)) {
                     data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), itemstack);
@@ -108,7 +108,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
         Collection<LivingEntity> list = CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(player, this.getRange(player, stack), 0.5, 0.5))
                 .apply(player, null);
         if (!list.isEmpty()) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.SPEAR, 2);
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.SPEAR, 2);
             list.forEach(e -> CombatUtils.attackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
         }
         if (finishing)

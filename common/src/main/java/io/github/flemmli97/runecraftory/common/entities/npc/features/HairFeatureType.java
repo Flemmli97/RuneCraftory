@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
@@ -14,7 +13,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public record HairFeatureType(TypedIndexRange types,
-                              ColorSetting color) implements NPCFeatureHolder<HairFeatureType.HairFeature> {
+                              ColorSetting color) implements NPCFeature.NPCFeatureHolder<HairFeatureType.HairFeature> {
 
     public static final MapCodec<HairFeatureType> TYPE_CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(TypedIndexRange.CODEC.fieldOf("styles").forGetter(d -> d.types),

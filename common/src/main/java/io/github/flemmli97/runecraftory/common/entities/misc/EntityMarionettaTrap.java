@@ -102,11 +102,11 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, Anima
         --this.tickLeft;
         this.caughtEntities.forEach(entity -> {
             if (entity.isAlive()) {
-                Platform.INSTANCE.getEntityData(entity).setInvis(entity, 10);
+                Platform.INSTANCE.getEntityData(entity).setInvis(10);
                 entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
                 EntityData data = Platform.INSTANCE.getEntityData(entity);
                 if (!data.thirdPersonView())
-                    data.setThirdPersonView(entity, true);
+                    data.setThirdPersonView(true);
             }
         });
         if (!this.level().isClientSide) {
@@ -120,8 +120,8 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, Anima
             }
             if (this.tickLeft <= 0) {
                 this.caughtEntities.forEach(entity -> {
-                    Platform.INSTANCE.getEntityData(entity).setInvis(entity, 0);
-                    Platform.INSTANCE.getEntityData(entity).setThirdPersonView(entity, false);
+                    Platform.INSTANCE.getEntityData(entity).setInvis(0);
+                    Platform.INSTANCE.getEntityData(entity).setThirdPersonView(false);
                 });
                 this.discard();
             }

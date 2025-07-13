@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -43,7 +43,7 @@ public class EntityRuneOrb extends Entity {
             return;
         }
         this.discard();
-        EnumSkills randomSkill = EnumSkills.values()[player.getRandom().nextInt(EnumSkills.values().length)];
+        Skills randomSkill = Skills.values()[player.getRandom().nextInt(Skills.values().length)];
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         if (this.entityData.get(LEVELSTATS))
             data.increaseSkill(randomSkill, LevelCalc.xpAmountForSkillLevelUp(randomSkill, data.getSkillLevel(randomSkill).getLevel()) - data.getSkillLevel(randomSkill).getXp());

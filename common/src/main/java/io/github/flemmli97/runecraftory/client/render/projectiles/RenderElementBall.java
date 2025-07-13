@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.client.render.AnimatedTexture;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -71,7 +71,7 @@ public class RenderElementBall extends EntityRenderer<EntityElementalBall> {
     }
 
     protected RenderType getRenderType(EntityElementalBall entity, ResourceLocation loc) {
-        if (entity.getElement() == EnumElement.DARK || entity.getElement() == EnumElement.LIGHT)
+        if (entity.getElement() == ItemElement.DARK || entity.getElement() == ItemElement.LIGHT)
             return RenderType.entityTranslucent(loc);
         return RenderType.entityCutoutNoCull(loc);
     }

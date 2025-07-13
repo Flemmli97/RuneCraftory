@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -107,7 +107,7 @@ public class EntityAmbrosiaWave extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity e) {
-        DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(EnumElement.EARTH)
+        DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(ItemElement.EARTH)
                 .withChangedAttribute(ModAttributes.DRAIN.asHolder(), 50);
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));

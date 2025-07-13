@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "CompatMinecolonies",
+    "EntityMixin",
+    "HotSpringMixin",
     "UncurableEffectMixin"
     ],
   "client": [

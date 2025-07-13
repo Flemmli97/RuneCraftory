@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
@@ -12,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class BlushFeatureType implements NPCFeatureHolder<BlushFeatureType.BlushFeature> {
+public class BlushFeatureType implements NPCFeature.NPCFeatureHolder<BlushFeatureType.BlushFeature> {
 
     public static MapCodec<BlushFeatureType> TYPE_CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(Codec.FLOAT.fieldOf("chance").forGetter(d -> d.chance),

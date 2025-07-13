@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.integration.rei;
 
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.client;
 
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandDataContainer;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandDataContainer;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;

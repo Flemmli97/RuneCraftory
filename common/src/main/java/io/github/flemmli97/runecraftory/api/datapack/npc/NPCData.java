@@ -5,14 +5,14 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.QuestConversationContext;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.core.Holder;
@@ -35,8 +35,8 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
-                      Gender gender, List<NPCJob> profession, @Nullable List<NPCLookId> look,
-                      @Nullable Pair<EnumSeason, Integer> birthday,
+                      Gender gender, List<NPCProfession> profession, @Nullable List<NPCLookId> look,
+                      @Nullable Pair<Season, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationContext, ResourceLocation> interactions,
                       QuestHandler questHandler,
@@ -92,7 +92,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
-                    ModNPCJobs.JOBS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
+                    ModNPCProfessions.PROFESSIONS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
                             weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
@@ -198,10 +198,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Gender gender;
         private final int weight;
         private String neutralGiftResponse;
-        private final List<NPCJob> professions = new ArrayList<>();
+        private final List<NPCProfession> professions = new ArrayList<>();
         private final Map<ConversationContext, ResourceLocation> interactions = new LinkedHashMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
-        private Pair<EnumSeason, Integer> birthday;
+        private Pair<Season, Integer> birthday;
         private NPCSchedule.Schedule schedule;
         private List<NPCLookId> look;
         private List<ResourceLocation> combatAction;
@@ -247,12 +247,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder withBirthday(Pair<EnumSeason, Integer> birthday) {
+        public Builder withBirthday(Pair<Season, Integer> birthday) {
             this.birthday = birthday;
             return this;
         }
 
-        public Builder withProfession(NPCJob... professions) {
+        public Builder withProfession(NPCProfession... professions) {
             this.professions.addAll(List.of(professions));
             return this;
         }

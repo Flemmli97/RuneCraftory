@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
 import io.github.flemmli97.runecraftory.common.blocks.entity.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;

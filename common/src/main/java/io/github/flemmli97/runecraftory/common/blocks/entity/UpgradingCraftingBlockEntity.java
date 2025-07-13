@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
+import io.github.flemmli97.runecraftory.common.inventory.SimpleItemContainer;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
-import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -20,11 +20,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class UpgradingCraftingBlockEntity extends CraftingBlockEntity {
 
-    private final SaveItemContainer upgradeContainer;
+    private final SimpleItemContainer upgradeContainer;
 
     public UpgradingCraftingBlockEntity(BlockEntityType<?> blockEntityType, CraftingType type, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, type, blockPos, blockState);
-        this.upgradeContainer = new SaveItemContainer(this, 2) {
+        this.upgradeContainer = new SimpleItemContainer(this, 2) {
             @Override
             public boolean canPlaceItem(int index, ItemStack stack) {
                 return UpgradingCraftingBlockEntity.this.isItemValid(index, stack);

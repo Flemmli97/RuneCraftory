@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
@@ -42,16 +42,16 @@ public class InfoSubScreen extends InfoScreen {
         this.addRenderableWidget(new TexturedButton(this.leftPos + 8, this.topPos + 103, 12, 12,
                 Component.literal("<"), b -> LoaderNetwork.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Action.MAIN)))
                 .withSprite(SpriteResources.PAGE_BUTTON));
-        this.addRenderableWidget(new SelectableListWidget(this.leftPos + 27, this.topPos + 124, 160, 65, this.font, Arrays.stream(EnumSkills.values())
+        this.addRenderableWidget(new SelectableListWidget(this.leftPos + 27, this.topPos + 124, 160, 65, this.font, Arrays.stream(Skills.values())
                 .<SelectableEntry>map(SkillListEntry::new).toList())
                 .withPadding(1));
     }
 
     private class SkillListEntry implements SelectableEntry {
 
-        private final EnumSkills skill;
+        private final Skills skill;
 
-        private SkillListEntry(EnumSkills skill) {
+        private SkillListEntry(Skills skill) {
             this.skill = skill;
         }
 

@@ -3,21 +3,21 @@ package io.github.flemmli97.runecraftory.neoforge.data;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.calendar.DayOfWeek;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
+import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumDay;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.BathhouseAttendant;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.Blacksmith;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.Chef;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.Doctor;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -32,6 +32,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
@@ -39,7 +40,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -194,27 +195,27 @@ public class LangGen implements DataProvider {
             this.add(reg.asHolder());
         }
 
-        for (EnumDay day : EnumDay.values()) {
+        for (DayOfWeek day : DayOfWeek.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));
             String d = day.toString().toLowerCase(Locale.ROOT);
             this.add(day.translationFull(), d.substring(0, 1).toUpperCase(Locale.ROOT) + d.substring(1));
         }
 
-        for (EnumElement element : EnumElement.values()) {
-            this.add(element.getTranslation(), "Attribute: " + this.simpleTranslation(element.getTranslation().replace(EnumElement.PREFIX, "")));
+        for (ItemElement element : ItemElement.values()) {
+            this.add(element.getTranslation(), "Attribute: " + this.simpleTranslation(element.getTranslation().replace(ItemElement.PREFIX, "")));
         }
 
-        for (EnumSeason season : EnumSeason.values()) {
-            this.add(season.translationKey(), this.simpleTranslation(season.translationKey().replace(EnumSeason.PREFIX, "")));
+        for (Season season : Season.values()) {
+            this.add(season.translationKey(), this.simpleTranslation(season.translationKey().replace(Season.PREFIX, "")));
         }
 
-        for (EnumWeather weather : EnumWeather.values()) {
-            this.add(weather.translation, this.simpleTranslation(weather.translation.replace(EnumWeather.PREFIX, "")));
+        for (Weather weather : Weather.values()) {
+            this.add(weather.translation, this.simpleTranslation(weather.translation.replace(Weather.PREFIX, "")));
         }
 
-        for (EnumSkills s : EnumSkills.values()) {
+        for (Skills s : Skills.values()) {
             this.add(s.getTranslation(),
-                    this.capitalize(s.getTranslation().replace(EnumSkills.PREFIX, "").replace("_", " "),
+                    this.capitalize(s.getTranslation().replace(Skills.PREFIX, "").replace("_", " "),
                             Lists.newArrayList("and")));
         }
 
@@ -471,33 +472,27 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.misc.spawner.entry.deny", "A mystical force prevents you from entering!");
 
         // NPC stuff
-        this.add(ModNPCJobs.NONE.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.NONE.getID()));
-        this.add(ModNPCJobs.GENERAL.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.GENERAL.getID()));
-        this.add(ModNPCJobs.FLOWER.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.FLOWER.getID()));
-        this.add(ModNPCJobs.SMITH.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.SMITH.getID()));
-        this.add(ModNPCJobs.DOCTOR.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.DOCTOR.getID()));
-        this.add(ModNPCJobs.COOK.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.COOK.getID()));
-        this.add(ModNPCJobs.MAGIC.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.MAGIC.getID()));
-        this.add(ModNPCJobs.RUNE_SKILLS.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RUNE_SKILLS.getID()));
-        this.add(ModNPCJobs.BATHHOUSE.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.BATHHOUSE.getID()));
-        this.add(ModNPCJobs.RANDOM.get().getTranslationKey(), this.simpleTranslation(ModNPCJobs.RANDOM.getID()));
+        for (RegistryEntrySupplier<NPCProfession, ? extends NPCProfession> sup : ModNPCProfessions.PROFESSIONS.register().getEntries()) {
+            this.add(sup.get().getTranslationKey(), this.simpleTranslation(sup.getID()));
+        }
+        this.add("npc.profession.general_store.owner", "General Store Owner");
 
-        this.add(Smith.BARN_ACTION, "Monster barn");
-        this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
-        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you %s for your purchase.");
-        this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
-        this.add(Smith.BARN_COST, "A barn costs %1$sG and following materials:");
-        this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
-        this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
+        this.add(Blacksmith.BARN_ACTION, "Monster barn");
+        this.add(Blacksmith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
+        this.add(Blacksmith.BARN_ACTION_SUCCESS, "Thank you %s for your purchase.");
+        this.add(Blacksmith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
+        this.add(Blacksmith.BARN_COST, "A barn costs %1$sG and following materials:");
+        this.add(Blacksmith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
+        this.add(Blacksmith.BARN_COST_FAIL, "Error getting the cost of a barn");
 
-        this.add(Cook.FORGE_BREAD_ACTION, "Weapon bread");
-        this.add(Cook.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
-        this.add(Cook.CHEM_BREAD_SUCCESS, "Medicine bread");
-        this.add(Cook.COOKING_BREAD_SUCCESS, "Cooking bread");
-        this.add(Cook.BREAD_ACTION_SUCCESS, "Here you go");
-        this.add(Cook.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
-        this.add(Cook.BREAD_ACTION_FAIL, "Seems you don't have enough money");
-        this.add(Cook.BREAD_COST, "One loaf costs: %1$s. %2$s left");
+        this.add(Chef.FORGE_BREAD_ACTION, "Weapon bread");
+        this.add(Chef.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
+        this.add(Chef.CHEM_BREAD_SUCCESS, "Medicine bread");
+        this.add(Chef.COOKING_BREAD_SUCCESS, "Cooking bread");
+        this.add(Chef.BREAD_ACTION_SUCCESS, "Here you go");
+        this.add(Chef.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
+        this.add(Chef.BREAD_ACTION_FAIL, "Seems you don't have enough money");
+        this.add(Chef.BREAD_COST, "One loaf costs: %1$s. %2$s left");
 
         this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");

@@ -45,7 +45,7 @@
   "neutral_gift_response": "npc.smith.2.gift.default",
   "profession": [
     "runecraftory:general_store",
-    "runecraftory:smith"
+    "runecraftory:blacksmith"
   ],
   "quest_handler": {
     "required_quests": [],

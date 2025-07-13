@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,15 +31,15 @@ public class CropProperties {
                     Codec.BOOL.fieldOf("regrowable").forGetter(CropProperties::regrowable),
 
                     BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("giant_crop").forGetter(CropProperties::getGiantVersion),
-                    CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING).listOf().fieldOf("best_season").forGetter(d -> List.copyOf(d.bestSeasons)),
-                    CodecUtils.stringEnumCodec(EnumSeason.class, EnumSeason.SPRING).listOf().fieldOf("bad_season").forGetter(d -> List.copyOf(d.badSeasons))
+                    CodecUtils.stringEnumCodec(Season.class, Season.SPRING).listOf().fieldOf("best_season").forGetter(d -> List.copyOf(d.bestSeasons)),
+                    CodecUtils.stringEnumCodec(Season.class, Season.SPRING).listOf().fieldOf("bad_season").forGetter(d -> List.copyOf(d.badSeasons))
             ).apply(instance, CropProperties::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, CropProperties> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public CropProperties decode(RegistryFriendlyByteBuf buf) {
             return new CropProperties(buf.readInt(), buf.readInt(), buf.readBoolean(),
                     ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.BLOCK)).decode(buf),
-                    buf.readEnumSet(EnumSeason.class), buf.readEnumSet(EnumSeason.class))
+                    buf.readEnumSet(Season.class), buf.readEnumSet(Season.class))
                     .setID(buf.readResourceLocation());
         }
 
@@ -49,14 +49,14 @@ public class CropProperties {
             buf.writeInt(props.maxDrops());
             buf.writeBoolean(props.regrowable());
             ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.BLOCK)).encode(buf, props.getGiantVersion());
-            buf.writeEnumSet(props.bestSeasons, EnumSeason.class);
-            buf.writeEnumSet(props.badSeasons, EnumSeason.class);
+            buf.writeEnumSet(props.bestSeasons, Season.class);
+            buf.writeEnumSet(props.badSeasons, Season.class);
             buf.writeResourceLocation(props.id);
         }
     };
 
-    private final EnumSet<EnumSeason> bestSeasons = EnumSet.noneOf(EnumSeason.class);
-    private final EnumSet<EnumSeason> badSeasons = EnumSet.noneOf(EnumSeason.class);
+    private final EnumSet<Season> bestSeasons = EnumSet.noneOf(Season.class);
+    private final EnumSet<Season> badSeasons = EnumSet.noneOf(Season.class);
 
     private final int growth;
     private final int maxDrops;
@@ -67,7 +67,7 @@ public class CropProperties {
     private ResourceLocation id;
     private List<Component> translationTexts;
 
-    public CropProperties(int growth, int maxDrops, boolean regrowable, Optional<Block> giantVersion, Collection<EnumSeason> bestSeasons, Collection<EnumSeason> badSeasons) {
+    public CropProperties(int growth, int maxDrops, boolean regrowable, Optional<Block> giantVersion, Collection<Season> bestSeasons, Collection<Season> badSeasons) {
         this.growth = growth;
         this.maxDrops = maxDrops;
         this.giantVersion = giantVersion;
@@ -86,11 +86,11 @@ public class CropProperties {
         return this.id;
     }
 
-    public Set<EnumSeason> bestSeasons() {
+    public Set<Season> bestSeasons() {
         return ImmutableSet.copyOf(this.bestSeasons);
     }
 
-    public Set<EnumSeason> badSeasons() {
+    public Set<Season> badSeasons() {
         return ImmutableSet.copyOf(this.badSeasons);
     }
 
@@ -110,7 +110,7 @@ public class CropProperties {
         return this.giantVersion;
     }
 
-    public float seasonMultiplier(EnumSeason season) {
+    public float seasonMultiplier(Season season) {
         if (this.bestSeasons.contains(season))
             return 1.5f;
         if (this.badSeasons.contains(season))
@@ -123,7 +123,7 @@ public class CropProperties {
             ImmutableList.Builder<Component> list = ImmutableList.builder();
             if (!this.bestSeasons.isEmpty()) {
                 MutableComponent txt = null;
-                for (EnumSeason season : this.bestSeasons) {
+                for (Season season : this.bestSeasons) {
                     if (txt == null) {
                         txt = Component.translatable(season.translationKey()).withStyle(season.getColor());
                     } else {
@@ -133,11 +133,11 @@ public class CropProperties {
                 }
                 list.add(Component.translatable("runecraftory.tooltip.crops.season.best", txt).withStyle(ChatFormatting.GRAY));
             }
-            EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeasons);
+            EnumSet<Season> badSeasons = EnumSet.copyOf(this.badSeasons);
             badSeasons.removeAll(this.bestSeasons);
             if (!badSeasons.isEmpty()) {
                 MutableComponent txt = null;
-                for (EnumSeason season : badSeasons) {
+                for (Season season : badSeasons) {
                     if (txt == null) {
                         txt = Component.translatable(season.translationKey()).withStyle(season.getColor());
                     } else {
@@ -173,8 +173,8 @@ public class CropProperties {
      */
     public static class Builder {
 
-        private final EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
-        private final EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
+        private final EnumSet<Season> bestSeason = EnumSet.noneOf(Season.class);
+        private final EnumSet<Season> badSeason = EnumSet.noneOf(Season.class);
 
         private final int growth, maxDrops;
         private final boolean regrowable;
@@ -187,12 +187,12 @@ public class CropProperties {
             this.regrowable = regrowable;
         }
 
-        public Builder addGoodSeason(EnumSeason season) {
+        public Builder addGoodSeason(Season season) {
             this.bestSeason.add(season);
             return this;
         }
 
-        public Builder addBadSeason(EnumSeason season) {
+        public Builder addBadSeason(Season season) {
             this.badSeason.add(season);
             return this;
         }

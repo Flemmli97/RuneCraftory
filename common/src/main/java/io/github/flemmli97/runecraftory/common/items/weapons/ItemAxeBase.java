@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
@@ -72,7 +72,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
         double reach = CombatUtils.getRange(entity, 0);
         S2CScreenShake.sendAround(entity, 16, 4, 3);
         if (performRightClickAction(stack, entity, reach, 0.7f) && entity instanceof ServerPlayer player) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.HAMMERAXE, 5);
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.HAMMERAXE, 5);
         }
     }
 
@@ -145,7 +145,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);

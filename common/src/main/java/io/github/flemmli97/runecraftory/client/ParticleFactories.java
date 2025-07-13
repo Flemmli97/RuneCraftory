@@ -9,8 +9,7 @@ import net.minecraft.client.particle.SpriteSet;
 
 public class ParticleFactories {
 
-    public record ShortLightParticleFactory(
-            SpriteSet sprite) implements ParticleProvider<ColoredParticleData> {
+    public record ShortLightParticleFactory(SpriteSet sprite) implements ParticleProvider<ColoredParticleData> {
 
         @Override
         public Particle createParticle(ColoredParticleData data, ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ) {

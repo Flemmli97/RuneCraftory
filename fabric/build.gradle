@@ -21,7 +21,7 @@ repositories {
 dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-fabric"
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forge_config_api}"
-    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-${project.minecraft_version}:${project.sbl_version}"
+    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-${minecraft_version}:${sbl_version}"
 
     modRuntimeOnly include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-fabric") {
         transitive = false
@@ -31,7 +31,7 @@ dependencies {
 
 //    modRuntimeOnly "mezz.jei:jei-1.21.1-fabric:${jei_version}"
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-    modRuntimeOnly "maven.modrinth:jade:${project.jade_fabric}"
+    modRuntimeOnly "maven.modrinth:jade:${jade_fabric}"
     modRuntimeOnly "net.favouriteless.modopedia:modopedia-fabric-${minecraft_version}:${modopedia}"
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.7-fabric"

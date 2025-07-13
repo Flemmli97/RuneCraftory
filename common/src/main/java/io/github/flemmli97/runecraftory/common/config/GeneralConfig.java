@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.config;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 
 public class GeneralConfig {
 
@@ -66,7 +66,7 @@ public class GeneralConfig {
 
     public static boolean debugAttack = false;
 
-    public static int getWaterFrom(EnumToolTier tier) {
+    public static int getWaterFrom(ToolItemTier tier) {
         return switch (tier) {
             case SCRAP -> 25;
             case IRON -> 35;

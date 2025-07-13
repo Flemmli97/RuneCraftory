@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
@@ -138,8 +138,8 @@ public class EntityDemon extends BaseMonster implements HealingPredicateEntity, 
     }
 
     @Override
-    public EnumElement getAttackElement() {
-        return EnumElement.DARK;
+    public ItemElement getAttackElement() {
+        return ItemElement.DARK;
     }
 
     @Override

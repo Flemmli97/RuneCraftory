@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -23,21 +23,21 @@ public class EntityElementalBall extends BaseProjectile {
     protected static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityElementalBall.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityElementalBall.class, EntityDataSerializers.INT);
 
-    private EnumElement element = EnumElement.NONE;
+    private ItemElement element = ItemElement.NONE;
     private int maxLivingTicks = 6;
 
     public EntityElementalBall(EntityType<? extends EntityElementalBall> type, Level world) {
         super(type, world);
     }
 
-    public EntityElementalBall(Level world, LivingEntity shooter, EnumElement element) {
+    public EntityElementalBall(Level world, LivingEntity shooter, ItemElement element) {
         super(ModEntities.ELEMENTAL_BALL.get(), world, shooter);
         this.element = element;
         this.entityData.set(ELEMENT_DATA, this.element.ordinal());
         this.damageMultiplier = 0.8f;
     }
 
-    public EnumElement getElement() {
+    public ItemElement getElement() {
         return this.element;
     }
 
@@ -63,8 +63,8 @@ public class EntityElementalBall extends BaseProjectile {
         super.onSyncedDataUpdated(key);
         if (key == ELEMENT_DATA) {
             int i = this.entityData.get(ELEMENT_DATA);
-            if (i < EnumElement.values().length)
-                this.element = EnumElement.values()[i];
+            if (i < ItemElement.values().length)
+                this.element = ItemElement.values()[i];
         }
     }
 
@@ -106,8 +106,8 @@ public class EntityElementalBall extends BaseProjectile {
         this.entityData.set(VARIANT, compound.getInt("Variant"));
         this.maxLivingTicks = compound.getInt("MaxLivingTicks");
         int i = this.entityData.get(ELEMENT_DATA);
-        if (i < EnumElement.values().length)
-            this.element = EnumElement.values()[i];
+        if (i < ItemElement.values().length)
+            this.element = ItemElement.values()[i];
     }
 
     @Override
@@ -119,7 +119,7 @@ public class EntityElementalBall extends BaseProjectile {
     }
 
     protected void playHitSound() {
-        if (this.element == EnumElement.WATER) {
+        if (this.element == ItemElement.WATER) {
             SoundEvent event = this.getVariant() == 1 ? SoundEvents.GENERIC_EXPLODE.value() : ModSounds.SPELL_GENERIC_WATER.get();
             this.playSound(event, this.getVariant() == 1 ? 0.9f : 0.35f, 1);
         }

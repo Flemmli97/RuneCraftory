@@ -1,8 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.Lists;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.DistanceZoningConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -11,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -76,7 +76,7 @@ public class LevelCalc {
         return LEVEL_XP_TOTAL[level - 1];
     }
 
-    public static int xpAmountForSkillLevelUp(EnumSkills skill, int level) {
+    public static int xpAmountForSkillLevelUp(Skills skill, int level) {
         if (level <= 0)
             return 1;
         if (level >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
@@ -84,7 +84,7 @@ public class LevelCalc {
         return (int) (totalSkillXpForLevel(skill, level + 1) - totalSkillXpForLevel(skill, level));
     }
 
-    public static long totalSkillXpForLevel(EnumSkills skill, int level) {
+    public static long totalSkillXpForLevel(Skills skill, int level) {
         if (level <= 0)
             return 0;
         long[] xps = switch (skill.gainType) {
@@ -205,11 +205,11 @@ public class LevelCalc {
         return xp * Math.max(0.01f, 1 - diff * 0.075f) * GeneralConfig.xpMultiplier;
     }
 
-    public static float getSkillXpMultiplier(EnumSkills skill) {
+    public static float getSkillXpMultiplier(Skills skill) {
         return DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).xpMultiplier();
     }
 
-    public static void levelSkill(PlayerData data, EnumSkills skill, float amount) {
+    public static void levelSkill(PlayerData data, Skills skill, float amount) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
         data.increaseSkill(skill, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
@@ -285,7 +285,7 @@ public class LevelCalc {
         return level + Math.round((float) ((random.nextDouble() * 2 - 1) * Math.ceil(level * 0.15)));
     }
 
-    public static boolean useRP(PlayerData data, float amount, boolean hurt, float percent, boolean mean, EnumSkills... skills) {
+    public static boolean useRP(PlayerData data, float amount, boolean hurt, float percent, boolean mean, Skills... skills) {
         int skillVal = 0;
         if (skills.length == 0)
             skillVal = 1;
@@ -295,11 +295,11 @@ public class LevelCalc {
             if (mean) {
                 float l = skills.length;
                 float sLvl = 0;
-                for (EnumSkills skill : skills)
+                for (Skills skill : skills)
                     sLvl += data.getSkillLevel(skill).getLevel();
                 skillVal = (int) (sLvl / l);
             } else {
-                for (EnumSkills skill : skills) {
+                for (Skills skill : skills) {
                     int lvl = data.getSkillLevel(skill).getLevel();
                     if (lvl > skillVal)
                         skillVal = lvl;
@@ -328,15 +328,15 @@ public class LevelCalc {
     }
 
     @Nullable
-    public static EnumSkills getSkillFromElement(EnumElement element) {
+    public static Skills getSkillFromElement(ItemElement element) {
         return switch (element) {
-            case WATER -> EnumSkills.WATER;
-            case EARTH -> EnumSkills.EARTH;
-            case WIND -> EnumSkills.WIND;
-            case FIRE -> EnumSkills.FIRE;
-            case LIGHT -> EnumSkills.LIGHT;
-            case DARK -> EnumSkills.DARK;
-            case LOVE -> EnumSkills.LOVE;
+            case WATER -> Skills.WATER;
+            case EARTH -> Skills.EARTH;
+            case WIND -> Skills.WIND;
+            case FIRE -> Skills.FIRE;
+            case LIGHT -> Skills.LIGHT;
+            case DARK -> Skills.DARK;
+            case LOVE -> Skills.LOVE;
             default -> null;
         };
     }

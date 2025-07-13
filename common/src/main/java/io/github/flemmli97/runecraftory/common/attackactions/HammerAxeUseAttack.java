@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
-import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;

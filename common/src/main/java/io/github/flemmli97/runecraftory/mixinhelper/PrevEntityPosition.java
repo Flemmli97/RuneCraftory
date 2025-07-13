@@ -4,7 +4,5 @@ public interface PrevEntityPosition {
 
     double runecraftory$getOldPlayerX();
 
-    double runecraftory$getOldPlayerY();
-
     double runecraftory$getOldPlayerZ();
 }

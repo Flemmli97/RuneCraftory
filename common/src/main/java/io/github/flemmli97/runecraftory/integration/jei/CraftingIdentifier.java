@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.integration.jei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import net.minecraft.resources.ResourceLocation;

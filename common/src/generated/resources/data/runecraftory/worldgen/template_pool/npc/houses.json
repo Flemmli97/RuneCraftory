@@ -8,7 +8,7 @@
           "processors": [
             {
               "processor_type": "runecraftory:npc_processor",
-              "shop_type": "runecraftory:general_store"
+              "profession": "runecraftory:general_store"
             }
           ]
         },
@@ -24,7 +24,7 @@
           "processors": [
             {
               "processor_type": "runecraftory:npc_processor",
-              "shop_type": "runecraftory:florist"
+              "profession": "runecraftory:florist"
             }
           ]
         },
@@ -40,7 +40,7 @@
           "processors": [
             {
               "processor_type": "runecraftory:npc_processor",
-              "shop_type": "runecraftory:smith"
+              "profession": "runecraftory:blacksmith"
             }
           ]
         },
@@ -56,7 +56,7 @@
           "processors": [
             {
               "processor_type": "runecraftory:npc_processor",
-              "shop_type": "runecraftory:doctor"
+              "profession": "runecraftory:doctor"
             }
           ]
         },
@@ -72,7 +72,7 @@
           "processors": [
             {
               "processor_type": "runecraftory:npc_processor",
-              "shop_type": "runecraftory:magicskill_merchant"
+              "profession": "runecraftory:spell_merchant"
             }
           ]
         },
@@ -88,7 +88,7 @@
           "processors": [
             {
               "processor_type": "runecraftory:npc_processor",
-              "shop_type": "runecraftory:runeskill_merchant"
+              "profession": "runecraftory:rune_abilities_merchant"
             }
           ]
         },

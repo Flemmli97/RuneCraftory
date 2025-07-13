@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
+import io.github.flemmli97.runecraftory.common.registry.ModFluids;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.tenshilib.fabric.client.ClientSetupModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -14,8 +15,11 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorResolverRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -28,10 +32,14 @@ import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.material.FluidState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -39,13 +47,13 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
 
     @Override
     public void clientSetup() {
-        //ClientRegister
         ClientRegister.init();
 
         ClientRegister.registerTooltipComponentFactories(TooltipRegistry::registerFactory);
 
         ClientRegister.registerKeyBinding(KeyBindingHelper::registerKeyBinding);
-        ClientRegister.setupRenderLayers(BlockRenderLayerMap.INSTANCE::putBlock);
+        ClientRegister.setupBlockRenderLayers(BlockRenderLayerMap.INSTANCE::putBlock);
+        ClientRegister.setupFluidRenderLayers(BlockRenderLayerMap.INSTANCE::putFluid);
         ClientRegister.registerItemProps(ItemProperties::register);
         ClientRegister.registerBlockColors(ColorProviderRegistry.BLOCK::register);
         ClientRegister.registerScreen(new ClientRegister.MenuScreenRegister() {
@@ -77,5 +85,13 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
         ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
         CoreShaderRegistrationCallback.EVENT.register(reg -> RunecraftoryShaders.registerShader(reg::register));
         BossBarTracker.register();
+
+        FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.HOT_SPRING_WATER.get(), ModFluids.FLOWING_HOT_SPRING_WATER.get(), new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL, SimpleFluidRenderHandler.WATER_FLOWING, SimpleFluidRenderHandler.WATER_OVERLAY, ClientRegister.HOT_SPRING_BASE) {
+            @Override
+            public int getFluidColor(@Nullable BlockAndTintGetter getter, @Nullable BlockPos pos, FluidState state) {
+                return getter != null && pos != null ? getter.getBlockTint(pos, ClientRegister.HOT_SPRING_COLOR) | 0xff000000 : ClientRegister.HOT_SPRING_BASE;
+            }
+        });
+        ColorResolverRegistry.register(ClientRegister.HOT_SPRING_COLOR);
     }
 }

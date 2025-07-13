@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
@@ -43,7 +43,7 @@ public class ItemDualBladeBase extends SwordItem implements DualWeapon, Extended
         if (performRightClickAction(stack, entity, reach, width)) {
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             if (entity instanceof ServerPlayer player) {
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.DUAL, 3);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.DUAL, 3);
             }
         }
     }
@@ -89,7 +89,7 @@ public class ItemDualBladeBase extends SwordItem implements DualWeapon, Extended
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(EnumSkills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.DUAL_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.DUAL_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);

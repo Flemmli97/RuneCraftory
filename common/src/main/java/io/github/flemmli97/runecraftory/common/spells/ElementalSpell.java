@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalTrail;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -13,9 +13,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class ElementalSpell extends Spell {
 
-    private final EnumElement element;
+    private final ItemElement element;
 
-    public ElementalSpell(EnumElement element) {
+    public ElementalSpell(ItemElement element) {
         this.element = element;
     }
 
@@ -26,7 +26,7 @@ public class ElementalSpell extends Spell {
         EntityElementalTrail flame = new EntityElementalTrail(level, entity, this.element);
         flame.knockback();
         flame.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
-        if (this.element == EnumElement.DARK) {
+        if (this.element == ItemElement.DARK) {
             Vec3 target = ProjectileUtils.getAimTarget(entity, flame.position());
             if (target != null)
                 flame.shootAtEntity(target, 0.05f, 0);

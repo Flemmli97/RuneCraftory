@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
@@ -69,7 +69,7 @@ public class EntityGustRocks extends BaseDamageCloud {
         } else {
             for (int i = 0; i < 2; i++) {
                 if (this.getOwner() instanceof LivingEntity living) {
-                    EntityElementalBall spellBall = new EntityElementalBall(this.level(), living, EnumElement.EARTH);
+                    EntityElementalBall spellBall = new EntityElementalBall(this.level(), living, ItemElement.EARTH);
                     spellBall.withMaxLivingTicks(40);
                     spellBall.setDamageMultiplier(this.damageMultiplier);
                     double upScale = this.random.nextDouble();

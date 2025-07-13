@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.api.action.DataKey;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
+import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
@@ -18,14 +18,15 @@ import io.github.flemmli97.runecraftory.client.gui.SpawnEggScreen;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
+import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;
-import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
+import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
@@ -74,8 +75,8 @@ public class ClientHandlers {
         return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
     }
 
-    public static void updateClientCalendar(CalendarImpl.Date date, EnumWeather weather) {
-        EnumSeason prev = ClientCalendarHolder.CLIENT_CALENDAR.currentSeason();
+    public static void updateClientCalendar(Calendar.Date date, Weather weather) {
+        Season prev = ClientCalendarHolder.CLIENT_CALENDAR.currentSeason();
         ClientCalendarHolder.CLIENT_CALENDAR.updateDirect(date, weather);
         if (ClientCalendarHolder.CLIENT_CALENDAR.currentSeason() != prev) {
             Minecraft mc = Minecraft.getInstance();

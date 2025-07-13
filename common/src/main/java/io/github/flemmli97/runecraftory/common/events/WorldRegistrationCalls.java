@@ -179,8 +179,8 @@ public class WorldRegistrationCalls {
     private static void addToPool(StructureTemplatePool pool, List<Pair<StructurePoolElement, Integer>> houses) {
         if (pool == null)
             return;
-        for (Pair<StructurePoolElement, Integer> p : houses)
-            ((StructureTemplateModifier) pool).runecraftory$addPoolElement(p);
+        for (Pair<StructurePoolElement, Integer> pair : houses)
+            ((StructureTemplateModifier) pool).runecraftory$addPoolElement(pair);
     }
 
     public interface FeatureRegister {

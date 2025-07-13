@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
@@ -25,8 +25,8 @@ public class BaseStaffSpell extends Spell {
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (stack.getItem() instanceof ItemStaffBase staff) {
-            EnumElement element = ItemNBT.getElement(stack);
-            if (element == EnumElement.NONE)
+            ItemElement element = ItemNBT.getElement(stack);
+            if (element == ItemElement.NONE)
                 return false;
             if (staff.amount == 1) {
                 EntityElementalBall ball = new EntityElementalBall(level, entity, element);

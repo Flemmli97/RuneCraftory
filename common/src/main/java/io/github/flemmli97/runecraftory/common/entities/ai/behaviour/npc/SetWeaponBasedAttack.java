@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.components.AttackActionData;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;

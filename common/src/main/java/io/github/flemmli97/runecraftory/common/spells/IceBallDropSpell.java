@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
@@ -21,7 +21,7 @@ public class IceBallDropSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityElementalBall ball = new EntityElementalBall(level, entity, EnumElement.WATER);
+        EntityElementalBall ball = new EntityElementalBall(level, entity, ItemElement.WATER);
         ball.setVariant(1);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {

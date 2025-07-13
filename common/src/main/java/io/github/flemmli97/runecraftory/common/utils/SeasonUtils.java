@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.mixin.BiomeAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -24,9 +25,9 @@ public class SeasonUtils {
         float temp = ((BiomeAccessor) (Object) biome).biomeTemp(pos);
         if (!GeneralConfig.seasonedSnow)
             return temp;
-        EnumSeason season;
+        Season season;
         if (level instanceof Level actual)
-            season = CalendarImpl.get(actual).currentSeason();
+            season = Calendar.get(actual).currentSeason();
         else
             return temp;
         switch (season) {

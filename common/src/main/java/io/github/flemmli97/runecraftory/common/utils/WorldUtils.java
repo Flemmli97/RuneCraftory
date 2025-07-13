@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -28,9 +28,9 @@ public class WorldUtils {
 
     public static final TicketType<ChunkPos> ENTITY_LOADER = TicketType.create(RuneCraftory.MODID + "_entity_loader", Comparator.comparingLong(ChunkPos::toLong), 10);
 
-    public static final Codec<Pair<EnumSeason, Integer>> DATE = RecordCodecBuilder.create(inst ->
+    public static final Codec<Pair<Season, Integer>> DATE = RecordCodecBuilder.create(inst ->
             inst.group(
-                    CodecUtils.stringEnumCodec(EnumSeason.class, null).fieldOf("season").forGetter(Pair::getFirst),
+                    CodecUtils.stringEnumCodec(Season.class, null).fieldOf("season").forGetter(Pair::getFirst),
                     dayRange().fieldOf("day").forGetter(Pair::getSecond)
             ).apply(inst, Pair::of));
 

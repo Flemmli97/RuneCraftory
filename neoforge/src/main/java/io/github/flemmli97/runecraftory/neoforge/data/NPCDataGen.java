@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
 import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SerializableBehaviours;
@@ -29,8 +28,8 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.TypedIndexR
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -333,7 +332,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("shop_owner/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(shopMale, NPCData.Gender.MALE), new NPCData.NPCLookId(shopFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.GENERAL.get(), ModNPCJobs.FLOWER.get())
+                        .withProfession(ModNPCProfessions.GENERAL_STORE.get(), ModNPCProfessions.FLORIST.get())
                         .addGiftResponse("hate", new NPCData.Gift(trashGift, "npc.shop_owner.1.hate", -15), "Uhh... what should I do with this?")
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.shop_owner.1.dislike", -7), "Sorry... but this isn't really my thing.")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.shop_owner.1.like", 10), "Oh, nice... this is something I can appreciate.")
@@ -385,7 +384,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("smith/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(smithMale, NPCData.Gender.MALE), new NPCData.NPCLookId(smithFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.GENERAL.get(), ModNPCJobs.SMITH.get())
+                        .withProfession(ModNPCProfessions.GENERAL_STORE.get(), ModNPCProfessions.BLACKSMITH.get())
                         .addGiftResponse("dislike", new NPCData.Gift(smithTrashGift, "npc.smith.2.dislike", -7), "Hey! I'm not your trashcan!")
                         .addGiftResponse("like", new NPCData.Gift(mineralGift, "npc.smith.2.like", 10), "Wow thanks! I can make something great using this")
                         .setNeutralGiftResponse("npc.smith.2.gift.default", "Thanks. Btw did you know that I really like %like%?")
@@ -433,7 +432,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("doctor/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(doctorMale, NPCData.Gender.MALE), new NPCData.NPCLookId(doctorFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.DOCTOR.get())
+                        .withProfession(ModNPCProfessions.DOCTOR.get())
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.doctor.2.dislike", -7), "I can't use this...")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.doctor.2.like", 10), "Thanks! I really like this!")
                         .setNeutralGiftResponse("npc.doctor.2.gift.default", "Oh? this might be useful. Thanks")
@@ -482,7 +481,7 @@ public class NPCDataGen extends NPCDataProvider {
 
         this.addNPCData("cook/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(cookMale, NPCData.Gender.MALE), new NPCData.NPCLookId(cookFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCJobs.COOK.get())
+                        .withProfession(ModNPCProfessions.CHEF.get())
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.cook.2.dislike", -7), "This can't even be used in my dishes...")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.cook.2.like", 10), "Wow thanks! I really like this!")
                         .setNeutralGiftResponse("npc.cook.2.gift.default", "It’s nice of you to think of me. I’ll find a use for this.")
@@ -560,8 +559,8 @@ public class NPCDataGen extends NPCDataProvider {
                 Pair.of(RuneCraftory.modRes("test_look"), new NPCData.NPCLook(NPCData.Gender.UNDEFINED, "Flemmli97", 0, Map.of())), Map.of());*/
     }
 
-    private static <T extends NPCFeature> Map<NPCFeatureType<?>, NPCFeatureHolder<?>> defaultNPCFeatures(boolean female, Consumer<FeatureBuilderHelper> cons) {
-        Map<NPCFeatureType<?>, NPCFeatureHolder<?>> map = new LinkedHashMap<>();
+    private static <T extends NPCFeature> Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> defaultNPCFeatures(boolean female, Consumer<FeatureBuilderHelper> cons) {
+        Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> map = new LinkedHashMap<>();
         // Just for generic sanity check
         FeatureBuilderHelper builder = map::put;
         builder.put(ModNPCLooks.SKIN.get(), new IndexedColorSettingType(ModNPCLooks.SKIN, List.of(0, 1, 2), ColorSetting.SKIN_COLOR_RANGE));
@@ -602,6 +601,6 @@ public class NPCDataGen extends NPCDataProvider {
 
     private interface FeatureBuilderHelper {
 
-        <T extends NPCFeature> void put(NPCFeatureType<T> type, NPCFeatureHolder<T> holder);
+        <T extends NPCFeature> void put(NPCFeatureType<T> type, NPCFeature.NPCFeatureHolder<T> holder);
     }
 }

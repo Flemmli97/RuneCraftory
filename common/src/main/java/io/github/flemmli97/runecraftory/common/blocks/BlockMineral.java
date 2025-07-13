@@ -2,8 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -50,7 +49,7 @@ import java.util.List;
 public class BlockMineral extends Block implements SimpleWaterloggedBlock, ExtendedBlock {
 
     public static final MapCodec<BlockMineral> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
+            inst.group(CodecUtils.stringEnumCodec(MineralBlockTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
                     propertiesCodec()
             ).apply(inst, BlockMineral::new));
 
@@ -81,9 +80,9 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
             VoxelUtils.ShapeBuilder.of(8.6, 8.4, 3.5, 11.6, 10.4, 4.5),
             VoxelUtils.ShapeBuilder.of(0.6, 5, 4.2, 1.6, 7, 8.2));
 
-    public final EnumMineralTier tier;
+    public final MineralBlockTier tier;
 
-    public BlockMineral(EnumMineralTier tier, Properties properties) {
+    public BlockMineral(MineralBlockTier tier, Properties properties) {
         super(properties);
         this.tier = tier;
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
@@ -142,7 +141,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
         Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity instanceof Player player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            float addChance = data.getSkillLevel(EnumSkills.MINING).getLevel() * 0.03f;
+            float addChance = data.getSkillLevel(Skills.MINING).getLevel() * 0.03f;
             ItemStack stack = player.getMainHandItem();
             if (stack.getItem() instanceof ItemToolHammer && stack.has(ModDataComponentTypes.TOOL_TIER.get())) {
                 addChance += stack.get(ModDataComponentTypes.TOOL_TIER.get())

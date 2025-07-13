@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.fabric.client;
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.flemmli97.runecraftory.client.ArmorModels;
-import io.github.flemmli97.runecraftory.client.model.ArmorSimpleItemModel;
+import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
+import io.github.flemmli97.runecraftory.client.model.armor.SimpleItemArmorModel;
 import io.github.flemmli97.tenshilib.common.item.DynamicArmorTextureItem;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,6 @@ public class ArmorRendererImpl implements ArmorRenderer {
     private final Supplier<TextureAtlas> atlas = Suppliers.memoize(() ->
             Minecraft.getInstance().getModelManager().getAtlas(Sheets.ARMOR_TRIMS_SHEET));
 
-
     @SuppressWarnings("unchecked")
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, HumanoidModel<LivingEntity> contextModel) {
@@ -50,7 +49,7 @@ public class ArmorRendererImpl implements ArmorRenderer {
             contextModel.copyPropertiesTo((HumanoidModel<LivingEntity>) model);
             copyVisibilitySettings(contextModel, (HumanoidModel<LivingEntity>) model);
         }
-        if (model instanceof ArmorSimpleItemModel)
+        if (model instanceof SimpleItemArmorModel)
             model.renderToBuffer(poseStack, null, light, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
         else {
             ArmorMaterial armormaterial = item.getMaterial().value();

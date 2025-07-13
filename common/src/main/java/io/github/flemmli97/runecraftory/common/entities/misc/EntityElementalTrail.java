@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -24,7 +24,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
     private static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityElementalTrail.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> STATIONARY = SynchedEntityData.defineId(EntityElementalTrail.class, EntityDataSerializers.BOOLEAN);
 
-    private EnumElement element = EnumElement.NONE;
+    private ItemElement element = ItemElement.NONE;
     private boolean piercing = true;
     private boolean hasKnockback, homing;
     private LivingEntity targetMob;
@@ -34,7 +34,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
         super(type, level);
     }
 
-    public EntityElementalTrail(Level level, LivingEntity thrower, EnumElement element) {
+    public EntityElementalTrail(Level level, LivingEntity thrower, ItemElement element) {
         super(ModEntities.ELEMENTAL_TRAIL.get(), level, thrower);
         this.setPos(this.getX(), this.getY() + thrower.getBbHeight() * 0.5, this.getZ());
         this.setElement(element);
@@ -66,12 +66,12 @@ public class EntityElementalTrail extends BaseDamageCloud {
         this.xRotO = this.getXRot();
     }
 
-    protected void setElement(EnumElement element) {
+    protected void setElement(ItemElement element) {
         this.element = element;
         this.entityData.set(ELEMENT_DATA, this.element.ordinal());
     }
 
-    public EnumElement element() {
+    public ItemElement element() {
         return this.element;
     }
 
@@ -98,7 +98,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         if (key.equals(ELEMENT_DATA)) {
-            this.element = EnumElement.values()[this.entityData.get(ELEMENT_DATA)];
+            this.element = ItemElement.values()[this.entityData.get(ELEMENT_DATA)];
         }
         super.onSyncedDataUpdated(key);
     }
@@ -139,9 +139,9 @@ public class EntityElementalTrail extends BaseDamageCloud {
             }
         } else {
             if (this.livingTicks % 2 == 0) {
-                if (this.element == EnumElement.WATER)
+                if (this.element == ItemElement.WATER)
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 0.9f, 0.8f, false);
-                if (this.element == EnumElement.EARTH)
+                if (this.element == ItemElement.EARTH)
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ROOTED_DIRT_BREAK, this.getSoundSource(), 2, 0.8f, false);
             }
         }
@@ -163,7 +163,7 @@ public class EntityElementalTrail extends BaseDamageCloud {
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         try {
-            this.setElement(EnumElement.values()[compound.getInt("Element")]);
+            this.setElement(ItemElement.values()[compound.getInt("Element")]);
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         this.entityData.set(STATIONARY, compound.getBoolean("Stationary"));

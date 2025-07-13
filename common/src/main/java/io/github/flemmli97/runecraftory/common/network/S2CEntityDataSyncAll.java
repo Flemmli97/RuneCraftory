@@ -57,11 +57,11 @@ public class S2CEntityDataSyncAll implements CustomPacketPayload {
         Entity e = player.level().getEntity(pkt.entityID);
         if (e instanceof LivingEntity living) {
             EntityData data = Platform.INSTANCE.getEntityData(living);
-            data.setSleeping(living, pkt.sleeping);
-            data.setParalysis(living, pkt.paralysis);
-            data.setCold(living, pkt.cold);
+            data.setSleeping(pkt.sleeping);
+            data.setParalysis(pkt.paralysis);
+            data.setCold(pkt.cold);
             data.setPoison(living, pkt.poison);
-            data.setStunned(living, pkt.stunned);
+            data.setStunned(pkt.stunned);
         }
     }
 

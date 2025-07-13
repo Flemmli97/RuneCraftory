@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.api.action.DataKey;
-import io.github.flemmli97.runecraftory.api.action.ToolUseData;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
+import io.github.flemmli97.runecraftory.api.registry.action.ToolUseData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
@@ -47,16 +47,16 @@ public class ItemToolHammer extends PickaxeItem {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         if (data.getWeaponHandler().getCurrentAction() == ModAttackActions.TOOL_HAMMER_USE.get()) // Action does rp use itself
             return;
-        LevelCalc.useRP(data, 5, true, 0, true, EnumSkills.MINING);
+        LevelCalc.useRP(data, 5, true, 0, true, Skills.MINING);
         if (level)
-            LevelCalc.levelSkill(data, EnumSkills.MINING, 10);
+            LevelCalc.levelSkill(data, Skills.MINING, 10);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -65,7 +65,7 @@ public class ItemToolHammer extends PickaxeItem {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnSingleBlock(ctx, false);
         }
@@ -75,7 +75,7 @@ public class ItemToolHammer extends PickaxeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -85,7 +85,7 @@ public class ItemToolHammer extends PickaxeItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             int useTime = data.getWeaponHandler().canExecuteAction(ModAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier));

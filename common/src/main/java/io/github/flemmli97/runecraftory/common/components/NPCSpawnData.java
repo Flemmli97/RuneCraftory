@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -16,29 +16,29 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public record NPCSpawnData(Optional<Holder<NPCJob>> job, Optional<ResourceLocation> npcDataId) {
+public record NPCSpawnData(Optional<Holder<NPCProfession>> profession, Optional<ResourceLocation> npcDataId) {
 
     public static final NPCSpawnData DEFAULT = new NPCSpawnData(Optional.empty(), Optional.empty());
 
     public static final Codec<NPCSpawnData> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ModNPCJobs.JOBS.registry().holderByNameCodec().optionalFieldOf("job").forGetter(NPCSpawnData::job),
+            instance.group(ModNPCProfessions.PROFESSIONS.registry().holderByNameCodec().optionalFieldOf("profession").forGetter(NPCSpawnData::profession),
                     ResourceLocation.CODEC.optionalFieldOf("npc_data_id").forGetter(NPCSpawnData::npcDataId)
             ).apply(instance, NPCSpawnData::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, NPCSpawnData> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModNPCJobs.JOB_REGISTRY_KEY)), NPCSpawnData::job,
+            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModNPCProfessions.PROFESSION_REGISTRY_KEY)), NPCSpawnData::profession,
             ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), NPCSpawnData::npcDataId, NPCSpawnData::new);
 
-    public NPCSpawnData cycleJob(HolderLookup.Provider provider) {
-        List<Holder.Reference<NPCJob>> jobs = provider.lookupOrThrow(ModNPCJobs.JOB_REGISTRY_KEY).listElements()
+    public NPCSpawnData cycleProfession(HolderLookup.Provider provider) {
+        List<Holder.Reference<NPCProfession>> professions = provider.lookupOrThrow(ModNPCProfessions.PROFESSION_REGISTRY_KEY).listElements()
                 .sorted(Comparator.comparing(Holder::getRegisteredName)).toList();
-        if (jobs.isEmpty())
+        if (professions.isEmpty())
             return new NPCSpawnData(Optional.empty(), this.npcDataId);
-        if (this.job.isEmpty())
-            return new NPCSpawnData(Optional.ofNullable(jobs.getFirst()), this.npcDataId);
-        Holder<NPCJob> next = null;
-        for (int i = 0; i < jobs.size(); i++) {
-            if (jobs.get(i).is(this.job.get())) {
-                next = jobs.get((i + 1) % jobs.size());
+        if (this.profession.isEmpty())
+            return new NPCSpawnData(Optional.ofNullable(professions.getFirst()), this.npcDataId);
+        Holder<NPCProfession> next = null;
+        for (int i = 0; i < professions.size(); i++) {
+            if (professions.get(i).is(this.profession.get())) {
+                next = professions.get((i + 1) % professions.size());
                 break;
             }
         }
@@ -46,6 +46,6 @@ public record NPCSpawnData(Optional<Holder<NPCJob>> job, Optional<ResourceLocati
     }
 
     public NPCSpawnData withId(@Nullable ResourceLocation id) {
-        return new NPCSpawnData(this.job(), Optional.ofNullable(id));
+        return new NPCSpawnData(this.profession(), Optional.ofNullable(id));
     }
 }

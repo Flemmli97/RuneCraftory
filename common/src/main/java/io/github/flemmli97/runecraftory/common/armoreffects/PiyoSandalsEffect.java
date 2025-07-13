@@ -16,6 +16,7 @@ public class PiyoSandalsEffect extends ArmorEffect {
 
     @Override
     public void onStep(LivingEntity entity, ItemStack stack) {
-        entity.playSound(ModSounds.PLAYER_ARMOR_PIYO_CHIRP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        if (!entity.isShiftKeyDown())
+            entity.playSound(ModSounds.PLAYER_ARMOR_PIYO_CHIRP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
     }
 }

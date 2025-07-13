@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.client.gui.widgets.InfoButton;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -290,7 +290,7 @@ public class ClientCalls {
                 LoaderNetwork.INSTANCE.sendToServer(C2SRideJump.INSTANCE);
         }
         if (entity == Minecraft.getInstance().cameraEntity) {
-            if (ClientCalendarHolder.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
+            if (ClientCalendarHolder.CLIENT_CALENDAR.currentWeather() == Weather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles().get() != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
                     entity.level().addParticle(ModParticles.RUNEY.get(),

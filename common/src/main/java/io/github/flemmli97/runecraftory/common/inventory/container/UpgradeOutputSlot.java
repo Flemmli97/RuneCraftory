@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
@@ -68,8 +68,8 @@ public class UpgradeOutputSlot extends Slot {
         }
         data.useRunePoints(this.container.rpCost(), true);
         switch (this.container.craftingType()) {
-            case FORGE -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.FORGING, toUpgrade, material);
-            case ACCESSORY_WORKBENCH -> CraftingUtils.giveUpgradeXPTo(data, EnumSkills.CRAFTING, toUpgrade, material);
+            case FORGE -> CraftingUtils.giveUpgradeXPTo(data, Skills.FORGING, toUpgrade, material);
+            case ACCESSORY_WORKBENCH -> CraftingUtils.giveUpgradeXPTo(data, Skills.CRAFTING, toUpgrade, material);
         }
         ItemStack ing1 = this.ingredientInv.getItem(0);
         ItemStack ing2 = this.ingredientInv.getItem(1);

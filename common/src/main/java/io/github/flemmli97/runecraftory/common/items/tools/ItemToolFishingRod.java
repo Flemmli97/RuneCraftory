@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -34,7 +34,7 @@ public class ItemToolFishingRod extends FishingRodItem {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -44,7 +44,7 @@ public class ItemToolFishingRod extends FishingRodItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && Platform.INSTANCE.getEntityData(player).fishingHook == null) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -55,7 +55,7 @@ public class ItemToolFishingRod extends FishingRodItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int charge = Math.min(useTime, tier.getTierLevel());
@@ -93,7 +93,7 @@ public class ItemToolFishingRod extends FishingRodItem {
             if (level instanceof ServerLevel serverLevel) {
                 float speed = EnchantmentHelper.getFishingTimeReduction(serverLevel, stack, entity);
                 int luck = EnchantmentHelper.getFishingLuckBonus(serverLevel, stack, entity);
-                EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+                ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
                 hook = new EntityCustomFishingHook(level, entity, speed + tier.getTierLevel(), luck, charge);
                 hook.setElement(ItemNBT.getElement(stack));
                 if (entity instanceof Player player)

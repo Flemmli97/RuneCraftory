@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandDataContainer;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandDataContainer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

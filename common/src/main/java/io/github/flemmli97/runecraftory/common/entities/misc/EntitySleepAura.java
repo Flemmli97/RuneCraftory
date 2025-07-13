@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -48,7 +48,7 @@ public class EntitySleepAura extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(4).magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.asHolder(), 100), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(4).magic().element(ItemElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.asHolder(), 100), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             this.hitEntities.add(target.getUUID());
             return true;
         }

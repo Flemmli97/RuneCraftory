@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.mixin.compat;
 
 import io.github.flemmli97.runecraftory.integration.jei.JEI;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.library.recipes.PluginManager;
 import mezz.jei.library.recipes.collect.RecipeTypeData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.stream.Stream;
 
 @Pseudo
-@Mixin(targets = "mezz/jei/library/recipes/PluginManager")
+@Mixin(PluginManager.class)
 public abstract class CompatJei {
 
     /**

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -9,8 +9,8 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -114,7 +114,7 @@ public class CropUtils {
             ModCriteria.HARVEST_CROP.get().trigger(player, state);
             if (cropBlock.isMaxAge(state)) {
                 spawnRuney(player, pos);
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.FARMING, 2f);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FARMING, 2f);
             }
         }
         if (entity instanceof LivingEntity living)

@@ -1,23 +1,27 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.ExtendedEffect;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.AABB;
 
 public class BathEffect extends MobEffect implements ExtendedEffect {
 
     public BathEffect() {
-        super(MobEffectCategory.BENEFICIAL, 0);
+        super(MobEffectCategory.BENEFICIAL, 0xff40b5e1);
     }
 
     @Override
@@ -27,20 +31,45 @@ public class BathEffect extends MobEffect implements ExtendedEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity living, int amplifier) {
+        if (living.level().isClientSide())
+            return true;
         EntityData entityData = Platform.INSTANCE.getEntityData(living);
-        if (living.updateFluidHeightAndDoFluidPushing(RunecraftoryTags.Fluids.HOT_SPRING_FLUID, 0.014)) {
+        if (this.isInWater(living)) {
             entityData.setEnteredBath(true);
             living.heal(living.getMaxHealth() * 0.04f);
             if (living instanceof ServerPlayer player) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
                 data.regenRunePoints(Math.max(1, (int) (data.getMaxRunePoints() * 0.03f)));
-                LevelCalc.levelSkill(data, EnumSkills.BATH, 2f);
+                LevelCalc.levelSkill(data, Skills.BATH, 2f);
             }
         } else if (entityData.enteredBath()) {
             entityData.setEnteredBath(false);
             living.removeEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(this));
         }
         return super.applyEffectTick(living, amplifier);
+    }
+
+    private boolean isInWater(LivingEntity entity) {
+        AABB aABB = entity.getBoundingBox().deflate(0.001);
+        int minX = Mth.floor(aABB.minX);
+        int maxX = Mth.ceil(aABB.maxX);
+        int minY = Mth.floor(aABB.minY);
+        int maxY = Mth.ceil(aABB.maxY);
+        int minZ = Mth.floor(aABB.minZ);
+        int maxZ = Mth.ceil(aABB.maxZ);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int y = minY; y < maxY; ++y) {
+            for (int x = minX; x < maxX; ++x) {
+                for (int z = minZ; z < maxZ; ++z) {
+                    pos.set(x, y, z);
+                    FluidState fluidState = entity.level().getFluidState(pos);
+                    if (fluidState.is(RunecraftoryTags.Fluids.HOT_SPRING_FLUID)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.common.blocks.BlockAccessory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
@@ -21,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockSingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.BlockTreeBase;
 import io.github.flemmli97.runecraftory.common.blocks.BlockTreeRoot;
 import io.github.flemmli97.runecraftory.common.blocks.BlockTreeSapling;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlockTier;
 import io.github.flemmli97.runecraftory.common.blocks.entity.AccessoryBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BrokenMineralBlockEntity;
@@ -46,6 +46,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -74,41 +75,41 @@ public class ModBlocks {
     public static final List<RegistryEntrySupplier<Block, ?>> FLOWERS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Block, ?>> HERBS = new ArrayList<>();
     public static final Map<RegistryEntrySupplier<Block, ?>, RegistryEntrySupplier<Block, ?>> GIANT_CROP_MAP = new HashMap<>();
-    public static final EnumMap<EnumMineralTier, RegistryEntrySupplier<Block, ?>> MINERAL_MAP = new EnumMap<>(EnumMineralTier.class);
-    public static final EnumMap<EnumMineralTier, RegistryEntrySupplier<Block, ?>> BROKEN_MINERAL_MAP = new EnumMap<>(EnumMineralTier.class);
+    public static final EnumMap<MineralBlockTier, RegistryEntrySupplier<Block, ?>> MINERAL_MAP = new EnumMap<>(MineralBlockTier.class);
+    public static final EnumMap<MineralBlockTier, RegistryEntrySupplier<Block, ?>> BROKEN_MINERAL_MAP = new EnumMap<>(MineralBlockTier.class);
 
     public static final RegistryEntrySupplier<Block, BlockForge> FORGE = BLOCKS.register("forge", () -> new BlockForge(BlockBehaviour.Properties.of().sound(SoundType.METAL).noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block, BlockAccessory> ACCESSORY_WORKBENCH = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block, BlockChemistry> CHEMISTRY_SET = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block, BlockCooking> COOKING_TABLE = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of().noOcclusion().strength(3, 100)));
 
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_IRON = mineral(EnumMineralTier.IRON, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_TIN = mineral(EnumMineralTier.TIN, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SILVER = mineral(EnumMineralTier.SILVER, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_GOLD = mineral(EnumMineralTier.GOLD, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_PLATINUM = mineral(EnumMineralTier.PLATINUM, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_ORICHALCUM = mineral(EnumMineralTier.ORICHALCUM, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DIAMOND = mineral(EnumMineralTier.DIAMOND, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DRAGONIC = mineral(EnumMineralTier.DRAGONIC, List.of(BiomeTags.IS_END), List.of());
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AQUAMARINE = mineral(EnumMineralTier.AQUAMARINE, List.of(RunecraftoryTags.Biomes.IS_AQUATIC, BiomeTags.IS_BEACH, RunecraftoryTags.Biomes.IS_WET), List.of(BiomeTags.IS_NETHER, BiomeTags.IS_END));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AMETHYST = mineral(EnumMineralTier.AMETHYST, List.of(BiomeTags.IS_FOREST, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.Biomes.IS_DEAD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_RUBY = mineral(EnumMineralTier.RUBY, List.of(RunecraftoryTags.Biomes.IS_HOT, BiomeTags.IS_NETHER), List.of());
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_EMERALD = mineral(EnumMineralTier.EMERALD, List.of(RunecraftoryTags.Biomes.IS_PLAINS, RunecraftoryTags.Biomes.IS_WASTELAND, RunecraftoryTags.Biomes.IS_SPARSE_VEGETATION_OVERWORLD, BiomeTags.IS_HILL), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
-    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SAPPHIRE = mineral(EnumMineralTier.SAPPHIRE, List.of(RunecraftoryTags.Biomes.IS_MAGICAL, RunecraftoryTags.Biomes.IS_SNOWY), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_IRON = mineral(MineralBlockTier.IRON, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_TIN = mineral(MineralBlockTier.TIN, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SILVER = mineral(MineralBlockTier.SILVER, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_GOLD = mineral(MineralBlockTier.GOLD, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_PLATINUM = mineral(MineralBlockTier.PLATINUM, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_ORICHALCUM = mineral(MineralBlockTier.ORICHALCUM, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DIAMOND = mineral(MineralBlockTier.DIAMOND, List.of(BiomeTags.IS_OVERWORLD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_DRAGONIC = mineral(MineralBlockTier.DRAGONIC, List.of(BiomeTags.IS_END), List.of());
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AQUAMARINE = mineral(MineralBlockTier.AQUAMARINE, List.of(RunecraftoryTags.Biomes.IS_AQUATIC, BiomeTags.IS_BEACH, RunecraftoryTags.Biomes.IS_WET), List.of(BiomeTags.IS_NETHER, BiomeTags.IS_END));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_AMETHYST = mineral(MineralBlockTier.AMETHYST, List.of(BiomeTags.IS_FOREST, BiomeTags.IS_MOUNTAIN, RunecraftoryTags.Biomes.IS_DEAD), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_RUBY = mineral(MineralBlockTier.RUBY, List.of(RunecraftoryTags.Biomes.IS_HOT, BiomeTags.IS_NETHER), List.of());
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_EMERALD = mineral(MineralBlockTier.EMERALD, List.of(RunecraftoryTags.Biomes.IS_PLAINS, RunecraftoryTags.Biomes.IS_WASTELAND, RunecraftoryTags.Biomes.IS_SPARSE_VEGETATION_OVERWORLD, BiomeTags.IS_HILL), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
+    public static final RegistryEntrySupplier<Block, BlockMineral> MINERAL_SAPPHIRE = mineral(MineralBlockTier.SAPPHIRE, List.of(RunecraftoryTags.Biomes.IS_MAGICAL, RunecraftoryTags.Biomes.IS_SNOWY), List.of(RunecraftoryTags.Biomes.COMMON_GROUND_BLACKLIST));
 
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_IRON = brokenMineral(EnumMineralTier.IRON);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_TIN = brokenMineral(EnumMineralTier.TIN);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_SILVER = brokenMineral(EnumMineralTier.SILVER);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_GOLD = brokenMineral(EnumMineralTier.GOLD);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_PLATINUM = brokenMineral(EnumMineralTier.PLATINUM);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_ORICHALCUM = brokenMineral(EnumMineralTier.ORICHALCUM);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_DIAMOND = brokenMineral(EnumMineralTier.DIAMOND);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_DRAGONIC = brokenMineral(EnumMineralTier.DRAGONIC);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_AQUAMARINE = brokenMineral(EnumMineralTier.AQUAMARINE);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_AMETHYST = brokenMineral(EnumMineralTier.AMETHYST);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_RUBY = brokenMineral(EnumMineralTier.RUBY);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_EMERALD = brokenMineral(EnumMineralTier.EMERALD);
-    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_SAPPHIRE = brokenMineral(EnumMineralTier.SAPPHIRE);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_IRON = brokenMineral(MineralBlockTier.IRON);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_TIN = brokenMineral(MineralBlockTier.TIN);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_SILVER = brokenMineral(MineralBlockTier.SILVER);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_GOLD = brokenMineral(MineralBlockTier.GOLD);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_PLATINUM = brokenMineral(MineralBlockTier.PLATINUM);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_ORICHALCUM = brokenMineral(MineralBlockTier.ORICHALCUM);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_DIAMOND = brokenMineral(MineralBlockTier.DIAMOND);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_DRAGONIC = brokenMineral(MineralBlockTier.DRAGONIC);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_AQUAMARINE = brokenMineral(MineralBlockTier.AQUAMARINE);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_AMETHYST = brokenMineral(MineralBlockTier.AMETHYST);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_RUBY = brokenMineral(MineralBlockTier.RUBY);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_EMERALD = brokenMineral(MineralBlockTier.EMERALD);
+    public static final RegistryEntrySupplier<Block, BlockBrokenMineral> BROKEN_MINERAL_SAPPHIRE = brokenMineral(MineralBlockTier.SAPPHIRE);
 
     public static final RegistryEntrySupplier<Block, BlockBossSpawner> BOSS_SPAWNER = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(BlockBehaviour.Properties.of().sound(SoundType.METAL).instrument(NoteBlockInstrument.BASEDRUM).strength(60, 9999).noOcclusion()));
     public static final RegistryEntrySupplier<Block, BlockShippingBin> SHIPPING = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(BlockBehaviour.Properties.of().sound(SoundType.WOOD).instrument(NoteBlockInstrument.XYLOPHONE).strength(3, 10)));
@@ -243,6 +244,8 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, BlockFruitTreeLeaf> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new BlockFruitTreeLeaf(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ModItems.GRAPES.getKey()));
 
+    public static final RegistryEntrySupplier<Block, LiquidBlock> HOT_SPRING_WATER = BLOCKS.register("hot_spring_water", () -> new LiquidBlock(ModFluids.FLOWING_HOT_SPRING_WATER.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)));
+
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<BrokenMineralBlockEntity>> BROKEN_MINERAL_TILE = brokenMineralTile("broken_mineral_tile", BROKEN_MINERAL_MAP.values());
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<AccessoryBlockEntity>> ACCESSORY_TILE = BLOCK_ENTITY_TYPES.register("accessory_tile", () -> BlockEntityType.Builder.of(AccessoryBlockEntity::new, ACCESSORY_WORKBENCH.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<ForgingBlockEntity>> FORGING_TILE = BLOCK_ENTITY_TYPES.register("forge_tile", () -> BlockEntityType.Builder.of(ForgingBlockEntity::new, FORGE.get()).build(null));
@@ -253,7 +256,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> BlockEntityType.Builder.of(MonsterBarnBlockEntity::new, MONSTER_BARN.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> BlockEntityType.Builder.of(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()).build(null));
 
-    public static RegistryEntrySupplier<Block, BlockMineral> mineral(EnumMineralTier name, List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist) {
+    public static RegistryEntrySupplier<Block, BlockMineral> mineral(MineralBlockTier name, List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist) {
         RegistryEntrySupplier<Block, BlockMineral> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of().lightLevel(s -> 1).strength(5, 10)
                 .requiresCorrectToolForDrops()));
         MINERAL_MAP.put(name, reg);
@@ -263,7 +266,7 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryEntrySupplier<Block, BlockBrokenMineral> brokenMineral(EnumMineralTier name) {
+    public static RegistryEntrySupplier<Block, BlockBrokenMineral> brokenMineral(MineralBlockTier name) {
         RegistryEntrySupplier<Block, BlockBrokenMineral> reg = BLOCKS.register("ore_broken_" + name.getSerializedName(), () -> new BlockBrokenMineral(name, BlockBehaviour.Properties.of().strength(30, 15)));
         BROKEN_MINERAL_MAP.put(name, reg);
         return reg;

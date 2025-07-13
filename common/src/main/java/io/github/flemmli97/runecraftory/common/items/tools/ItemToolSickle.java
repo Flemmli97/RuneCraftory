@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
@@ -44,9 +44,9 @@ public class ItemToolSickle extends DiggerItem {
 
     public void postUse(ServerPlayer player) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        LevelCalc.useRP(data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WIND);
-        LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
-        LevelCalc.levelSkill(data, EnumSkills.WIND, 2);
+        LevelCalc.useRP(data, 2, true, 0, true, Skills.FARMING, Skills.WIND);
+        LevelCalc.levelSkill(data, Skills.FARMING, 3);
+        LevelCalc.levelSkill(data, Skills.WIND, 2);
     }
 
     @Override
@@ -54,8 +54,8 @@ public class ItemToolSickle extends DiggerItem {
         Tool tool = stack.get(DataComponents.TOOL);
         if (tool != null && entityLiving instanceof ServerPlayer serverPlayer && tool.rules().stream().anyMatch(p -> state.is(p.blocks()))) {
             PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
-            LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
-            LevelCalc.levelSkill(data, EnumSkills.WIND, 2);
+            LevelCalc.levelSkill(data, Skills.FARMING, 3);
+            LevelCalc.levelSkill(data, Skills.WIND, 2);
         }
         return super.mineBlock(stack, level, state, pos, entityLiving);
     }
@@ -64,7 +64,7 @@ public class ItemToolSickle extends DiggerItem {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -73,7 +73,7 @@ public class ItemToolSickle extends DiggerItem {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
@@ -83,7 +83,7 @@ public class ItemToolSickle extends DiggerItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(usedHand);
             return InteractionResultHolder.consume(stack);
@@ -93,7 +93,7 @@ public class ItemToolSickle extends DiggerItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel()) + 2;
@@ -110,9 +110,9 @@ public class ItemToolSickle extends DiggerItem {
                         .count();
                 if (amount > 0) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    LevelCalc.useRP(data, range * 10, true, 0, true, EnumSkills.FARMING);
-                    LevelCalc.levelSkill(data, EnumSkills.FARMING, 3.5f);
-                    LevelCalc.levelSkill(data, EnumSkills.WIND, 2.5f);
+                    LevelCalc.useRP(data, range * 10, true, 0, true, Skills.FARMING);
+                    LevelCalc.levelSkill(data, Skills.FARMING, 3.5f);
+                    LevelCalc.levelSkill(data, Skills.WIND, 2.5f);
                 }
             }
         }

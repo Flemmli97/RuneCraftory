@@ -11,12 +11,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ModSounds {
 
@@ -24,7 +21,6 @@ public class ModSounds {
 
     public static final Object2IntMap<ResourceLocation> VARIATIONS = new Object2IntArrayMap<>();
     public static final List<BGMHolder> BGM = new ArrayList<>();
-    public static final Map<ResourceLocation, RegistryEntrySupplier<Item, ?>> BGM_RECORD = new HashMap<>();
 
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_AMBROSIA_WAVE = register("entity.ambrosia.wave");
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_CHIMERA_AMBIENT = register("entity.chimera.ambient", 2);

@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -46,7 +46,7 @@ public class CraftingUtils {
             if (stat.getDiff() <= 0)
                 return -1;
             if (!stack.isEmpty()) {
-                int skillLevel = type == CraftingType.FORGE ? data.getSkillLevel(EnumSkills.FORGING).getLevel() : data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
+                int skillLevel = type == CraftingType.FORGE ? data.getSkillLevel(Skills.FORGING).getLevel() : data.getSkillLevel(Skills.CRAFTING).getLevel();
                 int result;
                 if (skillLevel >= stat.getDiff()) {
                     result = stat.getDiff() * 2 + (ItemNBT.itemLevel(stack) - 1) * 2;
@@ -62,13 +62,13 @@ public class CraftingUtils {
         }).orElse(-1);
     }
 
-    public static void giveCraftingXPTo(PlayerData data, EnumSkills skill, SextupleRecipe recipe) {
+    public static void giveCraftingXPTo(PlayerData data, Skills skill, SextupleRecipe recipe) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
         data.increaseSkill(skill, xpForCrafting(skill, recipe, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
     }
 
-    private static float xpForCrafting(EnumSkills skill, SextupleRecipe recipe, int skillLevel) {
+    private static float xpForCrafting(Skills skill, SextupleRecipe recipe, int skillLevel) {
         float mult = LevelCalc.getSkillXpMultiplier(skill);
         float xp = (recipe.getCraftingLevel() * 2 + 10) * mult;
         if (skillLevel > recipe.getCraftingLevel())
@@ -80,13 +80,13 @@ public class CraftingUtils {
         return xp;
     }
 
-    public static void giveUpgradeXPTo(PlayerData data, EnumSkills skill, ItemStack equip, ItemStack upgrade) {
+    public static void giveUpgradeXPTo(PlayerData data, Skills skill, ItemStack equip, ItemStack upgrade) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
         data.increaseSkill(skill, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
     }
 
-    private static float xpForUpgrade(EnumSkills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
+    private static float xpForUpgrade(Skills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
         float mult = LevelCalc.getSkillXpMultiplier(skill) * 1.5f;
         int difficulty = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
         float xp = mult * (10 + ItemNBT.itemLevel(equip));
@@ -110,10 +110,10 @@ public class CraftingUtils {
             return cost;
         }
         int skillLevel = switch (type) {
-            case FORGE -> data.getSkillLevel(EnumSkills.FORGING).getLevel();
-            case ACCESSORY_WORKBENCH -> data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
-            case CHEMISTRY_SET -> data.getSkillLevel(EnumSkills.CHEMISTRY).getLevel();
-            case COOKING_TABLE -> data.getSkillLevel(EnumSkills.COOKING).getLevel();
+            case FORGE -> data.getSkillLevel(Skills.FORGING).getLevel();
+            case ACCESSORY_WORKBENCH -> data.getSkillLevel(Skills.CRAFTING).getLevel();
+            case CHEMISTRY_SET -> data.getSkillLevel(Skills.CHEMISTRY).getLevel();
+            case COOKING_TABLE -> data.getSkillLevel(Skills.COOKING).getLevel();
         };
         int lvlDifference = recipe.getCraftingLevel() - skillLevel;
         int cost = recipe.getCraftingLevel() * 2;

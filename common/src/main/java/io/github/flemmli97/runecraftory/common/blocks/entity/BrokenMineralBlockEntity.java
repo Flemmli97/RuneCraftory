@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.api.IDailyUpdate;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
+import io.github.flemmli97.runecraftory.common.blocks.DailyUpdateable;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdate {
+public class BrokenMineralBlockEntity extends BlockEntity implements DailyUpdateable {
 
     private int lastUpdateDay;
     private boolean check;

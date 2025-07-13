@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.attackactions;
 
-import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
-import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -44,7 +44,7 @@ public class GloveUseAttack extends AttackAction {
                         .doOnSuccess(hit::add)
                         .executeAttack());
                 if (!hit.isEmpty() && entity instanceof ServerPlayer serverPlayer) {
-                    LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(serverPlayer), EnumSkills.DUAL, 2);
+                    LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(serverPlayer), Skills.DUAL, 2);
                 }
             }
         }

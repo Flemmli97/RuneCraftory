@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -50,7 +50,7 @@ public class MultiArrowSpell extends Spell {
         for (float y = angle; y <= this.angle; y += inc) {
             Vector3d newDir = dir3d.rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z(), new Vector3d());
             EntityMobArrow arrow = new EntityMobArrow(level, entity, CombatUtils.getAbilityDamageBonus(lvl, this.damage));
-            arrow.setRemainingFireTicks(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
+            arrow.setRemainingFireTicks(ItemNBT.getElement(stack) == ItemElement.FIRE ? 200 : 0);
             arrow.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
             level.addFreshEntity(arrow);
         }

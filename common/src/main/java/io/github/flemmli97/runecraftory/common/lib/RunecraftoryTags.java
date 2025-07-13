@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlockTier;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -287,7 +287,7 @@ public class RunecraftoryTags {
         public static final TagKey<Biome> WIND_SHRINE = biome("wind_shrine");
         public static final TagKey<Biome> LEON_KARNAK = biome("leon_karnak");
 
-        public static TagKey<Biome> getMineralGenTag(EnumMineralTier mineral, boolean whitelist) {
+        public static TagKey<Biome> getMineralGenTag(MineralBlockTier mineral, boolean whitelist) {
             return biome(mineral.getSerializedName() + (whitelist ? "_whitelist" : "_blacklist"));
         }
 

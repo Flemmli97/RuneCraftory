@@ -2,12 +2,12 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
-import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -26,7 +26,7 @@ public class OverlayGui {
     private static final ResourceLocation HEALTH_BAR = RuneCraftory.modRes("hud/overlay/health_bar");
     private static final ResourceLocation RUNEPOINTS_BAR_BACKGROUND = RuneCraftory.modRes("hud/overlay/runepoints_bar_background");
     private static final ResourceLocation RUNEPOINTS_BAR = RuneCraftory.modRes("hud/overlay/runepoints_bar");
-    private static final Map<EnumSeason, ResourceLocation> DATE = Arrays.stream(EnumSeason.values())
+    private static final Map<Season, ResourceLocation> DATE = Arrays.stream(Season.values())
             .collect(Collectors.toUnmodifiableMap(
                     e -> e,
                     e -> RuneCraftory.modRes("hud/overlay/date_" + e.name().toLowerCase())
@@ -61,8 +61,8 @@ public class OverlayGui {
             }
         }
         if (ClientConfig.renderCalendar) {
-            CalendarImpl calendar = ClientCalendarHolder.CLIENT_CALENDAR;
-            EnumSeason season = calendar.currentSeason();
+            Calendar calendar = ClientCalendarHolder.CLIENT_CALENDAR;
+            Season season = calendar.currentSeason();
             int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 64, ClientConfig.seasonDisplayX);
             int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 32 + 15 + 4, ClientConfig.seasonDisplayY);
             graphics.blitSprite(DATE.get(season), xPos, yPos, 64, 32);

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
@@ -81,13 +81,13 @@ public class CraftingOutputSlot extends Slot {
             }
             switch (this.craftingContainer.craftingType()) {
                 case FORGE ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.FORGING, this.craftingContainer.getSelected().value());
+                        CraftingUtils.giveCraftingXPTo(data, Skills.FORGING, this.craftingContainer.getSelected().value());
                 case ACCESSORY_WORKBENCH ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CRAFTING, this.craftingContainer.getSelected().value());
+                        CraftingUtils.giveCraftingXPTo(data, Skills.CRAFTING, this.craftingContainer.getSelected().value());
                 case CHEMISTRY_SET ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.CHEMISTRY, this.craftingContainer.getSelected().value());
+                        CraftingUtils.giveCraftingXPTo(data, Skills.CHEMISTRY, this.craftingContainer.getSelected().value());
                 case COOKING_TABLE ->
-                        CraftingUtils.giveCraftingXPTo(data, EnumSkills.COOKING, this.craftingContainer.getSelected().value());
+                        CraftingUtils.giveCraftingXPTo(data, Skills.COOKING, this.craftingContainer.getSelected().value());
             }
         }
         if (ItemNBT.usedLightOre(stack))

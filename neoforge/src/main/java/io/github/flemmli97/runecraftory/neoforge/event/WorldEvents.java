@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,9 +22,9 @@ public class WorldEvents {
     }
 
     @SubscribeEvent
-    public void daily(LevelTickEvent.Post event) {
+    public void tick(LevelTickEvent.Post event) {
         if (event.getLevel().dimension().equals(Level.OVERWORLD)) {
-            WorldCalls.daily(event.getLevel());
+            WorldCalls.tick(event.getLevel());
         }
     }
 

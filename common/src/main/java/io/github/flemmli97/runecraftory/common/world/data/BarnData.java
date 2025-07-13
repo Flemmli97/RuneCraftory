@@ -1,0 +1,147 @@
+package io.github.flemmli97.runecraftory.common.world.data;
+
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+public class BarnData {
+
+    public final GlobalPos pos;
+    private int size = 0;
+    private int roofHeight;
+
+    private int changeCooldown;
+
+    private final Map<UUID, Integer> monsters = new HashMap<>();
+    private final Set<BaseMonster> listeners = new HashSet<>();
+
+    private boolean removed;
+
+    public BarnData(GlobalPos pos) {
+        this.pos = pos;
+    }
+
+    public static BarnData fromTag(CompoundTag tag) {
+        DataResult<GlobalPos> dataResult = GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, tag.get("Pos")));
+        BarnData data = new BarnData(dataResult.getOrThrow());
+        data.load(tag);
+        return data;
+    }
+
+    public void update(int size, int roofHeight) {
+        if (this.size != size || this.roofHeight != roofHeight)
+            this.changeCooldown = 150;
+        this.size = size;
+        this.roofHeight = roofHeight;
+        --this.changeCooldown;
+        this.listeners.removeIf(m -> {
+            if (m.behaviourState() == BaseMonster.Behaviour.WANDER_HOME) {
+                if (m.level().dimension() == this.pos.dimension())
+                    m.restrictTo(this.pos.pos(), this.getSize() + 1);
+            }
+            return m.isRemoved();
+        });
+    }
+
+    public void addMonster(BaseMonster monster, int size) {
+        this.monsters.put(monster.getUUID(), size);
+        this.listeners.add(monster);
+    }
+
+    public void removeMonster(BaseMonster monster) {
+        this.monsters.remove(monster.getUUID());
+        this.listeners.remove(monster);
+    }
+
+    public boolean hasCapacityFor(BaseMonster monster) {
+        int size = monster.getProp().size;
+        boolean needsRoof = monster.getProp().needsRoof;
+        if (needsRoof && this.roofHeight <= 0)
+            return false;
+        if (this.roofHeight <= monster.getBbHeight() + 1) {
+            return false;
+        }
+        return this.usedCapacity() + size <= this.getCapacity();
+    }
+
+    public int getCapacity() {
+        if (this.getSize() < 2)
+            return 0;
+        if (this.getSize() < 4)
+            return (this.getSize() - 1) * 2;
+        return (this.getSize() - 3) * 4 + 2;
+    }
+
+    public int usedCapacity() {
+        return this.monsters.values().stream().mapToInt(i -> i)
+                .sum();
+    }
+
+    public boolean hasRoof() {
+        return this.roofHeight > 0;
+    }
+
+    public int roofHeight() {
+        return this.roofHeight;
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public boolean isInvalid() {
+        return this.removed || this.size < 2;
+    }
+
+    public boolean isInvalidFor(BaseMonster monster) {
+        if (this.isInvalid())
+            return true;
+        if (this.monsters.containsKey(monster.getUUID()) && this.changeCooldown > 0)
+            return false;
+        if (this.roofHeight > 0) {
+            return this.roofHeight < monster.getBbHeight() + 1;
+        }
+        return !monster.getProp().needsRoof;
+    }
+
+    public void remove() {
+        this.removed = true;
+    }
+
+    public void load(CompoundTag tag) {
+        this.size = tag.getInt("Size");
+        this.roofHeight = tag.getInt("RoofHeight");
+        this.changeCooldown = tag.getInt("ChangeCooldown");
+        CompoundTag monsters = tag.getCompound("Monsters");
+        monsters.getAllKeys().forEach(key -> this.monsters.put(UUID.fromString(key), monsters.getInt(key)));
+    }
+
+    public CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
+        GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).resultOrPartial(RuneCraftory.LOGGER::error)
+                .ifPresent(t -> tag.put("Pos", t));
+        tag.putInt("Size", this.size);
+        tag.putInt("RoofHeight", this.roofHeight);
+        tag.putInt("ChangeCooldown", this.changeCooldown);
+        CompoundTag monsters = new CompoundTag();
+        this.monsters.forEach((uuid, integer) -> monsters.putInt(uuid.toString(), integer));
+        tag.put("Monsters", monsters);
+        return tag;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Barn[%s]; Size: %d, With Roof: %s, Capacity: %d, FreeCapacity: %d", this.pos,
+                this.size, this.roofHeight, this.getCapacity(), this.getCapacity() - this.monsters.values().stream().mapToInt(i -> i).sum());
+    }
+}

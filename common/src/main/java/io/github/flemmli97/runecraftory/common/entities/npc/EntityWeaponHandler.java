@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
-import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
-import io.github.flemmli97.runecraftory.api.action.ComboContainer;
-import io.github.flemmli97.runecraftory.api.action.DataKey;
-import io.github.flemmli97.runecraftory.api.registry.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
+import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
+import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
+import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;

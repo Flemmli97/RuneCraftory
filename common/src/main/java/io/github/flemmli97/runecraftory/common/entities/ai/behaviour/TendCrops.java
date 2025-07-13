@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

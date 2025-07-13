@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -71,7 +71,7 @@ import java.util.UUID;
 
 public class GateEntity extends Mob implements IBaseMob {
 
-    private static final Map<EnumElement, ResourceKey<LootTable>> LOOT_RES = new HashMap<>();
+    private static final Map<ItemElement, ResourceKey<LootTable>> LOOT_RES = new HashMap<>();
 
     private static final EntityDataAccessor<String> ELEMENT_TYPE = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> ELEMENT = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
@@ -81,7 +81,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     public int rotate, clientRenderTick;
     private final List<EntityType<?>> spawnList = new ArrayList<>();
-    private EnumElement type = EnumElement.NONE;
+    private ItemElement type = ItemElement.NONE;
     private boolean initialSpawn = true;
     private final XpLevelHolder expPair = new XpLevelHolder();
     private boolean removeCauseEmptyList;
@@ -119,7 +119,7 @@ public class GateEntity extends Mob implements IBaseMob {
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
-    public static ResourceKey<LootTable> getGateLootLocation(EnumElement element) {
+    public static ResourceKey<LootTable> getGateLootLocation(ItemElement element) {
         ResourceKey<LootTable> def = ModEntities.GATE.get().getDefaultLootTable();
         return LOOT_RES.computeIfAbsent(element, e -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(),
                 def.location().getPath() + "_" + e.name().toLowerCase(Locale.ROOT))));
@@ -141,7 +141,7 @@ public class GateEntity extends Mob implements IBaseMob {
                 this.updateStatsToLevel();
             }
             if (key.equals(ELEMENT)) {
-                this.type = EnumElement.values()[this.entityData.get(ELEMENT)];
+                this.type = ItemElement.values()[this.entityData.get(ELEMENT)];
             }
         }
     }
@@ -158,7 +158,7 @@ public class GateEntity extends Mob implements IBaseMob {
         return level.isUnobstructed(this);
     }
 
-    public EnumElement getElement() {
+    public ItemElement getElement() {
         return this.type;
     }
 
@@ -276,7 +276,7 @@ public class GateEntity extends Mob implements IBaseMob {
         if (compound.contains("Element")) {
             String el = compound.getString("Element");
             try {
-                this.type = EnumElement.valueOf(el);
+                this.type = ItemElement.valueOf(el);
                 this.entityData.set(ELEMENT_TYPE, this.type.getTranslation());
                 this.entityData.set(ELEMENT, this.type.ordinal());
             } catch (IllegalArgumentException e) {
@@ -428,34 +428,34 @@ public class GateEntity extends Mob implements IBaseMob {
         return other instanceof Player;
     }
 
-    private EnumElement getType(ServerLevelAccessor level, Holder<Biome> key) {
-        EnumElement element = EnumElement.values()[this.getRandom().nextInt(EnumElement.values().length)];
+    private ItemElement getType(ServerLevelAccessor level, Holder<Biome> key) {
+        ItemElement element = ItemElement.values()[this.getRandom().nextInt(ItemElement.values().length)];
         if (key.is(RunecraftoryTags.Biomes.IS_PLAINS) && this.getRandom().nextFloat() < 0.5) {
-            element = EnumElement.NONE;
+            element = ItemElement.NONE;
         } else if (key.is(BiomeTags.IS_FOREST) && this.getRandom().nextFloat() < 0.5) {
-            element = EnumElement.WIND;
+            element = ItemElement.WIND;
         } else if (key.is(RunecraftoryTags.Biomes.IS_HOT) && this.getRandom().nextFloat() < 0.5) {
-            element = EnumElement.FIRE;
+            element = ItemElement.FIRE;
         } else if (key.is(BiomeTags.IS_MOUNTAIN) && this.getRandom().nextFloat() < 0.5) {
-            element = EnumElement.WIND;
+            element = ItemElement.WIND;
         } else if ((key.is(RunecraftoryTags.Biomes.IS_AQUATIC) || key.is(RunecraftoryTags.Biomes.IS_COLD_OVERWORLD)) && this.getRandom().nextFloat() < 0.5) {
-            element = EnumElement.WATER;
+            element = ItemElement.WATER;
         } else if (key.is(RunecraftoryTags.Biomes.IS_SANDY) && this.getRandom().nextFloat() < 0.5) {
-            element = EnumElement.EARTH;
+            element = ItemElement.EARTH;
         } else if (key.is(RunecraftoryTags.Biomes.IS_MAGICAL)) {
             if (this.getRandom().nextFloat() < 0.4) {
-                element = EnumElement.LIGHT;
+                element = ItemElement.LIGHT;
             } else if (this.getRandom().nextFloat() < 0.2) {
-                element = EnumElement.LOVE;
+                element = ItemElement.LOVE;
             }
         } else if (key.is(RunecraftoryTags.Biomes.IS_SPOOKY) && this.getRandom().nextFloat() < 0.4) {
-            element = EnumElement.DARK;
+            element = ItemElement.DARK;
         }
         if (key.is(BiomeTags.IS_END)) {
             if (this.getRandom().nextFloat() < 0.3) {
-                element = EnumElement.DARK;
+                element = ItemElement.DARK;
             } else if (this.getRandom().nextFloat() < 0.3) {
-                element = EnumElement.LIGHT;
+                element = ItemElement.LIGHT;
             }
         }
         return element;

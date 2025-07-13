@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.action.AttackActionHandler;
-import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -13,7 +12,9 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
+import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
+import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -31,8 +32,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetWalk
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SleepInBed;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
@@ -56,9 +56,8 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -66,10 +65,11 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.NPCHandler;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
-import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
-import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
+import io.github.flemmli97.runecraftory.common.world.data.NPCHandler;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.common.world.data.family.FamilyEntry;
+import io.github.flemmli97.runecraftory.common.world.data.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
@@ -240,12 +240,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
 
     private final XpLevelHolder levelPair = new XpLevelHolder();
 
-    private NPCJob shop = ModNPCJobs.NONE.get();
+    private NPCProfession profession = ModNPCProfessions.NONE.get();
     private NPCData data = NPCData.DEFAULT_DATA;
     private NPCLook look = NPCLook.DEFAULT_LOOK;
     public final NPCFeatureContainer lookFeatures = new NPCFeatureContainer();
     private NPCAttackActions attackActions;
-    private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
+    private Pair<Season, Integer> birthday = Pair.of(Season.SPRING, 1);
     private Map<String, GiftData> gifts;
     private final Random dataRandom = new Random();
 
@@ -392,11 +392,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                                 .and(AcquirePOITask.withinRangeOf(EntityNPCBase::getWorkPlace)))
                         .onAqcuire(e -> e.level().broadcastEntityEvent(this, (byte) 14)),
                 new InvalidatePOITask<>(MemoryModuleType.JOB_SITE,
-                        m -> this.getShop().matches(m),
+                        m -> this.getProfession().matches(m),
                         EntityNPCBase::releaseWorkplacePoi),
-                new AcquirePOITask<EntityNPCBase>(MemoryModuleType.JOB_SITE, m -> this.getShop().matches(m)).canAquire(AcquirePOITask.withinRangeOf(EntityNPCBase::getBedPos))
+                new AcquirePOITask<EntityNPCBase>(MemoryModuleType.JOB_SITE, m -> this.getProfession().matches(m)).canAquire(AcquirePOITask.withinRangeOf(EntityNPCBase::getBedPos))
                         .onAqcuire(e -> e.level().broadcastEntityEvent(this, (byte) 15))
-                        .startCondition(m -> m.getShop().hasPoi()),
+                        .startCondition(m -> m.getProfession().hasPoi()),
                 new InvalidatePOITask<>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING, EntityNPCBase::releaseMeetingPoi),
                 new AcquirePOITask<EntityNPCBase>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING),
                 new InvalidateMemory<>(MemoryModuleType.HIDING_PLACE).invalidateIf((e, p) -> !e.level().isRaining()),
@@ -595,9 +595,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         GlobalPos bed = this.getBedPos();
         if (bed != null)
             tag.put("BedPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, bed).getOrThrow());
-        GlobalPos job = this.getWorkPlace();
-        if (job != null)
-            tag.put("JobPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, job).getOrThrow());
+        GlobalPos workPlace = this.getWorkPlace();
+        if (workPlace != null)
+            tag.put("WorkPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, workPlace).getOrThrow());
         GlobalPos meeting = this.getMeetingPos();
         if (meeting != null)
             tag.put("MeetingPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, meeting).getOrThrow());
@@ -607,7 +607,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     protected void readMemories(CompoundTag tag) {
         GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("BedPos"))
                 .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.HOME, pos));
-        GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("JobPos"))
+        GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("WorkPos"))
                 .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.JOB_SITE, pos));
         GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("MeetingPos"))
                 .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.MEETING_POINT, pos));
@@ -617,7 +617,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         CompoundTag tag = new CompoundTag();
         tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
         tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
-        tag.put("Profession", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getShop()).getOrThrow());
+        tag.put("Profession", ModNPCProfessions.PROFESSIONS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getProfession()).getOrThrow());
         tag.putBoolean("Male", this.isMale());
         tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
         tag.putInt("Birthday", this.getBirthday().getSecond());
@@ -633,11 +633,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     private void loadNpcData(CompoundTag tag) {
         NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(ResourceLocation.parse(tag.getString("Data")));
         this.look = DataPackHandler.INSTANCE.npcLookManager().get(ResourceLocation.parse(tag.getString("Look")));
-        this.setShop(ModNPCJobs.JOBS.registry().byNameCodec().parse(NbtOps.INSTANCE, tag.get("Profession"))
+        this.setProfession(ModNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(NbtOps.INSTANCE, tag.get("Profession"))
                 .getOrThrow());
         this.setMale(tag.getBoolean("Male"));
         try {
-            EnumSeason month = EnumSeason.values()[tag.getInt("BirthdayMonth")];
+            Season month = Season.values()[tag.getInt("BirthdayMonth")];
             this.birthday = Pair.of(month, tag.getInt("Birthday"));
         } catch (IllegalArgumentException e) {
             this.getBirthday();
@@ -897,7 +897,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         }
         float mult = 1;
         if (player instanceof ServerPlayer serverPlayer) {
-            CalendarImpl calendar = CalendarImpl.get(serverPlayer.level());
+            Calendar calendar = Calendar.get(serverPlayer.level());
             if (calendar.currentSeason() == this.birthday.getFirst() && calendar.date().date() == this.birthday.getSecond())
                 mult = 3;
             EntityUtils.playSoundForPlayer(serverPlayer, sound, SoundSource.NEUTRAL, 0.7f, 1);
@@ -1413,19 +1413,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                 });
     }
 
-    public NPCJob getShop() {
-        return this.shop;
+    public NPCProfession getProfession() {
+        return this.profession;
     }
 
-    public void setShop(NPCJob shop) {
-        this.shop = shop;
+    public void setProfession(NPCProfession profession) {
+        this.profession = profession;
     }
 
-    public void handleUpdatePacket(Player player, CompoundTag friendPoints, CompoundTag schedule, NPCJob job) {
+    public void handleUpdatePacket(Player player, CompoundTag friendPoints, CompoundTag schedule, NPCProfession profession) {
         if (this.level().isClientSide) {
             this.relationManager.getFriendPointData(player.getUUID()).load(friendPoints);
             this.schedule.load(schedule);
-            this.setShop(job);
+            this.setProfession(profession);
         }
     }
 
@@ -1442,8 +1442,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     public void releaseWorkplacePoi() {
-        if (this.getShop().hasPoi())
-            this.releasePoi(MemoryModuleType.JOB_SITE, this.getShop()::matches);
+        if (this.getProfession().hasPoi())
+            this.releasePoi(MemoryModuleType.JOB_SITE, this.getProfession()::matches);
     }
 
     public GlobalPos getBedPos() {
@@ -1482,9 +1482,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     public ShopState canTrade() {
-        if (this.isBaby() || (!this.shop.hasShop && !this.shop.hasWorkSchedule))
+        if (this.isBaby() || (!this.profession.hasShop && !this.profession.hasWorkSchedule))
             return ShopState.NOTWORKER;
-        if (!this.shop.hasWorkSchedule)
+        if (!this.profession.hasWorkSchedule)
             return ShopState.OPEN;
         if (this.getWorkPlace() == null)
             return ShopState.NOWORKPLACE;
@@ -1678,14 +1678,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         return this.attackActions;
     }
 
-    public Pair<EnumSeason, Integer> getBirthday() {
+    public Pair<Season, Integer> getBirthday() {
         if (this.birthday == null) {
             if (this.data == NPCData.DEFAULT_DATA)
-                this.birthday = Pair.of(EnumSeason.SPRING, 1);
+                this.birthday = Pair.of(Season.SPRING, 1);
             else if (this.data.birthday() != null)
                 this.birthday = this.data.birthday();
             else {
-                EnumSeason randSeason = EnumSeason.values()[this.random.nextInt(EnumSeason.values().length)];
+                Season randSeason = Season.values()[this.random.nextInt(Season.values().length)];
                 int day = this.random.nextInt(30) + 1;
                 this.birthday = Pair.of(randSeason, day);
             }
@@ -1736,14 +1736,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     }
 
     public void openShopForPlayer(ServerPlayer player) {
-        if (this.canTrade() == ShopState.OPEN && this.getShop().hasShop) {
+        if (this.canTrade() == ShopState.OPEN && this.getProfession().hasShop) {
             this.interactWithPlayer(player);
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            NonNullList<ItemStack> shopList = data.getShop(this.getShop());
+            NonNullList<ItemStack> shopList = data.getShop(this.getProfession());
             Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
-                    return Component.translatable(EntityNPCBase.this.getShop().getTranslationKey());
+                    return Component.translatable(EntityNPCBase.this.getProfession().getTranslationKey());
                 }
 
                 @Nullable
@@ -1755,18 +1755,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         }
     }
 
-    public void randomizeData(@Nullable ResourceLocation job) {
-        this.randomizeData(job == null ? null : ModNPCJobs.JOBS.registry().get(job), false);
+    public void randomizeData(@Nullable ResourceLocation res) {
+        this.randomizeData(res == null ? null : ModNPCProfessions.PROFESSIONS.registry().get(res), false);
     }
 
-    public void randomizeData(NPCJob job, boolean overwrite) {
+    public void randomizeData(NPCProfession profession, boolean overwrite) {
         if (this.getServer() != null) {
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
-                    (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))
-                            && RunecraftorySavedData.get(this.getServer()).npcHandler.canAssignNPC(d), job == null ? null :
-                    d -> d.profession().stream().anyMatch(j -> j.equals(job))), !overwrite);
-            if (job != null)
-                this.setShop(job);
+                    (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(profession)))
+                            && RunecraftorySavedData.get(this.getServer()).npcHandler.canAssignNPC(d), profession == null ? null :
+                    d -> d.profession().stream().anyMatch(j -> j.equals(profession))), !overwrite);
+            if (profession != null)
+                this.setProfession(profession);
         }
     }
 
@@ -1784,8 +1784,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         this.dataRandom.setSeed(this.getUUID().hashCode());
         if (!load) {
             this.releaseWorkplacePoi();
-            this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
-                    : ModNPCJobs.JOBS.registry().getRandom(this.random).map(Holder::value).get());
+            this.setProfession(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
+                    : ModNPCProfessions.PROFESSIONS.registry().getRandom(this.random).map(Holder::value).get());
             this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
             if (this.data.name() == null) {
                 String name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
@@ -1817,9 +1817,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
                 this.look = null;
                 this.getLook();
             }
-            if (!this.data.profession().isEmpty() && !this.data.profession().contains(this.getShop()))
-                this.setShop(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
-                        : ModNPCJobs.JOBS.registry().getRandom(this.random).map(Holder::value).get());
+            if (!this.data.profession().isEmpty() && !this.data.profession().contains(this.getProfession()))
+                this.setProfession(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
+                        : ModNPCProfessions.PROFESSIONS.registry().getRandom(this.random).map(Holder::value).get());
             if (this.data.gender() != NPCData.Gender.UNDEFINED && (this.data.gender() == NPCData.Gender.MALE) != this.isMale())
                 this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
             if (this.data.name() != null) {

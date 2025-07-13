@@ -27,19 +27,20 @@ import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.registry.ModFluids;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
@@ -165,7 +166,7 @@ public class RuneCraftoryFabric implements ModInitializer {
                         feat.decoration(), ResourceKey.create(Registries.PLACED_FEATURE, feat.placedFeature())));
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.dimension() == Level.OVERWORLD) {
-                WorldCalls.daily(world);
+                WorldCalls.tick(world);
             }
         });
         CropGrowEvent.EVENT.register((WorldCalls::disableVanillaCrop));
@@ -225,7 +226,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModArmorEffects.ARMOR_EFFECTS.register().registerContent();
         ModNPCLooks.NPC_FEATURES.register().registerContent();
         ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent();
-        ModNPCJobs.JOBS.register().registerContent();
+        ModNPCProfessions.PROFESSIONS.register().registerContent();
         ModArmorMaterials.MATERIALS.registerContent();
 
         ModLootRegistries.LOOTFUNCTION.registerContent();
@@ -234,6 +235,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModStructures.STRUCTURE_PROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
         ModSounds.SOUND_EVENTS.registerContent();
+        ModFluids.FLUIDS.registerContent();
         ModDataComponentTypes.DATA_COMPONENTS.registerContent();
         ModCriteria.TRIGGERS.registerContent();
     }

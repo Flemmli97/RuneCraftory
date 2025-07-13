@@ -81,7 +81,7 @@ public class C2SNPCInteraction implements CustomPacketPayload {
                 case CLOSE_QUEST -> npc.closedQuestDialogue(sender);
                 case ACTION -> {
                     if (!npc.isBaby())
-                        npc.getShop().handleAction(npc, sender, pkt.action);
+                        npc.getProfession().handleAction(npc, sender, pkt.action);
                 }
             }
         }

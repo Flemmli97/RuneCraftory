@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.events;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.action.DataKey;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
+import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
@@ -38,9 +38,9 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
-import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
+import io.github.flemmli97.runecraftory.common.world.data.family.FamilyHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.AttributeInstanceExtension;
@@ -175,11 +175,6 @@ public class EntityCalls {
             ((AttributeInstanceExtension) inst)
                     .runecraftory$setAttributeModifierFilter(weapon ? null : mod -> !mod.id().getNamespace().equals(RuneCraftory.MODID));
         }
-        inst = entity.getAttribute(ModAttributes.MAGIC_ATTACK.asHolder());
-        if (inst != null) {
-            ((AttributeInstanceExtension) inst)
-                    .runecraftory$setAttributeModifierFilter(weapon ? null : mod -> !mod.id().getNamespace().equals(RuneCraftory.MODID));
-        }
     }
 
     private static void recalcOffhandBonus(LivingEntity entity, float efficiency) {
@@ -198,6 +193,14 @@ public class EntityCalls {
                 });
         offhandMods.forEach((att, mod) -> entity.getAttributes().getInstance(att)
                 .addTransientModifier(new AttributeModifier(LibConstants.SHIELD_PENALTY, -mod.amount() * reduction, AttributeModifier.Operation.ADD_VALUE)));
+    }
+
+    public static boolean playerAttack(Player player, Entity target) {
+        if (!player.level().isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
+            CombatUtils.attackWithItem(player, target, true, true);
+            return true;
+        }
+        return false;
     }
 
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
@@ -224,12 +227,29 @@ public class EntityCalls {
         return false;
     }
 
-    public static boolean playerAttack(Player player, Entity target) {
-        if (!player.level().isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
-            CombatUtils.attackWithItem(player, target, true, true);
-            return true;
+    public static float damageCalculation(LivingEntity entity, DamageSource source, float dmg) {
+        float damage = CombatUtils.reduceDamageFromStats(entity, source, dmg);
+        if (damage < 0)
+            entity.heal(-damage);
+        else if (damage > 1 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && entity instanceof ServerPlayer player) {
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
         }
-        return false;
+        return damage;
+    }
+
+    public static void postDamage(LivingEntity entity, DamageSource src, float amount) {
+        Entity attacker = src.getEntity();
+        if (attacker instanceof LivingEntity)
+            entity.removeEffect(ModEffects.SLEEP.asHolder());
+        if (amount > 0 && attacker instanceof LivingEntity living) {
+            float drainPercent = (float) (CombatUtils.statusEffectValue(living, ModAttributes.DRAIN.asHolder(), entity));
+            if (drainPercent > 0f) {
+                if (attacker instanceof Player player)
+                    player.heal(drainPercent * amount);
+                else
+                    living.heal(drainPercent * amount);
+            }
+        }
     }
 
     public static boolean playerDeath(LivingEntity entity, DamageSource source) {
@@ -353,11 +373,14 @@ public class EntityCalls {
             if (disabled && !mob.getNavigation().isDone())
                 mob.getNavigation().stop();
         }
-        Platform.INSTANCE.getEntityData(entity).tick(entity);
+        Platform.INSTANCE.getEntityData(entity).tick();
     }
 
-    // Blocking normally at Entity#tick wont work due to overrides etc.
-    // Block at level instead
+    /**
+     * Handles entity being stunned.
+     * By preventing the entity from ticking at the base the current state of the entity can be preserved (e.g. if entity is mid attack).
+     * Blocking normally at Entity#tick wont work due to overrides etc. so we block at the level trying to tick the entity instead
+     */
     public static boolean rootTick(LivingEntity entity) {
         // Ignore the player. Its enough to simply block player actions which is already done
         if (entity instanceof Player) {
@@ -382,7 +405,7 @@ public class EntityCalls {
                 if (entity instanceof ServerPlayer player && stack.has(DataComponents.FOOD)) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
                     if (data.foodBuff().duration() <= 0)
-                        LevelCalc.levelSkill(data, EnumSkills.EATING, 5);
+                        LevelCalc.levelSkill(data, Skills.EATING, 5);
                     data.regenRunePoints(EntityUtils.getRPFromVanillaFood(stack));
                 }
                 return;
@@ -414,7 +437,7 @@ public class EntityCalls {
             player.heal(player.getMaxHealth());
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.regenRunePoints(data.getMaxRunePoints());
-            LevelCalc.levelSkill(data, EnumSkills.SLEEPING, 75);
+            LevelCalc.levelSkill(data, Skills.SLEEPING, 75);
             player.removeEffect(ModEffects.FATIGUE.asHolder());
         }
     }
@@ -424,31 +447,6 @@ public class EntityCalls {
             return (spawnType == MobSpawnType.CHUNK_GENERATION || spawnType == MobSpawnType.NATURAL) && entity != ModEntities.GATE.get();
         }
         return false;
-    }
-
-    public static float damageCalculation(LivingEntity entity, DamageSource source, float dmg) {
-        float damage = CombatUtils.reduceDamageFromStats(entity, source, dmg);
-        if (damage < 0)
-            entity.heal(-damage);
-        else if (damage > 1 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && entity instanceof ServerPlayer player) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
-        }
-        return damage;
-    }
-
-    public static void postDamage(LivingEntity entity, DamageSource src, float amount) {
-        Entity attacker = src.getEntity();
-        if (attacker instanceof LivingEntity)
-            entity.removeEffect(ModEffects.SLEEP.asHolder());
-        if (amount > 0 && attacker instanceof LivingEntity living) {
-            float drainPercent = (float) (CombatUtils.statusEffectValue(living, ModAttributes.DRAIN.asHolder(), entity));
-            if (drainPercent > 0f) {
-                if (attacker instanceof Player player)
-                    player.heal(drainPercent * amount);
-                else
-                    living.heal(drainPercent * amount);
-            }
-        }
     }
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
@@ -461,24 +459,24 @@ public class EntityCalls {
         if (state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
-            LevelCalc.levelSkill(data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1);
+            LevelCalc.levelSkill(data, Skills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1);
         }
         if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
-            LevelCalc.levelSkill(data, EnumSkills.LOGGING, 1);
+            LevelCalc.levelSkill(data, Skills.LOGGING, 1);
         }
         if (state.is(BlockTags.MINEABLE_WITH_HOE)) {
             if (!(player.getMainHandItem().getItem() instanceof ItemToolSickle))
-                LevelCalc.levelSkill(data, EnumSkills.FARMING, 1);
+                LevelCalc.levelSkill(data, Skills.FARMING, 1);
         }
         if (state.getBlock() instanceof BushBlock) {
-            LevelCalc.levelSkill(data, EnumSkills.FARMING, 0.5f);
+            LevelCalc.levelSkill(data, Skills.FARMING, 0.5f);
         }
     }
 
     public static void onLootTableBlockGen(Player player) {
         if (player instanceof ServerPlayer) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            LevelCalc.levelSkill(data, EnumSkills.SEARCHING, 7);
+            LevelCalc.levelSkill(data, Skills.SEARCHING, 7);
         }
     }
 

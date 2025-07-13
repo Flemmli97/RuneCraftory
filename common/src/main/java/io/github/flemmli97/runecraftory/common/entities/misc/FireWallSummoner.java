@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
@@ -36,7 +36,7 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
         LivingEntity owner = this.getOwner();
         if (this.ticksExisted > 10 && this.ticksExisted % 2 == 0) {
             Vec3 dir = new Vec3(this.targetX, this.targetY, this.targetZ).subtract(this.position()).normalize();
-            EntityElementalTrail fire = new EntityElementalTrail(this.level(), owner, EnumElement.FIRE);
+            EntityElementalTrail fire = new EntityElementalTrail(this.level(), owner, ItemElement.FIRE);
             fire.setPos(this.position().add(dir.scale((this.ticksExisted - 10) / 2f * 1)));
             this.playSound(SoundEvents.BLAZE_SHOOT, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             this.level().addFreshEntity(fire);

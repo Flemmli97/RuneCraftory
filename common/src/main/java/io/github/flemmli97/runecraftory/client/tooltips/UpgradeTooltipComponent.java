@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.client.tooltips;
 
 import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -28,8 +28,8 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
     public UpgradeTooltipComponent(UpgradeComponent comp) {
         ItemStack stack = comp.stack;
         if (ItemNBT.isWeapon(stack)) {
-            EnumElement element = ItemNBT.getElement(stack);
-            if (element != EnumElement.NONE)
+            ItemElement element = ItemNBT.getElement(stack);
+            if (element != ItemElement.NONE)
                 this.stacks.add(element.icon.get());
         }
         if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get()))
@@ -46,7 +46,7 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
     }
 
     public static boolean shouldAdd(ItemStack stack) {
-        return (stack.has(ModDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != ModItems.GLASS.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != EnumElement.NONE) || stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())
+        return (stack.has(ModDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != ModItems.GLASS.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != ItemElement.NONE) || stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())
                 || stack.has(ModDataComponentTypes.INVISIBLE.get()) || !stack.getOrDefault(ModDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty();
     }
 

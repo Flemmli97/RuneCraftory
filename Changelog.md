@@ -3,6 +3,8 @@ RuneCraftory 2.0.0
 - Update to 1.21.1
 - Overhauled various UIs
 - All mobs now use brains instead of goals
+- Added Serene Seasons compat
+- Added hot spring fluid, replaces previous bath system
 
 RuneCraftory 1.11.1
 ================

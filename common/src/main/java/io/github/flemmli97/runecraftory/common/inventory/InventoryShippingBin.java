@@ -8,13 +8,12 @@ import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-public class InventoryShippingBin extends SaveItemContainer {
+public class InventoryShippingBin extends SimpleItemContainer {
 
     public InventoryShippingBin() {
         super(54);

@@ -39,7 +39,8 @@
     "StructureTemplatePoolMixin",
     "StructureTemplatePoolMixin",
     "TargetingConditionsMixin",
-    "TreeFeatureMixin"
+    "TreeFeatureMixin",
+    "WalkNodeEvaluatorMixin"
   ],
   "client": [
     "BiomeColorsMixin",

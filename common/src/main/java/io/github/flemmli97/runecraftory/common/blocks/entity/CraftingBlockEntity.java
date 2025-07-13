@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
+import io.github.flemmli97.runecraftory.common.inventory.SimpleItemContainer;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
-import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,14 +22,14 @@ public class CraftingBlockEntity extends BlockEntity implements MenuProvider {
 
     public static final String DISPLAY_PREFIX = "runecraftory.container.crafting.";
 
-    private final SaveItemContainer container;
+    private final SimpleItemContainer container;
     private final CraftingType type;
     private int craftingIndex;
 
     public CraftingBlockEntity(BlockEntityType<?> blockEntityType, CraftingType type, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
         this.type = type;
-        this.container = new SaveItemContainer(this, 6);
+        this.container = new SimpleItemContainer(this, 6);
     }
 
     public Container getContainer() {

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableList;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -153,7 +153,7 @@ public class EntityUtils {
         float lvlPenalty = Math.max(0, (monster.xpLevel().getLevel() - lvl) * 0.02f);
         float brushBonus = brushCount * 0.05f;
         float loveAttackBonus = loveAttackCount * 0.002f;
-        float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).getSkillLevel(EnumSkills.TAMING).getLevel() - 1) * 0.005f;
+        float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).getSkillLevel(Skills.TAMING).getLevel() - 1) * 0.005f;
         float tamingBonus = 1 + brushBonus + loveAttackBonus + tamingLvlBonus;
         return monster.tamingChance() * GeneralConfig.tamingMultiplier * tamingBonus - lvlPenalty;
     }

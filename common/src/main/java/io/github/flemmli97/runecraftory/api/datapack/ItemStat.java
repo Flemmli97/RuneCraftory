@@ -2,10 +2,10 @@ package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -52,7 +52,7 @@ public class ItemStat {
                     ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_3_Spell").forGetter(ItemStat::getTier3Spell),
                     ModArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("armor_effect").forGetter(ItemStat::getArmorEffect),
 
-                    CodecUtils.stringEnumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
+                    CodecUtils.stringEnumCodec(ItemElement.class, ItemElement.NONE).orElse(ItemElement.NONE).fieldOf("element").forGetter(ItemStat::element),
                     ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_1_Spell").forGetter(ItemStat::getTier1Spell),
                     ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_2_Spell").forGetter(ItemStat::getTier2Spell),
 
@@ -71,7 +71,7 @@ public class ItemStat {
 
         @Override
         public ItemStat decode(RegistryFriendlyByteBuf buf) {
-            return new ItemStat(buf.readInt(), buf.readInt(), buf.readInt(), buf.readEnum(EnumElement.class),
+            return new ItemStat(buf.readInt(), buf.readInt(), buf.readInt(), buf.readEnum(ItemElement.class),
                     SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf),
                     ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModArmorEffects.ARMOR_EFFECT_KEY)).decode(buf),
                     StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf), StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf))
@@ -99,7 +99,7 @@ public class ItemStat {
     private final int buyPrice;
     private final int sellPrice;
     private final int upgradeDifficulty;
-    private final EnumElement element;
+    private final ItemElement element;
     private final Optional<Holder<Spell>> tier1Spell;
     private final Optional<Holder<Spell>> tier2Spell;
     private final Optional<Holder<Spell>> tier3Spell;
@@ -109,7 +109,7 @@ public class ItemStat {
 
     private transient ResourceLocation id;
 
-    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element,
+    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, ItemElement element,
                      Optional<Holder<Spell>> tier1Spell, Optional<Holder<Spell>> tier2Spell, Optional<Holder<Spell>> tier3Spell,
                      Optional<Holder<ArmorEffect>> effect,
                      Map<Holder<Attribute>, Double> itemStats, Map<Holder<Attribute>, Double> monsterGiftIncrease) {
@@ -159,7 +159,7 @@ public class ItemStat {
         return this.upgradeDifficulty;
     }
 
-    public EnumElement element() {
+    public ItemElement element() {
         return this.element;
     }
 
@@ -263,7 +263,7 @@ public class ItemStat {
         public final int buyPrice;
         public final int sellPrice;
         public final int upgradeDifficulty;
-        private EnumElement element = EnumElement.NONE;
+        private ItemElement element = ItemElement.NONE;
         private Holder<Spell> tier1Spell;
         private Holder<Spell> tier2Spell;
         private Holder<Spell> tier3Spell;
@@ -275,7 +275,7 @@ public class ItemStat {
             this.upgradeDifficulty = upgrade;
         }
 
-        public Builder setElement(EnumElement element) {
+        public Builder setElement(ItemElement element) {
             this.element = element;
             return this;
         }

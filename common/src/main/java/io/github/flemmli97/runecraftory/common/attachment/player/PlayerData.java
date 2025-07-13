@@ -2,14 +2,14 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DynamicOps;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
@@ -23,7 +23,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -72,7 +72,7 @@ public class PlayerData {
     private double runePoints;
 
     private final XpLevelHolder level = new XpLevelHolder();
-    private final EnumMap<EnumSkills, XpLevelHolder> skillLevels = new EnumMap<>(EnumSkills.class);
+    private final EnumMap<Skills, XpLevelHolder> skillLevels = new EnumMap<>(Skills.class);
 
     private int money = GeneralConfig.startingMoney;
 
@@ -80,7 +80,7 @@ public class PlayerData {
 
     private final InventoryShippingBin shippingBin = new InventoryShippingBin();
     private final Map<Item, ShippedItemData> shippedItems = new HashMap<>();
-    private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
+    private final Map<NPCProfession, NonNullList<ItemStack>> shopItems = new HashMap<>();
 
     private final InventorySpells spells = new InventorySpells();
 
@@ -105,7 +105,7 @@ public class PlayerData {
 
     public PlayerData(Player player) {
         this.player = player;
-        for (EnumSkills skill : EnumSkills.values()) {
+        for (Skills skill : Skills.values()) {
             this.skillLevels.put(skill, new XpLevelHolder());
         }
         this.weaponHandler = new PlayerWeaponHandler(player);
@@ -318,11 +318,11 @@ public class PlayerData {
         return this.skillLevels.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
-    public XpLevelHolder getSkillLevel(EnumSkills skill) {
+    public XpLevelHolder getSkillLevel(Skills skill) {
         return this.skillLevels.get(skill);
     }
 
-    public void setSkillLevel(EnumSkills skill, int level, float xpAmount, boolean recalc) {
+    public void setSkillLevel(Skills skill, int level, float xpAmount, boolean recalc) {
         this.skillLevels.get(skill).setLevel(this.player.level().isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> LevelCalc.xpAmountForSkillLevelUp(skill, l));
         this.skillLevels.get(skill).setXp(this.player.level().isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (this.player instanceof ServerPlayer serverPlayer) {
@@ -334,7 +334,7 @@ public class PlayerData {
         }
     }
 
-    public void increaseSkill(EnumSkills skill, float amount) {
+    public void increaseSkill(Skills skill, float amount) {
         if (this.skillLevels.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
         boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), this::onSkillLevelUp);
@@ -394,7 +394,7 @@ public class PlayerData {
 
     public void refreshShop() {
         if (this.player instanceof ServerPlayer serverPlayer) {
-            for (NPCJob profession : ModNPCJobs.JOBS.registry()) {
+            for (NPCProfession profession : ModNPCProfessions.PROFESSIONS.registry()) {
                 Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(shopProps -> {
@@ -411,7 +411,7 @@ public class PlayerData {
                     for (float chance = 1.5f + shopItems.size() * 0.002f; this.player.level().random.nextFloat() < chance; chance -= 0.1f) {
                         ItemStack stack = shopItems.remove(this.player.level().random.nextInt(shopItems.size()));
                         shop.add(stack);
-                        if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.get() && shop.size() >= InventoryShop.SHOP_SIZE))
+                        if (shopItems.isEmpty() || (profession == ModNPCProfessions.TRAVELLING_MERCHANT.get() && shop.size() >= InventoryShop.SHOP_SIZE))
                             break;
                     }
                 }
@@ -421,7 +421,7 @@ public class PlayerData {
         }
     }
 
-    public NonNullList<ItemStack> getShop(NPCJob shop) {
+    public NonNullList<ItemStack> getShop(NPCProfession shop) {
         NonNullList<ItemStack> list = NonNullList.create();
         list.addAll(this.shopItems.getOrDefault(shop, NonNullList.withSize(0, ItemStack.EMPTY)));
         return list;
@@ -573,7 +573,7 @@ public class PlayerData {
         this.runePoints = nbt.getDouble("RunePoints");
         this.level.read(nbt.get("XpLevel"));
         CompoundTag skillCompound = nbt.getCompound("Skills");
-        for (EnumSkills skill : EnumSkills.values()) {
+        for (Skills skill : Skills.values()) {
             this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
         }
         this.money = nbt.getInt("Money");
@@ -592,7 +592,7 @@ public class PlayerData {
             NonNullList<ItemStack> list = NonNullList.create();
             ListTag items = data.getList("Items", Tag.TAG_COMPOUND);
             items.forEach(lt -> ItemStack.parse(provider, lt).ifPresent(list::add));
-            this.shopItems.put(ModNPCJobs.JOBS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
+            this.shopItems.put(ModNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
         });
         this.spells.load(nbt.getCompound("Inventory"), provider);
         this.updater.read(nbt.getCompound("DailyUpdater"));
@@ -624,7 +624,7 @@ public class PlayerData {
         }
         tag.put("XpLevel", this.level.save());
         CompoundTag skillCompound = new CompoundTag();
-        for (EnumSkills skill : EnumSkills.values()) {
+        for (Skills skill : Skills.values()) {
             skillCompound.put(skill.toString(), this.skillLevels.get(skill).save());
         }
         tag.put("Skills", skillCompound);
@@ -642,9 +642,9 @@ public class PlayerData {
         });
         tag.put("ShippedItems", ship);
         ListTag shop = new ListTag();
-        for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
+        for (Map.Entry<NPCProfession, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
             CompoundTag data = new CompoundTag();
-            data.put("Shop", ModNPCJobs.JOBS.registry().byNameCodec().encodeStart(ops, entry.getKey()).getOrThrow());
+            data.put("Shop", ModNPCProfessions.PROFESSIONS.registry().byNameCodec().encodeStart(ops, entry.getKey()).getOrThrow());
             ListTag items = new ListTag();
             for (ItemStack stack : entry.getValue())
                 items.add(stack.save(provider, new CompoundTag()));

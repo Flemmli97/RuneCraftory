@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
@@ -27,7 +27,7 @@ public class TripleFireBulletSpell extends Spell {
         } else {
             dir = entity.getLookAngle();
         }
-        projectile.setElement(EnumElement.FIRE);
+        projectile.setElement(ItemElement.FIRE);
         projectile.setStraight();
         projectile.shoot(dir.x, dir.y, dir.z, 1, 0);
         projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
@@ -39,7 +39,7 @@ public class TripleFireBulletSpell extends Spell {
                     .rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
             EntityBullet other = new EntityBullet(level, entity);
             other.setStraight();
-            other.setElement(EnumElement.FIRE);
+            other.setElement(ItemElement.FIRE);
             other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             other.shoot(newDir.x(), newDir.y(), newDir.z(), 1, 0);
             level.addFreshEntity(other);

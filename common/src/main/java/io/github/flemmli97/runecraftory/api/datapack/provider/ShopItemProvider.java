@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -76,55 +76,55 @@ public abstract class ShopItemProvider implements DataProvider {
         return "ShopItems for " + this.modid;
     }
 
-    public void addItem(Holder<NPCJob> shop, ItemLike item) {
+    public void addItem(Holder<NPCProfession> shop, ItemLike item) {
         this.addItem(shop, item, ShopItemProperties.UnlockType.NEEDS_SHIPPING);
     }
 
-    public void addItem(Holder<NPCJob> shop, ItemLike item, ShopItemProperties.UnlockType unlockType) {
+    public void addItem(Holder<NPCProfession> shop, ItemLike item, ShopItemProperties.UnlockType unlockType) {
         this.props.computeIfAbsent(shop.unwrapKey().get().location(),
                         r -> new ArrayList<>())
                 .add(new ShopItemProperties.IntermediaryShopItem(ShopItemProperties.MultiItemValue.of(item.asItem()), unlockType, Optional.empty()));
     }
 
-    public void addItem(Holder<NPCJob> shop, ItemLike item, ShopItemProperties.UnlockType unlockType, EntityPredicate predicate) {
+    public void addItem(Holder<NPCProfession> shop, ItemLike item, ShopItemProperties.UnlockType unlockType, EntityPredicate predicate) {
         this.props.computeIfAbsent(shop.unwrapKey().get().location(),
                         r -> new ArrayList<>())
                 .add(new ShopItemProperties.IntermediaryShopItem(ShopItemProperties.MultiItemValue.of(item.asItem()), unlockType, Optional.of(predicate)));
     }
 
-    public void addItem(Holder<NPCJob> shop, ItemStack item) {
+    public void addItem(Holder<NPCProfession> shop, ItemStack item) {
         this.addItem(shop, item, ShopItemProperties.UnlockType.NEEDS_SHIPPING);
     }
 
-    public void addItem(Holder<NPCJob> shop, ItemStack item, ShopItemProperties.UnlockType unlockType) {
+    public void addItem(Holder<NPCProfession> shop, ItemStack item, ShopItemProperties.UnlockType unlockType) {
         this.props.computeIfAbsent(shop.unwrapKey().get().location(),
                         r -> new ArrayList<>())
                 .add(new ShopItemProperties.IntermediaryShopItem(new ShopItemProperties.MultiItemValue(List.of(item)), unlockType, Optional.empty()));
     }
 
-    public void addItem(Holder<NPCJob> shop, ItemStack item, ShopItemProperties.UnlockType unlockType, EntityPredicate predicate) {
+    public void addItem(Holder<NPCProfession> shop, ItemStack item, ShopItemProperties.UnlockType unlockType, EntityPredicate predicate) {
         this.props.computeIfAbsent(shop.unwrapKey().get().location(),
                         r -> new ArrayList<>())
                 .add(new ShopItemProperties.IntermediaryShopItem(new ShopItemProperties.MultiItemValue(List.of(item)), unlockType, Optional.of(predicate)));
     }
 
-    public void addItem(Holder<NPCJob> shop, TagKey<Item> tag) {
+    public void addItem(Holder<NPCProfession> shop, TagKey<Item> tag) {
         this.addItem(shop, tag, ShopItemProperties.UnlockType.NEEDS_SHIPPING);
     }
 
-    public void addItem(Holder<NPCJob> shop, TagKey<Item> tag, ShopItemProperties.UnlockType unlockType) {
+    public void addItem(Holder<NPCProfession> shop, TagKey<Item> tag, ShopItemProperties.UnlockType unlockType) {
         this.props.computeIfAbsent(shop.unwrapKey().get().location(),
                         r -> new ArrayList<>())
                 .add(new ShopItemProperties.IntermediaryShopItem(new ShopItemProperties.MultiItemValue(tag), unlockType, Optional.empty()));
     }
 
-    public void addItem(Holder<NPCJob> shop, TagKey<Item> tag, ShopItemProperties.UnlockType unlockType, EntityPredicate predicate) {
+    public void addItem(Holder<NPCProfession> shop, TagKey<Item> tag, ShopItemProperties.UnlockType unlockType, EntityPredicate predicate) {
         this.props.computeIfAbsent(shop.unwrapKey().get().location(),
                         r -> new ArrayList<>())
                 .add(new ShopItemProperties.IntermediaryShopItem(new ShopItemProperties.MultiItemValue(tag), unlockType, Optional.of(predicate)));
     }
 
-    public void overwrite(Holder<NPCJob> shop, boolean defaults) {
+    public void overwrite(Holder<NPCProfession> shop, boolean defaults) {
         ResourceLocation res = shop.unwrapKey().get().location();
         this.overwrite.put(ResourceLocation.fromNamespaceAndPath(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")), true);
     }

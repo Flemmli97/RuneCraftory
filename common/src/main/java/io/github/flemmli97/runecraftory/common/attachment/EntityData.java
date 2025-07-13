@@ -16,6 +16,8 @@ import java.util.HashSet;
 
 public class EntityData {
 
+    private final LivingEntity entity;
+
     private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, orthoView, enteredBath;
     private int disabledState;
 
@@ -30,27 +32,31 @@ public class EntityData {
 
     private final HashSet<Holder<ArmorEffect>> armorFlags = new HashSet<>();
 
-    public static SleepState getSleepStateFrom(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).getSleepState(entity);
+    public EntityData(LivingEntity entity) {
+        this.entity = entity;
     }
 
-    public SleepState getSleepState(LivingEntity entity) {
+    public static SleepState getSleepStateFrom(LivingEntity entity) {
+        return Platform.INSTANCE.getEntityData(entity).getSleepState();
+    }
+
+    public SleepState getSleepState() {
         if (!this.isSleeping())
             return SleepState.NONE;
-        if (entity instanceof SleepingEntity sleepingEntity && sleepingEntity.hasSleepingAnimation())
+        if (this.entity instanceof SleepingEntity sleepingEntity && sleepingEntity.hasSleepingAnimation())
             return SleepState.CUSTOM;
         return SleepState.VANILLA;
     }
 
-    public void setSleeping(LivingEntity entity, boolean flag) {
+    public void setSleeping(boolean flag) {
         this.sleeping = flag;
-        this.updateAiState(entity, flag);
-        this.setThirdPersonView(entity, flag);
-        this.sleepYRot = entity.yBodyRot;
-        if (!entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.SLEEP, this.sleeping), entity);
+        this.updateAiState(flag);
+        this.setThirdPersonView(flag);
+        this.sleepYRot = this.entity.yBodyRot;
+        if (!this.entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.SLEEP, this.sleeping), this.entity);
         } else
-            ClientHandlers.grabMouse(entity, this.sleeping);
+            ClientHandlers.grabMouse(this.entity, this.sleeping);
     }
 
     public boolean isSleeping() {
@@ -68,10 +74,10 @@ public class EntityData {
         return this.poison;
     }
 
-    public void setCold(LivingEntity entity, boolean flag) {
+    public void setCold(boolean flag) {
         this.cold = flag;
-        if (!entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.COLD, this.cold), entity);
+        if (!this.entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.COLD, this.cold), this.entity);
         }
     }
 
@@ -79,10 +85,10 @@ public class EntityData {
         return this.cold;
     }
 
-    public void setParalysis(LivingEntity entity, boolean flag) {
+    public void setParalysis(boolean flag) {
         this.paralysis = flag;
-        if (!entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.PARALYSIS, this.paralysis), entity);
+        if (!this.entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.PARALYSIS, this.paralysis), this.entity);
         }
     }
 
@@ -90,11 +96,11 @@ public class EntityData {
         return this.paralysis;
     }
 
-    public void setStunned(LivingEntity entity, boolean flag) {
+    public void setStunned(boolean flag) {
         this.stunned = flag;
-        this.updateAiState(entity, flag);
-        if (!entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.STUN, this.stunned), entity);
+        this.updateAiState(flag);
+        if (!this.entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.STUN, this.stunned), this.entity);
         }
     }
 
@@ -102,12 +108,12 @@ public class EntityData {
         return this.stunned;
     }
 
-    public void setInvis(LivingEntity entity, int duration) {
+    public void setInvis(int duration) {
         this.invisible = duration;
         boolean pre = this.invisibleFlag;
         this.invisibleFlag = duration > 0;
-        if (this.invisibleFlag != pre && !entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), entity);
+        if (this.invisibleFlag != pre && !this.entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), this.entity);
         }
     }
 
@@ -115,12 +121,12 @@ public class EntityData {
         return this.invisibleFlag;
     }
 
-    public void setThirdPersonView(LivingEntity entity, boolean flag) {
+    public void setThirdPersonView(boolean flag) {
         this.orthoView = flag;
-        if (!entity.level().isClientSide) {
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.ORTHOVIEW, this.orthoView), entity);
+        if (!this.entity.level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.ORTHOVIEW, this.orthoView), this.entity);
         } else
-            ClientHandlers.trySetPerspective(entity, flag);
+            ClientHandlers.trySetPerspective(this.entity, flag);
     }
 
     public boolean thirdPersonView() {
@@ -155,37 +161,37 @@ public class EntityData {
         this.enteredBath = enteredBath;
     }
 
-    private void updateAiState(LivingEntity entity, boolean increase) {
+    private void updateAiState(boolean increase) {
         int pre = this.disabledState;
         if (increase)
             this.disabledState++;
         else
             this.disabledState--;
         if (pre == 0 && increase) {
-            if (entity instanceof Mob mob) {
+            if (this.entity instanceof Mob mob) {
                 this.noAIStunned = mob.isNoAi();
                 if (!this.noAIStunned)
                     mob.setNoAi(true);
             }
-            this.isSilent = entity.isSilent();
+            this.isSilent = this.entity.isSilent();
             if (!this.isSilent)
-                entity.setSilent(true);
+                this.entity.setSilent(true);
         } else if (pre == 1 && !increase) {
-            if (entity instanceof Mob mob && !this.noAIStunned) {
+            if (this.entity instanceof Mob mob && !this.noAIStunned) {
                 mob.setNoAi(false);
             }
             if (!this.isSilent) {
-                entity.setSilent(false);
+                this.entity.setSilent(false);
             }
         }
     }
 
-    public void tick(LivingEntity entity) {
-        if (--this.invisible <= 0 && !entity.level().isClientSide()) {
+    public void tick() {
+        if (--this.invisible <= 0 && !this.entity.level().isClientSide()) {
             boolean pre = this.invisibleFlag;
             this.invisibleFlag = this.invisible > 0;
-            if (this.invisibleFlag != pre && !entity.level().isClientSide) {
-                LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), entity);
+            if (this.invisibleFlag != pre && !this.entity.level().isClientSide) {
+                LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), this.entity);
             }
         }
     }

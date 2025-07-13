@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
@@ -20,19 +20,19 @@ import java.util.Set;
 public class SkillLevelCondition implements LootItemCondition {
 
     public static final MapCodec<SkillLevelCondition> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(CodecUtils.stringEnumCodec(EnumSkills.class, null).fieldOf("skill").forGetter(d -> d.skill),
+            inst.group(CodecUtils.stringEnumCodec(Skills.class, null).fieldOf("skill").forGetter(d -> d.skill),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("minimum_level").forGetter(d -> d.min)
             ).apply(inst, SkillLevelCondition::new));
 
-    private final EnumSkills skill;
+    private final Skills skill;
     private final int min;
 
-    public SkillLevelCondition(EnumSkills skills, int required) {
+    public SkillLevelCondition(Skills skills, int required) {
         this.skill = skills;
         this.min = required;
     }
 
-    public static LootItemCondition.Builder get(EnumSkills skill, int val) {
+    public static LootItemCondition.Builder get(Skills skill, int val) {
         return () -> new SkillLevelCondition(skill, val);
     }
 

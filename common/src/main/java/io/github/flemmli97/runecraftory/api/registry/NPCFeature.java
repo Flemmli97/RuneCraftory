@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
 import com.mojang.serialization.Codec;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -18,4 +19,11 @@ public interface NPCFeature {
             .dispatch(NPCFeature::type, s -> (StreamCodec<ByteBuf, NPCFeature>) s.streamCodec());
 
     NPCFeatureType<?> type();
+
+    interface NPCFeatureHolder<F extends NPCFeature> {
+
+        F create(EntityNPCBase npc);
+
+        NPCFeatureType<F> getType();
+    }
 }

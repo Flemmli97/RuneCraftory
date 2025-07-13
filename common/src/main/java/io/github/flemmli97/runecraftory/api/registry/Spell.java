@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
@@ -46,10 +47,10 @@ public abstract class Spell {
     }
 
     public void levelSkill(ServerPlayer player) {
-        Map<EnumSkills, Float> skillXp = DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skillXP;
+        Map<Skills, Float> skillXp = DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skillXP;
         if (!skillXp.isEmpty()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(data, EnumSkills.DARK, xp));
+            skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(data, Skills.DARK, xp));
         }
     }
 
@@ -65,8 +66,8 @@ public abstract class Spell {
         return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).percentage;
     }
 
-    public EnumSkills[] costReductionSkills() {
-        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skills.toArray(EnumSkills[]::new);
+    public Skills[] costReductionSkills() {
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skills.toArray(Skills[]::new);
     }
 
     public boolean use(LivingEntity entity) {

@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -114,19 +114,19 @@ public class CombatUtils {
         return null;
     }
 
-    public static EnumSkills matchingSkill(Holder<Attribute> att) {
+    public static Skills matchingSkill(Holder<Attribute> att) {
         if (att.is(ModAttributes.PARALYSIS.getID()))
-            return EnumSkills.RES_PARA;
+            return Skills.RES_PARA;
         if (att.is(ModAttributes.POISON.getID()))
-            return EnumSkills.RES_POISON;
+            return Skills.RES_POISON;
         if (att.is(ModAttributes.SEAL.getID()))
-            return EnumSkills.RES_SEAL;
+            return Skills.RES_SEAL;
         if (att.is(ModAttributes.SLEEP.getID()))
-            return EnumSkills.RES_SLEEP;
+            return Skills.RES_SLEEP;
         if (att.is(ModAttributes.FATIGUE.getID()))
-            return EnumSkills.RES_FATIGUE;
+            return Skills.RES_FATIGUE;
         if (att.is(ModAttributes.COLD.getID()))
-            return EnumSkills.RES_COLD;
+            return Skills.RES_COLD;
         return null;
     }
 
@@ -135,7 +135,7 @@ public class CombatUtils {
         Holder<Attribute> opposing = opposing(att);
         double res = target instanceof LivingEntity livingTarget && opposing != null ? getAttributeValue(livingTarget, opposing) : 0;
         if (target instanceof Player player) {
-            EnumSkills matchingSkill = matchingSkill(att);
+            Skills matchingSkill = matchingSkill(att);
             if (matchingSkill != null)
                 res += Platform.INSTANCE.getPlayerData(player).getSkillLevel(matchingSkill).getLevel() * 0.005;
         }
@@ -175,8 +175,8 @@ public class CombatUtils {
     }
 
     public static float elementalReduction(LivingEntity entity, DamageSource source, float amount) {
-        if (source instanceof DynamicDamage && ((DynamicDamage) source).getElement() != EnumElement.NONE) {
-            EnumElement element = ((DynamicDamage) source).getElement();
+        if (source instanceof DynamicDamage && ((DynamicDamage) source).getElement() != ItemElement.NONE) {
+            ItemElement element = ((DynamicDamage) source).getElement();
             double percent = 0;
             switch (element) {
                 case DARK:
@@ -382,7 +382,7 @@ public class CombatUtils {
             return false;
         if (damage > 0) {
             if (attacker instanceof ElementalAttackMob mob) {
-                EnumElement element = mob.getAttackElement();
+                ItemElement element = mob.getAttackElement();
                 if (element != null)
                     source.element(element);
             }
@@ -454,15 +454,15 @@ public class CombatUtils {
         return success;
     }
 
-    public static float modifyDmgElement(EnumElement element, Entity target, float dmg) {
+    public static float modifyDmgElement(ItemElement element, Entity target, float dmg) {
         if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
-            if (element == EnumElement.WATER && target instanceof LivingEntity living && (living.fireImmune() || living.isSensitiveToWater()))
+            if (element == ItemElement.WATER && target instanceof LivingEntity living && (living.fireImmune() || living.isSensitiveToWater()))
                 dmg *= 1.1;
         }
         return dmg;
     }
 
-    public static void elementalEffects(Entity attacker, EnumElement element, Entity target) {
+    public static void elementalEffects(Entity attacker, ItemElement element, Entity target) {
         if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
             switch (element) {
                 case FIRE -> target.igniteForSeconds(3);
@@ -494,37 +494,37 @@ public class CombatUtils {
         if (poisonChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.POISON.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_POISON, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_POISON, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_POISON, 15);
         }
         if (fatigueChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_FATIGUE, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_FATIGUE, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_FATIGUE, 15);
         }
         if (coldChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.COLD.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_COLD, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_COLD, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_COLD, 15);
         }
         if (paraChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_PARA, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_PARA, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_PARA, 15);
         }
         if (sealChance) {
             EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SEAL, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SEAL, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SEAL, 15);
         }
         if (dizzyChance) {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
@@ -535,13 +535,13 @@ public class CombatUtils {
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(ModEffects.SLEEP.asHolder(), 80, 0, true, false));
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 5);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SLEEP, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.RES_SLEEP, 15);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SLEEP, 15);
         }
     }
 
-    public static void spawnElementalParticle(Entity target, EnumElement element) {
+    public static void spawnElementalParticle(Entity target, ItemElement element) {
         if (target.level() instanceof ServerLevel serverLevel) {
             int color = 0xFFFFFF;
             switch (element) {
@@ -593,40 +593,40 @@ public class CombatUtils {
         //Weapons
         if (stack.getItem() instanceof ItemStaffBase) {
             switch (ItemNBT.getElement(stack)) {
-                case WATER -> LevelCalc.levelSkill(data, EnumSkills.WATER, 3);
-                case EARTH -> LevelCalc.levelSkill(data, EnumSkills.EARTH, 3);
-                case WIND -> LevelCalc.levelSkill(data, EnumSkills.WIND, 3);
-                case FIRE -> LevelCalc.levelSkill(data, EnumSkills.FIRE, 3);
-                case LIGHT -> LevelCalc.levelSkill(data, EnumSkills.LIGHT, 3);
-                case DARK -> LevelCalc.levelSkill(data, EnumSkills.DARK, 3);
-                case LOVE -> LevelCalc.levelSkill(data, EnumSkills.LOVE, 3);
+                case WATER -> LevelCalc.levelSkill(data, Skills.WATER, 3);
+                case EARTH -> LevelCalc.levelSkill(data, Skills.EARTH, 3);
+                case WIND -> LevelCalc.levelSkill(data, Skills.WIND, 3);
+                case FIRE -> LevelCalc.levelSkill(data, Skills.FIRE, 3);
+                case LIGHT -> LevelCalc.levelSkill(data, Skills.LIGHT, 3);
+                case DARK -> LevelCalc.levelSkill(data, Skills.DARK, 3);
+                case LOVE -> LevelCalc.levelSkill(data, Skills.LOVE, 3);
             }
             return;
         }
         if (stack.is(RunecraftoryTags.Items.SHORTSWORDS)) {
-            LevelCalc.levelSkill(data, EnumSkills.SHORTSWORD, 2);
+            LevelCalc.levelSkill(data, Skills.SHORTSWORD, 2);
         }
         if (stack.is(RunecraftoryTags.Items.LONGSWORDS)) {
-            LevelCalc.levelSkill(data, EnumSkills.LONGSWORD, 4);
+            LevelCalc.levelSkill(data, Skills.LONGSWORD, 4);
         }
         if (stack.is(RunecraftoryTags.Items.SPEARS)) {
-            LevelCalc.levelSkill(data, EnumSkills.SPEAR, 3);
+            LevelCalc.levelSkill(data, Skills.SPEAR, 3);
         }
         if (stack.is(RunecraftoryTags.Items.AXES) || stack.is(RunecraftoryTags.Items.HAMMERS)) {
-            LevelCalc.levelSkill(data, EnumSkills.HAMMERAXE, 5);
+            LevelCalc.levelSkill(data, Skills.HAMMERAXE, 5);
         }
         if (stack.is(RunecraftoryTags.Items.DUALBLADES)) {
-            LevelCalc.levelSkill(data, EnumSkills.DUAL, 2);
+            LevelCalc.levelSkill(data, Skills.DUAL, 2);
         }
         if (stack.is(RunecraftoryTags.Items.FISTS)) {
-            LevelCalc.levelSkill(data, EnumSkills.FIST, 2);
+            LevelCalc.levelSkill(data, Skills.FIST, 2);
         }
         //Tools
         if (stack.is(RunecraftoryTags.Items.AXE_TOOLS) || stack.is(RunecraftoryTags.Items.HAMMER_TOOLS)) {
-            LevelCalc.levelSkill(data, EnumSkills.HAMMERAXE, 1);
+            LevelCalc.levelSkill(data, Skills.HAMMERAXE, 1);
         }
         if (stack.is(RunecraftoryTags.Items.HOES) || stack.is(RunecraftoryTags.Items.WATERINGCANS) || stack.is(RunecraftoryTags.Items.SICKLES)) {
-            LevelCalc.levelSkill(data, EnumSkills.FARMING, 1);
+            LevelCalc.levelSkill(data, Skills.FARMING, 1);
         }
     }
 
@@ -669,7 +669,7 @@ public class CombatUtils {
         return new Vec3(vec3.x * g - vec3.z * f, vec3.y, vec3.z * g + vec3.x * f);
     }
 
-    public static boolean canPerform(LivingEntity entity, EnumSkills skill, int requiredLvl) {
+    public static boolean canPerform(LivingEntity entity, Skills skill, int requiredLvl) {
         if (!(entity instanceof Player player))
             return false;
         return player.isCreative() || Platform.INSTANCE.getPlayerData(player).getSkillLevel(skill).getLevel() >= requiredLvl;

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -10,13 +10,13 @@ import net.minecraft.world.level.Level;
 
 public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
 
-    private EnumElement element = EnumElement.NONE;
+    private ItemElement element = ItemElement.NONE;
 
     public ElementalCircleSummoner(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 
-    public ElementalCircleSummoner(Level level, LivingEntity caster, EnumElement element) {
+    public ElementalCircleSummoner(Level level, LivingEntity caster, ItemElement element) {
         super(ModEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), level, caster);
         this.damageMultiplier = 0.8f;
         this.maxLivingTicks = 380 / 10;
@@ -42,7 +42,7 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
                 proj.shoot(this, 0, rot, 0, 0.32f, 0);
                 proj.withMaxLiving(40);
                 double y = this.getY();
-                if (this.element == EnumElement.WATER || this.element == EnumElement.EARTH)
+                if (this.element == ItemElement.WATER || this.element == ItemElement.EARTH)
                     y -= 0.5;
                 proj.setPos(proj.getX(), y, proj.getZ());
                 this.level().addFreshEntity(proj);
@@ -54,7 +54,7 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.element = EnumElement.values()[compound.getInt("Element")];
+        this.element = ItemElement.values()[compound.getInt("Element")];
     }
 
     @Override

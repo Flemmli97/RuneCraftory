@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
-import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
+import io.github.flemmli97.runecraftory.common.world.data.family.FamilyEntry;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;

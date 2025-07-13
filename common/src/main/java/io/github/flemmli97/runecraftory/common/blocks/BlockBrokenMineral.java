@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BrokenMineralBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
@@ -38,7 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock, EntityBlock, ExtendedBlock {
 
     public static final MapCodec<BlockBrokenMineral> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(CodecUtils.stringEnumCodec(EnumMineralTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
+            inst.group(CodecUtils.stringEnumCodec(MineralBlockTier.class, null).fieldOf("mineral_tier").forGetter(d -> d.tier),
                     propertiesCodec()
             ).apply(inst, BlockBrokenMineral::new));
 
@@ -61,9 +60,9 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
             VoxelUtils.ShapeBuilder.of(6.75, 1.55, 4.5, 8.75, 2.55, 7.5),
             VoxelUtils.ShapeBuilder.of(3.75, 1.55, 9.5, 5.75, 2.55, 11.5));
 
-    public final EnumMineralTier tier;
+    public final MineralBlockTier tier;
 
-    public BlockBrokenMineral(EnumMineralTier tier, Properties properties) {
+    public BlockBrokenMineral(MineralBlockTier tier, Properties properties) {
         super(properties);
         this.tier = tier;
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));

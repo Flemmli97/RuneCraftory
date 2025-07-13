@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -17,7 +17,7 @@ public class S2CSkillLevelPkt implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CSkillLevelPkt> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CSkillLevelPkt decode(RegistryFriendlyByteBuf buf) {
-            return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), new XpLevelHolder(buf), buf.readInt());
+            return new S2CSkillLevelPkt(buf.readEnum(Skills.class), new XpLevelHolder(buf), buf.readInt());
         }
 
         @Override
@@ -28,17 +28,17 @@ public class S2CSkillLevelPkt implements CustomPacketPayload {
         }
     };
 
-    private final EnumSkills skill;
+    private final Skills skill;
     private final XpLevelHolder level;
     private final int rp;
 
-    private S2CSkillLevelPkt(EnumSkills skill, XpLevelHolder xp, int rp) {
+    private S2CSkillLevelPkt(Skills skill, XpLevelHolder xp, int rp) {
         this.skill = skill;
         this.level = xp;
         this.rp = rp;
     }
 
-    public S2CSkillLevelPkt(PlayerData cap, EnumSkills skill) {
+    public S2CSkillLevelPkt(PlayerData cap, Skills skill) {
         this.skill = skill;
         this.level = cap.getSkillLevel(skill);
         this.rp = cap.getRunePoints();

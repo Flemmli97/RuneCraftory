@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
@@ -137,7 +137,7 @@ public class EntityTreasureChest extends Entity implements AnimatedEntity {
                 this.getAnimationHandler().setAnimation(OPEN);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> this.openChest(serverPlayer, serverPlayer.getItemInHand(hand));
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.SEARCHING, 20);
+                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.SEARCHING, 20);
             }
         }
         return InteractionResult.CONSUME;

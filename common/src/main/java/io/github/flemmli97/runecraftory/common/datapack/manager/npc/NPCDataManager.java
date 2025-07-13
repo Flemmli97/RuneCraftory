@@ -31,7 +31,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
     private Map<NPCData, ResourceLocation> dataKey = ImmutableMap.of();
     private final WeightedList<NPCData> view = new WeightedList<>();
-    private final WeightedList<NPCData> viewNoJobDef = new WeightedList<>();
+    private final WeightedList<NPCData> viewNoProfessionDefined = new WeightedList<>();
 
     private HolderLookup.Provider provider;
 
@@ -75,7 +75,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
         this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
         this.dataKey = reverse.build();
         this.view.setList(this.keyData.values().stream().map(d -> WeightedEntry.wrap(d, d.weight())).toList());
-        this.viewNoJobDef.setList(this.keyData.values().stream().filter(d -> d.profession().isEmpty()).map(d -> WeightedEntry.wrap(d, d.weight())).toList());
+        this.viewNoProfessionDefined.setList(this.keyData.values().stream().filter(d -> d.profession().isEmpty()).map(d -> WeightedEntry.wrap(d, d.weight())).toList());
     }
 
     @Override

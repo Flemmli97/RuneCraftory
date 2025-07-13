@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.tenshilib.common.item.AnimationDebugger;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.ChatFormatting;

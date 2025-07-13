@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -33,8 +33,8 @@ public class S2CCapSync implements CustomPacketPayload {
             buf.writeInt(pkt.money);
             buf.writeInt(pkt.runePoints);
             pkt.level.toPacket(buf);
-            buf.writeInt(EnumSkills.values().length);
-            for (EnumSkills skill : EnumSkills.values()) {
+            buf.writeInt(Skills.values().length);
+            for (Skills skill : Skills.values()) {
                 buf.writeEnum(skill);
                 XpLevelHolder xp = pkt.skillMap.getOrDefault(skill, new XpLevelHolder());
                 xp.toPacket(buf);
@@ -48,7 +48,7 @@ public class S2CCapSync implements CustomPacketPayload {
         }
     };
 
-    private final EnumMap<EnumSkills, XpLevelHolder> skillMap = new EnumMap<>(EnumSkills.class);
+    private final EnumMap<Skills, XpLevelHolder> skillMap = new EnumMap<>(Skills.class);
     private final int money;
     private final int runePoints;
     private final XpLevelHolder level;
@@ -64,7 +64,7 @@ public class S2CCapSync implements CustomPacketPayload {
         this.level = new XpLevelHolder(buf);
         int l = buf.readInt();
         for (int i = 0; i < l; i++) {
-            EnumSkills skill = buf.readEnum(EnumSkills.class);
+            Skills skill = buf.readEnum(Skills.class);
             this.skillMap.put(skill, new XpLevelHolder(buf));
         }
         this.spells = buf.readNbt();
@@ -79,7 +79,7 @@ public class S2CCapSync implements CustomPacketPayload {
         this.money = data.getMoney();
         this.runePoints = data.getRunePoints();
         this.level = data.getPlayerLevel();
-        for (EnumSkills skill : EnumSkills.values())
+        for (Skills skill : Skills.values())
             this.skillMap.put(skill, data.getSkillLevel(skill));
         this.spells = data.getInv().save(data.player().registryAccess());
         this.foodData = data.foodBuff();

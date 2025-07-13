@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
+import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -64,7 +64,7 @@ public class S2COpenNPCGui implements CustomPacketPayload {
     public S2COpenNPCGui(EntityNPCBase entity, ServerPlayer player) {
         this.entityID = entity.getId();
         this.isShopOpen = entity.canTrade();
-        this.actions = entity.getShop().actions(entity, player);
+        this.actions = entity.getProfession().actions(entity, player);
         this.quest = QuestHandler.questForExists(player, entity);
         if (entity.getEntityToFollowUUID() == null)
             this.followState = Platform.INSTANCE.getPlayerData(player).party.isPartyFull() ? 2 : 0;

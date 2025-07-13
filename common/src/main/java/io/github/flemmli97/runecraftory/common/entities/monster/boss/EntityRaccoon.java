@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
@@ -9,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.GroundShakeParticleSpawner;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -150,7 +150,7 @@ public class EntityRaccoon extends BossMonster {
         });
         b.put(LAND, (anim, entity) -> {
             if (anim.isAt("attack")) {
-                DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
+                DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(ItemElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.asHolder(), 80);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 8, 3);
@@ -161,7 +161,7 @@ public class EntityRaccoon extends BossMonster {
         b.put(STOMP, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt("attack_1") || anim.isAt("attack_2")) {
-                DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5)
+                DynamicDamage.Builder source = new DynamicDamage.Builder(entity).noKnockback().element(ItemElement.EARTH).hurtResistant(5)
                         .withChangedAttribute(ModAttributes.STUN.asHolder(), 50);
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 8, 3);

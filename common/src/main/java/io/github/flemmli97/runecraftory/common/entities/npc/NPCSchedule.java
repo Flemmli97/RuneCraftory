@@ -5,10 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumDay;
+import io.github.flemmli97.runecraftory.api.calendar.DayOfWeek;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
-import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -48,13 +48,13 @@ public class NPCSchedule {
     }
 
     public Activity getActivity(ServerLevel level) {
-        if (!this.npc.getShop().hasSchedule)
+        if (!this.npc.getProfession().hasSchedule)
             return Activity.IDLE;
         int dayTime = WorldUtils.dayTime(level);
-        EnumDay day = CalendarImpl.get(level).date().day();
+        DayOfWeek day = Calendar.get(level).date().day();
         if (dayTime < this.schedule.wakeUpTime)
             return Activity.REST;
-        if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getShop().hasWorkSchedule) {
+        if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getProfession().hasWorkSchedule) {
             if (dayTime < this.schedule.workTime)
                 return ModActivities.EARLY_IDLE.get();
             if (dayTime < this.schedule.breakTime)
@@ -91,7 +91,7 @@ public class NPCSchedule {
     }
 
     public List<Component> viewSchedule() {
-        if (!this.npc.getShop().hasSchedule || !this.npc.getShop().hasWorkSchedule) {
+        if (!this.npc.getProfession().hasSchedule || !this.npc.getProfession().hasWorkSchedule) {
             return List.of();
         }
         if (this.view == null) {
@@ -101,14 +101,14 @@ public class NPCSchedule {
             if (!noBreaks)
                 newList.add(Component.translatable("runecraftory.npc.schedule.work.2", this.formatTime(this.schedule.workTimeAfter), this.formatTime(this.schedule.doneWorkTime)));
             newList.add(Component.translatable("runecraftory.npc.schedule.days.header"));
-            List<EnumDay> weekDayCounts = new ArrayList<>();
-            for (EnumDay day : EnumDay.values()) {
-                if (day == EnumDay.SATURDAY || day == EnumDay.SUNDAY)
+            List<DayOfWeek> weekDayCounts = new ArrayList<>();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
                     continue;
                 if (!this.schedule.workDays.contains(day))
                     weekDayCounts.add(day);
             }
-            if (this.schedule.workDays.size() == EnumDay.values().length) {
+            if (this.schedule.workDays.size() == DayOfWeek.values().length) {
                 newList.add(Component.translatable("runecraftory.npc.schedule.days.all"));
             } else {
                 switch (weekDayCounts.size()) {
@@ -118,15 +118,15 @@ public class NPCSchedule {
                     case 2 ->
                             newList.add(Component.translatable("runecraftory.npc.schedule.days.2", Component.translatable(weekDayCounts.get(0).translationFull()), Component.translatable(weekDayCounts.get(1).translationFull())));
                     default ->
-                            newList.add(Component.translatable("runecraftory.npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> Component.translatable(e.translationFull())).toArray()));
+                            newList.add(Component.translatable("runecraftory.npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY).map(e -> Component.translatable(e.translationFull())).toArray()));
                 }
-                if (this.schedule.workDays.contains(EnumDay.SATURDAY)) {
-                    if (this.schedule.workDays.contains(EnumDay.SUNDAY))
-                        newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.2", Component.translatable(EnumDay.SATURDAY.translationFull()), Component.translatable(EnumDay.SUNDAY.translationFull())));
+                if (this.schedule.workDays.contains(DayOfWeek.SATURDAY)) {
+                    if (this.schedule.workDays.contains(DayOfWeek.SUNDAY))
+                        newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.2", Component.translatable(DayOfWeek.SATURDAY.translationFull()), Component.translatable(DayOfWeek.SUNDAY.translationFull())));
                     else
-                        newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.1", Component.translatable(EnumDay.SATURDAY.translationFull())));
-                } else if (this.schedule.workDays.contains(EnumDay.SUNDAY))
-                    newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.1", Component.translatable(EnumDay.SUNDAY.translationFull())));
+                        newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.1", Component.translatable(DayOfWeek.SATURDAY.translationFull())));
+                } else if (this.schedule.workDays.contains(DayOfWeek.SUNDAY))
+                    newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.1", Component.translatable(DayOfWeek.SUNDAY.translationFull())));
             }
             this.view = ImmutableList.copyOf(newList);
         }
@@ -152,7 +152,7 @@ public class NPCSchedule {
                         ExtraCodecs.POSITIVE_INT.fieldOf("meet_time").forGetter(d -> d.meetTime),
                         ExtraCodecs.POSITIVE_INT.fieldOf("meet_time_after").forGetter(d -> d.meetTimeAfter),
                         ExtraCodecs.POSITIVE_INT.fieldOf("sleep_time").forGetter(d -> d.sleepTime),
-                        CodecUtils.stringEnumCodec(EnumDay.class, null).listOf().fieldOf("work_days").forGetter(d -> d.workDays.stream().toList())
+                        CodecUtils.stringEnumCodec(DayOfWeek.class, null).listOf().fieldOf("work_days").forGetter(d -> d.workDays.stream().toList())
                 ).apply(inst, Schedule::new)
         );
 
@@ -163,9 +163,9 @@ public class NPCSchedule {
 
         public final int sleepTime;
 
-        private final EnumSet<EnumDay> workDays;
+        private final EnumSet<DayOfWeek> workDays;
 
-        public Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, EnumSet<EnumDay> workDays) {
+        public Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, EnumSet<DayOfWeek> workDays) {
             this.wakeUpTime = wakeUpTime;
             this.workTime = Math.max(this.wakeUpTime + 500, workTime);
             this.breakTime = Math.max(this.workTime, breakTime);
@@ -177,8 +177,8 @@ public class NPCSchedule {
             this.workDays = workDays;
         }
 
-        private Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, List<EnumDay> workDays) {
-            this(wakeUpTime, workTime, breakTime, workTimeAfter, doneWorkTime, sleepTime, meetTimeOffday, meetTimeAfterOffday, workDays.isEmpty() ? EnumSet.noneOf(EnumDay.class) : EnumSet.copyOf(workDays));
+        private Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, List<DayOfWeek> workDays) {
+            this(wakeUpTime, workTime, breakTime, workTimeAfter, doneWorkTime, sleepTime, meetTimeOffday, meetTimeAfterOffday, workDays.isEmpty() ? EnumSet.noneOf(DayOfWeek.class) : EnumSet.copyOf(workDays));
         }
 
         public Schedule(RandomSource random) {
@@ -202,13 +202,13 @@ public class NPCSchedule {
             return (int) (hour * 10) * 100;
         }
 
-        private static EnumSet<EnumDay> randomizedWorkDays(RandomSource random) {
-            EnumSet<EnumDay> set = EnumSet.noneOf(EnumDay.class);
-            for (EnumDay day : EnumDay.values()) {
-                if (day == EnumDay.SATURDAY) {
+        private static EnumSet<DayOfWeek> randomizedWorkDays(RandomSource random) {
+            EnumSet<DayOfWeek> set = EnumSet.noneOf(DayOfWeek.class);
+            for (DayOfWeek day : DayOfWeek.values()) {
+                if (day == DayOfWeek.SATURDAY) {
                     if (random.nextFloat() < 0.4f)
                         set.add(day);
-                } else if (day == EnumDay.SUNDAY) {
+                } else if (day == DayOfWeek.SUNDAY) {
                     if (random.nextFloat() < 0.15f)
                         set.add(day);
                 } else if (random.nextFloat() < 0.85f)
@@ -217,7 +217,7 @@ public class NPCSchedule {
             return set;
         }
 
-        public Collection<EnumDay> getWorkDays() {
+        public Collection<DayOfWeek> getWorkDays() {
             return ImmutableSet.copyOf(this.workDays);
         }
     }

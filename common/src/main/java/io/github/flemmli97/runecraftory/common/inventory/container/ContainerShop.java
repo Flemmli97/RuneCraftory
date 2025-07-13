@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.network.S2CShopResponses;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
@@ -137,14 +137,14 @@ public class ContainerShop extends AbstractContainerMenu {
         if (slot == InventoryShop.SHOP_SIZE) {
             Slot shopOutput = this.getSlot(InventoryShop.SHOP_SIZE);
             if (shopOutput.hasItem() && player instanceof ServerPlayer serverPlayer) {
-                EnumShopResult res = ItemUtils.buyItem(player, this.invShop.npc, shopOutput.getItem().copy());
+                ShopResult res = ItemUtils.buyItem(player, this.invShop.npc, shopOutput.getItem().copy());
                 Component txt = switch (res) {
                     case NOMONEY -> Component.translatable("runecraftory.npc.shop.money.no");
                     case NOSPACE -> Component.translatable("runecraftory.npc.shop.inventory.full");
                     case SUCCESS -> Component.translatable("runecraftory.npc.shop.success");
                 };
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CShopResponses(txt), serverPlayer);
-                if (res == EnumShopResult.SUCCESS)
+                if (res == ShopResult.SUCCESS)
                     shopOutput.set(ItemStack.EMPTY);
             }
             return;

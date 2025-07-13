@@ -11,10 +11,10 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
@@ -39,10 +39,10 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
     public static final ResourceLocation ID = RuneCraftory.modRes("shop_items");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
-    private Map<NPCJob, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
-    private Map<NPCJob, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();
+    private Map<NPCProfession, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
+    private Map<NPCProfession, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();
     private boolean resolved;
-    private Map<NPCJob, Collection<ShopItemProperties.IntermediaryShopItem>> intermediaryData = ImmutableMap.of();
+    private Map<NPCProfession, Collection<ShopItemProperties.IntermediaryShopItem>> intermediaryData = ImmutableMap.of();
 
     private HolderLookup.Provider provider;
 
@@ -50,12 +50,12 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
         super(DataPackHandler.GSON, DIRECTORY);
     }
 
-    public Collection<ShopItemProperties> get(NPCJob shop) {
+    public Collection<ShopItemProperties> get(NPCProfession shop) {
         this.resolve();
         return this.shopItems.getOrDefault(shop, Collections.emptyList());
     }
 
-    public Collection<ShopItemProperties> getDefaultItems(NPCJob shop) {
+    public Collection<ShopItemProperties> getDefaultItems(NPCProfession shop) {
         this.resolve();
         return this.shopItemsDefaults.getOrDefault(shop, Collections.emptyList());
     }
@@ -63,9 +63,9 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
     public void resolve() {
         if (!this.resolved) {
             this.resolved = true;
-            ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> builder = ImmutableMap.builder();
-            ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> defaultsBuilder = ImmutableMap.builder();
-            this.intermediaryData.forEach((job, items) -> {
+            ImmutableMap.Builder<NPCProfession, Collection<ShopItemProperties>> builder = ImmutableMap.builder();
+            ImmutableMap.Builder<NPCProfession, Collection<ShopItemProperties>> defaultsBuilder = ImmutableMap.builder();
+            this.intermediaryData.forEach((profession, items) -> {
                 Collection<ShopItemProperties> newCollection = new ArrayList<>();
                 Collection<ShopItemProperties> defaultCollection = new ArrayList<>();
                 items.forEach(props -> {
@@ -80,10 +80,10 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
                         }
                     }));
                 });
-                builder.put(job, ImmutableList.copyOf(newCollection));
-                defaultsBuilder.put(job, ImmutableList.copyOf(defaultCollection));
+                builder.put(profession, ImmutableList.copyOf(newCollection));
+                defaultsBuilder.put(profession, ImmutableList.copyOf(defaultCollection));
             });
-            builder.put(ModNPCJobs.RANDOM.get(), DataPackHandler.INSTANCE.itemStatManager().all()
+            builder.put(ModNPCProfessions.TRAVELLING_MERCHANT.get(), DataPackHandler.INSTANCE.itemStatManager().all()
                     .stream().filter(p -> p.getSecond().getBuy() > 0)
                     .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING, Optional.empty()))
                     .toList());
@@ -94,15 +94,15 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
-        HashMap<NPCJob, Collection<ShopItemProperties.IntermediaryShopItem>> shops = new HashMap<>();
+        HashMap<NPCProfession, Collection<ShopItemProperties.IntermediaryShopItem>> shops = new HashMap<>();
         this.resolved = false;
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((fres, el) -> {
             try {
-                Optional<NPCJob> optionalNPCJob = HolderUtils.get(this.provider, ModNPCJobs.JOB_REGISTRY_KEY, fres);
-                if (optionalNPCJob.isEmpty() || !optionalNPCJob.get().hasShop)
+                Optional<NPCProfession> optionalProfession = HolderUtils.get(this.provider, ModNPCProfessions.PROFESSION_REGISTRY_KEY, fres);
+                if (optionalProfession.isEmpty() || !optionalProfession.get().hasShop)
                     return;
-                NPCJob job = optionalNPCJob.get();
+                NPCProfession profession = optionalProfession.get();
                 JsonObject obj = el.getAsJsonObject();
                 boolean replace = GsonHelper.getAsBoolean(obj, "replace", false);
                 JsonArray array = GsonHelper.getAsJsonArray(obj, "values");
@@ -113,9 +113,9 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
                     contents.add(prop);
                 });
                 if (replace)
-                    shops.put(job, contents);
+                    shops.put(profession, contents);
                 else
-                    shops.compute(job, (k, v) -> {
+                    shops.compute(profession, (k, v) -> {
                         if (v == null)
                             return contents;
                         v.addAll(contents);

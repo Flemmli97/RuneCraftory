@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
@@ -13,7 +12,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record OutfitFeatureType(TypedIndexRange types) implements NPCFeatureHolder<OutfitFeatureType.OutfitFeature> {
+public record OutfitFeatureType(
+        TypedIndexRange types) implements NPCFeature.NPCFeatureHolder<OutfitFeatureType.OutfitFeature> {
 
     public static final MapCodec<OutfitFeatureType> TYPE_CODEC = TypedIndexRange.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::types);
     public static MapCodec<OutfitFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->

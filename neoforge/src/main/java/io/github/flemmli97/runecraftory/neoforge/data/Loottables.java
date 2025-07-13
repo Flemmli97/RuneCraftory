@@ -1,16 +1,16 @@
 package io.github.flemmli97.runecraftory.neoforge.data;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlockTier;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMineralSqueek;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
@@ -411,12 +411,12 @@ public class Loottables extends LootTableProvider {
         }
 
         private void registerGateLoot() {
-            for (EnumElement element : EnumElement.values()) {
+            for (ItemElement element : ItemElement.values()) {
                 this.lootTables.put(GateEntity.getGateLootLocation(element), this.gateLoot(element));
             }
         }
 
-        private LootTable.Builder gateLoot(EnumElement element) {
+        private LootTable.Builder gateLoot(ItemElement element) {
             return switch (element) {
                 case WATER ->
                         this.table(new ItemLootData(ModItems.CRYSTAL_WATER.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
@@ -703,7 +703,7 @@ public class Loottables extends LootTableProvider {
             return build;
         }
 
-        protected static LootPool.Builder oreLootPool(EnumMineralTier tier) {
+        protected static LootPool.Builder oreLootPool(MineralBlockTier tier) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
             switch (tier) {
                 case IRON -> {
@@ -810,7 +810,7 @@ public class Loottables extends LootTableProvider {
         }
 
         private static LootPoolSingletonContainer.Builder<?> ore(int weight, int quality, ItemLike item, int minMiningLevel) {
-            return ore(weight, quality, item).when(SkillLevelCondition.get(EnumSkills.MINING, minMiningLevel));
+            return ore(weight, quality, item).when(SkillLevelCondition.get(Skills.MINING, minMiningLevel));
         }
 
         @Override

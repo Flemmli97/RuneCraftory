@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -37,7 +37,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
         super.appendHoverText(stack, context, list, tooltipFlag);
         NPCSpawnData itemData = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
         list.add(Component.translatable("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
-        String key = itemData.job().map(h -> h.value().getTranslationKey()).orElse(ModNPCJobs.NONE.get().getTranslationKey());
+        String key = itemData.profession().map(h -> h.value().getTranslationKey()).orElse(ModNPCProfessions.NONE.get().getTranslationKey());
         list.add(Component.translatable(key).withStyle(ChatFormatting.AQUA));
     }
 
@@ -45,16 +45,16 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EntityNPCBase npc) {
             NPCSpawnData itemData = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
-            boolean modifyJob = true;
+            boolean profession = true;
             if (itemData.npcDataId().isPresent()) {
                 NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(itemData.npcDataId().get());
                 if (data != null) {
                     npc.setNPCData(data, false);
-                    modifyJob = data.profession().isEmpty();
+                    profession = data.profession().isEmpty();
                 }
             }
-            if (modifyJob) {
-                itemData.job().ifPresent(job -> npc.randomizeData(job.value(), true));
+            if (profession) {
+                itemData.profession().ifPresent(prof -> npc.randomizeData(prof.value(), true));
             }
         }
         return super.onEntitySpawned(e, stack, player);
@@ -66,7 +66,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
             ItemStack stack = player.getItemInHand(hand);
             if (!level.isClientSide) {
                 NPCSpawnData data = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
-                stack.set(ModDataComponentTypes.NPC_SPAWN_DATA.get(), data.cycleJob(level.registryAccess()));
+                stack.set(ModDataComponentTypes.NPC_SPAWN_DATA.get(), data.cycleProfession(level.registryAccess()));
             }
             return InteractionResultHolder.consume(stack);
         }

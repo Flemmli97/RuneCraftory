@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
@@ -26,10 +26,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemStaffBase extends Item implements ExtendedWeapon {
 
-    public final EnumElement startElement;
+    public final ItemElement startElement;
     public final int amount;
 
-    public ItemStaffBase(EnumElement startElement, int amount, Item.Properties props) {
+    public ItemStaffBase(ItemElement startElement, int amount, Item.Properties props) {
         super(props);
         this.startElement = startElement;
         this.amount = Math.max(1, amount);

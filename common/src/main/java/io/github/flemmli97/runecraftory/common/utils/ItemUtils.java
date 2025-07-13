@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResult;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
@@ -36,9 +36,9 @@ public class ItemUtils {
         return Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
     }
 
-    public static int getChargeTime(LivingEntity entity, EnumToolTier toolTier) {
+    public static int getChargeTime(LivingEntity entity, ToolItemTier toolTier) {
         int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
-        if (toolTier == EnumToolTier.PLATINUM)
+        if (toolTier == ToolItemTier.PLATINUM)
             time *= GeneralConfig.platinumChargeTime;
         return time;
     }
@@ -77,10 +77,10 @@ public class ItemUtils {
         return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(stat -> getBuyPrice(stack, stat)).orElse(0);
     }
 
-    public static EnumShopResult buyItem(Player player, EntityNPCBase npc, ItemStack stack) {
+    public static ShopResult buyItem(Player player, EntityNPCBase npc, ItemStack stack) {
         if (sizeInv(player.getInventory(), stack) < stack.getCount()) {
             player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
-            return EnumShopResult.NOSPACE;
+            return ShopResult.NOSPACE;
         }
         int price = getBuyPrice(stack) * stack.getCount();
         if (Platform.INSTANCE.getPlayerData(player).useMoney(price)) {
@@ -94,10 +94,10 @@ public class ItemUtils {
                 spawnItemAtEntity(player, copy);
                 stack.setCount(stack.getCount() - count);
             }
-            return EnumShopResult.SUCCESS;
+            return ShopResult.SUCCESS;
         }
         player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
-        return EnumShopResult.NOMONEY;
+        return ShopResult.NOMONEY;
     }
 
     private static int sizeInv(Inventory playerInv, ItemStack stack) {

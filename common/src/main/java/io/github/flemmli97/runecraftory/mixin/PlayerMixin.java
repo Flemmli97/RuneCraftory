@@ -17,8 +17,6 @@ public abstract class PlayerMixin implements PrevEntityPosition {
     @Unique
     private double runecraftory$oldMPosX1, runecraftory$oldMPosX2;
     @Unique
-    private double runecraftory$oldMPosY1, runecraftory$oldMPosY2;
-    @Unique
     private double runecraftory$oldMPosZ1, runecraftory$oldMPosZ2;
     @Unique
     private boolean runecraftory$saveAt2;
@@ -39,12 +37,10 @@ public abstract class PlayerMixin implements PrevEntityPosition {
     private void savePos(CallbackInfo info) {
         if (this.runecraftory$saveAt2) {
             this.runecraftory$oldMPosX2 = ((Player) (Object) this).getX();
-            this.runecraftory$oldMPosY2 = ((Player) (Object) this).getY();
             this.runecraftory$oldMPosZ2 = ((Player) (Object) this).getZ();
             this.runecraftory$saveAt2 = false;
         } else {
             this.runecraftory$oldMPosX1 = ((Player) (Object) this).getX();
-            this.runecraftory$oldMPosY1 = ((Player) (Object) this).getY();
             this.runecraftory$oldMPosZ1 = ((Player) (Object) this).getZ();
             this.runecraftory$saveAt2 = true;
         }
@@ -53,11 +49,6 @@ public abstract class PlayerMixin implements PrevEntityPosition {
     @Override
     public double runecraftory$getOldPlayerX() {
         return this.runecraftory$saveAt2 ? this.runecraftory$oldMPosX2 : this.runecraftory$oldMPosX1;
-    }
-
-    @Override
-    public double runecraftory$getOldPlayerY() {
-        return this.runecraftory$saveAt2 ? this.runecraftory$oldMPosY2 : this.runecraftory$oldMPosY1;
     }
 
     @Override

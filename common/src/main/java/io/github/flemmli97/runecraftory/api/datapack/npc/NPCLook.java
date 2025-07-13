@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
-import io.github.flemmli97.runecraftory.api.registry.NPCFeatureHolder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int weight,
-                      Map<NPCFeatureType<?>, NPCFeatureHolder<?>> additionalFeatures) {
+                      Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> additionalFeatures) {
 
     public static final ResourceLocation DEFAULT_LOOK_ID = RuneCraftory.modRes("default_look");
     public static final NPCLook DEFAULT_LOOK = new NPCLook(NPCData.Gender.MALE, null, 0, Map.of());
@@ -31,7 +30,7 @@ public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int we
                     NPCFeature.CODEC.listOf().fieldOf("additional_features").forGetter(d -> List.copyOf(d.additionalFeatures.values()))
             ).apply(inst, (skin, gender, weight, features) -> new NPCLook(gender, skin.orElse(null), weight, features
                     .stream().collect(Collectors.toMap(
-                            NPCFeatureHolder::getType,
+                            NPCFeature.NPCFeatureHolder::getType,
                             h -> h,
                             (e1, e2) -> e1,
                             HashMap::new

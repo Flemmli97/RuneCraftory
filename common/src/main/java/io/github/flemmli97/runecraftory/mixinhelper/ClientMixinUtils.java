@@ -2,11 +2,11 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.client.ArmorModels;
+import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
+import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
@@ -16,7 +16,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
@@ -57,15 +57,15 @@ public class ClientMixinUtils {
     private static boolean ItemRenderContext;
 
     public static int modifyColoredTint(BlockAndTintGetter getter, int old) {
-        CalendarImpl calendar = ClientCalendarHolder.CLIENT_CALENDAR;
-        if (calendar.currentSeason() == EnumSeason.SUMMER)
+        Calendar calendar = ClientCalendarHolder.CLIENT_CALENDAR;
+        if (calendar.currentSeason() == Season.SUMMER)
             return old;
         return LEAVE_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getLeaveTint);
     }
 
     public static int modifyColoredTintGrass(BlockAndTintGetter getter, int old) {
-        CalendarImpl calendar = ClientCalendarHolder.CLIENT_CALENDAR;
-        if (calendar.currentSeason() == EnumSeason.SUMMER)
+        Calendar calendar = ClientCalendarHolder.CLIENT_CALENDAR;
+        if (calendar.currentSeason() == Season.SUMMER)
             return old;
         return GRASS_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getGrassTint);
     }
@@ -229,7 +229,7 @@ public class ClientMixinUtils {
         return new ModelPartsContainer.ModelPartExtended("root", null, root);
     }
 
-    record SeasonedTint(int origin, EnumSeason season) {
+    record SeasonedTint(int origin, Season season) {
 
     }
 }

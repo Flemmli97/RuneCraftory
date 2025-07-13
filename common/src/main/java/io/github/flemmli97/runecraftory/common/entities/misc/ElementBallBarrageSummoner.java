@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -15,13 +15,13 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
 
     protected static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(ElementBallBarrageSummoner.class, EntityDataSerializers.INT);
 
-    private EnumElement element = EnumElement.NONE;
+    private ItemElement element = ItemElement.NONE;
 
     public ElementBallBarrageSummoner(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 
-    public ElementBallBarrageSummoner(Level level, LivingEntity caster, EnumElement element) {
+    public ElementBallBarrageSummoner(Level level, LivingEntity caster, ItemElement element) {
         super(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), level, caster);
         this.element = element;
         this.entityData.set(ELEMENT_DATA, this.element.ordinal());
@@ -29,7 +29,7 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
         this.maxLivingTicks = 20;
     }
 
-    public EnumElement getElement() {
+    public ItemElement getElement() {
         return this.element;
     }
 
@@ -38,8 +38,8 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
         super.onSyncedDataUpdated(key);
         if (key == ELEMENT_DATA) {
             int i = this.entityData.get(ELEMENT_DATA);
-            if (i < EnumElement.values().length)
-                this.element = EnumElement.values()[i];
+            if (i < ItemElement.values().length)
+                this.element = ItemElement.values()[i];
         }
     }
 
@@ -54,7 +54,7 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
         super.readAdditionalSaveData(compound);
         this.entityData.set(ELEMENT_DATA, compound.getInt("Element"));
         try {
-            this.element = EnumElement.values()[this.entityData.get(ELEMENT_DATA)];
+            this.element = ItemElement.values()[this.entityData.get(ELEMENT_DATA)];
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
     }

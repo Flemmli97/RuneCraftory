@@ -145,7 +145,7 @@ public class EntityHandonetta extends BossMonster {
                 S2CScreenShake.sendAround(entity, 24, 4, 1);
             }
             if (anim.isPast("attack_end") && !entity.caughtEntities.isEmpty()) {
-                Platform.INSTANCE.getEntityData(entity).setInvis(entity, 0);
+                Platform.INSTANCE.getEntityData(entity).setInvis(0);
                 entity.caughtEntities.clear();
             }
         });
@@ -267,7 +267,7 @@ public class EntityHandonetta extends BossMonster {
                     else
                         entity.setPos(this.getX(), this.getY(), this.getZ());
                     if (invis)
-                        Platform.INSTANCE.getEntityData(entity).setInvis(entity, 10);
+                        Platform.INSTANCE.getEntityData(entity).setInvis(10);
                 }
             });
         }

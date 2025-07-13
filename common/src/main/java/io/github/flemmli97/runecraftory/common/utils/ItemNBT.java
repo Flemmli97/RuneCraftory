@@ -3,8 +3,6 @@ package io.github.flemmli97.runecraftory.common.utils;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.components.ArmorEffectData;
 import io.github.flemmli97.runecraftory.common.components.FoodAttributeData;
 import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
@@ -12,9 +10,11 @@ import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.ListItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -101,17 +101,17 @@ public class ItemNBT {
         return Pair.of(data.getFlatStats(), data.getMultiplierStats());
     }
 
-    public static void setElement(EnumElement element, ItemStack stack) {
-        EnumElement stackElement = stack.get(ModDataComponentTypes.ELEMENT.get());
-        stack.set(ModDataComponentTypes.ELEMENT.get(), stackElement == null || stackElement == element ? element : EnumElement.NONE);
+    public static void setElement(ItemElement element, ItemStack stack) {
+        ItemElement stackElement = stack.get(ModDataComponentTypes.ELEMENT.get());
+        stack.set(ModDataComponentTypes.ELEMENT.get(), stackElement == null || stackElement == element ? element : ItemElement.NONE);
     }
 
-    public static EnumElement getElement(ItemStack stack) {
-        EnumElement stackElement = stack.get(ModDataComponentTypes.ELEMENT.get());
+    public static ItemElement getElement(ItemStack stack) {
+        ItemElement stackElement = stack.get(ModDataComponentTypes.ELEMENT.get());
         if (stackElement != null) {
             return stackElement;
         }
-        return isWeapon(stack) ? DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
+        return isWeapon(stack) ? DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(ItemElement.NONE) : ItemElement.NONE;
     }
 
     public static ItemStack addUpgradeItem(ItemStack stack, ItemStack upgrade, boolean crafting, CraftingType type) {

@@ -20,14 +20,14 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
     /**
      * Lower case looks better in json
      */
-    public static final MapCodec<NPCDataProcessor> CODEC = ResourceLocation.CODEC.fieldOf("shop_type")
-            .xmap(NPCDataProcessor::new, d -> d.jobID);
+    public static final MapCodec<NPCDataProcessor> CODEC = ResourceLocation.CODEC.fieldOf("profession")
+            .xmap(NPCDataProcessor::new, d -> d.profession);
 
-    protected final ResourceLocation jobID;
+    protected final ResourceLocation profession;
 
-    public NPCDataProcessor(ResourceLocation jobID) {
+    public NPCDataProcessor(ResourceLocation profession) {
         super("NPC", true);
-        this.jobID = jobID;
+        this.profession = profession;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
         CompoundTag tag = new CompoundTag();
         tag.putString("Entity", ModEntities.NPC.getID().toString());
         tag.put("EntityNBT", entityTag);
-        tag.putString("NPCShop", this.jobID.toString());
+        tag.putString("NPCProfession", this.profession.toString());
         return new StructureTemplate.StructureBlockInfo(origin.pos(), state, tag);
     }
 

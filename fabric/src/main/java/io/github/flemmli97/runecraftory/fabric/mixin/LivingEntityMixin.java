@@ -28,8 +28,9 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
     @Shadow
     @Final
     private Map<Holder<MobEffect>, MobEffectInstance> activeEffects;
+
     @Unique
-    private final EntityData runecraftory$EntityData = new EntityData();
+    private final EntityData runecraftory$EntityData = new EntityData((LivingEntity) (Object) this);
     @Unique
     private boolean runecraftory$EffectCuringProcess;
 

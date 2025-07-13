@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -46,14 +46,14 @@ public class ItemToolHoe extends HoeItem {
 
     public static void onHoeUse(ServerPlayer player) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        LevelCalc.useRP(data, 3, true, 0, true, EnumSkills.FARMING, EnumSkills.EARTH);
-        LevelCalc.levelSkill(data, EnumSkills.FARMING, 3);
-        LevelCalc.levelSkill(data, EnumSkills.EARTH, 1.5f);
+        LevelCalc.useRP(data, 3, true, 0, true, Skills.FARMING, Skills.EARTH);
+        LevelCalc.levelSkill(data, Skills.FARMING, 3);
+        LevelCalc.levelSkill(data, Skills.EARTH, 1.5f);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
@@ -64,7 +64,7 @@ public class ItemToolHoe extends HoeItem {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
@@ -74,7 +74,7 @@ public class ItemToolHoe extends HoeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -84,7 +84,7 @@ public class ItemToolHoe extends HoeItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel());
@@ -102,9 +102,9 @@ public class ItemToolHoe extends HoeItem {
                         .count();
                 if (amount > 0) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
-                    LevelCalc.levelSkill(data, EnumSkills.FARMING, range * 15);
-                    LevelCalc.levelSkill(data, EnumSkills.EARTH, range * 2);
+                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, Skills.FARMING);
+                    LevelCalc.levelSkill(data, Skills.FARMING, range * 15);
+                    LevelCalc.levelSkill(data, Skills.EARTH, range * 2);
                 }
             }
         }

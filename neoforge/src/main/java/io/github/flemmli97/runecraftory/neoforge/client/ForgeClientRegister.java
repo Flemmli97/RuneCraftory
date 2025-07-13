@@ -1,12 +1,14 @@
 package io.github.flemmli97.runecraftory.neoforge.client;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
+import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.neoforge.registry.ModFluidTypes;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.model.HumanoidModel;
@@ -16,13 +18,17 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -33,6 +39,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -48,7 +55,8 @@ public class ForgeClientRegister {
         ClientRegister.init();
         event.enqueueWork(() -> {
             // Cause multi loader
-            ClientRegister.setupRenderLayers(ItemBlockRenderTypes::setRenderLayer);
+            ClientRegister.setupBlockRenderLayers(ItemBlockRenderTypes::setRenderLayer);
+            ClientRegister.setupFluidRenderLayers(ItemBlockRenderTypes::setRenderLayer);
             ClientRegister.registerItemProps(ItemProperties::register);
         });
     }
@@ -69,6 +77,47 @@ public class ForgeClientRegister {
                 }, e.get());
             }
         });
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            private static final ResourceLocation UNDERWATER_LOCATION = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png");
+            private static final ResourceLocation WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
+            private static final ResourceLocation WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
+            private static final ResourceLocation WATER_OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
+
+            @Override
+            public ResourceLocation getStillTexture() {
+                return WATER_STILL;
+            }
+
+            @Override
+            public ResourceLocation getFlowingTexture() {
+                return WATER_FLOW;
+            }
+
+            @Override
+            public ResourceLocation getOverlayTexture() {
+                return WATER_OVERLAY;
+            }
+
+            @Override
+            public ResourceLocation getRenderOverlayTexture(Minecraft mc) {
+                return UNDERWATER_LOCATION;
+            }
+
+            @Override
+            public int getTintColor() {
+                return ClientRegister.HOT_SPRING_BASE;
+            }
+
+            @Override
+            public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
+                return getter.getBlockTint(pos, ClientRegister.HOT_SPRING_COLOR) | 0xff000000;
+            }
+        }, ModFluidTypes.HOT_SPRING_TYPE.get());
+    }
+
+    @SubscribeEvent
+    public static void colorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
+        event.register(ClientRegister.HOT_SPRING_COLOR);
     }
 
     @SubscribeEvent

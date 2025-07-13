@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class SetRainShelterTarget<E extends PathfinderMob> extends ExtendedBehaviour<E> {
 
     private static final Predicate<Holder<PoiType>> HIDING_POIS = poi ->
-            ModNPCJobs.JOBS.registry().stream().anyMatch(j -> j.matches(poi));
+            ModNPCProfessions.PROFESSIONS.registry().stream().anyMatch(j -> j.matches(poi));
 
     private static final MemoryTest MEMORIES = MemoryTest.builder(1)
             .noMemory(MemoryModuleType.WALK_TARGET)

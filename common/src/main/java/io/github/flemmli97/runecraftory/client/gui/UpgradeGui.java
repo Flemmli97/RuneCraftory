@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -24,7 +24,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
     public static final ResourceLocation RUNEPOINTS_BORDER = RuneCraftory.modRes("widget/runepoints_bar_border");
 
     protected final PlayerData data;
-    private final EnumSkills skill;
+    private final Skills skill;
 
     public UpgradeGui(ContainerUpgrade container, Inventory inv, Component name) {
         super(container, inv, name);

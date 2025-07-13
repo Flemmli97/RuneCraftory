@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class SingleTimeSpawner extends BlockEntity {
 
     private EntityType<?> savedEntity;
-    private ResourceLocation shop;
+    private ResourceLocation npcProfession;
     private CompoundTag tag;
     private int delay = 3;
 
@@ -47,7 +47,7 @@ public class SingleTimeSpawner extends BlockEntity {
                     mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null);
                 }
                 if (e instanceof EntityNPCBase npc) {
-                    npc.randomizeData(this.shop);
+                    npc.randomizeData(this.npcProfession);
                 }
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY(), this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);
                 if (this.tag != null) {
@@ -75,8 +75,8 @@ public class SingleTimeSpawner extends BlockEntity {
                 .getOrThrow();
         if (nbt.contains("EntityNBT"))
             this.tag = nbt.getCompound("EntityNBT");
-        if (nbt.contains("NPCShop"))
-            this.shop = ResourceLocation.parse(nbt.getString("NPCShop"));
+        if (nbt.contains("NPCProfession"))
+            this.npcProfession = ResourceLocation.parse(nbt.getString("NPCProfession"));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class SingleTimeSpawner extends BlockEntity {
                     .getOrThrow());
         if (this.tag != null)
             nbt.put("EntityNBT", this.tag);
-        if (this.shop != null)
-            nbt.putString("NPCShop", this.shop.toString());
+        if (this.npcProfession != null)
+            nbt.putString("NPCProfession", this.npcProfession.toString());
     }
 }

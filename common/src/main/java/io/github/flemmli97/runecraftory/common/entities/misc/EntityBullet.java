@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -22,7 +22,7 @@ public class EntityBullet extends BaseProjectile {
     private static final float[] SIN_POINTS = calcSinPoints();
     private static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityBullet.class, EntityDataSerializers.INT);
 
-    private EnumElement element = EnumElement.NONE;
+    private ItemElement element = ItemElement.NONE;
     private boolean straight;
     private boolean reverse;
     private Vec3 dir, side;
@@ -52,17 +52,17 @@ public class EntityBullet extends BaseProjectile {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         if (key.equals(ELEMENT_DATA)) {
-            this.element = EnumElement.values()[this.entityData.get(ELEMENT_DATA)];
+            this.element = ItemElement.values()[this.entityData.get(ELEMENT_DATA)];
         }
         super.onSyncedDataUpdated(key);
     }
 
-    public void setElement(EnumElement element) {
+    public void setElement(ItemElement element) {
         this.element = element;
         this.entityData.set(ELEMENT_DATA, this.element.ordinal());
     }
 
-    public EnumElement element() {
+    public ItemElement element() {
         return this.element;
     }
 

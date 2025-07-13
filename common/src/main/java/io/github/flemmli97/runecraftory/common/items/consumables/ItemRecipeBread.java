@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.enums.CraftingType;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
+import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.ForgingRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
@@ -94,23 +94,23 @@ public class ItemRecipeBread extends Item {
         return true;
     }
 
-    private static boolean canUnlockRecipe(Level level, RecipeHolder<SextupleRecipe> r, PlayerData data, EnumSkills skill) {
+    private static boolean canUnlockRecipe(Level level, RecipeHolder<SextupleRecipe> r, PlayerData data, Skills skill) {
         SextupleRecipe recipe = r.value();
         if (recipe instanceof ForgingRecipe) {
             boolean weaponSkillCheck = true;
             Item res = recipe.getResultItem(level.registryAccess()).getItem();
             if (res instanceof ItemLongSwordBase) {
-                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.LONGSWORD).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(Skills.LONGSWORD).getLevel()) <= 5;
             } else if (res instanceof ItemDualBladeBase) {
-                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.DUAL).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(Skills.DUAL).getLevel()) <= 5;
             } else if (res instanceof SwordItem) {
-                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.SHORTSWORD).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(Skills.SHORTSWORD).getLevel()) <= 5;
             } else if (res instanceof ItemSpearBase) {
-                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.SPEAR).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(Skills.SPEAR).getLevel()) <= 5;
             } else if (res instanceof ItemHammerBase || res instanceof AxeItem) {
-                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(Skills.HAMMERAXE).getLevel()) <= 5;
             } else if (res instanceof ItemGloveBase) {
-                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(EnumSkills.FIST).getLevel()) <= 5;
+                weaponSkillCheck = (recipe.getCraftingLevel() - data.getSkillLevel(Skills.FIST).getLevel()) <= 5;
             }
             return weaponSkillCheck && !data.getRecipeKeeper().isUnlocked(r) && (recipe.getCraftingLevel() - data.getSkillLevel(skill).getLevel()) <= 5;
         }

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -74,7 +74,7 @@ public class EntityExplosionSpell extends BaseProjectile {
 
     protected void doExplosion(Entity hit) {
         if (hit != null)
-            CombatUtils.damageWithFaintAndCrit(this.getOwner(), hit, new DynamicDamage.Builder(this, this.getOwner()).magic().element(EnumElement.FIRE).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK).knockAmount(1), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
+            CombatUtils.damageWithFaintAndCrit(this.getOwner(), hit, new DynamicDamage.Builder(this, this.getOwner()).magic().element(ItemElement.FIRE).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK).knockAmount(1), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
         List<Entity> list = this.level().getEntities(this, new AABB(-5, -5, -5, 5, 5, 5).move(this.position()));
         for (Entity e : list) {
             double dist;
@@ -87,7 +87,7 @@ public class EntityExplosionSpell extends BaseProjectile {
                 dmgPerc = 0.8f;
             else
                 dmgPerc = 1;
-            CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner()).magic().element(EnumElement.FIRE).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK).knockAmount(1), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier * dmgPerc, null);
+            CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner()).magic().element(ItemElement.FIRE).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK).knockAmount(1), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier * dmgPerc, null);
         }
         if (this.level() instanceof ServerLevel serverLevel)
             serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 1.0, 0.0, 0.0, 1);

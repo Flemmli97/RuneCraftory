@@ -38,7 +38,7 @@ repositories {
 
 dependencies {
     modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-neoforge"
-    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${project.minecraft_version}:${project.sbl_version}"
+    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${minecraft_version}:${sbl_version}"
     modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge")
 
     implementation "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia}"
@@ -52,8 +52,8 @@ dependencies {
     modRuntimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
-    modRuntimeOnly "maven.modrinth:jade:${project.jade_neoforge}"
-//    modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
+    modRuntimeOnly "maven.modrinth:jade:${jade_neoforge}"
+    modCompileOnly "com.ldtteam:minecolonies:${minecolonies}"
 
     // Mods useful for testing things
     modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.8-neoforge"

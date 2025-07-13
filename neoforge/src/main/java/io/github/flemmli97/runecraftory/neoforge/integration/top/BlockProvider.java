@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.forge.integration.top;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
-import io.github.flemmli97.runecraftory.common.world.BarnData;
+import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;

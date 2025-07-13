@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.npc.NPCTextureLayer;
-import io.github.flemmli97.runecraftory.client.npc.RenderNPC;
+import io.github.flemmli97.runecraftory.client.render.npc.NPCTextureLayer;
+import io.github.flemmli97.runecraftory.client.render.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.common.network.C2SQuestSelect;
 import io.github.flemmli97.runecraftory.common.network.C2SSubmitQuestBoard;
 import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;

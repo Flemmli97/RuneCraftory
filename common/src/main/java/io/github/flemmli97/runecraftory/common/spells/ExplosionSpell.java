@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -17,7 +17,7 @@ public class ExplosionSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), EnumSkills.FIRE, 10);
+        LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FIRE, 10);
     }
 
     @Override

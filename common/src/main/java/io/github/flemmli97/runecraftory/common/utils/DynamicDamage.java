@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class DynamicDamage extends DamageSource {
 
-    private final EnumElement element;
+    private final ItemElement element;
     private final KnockBackType knock;
     private final float knockAmount;
     private final int hurtProtection;
@@ -32,7 +32,7 @@ public class DynamicDamage extends DamageSource {
 
     private final Set<TagKey<DamageType>> dynamicTags;
 
-    public DynamicDamage(Holder<DamageType> type, Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock,
+    public DynamicDamage(Holder<DamageType> type, Entity attacker, @Nullable Entity cause, ItemElement element, KnockBackType knock,
                          float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage,
                          Map<Holder<Attribute>, Double> attributesChange, Set<TagKey<DamageType>> dynamicTags) {
         super(type, attacker, cause == null ? attacker : cause);
@@ -51,7 +51,7 @@ public class DynamicDamage extends DamageSource {
         return super.is(damageTypeKey) || this.dynamicTags.contains(damageTypeKey);
     }
 
-    public EnumElement getElement() {
+    public ItemElement getElement() {
         return this.element;
     }
 
@@ -122,7 +122,7 @@ public class DynamicDamage extends DamageSource {
 
         private final Entity cause;
 
-        private EnumElement element = EnumElement.NONE;
+        private ItemElement element = ItemElement.NONE;
         private KnockBackType knock = KnockBackType.VANILLA;
         private Entity source;
         private float knockAmount;
@@ -141,7 +141,7 @@ public class DynamicDamage extends DamageSource {
             this.source = source;
         }
 
-        public Builder element(EnumElement el) {
+        public Builder element(ItemElement el) {
             this.element = el;
             return this;
         }

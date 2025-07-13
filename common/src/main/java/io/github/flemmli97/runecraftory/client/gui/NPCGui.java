@@ -2,14 +2,13 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
-import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SProcreationRequest;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
-import io.github.flemmli97.runecraftory.common.world.family.SyncedFamilyData;
+import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
@@ -142,10 +141,8 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         int shopSizeY = -5;
         if (!this.entity.isBaby()) {
             MutableComponent shopComp = null;
-            if (this.entity.getShop() == ModNPCJobs.GENERAL.get())
-                shopComp = Component.translatable("runecraftory.gui.npc.shop.owner", Component.translatable(this.entity.getShop().getTranslationKey()));
-            else if (this.entity.getShop().hasWorkSchedule)
-                shopComp = Component.translatable(this.entity.getShop().getTranslationKey());
+            if (this.entity.getProfession().hasWorkSchedule)
+                shopComp = Component.translatable(this.entity.getProfession().getOwnerTranslationKey());
             if (shopComp != null) {
                 if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
                     shopComp.withStyle(ChatFormatting.DARK_RED);
@@ -157,7 +154,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                 }
             }
 
-            if (this.entity.getShop().hasWorkSchedule) {
+            if (this.entity.getProfession().hasWorkSchedule) {
                 for (Component comp : this.entity.getNPCSchedule().viewSchedule()) {
                     for (FormattedCharSequence formatted : this.font.split(comp, 140)) {
                         graphics.drawString(this.font, formatted, txtOffX, txtOffY + 13 * y, 0, false);
@@ -189,7 +186,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             }).bounds(this.leftPos + x, this.topPos + y, xSize, 20).build());
         }
         if (!this.entity.isBaby() && this.isShopOpen == ShopState.OPEN) {
-            if (this.entity.getShop().hasShop) {
+            if (this.entity.getProfession().hasShop) {
                 y += 30;
                 this.addRenderableWidget(Button.builder(Component.translatable(C2SNPCInteraction.Action.SHOP.translation), b -> {
                     LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.SHOP));
@@ -229,14 +226,14 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.bed.no"), 150));
         }
-        if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().hasPoi()) {
+        if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getProfession().hasPoi()) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop())), 150));
+            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getProfession())), 150));
         }
     }
 
-    private Component formatShopPoi(NPCJob job) {
-        Set<BlockState> set = job.matchingStates(this.minecraft.level.registryAccess());
+    private Component formatShopPoi(NPCProfession profession) {
+        Set<BlockState> set = profession.matchingStates(this.minecraft.level.registryAccess());
         MutableComponent comp = Component.literal("");
         set.stream().map(BlockBehaviour.BlockStateBase::getBlock)
                 .distinct()

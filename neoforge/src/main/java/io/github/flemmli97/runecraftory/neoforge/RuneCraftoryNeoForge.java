@@ -18,13 +18,14 @@ import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.registry.ModFluids;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSounds;
@@ -37,6 +38,7 @@ import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
 import io.github.flemmli97.runecraftory.neoforge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.neoforge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.neoforge.registry.ModAttachments;
+import io.github.flemmli97.runecraftory.neoforge.registry.ModFluidTypes;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -115,7 +117,7 @@ public class RuneCraftoryNeoForge {
         ModLootRegistries.LOOTCONDITIONS.registerContent(modBus);
         ModLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
         ModCrafting.RECIPETYPE.registerContent(modBus);
-        ModNPCJobs.JOBS.register().registerContent(modBus);
+        ModNPCProfessions.PROFESSIONS.register().registerContent(modBus);
         ModAttachments.ATTACHMENT_TYPES.register(modBus);
         ModDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
         ModCriteria.TRIGGERS.registerContent(modBus);
@@ -125,6 +127,8 @@ public class RuneCraftoryNeoForge {
         ModFeatures.FEATURES.registerContent(modBus);
         ModFeatures.TRUNK_PLACER.registerContent(modBus);
         ModFeatures.TREE_DECORATORS.registerContent(modBus);
+        ModFluids.FLUIDS.registerContent(modBus);
+        ModFluidTypes.FLUID_TYPES.register(modBus);
     }
 
     public void common(FMLCommonSetupEvent event) {

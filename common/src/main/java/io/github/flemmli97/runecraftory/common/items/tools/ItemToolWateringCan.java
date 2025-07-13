@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
+import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,16 +42,16 @@ public class ItemToolWateringCan extends Item {
     public void postUse(ServerPlayer player) {
         player.disableShield();
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        LevelCalc.useRP(data, 2, true, 0, true, EnumSkills.FARMING, EnumSkills.WATER);
-        LevelCalc.levelSkill(data, EnumSkills.FARMING, 4);
-        LevelCalc.levelSkill(data, EnumSkills.WATER, 1);
+        LevelCalc.useRP(data, 2, true, 0, true, Skills.FARMING, Skills.WATER);
+        LevelCalc.levelSkill(data, Skills.FARMING, 4);
+        LevelCalc.levelSkill(data, Skills.WATER, 1);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -60,7 +60,7 @@ public class ItemToolWateringCan extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        EnumToolTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
@@ -78,7 +78,7 @@ public class ItemToolWateringCan extends Item {
             player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
             return InteractionResultHolder.success(stack);
         }
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -88,7 +88,7 @@ public class ItemToolWateringCan extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        EnumToolTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), EnumToolTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel());
@@ -105,9 +105,9 @@ public class ItemToolWateringCan extends Item {
                         .count();
                 if (amount > 0) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
-                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, EnumSkills.FARMING);
-                    LevelCalc.levelSkill(data, EnumSkills.FARMING, range * 10);
-                    LevelCalc.levelSkill(data, EnumSkills.WATER, range * 3);
+                    LevelCalc.useRP(data, 0, true, range * 17.5f, true, Skills.FARMING);
+                    LevelCalc.levelSkill(data, Skills.FARMING, range * 10);
+                    LevelCalc.levelSkill(data, Skills.WATER, range * 3);
                 }
             }
         }

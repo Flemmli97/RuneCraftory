@@ -510,7 +510,7 @@ public class BookContentGen extends ContentSetProvider {
         this.add("runecraftory.book.entry.npc.2", """
                 For a villager to operate a shop they require a $(c:blue)bed$() and a $(c:blue)workplace$() that is not too far away from it.
                 Additionally a shop is only open during opening hours. You can check the requirements by simply talking to them.
-                Hovering over their $(c:red)job$() will highlight what the villager is missing.
+                Hovering over their $(c:red)profession$() will highlight what the villager is missing.
                 
                 These villagers are also much more capable than usual.""");
         this.add("runecraftory.book.entry.npc.3", """
