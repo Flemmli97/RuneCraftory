@@ -38,7 +38,7 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
@@ -96,7 +96,7 @@ public class EntityCalls {
 
     public static void joinPlayer(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(RunecraftorySavedData.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.onJoin();
             QuestHandler.removeNPCQuestsFor(serverPlayer);
@@ -110,7 +110,7 @@ public class EntityCalls {
     public static void onPlayerLoad(ServerPlayer serverPlayer) {
         //Load the chunks of unloaded party members. They will then teleport to the player themselves
         serverPlayer.getServer().tell(new TickTask(2, () -> {
-            Set<WorldHandler.UnloadedPartyMember> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(serverPlayer);
+            Set<RunecraftorySavedData.UnloadedPartyMember> party = RunecraftorySavedData.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(serverPlayer);
             party.forEach(p -> {
                 GlobalPos pos = p.pos();
                 ServerLevel level = serverPlayer.serverLevel();
@@ -122,7 +122,7 @@ public class EntityCalls {
             party.clear();
         }));
         //If the party member still got killed somehow remove them here
-        Set<UUID> toRemove = WorldHandler.get(serverPlayer.getServer()).removedPartyMembersFor(serverPlayer);
+        Set<UUID> toRemove = RunecraftorySavedData.get(serverPlayer.getServer()).removedPartyMembersFor(serverPlayer);
         PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
         toRemove.forEach(data.party::removePartyMember);
         toRemove.clear();

@@ -6,7 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -79,13 +79,13 @@ public class WorldUtils {
             public void onRemove(Entity.RemovalReason reason) {
                 if (member.level() instanceof ServerLevel serverLevel) {
                     if (reason == Entity.RemovalReason.UNLOADED_TO_CHUNK) {
-                        WorldHandler.get(serverLevel.getServer()).safeUnloadedPartyMembers(member);
+                        RunecraftorySavedData.get(serverLevel.getServer()).safeUnloadedPartyMembers(member);
                     } else if (reason == Entity.RemovalReason.DISCARDED || reason == Entity.RemovalReason.KILLED) {
                         Player owner = partyOwner.get();
                         if (owner instanceof ServerPlayer player) {
                             Platform.INSTANCE.getPlayerData(player).party.removePartyMember(member);
                         } else
-                            WorldHandler.get(serverLevel.getServer()).toRemovePartyMember(member);
+                            RunecraftorySavedData.get(serverLevel.getServer()).toRemovePartyMember(member);
                     }
                 }
                 callback.onRemove(reason);

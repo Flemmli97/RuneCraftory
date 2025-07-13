@@ -14,6 +14,9 @@ public class ClientConfigSpec {
     public final ModConfigSpec.IntValue seasonDisplayX;
     public final ModConfigSpec.IntValue seasonDisplayY;
     public final ModConfigSpec.EnumValue<ClientConfig.DisplayPosition> seasonDisplayPosition;
+    public final ModConfigSpec.IntValue spellsDisplayX;
+    public final ModConfigSpec.IntValue spellsDisplayY;
+    public final ModConfigSpec.EnumValue<ClientConfig.DisplayPosition> spellsDisplayPosition;
     public final ModConfigSpec.IntValue inventoryOffsetX;
     public final ModConfigSpec.IntValue inventoryOffsetY;
     public final ModConfigSpec.IntValue creativeInventoryOffsetX;
@@ -36,6 +39,9 @@ public class ClientConfigSpec {
         this.seasonDisplayX = builder.comment("X Position of calendar display").defineInRange("Calendar X", ClientConfig.seasonDisplayX, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.seasonDisplayY = builder.comment("Y Position of calendar display").defineInRange("Calendar Y", ClientConfig.seasonDisplayY, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.seasonDisplayPosition = builder.comment("Relative Position of the calendar in regards to the screen").defineEnum("Calendar Anchor", ClientConfig.seasonDisplayPosition);
+        this.spellsDisplayX = builder.comment("X Position of the spell inventory display").defineInRange("Spell X", ClientConfig.spellsDisplayX, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.spellsDisplayY = builder.comment("Y Position of the spell inventory display").defineInRange("Spell Y", ClientConfig.spellsDisplayY, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.spellsDisplayPosition = builder.comment("Relative Position of the the spell inventory display in regards to the screen").defineEnum("Spell Anchor", ClientConfig.spellsDisplayPosition);
         this.inventoryOffsetX = builder.comment("X offset of inventory button").defineInRange("Inventory X", ClientConfig.inventoryOffsetX, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.inventoryOffsetY = builder.comment("Y offset of inventory button").defineInRange("Inventory Y", ClientConfig.inventoryOffsetY, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.creativeInventoryOffsetX = builder.comment("X offset of inventory button in creative").defineInRange("Creative X", ClientConfig.creativeInventoryOffsetX, Integer.MIN_VALUE, Integer.MAX_VALUE);

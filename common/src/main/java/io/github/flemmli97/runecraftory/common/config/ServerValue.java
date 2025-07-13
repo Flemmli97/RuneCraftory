@@ -30,6 +30,7 @@ public abstract class ServerValue<T> {
      */
     public void read(T configValue) {
         this.configValue = configValue;
+        this.useValue = this.configValue;
     }
 
     protected T getConfigValue() {

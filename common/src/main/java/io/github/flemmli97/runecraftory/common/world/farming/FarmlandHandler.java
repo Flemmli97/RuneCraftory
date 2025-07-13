@@ -9,8 +9,8 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandRemovePacket;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandUpdatePacket;
+import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -340,7 +340,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     private void randomTick(ServerLevel level, Long2ObjectMap<Set<FarmlandData>> m) {
-        EnumWeather weather = WorldHandler.get(level.getServer()).currentWeather();
+        EnumWeather weather = CalendarImpl.get(level).currentWeather();
         Consumer<FarmlandData> cons = null;
         int day = WorldUtils.day(level);
         if (weather == EnumWeather.STORM)

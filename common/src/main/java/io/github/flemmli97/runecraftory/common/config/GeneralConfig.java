@@ -29,8 +29,7 @@ public class GeneralConfig {
     public static boolean tickUnloadedFarmland = true;
     public static boolean unloadedFarmlandCheckWater = true;
 
-    public static boolean seasons = true;
-    public static boolean dynamicTrees = true;
+    public static final ServerValue<Boolean> SERENE_SEASONS = new ServerValue.SyncedBoolean(true, "config.integration.seasons");
 
     public static int maxLevel = 999;
     public static int startingHealth = 20;

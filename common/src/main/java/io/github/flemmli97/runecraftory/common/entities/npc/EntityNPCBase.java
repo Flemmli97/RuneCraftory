@@ -58,6 +58,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -66,7 +67,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.NPCHandler;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyEntry;
 import io.github.flemmli97.runecraftory.common.world.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
@@ -663,7 +664,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public void tick() {
         if (this.firstTick) {
             if (this.getServer() != null) {
-                NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
+                NPCHandler handler = RunecraftorySavedData.get(this.getServer()).npcHandler;
                 handler.addNPC(this);
                 handler.playersToReset(this.getUUID()).forEach(pair -> this.relationManager.resetQuest(pair.getFirst(), pair.getSecond()));
             }
@@ -798,7 +799,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         super.setCustomName(name);
         if (this.getServer() != null) {
             this.getFamily().updateName(this);
-            WorldHandler.get(this.getServer())
+            RunecraftorySavedData.get(this.getServer())
                     .npcHandler.addNPC(this);
         }
     }
@@ -896,8 +897,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         }
         float mult = 1;
         if (player instanceof ServerPlayer serverPlayer) {
-            WorldHandler handler = WorldHandler.get(serverPlayer.getServer());
-            if (handler.currentSeason() == this.birthday.getFirst() && handler.date() == this.birthday.getSecond())
+            CalendarImpl calendar = CalendarImpl.get(serverPlayer.level());
+            if (calendar.currentSeason() == this.birthday.getFirst() && calendar.date().date() == this.birthday.getSecond())
                 mult = 3;
             EntityUtils.playSoundForPlayer(serverPlayer, sound, SoundSource.NEUTRAL, 0.7f, 1);
         }
@@ -1173,7 +1174,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         this.releaseMeetingPoi();
         super.remove(reason);
         if (this.getServer() != null) {
-            NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
+            NPCHandler handler = RunecraftorySavedData.get(this.getServer()).npcHandler;
             if (reason.shouldDestroy() && this.data != null && this.data.unique() > 0)
                 handler.removeUniqueNPC(this.getUUID(), this.data);
             handler.removeNPC(this, reason);
@@ -1762,7 +1763,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
         if (this.getServer() != null) {
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
                     (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(job)))
-                            && WorldHandler.get(this.getServer()).npcHandler.canAssignNPC(d), job == null ? null :
+                            && RunecraftorySavedData.get(this.getServer()).npcHandler.canAssignNPC(d), job == null ? null :
                     d -> d.profession().stream().anyMatch(j -> j.equals(job))), !overwrite);
             if (job != null)
                 this.setShop(job);
@@ -1776,8 +1777,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, Animated
     public void setNPCData(NPCData data, boolean load) {
         if (this.getServer() != null) {
             if (this.data != null)
-                WorldHandler.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
-            WorldHandler.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), data);
+                RunecraftorySavedData.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
+            RunecraftorySavedData.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), data);
         }
         this.data = data;
         this.dataRandom.setSeed(this.getUUID().hashCode());

@@ -7,8 +7,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -51,7 +51,7 @@ public class NPCSchedule {
         if (!this.npc.getShop().hasSchedule)
             return Activity.IDLE;
         int dayTime = WorldUtils.dayTime(level);
-        EnumDay day = WorldHandler.get(level.getServer()).currentDay();
+        EnumDay day = CalendarImpl.get(level).date().day();
         if (dayTime < this.schedule.wakeUpTime)
             return Activity.REST;
         if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getShop().hasWorkSchedule) {

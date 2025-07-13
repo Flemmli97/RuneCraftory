@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
@@ -61,13 +61,13 @@ public class OverlayGui {
             }
         }
         if (ClientConfig.renderCalendar) {
-            CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
+            CalendarImpl calendar = ClientCalendarHolder.CLIENT_CALENDAR;
             EnumSeason season = calendar.currentSeason();
             int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 64, ClientConfig.seasonDisplayX);
             int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 32 + 15 + 4, ClientConfig.seasonDisplayY);
             graphics.blitSprite(DATE.get(season), xPos, yPos, 64, 32);
             GuiGraphicsExtension.drawCenteredString(graphics, this.mc.font,
-                    Component.translatable("runecraftory.gui.date.format", Component.translatable(calendar.currentDay().translation()), calendar.date())
+                    Component.translatable("runecraftory.gui.date.format", Component.translatable(calendar.date().day().translation()), calendar.date().date())
                             .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.BOLD),
                     xPos + 32, yPos + 15, 0, false);
             Component money = Component.literal(data.getMoney() + "")

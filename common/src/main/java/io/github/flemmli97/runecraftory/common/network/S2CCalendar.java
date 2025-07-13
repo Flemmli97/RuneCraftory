@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,27 +15,31 @@ public class S2CCalendar implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CCalendar> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CCalendar decode(RegistryFriendlyByteBuf buf) {
-            return new S2CCalendar(CalendarImpl.CalendarSync.STREAM_CODEC.decode(buf));
+            return new S2CCalendar(CalendarImpl.Date.STREAM_CODEC.decode(buf), EnumWeather.values()[buf.readVarInt()]);
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, S2CCalendar pkt) {
-            CalendarImpl.CalendarSync.STREAM_CODEC.encode(buf, pkt.data);
+            CalendarImpl.Date.STREAM_CODEC.encode(buf, pkt.date);
+            buf.writeVarInt(pkt.weather.ordinal());
         }
     };
 
-    private final CalendarImpl.CalendarSync data;
+    private final CalendarImpl.Date date;
+    private final EnumWeather weather;
 
-    private S2CCalendar(CalendarImpl.CalendarSync data) {
-        this.data = data;
+    public S2CCalendar(CalendarImpl.Date date, EnumWeather weather) {
+        this.date = date;
+        this.weather = weather;
     }
 
     public S2CCalendar(CalendarImpl calendar) {
-        this.data = calendar.getData();
+        this.date = calendar.date();
+        this.weather = calendar.currentWeather();
     }
 
     public static void handle(S2CCalendar pkt) {
-        ClientHandlers.updateClientCalendar(pkt.data);
+        ClientHandlers.updateClientCalendar(pkt.date, pkt.weather);
     }
 
     @Override

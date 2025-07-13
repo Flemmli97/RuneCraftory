@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.blocks.entity;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +36,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
         if (blockEntity.owner == null || --blockEntity.cooldown > 0 || !(level instanceof ServerLevel))
             return;
         if (blockEntity.barnData == null) {
-            blockEntity.barnData = WorldHandler.get(level.getServer())
+            blockEntity.barnData = RunecraftorySavedData.get(level.getServer())
                     .getOrCreateFor(blockEntity.owner, level, blockPos);
         }
         blockEntity.cooldown = 40;

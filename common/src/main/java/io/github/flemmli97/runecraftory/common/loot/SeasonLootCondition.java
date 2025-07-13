@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -25,6 +25,6 @@ public record SeasonLootCondition(EnumSeason season) implements LootItemConditio
 
     @Override
     public boolean test(LootContext ctx) {
-        return WorldHandler.get(ctx.getLevel().getServer()).currentSeason() == this.season;
+        return CalendarImpl.get(ctx.getLevel()).currentSeason() == this.season;
     }
 }

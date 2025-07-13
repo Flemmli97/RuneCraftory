@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.impls.progression.EntityTracker;
 import io.github.flemmli97.simplequests_api.impls.quests.Quest;
@@ -97,7 +97,7 @@ public class QuestData implements PlayerQuestData {
     public AcceptType canAcceptQuest(QuestBase quest, boolean ignoreMiss) {
         if (!ignoreMiss && (this.questBoardContent == null || !this.questBoardContent.containsKey(quest.id)))
             return AcceptType.MISSING;
-        if (quest instanceof NPCQuest npcQuest && !WorldHandler.get(this.player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())) {
+        if (quest instanceof NPCQuest npcQuest && !RunecraftorySavedData.get(this.player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())) {
             return AcceptType.NONPC;
         }
         if (!quest.isUnlocked(this.player)

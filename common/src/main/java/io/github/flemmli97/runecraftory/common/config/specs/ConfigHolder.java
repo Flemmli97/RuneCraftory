@@ -44,7 +44,7 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         GeneralConfig.disableFoodSystem = spec.disableFoodSystem.get();
         GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
-        GeneralConfig.seasonedSnow = spec.seasonedSnow.get();
+        GeneralConfig.seasonedSnow = spec.seasonedSnow.get() && !TenshiLibCrossPlat.INSTANCE.isModLoaded("sereneseasons");
         GeneralConfig.maxPartySize = spec.maxPartySize.get();
 
         GeneralConfig.witherChance = spec.witherChance.get().floatValue();
@@ -85,6 +85,8 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();
         GeneralConfig.tamingMultiplier = spec.tamingMultiplier.get().floatValue();
 
+        GeneralConfig.SERENE_SEASONS.read(spec.seasons.get() && TenshiLibCrossPlat.INSTANCE.isModLoaded("sereneseasons"));
+
         GeneralConfig.debugAttack = spec.debugAttack.get();
 
         if (TenshiLibCrossPlat.INSTANCE.getCurrentServer() != null)
@@ -98,6 +100,9 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         ClientConfig.seasonDisplayX = spec.seasonDisplayX.get();
         ClientConfig.seasonDisplayY = spec.seasonDisplayY.get();
         ClientConfig.seasonDisplayPosition = spec.seasonDisplayPosition.get();
+        ClientConfig.spellsDisplayX = spec.spellsDisplayX.get();
+        ClientConfig.spellsDisplayY = spec.spellsDisplayY.get();
+        ClientConfig.spellsDisplayPosition = spec.spellsDisplayPosition.get();
         ClientConfig.inventoryOffsetX = spec.inventoryOffsetX.get();
         ClientConfig.inventoryOffsetY = spec.inventoryOffsetY.get();
         ClientConfig.creativeInventoryOffsetX = spec.creativeInventoryOffsetX.get();
@@ -108,8 +113,10 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         ClientConfig.renderHealthRpBar = spec.renderHealthRPBar.get();
         ClientConfig.renderCalendar = spec.renderCalendar.get();
         ClientConfig.inventoryButton = spec.inventoryButton.get();
-        ClientConfig.grassColor = spec.grassColor.get();
-        ClientConfig.foliageColor = spec.foliageColor.get();
+
+        ClientConfig.grassColor = spec.grassColor.get() && !TenshiLibCrossPlat.INSTANCE.isModLoaded("sereneseasons");
+        ClientConfig.foliageColor = spec.foliageColor.get() && !TenshiLibCrossPlat.INSTANCE.isModLoaded("sereneseasons");
+
         ClientConfig.bossMusic = spec.bossMusic.get();
         ClientConfig.bossMusicFadeDelay = spec.bossMusicFadeDelay.get();
     }

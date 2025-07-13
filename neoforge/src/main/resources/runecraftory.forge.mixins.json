@@ -4,9 +4,7 @@
   "package": "io.github.flemmli97.runecraftory.neoforge.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CompatApotheosis",
     "CompatMinecolonies",
-    "CompatQuarkMixin",
     "UncurableEffectMixin"
     ],
   "client": [

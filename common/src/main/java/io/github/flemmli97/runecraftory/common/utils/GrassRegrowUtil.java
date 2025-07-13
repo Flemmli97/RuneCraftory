@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -21,7 +20,7 @@ public class GrassRegrowUtil {
     private static final EnumMap<EnumSeason, List<HerbEntry>> SEASON_HERB_GROW_MAP = getSeasonHerbGrowMap();
 
     public static void tryGrowHerb(ServerLevel level, BlockPos pos) {
-        EnumSeason currentSeason = WorldHandler.get(level.getServer()).currentSeason();
+        EnumSeason currentSeason = CalendarImpl.get(level).currentSeason();
         List<HerbEntry> l = SEASON_HERB_GROW_MAP.get(currentSeason);
         BlockState state = WeightedRandom.getRandomItem(level.random, l).map(e -> e.sup.get().defaultBlockState()).orElse(Blocks.AIR.defaultBlockState());
         if (state.getBlock() != Blocks.AIR)

@@ -16,11 +16,11 @@ import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
+import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -38,7 +38,7 @@ public class ModDataComponentTypes {
 
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<ArmorEffectData>> ARMOR_EFFECT = register("armor_effects", ArmorEffectData.CODEC, ArmorEffectData.STREAM_CODEC);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<StaffData>> STAFF = register("staff", StaffData.CODEC, StaffData.STREAM_CODEC);
-    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<EnumElement>> ELEMENT = register("element", CodecUtils.stringEnumCodec(EnumElement.class, null), ofEnum(EnumElement.class));
+    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<EnumElement>> ELEMENT = register("element", CodecUtils.stringEnumCodec(EnumElement.class, null), StreamCodecUtils.ofEnum(EnumElement.class));
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Integer>> LEVEL = register("level", ExtraCodecs.intRange(0, 10), ByteBufCodecs.INT);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<ItemAttributeData>> STATS = register("stats", ItemAttributeData.CODEC, ItemAttributeData.STREAM_CODEC);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<FoodAttributeData>> FOOD_BUFF = register("food_buff", FoodAttributeData.CODEC, FoodAttributeData.STREAM_CODEC);
@@ -50,7 +50,7 @@ public class ModDataComponentTypes {
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Integer>> MAX_WATER = register("max_water", ExtraCodecs.NON_NEGATIVE_INT, ByteBufCodecs.INT);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Float>> SHIELD_EFFICIENCY = register("shield_efficiency", Codec.FLOAT.validate((val) -> val >= 0 && val <= 1 ? DataResult.success(val) : DataResult.error(() -> "Value must be between (0,1)")), ByteBufCodecs.FLOAT);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<AttackActionData>> ATTACK_ACTION = register("attack_action", AttackActionData.CODEC, AttackActionData.STREAM_CODEC);
-    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<EnumToolTier>> TOOL_TIER = register("tool_tier", CodecUtils.stringEnumCodec(EnumToolTier.class, null), ofEnum(EnumToolTier.class));
+    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<EnumToolTier>> TOOL_TIER = register("tool_tier", CodecUtils.stringEnumCodec(EnumToolTier.class, null), StreamCodecUtils.ofEnum(EnumToolTier.class));
 
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Unit>> MAGNIFYING_GLASS = register("magnifying_glass", Codec.unit(Unit.INSTANCE), StreamCodec.unit(Unit.INSTANCE));
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Unit>> SCRAP_METAL_PLUS = register("scrap_metal_plus", Codec.unit(Unit.INSTANCE), StreamCodec.unit(Unit.INSTANCE));
@@ -63,19 +63,15 @@ public class ModDataComponentTypes {
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Boolean>> LIGHT_ORE = register("light_ore", Codec.BOOL, ByteBufCodecs.BOOL);
 
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<ItemDebug.Mode>> DEBUG_ITEM_MODE = register("debug_item_mode",
-            CodecUtils.ordinalEnumCodec(ItemDebug.Mode.class, null), ByteBufCodecs.idMapper(i -> ItemDebug.Mode.values()[i], Enum::ordinal));
+            CodecUtils.ordinalEnumCodec(ItemDebug.Mode.class, null), StreamCodecUtils.ofEnum(ItemDebug.Mode.class));
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<UUID>> SELECTED_UUID = register("selected_uuid", UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<String>> SELECTED_ANIMATION = register("selected_animation", Codec.STRING, ByteBufCodecs.STRING_UTF8);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<Integer>> SPAWN_EGG_LEVEL = register("spawn_egg_level", ExtraCodecs.POSITIVE_INT, ByteBufCodecs.INT);
-    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<TreasureChestSpawnegg.ChestTier>> SPAWN_EGG_CHEST_TIER = register("spawn_egg_chest_tier", CodecUtils.stringEnumCodec(TreasureChestSpawnegg.ChestTier.class, null), ofEnum(TreasureChestSpawnegg.ChestTier.class));
+    public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<TreasureChestSpawnegg.ChestTier>> SPAWN_EGG_CHEST_TIER = register("spawn_egg_chest_tier", CodecUtils.stringEnumCodec(TreasureChestSpawnegg.ChestTier.class, null), StreamCodecUtils.ofEnum(TreasureChestSpawnegg.ChestTier.class));
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<NPCSpawnData>> NPC_SPAWN_DATA = register("npc_spawn_data", NPCSpawnData.CODEC, NPCSpawnData.STREAM_CODEC);
     public static final RegistryEntrySupplier<DataComponentType<?>, DataComponentType<BabyData>> BABY_DATA = register("baby_data", BabyData.CODEC, BabyData.STREAM_CODEC);
 
     private static <T> RegistryEntrySupplier<DataComponentType<?>, DataComponentType<T>> register(String name, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
         return DATA_COMPONENTS.register(name, () -> DataComponentType.<T>builder().persistent(codec).networkSynchronized(streamCodec).build());
-    }
-
-    private static <T extends Enum<T>> StreamCodec<ByteBuf, T> ofEnum(Class<T> clss) {
-        return ByteBufCodecs.idMapper(i -> clss.getEnumConstants()[i], Enum::ordinal);
     }
 }

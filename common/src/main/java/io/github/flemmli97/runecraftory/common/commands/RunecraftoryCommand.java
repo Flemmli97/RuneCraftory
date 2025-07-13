@@ -23,7 +23,7 @@ import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.commands.CommandBuildContext;
@@ -281,7 +281,7 @@ public class RunecraftoryCommand {
             ctx.getSource().sendFailure(Component.translatable("runecraftory.command.weather.no", s));
             return 0;
         }
-        WorldHandler.get(ctx.getSource().getServer()).updateWeatherTo(ctx.getSource().getLevel(), weather);
+        CalendarImpl.get(ctx.getSource().getLevel()).updateWeatherTo(ctx.getSource().getLevel(), weather);
         ctx.getSource().sendSuccess(() -> Component.translatable("runecraftory.command.set.weather", Component.translatable(weather.translation)), false);
         return 1;
     }

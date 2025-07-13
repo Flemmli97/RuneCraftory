@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -83,7 +83,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && level instanceof ServerLevel serverLevel)
-            WorldHandler.get(serverLevel.getServer()).removeBarn(barn.getOwner(), GlobalPos.of(level.dimension(), pos));
+            RunecraftorySavedData.get(serverLevel.getServer()).removeBarn(barn.getOwner(), GlobalPos.of(level.dimension(), pos));
         super.onRemove(state, level, pos, newState, isMoving);
     }
 

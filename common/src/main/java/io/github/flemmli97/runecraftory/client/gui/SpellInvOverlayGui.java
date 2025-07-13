@@ -24,10 +24,10 @@ public class SpellInvOverlayGui {
     public void render(GuiGraphics graphics, DeltaTracker tracker) {
         if (!this.mc.player.isSpectator()) {
             InventorySpells inv = Platform.INSTANCE.getPlayerData(this.mc.player).getInv();
-            int x = ClientConfig.DisplayPosition.BOTTOMLEFT
-                    .positionX(this.mc.getWindow().getGuiScaledWidth(), 44, 40);
-            int y = ClientConfig.DisplayPosition.BOTTOMLEFT
-                    .positionY(this.mc.getWindow().getGuiScaledHeight(), 44, 8);
+            int x = ClientConfig.spellsDisplayPosition
+                    .positionX(this.mc.getWindow().getGuiScaledWidth(), 44, ClientConfig.spellsDisplayX);
+            int y = ClientConfig.spellsDisplayPosition
+                    .positionY(this.mc.getWindow().getGuiScaledHeight(), 44, ClientConfig.spellsDisplayY);
             RenderSystem.enableBlend();
             graphics.blitSprite(TEXTURE, x, y, 44, 44);
             RenderSystem.disableBlend();

@@ -33,10 +33,7 @@ public class GeneralConfigSpec {
     public final ModConfigSpec.BooleanValue tickUnloadedFarmland;
     public final ModConfigSpec.BooleanValue unloadedFarmlandCheckWater;
 
-    public final boolean waila = true;
-    public final boolean jei = true;
-    public final boolean harvestCraft = true;
-    public final boolean seasons = true;
+    public final ModConfigSpec.BooleanValue seasons;
     public final boolean dynamicTrees = true;
 
     public final ModConfigSpec.IntValue maxLevel;
@@ -122,6 +119,12 @@ public class GeneralConfigSpec {
         this.xpMultiplier = builder.comment("Gain base xp * multiplier. Default 0 for now cause its not balanced").defineInRange("XP Multiplier", GeneralConfig.xpMultiplier, 0, Double.MAX_VALUE);
         this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier. Default 0 for now cause its not balanced").defineInRange("Skill XP Multiplier", GeneralConfig.skillXpMultiplier, 0, Double.MAX_VALUE);
         this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").defineInRange("Taming Chance Multiplier", GeneralConfig.tamingMultiplier, 0, Double.MAX_VALUE);
+        builder.pop();
+
+        builder.push("Integration");
+        this.seasons = builder.comment("Enable Serene Seasons integration",
+                "If true date and seasons will use serene seasons version. ",
+                "Various other features such as biome tinting will also be disabled").define("Serene seasons", GeneralConfig.SERENE_SEASONS.get().booleanValue());
         builder.pop();
 
         builder.comment("Debug configs").push("Debug");

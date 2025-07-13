@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.IDailyUpdate;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -42,7 +42,7 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
     public void setLevel(Level level) {
         super.setLevel(level);
         if (this.level instanceof ServerLevel serverLevel) {
-            WorldHandler.get(serverLevel.getServer()).addToTracker(this);
+            RunecraftorySavedData.get(serverLevel.getServer()).addToTracker(this);
             int day = WorldUtils.day(this.level);
             if (this.check && this.lastUpdateDay != day) {
                 this.level.getServer().tell(new TickTask(1, () -> this.update(serverLevel)));
@@ -71,7 +71,7 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
     public void setRemoved() {
         super.setRemoved();
         if (this.level instanceof ServerLevel serverLevel) {
-            WorldHandler.get(serverLevel.getServer()).removeFromTracker(this);
+            RunecraftorySavedData.get(serverLevel.getServer()).removeFromTracker(this);
         }
     }
 }

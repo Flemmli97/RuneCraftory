@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.action.DataKey;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
@@ -52,8 +53,6 @@ import java.util.Map;
 
 public class ClientHandlers {
 
-    public static final CalendarImpl CLIENT_CALENDAR = new CalendarImpl();
-
     public static OverlayGui OVERLAY;
     public static SpellInvOverlayGui SPELL_DISPLAY;
     public static FarmlandInfo FARM_DISPLAY;
@@ -75,10 +74,10 @@ public class ClientHandlers {
         return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
     }
 
-    public static void updateClientCalendar(CalendarImpl.CalendarSync data) {
-        EnumSeason prev = CLIENT_CALENDAR.currentSeason();
-        CLIENT_CALENDAR.update(data);
-        if (CLIENT_CALENDAR.currentSeason() != prev) {
+    public static void updateClientCalendar(CalendarImpl.Date date, EnumWeather weather) {
+        EnumSeason prev = ClientCalendarHolder.CLIENT_CALENDAR.currentSeason();
+        ClientCalendarHolder.CLIENT_CALENDAR.updateDirect(date, weather);
+        if (ClientCalendarHolder.CLIENT_CALENDAR.currentSeason() != prev) {
             Minecraft mc = Minecraft.getInstance();
             Level level = mc.level;
             if (mc.level != null) {

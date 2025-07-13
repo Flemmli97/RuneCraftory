@@ -11,7 +11,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.mixinhelper.QuestDataGet;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
@@ -120,7 +120,7 @@ public class QuestHandler {
     public static void removeNPCQuestsFor(ServerPlayer player) {
         QuestData data = getData(player);
         List<QuestProgress> toRemove = data.getCurrentQuest().stream()
-                .filter(p -> p.getQuest() instanceof NPCQuest npcQuest && !WorldHandler.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())).toList();
+                .filter(p -> p.getQuest() instanceof NPCQuest npcQuest && !RunecraftorySavedData.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid())).toList();
         toRemove.forEach(p -> data.reset(p.getQuest().id));
     }
 

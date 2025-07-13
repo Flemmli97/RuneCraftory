@@ -8,10 +8,10 @@ import io.github.flemmli97.runecraftory.common.blocks.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.GrassRegrowUtil;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -283,7 +283,7 @@ public class FarmlandData {
             this.handleNotFarmblock(level);
             return;
         }
-        WorldHandler handler = WorldHandler.get(level.getServer());
+        CalendarImpl handler = CalendarImpl.get(level);
         ExternalModifiers ext = new ExternalModifiers(handler.currentSeason(), handler.currentWeather());
         if (!this.isLoaded) {
             this.scheduledData.add(ext);

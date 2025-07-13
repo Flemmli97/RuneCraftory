@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
@@ -208,7 +208,7 @@ public class NPCQuest extends QuestBase {
             if (npc != null)
                 npc.resetQuestProcess(player, this.dynamicData.origin());
             else {
-                WorldHandler.get(player.getServer()).npcHandler.scheduleQuestTrackerReset(this.dynamicData.npcUuid(), player.getUUID(), this.dynamicData.origin());
+                RunecraftorySavedData.get(player.getServer()).npcHandler.scheduleQuestTrackerReset(this.dynamicData.npcUuid(), player.getUUID(), this.dynamicData.origin());
             }
         }
     }

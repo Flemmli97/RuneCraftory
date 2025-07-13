@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,4 +15,8 @@ public class StreamCodecUtils {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Map<Holder<Attribute>, Double>> ATTRIBUTE_CODEC = ByteBufCodecs
             .map(HashMap::new, ByteBufCodecs.holderRegistry(Registries.ATTRIBUTE), ByteBufCodecs.DOUBLE);
+
+    public static <T extends Enum<T>> StreamCodec<ByteBuf, T> ofEnum(Class<T> clss) {
+        return ByteBufCodecs.idMapper(i -> clss.getEnumConstants()[i], Enum::ordinal);
+    }
 }

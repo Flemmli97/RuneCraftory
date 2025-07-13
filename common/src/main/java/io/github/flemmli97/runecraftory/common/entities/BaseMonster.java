@@ -51,7 +51,7 @@ import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
@@ -533,7 +533,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             if (this.getServer() != null)
                 GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("AssignedBarnLocation")))
                         .resultOrPartial(RuneCraftory.LOGGER::error).ifPresent(p ->
-                                this.assignedBarn = WorldHandler.get(this.getServer()).barnAt(p)
+                                this.assignedBarn = RunecraftorySavedData.get(this.getServer()).barnAt(p)
                         );
         }
         try {
@@ -1177,7 +1177,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             if (this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().displayClientMessage(this.getCombatTracker().getDeathMessage(), false);
             if (this.getServer() != null && this.getOwnerUUID() != null) {
-                WorldHandler.get(this.getServer())
+                RunecraftorySavedData.get(this.getServer())
                         .removeMonsterFromPlayer(this.getOwnerUUID(), this);
                 this.assignedBarn = null;
             }
@@ -1382,12 +1382,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 e.setLastHurtByMob(null);
         });
         if (this.getServer() != null && this.getOwnerUUID() != null) {
-            WorldHandler.get(this.getServer())
+            RunecraftorySavedData.get(this.getServer())
                     .removeMonsterFromPlayer(this.getOwnerUUID(), this);
             if (this.getOwner() != null) {
                 Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
             } else {
-                WorldHandler.get(this.getServer()).toRemovePartyMember(this);
+                RunecraftorySavedData.get(this.getServer()).toRemovePartyMember(this);
             }
             this.assignedBarn = null;
         }
@@ -1419,7 +1419,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private boolean findNearestBarn(boolean load) {
         if (load)
             return this.assignBarn();
-        BarnData nearest = WorldHandler.get(this.getServer()).findNearestFittingBarn(this, 5);
+        BarnData nearest = RunecraftorySavedData.get(this.getServer()).findNearestFittingBarn(this, 5);
         if (nearest != null) {
             if (this.assignedBarn != null && this.assignedBarn != nearest) {
                 this.assignedBarn.removeMonster(this);
@@ -1440,7 +1440,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (!this.isAlive())
             return false;
         if (this.assignedBarn == null || this.assignedBarn.isInvalidFor(this))
-            this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
+            this.assignedBarn = RunecraftorySavedData.get(this.getServer()).findFittingBarn(this);
         if (this.assignedBarn != null) {
             this.assignedBarn.addMonster(this, this.getProp().size);
             return true;
@@ -1814,7 +1814,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 stack.shrink(1);
             this.tamingTick = 60;
             float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
-            if (this.getServer() != null && (!MobConfig.monsterNeedBarn || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
+            if (this.getServer() != null && (!MobConfig.monsterNeedBarn || RunecraftorySavedData.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
                 this.delayedTaming = () -> {
                     if (chance == 0)
                         this.level().broadcastEntityEvent(this, (byte) 34);

@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
-import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestBase;
@@ -98,7 +98,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
             }
             Component name;
             if (this.npc == null) {
-                name = this.targetNPC != null ? WorldHandler.get(player.getServer())
+                name = this.targetNPC != null ? RunecraftorySavedData.get(player.getServer())
                         .npcHandler.getName(this.targetNPC) : null;
             } else {
                 name = this.npc.getName();

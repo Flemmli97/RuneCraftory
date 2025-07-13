@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
+import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -56,14 +57,14 @@ public class ClientMixinUtils {
     private static boolean ItemRenderContext;
 
     public static int modifyColoredTint(BlockAndTintGetter getter, int old) {
-        CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
+        CalendarImpl calendar = ClientCalendarHolder.CLIENT_CALENDAR;
         if (calendar.currentSeason() == EnumSeason.SUMMER)
             return old;
         return LEAVE_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getLeaveTint);
     }
 
     public static int modifyColoredTintGrass(BlockAndTintGetter getter, int old) {
-        CalendarImpl calendar = ClientHandlers.CLIENT_CALENDAR;
+        CalendarImpl calendar = ClientCalendarHolder.CLIENT_CALENDAR;
         if (calendar.currentSeason() == EnumSeason.SUMMER)
             return old;
         return GRASS_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getGrassTint);

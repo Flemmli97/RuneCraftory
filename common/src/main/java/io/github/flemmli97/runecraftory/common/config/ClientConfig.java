@@ -10,6 +10,10 @@ public class ClientConfig {
     public static int seasonDisplayY = 35;
     public static DisplayPosition seasonDisplayPosition = DisplayPosition.TOPLEFT;
 
+    public static int spellsDisplayX = 40;
+    public static int spellsDisplayY = 8;
+    public static DisplayPosition spellsDisplayPosition = DisplayPosition.BOTTOMLEFT;
+
     public static int inventoryOffsetX = 79;
     public static int inventoryOffsetY = 47;
 

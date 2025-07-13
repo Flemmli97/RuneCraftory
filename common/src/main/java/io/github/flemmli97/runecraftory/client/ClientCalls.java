@@ -290,7 +290,7 @@ public class ClientCalls {
                 LoaderNetwork.INSTANCE.sendToServer(C2SRideJump.INSTANCE);
         }
         if (entity == Minecraft.getInstance().cameraEntity) {
-            if (ClientHandlers.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
+            if (ClientCalendarHolder.CLIENT_CALENDAR.currentWeather() == EnumWeather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles().get() != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
                     entity.level().addParticle(ModParticles.RUNEY.get(),
