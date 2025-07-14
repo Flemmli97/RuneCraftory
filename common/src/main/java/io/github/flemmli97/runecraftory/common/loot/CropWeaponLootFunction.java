@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
@@ -37,7 +37,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<CropWeaponLootFunction> getType() {
-        return ModLootRegistries.CROP_WEAPON_FUNCTION.get();
+        return RuneCraftoryLootRegistries.CROP_WEAPON_FUNCTION.get();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
         List<Pair<ItemStack, ItemStat>> base = DataPackHandler.INSTANCE.itemStatManager()
                 .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(RunecraftoryTags.Items.UPGRADABLE_HELD));
         if (!base.isEmpty()) {
-            stack.set(ModDataComponentTypes.LIGHT_ORE.get(), true);
+            stack.set(RuneCraftoryDataComponentTypes.LIGHT_ORE.get(), true);
             ItemNBT.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         }
         List<Pair<ItemStack, ItemStat>> bonus = DataPackHandler.INSTANCE.itemStatManager()

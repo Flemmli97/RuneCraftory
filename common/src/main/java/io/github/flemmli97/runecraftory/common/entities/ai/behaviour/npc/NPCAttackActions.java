@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.level.ServerLevel;
@@ -39,7 +39,7 @@ public class NPCAttackActions {
         this.behaviours = behaviours;
     }
 
-    public static LootContext createLootContext(EntityNPCBase npc) {
+    public static LootContext createLootContext(NPCEntity npc) {
         LootParams.Builder builder = new LootParams.Builder((ServerLevel) npc.level())
                 .withParameter(LootContextParams.THIS_ENTITY, npc).withParameter(LootContextParams.ORIGIN, npc.position());
         return new LootContext.Builder(builder.create(LootContextParamSets.ADVANCEMENT_ENTITY)).withOptionalRandomSource(npc.getRandom())
@@ -51,7 +51,7 @@ public class NPCAttackActions {
     }
 
     @SuppressWarnings("unchecked")
-    public ExtendedBehaviour<EntityNPCBase> create() {
+    public ExtendedBehaviour<NPCEntity> create() {
         if (this.behaviours.isEmpty())
             return new InvalidateMemory<>(MemoryModuleType.ATTACK_TARGET);
         if (this.behaviours.size() == 1) {
@@ -59,7 +59,7 @@ public class NPCAttackActions {
                     .startCondition(npc -> !npc.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN))
                     .stopIf(npc -> npc.getAnimationHandler().hasAnimation() || !BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN));
         }
-        return new OneRandomBehaviour<EntityNPCBase>(this.behaviours.stream()
+        return new OneRandomBehaviour<NPCEntity>(this.behaviours.stream()
                 .map(seq -> Pair.of(seq.create(), seq.weight())).toArray(Pair[]::new))
                 .startCondition(npc -> !npc.getAnimationHandler().hasAnimation() && !BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN))
                 .stopIf(npc -> BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN));
@@ -78,20 +78,20 @@ public class NPCAttackActions {
                 ).apply(instance, NPCAttackSequence::new));
 
         @SuppressWarnings("unchecked")
-        public ExtendedBehaviour<EntityNPCBase> create() {
-            List<ExtendedBehaviour<EntityNPCBase>> behaviours = new ArrayList<>();
-            ImmutableList.Builder<Predicate<EntityNPCBase>> builder = ImmutableList.builder();
+        public ExtendedBehaviour<NPCEntity> create() {
+            List<ExtendedBehaviour<NPCEntity>> behaviours = new ArrayList<>();
+            ImmutableList.Builder<Predicate<NPCEntity>> builder = ImmutableList.builder();
             this.sequence.forEach(seq -> behaviours.addAll(seq.create(builder::add)));
             behaviours.add(DummyBehaviour.opt(new DoNPCAttackAction()));
-            SequentialBehaviour<EntityNPCBase> seq = new SequentialBehaviour<>(behaviours.toArray(ExtendedBehaviour[]::new));
+            SequentialBehaviour<NPCEntity> seq = new SequentialBehaviour<>(behaviours.toArray(ExtendedBehaviour[]::new));
             this.predicate().ifPresent(pred -> builder.add(npc -> pred.matches((ServerLevel) npc.level(), npc.position(), npc)));
-            List<Predicate<EntityNPCBase>> predicates = builder.build();
+            List<Predicate<NPCEntity>> predicates = builder.build();
             if (!predicates.isEmpty()) {
                 if (predicates.size() == 1) {
                     seq.startCondition(predicates.getFirst());
                 } else {
                     seq.startCondition(entity -> {
-                        for (Predicate<EntityNPCBase> pred : predicates) {
+                        for (Predicate<NPCEntity> pred : predicates) {
                             if (!pred.test(entity))
                                 return false;
                         }

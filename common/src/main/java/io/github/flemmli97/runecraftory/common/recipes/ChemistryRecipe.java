@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.recipes;
 
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,17 +16,17 @@ public class ChemistryRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.CHEMISTRY_SET.get());
+        return new ItemStack(RuneCraftoryItems.CHEMISTRY_SET.get());
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.CHEMISTRY_SERIALIZER.get();
+        return RuneCraftoryCrafting.CHEMISTRY_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<? extends SextupleRecipe> getType() {
-        return ModCrafting.CHEMISTRY.get();
+        return RuneCraftoryCrafting.CHEMISTRY.get();
     }
 
     @Override

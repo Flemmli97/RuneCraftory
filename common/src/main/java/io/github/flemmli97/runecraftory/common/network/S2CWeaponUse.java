@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -20,12 +20,12 @@ public class S2CWeaponUse implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CWeaponUse> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CWeaponUse decode(RegistryFriendlyByteBuf buf) {
-            return new S2CWeaponUse(ByteBufCodecs.registry(ModAttackActions.ATTACK_ACTION_KEY).decode(buf), ItemStack.OPTIONAL_STREAM_CODEC.decode(buf), buf.readInt(), buf.readInt());
+            return new S2CWeaponUse(ByteBufCodecs.registry(RuneCraftoryAttackActions.ATTACK_ACTION_KEY).decode(buf), ItemStack.OPTIONAL_STREAM_CODEC.decode(buf), buf.readInt(), buf.readInt());
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, S2CWeaponUse pkt) {
-            ByteBufCodecs.registry(ModAttackActions.ATTACK_ACTION_KEY).encode(buf, pkt.action);
+            ByteBufCodecs.registry(RuneCraftoryAttackActions.ATTACK_ACTION_KEY).encode(buf, pkt.action);
             ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, pkt.stack);
             buf.writeInt(pkt.count);
             buf.writeInt(pkt.entity);

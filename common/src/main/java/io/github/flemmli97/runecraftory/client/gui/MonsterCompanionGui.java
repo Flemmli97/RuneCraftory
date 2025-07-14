@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -86,7 +86,7 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
                     .bounds(this.leftPos + x + xOff, this.topPos + y + yOff, xSize, 20)
                     .build());
         }
-        if (this.minecraft.player.getMainHandItem().getItem() == ModItems.MOB_STAFF.get()) {
+        if (this.minecraft.player.getMainHandItem().getItem() == RuneCraftoryItems.MOB_STAFF.get()) {
             if (this.updatedBehaviour == BaseMonster.Behaviour.WANDER)
                 buttons.add((xOff, yOff) -> Button.builder(Component.translatable(C2SSetMonsterBehaviour.Action.CENTER.translation), b -> this.handlePress(C2SSetMonsterBehaviour.Action.CENTER))
                         .bounds(this.leftPos + x + xOff, this.topPos + y + yOff, xSize, 20)

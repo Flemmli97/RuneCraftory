@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
@@ -36,7 +36,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof IBaseMob mob) {
-            mob.setXPLevel(stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
+            mob.setXPLevel(stack.getOrDefault(RuneCraftoryDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
         }
         //Temporary fix for Forge-Bug-#7730
         if (e.getBbWidth() > 0.7 && e.getBbWidth() < 1) {

@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
-import io.github.flemmli97.runecraftory.common.blocks.DailyUpdateable;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.blocks.BrokenMineralBlock;
+import io.github.flemmli97.runecraftory.common.blocks.util.DailyUpdateable;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
@@ -21,14 +21,14 @@ public class BrokenMineralBlockEntity extends BlockEntity implements DailyUpdate
     private boolean check;
 
     public BrokenMineralBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.BROKEN_MINERAL_TILE.get(), blockPos, blockState);
+        super(RuneCraftoryBlocks.BROKEN_MINERAL_TILE.get(), blockPos, blockState);
     }
 
     @Override
     public void update(ServerLevel level) {
         BlockState state = this.getBlockState();
         Block block = state.getBlock();
-        if (block instanceof BlockBrokenMineral mineral) {
+        if (block instanceof BrokenMineralBlock mineral) {
             this.level.setBlockAndUpdate(this.worldPosition, mineral.getMineralState(state));
         }
     }

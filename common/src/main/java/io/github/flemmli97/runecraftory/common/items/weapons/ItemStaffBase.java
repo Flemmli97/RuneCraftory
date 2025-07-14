@@ -4,9 +4,9 @@ import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.core.BlockPos;
@@ -36,21 +36,21 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
     }
 
     public int getStaffChargeTime(LivingEntity entity, ItemStack stack) {
-        int time = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
+        int time = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
                 .chargeTime();
-        if (ArmorEffect.hasArmorEffect(entity, ModArmorEffects.MAGIC_RING.asHolder()))
+        if (ArmorEffect.hasArmorEffect(entity, RuneCraftoryArmorEffects.MAGIC_RING.asHolder()))
             time *= 0.75;
         return time;
     }
 
     public int chargeAmount(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
+        return stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
                 .getChargeLevel();
     }
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF.get(), stack);
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF.get(), stack);
     }
 
     @Override
@@ -76,10 +76,10 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
             if (!world.isClientSide) {
                 if (this.getStaffChargeTime(player, stack) <= 0) {
                     int level = Math.min(3, this.chargeAmount(stack));
-                    Spell spell = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
+                    Spell spell = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
                             .fromChargeLevel(stack, level);
                     if (spell != null && player instanceof ServerPlayer serverPlayer) {
-                        Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF_USE.get(), stack, spell);
+                        Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
                     }
                 } else
                     player.startUsingItem(hand);
@@ -94,11 +94,11 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
         if (!world.isClientSide) {
             int tier = (stack.getUseDuration(entity) - timeLeft - 1) / this.getStaffChargeTime(entity, stack);
             int level = Math.min(tier, this.chargeAmount(stack));
-            Spell spell = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
+            Spell spell = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
                     .fromChargeLevel(stack, level);
             if (spell != null) {
                 if (entity instanceof ServerPlayer player) {
-                    Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.STAFF_USE.get(), stack, spell);
+                    Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
                     return;
                 }
                 spell.use((ServerLevel) world, entity, stack);

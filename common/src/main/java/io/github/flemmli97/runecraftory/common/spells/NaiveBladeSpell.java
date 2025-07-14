@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 public class NaiveBladeSpell extends WeaponSpell {
 
     public NaiveBladeSpell() {
-        super(ModAttackActions.NAIVE_BLADE, RunecraftoryTags.Items.LONGSWORDS);
+        super(RuneCraftoryAttackActions.NAIVE_BLADE, RunecraftoryTags.Items.LONGSWORDS);
     }
 
     @Override

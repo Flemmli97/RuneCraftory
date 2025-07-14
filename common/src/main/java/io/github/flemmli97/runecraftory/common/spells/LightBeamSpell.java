@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBeam;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.LightBeamEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -15,11 +15,11 @@ public class LightBeamSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityLightBeam beam = new EntityLightBeam(level, entity);
+        LightBeamEntity beam = new LightBeamEntity(level, entity);
         beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         ProjectileUtils.shoot(entity, beam, 1);
         level.addFreshEntity(beam);
-        playSound(entity, ModSounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

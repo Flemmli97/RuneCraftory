@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.tenshilib.common.item.AnimationDebugger;
@@ -27,7 +27,7 @@ import java.util.List;
 public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
 
     public ItemDebug(Item.Properties props) {
-        super(props, ModDataComponentTypes.SELECTED_UUID, ModDataComponentTypes.SELECTED_ANIMATION);
+        super(props, RuneCraftoryDataComponentTypes.SELECTED_UUID, RuneCraftoryDataComponentTypes.SELECTED_ANIMATION);
     }
 
     @Override
@@ -100,11 +100,11 @@ public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
 
     private void changeMode(ItemStack stack) {
         Mode mode = this.getCurrentMode(stack);
-        stack.set(ModDataComponentTypes.DEBUG_ITEM_MODE.get(), mode == Mode.DEFAULT ? Mode.ANIMATION : Mode.DEFAULT);
+        stack.set(RuneCraftoryDataComponentTypes.DEBUG_ITEM_MODE.get(), mode == Mode.DEFAULT ? Mode.ANIMATION : Mode.DEFAULT);
     }
 
     private Mode getCurrentMode(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.DEBUG_ITEM_MODE.get(), Mode.DEFAULT);
+        return stack.getOrDefault(RuneCraftoryDataComponentTypes.DEBUG_ITEM_MODE.get(), Mode.DEFAULT);
     }
 
     public enum Mode {

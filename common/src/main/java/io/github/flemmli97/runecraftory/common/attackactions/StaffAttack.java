@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -35,7 +35,7 @@ public class StaffAttack extends AttackAction {
                                 CombatUtils.getRange(entity, 0),
                                 CombatUtils.getWidth(entity, 0), 0.5)))
                         .executeAttack();
-                ModSpells.STAFF_CAST.get().use(serverLevel, entity, stack);
+                RuneCraftorySpells.STAFF_CAST.get().use(serverLevel, entity, stack);
             }
             entity.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }

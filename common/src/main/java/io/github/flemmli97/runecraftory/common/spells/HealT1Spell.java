@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.particles.ParticleTypes;
@@ -45,14 +45,14 @@ public class HealT1Spell extends Spell {
                 return false;
             }
         });
-        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC_ATTACK.asHolder()) * CombatUtils.getAbilityDamageBonus(lvl, 0.6f));
+        float healAmount = (float) (CombatUtils.getAttributeValue(entity, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * CombatUtils.getAbilityDamageBonus(lvl, 0.6f));
         entity.heal(healAmount);
         spawnHealParticles(entity);
         entities.forEach(e -> {
             e.heal(healAmount);
             spawnHealParticles(e);
         });
-        playSound(entity, ModSounds.SPELL_GENERIC_HEAL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_HEAL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

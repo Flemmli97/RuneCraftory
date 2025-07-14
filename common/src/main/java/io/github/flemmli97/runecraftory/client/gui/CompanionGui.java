@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
@@ -76,11 +76,11 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         int statY = 46;
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, Attributes.ATTACK_DAMAGE),
                 this.leftPos + statX, this.topPos + statY, 0, false);
-        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, ModAttributes.DEFENCE.asHolder()),
+        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, RuneCraftoryAttributes.DEFENCE.asHolder()),
                 this.leftPos + statX, this.topPos + statY + 13, 0, false);
-        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, ModAttributes.MAGIC_ATTACK.asHolder()),
+        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()),
                 this.leftPos + statX, this.topPos + statY + 13 * 2, 0, false);
-        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, ModAttributes.MAGIC_DEFENCE.asHolder()),
+        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder()),
                 this.leftPos + statX, this.topPos + statY + 13 * 3, 0, false);
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + this.entity.friendPoints(this.minecraft.player),
                 this.leftPos + statX, this.topPos + statY + 13 * 4, 0, false);

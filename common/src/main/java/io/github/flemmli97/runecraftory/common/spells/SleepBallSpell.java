@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.StatusBallEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,13 +18,13 @@ public class SleepBallSpell extends Spell {
             double angle = i / 4.0 * Math.PI * 2.0 + Math.toRadians(entity.getYRot());
             double x = Math.cos(angle) * 1.3;
             double z = Math.sin(angle) * 1.3;
-            EntityStatusBall pollen = new EntityStatusBall(level, entity);
-            pollen.setType(EntityStatusBall.Type.SLEEP);
+            StatusBallEntity pollen = new StatusBallEntity(level, entity);
+            pollen.setType(StatusBallEntity.Type.SLEEP);
             pollen.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
             pollen.setPos(entity.getX() + x, entity.getY() + 0.4, entity.getZ() + z);
             level.addFreshEntity(pollen);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

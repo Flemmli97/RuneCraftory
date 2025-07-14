@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -21,15 +21,15 @@ public record NPCSpawnData(Optional<Holder<NPCProfession>> profession, Optional<
     public static final NPCSpawnData DEFAULT = new NPCSpawnData(Optional.empty(), Optional.empty());
 
     public static final Codec<NPCSpawnData> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ModNPCProfessions.PROFESSIONS.registry().holderByNameCodec().optionalFieldOf("profession").forGetter(NPCSpawnData::profession),
+            instance.group(RuneCraftoryNPCProfessions.PROFESSIONS.registry().holderByNameCodec().optionalFieldOf("profession").forGetter(NPCSpawnData::profession),
                     ResourceLocation.CODEC.optionalFieldOf("npc_data_id").forGetter(NPCSpawnData::npcDataId)
             ).apply(instance, NPCSpawnData::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, NPCSpawnData> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModNPCProfessions.PROFESSION_REGISTRY_KEY)), NPCSpawnData::profession,
+            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY)), NPCSpawnData::profession,
             ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), NPCSpawnData::npcDataId, NPCSpawnData::new);
 
     public NPCSpawnData cycleProfession(HolderLookup.Provider provider) {
-        List<Holder.Reference<NPCProfession>> professions = provider.lookupOrThrow(ModNPCProfessions.PROFESSION_REGISTRY_KEY).listElements()
+        List<Holder.Reference<NPCProfession>> professions = provider.lookupOrThrow(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY).listElements()
                 .sorted(Comparator.comparing(Holder::getRegisteredName)).toList();
         if (professions.isEmpty())
             return new NPCSpawnData(Optional.empty(), this.npcDataId);

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -37,7 +37,7 @@ public class TreasureChestSpawnegg extends SpawnEgg {
 
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
-        if (e instanceof EntityTreasureChest chest) {
+        if (e instanceof TreasureChestEntity chest) {
             chest.setTier(this.getTier(stack));
         }
         //Temporary fix for Forge-Bug-#7730
@@ -53,7 +53,7 @@ public class TreasureChestSpawnegg extends SpawnEgg {
             ItemStack stack = player.getItemInHand(hand);
             if (!world.isClientSide) {
                 ChestTier tier = this.getTier(stack);
-                stack.set(ModDataComponentTypes.SPAWN_EGG_CHEST_TIER.get(), tier.cycle());
+                stack.set(RuneCraftoryDataComponentTypes.SPAWN_EGG_CHEST_TIER.get(), tier.cycle());
             }
             return InteractionResultHolder.consume(stack);
         }
@@ -70,7 +70,7 @@ public class TreasureChestSpawnegg extends SpawnEgg {
     }
 
     protected ChestTier getTier(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_CHEST_TIER.get(), ChestTier.COMMON);
+        return stack.getOrDefault(RuneCraftoryDataComponentTypes.SPAWN_EGG_CHEST_TIER.get(), ChestTier.COMMON);
     }
 
     public enum ChestTier {

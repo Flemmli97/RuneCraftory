@@ -4,8 +4,8 @@ import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,9 +19,9 @@ import java.util.function.Supplier;
 
 public class UpgradeTooltipComponent implements ClientTooltipComponent {
 
-    private static final Supplier<ItemStack> MAGNIFYING_GLASS = Suppliers.memoize(() -> new ItemStack(ModItems.GLASS.get()));
-    private static final Supplier<ItemStack> SCRAP_PLUS = Suppliers.memoize(() -> new ItemStack(ModItems.SCRAP_PLUS.get()));
-    private static final Supplier<ItemStack> QUESTION = Suppliers.memoize(() -> new ItemStack(ModItems.UNKNOWN.get()));
+    private static final Supplier<ItemStack> MAGNIFYING_GLASS = Suppliers.memoize(() -> new ItemStack(RuneCraftoryItems.GLASS.get()));
+    private static final Supplier<ItemStack> SCRAP_PLUS = Suppliers.memoize(() -> new ItemStack(RuneCraftoryItems.SCRAP_PLUS.get()));
+    private static final Supplier<ItemStack> QUESTION = Suppliers.memoize(() -> new ItemStack(RuneCraftoryItems.UNKNOWN.get()));
 
     private final List<ItemStack> stacks = new ArrayList<>();
 
@@ -32,22 +32,22 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
             if (element != ItemElement.NONE)
                 this.stacks.add(element.icon.get());
         }
-        if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get()))
+        if (stack.has(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get()))
             this.stacks.add(SCRAP_PLUS.get());
-        if (stack.has(ModDataComponentTypes.INVISIBLE.get()))
+        if (stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get()))
             this.stacks.add(QUESTION.get());
-        if (stack.has(ModDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != ModItems.GLASS.get())
+        if (stack.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != RuneCraftoryItems.GLASS.get())
             this.stacks.add(MAGNIFYING_GLASS.get());
         if (!this.stacks.isEmpty())
             this.stacks.add(ItemStack.EMPTY);
-        ItemStack originItem = stack.getOrDefault(ModDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).stack();
+        ItemStack originItem = stack.getOrDefault(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).stack();
         if (!originItem.isEmpty())
             this.stacks.add(originItem);
     }
 
     public static boolean shouldAdd(ItemStack stack) {
-        return (stack.has(ModDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != ModItems.GLASS.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != ItemElement.NONE) || stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())
-                || stack.has(ModDataComponentTypes.INVISIBLE.get()) || !stack.getOrDefault(ModDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty();
+        return (stack.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != RuneCraftoryItems.GLASS.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != ItemElement.NONE) || stack.has(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get())
+                || stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get()) || !stack.getOrDefault(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty();
     }
 
     @Override

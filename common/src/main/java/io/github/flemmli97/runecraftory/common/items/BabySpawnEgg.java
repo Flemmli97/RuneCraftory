@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.items;
 
 import io.github.flemmli97.runecraftory.common.components.BabyData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,20 +43,20 @@ public class BabySpawnEgg extends Item {
         super(props);
     }
 
-    public static ItemStack createBabyFrom(EntityNPCBase baby, Component playerName, UUID father, UUID mother) {
+    public static ItemStack createBabyFrom(NPCEntity baby, Component playerName, UUID father, UUID mother) {
         CompoundTag tag = baby.saveWithoutId(new CompoundTag());
         tag.remove("Pos");
         tag.remove(Entity.UUID_TAG);
         tag.remove("Motion");
         tag.remove("Rotation");
-        ItemStack stack = new ItemStack(ModItems.NPC_BABY.get());
+        ItemStack stack = new ItemStack(RuneCraftoryItems.NPC_BABY.get());
         stack.set(DataComponents.ENTITY_DATA, CustomData.of(tag));
-        stack.set(ModDataComponentTypes.BABY_DATA.get(), new BabyData(baby.isMale(), baby.getDataName(), father, mother, Optional.of(playerName)));
+        stack.set(RuneCraftoryDataComponentTypes.BABY_DATA.get(), new BabyData(baby.isMale(), baby.getDataName(), father, mother, Optional.of(playerName)));
         return stack;
     }
 
     public static boolean isBoy(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.BABY_DATA.get(), BabyData.DEFAULT).male();
+        return stack.getOrDefault(RuneCraftoryDataComponentTypes.BABY_DATA.get(), BabyData.DEFAULT).male();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class BabySpawnEgg extends Item {
     }
 
     public Optional<Component> getPlayerName(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.BABY_DATA.get(), BabyData.DEFAULT).player();
+        return stack.getOrDefault(RuneCraftoryDataComponentTypes.BABY_DATA.get(), BabyData.DEFAULT).player();
     }
 
     @Override
@@ -119,10 +119,10 @@ public class BabySpawnEgg extends Item {
     }
 
     private Entity spawnEntity(ServerLevel level, Player player, ItemStack stack, BlockPos pos, MobSpawnType spawnType, boolean forgeCheck, boolean updateLocation, boolean doCollisionOffset) {
-        BabyData data = stack.get(ModDataComponentTypes.BABY_DATA.get());
+        BabyData data = stack.get(RuneCraftoryDataComponentTypes.BABY_DATA.get());
         if (data == null)
             return null;
-        EntityType<?> type = ModEntities.NPC.get();
+        EntityType<?> type = RuneCraftoryEntities.NPC.get();
         if (data.name().isEmpty()) {
             if (player != null)
                 player.displayClientMessage(Component.translatable("runecraftory.npc.spawn.name.missing")
@@ -130,7 +130,7 @@ public class BabySpawnEgg extends Item {
             return null;
         }
         Entity e = type.create(level, EntityType.createDefaultStackConfig(level, stack, player), pos, spawnType, updateLocation, doCollisionOffset);
-        if (e instanceof EntityNPCBase npc) {
+        if (e instanceof NPCEntity npc) {
             npc.tryUpdateName(Component.literal(data.name().get()));
             npc.getFamily().setFather(data.father());
             npc.getFamily().setMother(data.mother());

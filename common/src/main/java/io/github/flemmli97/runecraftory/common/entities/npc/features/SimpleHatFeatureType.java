@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -21,20 +21,20 @@ public record SimpleHatFeatureType(
     public static final StreamCodec<ByteBuf, SimpleHatFeature> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(SimpleHatFeature::new, SimpleHatFeature::hat);
 
     @Override
-    public SimpleHatFeature create(EntityNPCBase npc) {
+    public SimpleHatFeature create(NPCEntity npc) {
         return new SimpleHatFeature(this.hats.isEmpty() ? "" : this.hats.get(npc.getRandom().nextInt(this.hats.size())));
     }
 
     @Override
     public NPCFeatureType<SimpleHatFeature> getType() {
-        return ModNPCLooks.HAT.get();
+        return RuneCraftoryNPCLooks.HAT.get();
     }
 
     public record SimpleHatFeature(String hat) implements NPCFeature {
 
         @Override
         public NPCFeatureType<SimpleHatFeature> type() {
-            return ModNPCLooks.HAT.get();
+            return RuneCraftoryNPCLooks.HAT.get();
         }
     }
 }

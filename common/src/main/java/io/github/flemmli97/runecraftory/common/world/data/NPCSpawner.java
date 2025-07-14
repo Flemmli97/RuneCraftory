@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.world.data;
 
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -55,7 +55,7 @@ public class NPCSpawner implements CustomSpawner {
     }
 
     private void trySpawn(ServerLevel level, double x, double y, double z) {
-        EntityNPCBase npc = new EntityNPCBase(ModEntities.NPC.get(), level);
+        NPCEntity npc = new NPCEntity(RuneCraftoryEntities.NPC.get(), level);
         npc.finalizeSpawn(level, level.getCurrentDifficultyAt(npc.blockPosition()), MobSpawnType.EVENT, null);
         npc.moveTo(x, y, z, level.random.nextFloat() * 360.0f, 0.0f);
         level.addFreshEntityWithPassengers(npc);
@@ -67,7 +67,7 @@ public class NPCSpawner implements CustomSpawner {
             int x = pos.getX() + level.random.nextInt(16) - 8;
             int z = pos.getZ() + level.random.nextInt(16) - 8;
             BlockPos blockPos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
-            if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), new AABB(blockPos).inflate(64), e -> true).size() > 3 || level.getEntities(EntityTypeTest.forClass(Villager.class), new AABB(blockPos).inflate(48), e -> true).size() < 5)
+            if (!level.isVillage(blockPos) || level.getEntities(EntityTypeTest.forClass(NPCEntity.class), new AABB(blockPos).inflate(64), e -> true).size() > 3 || level.getEntities(EntityTypeTest.forClass(Villager.class), new AABB(blockPos).inflate(48), e -> true).size() < 5)
                 continue;
             return Vec3.atBottomCenterOf(blockPos);
         }

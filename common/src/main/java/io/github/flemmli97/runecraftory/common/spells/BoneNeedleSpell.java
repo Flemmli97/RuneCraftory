@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
+import io.github.flemmli97.runecraftory.common.entities.misc.BoneNeedleEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
@@ -22,7 +22,7 @@ public class BoneNeedleSpell extends Spell {
             return false;
         Vec3 dir;
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            Vec3 pos = new EntityBoneNeedle(level, entity).position().add(0, -entity.getBbHeight() * 0.25, 0);
+            Vec3 pos = new BoneNeedleEntity(level, entity).position().add(0, -entity.getBbHeight() * 0.25, 0);
             dir = EntityUtils.getStraightProjectileTarget(pos, mob.getTarget()).subtract(pos);
         } else
             dir = Vec3.directionFromRotation(entity.getXRot(), entity.getYRot());
@@ -33,7 +33,7 @@ public class BoneNeedleSpell extends Spell {
         double max = Math.abs(offset);
         double inc = max * 2.7 / 16;
         while (offset <= max) {
-            EntityBoneNeedle needle = new EntityBoneNeedle(level, entity);
+            BoneNeedleEntity needle = new BoneNeedleEntity(level, entity);
             Vector3d direction = new Vector3d(dir.x(), dir.y(), dir.z())
                     .rotateAxis(Mth.DEG_TO_RAD * 15 * offset, up.x(), up.y(), up.z());
             needle.shoot(direction.x(), direction.y(), direction.z(), entity.getRandom().nextFloat() * 0.1f + 0.6f, 2);

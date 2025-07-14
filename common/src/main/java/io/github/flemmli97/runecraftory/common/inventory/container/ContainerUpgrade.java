@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.UpgradingCraftingBl
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
-import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     }
 
     public ContainerUpgrade(int windowId, Inventory playerInv, UpgradingCraftingBlockEntity tile) {
-        super(ModMenuTypes.UPGRADE_CONTAINER.get(), windowId);
+        super(RuneCraftoryMenuTypes.UPGRADE_CONTAINER.get(), windowId);
         this.output = new WrappedContainer(new SimpleContainer(1), this::slotsChanged);
         this.craftingInv = PlayerBoundCraftingContainer.create(this, tile.getUpgradeInventory(), playerInv.player);
         this.type = tile.craftingType();

@@ -3,12 +3,12 @@ package io.github.flemmli97.runecraftory.common.events;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlock;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import io.github.flemmli97.runecraftory.common.world.features.config.BiomeFilteredConfig;
 import io.github.flemmli97.runecraftory.common.world.features.config.ChancedBlockClusterConfig;
 import io.github.flemmli97.runecraftory.mixinhelper.StructureTemplateModifier;
@@ -56,24 +56,24 @@ public class WorldRegistrationCalls {
 
     public static List<HerbFeatureEntry> defaultHerbEntries() {
         ImmutableList.Builder<HerbFeatureEntry> builder = new ImmutableList.Builder<>();
-        builder.add(new HerbFeatureEntry(ModBlocks.WEEDS, 100));
-        builder.add(new HerbFeatureEntry(ModBlocks.MUSHROOM, 40));
-        builder.add(new HerbFeatureEntry(ModBlocks.MONARCH_MUSHROOM, 10));
-        builder.add(new HerbFeatureEntry(ModBlocks.WITHERED_GRASS, 50));
-        builder.add(new HerbFeatureEntry(ModBlocks.WHITE_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.INDIGO_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.PURPLE_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.GREEN_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.BLUE_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.YELLOW_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.RED_GRASS, 30));
-        builder.add(new HerbFeatureEntry(ModBlocks.ORANGE_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.WEEDS, 100));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.MUSHROOM, 40));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.MONARCH_MUSHROOM, 10));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.WITHERED_GRASS, 50));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.WHITE_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.INDIGO_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.PURPLE_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.GREEN_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.BLUE_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.YELLOW_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.RED_GRASS, 30));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.ORANGE_GRASS, 30));
 
-        builder.add(new HerbFeatureEntry(ModBlocks.BLACK_GRASS, 75));
-        builder.add(new HerbFeatureEntry(ModBlocks.ELLI_LEAVES, 10));
-        builder.add(new HerbFeatureEntry(ModBlocks.ANTIDOTE_GRASS, 75));
-        builder.add(new HerbFeatureEntry(ModBlocks.MEDICINAL_HERB, 75));
-        builder.add(new HerbFeatureEntry(ModBlocks.BAMBOO_SPROUT, 66));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.BLACK_GRASS, 75));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.ELLI_LEAVES, 10));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.ANTIDOTE_GRASS, 75));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.MEDICINAL_HERB, 75));
+        builder.add(new HerbFeatureEntry(RuneCraftoryBlocks.BAMBOO_SPROUT, 66));
         return builder.build();
     }
 
@@ -86,7 +86,7 @@ public class WorldRegistrationCalls {
      */
     public static void createFeatures(@Nullable FeatureRegister register,
                                       Consumer<FeatureBiomeModifier> placedFeatureHandler) {
-        ResourceLocation herbs = ModFeatures.CONFIGRED_HERB_FEATURE.location();
+        ResourceLocation herbs = RuneCraftoryFeatures.CONFIGRED_HERB_FEATURE.location();
         if (register != null) {
             List<HerbFeatureEntry> herbEntries = defaultHerbEntries();
             herbEntries.forEach(entry -> register.registerConfigured(entry.getId(),
@@ -103,7 +103,7 @@ public class WorldRegistrationCalls {
                                                 ResourceKey.create(Registries.CONFIGURED_FEATURE, entry.getId())), List.of())),
                                         RunecraftoryTags.Biomes.getBlockBasedGenerationTag(entry.block(), true),
                                         RunecraftoryTags.Biomes.getBlockBasedGenerationTag(entry.block(), false), entry.weight())).toList();
-                        return new ConfiguredFeature<>(ModFeatures.BIOME_FILTERED_RANDOM_FEATURES.get(), new BiomeFilteredConfig(filtered));
+                        return new ConfiguredFeature<>(RuneCraftoryFeatures.BIOME_FILTERED_RANDOM_FEATURES.get(), new BiomeFilteredConfig(filtered));
                     });
             register.registerPlaced(herbs,
                     (provider, feat) -> new PlacedFeature(feat, List.of(RarityFilter.onAverageOnceEvery(4),
@@ -112,30 +112,30 @@ public class WorldRegistrationCalls {
         }
         placedFeatureHandler.accept(FeatureBiomeModifier.of(herbs));
         List<FeatureBiomeModifier> placedFeatures = new ArrayList<>();
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_IRON, 15, 2, 5));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_TIN, 20, 2, 4));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_SILVER, 40, 2, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_GOLD, 60, 2, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_PLATINUM, 100, 1, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_ORICHALCUM, 175, 1, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_DIAMOND, 133, 1, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_DRAGONIC, 25, 1, 2));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_AQUAMARINE, 25, 2, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_AMETHYST, 66, 2, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_RUBY, 50, 2, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_EMERALD, 66, 1, 3));
-        placedFeatures.addAll(registerMineralFeatures(register, ModBlocks.MINERAL_SAPPHIRE, 66, 2, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_IRON, 15, 2, 5));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_TIN, 20, 2, 4));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_SILVER, 40, 2, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_GOLD, 60, 2, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_PLATINUM, 100, 1, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_ORICHALCUM, 175, 1, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_DIAMOND, 133, 1, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_DRAGONIC, 25, 1, 2));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_AQUAMARINE, 25, 2, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_AMETHYST, 66, 2, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_RUBY, 50, 2, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_EMERALD, 66, 1, 3));
+        placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_SAPPHIRE, 66, 2, 3));
         placedFeatures.forEach(placedFeatureHandler);
     }
 
-    private static List<FeatureBiomeModifier> registerMineralFeatures(@Nullable FeatureRegister register, RegistryEntrySupplier<Block, ? extends BlockMineral> block,
+    private static List<FeatureBiomeModifier> registerMineralFeatures(@Nullable FeatureRegister register, RegistryEntrySupplier<Block, ? extends MineralBlock> block,
                                                                       int chance, int min, int max) {
         ResourceLocation id = RuneCraftory.modRes("mineral_" + block.getID().getPath().replace("ore_", ""));
         ResourceLocation netherID = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + "_nether");
         if (register != null) {
             register.registerConfigured(id, provider -> {
-                BlockMineral mineral = block.get();
-                return new ConfiguredFeature<>(ModFeatures.MINERAL_FEATURE.get(),
+                MineralBlock mineral = block.get();
+                return new ConfiguredFeature<>(RuneCraftoryFeatures.MINERAL_FEATURE.get(),
                         new ChancedBlockClusterConfig(mineral,
                                 RunecraftoryTags.Biomes.getMineralGenTag(mineral.tier, true), RunecraftoryTags.Biomes.getMineralGenTag(mineral.tier, false),
                                 UniformInt.of(min, max), 4, 32));
@@ -156,7 +156,7 @@ public class WorldRegistrationCalls {
     }
 
     public static MobSpawnSettings.SpawnerData gateSetting() {
-        return new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1);
+        return new MobSpawnSettings.SpawnerData(RuneCraftoryEntities.GATE.get(), 100, 1, 1);
     }
 
     public static void addVillageStructures(MinecraftServer server) {
@@ -170,7 +170,7 @@ public class WorldRegistrationCalls {
                     addToPool(streetsPool, ((StructureTemplateModifier) bigStreet).runecraftory$getRawTemplates());
             }
             StructureTemplatePool housePool = pools.get(ResourceLocation.withDefaultNamespace("village/" + s + "/houses"));
-            StructureTemplatePool npcHouses = pools.get(ModStructures.NPC_HOUSES);
+            StructureTemplatePool npcHouses = pools.get(RuneCraftoryStructures.NPC_HOUSES);
             if (npcHouses != null)
                 addToPool(housePool, ((StructureTemplateModifier) npcHouses).runecraftory$getRawTemplates());
         }

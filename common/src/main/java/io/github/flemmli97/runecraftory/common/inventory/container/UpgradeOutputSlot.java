@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -58,13 +58,13 @@ public class UpgradeOutputSlot extends Slot {
             return;
         ItemStack toUpgrade = this.ingredientInv.getItem(0);
         ItemStack material = this.ingredientInv.getItem(1);
-        ModCriteria.UPGRADE_ITEM.get().trigger(serverPlayer);
+        RuneCraftoryCriteria.UPGRADE_ITEM.get().trigger(serverPlayer);
         if (ItemNBT.getElement(toUpgrade) != ItemNBT.getElement(stack))
-            ModCriteria.CHANGE_ELEMENT.get().trigger(serverPlayer);
+            RuneCraftoryCriteria.CHANGE_ELEMENT.get().trigger(serverPlayer);
         PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
         if (stack.getItem() instanceof ItemStaffBase) {
             if (DataPackHandler.INSTANCE.itemStatManager().get(material.getItem()).map(s -> s.getTier1Spell().isPresent() || s.getTier2Spell().isPresent() || s.getTier3Spell().isPresent()).orElse(false))
-                ModCriteria.CHANGE_SPELL.get().trigger(serverPlayer);
+                RuneCraftoryCriteria.CHANGE_SPELL.get().trigger(serverPlayer);
         }
         data.useRunePoints(this.container.rpCost(), true);
         switch (this.container.craftingType()) {

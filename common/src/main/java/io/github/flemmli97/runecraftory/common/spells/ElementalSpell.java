@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalTrail;
+import io.github.flemmli97.runecraftory.common.entities.misc.ElementalTrailEntity;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
@@ -23,7 +23,7 @@ public class ElementalSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityElementalTrail flame = new EntityElementalTrail(level, entity, this.element);
+        ElementalTrailEntity flame = new ElementalTrailEntity(level, entity, this.element);
         flame.knockback();
         flame.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         if (this.element == ItemElement.DARK) {

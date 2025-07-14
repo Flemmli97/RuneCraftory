@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -25,7 +25,7 @@ public record FriendPointCondition(int points) implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.FRIENDPOINTS.get();
+        return RuneCraftoryLootRegistries.FRIENDPOINTS.get();
     }
 
     @Override

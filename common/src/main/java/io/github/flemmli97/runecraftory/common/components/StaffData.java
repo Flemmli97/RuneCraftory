@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -20,13 +20,13 @@ public record StaffData(Optional<Holder<Spell>> tier1, Optional<Holder<Spell>> t
 
     public static final StaffData DEFAULT = new StaffData(Optional.empty(), Optional.empty(), Optional.empty(), 0);
     public static final Codec<StaffData> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("first_spell").forGetter(StaffData::tier1),
-                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("second_spell").forGetter(StaffData::tier2),
-                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("third_spell").forGetter(StaffData::tier3),
+            instance.group(RuneCraftorySpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("first_spell").forGetter(StaffData::tier1),
+                    RuneCraftorySpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("second_spell").forGetter(StaffData::tier2),
+                    RuneCraftorySpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("third_spell").forGetter(StaffData::tier3),
                     Codec.INT.fieldOf("charge_time").forGetter(d -> d.chargeTime)
             ).apply(instance, StaffData::new));
     private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Spell>>> SPELL_CODEC = ByteBufCodecs.optional(
-            ByteBufCodecs.holderRegistry(ModSpells.SPELLS.registry().key()));
+            ByteBufCodecs.holderRegistry(RuneCraftorySpells.SPELLS.registry().key()));
     public static final StreamCodec<RegistryFriendlyByteBuf, StaffData> STREAM_CODEC = new StreamCodec<>() {
 
         @Override
@@ -88,6 +88,6 @@ public record StaffData(Optional<Holder<Spell>> tier1, Optional<Holder<Spell>> t
 
     @Override
     public int chargeTime() {
-        return this.chargeTime == 0 ? (int) ModAttributes.CHARGE_TIME.get().getDefaultValue() : this.chargeTime;
+        return this.chargeTime == 0 ? (int) RuneCraftoryAttributes.CHARGE_TIME.get().getDefaultValue() : this.chargeTime;
     }
 }

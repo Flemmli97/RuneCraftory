@@ -3,13 +3,13 @@ package io.github.flemmli97.runecraftory.integration.jade;
 import com.mojang.authlib.GameProfile;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
-import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
+import io.github.flemmli97.runecraftory.common.blocks.MonsterBarnBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -71,7 +71,7 @@ public class JadePlugin implements IWailaPlugin {
             public void appendServerData(CompoundTag compoundTag, EntityAccessor accessor) {
                 Entity entity = accessor.getEntity();
                 Player player = accessor.getPlayer();
-                if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == ModItems.DEBUG.get() || player.isCreative()
+                if (entity instanceof IBaseMob mob && (player.getMainHandItem().getItem() == RuneCraftoryItems.DEBUG.get() || player.isCreative()
                         || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
                     XpLevelHolder entityLevel = mob.xpLevel();
                     compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getProgress());
@@ -100,7 +100,7 @@ public class JadePlugin implements IWailaPlugin {
                         }
                     }
                 }
-                if (entity instanceof EntityNPCBase npc) {
+                if (entity instanceof NPCEntity npc) {
                     if (npc.followEntity() != null) {
                         compoundTag.put("NPCFollow", ComponentSerialization.CODEC.encodeStart(NbtOps.INSTANCE, npc.followEntity().getDisplayName()).getOrThrow());
                     }
@@ -140,7 +140,7 @@ public class JadePlugin implements IWailaPlugin {
             public ResourceLocation getUid() {
                 return IDBLOCK;
             }
-        }, BlockMonsterBarn.class);
+        }, MonsterBarnBlock.class);
         registration.addRayTraceCallback((hitResult, accessor, origin) -> {
             if (accessor instanceof EntityAccessor entityAccessor) {
                 if (entityAccessor.getEntity() instanceof MultiPartEntity entity) {
@@ -182,7 +182,7 @@ public class JadePlugin implements IWailaPlugin {
                         }
                     }
                 }
-                if (entityAccessor.getEntity() instanceof EntityNPCBase) {
+                if (entityAccessor.getEntity() instanceof NPCEntity) {
                     if (tag.contains("NPCFollow")) {
                         withText(iTooltip, "runecraftory.dependency.tooltips.npc.follow", ComponentSerialization.CODEC.parse(NbtOps.INSTANCE, tag.get("NPCFollow")).getOrThrow(), ChatFormatting.YELLOW);
                     }

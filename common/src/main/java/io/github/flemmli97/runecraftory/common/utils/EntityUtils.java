@@ -6,14 +6,14 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAdditional;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -72,7 +72,7 @@ public class EntityUtils {
     }
 
     public static boolean isExhaust(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.FATIGUE.asHolder());
+        return entity.hasEffect(RuneCraftoryEffects.FATIGUE.asHolder());
     }
 
     public static void applyPermanentEffect(LivingEntity entity, Holder<MobEffect> effect, int amplifier) {
@@ -82,15 +82,15 @@ public class EntityUtils {
     }
 
     public static boolean paralysed(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.PARALYSIS.asHolder());
+        return entity.hasEffect(RuneCraftoryEffects.PARALYSIS.asHolder());
     }
 
     public static boolean sealed(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.SEAL.asHolder());
+        return entity.hasEffect(RuneCraftoryEffects.SEAL.asHolder());
     }
 
     public static boolean canMonsterTargetNPC(Entity e) {
-        if (e instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
+        if (e instanceof NPCEntity npc && npc.getEntityToFollowUUID() != null)
             return true;
         return MobConfig.mobAttackNpc && e instanceof Npc;
     }
@@ -109,7 +109,7 @@ public class EntityUtils {
     public static boolean shouldShowFarmlandView(LivingEntity entity) {
         ItemStack main = entity.getMainHandItem();
         ItemStack off = entity.getOffhandItem();
-        return main.has(ModDataComponentTypes.MAGNIFYING_GLASS.get()) || off.has(ModDataComponentTypes.MAGNIFYING_GLASS.get());
+        return main.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) || off.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get());
     }
 
     public static void foodHealing(LivingEntity entity, float amount) {
@@ -124,7 +124,7 @@ public class EntityUtils {
     }
 
     public static boolean isDisabled(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.SLEEP.asHolder()) || entity.hasEffect(ModEffects.STUNNED.asHolder());
+        return entity.hasEffect(RuneCraftoryEffects.SLEEP.asHolder()) || entity.hasEffect(RuneCraftoryEffects.STUNNED.asHolder());
     }
 
     @Nullable
@@ -162,11 +162,11 @@ public class EntityUtils {
         if (spawner.getRandom().nextFloat() < MobConfig.treasureChance) {
             if (spawner.getRandom().nextFloat() < MobConfig.mimicChance) {
                 if (spawner.getRandom().nextFloat() < MobConfig.mimicStrongChance)
-                    return ModEntities.GOBBLE_BOX.get();
+                    return RuneCraftoryEntities.GOBBLE_BOX.get();
                 else
-                    return ModEntities.MONSTER_BOX.get();
+                    return RuneCraftoryEntities.MONSTER_BOX.get();
             } else
-                return ModEntities.TREASURE_CHEST.get();
+                return RuneCraftoryEntities.TREASURE_CHEST.get();
         }
         return null;
     }
@@ -178,7 +178,7 @@ public class EntityUtils {
             new WeightedChestTier(TreasureChestSpawnegg.ChestTier.EPIC, 0, 0, 20) //0.05f
     );
 
-    public static void tieredTreasureChest(GateEntity spawner, EntityTreasureChest chest) {
+    public static void tieredTreasureChest(GateEntity spawner, TreasureChestEntity chest) {
         int max = 0;
         for (WeightedChestTier tier : CHEST_TIERS) {
             max += tier.getModifiedWeight(spawner.xpLevel().getLevel());

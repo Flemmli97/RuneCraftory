@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.neoforge.data.tags;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.tenshilib.TenshiLib;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.HolderLookup;
@@ -33,7 +33,7 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        for (RegistryEntrySupplier<EntityType<?>, ?> type : ModEntities.getMonsters()) {
+        for (RegistryEntrySupplier<EntityType<?>, ?> type : RuneCraftoryEntities.getMonsters()) {
             this.tag(IM_HELD).add(type.get());
             this.tag(IM_USE).add(type.get());
             this.tag(IM_VILLAGERS).add(type.get());
@@ -41,7 +41,7 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
             this.tag(MINECOLONIES).add(type.get());
             this.tag(RunecraftoryTags.EntityTypes.MONSTERS).add(type.get());
         }
-        for (RegistryEntrySupplier<EntityType<?>, ?> sup : ModEntities.getBosses()) {
+        for (RegistryEntrySupplier<EntityType<?>, ?> sup : RuneCraftoryEntities.getBosses()) {
             this.tag(RunecraftoryTags.EntityTypes.BOSS_MONSTERS)
                     .add(sup.get());
         }
@@ -49,34 +49,34 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
                 .addTag(RunecraftoryTags.EntityTypes.BOSS_MONSTERS);
 
         this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
-                .add(ModEntities.GATE.get())
-                .add(ModEntities.SKY_FISH.get())
-                .add(ModEntities.TORTAS.get());
+                .add(RuneCraftoryEntities.GATE.get())
+                .add(RuneCraftoryEntities.SKY_FISH.get())
+                .add(RuneCraftoryEntities.TORTAS.get());
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER)
-                .add(ModEntities.SKY_FISH.get())
-                .add(ModEntities.TORTAS.get());
+                .add(RuneCraftoryEntities.SKY_FISH.get())
+                .add(RuneCraftoryEntities.TORTAS.get());
         this.tag(EntityTypeTags.AQUATIC)
-                .add(ModEntities.SKY_FISH.get())
-                .add(ModEntities.TORTAS.get());
+                .add(RuneCraftoryEntities.SKY_FISH.get())
+                .add(RuneCraftoryEntities.TORTAS.get());
         this.tag(EntityTypeTags.ARTHROPOD)
-                .add(ModEntities.ANT.get())
-                .add(ModEntities.KILLER_ANT.get())
-                .add(ModEntities.BEETLE.get())
-                .add(ModEntities.SPIDER.get())
-                .add(ModEntities.HORNET.get())
-                .add(ModEntities.SCORPION.get());
+                .add(RuneCraftoryEntities.ANT.get())
+                .add(RuneCraftoryEntities.KILLER_ANT.get())
+                .add(RuneCraftoryEntities.BEETLE.get())
+                .add(RuneCraftoryEntities.SPIDER.get())
+                .add(RuneCraftoryEntities.HORNET.get())
+                .add(RuneCraftoryEntities.SCORPION.get());
         this.tag(EntityTypeTags.UNDEAD)
-                .add(ModEntities.GHOST.get())
-                .add(ModEntities.GHOST_RAY.get())
-                .add(ModEntities.SPIRIT.get())
-                .add(ModEntities.IGNIS.get())
-                .add(ModEntities.TOMATO_GHOST.get())
-                .add(ModEntities.SKELEFANG.get());
+                .add(RuneCraftoryEntities.GHOST.get())
+                .add(RuneCraftoryEntities.GHOST_RAY.get())
+                .add(RuneCraftoryEntities.SPIRIT.get())
+                .add(RuneCraftoryEntities.IGNIS.get())
+                .add(RuneCraftoryEntities.TOMATO_GHOST.get())
+                .add(RuneCraftoryEntities.SKELEFANG.get());
 
         this.tag(RunecraftoryTags.EntityTypes.RAFFLESIA_SUMMONS)
-                .add(ModEntities.HORNET.get())
-                .add(ModEntities.ANT.get())
-                .add(ModEntities.KILLER_ANT.get());
+                .add(RuneCraftoryEntities.HORNET.get())
+                .add(RuneCraftoryEntities.ANT.get())
+                .add(RuneCraftoryEntities.KILLER_ANT.get());
 
         this.tag(RunecraftoryTags.EntityTypes.TAMED_MONSTER_IGNORE)
                 .add(EntityType.SNOW_GOLEM)
@@ -84,7 +84,7 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
                 .addOptional(ResourceLocation.fromNamespaceAndPath("advancedgolems", "golem"));
 
         this.tag(TenshiLib.MULTIPART_ENTITY)
-                .add(ModEntities.MULTIPART.get());
+                .add(RuneCraftoryEntities.MULTIPART.get());
     }
 
     @Override

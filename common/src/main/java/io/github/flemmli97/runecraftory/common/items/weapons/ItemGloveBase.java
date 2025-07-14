@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -29,7 +29,7 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVES.get(), stack);
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.GLOVES.get(), stack);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.fail(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(Skills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.GLOVE_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.GLOVE_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -63,7 +63,7 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
-            Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(ModAttackActions.GLOVE_USE.get(), stack);
+            Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.GLOVE_USE.get(), stack);
         }
     }
 

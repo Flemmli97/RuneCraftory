@@ -1,15 +1,15 @@
 package io.github.flemmli97.runecraftory.neoforge.data;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
-import io.github.flemmli97.runecraftory.common.blocks.MineralBlockTier;
+import io.github.flemmli97.runecraftory.common.blocks.CraftingBlock;
+import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
+import io.github.flemmli97.runecraftory.common.blocks.GiantCropBlock;
+import io.github.flemmli97.runecraftory.common.blocks.QuestboardBlock;
+import io.github.flemmli97.runecraftory.common.blocks.util.MineralBlockTier;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityMineralSqueek;
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
+import io.github.flemmli97.runecraftory.common.entities.monster.KingWooly;
+import io.github.flemmli97.runecraftory.common.entities.monster.MineralSqueek;
+import io.github.flemmli97.runecraftory.common.entities.monster.Wooly;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
@@ -20,9 +20,9 @@ import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.loot.LootingAndLuckLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.LuckBonusNumberProvider;
 import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
@@ -107,305 +107,305 @@ public class Loottables extends LootTableProvider {
 
         protected void init() {
             this.lootTables.put(LootTableResources.WOOLY_WHITE, this.table(
-                            new ItemLootData(ModItems.FUR_SMALL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
-                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
-            this.registerLootTable(ModEntities.WOOLY.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.FUR_SMALL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
+                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(RuneCraftoryEntities.WOOLY.get().getDefaultLootTable()))));
+            this.registerLootTable(RuneCraftoryEntities.WOOLY.get(), this.table(
                                     new ItemLootData(Items.SHEARS, 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1))
                             .withPool(this.create().add(this.addWithCount(Items.MUTTON, -3, 1, 1))),
-                    new TamedItemLootData(ModItems.FUR_SMALL.get(), 1, 0),
-                    new TamedItemLootData(ModItems.FUR_MEDIUM.get(), 1, 5),
-                    new TamedItemLootData(ModItems.FUR_LARGE.get(), 1, 8));
-            this.registerLootTable(ModEntities.ANT.get(), this.table(
-                            new ItemLootData(ModItems.CARAPACE_INSECT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.CARAPACE_PRETTY.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 2),
-                            new ItemLootData(ModItems.JAW_INSECT.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new TamedItemLootData(RuneCraftoryItems.FUR_SMALL.get(), 1, 0),
+                    new TamedItemLootData(RuneCraftoryItems.FUR_MEDIUM.get(), 1, 5),
+                    new TamedItemLootData(RuneCraftoryItems.FUR_LARGE.get(), 1, 8));
+            this.registerLootTable(RuneCraftoryEntities.ANT.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_INSECT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_PRETTY.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 2),
+                            new ItemLootData(RuneCraftoryItems.JAW_INSECT.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(Items.OAK_LOG, 0.7f, 0.05f, 0.6f, 0, true)),
-                    new TamedItemLootData(ModItems.CARAPACE_INSECT.get(), 1, 0));
-            this.registerLootTable(ModEntities.ORC_ARCHER.get(), this.table(
-                            new ItemLootData(ModItems.RECOVERY_POTION.get(), 0.03f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new TamedItemLootData(RuneCraftoryItems.CARAPACE_INSECT.get(), 1, 0));
+            this.registerLootTable(RuneCraftoryEntities.ORC_ARCHER.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.RECOVERY_POTION.get(), 0.03f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
                             new ItemLootData(Items.GUNPOWDER, 0.6f, COMMON_LUCK_BONUS, 0.7f, 0, true),
-                            new ItemLootData(ModItems.ARROW_HEAD.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+                            new ItemLootData(RuneCraftoryItems.ARROW_HEAD.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                     .withPool(this.create().add(this.addWithCount(Items.ARROW, -1, 1, 1))));
-            this.registerLootTable(ModEntities.ORC.get(), this.table(
-                    new ItemLootData(ModItems.CHEAP_BRACELET.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.CLOTH_CHEAP.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.GLUE.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.BEETLE.get(), this.table(
-                            new ItemLootData(ModItems.CARAPACE_INSECT.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.CARAPACE_PRETTY.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.HORN_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.HORN_INSECT.get(), 1, 0));
-            this.registerLootTable(ModEntities.BIG_MUCK.get(), this.table(
-                            new ItemLootData(ModItems.SPORE.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.POWDER_POISON.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.MUSHROOM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.SPORE.get(), 1, 0));
-            this.registerLootTable(ModEntities.BUFFAMOO.get(), this.table(
-                                    new ItemLootData(ModItems.MILK_S.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+            this.registerLootTable(RuneCraftoryEntities.ORC.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CHEAP_BRACELET.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.CLOTH_CHEAP.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.GLUE.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.BEETLE.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_INSECT.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_PRETTY.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.HORN_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.HORN_INSECT.get(), 1, 0));
+            this.registerLootTable(RuneCraftoryEntities.BIG_MUCK.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.SPORE.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.POWDER_POISON.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.MUSHROOM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.SPORE.get(), 1, 0));
+            this.registerLootTable(RuneCraftoryEntities.BUFFAMOO.get(), this.table(
+                                    new ItemLootData(RuneCraftoryItems.MILK_S.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                             .withPool(this.create().add(this.addWithCount(Items.LEATHER, -4, 1, 1)))
                             .withPool(this.create().add(this.addWithCount(Items.BEEF, -5, 2, 1))),
-                    new TamedItemLootData(ModItems.MILK_S.get(), 1, 0),
-                    new TamedItemLootData(ModItems.MILK_M.get(), 1, 5),
-                    new TamedItemLootData(ModItems.MILK_L.get(), 1, 8));
-            this.registerLootTable(ModEntities.CHIPSQUEEK.get(), this.table(
-                            new ItemLootData(ModItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.FUR_QUALITY.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.FUR.get(), 1, 0));
-            this.registerLootTable(ModEntities.CLUCKADOODLE.get(), this.table(
-                                    new ItemLootData(ModItems.EGG_S.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+                    new TamedItemLootData(RuneCraftoryItems.MILK_S.get(), 1, 0),
+                    new TamedItemLootData(RuneCraftoryItems.MILK_M.get(), 1, 5),
+                    new TamedItemLootData(RuneCraftoryItems.MILK_L.get(), 1, 8));
+            this.registerLootTable(RuneCraftoryEntities.CHIPSQUEEK.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.FUR_QUALITY.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.FUR.get(), 1, 0));
+            this.registerLootTable(RuneCraftoryEntities.CLUCKADOODLE.get(), this.table(
+                                    new ItemLootData(RuneCraftoryItems.EGG_S.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                             .withPool(this.create().add(this.addWithCount(Items.CHICKEN, -4, 1, 0.5f)))
                             .withPool(this.create().add(this.addWithCount(Items.FEATHER, -3, 2, 1))),
-                    new TamedItemLootData(ModItems.EGG_S.get(), 1, 0),
-                    new TamedItemLootData(ModItems.EGG_M.get(), 1, 5),
-                    new TamedItemLootData(ModItems.EGG_L.get(), 1, 8));
-            this.registerLootTable(ModEntities.POMME_POMME.get(), this.table(
+                    new TamedItemLootData(RuneCraftoryItems.EGG_S.get(), 1, 0),
+                    new TamedItemLootData(RuneCraftoryItems.EGG_M.get(), 1, 5),
+                    new TamedItemLootData(RuneCraftoryItems.EGG_L.get(), 1, 8));
+            this.registerLootTable(RuneCraftoryEntities.POMME_POMME.get(), this.table(
                             new ItemLootData(Items.APPLE, 0.7f, COMMON_LUCK_BONUS, 0.7f, 2, true),
-                            new ItemLootData(ModItems.BAKED_APPLE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                            new ItemLootData(ModItems.APPLE_SAPLING.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                            new ItemLootData(RuneCraftoryItems.BAKED_APPLE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(RuneCraftoryItems.APPLE_SAPLING.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
                     new TamedItemLootData(Items.APPLE, 1, 0));
-            this.registerLootTable(ModEntities.TORTAS.get(), this.table(
-                    new ItemLootData(ModItems.TURTLE_SHELL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.TORTAS.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.TURTLE_SHELL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(Items.IRON_INGOT, 0.65f, COMMON_LUCK_BONUS, 0.5f, 0),
                     new ItemLootData(Items.COPPER_INGOT, 0.45f, COMMON_LUCK_BONUS, 0.5f, 0)));
-            this.registerLootTable(ModEntities.SKY_FISH.get(), this.table(
-                    new ItemLootData(ModItems.FISH_FOSSIL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CAN.get(), 0.03f, VERY_RARE_LUCK_BONUS, RARE_LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.RARE_CAN.get(), 0.005f, SUPER_RARE_LUCK_BONUS, RARE_LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.WEAGLE.get(), this.table(
+            this.registerLootTable(RuneCraftoryEntities.SKY_FISH.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.FISH_FOSSIL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CAN.get(), 0.03f, VERY_RARE_LUCK_BONUS, RARE_LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.RARE_CAN.get(), 0.005f, SUPER_RARE_LUCK_BONUS, RARE_LOOTING_BONUS, 1)));
+            this.registerLootTable(RuneCraftoryEntities.WEAGLE.get(), this.table(
                             new ItemLootData(Items.FEATHER, 0.5f, COMMON_LUCK_BONUS, 0.55f, 0, true)),
                     new TamedItemLootData(Items.FEATHER, 1, 0)); // + shiny seed
-            this.registerLootTable(ModEntities.GOBLIN.get(), this.table(
-                    new ItemLootData(ModItems.BLADE_SHARD.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.GLUE.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.OLD_BANDAGE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.ONIGIRI.get(), 0.07f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.GOBLIN_ARCHER.get(), this.table(
-                            new ItemLootData(ModItems.ARROW_HEAD.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.OLD_BANDAGE.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.GOBLIN.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.BLADE_SHARD.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.GLUE.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.OLD_BANDAGE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.ONIGIRI.get(), 0.07f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1)));
+            this.registerLootTable(RuneCraftoryEntities.GOBLIN_ARCHER.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.ARROW_HEAD.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.OLD_BANDAGE.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(Items.GUNPOWDER, 0.7f, 0.05f, 0.7f, 0, true),
-                            new ItemLootData(ModItems.RECOVERY_POTION.get(), 0.08f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
+                            new ItemLootData(RuneCraftoryItems.RECOVERY_POTION.get(), 0.08f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2))
                     .withPool(this.create().add(this.addWithCount(Items.ARROW, -2, 2, 1))));
-            this.registerLootTable(ModEntities.DUCK.get(), this.table(
-                            new ItemLootData(ModItems.DOWN_YELLOW.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.DUCK.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.DOWN_YELLOW.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(Items.FEATHER, 0.8f, COMMON_LUCK_BONUS, 0.6f, 0, true),
-                            new ItemLootData(ModItems.FEATHER_YELLOW.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.DOWN_YELLOW.get(), 1, 0));
-            this.registerLootTable(ModEntities.FAIRY.get(), this.table(
-                            new ItemLootData(ModItems.FAIRY_DUST.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.FAIRY_DUST.get(), 1, 0)); // + love potion, prelude to love
-            this.registerLootTable(ModEntities.GHOST.get(), this.table(
-                    new ItemLootData(ModItems.GHOST_HOOD.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.SKULL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.FEATHER_YELLOW.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.DOWN_YELLOW.get(), 1, 0));
+            this.registerLootTable(RuneCraftoryEntities.FAIRY.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.FAIRY_DUST.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.FAIRY_DUST.get(), 1, 0)); // + love potion, prelude to love
+            this.registerLootTable(RuneCraftoryEntities.GHOST.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.GHOST_HOOD.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.SKULL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(Items.SKELETON_SKULL, 0.03f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.SPIRIT.get(), this.table(
-                    new ItemLootData(ModItems.CRYSTAL_DARK.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CRYSTAL_MAGIC.get(), 0.33f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.GHOST_RAY.get(), this.table(
-                    new ItemLootData(ModItems.GHOST_HOOD.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.SKULL.get(), 0.075f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.STICK_THICK.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.SPIRIT.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_DARK.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_MAGIC.get(), 0.33f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.GHOST_RAY.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.GHOST_HOOD.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.SKULL.get(), 0.075f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.STICK_THICK.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
                     new ItemLootData(Items.SKELETON_SKULL, 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.SPIDER.get(), this.table(
-                            new ItemLootData(ModItems.JAW_INSECT.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.THREAD_PRETTY.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.SPIDER.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.JAW_INSECT.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.THREAD_PRETTY.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(Items.STRING, 0.7f, COMMON_LUCK_BONUS, 0.75f, 0, true)),
                     new TamedItemLootData(Items.STRING, 1, 0));
-            this.registerLootTable(ModEntities.SHADOW_PANTHER.get(), this.table(
-                    new ItemLootData(ModItems.CLAW_PANTHER.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR_QUALITY.get(), 0.35f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.MONSTER_BOX.get(), this.table(
-                    new ItemLootData(ModItems.BROKEN_HILT.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.BROKEN_BOX.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FAILED_DISH.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.DISASTROUS_DISH.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.GOBBLE_BOX.get(), this.table(
-                    new ItemLootData(ModItems.BROKEN_HILT.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.BROKEN_BOX.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FAILED_DISH.get(), 0.15f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.DISASTROUS_DISH.get(), 0.1f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.KILLER_ANT.get(), this.table(
-                            new ItemLootData(ModItems.CARAPACE_INSECT.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.CARAPACE_PRETTY.get(), 0.15f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.JAW_INSECT.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.SHADOW_PANTHER.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CLAW_PANTHER.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR_QUALITY.get(), 0.35f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.MONSTER_BOX.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.BROKEN_HILT.get(), 0.45f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.BROKEN_BOX.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FAILED_DISH.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.DISASTROUS_DISH.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
+            this.registerLootTable(RuneCraftoryEntities.GOBBLE_BOX.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.BROKEN_HILT.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.BROKEN_BOX.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FAILED_DISH.get(), 0.15f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.DISASTROUS_DISH.get(), 0.1f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
+            this.registerLootTable(RuneCraftoryEntities.KILLER_ANT.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_INSECT.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_PRETTY.get(), 0.15f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.JAW_INSECT.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(Items.OAK_LOG, 0.75f, 0.05f, 0.8f, 0, true)),
-                    new TamedItemLootData(ModItems.CARAPACE_PRETTY.get(), 0.5f, 4));
-            this.registerLootTable(ModEntities.ORC_HUNTER.get(), this.table(
+                    new TamedItemLootData(RuneCraftoryItems.CARAPACE_PRETTY.get(), 0.5f, 4));
+            this.registerLootTable(RuneCraftoryEntities.ORC_HUNTER.get(), this.table(
                             new ItemLootData(Items.GUNPOWDER, 0.6f, COMMON_LUCK_BONUS, 1, 0, true),
-                            new ItemLootData(ModItems.ARROW_HEAD.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+                            new ItemLootData(RuneCraftoryItems.ARROW_HEAD.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                     .withPool(this.create().add(this.addWithCount(Items.ARROW, -1, 1, 1))
                             .add(this.addWithCount(Items.STICK, 0, 4, 0.5f))));
-            this.registerLootTable(ModEntities.HIGH_ORC.get(), this.table(
-                            new ItemLootData(ModItems.CHEAP_BRACELET.get(), 0.09f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                            new ItemLootData(ModItems.CLOTH_CHEAP.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.GLUE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+            this.registerLootTable(RuneCraftoryEntities.HIGH_ORC.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.CHEAP_BRACELET.get(), 0.09f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(RuneCraftoryItems.CLOTH_CHEAP.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.GLUE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                     .withPool(this.create().add(this.addWithCount(Items.STICK, 0, 4, 0.5f))));
-            this.registerLootTable(ModEntities.HORNET.get(), this.table(
-                            new ItemLootData(ModItems.CARAPACE_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.CARAPACE_PRETTY.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.JAW_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+            this.registerLootTable(RuneCraftoryEntities.HORNET.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_PRETTY.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.JAW_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
                             new ItemLootData(Items.HONEY_BOTTLE, 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
                     new TamedItemLootData(Items.HONEY_BOTTLE, 1, 0));
-            this.registerLootTable(ModEntities.SILVER_WOLF.get(), this.table(
-                            new ItemLootData(ModItems.FUR.get(), 0.55f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.FUR_QUALITY.get(), 0.15f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.FANG_WOLF.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.FANG_WOLF.get(), 0.5f, 4));
-            this.registerLootTable(ModEntities.LEAF_BALL.get(), this.table(
-                    new ItemLootData(ModItems.PLANT_STEM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.FURPY.get(), this.table(
-                    new ItemLootData(ModItems.FUR.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR_QUALITY.get(), 0.2f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.PALM_CAT.get(), this.table(
-                    new ItemLootData(ModItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CLAW_PALM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.MINO.get(), this.table(
-                    new ItemLootData(ModItems.GRAPES.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.GRAPE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.TRICKY_MUCK.get(), this.table(
-                            new ItemLootData(ModItems.SPORE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.POWDER_POISON.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.MUSHROOM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.MONARCH_MUSHROOM.get(), 0.008f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.POWDER_POISON.get(), 0.7f, 0));
-            this.registerLootTable(ModEntities.FLOWER_LILY.get(), this.table(
-                    new ItemLootData(ModItems.PLANT_STEM.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.VINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.lootTables.put(EntityKingWooly.KING_WOOLY_WOOLED_LOOT, this.table(
-                            new ItemLootData(ModItems.FUR_SMALL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2),
-                            new ItemLootData(ModItems.FUR_MEDIUM.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2),
-                            new ItemLootData(ModItems.FURBALL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 2),
+            this.registerLootTable(RuneCraftoryEntities.SILVER_WOLF.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.FUR.get(), 0.55f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.FUR_QUALITY.get(), 0.15f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.FANG_WOLF.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.FANG_WOLF.get(), 0.5f, 4));
+            this.registerLootTable(RuneCraftoryEntities.LEAF_BALL.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.PLANT_STEM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.FURPY.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.FUR.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR_QUALITY.get(), 0.2f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.PALM_CAT.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CLAW_PALM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.MINO.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.GRAPES.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.GRAPE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
+            this.registerLootTable(RuneCraftoryEntities.TRICKY_MUCK.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.SPORE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.POWDER_POISON.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.MUSHROOM.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.MONARCH_MUSHROOM.get(), 0.008f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.POWDER_POISON.get(), 0.7f, 0));
+            this.registerLootTable(RuneCraftoryEntities.FLOWER_LILY.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.PLANT_STEM.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.VINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.lootTables.put(KingWooly.KING_WOOLY_WOOLED_LOOT, this.table(
+                            new ItemLootData(RuneCraftoryItems.FUR_SMALL.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2),
+                            new ItemLootData(RuneCraftoryItems.FUR_MEDIUM.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2),
+                            new ItemLootData(RuneCraftoryItems.FURBALL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 2),
                             new ItemLootData(Items.SHEARS, 0.01f, RARE_LUCK_BONUS, 0, 0))
-                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(ModEntities.WOOLY.get().getDefaultLootTable()))));
-            this.tamedDropTable(ModEntities.KING_WOOLY.get(), new TamedItemLootData(ModItems.FUR_SMALL.get(), 1, 0),
-                    new TamedItemLootData(ModItems.FUR_MEDIUM.get(), 1, 5),
-                    new TamedItemLootData(ModItems.FUR_LARGE.get(), 1, 8));
-            this.registerLootTable(ModEntities.BUFFALOO.get(), this.table(
-                                    new ItemLootData(ModItems.HORN_BULL.get(), 0.27f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
+                    .withPool(LootPool.lootPool().add(NestedLootTable.lootTableReference(RuneCraftoryEntities.WOOLY.get().getDefaultLootTable()))));
+            this.tamedDropTable(RuneCraftoryEntities.KING_WOOLY.get(), new TamedItemLootData(RuneCraftoryItems.FUR_SMALL.get(), 1, 0),
+                    new TamedItemLootData(RuneCraftoryItems.FUR_MEDIUM.get(), 1, 5),
+                    new TamedItemLootData(RuneCraftoryItems.FUR_LARGE.get(), 1, 8));
+            this.registerLootTable(RuneCraftoryEntities.BUFFALOO.get(), this.table(
+                                    new ItemLootData(RuneCraftoryItems.HORN_BULL.get(), 0.27f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))
                             .withPool(this.create().add(this.addWithCount(Items.LEATHER, -4, 2, 1)))
                             .withPool(this.create().add(this.addWithCount(Items.BEEF, -5, 3, 1))),
-                    new TamedItemLootData(ModItems.HORN_BULL.get(), 0.5f, 0));
-            this.registerLootTable(ModEntities.GOBLIN_PIRATE.get(), this.table(
-                    new ItemLootData(ModItems.CLOTH_QUALITY.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.OIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.OLD_BANDAGE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.GOBLIN_GANGSTER.get(), this.table(
-                    new ItemLootData(ModItems.CLOTH_QUALITY.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.OIL.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.OLD_BANDAGE.get(), 0.35f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.IGNIS.get(), this.table(
-                            new ItemLootData(ModItems.CRYSTAL_MAGIC.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.CRYSTAL_FIRE.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.CRYSTAL_FIRE.get(), 0.4f, 0));
-            this.registerLootTable(ModEntities.SCORPION.get(), this.table(
-                            new ItemLootData(ModItems.TAIL_SCORPION.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                            new ItemLootData(ModItems.CARAPACE_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.TAIL_SCORPION.get(), 0.6f, 0));
-            this.registerLootTable(ModEntities.TROLL.get(), this.table(
-                    new ItemLootData(ModItems.GIANTS_NAIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.GLOVE_GIANT.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.FLOWER_LION.get(), this.table(
-                    new ItemLootData(ModItems.PLANT_STEM.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.VINE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.TOMATO_GHOST.get(), this.table(
-                    new ItemLootData(ModItems.TOMATO_SEEDS.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.TOMATO.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.GHOST_HOOD.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))); //Giant tomato
-            this.registerLootTable(ModEntities.GOBLIN_CAPTAIN.get(), this.table(
-                    new ItemLootData(ModItems.CLOTH_QUALITY.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.WARRIORS_PROOF.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.SKULL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CLOTH_SILK.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.WINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.GOBLIN_DON.get(), this.table(
-                    new ItemLootData(ModItems.OLD_BANDAGE.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.PROOF_OF_RANK.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.SKULL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.WINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.lootTables.put(EntityMineralSqueek.MINERAL_SQUEEK_HURT, new LootTable.Builder()
-                    .withPool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.STEEL_DOUBLE.get())
+                    new TamedItemLootData(RuneCraftoryItems.HORN_BULL.get(), 0.5f, 0));
+            this.registerLootTable(RuneCraftoryEntities.GOBLIN_PIRATE.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CLOTH_QUALITY.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.OIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.OLD_BANDAGE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.GOBLIN_GANGSTER.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CLOTH_QUALITY.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.OIL.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.OLD_BANDAGE.get(), 0.35f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.IGNIS.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.CRYSTAL_MAGIC.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.CRYSTAL_FIRE.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.CRYSTAL_FIRE.get(), 0.4f, 0));
+            this.registerLootTable(RuneCraftoryEntities.SCORPION.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.TAIL_SCORPION.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                            new ItemLootData(RuneCraftoryItems.CARAPACE_INSECT.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.TAIL_SCORPION.get(), 0.6f, 0));
+            this.registerLootTable(RuneCraftoryEntities.TROLL.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.GIANTS_NAIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.GLOVE_GIANT.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.FLOWER_LION.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.PLANT_STEM.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.VINE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.TOMATO_GHOST.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.TOMATO_SEEDS.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.TOMATO.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.GHOST_HOOD.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0))); //Giant tomato
+            this.registerLootTable(RuneCraftoryEntities.GOBLIN_CAPTAIN.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CLOTH_QUALITY.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.WARRIORS_PROOF.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.SKULL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CLOTH_SILK.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.WINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.GOBLIN_DON.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.OLD_BANDAGE.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.PROOF_OF_RANK.get(), 0.1f, RARE_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.SKULL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.WINE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.lootTables.put(MineralSqueek.MINERAL_SQUEEK_HURT, new LootTable.Builder()
+                    .withPool(LootPool.lootPool().add(LootItem.lootTableItem(RuneCraftoryItems.STEEL_DOUBLE.get())
                                     .setWeight(40))
-                            .add(LootItem.lootTableItem(ModItems.STEEL_TEN.get())
+                            .add(LootItem.lootTableItem(RuneCraftoryItems.STEEL_TEN.get())
                                     .setWeight(1))));
-            this.registerLootTable(ModEntities.NAPPIE.get(), this.table(
-                            new ItemLootData(ModItems.PINEAPPLE.get(), 0.6f, COMMON_LUCK_BONUS, 0.5f, 2, true),
-                            new ItemLootData(ModItems.PINEAPPLE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                            new ItemLootData(ModItems.PINEAPPLE_SEEDS.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.PINEAPPLE.get(), 0.5f, 0));
-            this.registerLootTable(ModEntities.MALM_TIGER.get(), this.table(
-                            new ItemLootData(ModItems.PINEAPPLE.get(), 0.6f, COMMON_LUCK_BONUS, 0.5f, 2, true),
-                            new ItemLootData(ModItems.PINEAPPLE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                            new ItemLootData(ModItems.PINEAPPLE_SEEDS.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
-                    new TamedItemLootData(ModItems.PINEAPPLE.get(), 0.5f, 0));
-            this.registerLootTable(ModEntities.MALM_TIGER.get(), this.table(
-                    new ItemLootData(ModItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR_QUALITY.get(), 0.2f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CLAW_MALM.get(), 0.3f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.LITTLE_EMPEROR.get(), this.table(
-                    new ItemLootData(ModItems.CRYSTAL_MAGIC.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.POWDER_MAGIC.get(), 0.2f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CRYSTAL_SMALL.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.DEMON.get(), this.table(
-                    new ItemLootData(ModItems.DEVIL_BLOOD.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.ARCH_DEMON.get(), this.table(
-                    new ItemLootData(ModItems.DEVIL_BLOOD.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.HORN_DEVIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.MINOTAUR.get(), this.table(
-                    new ItemLootData(ModItems.HORN_DEVIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.HAMMER_PIECE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.PROTEIN.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.MINOTAUR_KING.get(), this.table(
-                    new ItemLootData(ModItems.HAMMER_PIECE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.PROTEIN.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.NAPPIE.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.PINEAPPLE.get(), 0.6f, COMMON_LUCK_BONUS, 0.5f, 2, true),
+                            new ItemLootData(RuneCraftoryItems.PINEAPPLE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(RuneCraftoryItems.PINEAPPLE_SEEDS.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.PINEAPPLE.get(), 0.5f, 0));
+            this.registerLootTable(RuneCraftoryEntities.MALM_TIGER.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.PINEAPPLE.get(), 0.6f, COMMON_LUCK_BONUS, 0.5f, 2, true),
+                            new ItemLootData(RuneCraftoryItems.PINEAPPLE_JUICE.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                            new ItemLootData(RuneCraftoryItems.PINEAPPLE_SEEDS.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)),
+                    new TamedItemLootData(RuneCraftoryItems.PINEAPPLE.get(), 0.5f, 0));
+            this.registerLootTable(RuneCraftoryEntities.MALM_TIGER.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.FUR.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR_QUALITY.get(), 0.2f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CLAW_MALM.get(), 0.3f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.LITTLE_EMPEROR.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_MAGIC.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.POWDER_MAGIC.get(), 0.2f, RARE_LOOTING_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_SMALL.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.DEMON.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.DEVIL_BLOOD.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.ARCH_DEMON.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.DEVIL_BLOOD.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.HORN_DEVIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.MINOTAUR.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.HORN_DEVIL.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.HAMMER_PIECE.get(), 0.3f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.PROTEIN.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.MINOTAUR_KING.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.HAMMER_PIECE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.PROTEIN.get(), 0.01f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
 
-            this.registerLootTable(ModEntities.AMBROSIA.get(), this.table(
-                    new ItemLootData(ModItems.AMBROSIAS_THORNS.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.TOYHERB.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.PLANT_STEM.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.THUNDERBOLT.get(), this.table(
-                    new ItemLootData(ModItems.LIGHTNING_MANE.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.FUR.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR_QUALITY.get(), 0.15f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.MARIONETTA.get(), this.table(
-                    new ItemLootData(ModItems.CURSED_DOLL.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.FUR_SMALL.get(), 0.8f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR_MEDIUM.get(), 0.25f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.HANDONETTA.get(), this.table(
-                    new ItemLootData(ModItems.PUPPETRY_STRINGS.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.FUR_SMALL.get(), 0.8f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.FUR_MEDIUM.get(), 0.25f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.DEAD_TREE.get(), this.table(
-                    new ItemLootData(ModItems.MOVING_BRANCH.get(), 0.6f, COMMON_LUCK_BONUS, RARE_LOOTING_BONUS, 2, true, false),
+            this.registerLootTable(RuneCraftoryEntities.AMBROSIA.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.AMBROSIAS_THORNS.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.TOYHERB.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.PLANT_STEM.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.THUNDERBOLT.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.LIGHTNING_MANE.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.FUR.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR_QUALITY.get(), 0.15f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.MARIONETTA.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CURSED_DOLL.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.FUR_SMALL.get(), 0.8f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR_MEDIUM.get(), 0.25f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.HANDONETTA.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.PUPPETRY_STRINGS.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.FUR_SMALL.get(), 0.8f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.FUR_MEDIUM.get(), 0.25f, RARE_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.DEAD_TREE.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.MOVING_BRANCH.get(), 0.6f, COMMON_LUCK_BONUS, RARE_LOOTING_BONUS, 2, true, false),
                     new ItemLootData(Items.APPLE, 0.8f, COMMON_LUCK_BONUS, 1, 0, true),
-                    new ItemLootData(ModItems.CRYSTAL_SMALL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 2)));
-            this.registerLootTable(ModEntities.CHIMERA.get(), this.table(
-                    new ItemLootData(ModItems.CLAW_CHIMERA.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.TAIL_CHIMERA.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.DEVIL_BLOOD.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.RACCOON.get(), this.table(
-                    new ItemLootData(ModItems.RACCOON_LEAF.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.UDON.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.CURRY_UDON.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1),
-                    new ItemLootData(ModItems.TEMPURA_UDON.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
-            this.registerLootTable(ModEntities.SKELEFANG.get(), this.table(
-                    new ItemLootData(ModItems.DRAGON_BONES.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
-                    new ItemLootData(ModItems.FISH_FOSSIL.get(), 0.7f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.SKULL.get(), 0.55f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
-            this.registerLootTable(ModEntities.RAFFLESIA.get(), this.table(
-                    new ItemLootData(ModItems.ROOT.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.RAFFLESIA_PETAL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false)));
-            this.registerLootTable(ModEntities.GRIMOIRE.get(), this.table(
-                    new ItemLootData(ModItems.FANG_DRAGON.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.SCALE_GRIMOIRE.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false)));
-            this.registerLootTable(ModEntities.SANO.get(), this.table(
-                            new ItemLootData(ModItems.ROCK_SHARD_LEFT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false))
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_SMALL.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 2)));
+            this.registerLootTable(RuneCraftoryEntities.CHIMERA.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CLAW_CHIMERA.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.TAIL_CHIMERA.get(), 0.05f, RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.DEVIL_BLOOD.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.RACCOON.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.RACCOON_LEAF.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.UDON.get(), 0.05f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.CURRY_UDON.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1),
+                    new ItemLootData(RuneCraftoryItems.TEMPURA_UDON.get(), 0.02f, VERY_RARE_LUCK_BONUS, LOOTING_BONUS, 1)));
+            this.registerLootTable(RuneCraftoryEntities.SKELEFANG.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.DRAGON_BONES.get(), 0.4f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false),
+                    new ItemLootData(RuneCraftoryItems.FISH_FOSSIL.get(), 0.7f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.SKULL.get(), 0.55f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0)));
+            this.registerLootTable(RuneCraftoryEntities.RAFFLESIA.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.ROOT.get(), 0.65f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.RAFFLESIA_PETAL.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false)));
+            this.registerLootTable(RuneCraftoryEntities.GRIMOIRE.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.FANG_DRAGON.get(), 0.2f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.SCALE_GRIMOIRE.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2, true, false)));
+            this.registerLootTable(RuneCraftoryEntities.SANO.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.ROCK_SHARD_LEFT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false))
                     .withPool(this.create().add(this.addWithCount(Items.STONE, 0, 5, 1))));
-            this.registerLootTable(ModEntities.UNO.get(), this.table(
-                            new ItemLootData(ModItems.ROCK_SHARD_RIGHT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false))
+            this.registerLootTable(RuneCraftoryEntities.UNO.get(), this.table(
+                            new ItemLootData(RuneCraftoryItems.ROCK_SHARD_RIGHT.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false))
                     .withPool(this.create().add(this.addWithCount(Items.STONE, 0, 5, 1))));
-            this.registerLootTable(ModEntities.SARCOPHAGUS.get(), this.table(
-                    new ItemLootData(ModItems.CRYSTAL_MAGIC.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
-                    new ItemLootData(ModItems.CRYSTAL_SKULL.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false)));
+            this.registerLootTable(RuneCraftoryEntities.SARCOPHAGUS.get(), this.table(
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_MAGIC.get(), 0.6f, COMMON_LUCK_BONUS, LOOTING_BONUS, 0),
+                    new ItemLootData(RuneCraftoryItems.CRYSTAL_SKULL.get(), 0.5f, COMMON_LUCK_BONUS, LOOTING_BONUS, 1, true, false)));
 
             this.registerGateLoot();
         }
@@ -419,19 +419,19 @@ public class Loottables extends LootTableProvider {
         private LootTable.Builder gateLoot(ItemElement element) {
             return switch (element) {
                 case WATER ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_WATER.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_WATER.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 case EARTH ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_EARTH.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_EARTH.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 case WIND ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_WIND.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_WIND.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 case FIRE ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_FIRE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_FIRE.get(), 0.25f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 case LIGHT ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_LIGHT.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_LIGHT.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 case DARK ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_DARK.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_DARK.get(), 0.1f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 case LOVE ->
-                        this.table(new ItemLootData(ModItems.CRYSTAL_LOVE.get(), 0.05f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
+                        this.table(new ItemLootData(RuneCraftoryItems.CRYSTAL_LOVE.get(), 0.05f, COMMON_LUCK_BONUS, LOOTING_BONUS, 2));
                 default -> this.table();
             };
         }
@@ -546,17 +546,17 @@ public class Loottables extends LootTableProvider {
         @Override
         protected void init() {
             LootPoolEntryContainer.Builder<?> b = AlternativesEntry.alternatives();
-            b.otherwise(LootItem.lootTableItem(ModItems.FUR_LARGE.get()).when(FriendPointCondition.of(8))
+            b.otherwise(LootItem.lootTableItem(RuneCraftoryItems.FUR_LARGE.get()).when(FriendPointCondition.of(8))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
-            b.otherwise(LootItem.lootTableItem(ModItems.FUR_MEDIUM.get()).when(FriendPointCondition.of(5))
+            b.otherwise(LootItem.lootTableItem(RuneCraftoryItems.FUR_MEDIUM.get()).when(FriendPointCondition.of(5))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
-            b.otherwise(LootItem.lootTableItem(ModItems.FUR_SMALL.get()).when(FriendPointCondition.of(0))
+            b.otherwise(LootItem.lootTableItem(RuneCraftoryItems.FUR_SMALL.get()).when(FriendPointCondition.of(0))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(this.provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE))));
 
-            this.lootTables.put(EntityWooly.shearedLootTable(LootTableResources.WOOLY_WHITE), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
+            this.lootTables.put(Wooly.shearedLootTable(LootTableResources.WOOLY_WHITE), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
         }
     }
 
@@ -571,33 +571,33 @@ public class Loottables extends LootTableProvider {
         @Override
         public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             LootPool.Builder tier1 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
-            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_1_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : RuneCraftoryItems.TIER_1_CHEST) {
                 tier1.add(LootItem.lootTableItem(item.get()));
             }
-            tier1.add(LootItem.lootTableItem(ModItems.FORGING_BREAD.get()));
-            tier1.add(LootItem.lootTableItem(ModItems.ACCESSORY_BREAD.get()));
-            tier1.add(LootItem.lootTableItem(ModItems.MEDICINE_BREAD.get()));
-            tier1.add(LootItem.lootTableItem(ModItems.COOKING_BREAD.get()));
+            tier1.add(LootItem.lootTableItem(RuneCraftoryItems.FORGING_BREAD.get()));
+            tier1.add(LootItem.lootTableItem(RuneCraftoryItems.ACCESSORY_BREAD.get()));
+            tier1.add(LootItem.lootTableItem(RuneCraftoryItems.MEDICINE_BREAD.get()));
+            tier1.add(LootItem.lootTableItem(RuneCraftoryItems.COOKING_BREAD.get()));
             output.accept(LootTableResources.TIER_1_LOOT, LootTable.lootTable().withPool(tier1));
 
             LootPool.Builder tier2 = LootPool.lootPool().setRolls(UniformGenerator.between(2, 4));
-            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_2_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : RuneCraftoryItems.TIER_2_CHEST) {
                 tier2.add(LootItem.lootTableItem(item.get()));
             }
-            tier2.add(LootItem.lootTableItem(ModItems.FORGING_BREAD.get()));
-            tier2.add(LootItem.lootTableItem(ModItems.ACCESSORY_BREAD.get()));
-            tier2.add(LootItem.lootTableItem(ModItems.MEDICINE_BREAD.get()));
-            tier2.add(LootItem.lootTableItem(ModItems.COOKING_BREAD.get()));
+            tier2.add(LootItem.lootTableItem(RuneCraftoryItems.FORGING_BREAD.get()));
+            tier2.add(LootItem.lootTableItem(RuneCraftoryItems.ACCESSORY_BREAD.get()));
+            tier2.add(LootItem.lootTableItem(RuneCraftoryItems.MEDICINE_BREAD.get()));
+            tier2.add(LootItem.lootTableItem(RuneCraftoryItems.COOKING_BREAD.get()));
             output.accept(LootTableResources.TIER_2_LOOT, LootTable.lootTable().withPool(tier2));
 
             LootPool.Builder tier3 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
-            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_3_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : RuneCraftoryItems.TIER_3_CHEST) {
                 tier3.add(LootItem.lootTableItem(item.get()));
             }
             output.accept(LootTableResources.TIER_3_LOOT, LootTable.lootTable().withPool(tier3));
 
             LootPool.Builder tier4 = LootPool.lootPool().setRolls(UniformGenerator.between(1, 2));
-            for (RegistryEntrySupplier<Item, ?> item : ModItems.TIER_4_CHEST) {
+            for (RegistryEntrySupplier<Item, ?> item : RuneCraftoryItems.TIER_4_CHEST) {
                 tier4.add(LootItem.lootTableItem(item.get()));
             }
             output.accept(LootTableResources.TIER_4_LOOT, LootTable.lootTable().withPool(tier4));
@@ -613,61 +613,61 @@ public class Loottables extends LootTableProvider {
 //                    .add(LootItem.lootTableItem(ModItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))));
 
             LootPool.Builder spells = LootPool.lootPool().setRolls(UniformGenerator.between(-2, 1));
-            spells.add(LootItem.lootTableItem(ModItems.FIRE_BALL_SMALL.get()).setWeight(140));
-            spells.add(LootItem.lootTableItem(ModItems.FIRE_BALL_BIG.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.EXPLOSION.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.WATER_LASER.get()).setWeight(110));
-            spells.add(LootItem.lootTableItem(ModItems.PARALLEL_LASER.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.DELTA_LASER.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.SCREW_ROCK.get()).setWeight(110));
-            spells.add(LootItem.lootTableItem(ModItems.EARTH_SPIKE.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.AVENGER_ROCK.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.SONIC_WIND.get()).setWeight(110));
-            spells.add(LootItem.lootTableItem(ModItems.DOUBLE_SONIC.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.PENETRATE_SONIC.get()).setWeight(20));
-            spells.add(LootItem.lootTableItem(ModItems.LIGHT_BARRIER.get()).setWeight(90));
-            spells.add(LootItem.lootTableItem(ModItems.SHINE.get()).setWeight(50));
-            spells.add(LootItem.lootTableItem(ModItems.PRISM.get()).setWeight(15));
-            spells.add(LootItem.lootTableItem(ModItems.DARK_SNAKE.get()).setWeight(100));
-            spells.add(LootItem.lootTableItem(ModItems.DARK_BALL.get()).setWeight(50));
-            spells.add(LootItem.lootTableItem(ModItems.DARKNESS.get()).setWeight(15));
-            spells.add(LootItem.lootTableItem(ModItems.CURE.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.CURE_ALL.get()).setWeight(30));
-            spells.add(LootItem.lootTableItem(ModItems.CURE_MASTER.get()).setWeight(10));
-            spells.add(LootItem.lootTableItem(ModItems.MEDI_POISON.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.MEDI_PARA.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.MEDI_SEAL.get()).setWeight(10));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.FIRE_BALL_SMALL.get()).setWeight(140));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.FIRE_BALL_BIG.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.EXPLOSION.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.WATER_LASER.get()).setWeight(110));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.PARALLEL_LASER.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DELTA_LASER.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.SCREW_ROCK.get()).setWeight(110));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.EARTH_SPIKE.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.AVENGER_ROCK.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.SONIC_WIND.get()).setWeight(110));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DOUBLE_SONIC.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.PENETRATE_SONIC.get()).setWeight(20));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.LIGHT_BARRIER.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.SHINE.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.PRISM.get()).setWeight(15));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DARK_SNAKE.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DARK_BALL.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DARKNESS.get()).setWeight(15));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.CURE.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.CURE_ALL.get()).setWeight(30));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.CURE_MASTER.get()).setWeight(10));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.MEDI_POISON.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.MEDI_PARA.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.MEDI_SEAL.get()).setWeight(10));
 
-            spells.add(LootItem.lootTableItem(ModItems.POWER_WAVE.get()).setWeight(100));
-            spells.add(LootItem.lootTableItem(ModItems.DASH_SLASH.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.RUSH_ATTACK.get()).setWeight(85));
-            spells.add(LootItem.lootTableItem(ModItems.ROUND_BREAK.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.MIND_THRUST.get()).setWeight(85));
-            spells.add(LootItem.lootTableItem(ModItems.GUST.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.STORM.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.BLITZ.get()).setWeight(30));
-            spells.add(LootItem.lootTableItem(ModItems.TWIN_ATTACK.get()).setWeight(90));
-            spells.add(LootItem.lootTableItem(ModItems.RAIL_STRIKE.get()).setWeight(50));
-            spells.add(LootItem.lootTableItem(ModItems.WIND_SLASH.get()).setWeight(70));
-            spells.add(LootItem.lootTableItem(ModItems.FLASH_STRIKE.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.NAIVE_BLADE.get()).setWeight(70));
-            spells.add(LootItem.lootTableItem(ModItems.STEEL_HEART.get()).setWeight(40));
-            spells.add(LootItem.lootTableItem(ModItems.DELTA_STRIKE.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.HURRICANE.get()).setWeight(90));
-            spells.add(LootItem.lootTableItem(ModItems.REAPER_SLASH.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.MILLION_STRIKE.get()).setWeight(50));
-            spells.add(LootItem.lootTableItem(ModItems.AXEL_DISASTER.get()).setWeight(50));
-            spells.add(LootItem.lootTableItem(ModItems.STARDUST_UPPER.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.TORNADO_SWING.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.GRAND_IMPACT.get()).setWeight(70));
-            spells.add(LootItem.lootTableItem(ModItems.GIGA_SWING.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.UPPER_CUT.get()).setWeight(100));
-            spells.add(LootItem.lootTableItem(ModItems.DOUBLE_KICK.get()).setWeight(90));
-            spells.add(LootItem.lootTableItem(ModItems.STRAIGHT_PUNCH.get()).setWeight(80));
-            spells.add(LootItem.lootTableItem(ModItems.NEKO_DAMASHI.get()).setWeight(100));
-            spells.add(LootItem.lootTableItem(ModItems.RUSH_PUNCH.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.CYCLONE.get()).setWeight(60));
-            spells.add(LootItem.lootTableItem(ModItems.RAPID_MOVE.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.POWER_WAVE.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DASH_SLASH.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.RUSH_ATTACK.get()).setWeight(85));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.ROUND_BREAK.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.MIND_THRUST.get()).setWeight(85));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.GUST.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.STORM.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.BLITZ.get()).setWeight(30));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.TWIN_ATTACK.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.RAIL_STRIKE.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.WIND_SLASH.get()).setWeight(70));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.FLASH_STRIKE.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.NAIVE_BLADE.get()).setWeight(70));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.STEEL_HEART.get()).setWeight(40));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DELTA_STRIKE.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.HURRICANE.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.REAPER_SLASH.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.MILLION_STRIKE.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.AXEL_DISASTER.get()).setWeight(50));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.STARDUST_UPPER.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.TORNADO_SWING.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.GRAND_IMPACT.get()).setWeight(70));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.GIGA_SWING.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.UPPER_CUT.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.DOUBLE_KICK.get()).setWeight(90));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.STRAIGHT_PUNCH.get()).setWeight(80));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.NEKO_DAMASHI.get()).setWeight(100));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.RUSH_PUNCH.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.CYCLONE.get()).setWeight(60));
+            spells.add(LootItem.lootTableItem(RuneCraftoryItems.RAPID_MOVE.get()).setWeight(90));
             output.accept(LootTableResources.CHEST_LOOT_SPELLS, LootTable.lootTable().withPool(spells));
         }
     }
@@ -686,17 +686,17 @@ public class Loottables extends LootTableProvider {
             return build;
         }
 
-        protected static LootPool.Builder cropLoot(HolderLookup.Provider provider, BlockCrop block) {
+        protected static LootPool.Builder cropLoot(HolderLookup.Provider provider, ExtendedCropBlock block) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
-            if (block instanceof BlockGiantCrop)
+            if (block instanceof GiantCropBlock)
                 build.add(LootItem.lootTableItem(block.getCrop(provider)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockGiantCrop.DIRECTION, Direction.NORTH))));
+                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(GiantCropBlock.DIRECTION, Direction.NORTH))));
             else
                 build.add(LootItem.lootTableItem(block.getCrop(provider)));
             return build;
         }
 
-        protected static LootPool.Builder cropWeaponLoot(HolderLookup.Provider provider, BlockCrop block) {
+        protected static LootPool.Builder cropWeaponLoot(HolderLookup.Provider provider, ExtendedCropBlock block) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
             build.add(LootItem.lootTableItem(block.getCrop(provider))
                     .apply(new CropWeaponLootFunction.Builder()));
@@ -707,98 +707,98 @@ public class Loottables extends LootTableProvider {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
             switch (tier) {
                 case IRON -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
                     build.add(ore(40, 17, Items.IRON_INGOT));
-                    build.add(ore(5, 5, ModItems.INVIS_STONE.get()));
-                    build.add(ore(10, 3, ModItems.INVIS_STONE.get(), 10));
-                    build.add(ore(1, 7, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(5, 5, RuneCraftoryItems.INVIS_STONE.get()));
+                    build.add(ore(10, 3, RuneCraftoryItems.INVIS_STONE.get(), 10));
+                    build.add(ore(1, 7, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case TIN -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
                     build.add(ore(40, 15, Items.IRON_INGOT));
                     build.add(ore(25, 24, Items.COPPER_INGOT));
-                    build.add(ore(4, 3, ModItems.INVIS_STONE.get(), 5));
-                    build.add(ore(5, 3, ModItems.INVIS_STONE.get(), 20));
-                    build.add(ore(3, 8, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(4, 3, RuneCraftoryItems.INVIS_STONE.get(), 5));
+                    build.add(ore(5, 3, RuneCraftoryItems.INVIS_STONE.get(), 20));
+                    build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case SILVER -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
                     build.add(ore(40, 12, Items.IRON_INGOT));
-                    build.add(ore(20, 31, ModItems.RAW_SILVER.get()));
-                    build.add(ore(2, 2, ModItems.INVIS_STONE.get(), 5));
-                    build.add(ore(3, 2, ModItems.INVIS_STONE.get(), 10));
-                    build.add(ore(3, 2, ModItems.INVIS_STONE.get(), 15));
-                    build.add(ore(3, 8, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(20, 31, RuneCraftoryItems.RAW_SILVER.get()));
+                    build.add(ore(2, 2, RuneCraftoryItems.INVIS_STONE.get(), 5));
+                    build.add(ore(3, 2, RuneCraftoryItems.INVIS_STONE.get(), 10));
+                    build.add(ore(3, 2, RuneCraftoryItems.INVIS_STONE.get(), 15));
+                    build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case GOLD -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
                     build.add(ore(50, 8, Items.IRON_INGOT));
                     build.add(ore(20, 31, Items.GOLD_INGOT));
-                    build.add(ore(3, 8, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case DIAMOND -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
                     build.add(ore(5, 7, Items.DIAMOND));
                     build.add(ore(15, 27, Items.DIAMOND, 20));
-                    build.add(ore(3, 8, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case PLATINUM -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
-                    build.add(ore(4, 12, ModItems.RAW_PLATINUM.get()));
-                    build.add(ore(20, 29, ModItems.RAW_PLATINUM.get(), 30));
-                    build.add(ore(3, 8, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(4, 12, RuneCraftoryItems.RAW_PLATINUM.get()));
+                    build.add(ore(20, 29, RuneCraftoryItems.RAW_PLATINUM.get(), 30));
+                    build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case ORICHALCUM -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
-                    build.add(ore(4, 8, ModItems.ORICHALCUM.get(), 20));
-                    build.add(ore(10, 27, ModItems.ORICHALCUM.get(), 40));
-                    build.add(ore(5, 11, ModItems.CRYSTAL_BIG.get(), 40));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(4, 8, RuneCraftoryItems.ORICHALCUM.get(), 20));
+                    build.add(ore(10, 27, RuneCraftoryItems.ORICHALCUM.get(), 40));
+                    build.add(ore(5, 11, RuneCraftoryItems.CRYSTAL_BIG.get(), 40));
                 }
                 case DRAGONIC -> {
-                    build.add(ore(100, 3, ModItems.SCRAP.get()));
-                    build.add(ore(6, 9, ModItems.DRAGONIC.get(), 20));
-                    build.add(ore(10, 26, ModItems.DRAGONIC.get(), 50));
-                    build.add(ore(3, 9, ModItems.CRYSTAL_SMALL.get(), 40));
+                    build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(6, 9, RuneCraftoryItems.DRAGONIC.get(), 20));
+                    build.add(ore(10, 26, RuneCraftoryItems.DRAGONIC.get(), 50));
+                    build.add(ore(3, 9, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case AMETHYST -> {
-                    build.add(ore(130, 3, ModItems.SCRAP.get()));
-                    build.add(ore(40, 15, ModItems.AMETHYST.get()));
-                    build.add(ore(15, 17, ModItems.CRYSTAL_EARTH.get()));
-                    build.add(ore(1, 3, ModItems.LIGHT_ORE.get()));
-                    build.add(ore(5, 3, ModItems.LIGHT_ORE.get(), 5));
-                    build.add(ore(7, 5, ModItems.LIGHT_ORE.get(), 15));
+                    build.add(ore(130, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(40, 15, RuneCraftoryItems.AMETHYST.get()));
+                    build.add(ore(15, 17, RuneCraftoryItems.CRYSTAL_EARTH.get()));
+                    build.add(ore(1, 3, RuneCraftoryItems.LIGHT_ORE.get()));
+                    build.add(ore(5, 3, RuneCraftoryItems.LIGHT_ORE.get(), 5));
+                    build.add(ore(7, 5, RuneCraftoryItems.LIGHT_ORE.get(), 15));
                 }
                 case AQUAMARINE -> {
-                    build.add(ore(130, 3, ModItems.SCRAP.get()));
-                    build.add(ore(40, 15, ModItems.AQUAMARINE.get()));
-                    build.add(ore(15, 17, ModItems.CRYSTAL_WATER.get()));
-                    build.add(ore(1, 3, ModItems.LIGHT_ORE.get()));
-                    build.add(ore(5, 3, ModItems.LIGHT_ORE.get(), 5));
-                    build.add(ore(7, 5, ModItems.LIGHT_ORE.get(), 15));
+                    build.add(ore(130, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(40, 15, RuneCraftoryItems.AQUAMARINE.get()));
+                    build.add(ore(15, 17, RuneCraftoryItems.CRYSTAL_WATER.get()));
+                    build.add(ore(1, 3, RuneCraftoryItems.LIGHT_ORE.get()));
+                    build.add(ore(5, 3, RuneCraftoryItems.LIGHT_ORE.get(), 5));
+                    build.add(ore(7, 5, RuneCraftoryItems.LIGHT_ORE.get(), 15));
                 }
                 case RUBY -> {
-                    build.add(ore(130, 3, ModItems.SCRAP.get()));
-                    build.add(ore(40, 15, ModItems.RUBY.get()));
-                    build.add(ore(15, 17, ModItems.CRYSTAL_FIRE.get()));
-                    build.add(ore(1, 3, ModItems.LIGHT_ORE.get()));
-                    build.add(ore(5, 3, ModItems.LIGHT_ORE.get(), 5));
-                    build.add(ore(7, 5, ModItems.LIGHT_ORE.get(), 15));
+                    build.add(ore(130, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(40, 15, RuneCraftoryItems.RUBY.get()));
+                    build.add(ore(15, 17, RuneCraftoryItems.CRYSTAL_FIRE.get()));
+                    build.add(ore(1, 3, RuneCraftoryItems.LIGHT_ORE.get()));
+                    build.add(ore(5, 3, RuneCraftoryItems.LIGHT_ORE.get(), 5));
+                    build.add(ore(7, 5, RuneCraftoryItems.LIGHT_ORE.get(), 15));
                 }
                 case EMERALD -> {
-                    build.add(ore(130, 3, ModItems.SCRAP.get()));
+                    build.add(ore(130, 3, RuneCraftoryItems.SCRAP.get()));
                     build.add(ore(40, 15, Items.EMERALD));
-                    build.add(ore(15, 17, ModItems.CRYSTAL_WIND.get()));
-                    build.add(ore(1, 3, ModItems.LIGHT_ORE.get()));
-                    build.add(ore(5, 3, ModItems.LIGHT_ORE.get(), 5));
-                    build.add(ore(7, 5, ModItems.LIGHT_ORE.get(), 15));
+                    build.add(ore(15, 17, RuneCraftoryItems.CRYSTAL_WIND.get()));
+                    build.add(ore(1, 3, RuneCraftoryItems.LIGHT_ORE.get()));
+                    build.add(ore(5, 3, RuneCraftoryItems.LIGHT_ORE.get(), 5));
+                    build.add(ore(7, 5, RuneCraftoryItems.LIGHT_ORE.get(), 15));
                 }
                 case SAPPHIRE -> {
-                    build.add(ore(130, 3, ModItems.SCRAP.get()));
-                    build.add(ore(50, 15, ModItems.SAPPHIRE.get()));
-                    build.add(ore(3, 17, ModItems.CRYSTAL_LOVE.get()));
-                    build.add(ore(1, 3, ModItems.LIGHT_ORE.get()));
-                    build.add(ore(5, 3, ModItems.LIGHT_ORE.get(), 5));
-                    build.add(ore(7, 5, ModItems.LIGHT_ORE.get(), 15));
+                    build.add(ore(130, 3, RuneCraftoryItems.SCRAP.get()));
+                    build.add(ore(50, 15, RuneCraftoryItems.SAPPHIRE.get()));
+                    build.add(ore(3, 17, RuneCraftoryItems.CRYSTAL_LOVE.get()));
+                    build.add(ore(1, 3, RuneCraftoryItems.LIGHT_ORE.get()));
+                    build.add(ore(5, 3, RuneCraftoryItems.LIGHT_ORE.get(), 5));
+                    build.add(ore(7, 5, RuneCraftoryItems.LIGHT_ORE.get(), 15));
                 }
             }
             build.apply(ItemLevelLootFunction.defaultFunc());
@@ -819,53 +819,53 @@ public class Loottables extends LootTableProvider {
 
         @Override
         public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-            this.add(ModBlocks.MUSHROOM.get(), LootTable.lootTable().withPool(herbLoot(ModItems.MUSHROOM.get())));
-            this.add(ModBlocks.MONARCH_MUSHROOM.get(), LootTable.lootTable().withPool(herbLoot(ModItems.MONARCH_MUSHROOM.get())));
-            this.add(ModBlocks.ELLI_LEAVES.get(), LootTable.lootTable().withPool(herbLoot(ModItems.ELLI_LEAVES.get())));
-            this.add(ModBlocks.WITHERED_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.WITHERED_GRASS.get())));
-            this.add(ModBlocks.WEEDS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.WEEDS.get())));
-            this.add(ModBlocks.WHITE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.WHITE_GRASS.get())));
-            this.add(ModBlocks.INDIGO_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.INDIGO_GRASS.get())));
-            this.add(ModBlocks.PURPLE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.PURPLE_GRASS.get())));
-            this.add(ModBlocks.GREEN_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.GREEN_GRASS.get())));
-            this.add(ModBlocks.BLUE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.BLUE_GRASS.get())));
-            this.add(ModBlocks.YELLOW_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.YELLOW_GRASS.get())));
-            this.add(ModBlocks.RED_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.RED_GRASS.get())));
-            this.add(ModBlocks.ORANGE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.ORANGE_GRASS.get())));
-            this.add(ModBlocks.BLACK_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.BLACK_GRASS.get())));
-            this.add(ModBlocks.ANTIDOTE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(ModItems.ANTIDOTE_GRASS.get())));
-            this.add(ModBlocks.MEDICINAL_HERB.get(), LootTable.lootTable().withPool(herbLoot(ModItems.MEDICINAL_HERB.get())));
-            this.add(ModBlocks.BAMBOO_SPROUT.get(), LootTable.lootTable().withPool(herbLoot(ModItems.BAMBOO_SPROUT.get())));
+            this.add(RuneCraftoryBlocks.MUSHROOM.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.MUSHROOM.get())));
+            this.add(RuneCraftoryBlocks.MONARCH_MUSHROOM.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.MONARCH_MUSHROOM.get())));
+            this.add(RuneCraftoryBlocks.ELLI_LEAVES.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.ELLI_LEAVES.get())));
+            this.add(RuneCraftoryBlocks.WITHERED_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.WITHERED_GRASS.get())));
+            this.add(RuneCraftoryBlocks.WEEDS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.WEEDS.get())));
+            this.add(RuneCraftoryBlocks.WHITE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.WHITE_GRASS.get())));
+            this.add(RuneCraftoryBlocks.INDIGO_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.INDIGO_GRASS.get())));
+            this.add(RuneCraftoryBlocks.PURPLE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.PURPLE_GRASS.get())));
+            this.add(RuneCraftoryBlocks.GREEN_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.GREEN_GRASS.get())));
+            this.add(RuneCraftoryBlocks.BLUE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.BLUE_GRASS.get())));
+            this.add(RuneCraftoryBlocks.YELLOW_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.YELLOW_GRASS.get())));
+            this.add(RuneCraftoryBlocks.RED_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.RED_GRASS.get())));
+            this.add(RuneCraftoryBlocks.ORANGE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.ORANGE_GRASS.get())));
+            this.add(RuneCraftoryBlocks.BLACK_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.BLACK_GRASS.get())));
+            this.add(RuneCraftoryBlocks.ANTIDOTE_GRASS.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.ANTIDOTE_GRASS.get())));
+            this.add(RuneCraftoryBlocks.MEDICINAL_HERB.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.MEDICINAL_HERB.get())));
+            this.add(RuneCraftoryBlocks.BAMBOO_SPROUT.get(), LootTable.lootTable().withPool(herbLoot(RuneCraftoryItems.BAMBOO_SPROUT.get())));
 
-            this.add(ModBlocks.FORGE.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.COOKING_TABLE.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.CHEMISTRY_SET.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(RuneCraftoryBlocks.FORGE.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
+            this.add(RuneCraftoryBlocks.COOKING_TABLE.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
+            this.add(RuneCraftoryBlocks.CHEMISTRY_SET.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
+            this.add(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
 
-            this.dropSelf(ModBlocks.SHIPPING.get());
-            this.dropSelf(ModBlocks.CASH_REGISTER.get());
-            this.dropSelf(ModBlocks.MONSTER_BARN.get());
-            this.add(ModBlocks.QUEST_BOARD.get(), block -> this.createSinglePropConditionTable(block, BlockQuestboard.PART, BlockQuestboard.Part.BOTTOM_LEFT));
+            this.dropSelf(RuneCraftoryBlocks.SHIPPING.get());
+            this.dropSelf(RuneCraftoryBlocks.CASH_REGISTER.get());
+            this.dropSelf(RuneCraftoryBlocks.MONSTER_BARN.get());
+            this.add(RuneCraftoryBlocks.QUEST_BOARD.get(), block -> this.createSinglePropConditionTable(block, QuestboardBlock.PART, QuestboardBlock.Part.BOTTOM_LEFT));
 
-            for (RegistryEntrySupplier<Block, ?> reg : ModBlocks.CROPS) {
+            for (RegistryEntrySupplier<Block, ?> reg : RuneCraftoryBlocks.CROPS) {
                 Block block = reg.get();
-                if (block instanceof BlockCrop)
-                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot(this.registries, (BlockCrop) block)));
+                if (block instanceof ExtendedCropBlock)
+                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot(this.registries, (ExtendedCropBlock) block)));
             }
-            for (RegistryEntrySupplier<Block, ?> reg : ModBlocks.FLOWERS) {
-                if (reg == ModBlocks.SWORD_CROP || reg == ModBlocks.SHIELD_CROP) {
+            for (RegistryEntrySupplier<Block, ?> reg : RuneCraftoryBlocks.FLOWERS) {
+                if (reg == RuneCraftoryBlocks.SWORD_CROP || reg == RuneCraftoryBlocks.SHIELD_CROP) {
                     Block block = reg.get();
-                    if (block instanceof BlockCrop)
-                        this.add(reg.get(), LootTable.lootTable().withPool(cropWeaponLoot(this.registries, (BlockCrop) block)));
+                    if (block instanceof ExtendedCropBlock)
+                        this.add(reg.get(), LootTable.lootTable().withPool(cropWeaponLoot(this.registries, (ExtendedCropBlock) block)));
                     continue;
                 }
                 Block block = reg.get();
-                if (block instanceof BlockCrop)
-                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot(this.registries, (BlockCrop) block)));
+                if (block instanceof ExtendedCropBlock)
+                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot(this.registries, (ExtendedCropBlock) block)));
             }
-            ModBlocks.MINERAL_MAP.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
+            RuneCraftoryBlocks.MINERAL_MAP.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
 
-            this.add(ModBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
 
             this.loots.forEach(biConsumer);
         }

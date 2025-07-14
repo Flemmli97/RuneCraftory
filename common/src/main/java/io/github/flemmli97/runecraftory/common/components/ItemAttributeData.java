@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleSortedMap;
@@ -47,7 +47,7 @@ public class ItemAttributeData {
     private ItemAttributeData(Map<Holder<Attribute>, Double> baseStats, Map<Holder<Attribute>, Double> stats) {
         this.baseStats = baseStats;
         this.stats = stats;
-        Object2DoubleAVLTreeMap<Holder<Attribute>> map = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
+        Object2DoubleAVLTreeMap<Holder<Attribute>> map = new Object2DoubleAVLTreeMap<>(RuneCraftoryAttributes.SORTED);
         map.putAll(this.baseStats);
         this.stats.forEach((attribute, value) -> map.put(attribute, map.getOrDefault(attribute, 0d) + value));
         this.totalStats = Object2DoubleSortedMaps.unmodifiable(map);

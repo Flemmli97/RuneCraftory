@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.SpellProperties;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -16,7 +16,7 @@ public record SpellPropertiesgen(PackOutput packOutput) implements DataProvider 
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-        return CompletableFuture.allOf(ModSpells.DEFAULT_PROPERTIES.entrySet().stream().map((entry) -> {
+        return CompletableFuture.allOf(RuneCraftorySpells.DEFAULT_PROPERTIES.entrySet().stream().map((entry) -> {
             Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(entry.getKey().getID().getNamespace() + "/" + SpellPropertiesManager.DIRECTORY + "/" + entry.getKey().getID().getPath() + ".json");
             JsonElement obj = SpellProperties.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
             return DataProvider.saveStable(cache, obj, path);

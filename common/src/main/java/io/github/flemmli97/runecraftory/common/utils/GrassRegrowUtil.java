@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.calendar.Season;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
@@ -30,23 +30,23 @@ public class GrassRegrowUtil {
 
     private static EnumMap<Season, List<HerbEntry>> getSeasonHerbGrowMap() {
         EnumMap<Season, List<HerbEntry>> map = new EnumMap<>(Season.class);
-        map.put(Season.SPRING, List.of(new HerbEntry(100, ModBlocks.WEEDS),
-                new HerbEntry(30, ModBlocks.GREEN_GRASS), new HerbEntry(30, ModBlocks.ORANGE_GRASS),
-                new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS), new HerbEntry(50, ModBlocks.MEDICINAL_HERB),
-                new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
-        map.put(Season.SUMMER, List.of(new HerbEntry(100, ModBlocks.WEEDS),
-                new HerbEntry(30, ModBlocks.GREEN_GRASS), new HerbEntry(30, ModBlocks.YELLOW_GRASS),
-                new HerbEntry(30, ModBlocks.BLUE_GRASS), new HerbEntry(30, ModBlocks.PURPLE_GRASS),
-                new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS), new HerbEntry(50, ModBlocks.MEDICINAL_HERB),
-                new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
-        map.put(Season.AUTUMN, List.of(new HerbEntry(100, ModBlocks.WEEDS),
-                new HerbEntry(30, ModBlocks.YELLOW_GRASS), new HerbEntry(20, ModBlocks.RED_GRASS),
-                new HerbEntry(20, ModBlocks.ORANGE_GRASS), new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS),
-                new HerbEntry(50, ModBlocks.MEDICINAL_HERB), new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
-        map.put(Season.WINTER, List.of(new HerbEntry(100, ModBlocks.WEEDS),
-                new HerbEntry(20, ModBlocks.WHITE_GRASS), new HerbEntry(20, ModBlocks.BLACK_GRASS),
-                new HerbEntry(30, ModBlocks.INDIGO_GRASS), new HerbEntry(50, ModBlocks.ANTIDOTE_GRASS),
-                new HerbEntry(50, ModBlocks.MEDICINAL_HERB), new HerbEntry(15, ModBlocks.BAMBOO_SPROUT)));
+        map.put(Season.SPRING, List.of(new HerbEntry(100, RuneCraftoryBlocks.WEEDS),
+                new HerbEntry(30, RuneCraftoryBlocks.GREEN_GRASS), new HerbEntry(30, RuneCraftoryBlocks.ORANGE_GRASS),
+                new HerbEntry(50, RuneCraftoryBlocks.ANTIDOTE_GRASS), new HerbEntry(50, RuneCraftoryBlocks.MEDICINAL_HERB),
+                new HerbEntry(15, RuneCraftoryBlocks.BAMBOO_SPROUT)));
+        map.put(Season.SUMMER, List.of(new HerbEntry(100, RuneCraftoryBlocks.WEEDS),
+                new HerbEntry(30, RuneCraftoryBlocks.GREEN_GRASS), new HerbEntry(30, RuneCraftoryBlocks.YELLOW_GRASS),
+                new HerbEntry(30, RuneCraftoryBlocks.BLUE_GRASS), new HerbEntry(30, RuneCraftoryBlocks.PURPLE_GRASS),
+                new HerbEntry(50, RuneCraftoryBlocks.ANTIDOTE_GRASS), new HerbEntry(50, RuneCraftoryBlocks.MEDICINAL_HERB),
+                new HerbEntry(15, RuneCraftoryBlocks.BAMBOO_SPROUT)));
+        map.put(Season.AUTUMN, List.of(new HerbEntry(100, RuneCraftoryBlocks.WEEDS),
+                new HerbEntry(30, RuneCraftoryBlocks.YELLOW_GRASS), new HerbEntry(20, RuneCraftoryBlocks.RED_GRASS),
+                new HerbEntry(20, RuneCraftoryBlocks.ORANGE_GRASS), new HerbEntry(50, RuneCraftoryBlocks.ANTIDOTE_GRASS),
+                new HerbEntry(50, RuneCraftoryBlocks.MEDICINAL_HERB), new HerbEntry(15, RuneCraftoryBlocks.BAMBOO_SPROUT)));
+        map.put(Season.WINTER, List.of(new HerbEntry(100, RuneCraftoryBlocks.WEEDS),
+                new HerbEntry(20, RuneCraftoryBlocks.WHITE_GRASS), new HerbEntry(20, RuneCraftoryBlocks.BLACK_GRASS),
+                new HerbEntry(30, RuneCraftoryBlocks.INDIGO_GRASS), new HerbEntry(50, RuneCraftoryBlocks.ANTIDOTE_GRASS),
+                new HerbEntry(50, RuneCraftoryBlocks.MEDICINAL_HERB), new HerbEntry(15, RuneCraftoryBlocks.BAMBOO_SPROUT)));
         return map;
     }
 

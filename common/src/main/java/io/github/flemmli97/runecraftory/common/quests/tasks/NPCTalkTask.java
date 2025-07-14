@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
@@ -71,7 +71,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
         private final UUID targetNPC;
         private final EntityPredicate predicate;
-        private EntityNPCBase npc;
+        private NPCEntity npc;
 
         public NPCTalkResolved(UUID targetNPC, EntityPredicate predicate) {
             this.targetNPC = targetNPC;
@@ -94,7 +94,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
                 if (this.targetNPC == null)
                     this.npc = null;
                 else
-                    this.npc = EntityUtils.findFromUUID(EntityNPCBase.class, player.level(), this.targetNPC);
+                    this.npc = EntityUtils.findFromUUID(NPCEntity.class, player.level(), this.targetNPC);
             }
             Component name;
             if (this.npc == null) {
@@ -108,7 +108,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
             return Component.translatable(this.getId().toString() + ".generic");
         }
 
-        public boolean trySubmit(ServerPlayer player, EntityNPCBase npc) {
+        public boolean trySubmit(ServerPlayer player, NPCEntity npc) {
             return npc.getUUID().equals(this.targetNPC) && (this.predicate == null || this.predicate.matches(player, npc));
         }
     }

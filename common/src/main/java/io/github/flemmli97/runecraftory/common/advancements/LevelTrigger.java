@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.advancements;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -32,7 +32,7 @@ public class LevelTrigger extends SimpleCriterionTrigger<LevelTrigger.TriggerIns
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> of(int amount) {
-            return ModCriteria.LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), amount));
+            return RuneCraftoryCriteria.LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), amount));
         }
 
         public boolean matches(ServerPlayer player) {

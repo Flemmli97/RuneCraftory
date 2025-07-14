@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -50,7 +50,7 @@ public record S2CNpcDialogue(int entity, ConversationContext convCtx, String con
 
     public static void handle(S2CNpcDialogue pkt, Player player) {
         Entity entity = player.level().getEntity(pkt.entity);
-        if (entity instanceof EntityNPCBase npc)
+        if (entity instanceof NPCEntity npc)
             ClientHandlers.updateNPCDialogue(npc, pkt.convCtx, pkt.conversationID, pkt.component, pkt.data, pkt.actions);
     }
 

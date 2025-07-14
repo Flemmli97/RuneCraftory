@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.blocks.DailyUpdateable;
+import io.github.flemmli97.runecraftory.common.blocks.util.DailyUpdateable;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -163,7 +163,7 @@ public class RunecraftorySavedData extends SavedData {
         if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
                     .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level().dimension(), entity.blockPosition())));
-        else if (entity instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
+        else if (entity instanceof NPCEntity npc && npc.getEntityToFollowUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(npc.getEntityToFollowUUID(), o -> new HashSet<>())
                     .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level().dimension(), entity.blockPosition())));
     }
@@ -176,7 +176,7 @@ public class RunecraftorySavedData extends SavedData {
         if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
             this.toRemovePartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
                     .add(entity.getUUID());
-        else if (entity instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
+        else if (entity instanceof NPCEntity npc && npc.getEntityToFollowUUID() != null)
             this.toRemovePartyMembers.computeIfAbsent(npc.getEntityToFollowUUID(), o -> new HashSet<>())
                     .add(entity.getUUID());
     }

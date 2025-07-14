@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.world.features.trees;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
@@ -24,7 +24,7 @@ public class FruitLeaveDecorator extends TreeDecorator {
 
     @Override
     protected TreeDecoratorType<?> type() {
-        return ModFeatures.FRUIT_DECORATOR.get();
+        return RuneCraftoryFeatures.FRUIT_DECORATOR.get();
     }
 
     @Override

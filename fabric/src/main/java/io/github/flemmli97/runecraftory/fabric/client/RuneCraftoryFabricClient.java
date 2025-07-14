@@ -6,8 +6,8 @@ import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
-import io.github.flemmli97.runecraftory.common.registry.ModFluids;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.tenshilib.fabric.client.ClientSetupModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
@@ -77,7 +77,7 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> ClientCalls.initSkillTab(screen, Screens.getButtons(screen)::add));
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> ClientCalls.tooltipEvent(stack, lines, flag));
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
-        ModItems.ITEMS.getEntries().forEach(e -> {
+        RuneCraftoryItems.ITEMS.getEntries().forEach(e -> {
             if (e.get() instanceof ItemArmorBase) {
                 ArmorRenderer.register(new ArmorRendererImpl(), e.get());
             }
@@ -86,7 +86,7 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
         CoreShaderRegistrationCallback.EVENT.register(reg -> RunecraftoryShaders.registerShader(reg::register));
         BossBarTracker.register();
 
-        FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.HOT_SPRING_WATER.get(), ModFluids.FLOWING_HOT_SPRING_WATER.get(), new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL, SimpleFluidRenderHandler.WATER_FLOWING, SimpleFluidRenderHandler.WATER_OVERLAY, ClientRegister.HOT_SPRING_BASE) {
+        FluidRenderHandlerRegistry.INSTANCE.register(RuneCraftoryFluids.HOT_SPRING_WATER.get(), RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get(), new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL, SimpleFluidRenderHandler.WATER_FLOWING, SimpleFluidRenderHandler.WATER_OVERLAY, ClientRegister.HOT_SPRING_BASE) {
             @Override
             public int getFluidColor(@Nullable BlockAndTintGetter getter, @Nullable BlockPos pos, FluidState state) {
                 return getter != null && pos != null ? getter.getBlockTint(pos, ClientRegister.HOT_SPRING_COLOR) | 0xff000000 : ClientRegister.HOT_SPRING_BASE;

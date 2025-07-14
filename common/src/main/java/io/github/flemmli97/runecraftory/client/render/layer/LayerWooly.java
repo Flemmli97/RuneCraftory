@@ -2,9 +2,9 @@ package io.github.flemmli97.runecraftory.client.render.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
+import io.github.flemmli97.runecraftory.client.model.monster.WoolyModel;
+import io.github.flemmli97.runecraftory.client.model.monster.WoolyWoolModel;
+import io.github.flemmli97.runecraftory.common.entities.monster.Wooly;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -14,12 +14,12 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 
-public class LayerWooly<T extends EntityWooly> extends RenderLayer<T, ModelWooly<T>> {
+public class LayerWooly<T extends Wooly> extends RenderLayer<T, WoolyModel<T>> {
 
     private final ResourceLocation tex = RuneCraftory.modRes("textures/entity/monsters/wooly_wool.png");
-    private final ModelWoolyWool<T> woolModel;
+    private final WoolyWoolModel<T> woolModel;
 
-    public LayerWooly(RenderLayerParent<T, ModelWooly<T>> renderer, ModelWoolyWool<T> woolModel) {
+    public LayerWooly(RenderLayerParent<T, WoolyModel<T>> renderer, WoolyWoolModel<T> woolModel) {
         super(renderer);
         this.woolModel = woolModel;
     }

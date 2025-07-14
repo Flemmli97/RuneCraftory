@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.entities.npc.profession;
 
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,7 +25,7 @@ public class BathhouseAttendant extends NPCProfession {
     }
 
     @Override
-    public void handleAction(EntityNPCBase npc, Player player, String action) {
+    public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.canTrade() == ShopState.OPEN)
             if (action.equals(BATH_ACTION)) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
@@ -33,7 +33,7 @@ public class BathhouseAttendant extends NPCProfession {
                 int amount = 300 * baths + (Math.max(0, baths - 1)) * 100;
                 if (data.useMoney(amount)) {
                     player.displayClientMessage(Component.translatable(BATH_ACTION_SUCCESS, player.getName()), false);
-                    player.addEffect(new MobEffectInstance(ModEffects.BATH.asHolder(), 1700, 0, false, true, false));
+                    player.addEffect(new MobEffectInstance(RuneCraftoryEffects.BATH.asHolder(), 1700, 0, false, true, false));
                     data.getDailyUpdater().increaseBathCounter();
                 } else {
                     player.displayClientMessage(Component.translatable(BATH_ACTION_FAIL, player.getName(), amount), false);
@@ -42,7 +42,7 @@ public class BathhouseAttendant extends NPCProfession {
     }
 
     @Override
-    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(NPCEntity entity, ServerPlayer player) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         int baths = data.getDailyUpdater().getBathCounter() + 1;
         int cost = 300 * baths + (Math.max(0, baths - 1)) * 100;

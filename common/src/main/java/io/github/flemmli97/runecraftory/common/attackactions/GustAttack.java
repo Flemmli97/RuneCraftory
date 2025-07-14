@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -27,7 +27,7 @@ public class GustAttack extends AttackAction {
         if (anim.isAt("jump")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             entity.setDeltaMovement(dir.scale(1.6).add(0, 0.4, 0));
-            entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
+            entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         if (anim.isAt("attack")) {
             if (!entity.level().isClientSide) {
@@ -39,7 +39,7 @@ public class GustAttack extends AttackAction {
                         .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.1f))
                         .executeAttack());
             }
-            entity.playSound(ModSounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         handler.store(DataKey.FIXED_LOOK, true);
     }

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.neoforge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDamageType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -23,14 +23,14 @@ public class DamageTypeGen extends JsonCodecProvider<DamageType> {
 
     @Override
     protected void gather() {
-        for (ResourceKey<DamageType> types : ModDamageType.ATTACK_TYPES) {
+        for (ResourceKey<DamageType> types : RuneCraftoryDamageType.ATTACK_TYPES) {
             this.unconditional(types.location(), new DamageType(
                     types.location().toLanguageKey(), DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f, DamageEffects.HURT));
         }
 
-        this.unconditional(ModDamageType.EXHAUST.location(), new DamageType(
-                ModDamageType.EXHAUST.location().toLanguageKey(), DamageScaling.NEVER, 0.1f, DamageEffects.HURT));
-        this.unconditional(ModDamageType.STRONG_POISON.location(), new DamageType(
-                ModDamageType.STRONG_POISON.location().toLanguageKey(), DamageScaling.NEVER, 0.2f, DamageEffects.HURT));
+        this.unconditional(RuneCraftoryDamageType.EXHAUST.location(), new DamageType(
+                RuneCraftoryDamageType.EXHAUST.location().toLanguageKey(), DamageScaling.NEVER, 0.1f, DamageEffects.HURT));
+        this.unconditional(RuneCraftoryDamageType.STRONG_POISON.location(), new DamageType(
+                RuneCraftoryDamageType.STRONG_POISON.location().toLanguageKey(), DamageScaling.NEVER, 0.2f, DamageEffects.HURT));
     }
 }

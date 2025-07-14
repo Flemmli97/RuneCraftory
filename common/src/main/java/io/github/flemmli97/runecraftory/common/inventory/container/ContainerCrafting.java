@@ -8,8 +8,8 @@ import io.github.flemmli97.runecraftory.common.network.S2CCraftingRecipes;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SpecialSextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -53,7 +53,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
     }
 
     public ContainerCrafting(int windowID, Inventory playerInv, CraftingBlockEntity blockEntity) {
-        super(ModMenuTypes.CRAFTING_CONTAINER.get(), windowID);
+        super(RuneCraftoryMenuTypes.CRAFTING_CONTAINER.get(), windowID);
         this.output = new WrappedContainer(new SimpleContainer(2));
         this.craftingInv = PlayerBoundCraftingContainer.create(this, blockEntity.getContainer(), playerInv.player);
         this.cache = new IngredientsCache(this.craftingInv);
@@ -149,7 +149,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
                 this.runePointCost.set(-1);
                 this.selected = null;
             } else {
-                this.runePointCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.selected.value(), output.bonusItems(), output.clientResult().getItem() != ModItems.UNKNOWN.get()));
+                this.runePointCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.selected.value(), output.bonusItems(), output.clientResult().getItem() != RuneCraftoryItems.UNKNOWN.get()));
                 trueOutput = output.serverResult();
                 clientOutput = output.clientResult();
             }
@@ -172,7 +172,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
     public void sendCraftingRecipesToClient(ServerPlayer player, PlayerData data) {
         List<ItemStack> clientData = this.matchingRecipes.stream()
                 .map(recipe -> recipe.value() instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe)
-                        ? recipe.value().getResultItem(player.registryAccess()) : new ItemStack(ModItems.UNKNOWN.get())).toList();
+                        ? recipe.value().getResultItem(player.registryAccess()) : new ItemStack(RuneCraftoryItems.UNKNOWN.get())).toList();
         LoaderNetwork.INSTANCE.sendToPlayer(new S2CCraftingRecipes(new ClientRecipeResult(player.level().getGameTime(), clientData), this.selected == null ? 0 : this.matchingRecipes.indexOf(this.selected)), player);
     }
 

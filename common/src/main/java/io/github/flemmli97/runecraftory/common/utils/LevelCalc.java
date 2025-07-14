@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -167,7 +167,7 @@ public class LevelCalc {
         else {
             if (attacker instanceof OwnableEntity ownable && ownable.getOwner() instanceof ServerPlayer sP)
                 player = sP;
-            else if (attacker instanceof EntityNPCBase npc && npc.followEntity() instanceof ServerPlayer sP)
+            else if (attacker instanceof NPCEntity npc && npc.followEntity() instanceof ServerPlayer sP)
                 player = sP;
         }
         if (player != null) {
@@ -189,7 +189,7 @@ public class LevelCalc {
             Consumer<Float> cons = null;
             if (entity instanceof BaseMonster monster && player.getUUID().equals(monster.getOwnerUUID()) && monster.behaviourState() == BaseMonster.Behaviour.FOLLOW)
                 cons = monster::addXp;
-            if (entity instanceof EntityNPCBase npc && player.getUUID().equals(npc.getEntityToFollowUUID()))
+            if (entity instanceof NPCEntity npc && player.getUUID().equals(npc.getEntityToFollowUUID()))
                 cons = npc::addXp;
             if (cons == null)
                 return;

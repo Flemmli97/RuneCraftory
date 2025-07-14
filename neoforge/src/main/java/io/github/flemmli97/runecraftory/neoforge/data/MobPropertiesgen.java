@@ -7,7 +7,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
 import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertiesManager;
 import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -35,8 +35,8 @@ public class MobPropertiesgen implements DataProvider {
         return this.provider.thenCompose(provider -> {
             DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
-            Map<ResourceLocation, EntityProperties.Builder> props = new HashMap<>(ModEntities.getDefaultMobProperties());
-            props.put(ModEntities.SANO_AND_UNO.getID(), new EntityProperties.Builder()
+            Map<ResourceLocation, EntityProperties.Builder> props = new HashMap<>(RuneCraftoryEntities.getDefaultMobProperties());
+            props.put(RuneCraftoryEntities.SANO_AND_UNO.getID(), new EntityProperties.Builder()
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
             props.forEach((res, builder) -> {
                 Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + MonsterPropertiesManager.DIRECTORY + "/" + res.getPath() + ".json");

@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.tenshilib.common.entity.OverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -49,9 +49,9 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
 
     protected static final List<Supplier<Holder<Attribute>>> STAT_INCREASE = List.of(
             () -> Attributes.ATTACK_DAMAGE,
-            ModAttributes.DEFENCE::asHolder,
-            ModAttributes.MAGIC_ATTACK::asHolder,
-            ModAttributes.MAGIC_DEFENCE::asHolder
+            RuneCraftoryAttributes.DEFENCE::asHolder,
+            RuneCraftoryAttributes.MAGIC_ATTACK::asHolder,
+            RuneCraftoryAttributes.MAGIC_DEFENCE::asHolder
     );
     protected static final ResourceLocation STAT_INCREASE_ID = RuneCraftory.modRes("boss_enraged_buff");
     private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
@@ -180,7 +180,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         if (this.level().isClientSide && this.deathTime > 1) {
             if (this.deathTime < 40) {
                 if (this.deathTime % 10 == 0)
-                    this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight()),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
@@ -189,7 +189,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                             this.random.nextGaussian() * 0.02D);
             } else if (this.deathTime < 80) {
                 if (this.deathTime % 2 == 0)
-                    this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
@@ -199,7 +199,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
             } else {
                 int amount = (this.deathTime - 80) / 10;
                 for (int i = 0; i < amount; i++) {
-                    this.level().addParticle(new ColoredParticleData(ModParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                             this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
                             this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
                             this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),

@@ -10,7 +10,7 @@ import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.simplequests_api.datapack.provider.QuestProvider;
 import io.github.flemmli97.simplequests_api.impls.quests.Quest;
 import io.github.flemmli97.simplequests_api.impls.tasks.BlockInteractTask;
@@ -74,8 +74,8 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                         "these turnip seeds. It should come in handy.")
                         )),
                         LootTable.lootTable().withPool(LootPool.lootPool()
-                                .add(LootItem.lootTableItem(ModItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))),
-                        b -> b.addEntry("Ship %s turnips", desc -> new ShippingTask("", DescriptiveValue.list(ItemPredicate.Builder.item().of(ModItems.TURNIP.get()).build(), desc).build(), ConstantValue.exactly(1))))
+                                .add(LootItem.lootTableItem(RuneCraftoryItems.TURNIP_SEEDS.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))),
+                        b -> b.addEntry("Ship %s turnips", desc -> new ShippingTask("", DescriptiveValue.list(ItemPredicate.Builder.item().of(RuneCraftoryItems.TURNIP.get()).build(), desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
                 .withCategory(this.main));
 
@@ -91,7 +91,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                         "With higher level you can get better ores from minerals. Here take this hammer, it should make mining minerals a bit easier.")
                         )),
                         LootTable.lootTable().withPool(LootPool.lootPool()
-                                        .add(LootItem.lootTableItem(ModItems.HAMMER_SCRAP.get())))
+                                        .add(LootItem.lootTableItem(RuneCraftoryItems.HAMMER_SCRAP.get())))
                                 .withPool(LootPool.lootPool()
                                         .add(LootItem.lootTableItem(Items.IRON_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
                                         .add(LootItem.lootTableItem(Items.COPPER_INGOT).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 10))))),
@@ -111,7 +111,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                 new ConversationSet.Builder("npc.generic.quest.tame_monster.end", "I see you've successfully tamed a monster. Congrats!")
                         )),
                         LootTable.lootTable().withPool(LootPool.lootPool()
-                                .add(LootItem.lootTableItem(ModItems.BRUSH.get()))),
+                                .add(LootItem.lootTableItem(RuneCraftoryItems.BRUSH.get()))),
                         builder -> builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.Builder.entity().build(), desc).build(), ConstantValue.exactly(1))))
                 .setRepeatDelay(-1)
                 .withCategory(this.main));

@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.advancements;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -41,7 +41,7 @@ public class CropHarvestTrigger extends SimpleCriterionTrigger<CropHarvestTrigge
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> harvest(TagKey<Block> tag) {
-            return ModCriteria.HARVEST_CROP.get().createCriterion(new TriggerInstance(Optional.empty(),
+            return RuneCraftoryCriteria.HARVEST_CROP.get().createCriterion(new TriggerInstance(Optional.empty(),
                     BuiltInRegistries.BLOCK.getOrCreateTag(tag), Optional.empty()));
         }
 

@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
-import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
+import io.github.flemmli97.runecraftory.common.blocks.ShippingBinBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.BathhouseAttendant;
@@ -33,15 +33,15 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.SkillLevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
-import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeRuneCraftoryTabs;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDamageType;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
@@ -90,63 +90,63 @@ public class LangGen implements DataProvider {
 
     protected void addTranslations() {
         //Static order
-        this.add(ModItems.HOE_SCRAP.get(), "Cheap Hoe");
-        this.add(ModItems.HOE_IRON.get(), "Sturdy Hoe");
-        this.add(ModItems.HOE_SILVER.get(), "Seasoned Hoe");
-        this.add(ModItems.HOE_GOLD.get(), "Shiny Hoe");
-        this.add(ModItems.HOE_PLATINUM.get(), "Blessed Hoe");
-        this.add(ModItems.WATERING_CAN_SCRAP.get(), "Cheap Waterpot");
-        this.add(ModItems.WATERING_CAN_IRON.get(), "Tin Waterpot");
-        this.add(ModItems.WATERING_CAN_SILVER.get(), "Lion Waterpot");
-        this.add(ModItems.WATERING_CAN_GOLD.get(), "Rainbow Waterpot");
-        this.add(ModItems.WATERING_CAN_PLATINUM.get(), "Joy Waterpot");
-        this.add(ModItems.SICKLE_SCRAP.get(), "Cheap Sickle");
-        this.add(ModItems.SICKLE_IRON.get(), "Iron Sickle");
-        this.add(ModItems.SICKLE_SILVER.get(), "Quality Sickle");
-        this.add(ModItems.SICKLE_GOLD.get(), "Super Sickle");
-        this.add(ModItems.SICKLE_PLATINUM.get(), "Legendary Sickle");
-        this.add(ModItems.HAMMER_SCRAP.get(), "Cheap Hammer");
-        this.add(ModItems.HAMMER_IRON.get(), "Iron Hammer");
-        this.add(ModItems.HAMMER_SILVER.get(), "Silver Hammer");
-        this.add(ModItems.HAMMER_GOLD.get(), "Golden Hammer");
-        this.add(ModItems.HAMMER_PLATINUM.get(), "Platinum Hammer");
-        this.add(ModItems.AXE_SCRAP.get(), "Cheap Axe");
-        this.add(ModItems.AXE_IRON.get(), "Chopping Axe");
-        this.add(ModItems.AXE_SILVER.get(), "Lumber Axe");
-        this.add(ModItems.AXE_GOLD.get(), "Mountain Axe");
-        this.add(ModItems.AXE_PLATINUM.get(), "Miracle Axe");
-        this.add(ModItems.FISHING_ROD_SCRAP.get(), "Cheap Pole");
-        this.add(ModItems.FISHING_ROD_IRON.get(), "Beginner's Pole");
-        this.add(ModItems.FISHING_ROD_SILVER.get(), "Skilled Pole");
-        this.add(ModItems.FISHING_ROD_GOLD.get(), "Famous Pole");
-        this.add(ModItems.FISHING_ROD_PLATINUM.get(), "Sacred Pole");
-        for (RegistryEntrySupplier<Item, ?> sup : ModItems.ITEMS.getEntries()) {
+        this.add(RuneCraftoryItems.HOE_SCRAP.get(), "Cheap Hoe");
+        this.add(RuneCraftoryItems.HOE_IRON.get(), "Sturdy Hoe");
+        this.add(RuneCraftoryItems.HOE_SILVER.get(), "Seasoned Hoe");
+        this.add(RuneCraftoryItems.HOE_GOLD.get(), "Shiny Hoe");
+        this.add(RuneCraftoryItems.HOE_PLATINUM.get(), "Blessed Hoe");
+        this.add(RuneCraftoryItems.WATERING_CAN_SCRAP.get(), "Cheap Waterpot");
+        this.add(RuneCraftoryItems.WATERING_CAN_IRON.get(), "Tin Waterpot");
+        this.add(RuneCraftoryItems.WATERING_CAN_SILVER.get(), "Lion Waterpot");
+        this.add(RuneCraftoryItems.WATERING_CAN_GOLD.get(), "Rainbow Waterpot");
+        this.add(RuneCraftoryItems.WATERING_CAN_PLATINUM.get(), "Joy Waterpot");
+        this.add(RuneCraftoryItems.SICKLE_SCRAP.get(), "Cheap Sickle");
+        this.add(RuneCraftoryItems.SICKLE_IRON.get(), "Iron Sickle");
+        this.add(RuneCraftoryItems.SICKLE_SILVER.get(), "Quality Sickle");
+        this.add(RuneCraftoryItems.SICKLE_GOLD.get(), "Super Sickle");
+        this.add(RuneCraftoryItems.SICKLE_PLATINUM.get(), "Legendary Sickle");
+        this.add(RuneCraftoryItems.HAMMER_SCRAP.get(), "Cheap Hammer");
+        this.add(RuneCraftoryItems.HAMMER_IRON.get(), "Iron Hammer");
+        this.add(RuneCraftoryItems.HAMMER_SILVER.get(), "Silver Hammer");
+        this.add(RuneCraftoryItems.HAMMER_GOLD.get(), "Golden Hammer");
+        this.add(RuneCraftoryItems.HAMMER_PLATINUM.get(), "Platinum Hammer");
+        this.add(RuneCraftoryItems.AXE_SCRAP.get(), "Cheap Axe");
+        this.add(RuneCraftoryItems.AXE_IRON.get(), "Chopping Axe");
+        this.add(RuneCraftoryItems.AXE_SILVER.get(), "Lumber Axe");
+        this.add(RuneCraftoryItems.AXE_GOLD.get(), "Mountain Axe");
+        this.add(RuneCraftoryItems.AXE_PLATINUM.get(), "Miracle Axe");
+        this.add(RuneCraftoryItems.FISHING_ROD_SCRAP.get(), "Cheap Pole");
+        this.add(RuneCraftoryItems.FISHING_ROD_IRON.get(), "Beginner's Pole");
+        this.add(RuneCraftoryItems.FISHING_ROD_SILVER.get(), "Skilled Pole");
+        this.add(RuneCraftoryItems.FISHING_ROD_GOLD.get(), "Famous Pole");
+        this.add(RuneCraftoryItems.FISHING_ROD_PLATINUM.get(), "Sacred Pole");
+        for (RegistryEntrySupplier<Item, ?> sup : RuneCraftoryItems.ITEMS.getEntries()) {
             if (sup.get() instanceof ItemToolAxe || sup.get() instanceof ItemToolHoe || sup.get() instanceof ItemToolWateringCan
                     || sup.get() instanceof ItemToolSickle || sup.get() instanceof ItemToolHammer || sup.get() instanceof ItemToolFishingRod)
                 continue;
-            if (sup == ModItems.STEEL_TEN) {
+            if (sup == RuneCraftoryItems.STEEL_TEN) {
                 this.add(sup.get(), "10-Fold Steel");
-            } else if (sup == ModItems.MTGU_PLATE) {
+            } else if (sup == RuneCraftoryItems.MTGU_PLATE) {
                 this.add(sup.get(), "MGTU Plate");
-            } else if (sup == ModItems.FUR_SMALL) {
+            } else if (sup == RuneCraftoryItems.FUR_SMALL) {
                 this.add(sup.get(), "Fur (S)");
-            } else if (sup == ModItems.FUR_MEDIUM) {
+            } else if (sup == RuneCraftoryItems.FUR_MEDIUM) {
                 this.add(sup.get(), "Fur (M)");
-            } else if (sup == ModItems.FUR_LARGE) {
+            } else if (sup == RuneCraftoryItems.FUR_LARGE) {
                 this.add(sup.get(), "Fur (L)");
-            } else if (sup == ModItems.EGG_S) {
+            } else if (sup == RuneCraftoryItems.EGG_S) {
                 this.add(sup.get(), "Egg (S)");
-            } else if (sup == ModItems.EGG_M) {
+            } else if (sup == RuneCraftoryItems.EGG_M) {
                 this.add(sup.get(), "Egg (M)");
-            } else if (sup == ModItems.EGG_L) {
+            } else if (sup == RuneCraftoryItems.EGG_L) {
                 this.add(sup.get(), "Egg (L)");
-            } else if (sup == ModItems.MILK_S) {
+            } else if (sup == RuneCraftoryItems.MILK_S) {
                 this.add(sup.get(), "Milk (S)");
-            } else if (sup == ModItems.MILK_M) {
+            } else if (sup == RuneCraftoryItems.MILK_M) {
                 this.add(sup.get(), "Milk (M)");
-            } else if (sup == ModItems.MILK_L) {
+            } else if (sup == RuneCraftoryItems.MILK_L) {
                 this.add(sup.get(), "Milk (L)");
-            } else if (sup == ModItems.GRAPE_SAPLING) {
+            } else if (sup == RuneCraftoryItems.GRAPE_SAPLING) {
                 this.add(sup.get(), "Grape Sapling?");
             } else if (sup.get() instanceof SpawnEgg)
                 this.add(sup.get(), "%s" + " Spawn Egg");
@@ -164,7 +164,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.item.creative.tooltip.mode.default", "Default");
         this.add("runecraftory.item.creative.tooltip.mode.animation", "Entity Animations");
 
-        for (RegistryEntrySupplier<Block, ?> sup : ModBlocks.BLOCKS.getEntries()) {
+        for (RegistryEntrySupplier<Block, ?> sup : RuneCraftoryBlocks.BLOCKS.getEntries()) {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
@@ -173,25 +173,25 @@ public class LangGen implements DataProvider {
         this.add(CraftingBlockEntity.DISPLAY_PREFIX + CraftingType.CHEMISTRY_SET.getId(), "Chemistry");
         this.add(CraftingBlockEntity.DISPLAY_PREFIX + CraftingType.COOKING_TABLE.getId(), "Cooking");
 
-        this.add(BlockShippingBin.NAME, "Shipping Bin");
+        this.add(ShippingBinBlock.NAME, "Shipping Bin");
         this.add(ContainerInfoScreen.TITLE, "Info Screen");
         this.add(ContainerInfoScreen.TITLE_SUB, "Info Screen");
 
-        for (RegistryEntrySupplier<EntityType<?>, ?> sup : ModEntities.ENTITIES.getEntries()) {
-            if (sup.get() == ModEntities.SARCOPHAGUS_TELEPORTER.get()) {
+        for (RegistryEntrySupplier<EntityType<?>, ?> sup : RuneCraftoryEntities.ENTITIES.getEntries()) {
+            if (sup.get() == RuneCraftoryEntities.SARCOPHAGUS_TELEPORTER.get()) {
                 this.add(sup.get(), "Teleporter");
             } else {
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
             }
         }
 
-        for (RegistryEntrySupplier<Attribute, ? extends Attribute> sup : ModAttributes.ATTRIBUTES.getEntries()) {
+        for (RegistryEntrySupplier<Attribute, ? extends Attribute> sup : RuneCraftoryAttributes.ATTRIBUTES.getEntries()) {
             this.add(sup.get().getDescriptionId(), this.simpleTranslation(sup.getID()));
         }
-        for (RegistryEntrySupplier<MobEffect, ?> reg : ModEffects.EFFECTS.getEntries()) {
+        for (RegistryEntrySupplier<MobEffect, ?> reg : RuneCraftoryEffects.EFFECTS.getEntries()) {
             this.add(reg.get(), this.simpleTranslation(reg.getID()));
         }
-        for (RegistryEntrySupplier<SoundEvent, ? extends SoundEvent> reg : ModSounds.SOUND_EVENTS.getEntries()) {
+        for (RegistryEntrySupplier<SoundEvent, ? extends SoundEvent> reg : RuneCraftorySounds.SOUND_EVENTS.getEntries()) {
             this.add(reg.asHolder());
         }
 
@@ -255,17 +255,17 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.baby.girl", "Girl");
         this.add("runecraftory.tooltip.baby.owner", "Parent: %s");
 
-        for (ResourceKey<DamageType> types : ModDamageType.ATTACK_TYPES) {
+        for (ResourceKey<DamageType> types : RuneCraftoryDamageType.ATTACK_TYPES) {
             this.add("death.attack." + types.location().toLanguageKey(), "%1$s was knocked");
             this.add("death.attack." + types.location().toLanguageKey() + ".player", "%1$s was knocked down by %2$s");
             this.add("death.attack." + types.location().toLanguageKey() + ".item", "%1$s was knocked down by %2$s using %3$s");
         }
-        this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey(), "%1$s fainted");
-        this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey() + ".player", "%1$s fainted while fighting %2$s");
-        this.add("death.attack." + ModDamageType.EXHAUST.location().toLanguageKey() + ".item", "%1$s fainted while fighting %2$s");
-        this.add("death.attack." + ModDamageType.STRONG_POISON.location().toLanguageKey(), "%1$s was to weak and died of poison");
-        this.add("death.attack." + ModDamageType.STRONG_POISON.location().toLanguageKey() + ".player", "%1$s was to weak and died of poison while fighting %2$s");
-        this.add("death.attack." + ModDamageType.STRONG_POISON.location().toLanguageKey() + ".item", "%1$s was to weak and died of poison  while fighting %2$s using %3$s");
+        this.add("death.attack." + RuneCraftoryDamageType.EXHAUST.location().toLanguageKey(), "%1$s fainted");
+        this.add("death.attack." + RuneCraftoryDamageType.EXHAUST.location().toLanguageKey() + ".player", "%1$s fainted while fighting %2$s");
+        this.add("death.attack." + RuneCraftoryDamageType.EXHAUST.location().toLanguageKey() + ".item", "%1$s fainted while fighting %2$s");
+        this.add("death.attack." + RuneCraftoryDamageType.STRONG_POISON.location().toLanguageKey(), "%1$s was to weak and died of poison");
+        this.add("death.attack." + RuneCraftoryDamageType.STRONG_POISON.location().toLanguageKey() + ".player", "%1$s was to weak and died of poison while fighting %2$s");
+        this.add("death.attack." + RuneCraftoryDamageType.STRONG_POISON.location().toLanguageKey() + ".item", "%1$s was to weak and died of poison  while fighting %2$s using %3$s");
 
         this.add(BaseMonster.Behaviour.WANDER_HOME.interactKey, "You send %s home");
         this.add(BaseMonster.Behaviour.FOLLOW.interactKey, "%s is now following you");
@@ -282,7 +282,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
 
-        for (RegistryEntrySupplier<CreativeModeTab, ? extends CreativeModeTab> tab : ModCreativeModTabs.CREATIVE_MODE_TABS.getEntries()) {
+        for (RegistryEntrySupplier<CreativeModeTab, ? extends CreativeModeTab> tab : RuneCraftoryCreativeRuneCraftoryTabs.CREATIVE_MODE_TABS.getEntries()) {
             this.add("itemGroup." + tab.getID().getNamespace() + "." + tab.getID().getPath(), this.simpleTranslation(tab.getID().getPath()));
         }
 
@@ -472,7 +472,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.misc.spawner.entry.deny", "A mystical force prevents you from entering!");
 
         // NPC stuff
-        for (RegistryEntrySupplier<NPCProfession, ? extends NPCProfession> sup : ModNPCProfessions.PROFESSIONS.register().getEntries()) {
+        for (RegistryEntrySupplier<NPCProfession, ? extends NPCProfession> sup : RuneCraftoryNPCProfessions.PROFESSIONS.register().getEntries()) {
             this.add(sup.get().getTranslationKey(), this.simpleTranslation(sup.getID()));
         }
         this.add("npc.profession.general_store.owner", "General Store Owner");

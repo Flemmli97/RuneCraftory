@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.blocks.QuestboardBlock;
+import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
@@ -63,7 +63,7 @@ public class NPCQuest extends QuestBase {
                 return builder;
             }));
 
-    private EntityNPCBase npc;
+    private NPCEntity npc;
     private DynamicQuestData dynamicData;
 
     public final List<ResourceLocation> npcDataIDs;
@@ -88,12 +88,12 @@ public class NPCQuest extends QuestBase {
     }
 
     private static AABB aabbOf(Vec3 pos) {
-        return new AABB(pos.add(-BlockQuestboard.RANGE, -BlockQuestboard.RANGE, -BlockQuestboard.RANGE),
-                pos.add(BlockQuestboard.RANGE, BlockQuestboard.RANGE, BlockQuestboard.RANGE));
+        return new AABB(pos.add(-QuestboardBlock.RANGE, -QuestboardBlock.RANGE, -QuestboardBlock.RANGE),
+                pos.add(QuestboardBlock.RANGE, QuestboardBlock.RANGE, QuestboardBlock.RANGE));
     }
 
     public static List<NPCQuest> resolve(NPCQuest quest, ServerPlayer player, Vec3 at) {
-        return player.level().getEntities(EntityTypeTest.forClass(EntityNPCBase.class), aabbOf(at), e -> {
+        return player.level().getEntities(EntityTypeTest.forClass(NPCEntity.class), aabbOf(at), e -> {
                     if (quest.npcDataIDs.contains(e.getDataID()) && e.canAcceptNPCQuest(player, quest)) {
                         ResourceLocation id = QuestHandler.questForExists(player, e);
                         return id == null || quest.getOriginID().equals(id);
@@ -103,7 +103,7 @@ public class NPCQuest extends QuestBase {
                 .stream().map(quest::forNPC).toList();
     }
 
-    private NPCQuest forNPC(EntityNPCBase npc) {
+    private NPCQuest forNPC(NPCEntity npc) {
         ResourceLocation newID = withUuid(this.id, npc.getUUID());
         NPCQuest quest = new NPCQuest(newID, this.category, this.name, this.description,
                 this.npcDataIDs, this.redoParent, this.repeatDelay, this.maxRepeat, this.sortingId,
@@ -112,7 +112,7 @@ public class NPCQuest extends QuestBase {
         return quest;
     }
 
-    private void withNPC(EntityNPCBase npc, ResourceLocation originID) {
+    private void withNPC(NPCEntity npc, ResourceLocation originID) {
         this.npc = npc;
         this.withNPC(npc.getUUID(), originID);
     }
@@ -138,7 +138,7 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public List<MutableComponent> getDescription(ServerPlayer player, int idx) {
-        EntityNPCBase npc = this.getNpc(player.level());
+        NPCEntity npc = this.getNpc(player.level());
         if (npc != null) {
             return this.description.stream().map(s -> Component.translatable(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
@@ -150,9 +150,9 @@ public class NPCQuest extends QuestBase {
     }
 
     @Nullable
-    public EntityNPCBase getNpc(Level level) {
+    public NPCEntity getNpc(Level level) {
         if (this.dynamicData != null && this.npc == null)
-            this.npc = EntityUtils.findFromUUID(EntityNPCBase.class, level, this.dynamicData.npcUuid());
+            this.npc = EntityUtils.findFromUUID(NPCEntity.class, level, this.dynamicData.npcUuid());
         return this.npc;
     }
 
@@ -185,7 +185,7 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public void onComplete(ServerPlayer serverPlayer) {
-        EntityTreasureChest chest = ModEntities.TREASURE_CHEST.get().create(serverPlayer.serverLevel());
+        TreasureChestEntity chest = RuneCraftoryEntities.TREASURE_CHEST.get().create(serverPlayer.serverLevel());
         if (chest != null && this.getLoot() != null && !this.getLoot().equals(BuiltInLootTables.EMPTY)) {
             chest.absMoveTo(serverPlayer.getX(2), serverPlayer.getY(1.5), serverPlayer.getZ(2), serverPlayer.getRandom().nextFloat() * 360.0f, 0.0f);
             int tries = 0;
@@ -204,7 +204,7 @@ public class NPCQuest extends QuestBase {
     @Override
     public void onReset(ServerPlayer player) {
         if (this.dynamicData != null) {
-            EntityNPCBase npc = this.getNpc(player.level());
+            NPCEntity npc = this.getNpc(player.level());
             if (npc != null)
                 npc.resetQuestProcess(player, this.dynamicData.origin());
             else {

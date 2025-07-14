@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.util.ExtraCodecs;
@@ -38,7 +38,7 @@ public class SkillLevelCondition implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.SKILL_CHECK.get();
+        return RuneCraftoryLootRegistries.SKILL_CHECK.get();
     }
 
     @Override

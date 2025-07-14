@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -51,7 +51,7 @@ public class C2SNPCInteraction implements CustomPacketPayload {
 
     public static void handle(C2SNPCInteraction pkt, ServerPlayer sender) {
         Entity entity = sender.level().getEntity(pkt.id);
-        if (entity instanceof EntityNPCBase npc) {
+        if (entity instanceof NPCEntity npc) {
             switch (pkt.type) {
                 case TALK -> npc.talkTo(sender);
                 case FOLLOW -> {
@@ -65,11 +65,11 @@ public class C2SNPCInteraction implements CustomPacketPayload {
                 }
                 case FOLLOWDISTANCE -> {
                     if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
-                        npc.setBehaviour(EntityNPCBase.Behaviour.FOLLOW_DISTANCE);
+                        npc.setBehaviour(NPCEntity.Behaviour.FOLLOW_DISTANCE);
                 }
                 case STAY -> {
                     if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
-                        npc.setBehaviour(EntityNPCBase.Behaviour.STAY);
+                        npc.setBehaviour(NPCEntity.Behaviour.STAY);
                 }
                 case STOPFOLLOW -> {
                     if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
@@ -95,10 +95,10 @@ public class C2SNPCInteraction implements CustomPacketPayload {
     public enum Action {
 
         TALK("runecraftory.gui.npc.talk", null),
-        FOLLOW("runecraftory.gui.npc.follow", EntityNPCBase.Behaviour.FOLLOW),
-        FOLLOWDISTANCE("runecraftory.gui.npc.distance", EntityNPCBase.Behaviour.FOLLOW_DISTANCE),
-        STAY("runecraftory.gui.npc.stay", EntityNPCBase.Behaviour.STAY),
-        STOPFOLLOW("runecraftory.gui.npc.stopFollow", EntityNPCBase.Behaviour.WANDER),
+        FOLLOW("runecraftory.gui.npc.follow", NPCEntity.Behaviour.FOLLOW),
+        FOLLOWDISTANCE("runecraftory.gui.npc.distance", NPCEntity.Behaviour.FOLLOW_DISTANCE),
+        STAY("runecraftory.gui.npc.stay", NPCEntity.Behaviour.STAY),
+        STOPFOLLOW("runecraftory.gui.npc.stopFollow", NPCEntity.Behaviour.WANDER),
         SHOP("runecraftory.gui.npc.shop", null),
         CLOSE("runecraftory.gui.npc.close", null),
         CLOSE_QUEST("runecraftory.gui.npc.close.quest", null),
@@ -107,9 +107,9 @@ public class C2SNPCInteraction implements CustomPacketPayload {
 
         public final String translation;
         @Nullable
-        public final EntityNPCBase.Behaviour behaviour;
+        public final NPCEntity.Behaviour behaviour;
 
-        Action(String translation, EntityNPCBase.Behaviour behaviour) {
+        Action(String translation, NPCEntity.Behaviour behaviour) {
             this.translation = translation;
             this.behaviour = behaviour;
         }

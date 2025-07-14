@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.summoners.ButterflySummonerEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +16,7 @@ public class ButterflySpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityButterflySummoner summoner = new EntityButterflySummoner(level, entity);
+        ButterflySummonerEntity summoner = new ButterflySummonerEntity(level, entity);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.5f));
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null)

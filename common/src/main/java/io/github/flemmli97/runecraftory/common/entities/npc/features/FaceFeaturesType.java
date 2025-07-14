@@ -6,8 +6,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -45,7 +45,7 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
             "angry", new ExpressionFeature(TextureType.NONE, TextureType.NONE, "angry"));
 
     @Override
-    public FaceFeatures create(EntityNPCBase npc) {
+    public FaceFeatures create(NPCEntity npc) {
         return new FaceFeatures(this.irisSetting.resolve(npc.getRandom()),
                 this.scleraSetting.resolve(npc.getRandom()),
                 this.eyebrowSetting.resolve(npc.getRandom()),
@@ -54,7 +54,7 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
 
     @Override
     public NPCFeatureType<FaceFeatures> getType() {
-        return ModNPCLooks.FACE.get();
+        return RuneCraftoryNPCLooks.FACE.get();
     }
 
     public record FaceFeatures(IndexedColorSetting.ResolvedIndexColor iris,
@@ -72,7 +72,7 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
 
         @Nullable
         public String expressionTexture(NPCFeatureContainer features, String expression, ExpressionType type) {
-            FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+            FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
             ExpressionFeature exp = feat.expressionMap.get(expression);
             if (exp != null) {
                 return switch (type) {
@@ -87,7 +87,7 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
         public boolean useSkinColor(NPCFeatureContainer features, String expression, ExpressionType type) {
             if (type == ExpressionType.EYEBROWS)
                 return false;
-            FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+            FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
             ExpressionFeature exp = feat.expressionMap.get(expression);
             if (exp != null) {
                 if (type == ExpressionType.IRIS) {
@@ -101,7 +101,7 @@ public record FaceFeaturesType(IndexedColorSetting irisSetting,
 
         @Override
         public NPCFeatureType<FaceFeatures> type() {
-            return ModNPCLooks.FACE.get();
+            return RuneCraftoryNPCLooks.FACE.get();
         }
     }
 

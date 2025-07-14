@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
+import io.github.flemmli97.runecraftory.common.entities.misc.BulletEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -16,9 +16,9 @@ public class DoubleBulletSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityBullet bullet = new EntityBullet(level, entity);
+        BulletEntity bullet = new BulletEntity(level, entity);
         bullet.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
-        EntityBullet bullet2 = new EntityBullet(level, entity);
+        BulletEntity bullet2 = new BulletEntity(level, entity);
         bullet2.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         bullet2.reverseMovement();
         ProjectileUtils.shoot(entity, bullet, 0.3f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);

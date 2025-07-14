@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,7 +45,7 @@ public class ItemObjectX extends Item {
                 MobEffectInstance inst = livingEntity.getEffect(effect);
                 if (inst != null)
                     amp += inst.getAmplifier();
-                int duration = effect.value() == ModEffects.SLEEP.get() ? 80 : 600;
+                int duration = effect.value() == RuneCraftoryEffects.SLEEP.get() ? 80 : 600;
                 livingEntity.addEffect(new MobEffectInstance(effect, duration, amp));
             }
         }

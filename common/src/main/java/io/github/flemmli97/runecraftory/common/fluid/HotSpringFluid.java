@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.fluid;
 
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModFluids;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -41,17 +41,17 @@ public abstract class HotSpringFluid extends WaterFluid {
 
     @Override
     public Fluid getFlowing() {
-        return ModFluids.FLOWING_HOT_SPRING_WATER.get();
+        return RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get();
     }
 
     @Override
     public Fluid getSource() {
-        return ModFluids.HOT_SPRING_WATER.get();
+        return RuneCraftoryFluids.HOT_SPRING_WATER.get();
     }
 
     @Override
     public Item getBucket() {
-        return ModItems.HOT_SPRING_BUCKET.get();
+        return RuneCraftoryItems.HOT_SPRING_BUCKET.get();
     }
 
     @Override
@@ -61,7 +61,7 @@ public abstract class HotSpringFluid extends WaterFluid {
 
     @Override
     public BlockState createLegacyBlock(FluidState state) {
-        return ModBlocks.HOT_SPRING_WATER.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return RuneCraftoryBlocks.HOT_SPRING_WATER.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override

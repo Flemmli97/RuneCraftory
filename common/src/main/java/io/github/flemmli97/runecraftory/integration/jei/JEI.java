@@ -4,8 +4,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -47,10 +47,10 @@ public class JEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.FORGING.identifier(), ModItems.FORGE.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.COOKING.identifier(), ModItems.COOKING_TABLE.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.ARMOR.identifier(), ModItems.ACCESSORY_WORKBENCH.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.CHEMISTRY.identifier(), ModItems.CHEMISTRY_SET.get())
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.FORGING.identifier(), RuneCraftoryItems.FORGE.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.COOKING.identifier(), RuneCraftoryItems.COOKING_TABLE.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.ARMOR.identifier(), RuneCraftoryItems.ACCESSORY_WORKBENCH.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CraftingIdentifier.CHEMISTRY.identifier(), RuneCraftoryItems.CHEMISTRY_SET.get())
         );
     }
 
@@ -59,10 +59,10 @@ public class JEI implements IModPlugin {
         if (Minecraft.getInstance().level == null)
             return;
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
-        reg.addRecipes(CraftingIdentifier.FORGING.identifier(), sorted(manager, ModCrafting.FORGE.get()));
-        reg.addRecipes(CraftingIdentifier.ARMOR.identifier(), sorted(manager, ModCrafting.ARMOR.get()));
-        reg.addRecipes(CraftingIdentifier.COOKING.identifier(), sorted(manager, ModCrafting.COOKING.get()));
-        reg.addRecipes(CraftingIdentifier.CHEMISTRY.identifier(), sorted(manager, ModCrafting.CHEMISTRY.get()));
+        reg.addRecipes(CraftingIdentifier.FORGING.identifier(), sorted(manager, RuneCraftoryCrafting.FORGE.get()));
+        reg.addRecipes(CraftingIdentifier.ARMOR.identifier(), sorted(manager, RuneCraftoryCrafting.ARMOR.get()));
+        reg.addRecipes(CraftingIdentifier.COOKING.identifier(), sorted(manager, RuneCraftoryCrafting.COOKING.get()));
+        reg.addRecipes(CraftingIdentifier.CHEMISTRY.identifier(), sorted(manager, RuneCraftoryCrafting.CHEMISTRY.get()));
     }
 
     private static <T extends SextupleRecipe> List<RecipeHolder<T>> sorted(RecipeManager manager, net.minecraft.world.item.crafting.RecipeType<T> type) {
@@ -81,10 +81,10 @@ public class JEI implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.FORGE.get()), CraftingIdentifier.FORGING.identifier());
-        registration.addRecipeCatalyst(new ItemStack(ModItems.ACCESSORY_WORKBENCH.get()), CraftingIdentifier.ARMOR.identifier());
-        registration.addRecipeCatalyst(new ItemStack(ModItems.COOKING_TABLE.get()), CraftingIdentifier.COOKING.identifier());
-        registration.addRecipeCatalyst(new ItemStack(ModItems.CHEMISTRY_SET.get()), CraftingIdentifier.CHEMISTRY.identifier());
+        registration.addRecipeCatalyst(new ItemStack(RuneCraftoryItems.FORGE.get()), CraftingIdentifier.FORGING.identifier());
+        registration.addRecipeCatalyst(new ItemStack(RuneCraftoryItems.ACCESSORY_WORKBENCH.get()), CraftingIdentifier.ARMOR.identifier());
+        registration.addRecipeCatalyst(new ItemStack(RuneCraftoryItems.COOKING_TABLE.get()), CraftingIdentifier.COOKING.identifier());
+        registration.addRecipeCatalyst(new ItemStack(RuneCraftoryItems.CHEMISTRY_SET.get()), CraftingIdentifier.CHEMISTRY.identifier());
     }
 
     @Override

@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.common.entities.npc.profession;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.chat.Component;
@@ -50,7 +50,7 @@ public class Blacksmith extends NPCProfession {
     }
 
     @Override
-    public void handleAction(EntityNPCBase npc, Player player, String action) {
+    public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.canTrade() == ShopState.OPEN)
             if (action.equals(BARN_ACTION)) {
                 PlayerData data = Platform.INSTANCE.getPlayerData(player);
@@ -81,8 +81,8 @@ public class Blacksmith extends NPCProfession {
                             }
                         }
                     }
-                    if (!player.addItem(new ItemStack(ModItems.MONSTER_BARN.get())))
-                        player.spawnAtLocation(new ItemStack(ModItems.MONSTER_BARN.get()));
+                    if (!player.addItem(new ItemStack(RuneCraftoryItems.MONSTER_BARN.get())))
+                        player.spawnAtLocation(new ItemStack(RuneCraftoryItems.MONSTER_BARN.get()));
                     data.onBuyBarn();
                 } else {
                     player.displayClientMessage(Component.translatable(BARN_ACTION_FAIL, player.getName(), amount), false);
@@ -91,7 +91,7 @@ public class Blacksmith extends NPCProfession {
     }
 
     @Override
-    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(NPCEntity entity, ServerPlayer player) {
         return Map.of(BARN_ACTION, getBarnActionComponent(player));
     }
 

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTornado;
+import io.github.flemmli97.runecraftory.common.entities.misc.TornadoEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +15,7 @@ public class TornadoSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityTornado tornado = new EntityTornado(level, entity);
+        TornadoEntity tornado = new TornadoEntity(level, entity);
         tornado.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
         Vec3 pos = entity.position();
         Vec3 target = ProjectileUtils.getAimTarget(entity);

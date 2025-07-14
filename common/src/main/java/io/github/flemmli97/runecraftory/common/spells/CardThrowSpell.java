@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
+import io.github.flemmli97.runecraftory.common.entities.misc.CardsEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
@@ -28,7 +28,7 @@ public class CardThrowSpell extends Spell {
         float[] yxRot = MathsHelper.YXRotFrom(dir);
         Vec3 up = Vec3.directionFromRotation(yxRot[1] + 90, yxRot[0]);
         for (Vector3d vec : MathUtils.rotatedVecs(new Vector3d(dir.x(), dir.y(), dir.z()), new Vector3d(up.x(), up.y(), up.z()), -50, 50, 10)) {
-            EntityCards cards = new EntityCards(level, entity, entity.getRandom().nextInt(8));
+            CardsEntity cards = new CardsEntity(level, entity, entity.getRandom().nextInt(8));
             cards.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
             cards.shoot(vec.x(), vec.y(), vec.z(), 1.5f, 0);
             level.addFreshEntity(cards);

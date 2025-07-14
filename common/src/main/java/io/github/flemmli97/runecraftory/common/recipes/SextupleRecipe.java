@@ -6,8 +6,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.HolderLookup;
@@ -138,14 +138,14 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
         if (matches == null)
             return null;
         CraftingType type = CraftingType.FORGE;
-        if (this.getType() == ModCrafting.ARMOR.get())
+        if (this.getType() == RuneCraftoryCrafting.ARMOR.get())
             type = CraftingType.ACCESSORY_WORKBENCH;
-        if (this.getType() == ModCrafting.CHEMISTRY.get())
+        if (this.getType() == RuneCraftoryCrafting.CHEMISTRY.get())
             type = CraftingType.CHEMISTRY_SET;
-        if (this.getType() == ModCrafting.COOKING.get())
+        if (this.getType() == RuneCraftoryCrafting.COOKING.get())
             type = CraftingType.COOKING_TABLE;
         ItemStack trueOutput = CraftingUtils.getCraftingOutput(this.getResultItem(inv.getPlayer().registryAccess()), inv, matches, type);
-        return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(ModItems.UNKNOWN.get()), matches.bonusItems());
+        return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(RuneCraftoryItems.UNKNOWN.get()), matches.bonusItems());
     }
 
     protected ItemStack getRecipeOutput() {

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
+import io.github.flemmli97.runecraftory.common.entities.misc.FurnitureEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ public class PlushThrowSpell extends Spell {
             return false;
         int plushAmount = entity.getRandom().nextInt(7) + 7;
         for (int i = 0; i < plushAmount; ++i) {
-            EntityFurniture furniture = new EntityFurniture(level, entity, entity.getRandom().nextBoolean() ? EntityFurniture.Type.WOOLYPLUSH : EntityFurniture.Type.CHIPSQUEEKPLUSH);
+            FurnitureEntity furniture = new FurnitureEntity(level, entity, entity.getRandom().nextBoolean() ? FurnitureEntity.Type.WOOLYPLUSH : FurnitureEntity.Type.CHIPSQUEEKPLUSH);
             furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
 
             Vec3 target = ProjectileUtils.getAimTarget(entity);

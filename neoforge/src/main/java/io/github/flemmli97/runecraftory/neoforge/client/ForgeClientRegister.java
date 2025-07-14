@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.neoforge.registry.ModFluidTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -63,7 +63,7 @@ public class ForgeClientRegister {
 
     @SubscribeEvent
     public static void initClientItemProps(RegisterClientExtensionsEvent event) {
-        ModItems.ITEMS.getEntries().forEach(e -> {
+        RuneCraftoryItems.ITEMS.getEntries().forEach(e -> {
             if (e.get() instanceof ItemArmorBase) {
                 event.registerItem(new IClientItemExtensions() {
                     @Override

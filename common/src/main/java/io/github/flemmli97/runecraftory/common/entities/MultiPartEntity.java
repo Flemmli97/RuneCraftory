@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,7 +46,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     }
 
     public MultiPartEntity(LivingEntity parent, float width, float height) {
-        super(ModEntities.MULTIPART.get(), parent.level());
+        super(RuneCraftoryEntities.MULTIPART.get(), parent.level());
         this.setSize(width, height);
         this.setParent(parent);
     }

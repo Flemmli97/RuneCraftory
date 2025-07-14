@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.calendar.DayOfWeek;
-import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
@@ -28,18 +28,18 @@ import java.util.function.Supplier;
 
 public class NPCSchedule {
 
-    private final EntityNPCBase npc;
+    private final NPCEntity npc;
 
     private Schedule schedule;
 
     private List<Component> view;
 
-    public NPCSchedule(EntityNPCBase npc, Schedule schedule) {
+    public NPCSchedule(NPCEntity npc, Schedule schedule) {
         this.npc = npc;
         this.schedule = schedule;
     }
 
-    public NPCSchedule(EntityNPCBase npc, RandomSource random) {
+    public NPCSchedule(NPCEntity npc, RandomSource random) {
         this(npc, new Schedule(random));
     }
 
@@ -56,7 +56,7 @@ public class NPCSchedule {
             return Activity.REST;
         if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getProfession().hasWorkSchedule) {
             if (dayTime < this.schedule.workTime)
-                return ModActivities.EARLY_IDLE.get();
+                return RuneCraftoryActivities.EARLY_IDLE.get();
             if (dayTime < this.schedule.breakTime)
                 return Activity.WORK;
             if (dayTime < this.schedule.workTimeAfter)

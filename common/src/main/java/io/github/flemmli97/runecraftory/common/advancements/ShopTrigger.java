@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.advancements;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -22,7 +22,7 @@ public class ShopTrigger extends SimpleCriterionTrigger<ShopTrigger.TriggerInsta
         return TriggerInstance.CODEC;
     }
 
-    public void trigger(ServerPlayer player, EntityNPCBase npc, ItemStack stack) {
+    public void trigger(ServerPlayer player, NPCEntity npc, ItemStack stack) {
         LootContext lootContext = EntityPredicate.createContext(player, npc);
         this.trigger(player, inst -> inst.matches(lootContext, stack));
     }
@@ -37,12 +37,12 @@ public class ShopTrigger extends SimpleCriterionTrigger<ShopTrigger.TriggerInsta
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> buyAny() {
-            return ModCriteria.SHOP_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
+            return RuneCraftoryCriteria.SHOP_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
                     Optional.empty(), Optional.empty()));
         }
 
         public static Criterion<TriggerInstance> buyFromItem(EntityPredicate.Builder npc, ItemPredicate.Builder item) {
-            return ModCriteria.SHOP_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
+            return RuneCraftoryCriteria.SHOP_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
                     Optional.of(EntityPredicate.wrap(npc)), Optional.of(item.build())));
         }
 

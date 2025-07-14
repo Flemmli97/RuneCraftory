@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -43,7 +43,7 @@ public class S2CNPCLook implements CustomPacketPayload {
 
     public static void handle(S2CNPCLook pkt, Player player) {
         Entity e = player.level().getEntity(pkt.id);
-        if (e instanceof EntityNPCBase npc) {
+        if (e instanceof NPCEntity npc) {
             npc.lookFeatures.with(pkt.features);
             npc.setClientLook(pkt.look);
         }

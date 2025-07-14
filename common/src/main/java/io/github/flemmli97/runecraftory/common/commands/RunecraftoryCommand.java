@@ -15,14 +15,14 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -81,10 +81,10 @@ public class RunecraftoryCommand {
                 )
                 .then(Commands.literal("spell").requires(src -> src.hasPermission(2))
                         .then(Commands.literal("cast")
-                                .then(Commands.argument("spell", ResourceArgument.resource(buildContext, ModSpells.SPELL_REGISTRY_KEY)).executes(ctx -> RunecraftoryCommand.castSpell(ctx, Set.of(ctx.getSource().getEntityOrException())))
+                                .then(Commands.argument("spell", ResourceArgument.resource(buildContext, RuneCraftorySpells.SPELL_REGISTRY_KEY)).executes(ctx -> RunecraftoryCommand.castSpell(ctx, Set.of(ctx.getSource().getEntityOrException())))
                                         .then(Commands.argument("as", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.castSpell(ctx, EntityArgument.getEntities(ctx, "as"))))))
                         .then(Commands.literal("apply")
-                                .then(Commands.argument("spell", ResourceArgument.resource(buildContext, ModSpells.SPELL_REGISTRY_KEY))
+                                .then(Commands.argument("spell", ResourceArgument.resource(buildContext, RuneCraftorySpells.SPELL_REGISTRY_KEY))
                                         .then(Commands.argument("tier", IntegerArgumentType.integer(1, 3)).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, Set.of(ctx.getSource().getEntityOrException())))
                                                 .then(Commands.argument("as", EntityArgument.entities()).executes(ctx -> RunecraftoryCommand.applySpellTo(ctx, EntityArgument.getEntities(ctx, "as")))))))
                 )
@@ -215,19 +215,19 @@ public class RunecraftoryCommand {
         Set<ResourceLocation> allRecipes = Sets.newHashSet();
         PlayerData data = Platform.INSTANCE.getPlayerData(ctx.getSource().getPlayerOrException());
         if (data != null) {
-            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.FORGE.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
                     allRecipes.add(r.id());
             }
-            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.CHEMISTRY.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
                     allRecipes.add(r.id());
             }
-            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.ARMOR.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
                     allRecipes.add(r.id());
             }
-            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get())) {
+            for (RecipeHolder<SextupleRecipe> r : ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.COOKING.get())) {
                 if (!data.getRecipeKeeper().isUnlocked(r))
                     allRecipes.add(r.id());
             }
@@ -248,10 +248,10 @@ public class RunecraftoryCommand {
 
     private static int unlockRecipes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Set<ResourceLocation> allRecipes = Sets.newHashSet();
-        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get()).forEach(r -> allRecipes.add(r.id()));
-        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get()).forEach(r -> allRecipes.add(r.id()));
-        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get()).forEach(r -> allRecipes.add(r.id()));
-        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get()).forEach(r -> allRecipes.add(r.id()));
+        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.FORGE.get()).forEach(r -> allRecipes.add(r.id()));
+        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.CHEMISTRY.get()).forEach(r -> allRecipes.add(r.id()));
+        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.ARMOR.get()).forEach(r -> allRecipes.add(r.id()));
+        ctx.getSource().getServer().getRecipeManager().getAllRecipesFor(RuneCraftoryCrafting.COOKING.get()).forEach(r -> allRecipes.add(r.id()));
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).getRecipeKeeper().unlockRecipesRes(player, allRecipes);
@@ -293,7 +293,7 @@ public class RunecraftoryCommand {
             if (e instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).recalculateStats(false);
                 i++;
-            } else if (e instanceof EntityNPCBase npc) {
+            } else if (e instanceof NPCEntity npc) {
                 npc.recalcStatsFull();
                 i++;
             } else if (e instanceof BaseMonster monster) {
@@ -309,7 +309,7 @@ public class RunecraftoryCommand {
     @SuppressWarnings("unchecked")
     private static int castSpell(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
-        Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
+        Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) RuneCraftorySpells.SPELLS.registry().key());
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity living) {
                 spell.value().use(living);
@@ -322,14 +322,14 @@ public class RunecraftoryCommand {
     @SuppressWarnings("unchecked")
     private static int applySpellTo(CommandContext<CommandSourceStack> ctx, Collection<? extends Entity> entities) throws CommandSyntaxException {
         int success = 0;
-        Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) ModSpells.SPELLS.registry().key());
+        Holder.Reference<Spell> spell = ResourceArgument.getResource(ctx, "spell", (ResourceKey<Registry<Spell>>) RuneCraftorySpells.SPELLS.registry().key());
         int tier = IntegerArgumentType.getInteger(ctx, "tier");
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity living) {
                 ItemStack stack = living.getMainHandItem();
                 if (stack.getItem() instanceof ItemStaffBase) {
-                    StaffData data = stack.getOrDefault(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT);
-                    stack.set(ModDataComponentTypes.STAFF.get(), switch (tier) {
+                    StaffData data = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT);
+                    stack.set(RuneCraftoryDataComponentTypes.STAFF.get(), switch (tier) {
                         case 3 -> data.setTier3Spell(spell);
                         case 2 -> data.setTier2Spell(spell);
                         default -> data.setTier1Spell(spell);

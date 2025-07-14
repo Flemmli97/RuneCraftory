@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.SporeCircleSummoner;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.summoners.SporeCircleSummoner;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +18,7 @@ public class SporeCircleSpell extends Spell {
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
         summoner.setPos(entity.position().x, entity.position().y, entity.position().z);
         level.addFreshEntity(summoner);
-        playSound(entity, ModSounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

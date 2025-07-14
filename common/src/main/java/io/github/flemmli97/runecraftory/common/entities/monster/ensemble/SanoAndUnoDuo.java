@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.ensemble;
 
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
-import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySano;
-import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityUno;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.Sano;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.Uno;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -26,17 +26,17 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
 
     @Override
     public List<Supplier<? extends EntityType<?>>> entities() {
-        return List.of(ModEntities.SANO, ModEntities.UNO);
+        return List.of(RuneCraftoryEntities.SANO, RuneCraftoryEntities.UNO);
     }
 
     @Override
     public void spawnEntities(ServerLevel serverLevel) {
         BlockPos off = new BlockPos(5, 0, 4);
-        Entity e = ModEntities.SANO.get().create(serverLevel, null, this.blockPosition()
+        Entity e = RuneCraftoryEntities.SANO.get().create(serverLevel, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
         UUID link = Mth.createInsecureUUID();
-        if (e instanceof EntitySano sano) {
+        if (e instanceof Sano sano) {
             sano.setXPLevel(this.monsterLevel);
             sano.linkUsing(link);
             if (this.restrictRadius != -1)
@@ -48,10 +48,10 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
             serverLevel.addFreshEntityWithPassengers(sano);
         }
         off = new BlockPos(-5, 0, 4);
-        e = ModEntities.UNO.get().create(serverLevel, null, this.blockPosition()
+        e = RuneCraftoryEntities.UNO.get().create(serverLevel, null, this.blockPosition()
                         .offset(off.rotate(this.rotation)),
                 MobSpawnType.SPAWNER, false, false);
-        if (e instanceof EntityUno uno) {
+        if (e instanceof Uno uno) {
             uno.setXPLevel(this.monsterLevel);
             uno.linkUsing(link);
             if (this.restrictRadius != -1)
@@ -66,6 +66,6 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
 
     @Override
     public boolean canSpawnerSpawn(ServerLevel level, BlockPos pos, int range) {
-        return level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(range), e -> e instanceof EntitySano || e instanceof EntityUno).isEmpty();
+        return level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(range), e -> e instanceof Sano || e instanceof Uno).isEmpty();
     }
 }

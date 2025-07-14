@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
@@ -35,7 +35,7 @@ public class EnsembleEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EnsembleMonsters mob) {
-            mob.setLevel(stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
+            mob.setLevel(stack.getOrDefault(RuneCraftoryDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1));
         }
         return super.onEntitySpawned(e, stack, player);
     }

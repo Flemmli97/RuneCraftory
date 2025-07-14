@@ -1,16 +1,16 @@
 package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 
-public class NPCFaceLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends NPCTextureLayer<T, M, A> {
+public class NPCFaceLayer<T extends NPCEntity, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends NPCTextureLayer<T, M, A> {
 
     private String textureType;
 
@@ -40,7 +40,7 @@ public class NPCFaceLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A
     @Override
     protected int setColor(T entity) {
         if (this.textureType != null && (this.layer == LayerType.IRIS_LAYER || this.layer == LayerType.SCLERA_LAYER)) {
-            FaceFeaturesType.FaceFeatures feat = entity.lookFeatures.getFeature(ModNPCLooks.FACE.get());
+            FaceFeaturesType.FaceFeatures feat = entity.lookFeatures.getFeature(RuneCraftoryNPCLooks.FACE.get());
             boolean skin = this.layer == LayerType.IRIS_LAYER ?
                     feat.useSkinColor(entity.lookFeatures, this.textureType, FaceFeaturesType.ExpressionType.IRIS)
                     : feat.useSkinColor(entity.lookFeatures, this.textureType, FaceFeaturesType.ExpressionType.SCLERA);
@@ -53,6 +53,6 @@ public class NPCFaceLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A
 
     @Override
     protected ResourceLocation getTexture(T entity) {
-        return RenderNPC.getTextureFromLook(entity, this.layer, this.textureType);
+        return NPCRender.getTextureFromLook(entity, this.layer, this.textureType);
     }
 }

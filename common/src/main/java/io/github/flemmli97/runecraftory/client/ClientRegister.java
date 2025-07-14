@@ -10,40 +10,40 @@ import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.UpgradeGui;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelAnt;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelBeetle;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelBigMuck;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffaloo;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelChimera;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelDemon;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelFlowerLily;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelGrimoire;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelHandonetta;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelHornet;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelLeafBall;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelMage;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelMarionetta;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelMinotaur;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelNappie;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelPalmCat;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelSanoUno;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelSarcophagus;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelTroll;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
+import io.github.flemmli97.runecraftory.client.model.monster.AmbrosiaModel;
+import io.github.flemmli97.runecraftory.client.model.monster.AntModel;
+import io.github.flemmli97.runecraftory.client.model.monster.BeetleModel;
+import io.github.flemmli97.runecraftory.client.model.monster.BigMuckModel;
+import io.github.flemmli97.runecraftory.client.model.monster.BuffalooModel;
+import io.github.flemmli97.runecraftory.client.model.monster.BuffamooModel;
+import io.github.flemmli97.runecraftory.client.model.monster.ChimeraModel;
+import io.github.flemmli97.runecraftory.client.model.monster.ChipsqueekModel;
+import io.github.flemmli97.runecraftory.client.model.monster.CluckadoodleModel;
+import io.github.flemmli97.runecraftory.client.model.monster.DemonModel;
+import io.github.flemmli97.runecraftory.client.model.monster.FairyModel;
+import io.github.flemmli97.runecraftory.client.model.monster.FlowerLilyModel;
+import io.github.flemmli97.runecraftory.client.model.monster.GrimoireModel;
+import io.github.flemmli97.runecraftory.client.model.monster.HandonettaModel;
+import io.github.flemmli97.runecraftory.client.model.monster.HornetModel;
+import io.github.flemmli97.runecraftory.client.model.monster.LeafBallModel;
+import io.github.flemmli97.runecraftory.client.model.monster.MageModel;
+import io.github.flemmli97.runecraftory.client.model.monster.MarionettaModel;
+import io.github.flemmli97.runecraftory.client.model.monster.MimicModel;
+import io.github.flemmli97.runecraftory.client.model.monster.MinoModel;
+import io.github.flemmli97.runecraftory.client.model.monster.MinotaurModel;
+import io.github.flemmli97.runecraftory.client.model.monster.NappieModel;
+import io.github.flemmli97.runecraftory.client.model.monster.PalmCatModel;
+import io.github.flemmli97.runecraftory.client.model.monster.PantherModel;
+import io.github.flemmli97.runecraftory.client.model.monster.PommePommeModel;
+import io.github.flemmli97.runecraftory.client.model.monster.SanoUnoModel;
+import io.github.flemmli97.runecraftory.client.model.monster.SarcophagusModel;
+import io.github.flemmli97.runecraftory.client.model.monster.ScorpionModel;
+import io.github.flemmli97.runecraftory.client.model.monster.SkyFishModel;
+import io.github.flemmli97.runecraftory.client.model.monster.ThunderboltModel;
+import io.github.flemmli97.runecraftory.client.model.monster.TortasModel;
+import io.github.flemmli97.runecraftory.client.model.monster.TrollModel;
+import io.github.flemmli97.runecraftory.client.model.monster.WeagleModel;
+import io.github.flemmli97.runecraftory.client.model.monster.WolfModel;
 import io.github.flemmli97.runecraftory.client.particles.BlockParticle;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
@@ -56,69 +56,69 @@ import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.RenderRuney;
 import io.github.flemmli97.runecraftory.client.render.RenderTreasureChest;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderDeadTree;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderDuck;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderRaccoon;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderRafflesia;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
+import io.github.flemmli97.runecraftory.client.render.monster.DeadTreeRender;
+import io.github.flemmli97.runecraftory.client.render.monster.DuckRender;
+import io.github.flemmli97.runecraftory.client.render.monster.GhostRender;
+import io.github.flemmli97.runecraftory.client.render.monster.GoblinRender;
+import io.github.flemmli97.runecraftory.client.render.monster.OrcRender;
+import io.github.flemmli97.runecraftory.client.render.monster.RaccoonRender;
+import io.github.flemmli97.runecraftory.client.render.monster.RafflesiaRender;
+import io.github.flemmli97.runecraftory.client.render.monster.SkelefangRender;
+import io.github.flemmli97.runecraftory.client.render.monster.SpiderRender;
+import io.github.flemmli97.runecraftory.client.render.monster.VeggieGhostRender;
+import io.github.flemmli97.runecraftory.client.render.monster.WispRender;
+import io.github.flemmli97.runecraftory.client.render.monster.WoolyRender;
 import io.github.flemmli97.runecraftory.client.render.npc.NPCFeatureRenderers;
+import io.github.flemmli97.runecraftory.client.render.npc.NPCRender;
 import io.github.flemmli97.runecraftory.client.render.npc.NPCTextureLayer;
-import io.github.flemmli97.runecraftory.client.render.npc.RenderNPC;
-import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
+import io.github.flemmli97.runecraftory.client.render.projectiles.AppleProjectileRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.BigRaccoonLeafRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.BoneNeedleRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.BulletRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.ButterflyRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.CardsRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookerRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.DarkBulletRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.DarknessRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.ElementBallRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.ElementalTrailRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderAppleProjectile;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBigRaccoonLeaf;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBoneNeedle;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBullet;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBullet;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkness;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderElementBall;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderElementalTrail;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderEnergyOrb;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFurnitures;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMarionettaTrap;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMissile;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPlate;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPoisonNeedle;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpear;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSingleFrameBeam;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSmallRaccoonLeaf;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpikes;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderThrownItem;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
-import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWindBlade;
+import io.github.flemmli97.runecraftory.client.render.projectiles.EnergyOrbRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.FireballRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.FurnituresRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.MarionettaTrapRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.MissileRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.MobArrowRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.PlateRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.PoisonNeedleRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RockSpearRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.SingleFrameBeamRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.SmallRaccoonLeafRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.SpiderWebRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.SpikesRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.ThrownItemRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.WaterLaserRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.WindBladeRender;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
-import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
-import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
-import io.github.flemmli97.runecraftory.common.blocks.BlockTreeSapling;
+import io.github.flemmli97.runecraftory.common.blocks.BrokenMineralBlock;
+import io.github.flemmli97.runecraftory.common.blocks.CraftingBlock;
+import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
+import io.github.flemmli97.runecraftory.common.blocks.HerbBlock;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlock;
+import io.github.flemmli97.runecraftory.common.blocks.TreeSaplingBlock;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
+import io.github.flemmli97.runecraftory.common.entities.misc.StoneEntity;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModFluids;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
 import io.github.flemmli97.tenshilib.client.render.ItemProjectileRenderer;
@@ -174,7 +174,7 @@ public class ClientRegister {
     public static final int HOT_SPRING_HUE = 0xff60c9f1;
 
     private static final BlockColor CROP_COLOR = (blockState, blockAndTintGetter, blockPos, i) -> {
-        if (blockState.getValue(BlockCrop.WILTED))
+        if (blockState.getValue(ExtendedCropBlock.WILTED))
             return 0xdc680a;
         return -1;
     };
@@ -210,35 +210,35 @@ public class ClientRegister {
     }
 
     public static void setupBlockRenderLayers(BiConsumer<Block, RenderType> consumer) {
-        ModBlocks.BLOCKS.getEntries().forEach(reg -> {
-            if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
+        RuneCraftoryBlocks.BLOCKS.getEntries().forEach(reg -> {
+            if (reg.get() instanceof HerbBlock || reg.get() instanceof ExtendedCropBlock || reg.get() instanceof MineralBlock || reg.get() instanceof BrokenMineralBlock)
                 consumer.accept(reg.get(), RenderType.cutout());
-            if (reg.get() instanceof BlockCrafting)
+            if (reg.get() instanceof CraftingBlock)
                 consumer.accept(reg.get(), RenderType.cutout());
-            if (reg == ModBlocks.MONSTER_BARN)
+            if (reg == RuneCraftoryBlocks.MONSTER_BARN)
                 consumer.accept(reg.get(), RenderType.cutout());
             if (reg.get() instanceof LeavesBlock)
                 consumer.accept(reg.get(), RenderType.cutoutMipped());
-            if (reg.get() instanceof BlockTreeSapling)
+            if (reg.get() instanceof TreeSaplingBlock)
                 consumer.accept(reg.get(), RenderType.cutout());
         });
-        consumer.accept(ModBlocks.BOSS_SPAWNER.get(), RenderType.cutout());
+        consumer.accept(RuneCraftoryBlocks.BOSS_SPAWNER.get(), RenderType.cutout());
     }
 
     public static void setupFluidRenderLayers(BiConsumer<Fluid, RenderType> consumer) {
-        consumer.accept(ModFluids.FLOWING_HOT_SPRING_WATER.get(), RenderType.translucent());
-        consumer.accept(ModFluids.HOT_SPRING_WATER.get(), RenderType.translucent());
+        consumer.accept(RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get(), RenderType.translucent());
+        consumer.accept(RuneCraftoryFluids.HOT_SPRING_WATER.get(), RenderType.translucent());
     }
 
     public static void registerItemProps(ItemModelPropsRegister register) {
-        ModItems.ITEMS.getEntries().forEach(reg -> {
+        RuneCraftoryItems.ITEMS.getEntries().forEach(reg -> {
             if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof BigWeapon)
                 register.register(reg.get(), ItemModelProps.HELD_ID, ItemModelProps.HELD_MAIN_PROP);
             else if (reg.get() instanceof ItemGloveBase)
                 register.register(reg.get(), ItemModelProps.GLOVE_HELD_ID, ItemModelProps.HELD_MAIN_GLOVE);
             else if (reg.get() instanceof ItemToolFishingRod)
                 register.register(reg.get(), ItemModelProps.FISHING_ROD_ID, ItemModelProps.FISHING_RODS);
-            else if (reg == ModItems.NPC_BABY)
+            else if (reg == RuneCraftoryItems.NPC_BABY)
                 register.register(reg.get(), ItemModelProps.BABY_GENDER, ItemModelProps.BABY_GENDER_PROPS);
             else if (reg.get() instanceof ShieldItem)
                 register.register(reg.get(), ResourceLocation.withDefaultNamespace("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
@@ -246,192 +246,192 @@ public class ClientRegister {
     }
 
     public static void registerBlockColors(BiConsumer<BlockColor, Block> cons) {
-        ModBlocks.CROPS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
-        ModBlocks.FLOWERS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
+        RuneCraftoryBlocks.CROPS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
+        RuneCraftoryBlocks.FLOWERS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
         BlockColor leaves = (blockState, blockAndTintGetter, blockPos, i) -> {
             if (blockAndTintGetter == null || blockPos == null) {
                 return FoliageColor.getDefaultColor();
             }
             return BiomeColors.getAverageFoliageColor(blockAndTintGetter, blockPos);
         };
-        cons.accept(leaves, ModBlocks.APPLE_LEAVES.get());
-        cons.accept(leaves, ModBlocks.APPLE.get());
-        cons.accept(leaves, ModBlocks.ORANGE_LEAVES.get());
-        cons.accept(leaves, ModBlocks.ORANGE.get());
-        cons.accept(leaves, ModBlocks.GRAPE_LEAVES.get());
-        cons.accept(leaves, ModBlocks.GRAPE.get());
+        cons.accept(leaves, RuneCraftoryBlocks.APPLE_LEAVES.get());
+        cons.accept(leaves, RuneCraftoryBlocks.APPLE.get());
+        cons.accept(leaves, RuneCraftoryBlocks.ORANGE_LEAVES.get());
+        cons.accept(leaves, RuneCraftoryBlocks.ORANGE.get());
+        cons.accept(leaves, RuneCraftoryBlocks.GRAPE_LEAVES.get());
+        cons.accept(leaves, RuneCraftoryBlocks.GRAPE.get());
     }
 
     public static void registerScreen(MenuScreenRegister factory) {
-        factory.register(ModMenuTypes.CRAFTING_CONTAINER.get(), (CraftingGui::new));
-        factory.register(ModMenuTypes.UPGRADE_CONTAINER.get(), UpgradeGui::new);
-        factory.register(ModMenuTypes.INFO_CONTAINER.get(), InfoScreen::new);
-        factory.register(ModMenuTypes.INFO_SUB_CONTAINER.get(), InfoSubScreen::new);
-        factory.register(ModMenuTypes.SHIPPING_CONTAINER.get(), MaxChestScreen<ShippingContainer>::new);
-        factory.register(ModMenuTypes.SHOP_CONTAINER.get(), NPCShopGui::new);
+        factory.register(RuneCraftoryMenuTypes.CRAFTING_CONTAINER.get(), (CraftingGui::new));
+        factory.register(RuneCraftoryMenuTypes.UPGRADE_CONTAINER.get(), UpgradeGui::new);
+        factory.register(RuneCraftoryMenuTypes.INFO_CONTAINER.get(), InfoScreen::new);
+        factory.register(RuneCraftoryMenuTypes.INFO_SUB_CONTAINER.get(), InfoSubScreen::new);
+        factory.register(RuneCraftoryMenuTypes.SHIPPING_CONTAINER.get(), MaxChestScreen<ShippingContainer>::new);
+        factory.register(RuneCraftoryMenuTypes.SHOP_CONTAINER.get(), NPCShopGui::new);
     }
 
     public static void registerRenderers(EntityRendererRegister consumer) {
-        consumer.register(ModEntities.GATE.get(), RenderGate::new);
+        consumer.register(RuneCraftoryEntities.GATE.get(), RenderGate::new);
 
-        consumer.register(ModEntities.WOOLY.get(), RenderWooly::new);
-        consumer.register(ModEntities.ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.ORC.get())));
-        consumer.register(ModEntities.ORC_ARCHER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.ORC.get())));
-        register(consumer, ModEntities.ANT.get(), ModelAnt::new, 0.8f);
-        register(consumer, ModEntities.BEETLE.get(), ModelBeetle::new, 0.6f);
-        register(consumer, ModEntities.BIG_MUCK.get(), ModelBigMuck::new, 0.6f);
-        register(consumer, ModEntities.BUFFAMOO.get(), ModelBuffamoo::new, 0.8f);
-        register(consumer, ModEntities.CHIPSQUEEK.get(), ModelChipsqueek::new, 0.4f);
-        register(consumer, ModEntities.CLUCKADOODLE.get(), ModelCluckadoodle::new, 0.35f);
-        register(consumer, ModEntities.POMME_POMME.get(), ModelPommePomme::new, 0.7f);
-        register(consumer, ModEntities.TORTAS.get(), ModelTortas::new, 0.8f);
-        register(consumer, ModEntities.SKY_FISH.get(), ModelSkyFish::new);
-        register(consumer, ModEntities.WEAGLE.get(), ModelWeagle::new);
-        consumer.register(ModEntities.GOBLIN.get(), RenderGoblin::new);
-        consumer.register(ModEntities.GOBLIN_ARCHER.get(), RenderGoblin::new);
-        consumer.register(ModEntities.DUCK.get(), ctx -> new RenderDuck<>(ctx, mobTexture(ModEntities.DUCK.get()), mobTexture(ModEntities.DUCK.get(), "_asleep")));
-        register(consumer, ModEntities.FAIRY.get(), ModelFairy::new, 0.3f);
-        consumer.register(ModEntities.GHOST.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST.get())));
-        consumer.register(ModEntities.SPIRIT.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.SPIRIT.get())));
-        consumer.register(ModEntities.GHOST_RAY.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST_RAY.get())));
-        consumer.register(ModEntities.SPIDER.get(), RenderSpider::new);
-        register(consumer, ModEntities.SHADOW_PANTHER.get(), ModelPanther::new, 0.85f);
-        register(consumer, ModEntities.MONSTER_BOX.get(), ModelMimic::new, 0.6f);
-        register(consumer, ModEntities.GOBBLE_BOX.get(), ModelMimic::new, 0.6f);
-        register(consumer, ModEntities.KILLER_ANT.get(), ModelAnt::new, 0.8f);
-        consumer.register(ModEntities.HIGH_ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
-        consumer.register(ModEntities.ORC_HUNTER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
-        register(consumer, ModEntities.HORNET.get(), ModelHornet::new);
-        register(consumer, ModEntities.SILVER_WOLF.get(), ModelWolf::new, 0.7f);
-        register(consumer, ModEntities.LEAF_BALL.get(), ModelLeafBall::new);
-        register(consumer, ModEntities.FURPY.get(), ModelChipsqueek::new, 0.4f);
-        register(consumer, ModEntities.PALM_CAT.get(), ModelPalmCat::new);
-        register(consumer, ModEntities.MINO.get(), ModelMino::new, 0.7f);
-        register(consumer, ModEntities.TRICKY_MUCK.get(), ModelBigMuck::new, 0.6f);
-        register(consumer, ModEntities.FLOWER_LILY.get(), ModelFlowerLily::new);
-        consumer.register(ModEntities.KING_WOOLY.get(), RenderWooly::new);
-        register(consumer, ModEntities.BUFFALOO.get(), ModelBuffaloo::new, 0.8f);
-        consumer.register(ModEntities.GOBLIN_PIRATE.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_PIRATE.get())));
-        consumer.register(ModEntities.GOBLIN_GANGSTER.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_GANGSTER.get())));
-        consumer.register(ModEntities.IGNIS.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.IGNIS.get())));
-        register(consumer, ModEntities.SCORPION.get(), ModelScorpion::new, 0.8f);
-        register(consumer, ModEntities.TROLL.get(), ModelTroll::new, 0.8f);
-        register(consumer, ModEntities.FLOWER_LION.get(), ModelFlowerLily::new);
-        consumer.register(ModEntities.TOMATO_GHOST.get(), ctx -> new RenderVeggieGhost<>(ctx, mobTexture(ModEntities.TOMATO_GHOST.get())));
-        consumer.register(ModEntities.GOBLIN_CAPTAIN.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_CAPTAIN.get())));
-        consumer.register(ModEntities.GOBLIN_DON.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_DON.get())));
-        register(consumer, ModEntities.MINERAL_SQUEEK.get(), ModelChipsqueek::new, 0.4f);
-        register(consumer, ModEntities.NAPPIE.get(), ModelNappie::new, 0.7f);
-        register(consumer, ModEntities.MALM_TIGER.get(), ModelPalmCat::new);
-        register(consumer, ModEntities.LITTLE_EMPEROR.get(), ModelMage::new, 0.4f);
-        register(consumer, ModEntities.DEMON.get(), ModelDemon::new);
-        register(consumer, ModEntities.ARCH_DEMON.get(), ModelDemon::new);
-        register(consumer, ModEntities.MINOTAUR.get(), ModelMinotaur::new, 0.95f);
-        register(consumer, ModEntities.MINOTAUR_KING.get(), ModelMinotaur::new, 0.95f);
+        consumer.register(RuneCraftoryEntities.WOOLY.get(), WoolyRender::new);
+        consumer.register(RuneCraftoryEntities.ORC.get(), ctx -> new OrcRender<>(ctx, mobTexture(RuneCraftoryEntities.ORC.get())));
+        consumer.register(RuneCraftoryEntities.ORC_ARCHER.get(), ctx -> new OrcRender<>(ctx, mobTexture(RuneCraftoryEntities.ORC.get())));
+        register(consumer, RuneCraftoryEntities.ANT.get(), AntModel::new, 0.8f);
+        register(consumer, RuneCraftoryEntities.BEETLE.get(), BeetleModel::new, 0.6f);
+        register(consumer, RuneCraftoryEntities.BIG_MUCK.get(), BigMuckModel::new, 0.6f);
+        register(consumer, RuneCraftoryEntities.BUFFAMOO.get(), BuffamooModel::new, 0.8f);
+        register(consumer, RuneCraftoryEntities.CHIPSQUEEK.get(), ChipsqueekModel::new, 0.4f);
+        register(consumer, RuneCraftoryEntities.CLUCKADOODLE.get(), CluckadoodleModel::new, 0.35f);
+        register(consumer, RuneCraftoryEntities.POMME_POMME.get(), PommePommeModel::new, 0.7f);
+        register(consumer, RuneCraftoryEntities.TORTAS.get(), TortasModel::new, 0.8f);
+        register(consumer, RuneCraftoryEntities.SKY_FISH.get(), SkyFishModel::new);
+        register(consumer, RuneCraftoryEntities.WEAGLE.get(), WeagleModel::new);
+        consumer.register(RuneCraftoryEntities.GOBLIN.get(), GoblinRender::new);
+        consumer.register(RuneCraftoryEntities.GOBLIN_ARCHER.get(), GoblinRender::new);
+        consumer.register(RuneCraftoryEntities.DUCK.get(), ctx -> new DuckRender<>(ctx, mobTexture(RuneCraftoryEntities.DUCK.get()), mobTexture(RuneCraftoryEntities.DUCK.get(), "_asleep")));
+        register(consumer, RuneCraftoryEntities.FAIRY.get(), FairyModel::new, 0.3f);
+        consumer.register(RuneCraftoryEntities.GHOST.get(), ctx -> new GhostRender<>(ctx, mobTexture(RuneCraftoryEntities.GHOST.get())));
+        consumer.register(RuneCraftoryEntities.SPIRIT.get(), ctx -> new WispRender<>(ctx, mobTexture(RuneCraftoryEntities.SPIRIT.get())));
+        consumer.register(RuneCraftoryEntities.GHOST_RAY.get(), ctx -> new GhostRender<>(ctx, mobTexture(RuneCraftoryEntities.GHOST_RAY.get())));
+        consumer.register(RuneCraftoryEntities.SPIDER.get(), SpiderRender::new);
+        register(consumer, RuneCraftoryEntities.SHADOW_PANTHER.get(), PantherModel::new, 0.85f);
+        register(consumer, RuneCraftoryEntities.MONSTER_BOX.get(), MimicModel::new, 0.6f);
+        register(consumer, RuneCraftoryEntities.GOBBLE_BOX.get(), MimicModel::new, 0.6f);
+        register(consumer, RuneCraftoryEntities.KILLER_ANT.get(), AntModel::new, 0.8f);
+        consumer.register(RuneCraftoryEntities.HIGH_ORC.get(), ctx -> new OrcRender<>(ctx, mobTexture(RuneCraftoryEntities.HIGH_ORC.get())));
+        consumer.register(RuneCraftoryEntities.ORC_HUNTER.get(), ctx -> new OrcRender<>(ctx, mobTexture(RuneCraftoryEntities.HIGH_ORC.get())));
+        register(consumer, RuneCraftoryEntities.HORNET.get(), HornetModel::new);
+        register(consumer, RuneCraftoryEntities.SILVER_WOLF.get(), WolfModel::new, 0.7f);
+        register(consumer, RuneCraftoryEntities.LEAF_BALL.get(), LeafBallModel::new);
+        register(consumer, RuneCraftoryEntities.FURPY.get(), ChipsqueekModel::new, 0.4f);
+        register(consumer, RuneCraftoryEntities.PALM_CAT.get(), PalmCatModel::new);
+        register(consumer, RuneCraftoryEntities.MINO.get(), MinoModel::new, 0.7f);
+        register(consumer, RuneCraftoryEntities.TRICKY_MUCK.get(), BigMuckModel::new, 0.6f);
+        register(consumer, RuneCraftoryEntities.FLOWER_LILY.get(), FlowerLilyModel::new);
+        consumer.register(RuneCraftoryEntities.KING_WOOLY.get(), WoolyRender::new);
+        register(consumer, RuneCraftoryEntities.BUFFALOO.get(), BuffalooModel::new, 0.8f);
+        consumer.register(RuneCraftoryEntities.GOBLIN_PIRATE.get(), ctx -> new GoblinRender<>(ctx, mobTexture(RuneCraftoryEntities.GOBLIN_PIRATE.get())));
+        consumer.register(RuneCraftoryEntities.GOBLIN_GANGSTER.get(), ctx -> new GoblinRender<>(ctx, mobTexture(RuneCraftoryEntities.GOBLIN_GANGSTER.get())));
+        consumer.register(RuneCraftoryEntities.IGNIS.get(), ctx -> new WispRender<>(ctx, mobTexture(RuneCraftoryEntities.IGNIS.get())));
+        register(consumer, RuneCraftoryEntities.SCORPION.get(), ScorpionModel::new, 0.8f);
+        register(consumer, RuneCraftoryEntities.TROLL.get(), TrollModel::new, 0.8f);
+        register(consumer, RuneCraftoryEntities.FLOWER_LION.get(), FlowerLilyModel::new);
+        consumer.register(RuneCraftoryEntities.TOMATO_GHOST.get(), ctx -> new VeggieGhostRender<>(ctx, mobTexture(RuneCraftoryEntities.TOMATO_GHOST.get())));
+        consumer.register(RuneCraftoryEntities.GOBLIN_CAPTAIN.get(), ctx -> new GoblinRender<>(ctx, mobTexture(RuneCraftoryEntities.GOBLIN_CAPTAIN.get())));
+        consumer.register(RuneCraftoryEntities.GOBLIN_DON.get(), ctx -> new GoblinRender<>(ctx, mobTexture(RuneCraftoryEntities.GOBLIN_DON.get())));
+        register(consumer, RuneCraftoryEntities.MINERAL_SQUEEK.get(), ChipsqueekModel::new, 0.4f);
+        register(consumer, RuneCraftoryEntities.NAPPIE.get(), NappieModel::new, 0.7f);
+        register(consumer, RuneCraftoryEntities.MALM_TIGER.get(), PalmCatModel::new);
+        register(consumer, RuneCraftoryEntities.LITTLE_EMPEROR.get(), MageModel::new, 0.4f);
+        register(consumer, RuneCraftoryEntities.DEMON.get(), DemonModel::new);
+        register(consumer, RuneCraftoryEntities.ARCH_DEMON.get(), DemonModel::new);
+        register(consumer, RuneCraftoryEntities.MINOTAUR.get(), MinotaurModel::new, 0.95f);
+        register(consumer, RuneCraftoryEntities.MINOTAUR_KING.get(), MinotaurModel::new, 0.95f);
 
-        register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new);
-        register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, 1.1f);
-        register(consumer, ModEntities.MARIONETTA.get(), ModelMarionetta::new);
-        register(consumer, ModEntities.HANDONETTA.get(), ModelHandonetta::new, 1);
-        consumer.register(ModEntities.DEAD_TREE.get(), RenderDeadTree::new);
-        register(consumer, ModEntities.CHIMERA.get(), ModelChimera::new, 0.8f);
-        consumer.register(ModEntities.RACCOON.get(), RenderRaccoon::new);
-        consumer.register(ModEntities.SKELEFANG.get(), RenderSkelefang::new);
-        consumer.register(ModEntities.RAFFLESIA.get(), RenderRafflesia::new);
-        register(consumer, ModEntities.GRIMOIRE.get(), ModelGrimoire::new, 1.3f);
-        register(consumer, ModEntities.SANO.get(), ModelSanoUno::new, 1.5f);
-        register(consumer, ModEntities.UNO.get(), ModelSanoUno::new, 1.5f);
-        register(consumer, ModEntities.SARCOPHAGUS.get(), ModelSarcophagus::new, 0);
+        register(consumer, RuneCraftoryEntities.AMBROSIA.get(), AmbrosiaModel::new);
+        register(consumer, RuneCraftoryEntities.THUNDERBOLT.get(), ThunderboltModel::new, 1.1f);
+        register(consumer, RuneCraftoryEntities.MARIONETTA.get(), MarionettaModel::new);
+        register(consumer, RuneCraftoryEntities.HANDONETTA.get(), HandonettaModel::new, 1);
+        consumer.register(RuneCraftoryEntities.DEAD_TREE.get(), DeadTreeRender::new);
+        register(consumer, RuneCraftoryEntities.CHIMERA.get(), ChimeraModel::new, 0.8f);
+        consumer.register(RuneCraftoryEntities.RACCOON.get(), RaccoonRender::new);
+        consumer.register(RuneCraftoryEntities.SKELEFANG.get(), SkelefangRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA.get(), RafflesiaRender::new);
+        register(consumer, RuneCraftoryEntities.GRIMOIRE.get(), GrimoireModel::new, 1.3f);
+        register(consumer, RuneCraftoryEntities.SANO.get(), SanoUnoModel::new, 1.5f);
+        register(consumer, RuneCraftoryEntities.UNO.get(), SanoUnoModel::new, 1.5f);
+        register(consumer, RuneCraftoryEntities.SARCOPHAGUS.get(), SarcophagusModel::new, 0);
 
-        consumer.register(ModEntities.NPC.get(), RenderNPC::new);
+        consumer.register(RuneCraftoryEntities.NPC.get(), NPCRender::new);
 
-        consumer.register(ModEntities.TREASURE_CHEST.get(), RenderTreasureChest::new);
+        consumer.register(RuneCraftoryEntities.TREASURE_CHEST.get(), RenderTreasureChest::new);
 
-        consumer.register(ModEntities.ARROW.get(), RenderMobArrow::new);
-        consumer.register(ModEntities.SPORE.get(), EmptyRender::new);
-        consumer.register(ModEntities.GUST.get(), EmptyRender::new);
-        consumer.register(ModEntities.STONE.get(), ctx -> new ItemProjectileRenderer<>(ctx) {
-            private final ItemStack stack = new ItemStack(ModItems.STONE_ROUND.get());
+        consumer.register(RuneCraftoryEntities.ARROW.get(), MobArrowRender::new);
+        consumer.register(RuneCraftoryEntities.SPORE.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.GUST.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STONE.get(), ctx -> new ItemProjectileRenderer<>(ctx) {
+            private final ItemStack stack = new ItemStack(RuneCraftoryItems.STONE_ROUND.get());
 
             @Override
-            public Type getRenderType(EntityStone entity) {
+            public Type getRenderType(StoneEntity entity) {
                 return Type.NORMAL;
             }
 
             @Override
-            public ItemStack getRenderItemStack(EntityStone entity) {
+            public ItemStack getRenderItemStack(StoneEntity entity) {
                 return this.stack;
             }
         });
-        consumer.register(ModEntities.STATUS_BALL.get(), EmptyRender::new);
-        consumer.register(ModEntities.POLLEN_PUFF.get(), EmptyRender::new);
-        consumer.register(ModEntities.POLLEN.get(), EmptyRender::new);
-        consumer.register(ModEntities.AMBROSIA_WAVE.get(), EmptyRender::new);
-        consumer.register(ModEntities.BUTTERFLY.get(), RenderButterfly::new);
-        consumer.register(ModEntities.LIGHTNING_ORB_BOLT.get(), EmptyRender::new);
-        consumer.register(ModEntities.LIGHTNING_BEAM.get(), EmptyRender::new);
-        consumer.register(ModEntities.ELEMENTAL_TRAIL.get(), RenderElementalTrail::new);
-        consumer.register(ModEntities.SPIDER_WEB.get(), RenderSpiderWeb::new);
-        consumer.register(ModEntities.DARK_BEAM.get(), ctx -> new RenderSingleFrameBeam<>(ctx, RenderSingleFrameBeam.DARK_BEAM));
-        consumer.register(ModEntities.CARDS.get(), RenderCards::new);
-        consumer.register(ModEntities.FURNITURE.get(), RenderFurnitures::new);
-        consumer.register(ModEntities.TRAP_CHEST.get(), RenderMarionettaTrap::new);
-        consumer.register(ModEntities.ELEMENTAL_BALL.get(), RenderElementBall::new);
-        consumer.register(ModEntities.FIRE_BALL.get(), RenderFireball::new);
-        consumer.register(ModEntities.EXPLOSION.get(), EmptyRender::new);
-        consumer.register(ModEntities.ROCK_SPEAR.get(), RenderRockSpear::new);
-        consumer.register(ModEntities.WIND_BLADE.get(), RenderWindBlade::new);
-        consumer.register(ModEntities.WATER_LASER.get(), RenderWaterLaser::new);
-        consumer.register(ModEntities.SWIPING_WATER_LASER.get(), RenderWaterLaser::new);
-        consumer.register(ModEntities.LIGHT_BALL.get(), EmptyRender::new);
-        consumer.register(ModEntities.DARK_BALL.get(), EmptyRender::new);
-        consumer.register(ModEntities.DARKNESS.get(), RenderDarkness::new);
-        consumer.register(ModEntities.BIG_PLATE.get(), RenderPlate::new);
-        consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
-        consumer.register(ModEntities.POISON_NEEDLE.get(), RenderPoisonNeedle::new);
-        consumer.register(ModEntities.SLEEP_AURA.get(), EmptyRender::new);
-        consumer.register(ModEntities.CIRCLING_BULLET.get(), ctx -> new RenderBullet(ctx, RuneCraftory.modRes("textures/entity/projectile/bullet.png")));
-        consumer.register(ModEntities.THROWN_ITEM.get(), RenderThrownItem::new);
-        consumer.register(ModEntities.APPLE.get(), RenderAppleProjectile::new);
-        consumer.register(ModEntities.SLASH_RESIDUE.get(), EmptyRender::new);
-        consumer.register(ModEntities.SMALL_RACCOON_LEAF.get(), RenderSmallRaccoonLeaf::new);
-        consumer.register(ModEntities.BIG_RACCOON_LEAF.get(), RenderBigRaccoonLeaf::new);
-        consumer.register(ModEntities.BONE_NEEDLE.get(), RenderBoneNeedle::new);
-        consumer.register(ModEntities.ENERGY_ORB.get(), RenderEnergyOrb::new);
-        consumer.register(ModEntities.HOMING_SPIKES.get(), RenderSpikes::new);
-        consumer.register(ModEntities.POWER_WAVE.get(), EmptyRender::new);
-        consumer.register(ModEntities.GUST_ROCK.get(), EmptyRender::new);
-        consumer.register(ModEntities.TORNADO.get(), EmptyRender::new);
-        consumer.register(ModEntities.LIGHT_BEAM.get(), ctx -> new RenderSingleFrameBeam<>(ctx, RenderSingleFrameBeam.LIGHT_BEAM));
-        consumer.register(ModEntities.MISSILE.get(), RenderMissile::new);
-        consumer.register(ModEntities.STARFALL.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STATUS_BALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.POLLEN_PUFF.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.POLLEN.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.AMBROSIA_WAVE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.BUTTERFLY.get(), ButterflyRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHTNING_ORB_BOLT.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHTNING_BEAM.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ELEMENTAL_TRAIL.get(), ElementalTrailRender::new);
+        consumer.register(RuneCraftoryEntities.SPIDER_WEB.get(), SpiderWebRender::new);
+        consumer.register(RuneCraftoryEntities.DARK_BEAM.get(), ctx -> new SingleFrameBeamRender<>(ctx, SingleFrameBeamRender.DARK_BEAM));
+        consumer.register(RuneCraftoryEntities.CARDS.get(), CardsRender::new);
+        consumer.register(RuneCraftoryEntities.FURNITURE.get(), FurnituresRender::new);
+        consumer.register(RuneCraftoryEntities.TRAP_CHEST.get(), MarionettaTrapRender::new);
+        consumer.register(RuneCraftoryEntities.ELEMENTAL_BALL.get(), ElementBallRender::new);
+        consumer.register(RuneCraftoryEntities.FIRE_BALL.get(), FireballRender::new);
+        consumer.register(RuneCraftoryEntities.EXPLOSION.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ROCK_SPEAR.get(), RockSpearRender::new);
+        consumer.register(RuneCraftoryEntities.WIND_BLADE.get(), WindBladeRender::new);
+        consumer.register(RuneCraftoryEntities.WATER_LASER.get(), WaterLaserRender::new);
+        consumer.register(RuneCraftoryEntities.SWIPING_WATER_LASER.get(), WaterLaserRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHT_BALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.DARK_BALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.DARKNESS.get(), DarknessRender::new);
+        consumer.register(RuneCraftoryEntities.BIG_PLATE.get(), PlateRender::new);
+        consumer.register(RuneCraftoryEntities.DARK_BULLET.get(), DarkBulletRender::new);
+        consumer.register(RuneCraftoryEntities.POISON_NEEDLE.get(), PoisonNeedleRender::new);
+        consumer.register(RuneCraftoryEntities.SLEEP_AURA.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.CIRCLING_BULLET.get(), ctx -> new BulletRender(ctx, RuneCraftory.modRes("textures/entity/projectile/bullet.png")));
+        consumer.register(RuneCraftoryEntities.THROWN_ITEM.get(), ThrownItemRender::new);
+        consumer.register(RuneCraftoryEntities.APPLE.get(), AppleProjectileRender::new);
+        consumer.register(RuneCraftoryEntities.SLASH_RESIDUE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SMALL_RACCOON_LEAF.get(), SmallRaccoonLeafRender::new);
+        consumer.register(RuneCraftoryEntities.BIG_RACCOON_LEAF.get(), BigRaccoonLeafRender::new);
+        consumer.register(RuneCraftoryEntities.BONE_NEEDLE.get(), BoneNeedleRender::new);
+        consumer.register(RuneCraftoryEntities.ENERGY_ORB.get(), EnergyOrbRender::new);
+        consumer.register(RuneCraftoryEntities.HOMING_SPIKES.get(), SpikesRender::new);
+        consumer.register(RuneCraftoryEntities.POWER_WAVE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.GUST_ROCK.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.TORNADO.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHT_BEAM.get(), ctx -> new SingleFrameBeamRender<>(ctx, SingleFrameBeamRender.LIGHT_BEAM));
+        consumer.register(RuneCraftoryEntities.MISSILE.get(), MissileRender::new);
+        consumer.register(RuneCraftoryEntities.STARFALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
 
-        consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
-        consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RUNEY.get(), RenderRuney::new);
+        consumer.register(RuneCraftoryEntities.STAT_BONUS.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
 
-        consumer.register(ModEntities.SPORE_CIRCLE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.BUTTERFLY_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.ROOT_SPIKE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.RAFFLESIA_BREATH_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.BLAZE_BARRAGE.get(), EmptyRender::new);
-        consumer.register(ModEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.FIRE_WALL_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
-        consumer.register(ModEntities.GROUND_SHAKE_PARTICLES.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SPORE_CIRCLE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.BUTTERFLY_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.DARK_BULLET_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ROOT_SPIKE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_BREATH_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.BLAZE_BARRAGE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.FIRE_WALL_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STARFALL_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.GROUND_SHAKE_PARTICLES.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
 
-        consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
-        consumer.register(ModEntities.SARCOPHAGUS_TELEPORTER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.FISHING_HOOK.get(), CustomFishingHookerRender::new);
+        consumer.register(RuneCraftoryEntities.SARCOPHAGUS_TELEPORTER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
 
-        consumer.register(ModEntities.MULTIPART.get(), EmptyRender::new);
-        consumer.register(ModEntities.RAFFLESIA_HORSETAIL.get(), EmptyRender::new);
-        consumer.register(ModEntities.RAFFLESIA_FLOWER.get(), EmptyRender::new);
-        consumer.register(ModEntities.RAFFLESIA_PITCHER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.MULTIPART.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_HORSETAIL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_FLOWER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_PITCHER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
 
-        consumer.register(ModEntities.SANO_AND_UNO.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SANO_AND_UNO.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
 
         NPCFeatureRenderers.init();
     }
@@ -466,26 +466,26 @@ public class ClientRegister {
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {
-        consumer.register(ModParticles.SINKING_DUST.get(), SinkingParticle.Factory::new);
-        consumer.register(ModParticles.LIGHT.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.SHORT_LIGHT.get(), ParticleFactories.ShortLightParticleFactory::new);
-        consumer.register(ModParticles.CROSS.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.BLINK.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.SMOKE.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(ModParticles.STATIC_LIGHT.get(), ColoredParticle.NoGravityParticleFactory::new);
-        consumer.register(ModParticles.CIRCLING_LIGHT.get(), CirclingParticle.CirclingFactoryBase::new);
-        consumer.register(ModParticles.WIND.get(), ColoredParticle.NoGravityParticleFactory::new);
-        consumer.register(ModParticles.SLEEP.get(), HeartParticle.Provider::new);
-        consumer.register(ModParticles.POISON.get(), HeartParticle.Provider::new);
-        consumer.register(ModParticles.PARALYSIS.get(), LightningParticle.Factory::new);
-        consumer.register(ModParticles.LIGHTNING.get(), LightningParticle.Factory::new);
-        consumer.register(ModParticles.TORNADO.get(), TornadoParticle.TornadoFactoryBase::new);
-        consumer.register(ModParticles.BLOCK.get(), BlockParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.SINKING_DUST.get(), SinkingParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.LIGHT.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.SHORT_LIGHT.get(), ParticleFactories.ShortLightParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.CROSS.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.BLINK.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.SMOKE.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.STATIC_LIGHT.get(), ColoredParticle.NoGravityParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.CIRCLING_LIGHT.get(), CirclingParticle.CirclingFactoryBase::new);
+        consumer.register(RuneCraftoryParticles.WIND.get(), ColoredParticle.NoGravityParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.SLEEP.get(), HeartParticle.Provider::new);
+        consumer.register(RuneCraftoryParticles.POISON.get(), HeartParticle.Provider::new);
+        consumer.register(RuneCraftoryParticles.PARALYSIS.get(), LightningParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.LIGHTNING.get(), LightningParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.TORNADO.get(), TornadoParticle.TornadoFactoryBase::new);
+        consumer.register(RuneCraftoryParticles.BLOCK.get(), BlockParticle.Factory::new);
 
-        consumer.register(ModParticles.RUNEY.get(), RuneyParticle.Provider::new);
+        consumer.register(RuneCraftoryParticles.RUNEY.get(), RuneyParticle.Provider::new);
 
-        consumer.register(ModParticles.SKELEFANG_BONES.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
-        consumer.register(ModParticles.DURATIONAL_PARTICLE.get(), MoveToGoalParticle.ParticleFactoryBase::new);
+        consumer.register(RuneCraftoryParticles.SKELEFANG_BONES.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
+        consumer.register(RuneCraftoryParticles.DURATIONAL_PARTICLE.get(), MoveToGoalParticle.ParticleFactoryBase::new);
     }
 
     public static <T extends TooltipComponent> void registerTooltipComponentFactories(ToolTipComponentRegister register) {

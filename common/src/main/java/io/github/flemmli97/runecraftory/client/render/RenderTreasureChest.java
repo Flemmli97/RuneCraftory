@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
+import io.github.flemmli97.runecraftory.client.model.misc.ChestModel;
+import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,22 +15,22 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
+public class RenderTreasureChest extends EntityRenderer<TreasureChestEntity> {
 
     protected static final ResourceLocation COMMON = RuneCraftory.modRes("textures/entity/chest.png");
     protected static final ResourceLocation RARE = RuneCraftory.modRes("textures/entity/rare_chest.png");
     protected static final ResourceLocation QUEST = RuneCraftory.modRes("textures/entity/quest_chest.png");
 
-    protected final EntityModel<EntityTreasureChest> model;
+    protected final EntityModel<TreasureChestEntity> model;
 
     public RenderTreasureChest(EntityRendererProvider.Context ctx) {
         super(ctx);
         this.shadowRadius = 0.6f;
-        this.model = new ModelChest<>();
+        this.model = new ChestModel<>();
     }
 
     @Override
-    public void render(EntityTreasureChest entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(TreasureChestEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
         float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
@@ -47,7 +47,7 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTreasureChest entity) {
+    public ResourceLocation getTextureLocation(TreasureChestEntity entity) {
         TreasureChestSpawnegg.ChestTier tier = entity.tier();
         if (tier == TreasureChestSpawnegg.ChestTier.RARE || tier == TreasureChestSpawnegg.ChestTier.EPIC)
             return RARE;
@@ -56,7 +56,7 @@ public class RenderTreasureChest extends EntityRenderer<EntityTreasureChest> {
         return COMMON;
     }
 
-    public void translate(EntityTreasureChest entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
+    public void translate(TreasureChestEntity entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
         stack.mulPose(Axis.YP.rotationDegrees(180.0F + yaw));
         stack.mulPose(Axis.XP.rotationDegrees(pitch));
     }

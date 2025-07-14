@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -35,16 +35,16 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, list, tooltipFlag);
-        NPCSpawnData itemData = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+        NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
         list.add(Component.translatable("runecraftory.tooltip.item.npc").withStyle(ChatFormatting.GOLD));
-        String key = itemData.profession().map(h -> h.value().getTranslationKey()).orElse(ModNPCProfessions.NONE.get().getTranslationKey());
+        String key = itemData.profession().map(h -> h.value().getTranslationKey()).orElse(RuneCraftoryNPCProfessions.NONE.get().getTranslationKey());
         list.add(Component.translatable(key).withStyle(ChatFormatting.AQUA));
     }
 
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
-        if (e instanceof EntityNPCBase npc) {
-            NPCSpawnData itemData = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+        if (e instanceof NPCEntity npc) {
+            NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
             boolean profession = true;
             if (itemData.npcDataId().isPresent()) {
                 NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(itemData.npcDataId().get());
@@ -65,8 +65,8 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
         if (player.isShiftKeyDown()) {
             ItemStack stack = player.getItemInHand(hand);
             if (!level.isClientSide) {
-                NPCSpawnData data = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
-                stack.set(ModDataComponentTypes.NPC_SPAWN_DATA.get(), data.cycleProfession(level.registryAccess()));
+                NPCSpawnData data = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+                stack.set(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), data.cycleProfession(level.registryAccess()));
             }
             return InteractionResultHolder.consume(stack);
         }

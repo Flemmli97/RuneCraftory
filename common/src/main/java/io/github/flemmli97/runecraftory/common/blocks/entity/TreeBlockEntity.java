@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.common.blocks.BlockFruitTreeLeaf;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.blocks.FruitTreeLeafBlock;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -29,7 +29,7 @@ public class TreeBlockEntity extends BlockEntity {
     private List<BlockPos> fruits = new ArrayList<>();
 
     public TreeBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.TREE_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(RuneCraftoryBlocks.TREE_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
     public void updateTreeLogs(Collection<BlockPos> pos) {
@@ -63,8 +63,8 @@ public class TreeBlockEntity extends BlockEntity {
     public void update(ServerLevel level) {
         for (BlockPos pos : this.fruits) {
             BlockState state = level.getBlockState(pos);
-            if (state.getBlock() instanceof BlockFruitTreeLeaf) {
-                level.setBlock(pos, state.setValue(BlockFruitTreeLeaf.HAS_FRUIT, true), Block.UPDATE_ALL);
+            if (state.getBlock() instanceof FruitTreeLeafBlock) {
+                level.setBlock(pos, state.setValue(FruitTreeLeafBlock.HAS_FRUIT, true), Block.UPDATE_ALL);
             }
         }
     }

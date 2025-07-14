@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.integration.top;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
+import io.github.flemmli97.runecraftory.common.blocks.MonsterBarnBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -27,7 +27,7 @@ public class BlockProvider implements IProbeInfoProvider {
 
     @Override
     public void addProbeInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player player, Level level, BlockState blockState, IProbeHitData iProbeHitData) {
-        if (blockState.getBlock() instanceof BlockMonsterBarn) {
+        if (blockState.getBlock() instanceof MonsterBarnBlock) {
             BlockEntity entity = level.getBlockEntity(iProbeHitData.getPos());
             if (entity instanceof MonsterBarnBlockEntity barn) {
                 BarnData data = barn.getBarnData();

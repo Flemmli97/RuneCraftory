@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.world.data;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +34,7 @@ public class NPCHandler {
         return this.npcs.containsKey(uuid);
     }
 
-    public void addNPC(EntityNPCBase npc) {
+    public void addNPC(NPCEntity npc) {
         this.npcs.put(npc.getUUID(), npc.getName());
     }
 
@@ -42,7 +42,7 @@ public class NPCHandler {
         return this.npcs.get(uuid);
     }
 
-    public void removeNPC(EntityNPCBase npc, Entity.RemovalReason reason) {
+    public void removeNPC(NPCEntity npc, Entity.RemovalReason reason) {
         if (reason.shouldDestroy()) {
             npc.getServer().getPlayerList().getPlayers().forEach(p -> QuestHandler.removeQuestFor(p, npc));
             npc.getFamily().markAsDead();

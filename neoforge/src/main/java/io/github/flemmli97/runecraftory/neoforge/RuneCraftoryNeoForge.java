@@ -5,32 +5,32 @@ import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModActivities;
-import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModArmorMaterials;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.runecraftory.common.registry.ModCreativeModTabs;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
-import io.github.flemmli97.runecraftory.common.registry.ModFluids;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
-import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
-import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorMaterials;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeRuneCraftoryTabs;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCBehaviour;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryPoiTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.runecraftory.neoforge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
@@ -94,40 +94,40 @@ public class RuneCraftoryNeoForge {
     }
 
     public static void registries(IEventBus modBus) {
-        ModBlocks.BLOCKS.registerContent(modBus);
-        ModBlocks.BLOCK_ENTITY_TYPES.registerContent(modBus);
-        ModItems.ITEMS.registerContent(modBus);
-        ModMenuTypes.CONTAINERS.registerContent(modBus);
-        ModEntities.ENTITIES.registerContent(modBus);
-        ModAttributes.ATTRIBUTES.registerContent(modBus);
-        ModEffects.EFFECTS.registerContent(modBus);
-        ModCrafting.RECIPESERIALIZER.registerContent(modBus);
-        ModSpells.SPELLS.register().registerContent(modBus);
-        ModParticles.PARTICLES.registerContent(modBus);
-        ModActivities.ACTIVITIES.registerContent(modBus);
-        ModPoiTypes.POI.registerContent(modBus);
-        ModArmorMaterials.MATERIALS.registerContent(modBus);
-        ModMemoryTypes.MEMORYIES.registerContent(modBus);
-        ModNPCBehaviour.BEHAVIOURS.register().registerContent(modBus);
-        ModAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
-        ModSounds.SOUND_EVENTS.registerContent(modBus);
-        ModArmorEffects.ARMOR_EFFECTS.register().registerContent(modBus);
-        ModNPCLooks.NPC_FEATURES.register().registerContent(modBus);
-        ModLootRegistries.LOOTFUNCTION.registerContent(modBus);
-        ModLootRegistries.LOOTCONDITIONS.registerContent(modBus);
-        ModLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
-        ModCrafting.RECIPETYPE.registerContent(modBus);
-        ModNPCProfessions.PROFESSIONS.register().registerContent(modBus);
+        RuneCraftoryBlocks.BLOCKS.registerContent(modBus);
+        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent(modBus);
+        RuneCraftoryItems.ITEMS.registerContent(modBus);
+        RuneCraftoryMenuTypes.CONTAINERS.registerContent(modBus);
+        RuneCraftoryEntities.ENTITIES.registerContent(modBus);
+        RuneCraftoryAttributes.ATTRIBUTES.registerContent(modBus);
+        RuneCraftoryEffects.EFFECTS.registerContent(modBus);
+        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent(modBus);
+        RuneCraftorySpells.SPELLS.register().registerContent(modBus);
+        RuneCraftoryParticles.PARTICLES.registerContent(modBus);
+        RuneCraftoryActivities.ACTIVITIES.registerContent(modBus);
+        RuneCraftoryPoiTypes.POI.registerContent(modBus);
+        RuneCraftoryArmorMaterials.MATERIALS.registerContent(modBus);
+        RuneCraftoryMemoryTypes.MEMORYIES.registerContent(modBus);
+        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent(modBus);
+        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
+        RuneCraftorySounds.SOUND_EVENTS.registerContent(modBus);
+        RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent(modBus);
+        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent(modBus);
+        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent(modBus);
+        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent(modBus);
+        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
+        RuneCraftoryCrafting.RECIPETYPE.registerContent(modBus);
+        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent(modBus);
         ModAttachments.ATTACHMENT_TYPES.register(modBus);
-        ModDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
-        ModCriteria.TRIGGERS.registerContent(modBus);
-        ModCreativeModTabs.CREATIVE_MODE_TABS.registerContent(modBus);
-        ModStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
-        ModStructures.STRUCTURES.registerContent(modBus);
-        ModFeatures.FEATURES.registerContent(modBus);
-        ModFeatures.TRUNK_PLACER.registerContent(modBus);
-        ModFeatures.TREE_DECORATORS.registerContent(modBus);
-        ModFluids.FLUIDS.registerContent(modBus);
+        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
+        RuneCraftoryCriteria.TRIGGERS.registerContent(modBus);
+        RuneCraftoryCreativeRuneCraftoryTabs.CREATIVE_MODE_TABS.registerContent(modBus);
+        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
+        RuneCraftoryStructures.STRUCTURES.registerContent(modBus);
+        RuneCraftoryFeatures.FEATURES.registerContent(modBus);
+        RuneCraftoryFeatures.TRUNK_PLACER.registerContent(modBus);
+        RuneCraftoryFeatures.TREE_DECORATORS.registerContent(modBus);
+        RuneCraftoryFluids.FLUIDS.registerContent(modBus);
         ModFluidTypes.FLUID_TYPES.register(modBus);
     }
 
@@ -137,22 +137,22 @@ public class RuneCraftoryNeoForge {
     }
 
     public void spawnPlacement(RegisterSpawnPlacementsEvent event) {
-        event.register(ModEntities.GATE.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        event.register(RuneCraftoryEntities.GATE.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 GateEntity::canSpawnAt, RegisterSpawnPlacementsEvent.Operation.AND);
     }
 
     public void attributes(EntityAttributeCreationEvent event) {
-        ModEntities.registerAttributes((type, builder) -> event.put(type, builder.build()));
+        RuneCraftoryEntities.registerAttributes((type, builder) -> event.put(type, builder.build()));
     }
 
     public void attributesAdd(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> t : event.getTypes()) {
-            for (RegistryEntrySupplier<Attribute, ?> s : ModAttributes.ENTITY_ATTRIBUTES) {
+            for (RegistryEntrySupplier<Attribute, ?> s : RuneCraftoryAttributes.ENTITY_ATTRIBUTES) {
                 if (!event.has(t, s.asHolder()))
                     event.add(t, s.asHolder());
             }
         }
-        for (RegistryEntrySupplier<Attribute, ?> s : ModAttributes.PLAYER_ATTRIBUTES) {
+        for (RegistryEntrySupplier<Attribute, ?> s : RuneCraftoryAttributes.PLAYER_ATTRIBUTES) {
             event.add(EntityType.PLAYER, s.asHolder());
         }
     }

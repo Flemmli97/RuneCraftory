@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -13,6 +13,6 @@ public class BlitzEffect extends MobEffect {
 
     public BlitzEffect() {
         super(MobEffectCategory.BENEFICIAL, 0x1348ba);
-        this.addAttributeModifier(ModAttributes.ATTACK_SPEED.asHolder(), MODIFIER, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        this.addAttributeModifier(RuneCraftoryAttributes.ATTACK_SPEED.asHolder(), MODIFIER, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 }

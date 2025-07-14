@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.neoforge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.provider.FoodProvider;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.effect.MobEffects;
@@ -23,84 +23,84 @@ public class FoodGen extends FoodProvider {
     @Override
     protected void add(HolderLookup.Provider provider) {
         this.addStat("fish", Items.COD, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat("salmon", Items.SALMON, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat("sweet_berry", Items.SWEET_BERRIES, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
         this.addStat("cookie", Items.COOKIE, new FoodProperties.Builder(6000).setRPRegen(3, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 2));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 2));
         this.addStat("honey_bottle", Items.HONEY_BOTTLE, new FoodProperties.Builder(6000).setRPRegen(15, 1)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
         this.addStat("apple", Items.APPLE, new FoodProperties.Builder(6000).setRPRegen(7, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
 
         this.addStat("chorus_fruit", Items.CHORUS_FRUIT, new FoodProperties.Builder(6000).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat("kelp", Items.DRIED_KELP, new FoodProperties.Builder(6000).setRPRegen(3, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat("melon", Items.MELON_SLICE, new FoodProperties.Builder(6000).setRPRegen(3, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
         this.addStat("potato", Items.POTATO, new FoodProperties.Builder(6000).setRPRegen(7, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
         this.addStat("carrot", Items.CARROT, new FoodProperties.Builder(6000).setRPRegen(7, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
 
-        this.addStat(ModItems.WITHERED_GRASS.get(), new FoodProperties.Builder(6000)
-                .addPotion(ModEffects.POISON.asHolder(), 60, 0).setRPRegen(0, -35)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), -10));
-        this.addStat(ModItems.WEEDS.get(), new FoodProperties.Builder(6000).setHPRegen(-10, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), -5));
-        this.addStat(ModItems.WHITE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.INDIGO_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.PURPLE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.GREEN_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.BLUE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.YELLOW_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.RED_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.ORANGE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.BLACK_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
-        this.addStat(ModItems.ANTIDOTE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0)
-                .curePotion(ModEffects.POISON.asHolder()).curePotion(MobEffects.POISON).curePotion(MobEffects.WITHER)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 5));
-        this.addStat(ModItems.MEDICINAL_HERB.get(), new FoodProperties.Builder(6000).setHPRegen(25, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 20));
-        this.addStat(ModItems.BAMBOO_SPROUT.get(), new FoodProperties.Builder(6000).setHPRegen(12, 0).setRPRegen(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10));
+        this.addStat(RuneCraftoryItems.WITHERED_GRASS.get(), new FoodProperties.Builder(6000)
+                .addPotion(RuneCraftoryEffects.POISON.asHolder(), 60, 0).setRPRegen(0, -35)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), -10));
+        this.addStat(RuneCraftoryItems.WEEDS.get(), new FoodProperties.Builder(6000).setHPRegen(-10, 0)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), -5));
+        this.addStat(RuneCraftoryItems.WHITE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.INDIGO_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.PURPLE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.GREEN_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.BLUE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.YELLOW_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.RED_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.ORANGE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.BLACK_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 3));
+        this.addStat(RuneCraftoryItems.ANTIDOTE_GRASS.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0)
+                .curePotion(RuneCraftoryEffects.POISON.asHolder()).curePotion(MobEffects.POISON).curePotion(MobEffects.WITHER)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.MEDICINAL_HERB.get(), new FoodProperties.Builder(6000).setHPRegen(25, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 20));
+        this.addStat(RuneCraftoryItems.BAMBOO_SPROUT.get(), new FoodProperties.Builder(6000).setHPRegen(12, 0).setRPRegen(5, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10));
 
-        this.addStat(ModItems.ROUNDOFF.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(ModEffects.SEAL.asHolder()));
-        this.addStat(ModItems.PARA_GONE.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(MobEffects.MOVEMENT_SLOWDOWN).curePotion(ModEffects.PARALYSIS.asHolder()));
-        this.addStat(ModItems.COLD_MED.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(ModEffects.COLD.asHolder()));
-        this.addStat(ModItems.ANTIDOTE.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(MobEffects.POISON).curePotion(ModEffects.POISON.asHolder()).curePotion(MobEffects.WITHER));
-        this.addStat(ModItems.RECOVERY_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(50, 0));
-        this.addStat(ModItems.HEALING_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(150, 0));
-        this.addStat(ModItems.MYSTERY_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0));
-        this.addStat(ModItems.MAGICAL_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(0, 50));
-        this.addStat(ModItems.INVINCIROID.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 100)
-                .addEffect(ModAttributes.POISON_RESISTANCE.asHolder(), 100)
-                .addEffect(ModAttributes.SEAL_RESISTANCE.asHolder(), 100)
-                .addEffect(ModAttributes.SLEEP_RESISTANCE.asHolder(), 100)
-                .addEffect(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 100)
-                .addEffect(ModAttributes.COLD_RESISTANCE.asHolder(), 100)
+        this.addStat(RuneCraftoryItems.ROUNDOFF.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(RuneCraftoryEffects.SEAL.asHolder()));
+        this.addStat(RuneCraftoryItems.PARA_GONE.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(MobEffects.MOVEMENT_SLOWDOWN).curePotion(RuneCraftoryEffects.PARALYSIS.asHolder()));
+        this.addStat(RuneCraftoryItems.COLD_MED.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(RuneCraftoryEffects.COLD.asHolder()));
+        this.addStat(RuneCraftoryItems.ANTIDOTE.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0).curePotion(MobEffects.POISON).curePotion(RuneCraftoryEffects.POISON.asHolder()).curePotion(MobEffects.WITHER));
+        this.addStat(RuneCraftoryItems.RECOVERY_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(50, 0));
+        this.addStat(RuneCraftoryItems.HEALING_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(150, 0));
+        this.addStat(RuneCraftoryItems.MYSTERY_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(500, 0));
+        this.addStat(RuneCraftoryItems.MAGICAL_POTION.get(), new FoodProperties.Builder(6000).setHPRegen(0, 50));
+        this.addStat(RuneCraftoryItems.INVINCIROID.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.PARALYSIS_RESISTANCE.asHolder(), 100)
+                .addEffect(RuneCraftoryAttributes.POISON_RESISTANCE.asHolder(), 100)
+                .addEffect(RuneCraftoryAttributes.SEAL_RESISTANCE.asHolder(), 100)
+                .addEffect(RuneCraftoryAttributes.SLEEP_RESISTANCE.asHolder(), 100)
+                .addEffect(RuneCraftoryAttributes.FATIGUE_RESISTANCE.asHolder(), 100)
+                .addEffect(RuneCraftoryAttributes.COLD_RESISTANCE.asHolder(), 100)
                 .curePotion(MobEffects.POISON)
                 .curePotion(MobEffects.WITHER)
                 .curePotion(MobEffects.MOVEMENT_SLOWDOWN)
@@ -108,705 +108,705 @@ public class FoodGen extends FoodProvider {
                 .curePotion(MobEffects.BLINDNESS)
                 .curePotion(MobEffects.LEVITATION)
                 .curePotion(MobEffects.CONFUSION)
-                .curePotion(ModEffects.SLEEP.asHolder())
-                .curePotion(ModEffects.POISON.asHolder())
-                .curePotion(ModEffects.PARALYSIS.asHolder())
-                .curePotion(ModEffects.SEAL.asHolder())
-                .curePotion(ModEffects.FATIGUE.asHolder())
-                .curePotion(ModEffects.COLD.asHolder()));
-        this.addStat(ModItems.FORMUADE.get(), new FoodProperties.Builder(6000).setRPIncrease(0, 75)
+                .curePotion(RuneCraftoryEffects.SLEEP.asHolder())
+                .curePotion(RuneCraftoryEffects.POISON.asHolder())
+                .curePotion(RuneCraftoryEffects.PARALYSIS.asHolder())
+                .curePotion(RuneCraftoryEffects.SEAL.asHolder())
+                .curePotion(RuneCraftoryEffects.FATIGUE.asHolder())
+                .curePotion(RuneCraftoryEffects.COLD.asHolder()));
+        this.addStat(RuneCraftoryItems.FORMUADE.get(), new FoodProperties.Builder(6000).setRPIncrease(0, 75)
                 .addEffectPercentage(Attributes.MAX_HEALTH, -50)
                 .addEffect(Attributes.ATTACK_DAMAGE, 70)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 70)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 35)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 35)
-                .addEffect(ModAttributes.POISON_RESISTANCE.asHolder(), 25)
-                .addEffect(ModAttributes.PARALYSIS_RESISTANCE.asHolder(), 25)
-                .addEffect(ModAttributes.SEAL_RESISTANCE.asHolder(), 25)
-                .addEffect(ModAttributes.SLEEP_RESISTANCE.asHolder(), 25)
-                .addEffect(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 25)
-                .addEffect(ModAttributes.COLD_RESISTANCE.asHolder(), 25)
-                .addEffect(ModAttributes.FAINT_RESISTANCE.asHolder(), 25));
-        this.addStat(ModItems.OBJECT_X.get(), new FoodProperties.Builder(6000).setRPIncrease(0, -50)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), -15)
-                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), -15));
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 70)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 35)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 35)
+                .addEffect(RuneCraftoryAttributes.POISON_RESISTANCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.PARALYSIS_RESISTANCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.SEAL_RESISTANCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.SLEEP_RESISTANCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.FATIGUE_RESISTANCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.COLD_RESISTANCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.FAINT_RESISTANCE.asHolder(), 25));
+        this.addStat(RuneCraftoryItems.OBJECT_X.get(), new FoodProperties.Builder(6000).setRPIncrease(0, -50)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), -15)
+                .addCookingBonusPercent(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), -15));
 
-        this.addStat(ModItems.MUSHROOM.get(), new FoodProperties.Builder(6000).setHPRegen(15, 1).setRPRegen(10, 0));
-        this.addStat(ModItems.MONARCH_MUSHROOM.get(), new FoodProperties.Builder(6000).setHPRegen(20, 2).setRPRegen(15, 0));
+        this.addStat(RuneCraftoryItems.MUSHROOM.get(), new FoodProperties.Builder(6000).setHPRegen(15, 1).setRPRegen(10, 0));
+        this.addStat(RuneCraftoryItems.MONARCH_MUSHROOM.get(), new FoodProperties.Builder(6000).setHPRegen(20, 2).setRPRegen(15, 0));
 
-        this.addStat(ModItems.RICE.get(), new FoodProperties.Builder(6000).setRPRegen(20, 0));
-        this.addStat(ModItems.RICE_FLOUR.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FLOUR.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.OIL.get(), new FoodProperties.Builder(6000).setHPRegen(0, 0)
-                .addEffect(ModAttributes.FIRE_RESISTANCE.asHolder(), -30));
-        this.addStat(ModItems.CURRY_POWDER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.WINE.get(), new FoodProperties.Builder(6000).setRPRegen(15, 0)
-                .addPotion(ModEffects.SLEEP.asHolder(), 80, 0));
-        this.addStat(ModItems.CHOCOLATE.get(), new FoodProperties.Builder(6000).setRPRegen(25, 0));
-        this.addStat(ModItems.EGG_S.get(), new FoodProperties.Builder(6000).setHPRegen(5, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 5));
-        this.addStat(ModItems.EGG_M.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(10, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
-        this.addStat(ModItems.EGG_L.get(), new FoodProperties.Builder(6000).setHPRegen(40, 0).setRPRegen(20, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 40)
-                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 20));
-        this.addStat(ModItems.MILK_S.get(), new FoodProperties.Builder(6000).setRPRegen(5, 0));
-        this.addStat(ModItems.MILK_M.get(), new FoodProperties.Builder(6000).setRPRegen(10, 0).setHPRegen(30, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 30));
-        this.addStat(ModItems.MILK_L.get(), new FoodProperties.Builder(6000).setRPRegen(40, 0).setHPRegen(50, 0)
-                .addCookingBonusPercent(ModAttributes.HEALTH_GAIN.asHolder(), 40)
-                .addCookingBonusPercent(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
+        this.addStat(RuneCraftoryItems.RICE.get(), new FoodProperties.Builder(6000).setRPRegen(20, 0));
+        this.addStat(RuneCraftoryItems.RICE_FLOUR.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FLOUR.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.OIL.get(), new FoodProperties.Builder(6000).setHPRegen(0, 0)
+                .addEffect(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder(), -30));
+        this.addStat(RuneCraftoryItems.CURRY_POWDER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.WINE.get(), new FoodProperties.Builder(6000).setRPRegen(15, 0)
+                .addPotion(RuneCraftoryEffects.SLEEP.asHolder(), 80, 0));
+        this.addStat(RuneCraftoryItems.CHOCOLATE.get(), new FoodProperties.Builder(6000).setRPRegen(25, 0));
+        this.addStat(RuneCraftoryItems.EGG_S.get(), new FoodProperties.Builder(6000).setHPRegen(5, 0)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.EGG_M.get(), new FoodProperties.Builder(6000).setHPRegen(10, 0).setRPRegen(10, 0)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonusPercent(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 10));
+        this.addStat(RuneCraftoryItems.EGG_L.get(), new FoodProperties.Builder(6000).setHPRegen(40, 0).setRPRegen(20, 0)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 40)
+                .addCookingBonusPercent(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 20));
+        this.addStat(RuneCraftoryItems.MILK_S.get(), new FoodProperties.Builder(6000).setRPRegen(5, 0));
+        this.addStat(RuneCraftoryItems.MILK_M.get(), new FoodProperties.Builder(6000).setRPRegen(10, 0).setHPRegen(30, 0)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonusPercent(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 30));
+        this.addStat(RuneCraftoryItems.MILK_L.get(), new FoodProperties.Builder(6000).setRPRegen(40, 0).setHPRegen(50, 0)
+                .addCookingBonusPercent(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 40)
+                .addCookingBonusPercent(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
 
         //Main effects: HP/RP regen, damage, magic dmg, defense stats
-        this.addStat(ModItems.ONIGIRI.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.ONIGIRI.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
                 .addEffect(Attributes.ATTACK_DAMAGE, 2));
-        this.addStat(ModItems.CHEESE.get(), new FoodProperties.Builder(6000).setRPRegen(30, 0));
-        this.addStat(ModItems.PICKLED_TURNIP.get(), new FoodProperties.Builder(4800)
+        this.addStat(RuneCraftoryItems.CHEESE.get(), new FoodProperties.Builder(6000).setRPRegen(30, 0));
+        this.addStat(RuneCraftoryItems.PICKLED_TURNIP.get(), new FoodProperties.Builder(4800)
                 .setHPRegen(175, 0)
                 .setRPRegen(100, 0)
                 .addEffect(Attributes.ATTACK_DAMAGE, 3)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 1)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
-        this.addStat(ModItems.PICKLES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.BAMBOO_RICE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALMON_ONIGIRI.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2));
+        this.addStat(RuneCraftoryItems.PICKLES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.BAMBOO_RICE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALMON_ONIGIRI.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(250, 5)
                 .addEffect(Attributes.ATTACK_DAMAGE, 10)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 5)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 7));
-        this.addStat(ModItems.PICKLE_MIX.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SANDWICH.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FRUIT_SANDWICH.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALAD.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.RELAX_TEA_LEAVES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TURNIP_HEAVEN.get(), new FoodProperties.Builder(6000));
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 5)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 7));
+        this.addStat(RuneCraftoryItems.PICKLE_MIX.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SANDWICH.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FRUIT_SANDWICH.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALAD.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.RELAX_TEA_LEAVES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TURNIP_HEAVEN.get(), new FoodProperties.Builder(6000));
 
         //Main effects: HP/RP regen, status resistance
-        this.addStat(ModItems.DUMPLINGS.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FLAN.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.DUMPLINGS.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FLAN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 0)
                 .setRPRegen(130, 0)
                 .addPotion(MobEffects.MOVEMENT_SPEED, 200, 1)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 1)
-                .addEffect(ModAttributes.FATIGUE_RESISTANCE.asHolder(), 15)
-                .addEffect(ModAttributes.COLD_RESISTANCE.asHolder(), 15));
-        this.addStat(ModItems.PUMPKIN_FLAN.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.STEAMED_BREAD.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CHEESE_BREAD.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.POUND_CAKE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CHOCOLATE_SPONGE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CURRY_MANJU.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CHINESE_MANJU.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.MEAT_DUMPLING.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.STEAMED_GYOZA.get(), new FoodProperties.Builder(6000));
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
+                .addEffect(RuneCraftoryAttributes.FATIGUE_RESISTANCE.asHolder(), 15)
+                .addEffect(RuneCraftoryAttributes.COLD_RESISTANCE.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.PUMPKIN_FLAN.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.STEAMED_BREAD.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CHEESE_BREAD.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.POUND_CAKE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CHOCOLATE_SPONGE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CURRY_MANJU.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CHINESE_MANJU.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.MEAT_DUMPLING.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.STEAMED_GYOZA.get(), new FoodProperties.Builder(6000));
 
         //Main effects: HP/RP regen, magic damage
-        this.addStat(ModItems.MAYONNAISE.get(), new FoodProperties.Builder(6000).setRPRegen(20, 0));
-        this.addStat(ModItems.BUTTER.get(), new FoodProperties.Builder(6000).setRPRegen(30, 0));
-        this.addStat(ModItems.KETCHUP.get(), new FoodProperties.Builder(6000).setRPRegen(20, 0));
-        this.addStat(ModItems.ICE_CREAM.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.APPLE_JUICE.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.MAYONNAISE.get(), new FoodProperties.Builder(6000).setRPRegen(20, 0));
+        this.addStat(RuneCraftoryItems.BUTTER.get(), new FoodProperties.Builder(6000).setRPRegen(30, 0));
+        this.addStat(RuneCraftoryItems.KETCHUP.get(), new FoodProperties.Builder(6000).setRPRegen(20, 0));
+        this.addStat(RuneCraftoryItems.ICE_CREAM.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.APPLE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(150, 0)
                 .setRPRegen(70, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 2));
-        this.addStat(ModItems.ORANGE_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2));
+        this.addStat(RuneCraftoryItems.ORANGE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(180, 0)
                 .setRPRegen(90, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 5));
-        this.addStat(ModItems.GRAPE_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GRAPE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(230, 0)
                 .setRPRegen(120, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 10));
-        this.addStat(ModItems.STRAWBERRY_MILK.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TOMATO_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 10));
+        this.addStat(RuneCraftoryItems.STRAWBERRY_MILK.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TOMATO_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(430, 0)
                 .setRPRegen(160, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 15));
-        this.addStat(ModItems.PINEAPPLE_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.PINEAPPLE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1600, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 45));
-        this.addStat(ModItems.FRUIT_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 45));
+        this.addStat(RuneCraftoryItems.FRUIT_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 0)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 19));
-        this.addStat(ModItems.FRUIT_SMOOTHIE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 19));
+        this.addStat(RuneCraftoryItems.FRUIT_SMOOTHIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(900, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 33));
-        this.addStat(ModItems.VEGETABLE_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 33));
+        this.addStat(RuneCraftoryItems.VEGETABLE_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(610, 0)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 22));
-        this.addStat(ModItems.VEGGIE_SMOOTHIE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 22));
+        this.addStat(RuneCraftoryItems.VEGGIE_SMOOTHIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1050, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 37));
-        this.addStat(ModItems.MIXED_JUICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 37));
+        this.addStat(RuneCraftoryItems.MIXED_JUICE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(860, 0)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 38));
-        this.addStat(ModItems.MIXED_SMOOTHIE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 38));
+        this.addStat(RuneCraftoryItems.MIXED_SMOOTHIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1300, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 40));
-        this.addStat(ModItems.HOT_JUICE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.PRELUDE_TO_LOVE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GOLD_JUICE.get(), new FoodProperties.Builder(6000));
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 40));
+        this.addStat(RuneCraftoryItems.HOT_JUICE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.PRELUDE_TO_LOVE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GOLD_JUICE.get(), new FoodProperties.Builder(6000));
 
         //Main effects: HP/RP regen, defence
-        this.addStat(ModItems.BAKED_ONIGIRI.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.BAKED_ONIGIRI.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
                 .setRPRegen(50, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 2)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 2));
-        this.addStat(ModItems.SWEET_POTATO.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CORN_ON_THE_COB.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.BREAD.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TOAST.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2));
+        this.addStat(RuneCraftoryItems.SWEET_POTATO.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CORN_ON_THE_COB.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.BREAD.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TOAST.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(180, 0)
                 .setRPRegen(90, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 13)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 6));
-        this.addStat(ModItems.RAISIN_BREAD.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.YAM_OF_THE_AGES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.BUTTER_ROLL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.JAM_ROLL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.APPLE_PIE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 13)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6));
+        this.addStat(RuneCraftoryItems.RAISIN_BREAD.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.YAM_OF_THE_AGES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.BUTTER_ROLL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.JAM_ROLL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.APPLE_PIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 0)
                 .setRPRegen(300, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 15)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 15));
-        this.addStat(ModItems.CAKE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 15)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.CAKE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(750, 0)
                 .setRPRegen(350, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 15)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 18));
-        this.addStat(ModItems.CHEESECAKE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 15)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 18));
+        this.addStat(RuneCraftoryItems.CHEESECAKE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1000, 0)
                 .setRPRegen(400, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 25)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 20));
-        this.addStat(ModItems.CHOCOLATE_CAKE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 25)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 20));
+        this.addStat(RuneCraftoryItems.CHOCOLATE_CAKE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(1900, 0)
                 .setRPRegen(600, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 30)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 30));
-        this.addStat(ModItems.COOKIE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 30)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 30));
+        this.addStat(RuneCraftoryItems.COOKIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(666, 0)
                 .setRPRegen(130, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 16)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 16));
-        this.addStat(ModItems.CHOCO_COOKIE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 16)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 16));
+        this.addStat(RuneCraftoryItems.CHOCO_COOKIE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(950, 0)
                 .setRPRegen(280, 0)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 19)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 19));
-        this.addStat(ModItems.DORIA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SEAFOOD_DORIA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.PIZZA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SEAFOOD_PIZZA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRATIN.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SEAFOOD_GRATIN.get(), new FoodProperties.Builder(6000));
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 19)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 19));
+        this.addStat(RuneCraftoryItems.DORIA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SEAFOOD_DORIA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.PIZZA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SEAFOOD_PIZZA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRATIN.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SEAFOOD_GRATIN.get(), new FoodProperties.Builder(6000));
 
         //Main effects: HP/RP regen, hp, rp increase
-        this.addStat(ModItems.YOGURT.get(), new FoodProperties.Builder(6000).setRPRegen(30, 0));
-        this.addStat(ModItems.RICE_PORRIDGE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.MILK_PORRIDGE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.MARMALADE.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.YOGURT.get(), new FoodProperties.Builder(6000).setRPRegen(30, 0));
+        this.addStat(RuneCraftoryItems.RICE_PORRIDGE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.MILK_PORRIDGE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.MARMALADE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
                 .setRPRegen(10, 0));
-        this.addStat(ModItems.APPLE_JAM.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.APPLE_JAM.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
                 .setRPRegen(10, 0));
-        this.addStat(ModItems.GRAPE_JAM.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.GRAPE_JAM.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
                 .setRPRegen(10, 0));
-        this.addStat(ModItems.STRAWBERRY_JAM.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.STRAWBERRY_JAM.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
                 .setRPRegen(10, 0));
-        this.addStat(ModItems.HOT_MILK.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.HOT_MILK.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
                 .setRPRegen(150, 1)
                 .setRPIncrease(20, 0)
                 .addPotion(MobEffects.MOVEMENT_SPEED, 100, 1));
-        this.addStat(ModItems.HOT_CHOCOLATE.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.HOT_CHOCOLATE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(100, 0)
                 .setRPRegen(300, 3)
                 .setRPIncrease(50, 5)
                 .addPotion(MobEffects.MOVEMENT_SPEED, 200, 1));
-        this.addStat(ModItems.BOILED_EGG.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.BOILED_SPINACH.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.BOILED_PUMPKIN.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CHEESE_FONDUE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRAPE_LIQUEUR.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GLAZED_YAM.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_MISO.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.STEW.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.ROCKFISH_STEW.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.UNION_STEW.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.EGG_BOWL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TEMPURA_BOWL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CURRY_RICE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.UDON.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.BOILED_EGG.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.BOILED_SPINACH.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.BOILED_PUMPKIN.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CHEESE_FONDUE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRAPE_LIQUEUR.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GLAZED_YAM.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_MISO.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.STEW.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.ROCKFISH_STEW.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.UNION_STEW.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.EGG_BOWL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TEMPURA_BOWL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CURRY_RICE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.UDON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 0)
                 .setRPRegen(50, 0)
-                .addEffect(ModAttributes.HEALTH_GAIN.asHolder(), 100)
-                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), 5));
-        this.addStat(ModItems.TEMPURA_UDON.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 100)
+                .addEffect(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.TEMPURA_UDON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(400, 30)
                 .setRPRegen(200, 0)
-                .addEffect(ModAttributes.HEALTH_GAIN.asHolder(), 200)
-                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), 15));
-        this.addStat(ModItems.CURRY_UDON.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 200)
+                .addEffect(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.CURRY_UDON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 50)
                 .setRPRegen(220, 0)
-                .addEffect(ModAttributes.HEALTH_GAIN.asHolder(), 250)
-                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), 15));
-        this.addStat(ModItems.BOILED_GYOZA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.RELAX_TEA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.ULTIMATE_CURRY.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.ROYAL_CURRY.get(), new FoodProperties.Builder(6000));
+                .addEffect(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 250)
+                .addEffect(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.BOILED_GYOZA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.RELAX_TEA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.ULTIMATE_CURRY.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.ROYAL_CURRY.get(), new FoodProperties.Builder(6000));
 
         //Main effects: HP/RP regen, damage, magic, def
-        this.addStat(ModItems.BAKED_APPLE.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.BAKED_APPLE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(130, 0)
                 .addEffectPercentage(Attributes.MAX_HEALTH, 10)
                 .addEffect(Attributes.ATTACK_DAMAGE, 5)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 2)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 5)
-                .addEffect(ModAttributes.MAGIC_DEFENCE.asHolder(), 2));
-        this.addStat(ModItems.FRIED_EGGS.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.POPCORN.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FRENCH_FRIES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CORN_CEREAL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.OMELET.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.OMELET_RICE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FRIED_RICE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FRIED_VEGGIES.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
+                .addEffect(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2));
+        this.addStat(RuneCraftoryItems.FRIED_EGGS.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.POPCORN.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FRENCH_FRIES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CORN_CEREAL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.OMELET.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.OMELET_RICE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FRIED_RICE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FRIED_VEGGIES.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(250, 30)
                 .setRPRegen(150, 25)
                 .setRPIncrease(0, 20)
                 .addEffectPercentage(Attributes.MAX_HEALTH, 300)
-                .addEffect(ModAttributes.DEFENCE.asHolder(), 1)
-                .addEffect(ModAttributes.MAGIC_ATTACK.asHolder(), 1));
-        this.addStat(ModItems.FRENCH_TOAST.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CROQUETTES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.PANCAKES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.DONUT.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.RISOTTO.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.MISO_EGGPLANT.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GYOZA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TEMPURA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CURRY_BREAD.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CABBAGE_CAKES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.DRY_CURRY.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FRIED_UDON.get(), new FoodProperties.Builder(6000));
+                .addEffect(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
+                .addEffect(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1));
+        this.addStat(RuneCraftoryItems.FRENCH_TOAST.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CROQUETTES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.PANCAKES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.DONUT.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.RISOTTO.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.MISO_EGGPLANT.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GYOZA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TEMPURA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CURRY_BREAD.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CABBAGE_CAKES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.DRY_CURRY.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FRIED_UDON.get(), new FoodProperties.Builder(6000));
 
         //For fish: hp/rp regen, rp max, magic
-        this.addStat(ModItems.SALTED_CHAR.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_MASU_TROUT.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_CHERRY_SALMON.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_RAINBOW_TROUT.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_SALMON.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_TAIMEN.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_CHUB.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_SQUID.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_SUNSQUID.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_LAMP_SQUID.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_SAND_FLOUNDER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_SHRIMP.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_LOBSTER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_BLOWFISH.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_FALL_FLOUNDER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_TURBOT.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_FLOUNDER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_PIKE.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_NEEDLEFISH.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.DRIED_SARDINES.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TUNA_TERIYAKI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALTED_POND_SMELT.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_YELLOWTAIL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_MACKEREL.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_SKIPJACK.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_LOVER_SNAPPER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_GLITTER_SNAPPER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_GIRELLA.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_SNAPPER.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_GIBELIO.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GRILLED_CRUCIAN_CARP.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_CHAR.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_MASU_TROUT.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_CHERRY_SALMON.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_RAINBOW_TROUT.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_SALMON.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_TAIMEN.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_CHUB.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_SQUID.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_SUNSQUID.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_LAMP_SQUID.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_SAND_FLOUNDER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_SHRIMP.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_LOBSTER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_BLOWFISH.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_FALL_FLOUNDER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_TURBOT.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_FLOUNDER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_PIKE.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_NEEDLEFISH.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.DRIED_SARDINES.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TUNA_TERIYAKI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALTED_POND_SMELT.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_YELLOWTAIL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_MACKEREL.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_SKIPJACK.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_LOVER_SNAPPER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_GLITTER_SNAPPER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_GIRELLA.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_SNAPPER.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_GIBELIO.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GRILLED_CRUCIAN_CARP.get(), new FoodProperties.Builder(6000));
 
         //Main effects: HP/RP regen, damage
-        this.addStat(ModItems.CHAR_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TROUT_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.CHERRY_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.RAINBOW_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SALMON_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TAIMEN_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SQUID_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SUNSQUID_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.LAMP_SQUID_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SHRIMP_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.LOBSTER_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.BLOWFISH_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FALL_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TURBOT_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.FLOUNDER_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.PIKE_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.NEEDLEFISH_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SARDINE_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.TUNA_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.YELLOWTAIL_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SKIPJACK_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GIRELLA_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.LOVER_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.GLITTER_SASHIMI.get(), new FoodProperties.Builder(6000));
-        this.addStat(ModItems.SNAPPER_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CHAR_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TROUT_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.CHERRY_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.RAINBOW_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SALMON_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TAIMEN_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SQUID_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SUNSQUID_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.LAMP_SQUID_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SHRIMP_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.LOBSTER_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.BLOWFISH_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FALL_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TURBOT_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.FLOUNDER_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.PIKE_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.NEEDLEFISH_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SARDINE_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.TUNA_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.YELLOWTAIL_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SKIPJACK_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GIRELLA_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.LOVER_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.GLITTER_SASHIMI.get(), new FoodProperties.Builder(6000));
+        this.addStat(RuneCraftoryItems.SNAPPER_SASHIMI.get(), new FoodProperties.Builder(6000));
 
-        this.addStat(ModItems.FAILED_DISH.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.FAILED_DISH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, -20)
                 .setRPIncrease(0, -10)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -10)
-                .addEffectPercentage(ModAttributes.DEFENCE.asHolder(), -10)
-                .addEffectPercentage(ModAttributes.MAGIC_ATTACK.asHolder(), -10)
-                .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.asHolder(), -10));
-        this.addStat(ModItems.DISASTROUS_DISH.get(), new FoodProperties.Builder(6000)
+                .addEffectPercentage(RuneCraftoryAttributes.DEFENCE.asHolder(), -10)
+                .addEffectPercentage(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), -10)
+                .addEffectPercentage(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), -10));
+        this.addStat(RuneCraftoryItems.DISASTROUS_DISH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, -60)
                 .setRPIncrease(0, -30)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -25)
-                .addEffectPercentage(ModAttributes.DEFENCE.asHolder(), -25)
-                .addEffectPercentage(ModAttributes.MAGIC_ATTACK.asHolder(), -25)
-                .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.asHolder(), -25));
-        this.addStat(ModItems.MIXED_HERBS.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.WIND_RESISTANCE.asHolder(), -30));
-        this.addStat(ModItems.SOUR_DROP.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.EARTH_RESISTANCE.asHolder(), -30));
-        this.addStat(ModItems.SWEET_POWDER.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.WATER_RESISTANCE.asHolder(), -30));
-        this.addStat(ModItems.HEAVY_SPICE.get(), new FoodProperties.Builder(6000)
-                .addEffect(ModAttributes.FIRE_RESISTANCE.asHolder(), -30));
-        this.addStat(ModItems.ORANGE.get(), new FoodProperties.Builder(6000).setHPRegen(15, 0).setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 25));
-        this.addStat(ModItems.GRAPES.get(), new FoodProperties.Builder(6000).setHPRegen(15, 0).setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 25));
-        this.addStat(ModItems.MEALY_APPLE.get(), new FoodProperties.Builder(6000)
+                .addEffectPercentage(RuneCraftoryAttributes.DEFENCE.asHolder(), -25)
+                .addEffectPercentage(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), -25)
+                .addEffectPercentage(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), -25));
+        this.addStat(RuneCraftoryItems.MIXED_HERBS.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder(), -30));
+        this.addStat(RuneCraftoryItems.SOUR_DROP.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), -30));
+        this.addStat(RuneCraftoryItems.SWEET_POWDER.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder(), -30));
+        this.addStat(RuneCraftoryItems.HEAVY_SPICE.get(), new FoodProperties.Builder(6000)
+                .addEffect(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder(), -30));
+        this.addStat(RuneCraftoryItems.ORANGE.get(), new FoodProperties.Builder(6000).setHPRegen(15, 0).setRPRegen(15, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 25));
+        this.addStat(RuneCraftoryItems.GRAPES.get(), new FoodProperties.Builder(6000).setHPRegen(15, 0).setRPRegen(15, 0)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 25));
+        this.addStat(RuneCraftoryItems.MEALY_APPLE.get(), new FoodProperties.Builder(6000)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -50)
-                .addEffectPercentage(ModAttributes.DEFENCE.asHolder(), -50)
-                .addEffectPercentage(ModAttributes.MAGIC_ATTACK.asHolder(), -50)
-                .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.asHolder(), -50)
-                .addEffectPercentage(ModAttributes.FIRE_RESISTANCE.asHolder(), -20)
-                .addEffectPercentage(ModAttributes.WATER_RESISTANCE.asHolder(), -20)
-                .addEffectPercentage(ModAttributes.EARTH_RESISTANCE.asHolder(), -20)
-                .addEffectPercentage(ModAttributes.WIND_RESISTANCE.asHolder(), -20));
+                .addEffectPercentage(RuneCraftoryAttributes.DEFENCE.asHolder(), -50)
+                .addEffectPercentage(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), -50)
+                .addEffectPercentage(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), -50)
+                .addEffectPercentage(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder(), -20)
+                .addEffectPercentage(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder(), -20)
+                .addEffectPercentage(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), -20)
+                .addEffectPercentage(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder(), -20));
 
-        this.addStat(ModItems.TURNIP.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.TURNIP.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
                 .setRPIncrease(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.TURNIP_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.TURNIP_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(45, 0)
                 .setRPIncrease(15, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.TURNIP_PINK.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.TURNIP_PINK.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(25, 0)
                 .setRPIncrease(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.TURNIP_PINK_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.TURNIP_PINK_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(90, 0)
                 .setRPIncrease(18, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CABBAGE.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CABBAGE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(15, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(35, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.PINK_MELON.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.PINK_MELON.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(100, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.PINK_MELON_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.PINK_MELON_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(150, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.PINEAPPLE.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.PINEAPPLE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.PINEAPPLE_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.PINEAPPLE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.STRAWBERRY.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.STRAWBERRY.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
                 .setRPIncrease(3, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.STRAWBERRY_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.STRAWBERRY_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(110, 0)
                 .setRPIncrease(7, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_TURNIP.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_TURNIP.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 5)
                 .setRPIncrease(3, 3)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_TURNIP_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_TURNIP_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(500, 5)
                 .setRPIncrease(30, 5)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_POTATO.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_POTATO.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(230, 5)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_POTATO_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_POTATO_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(400, 7)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_PUMPKIN.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_PUMPKIN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(200, 3)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_PUMPKIN_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_PUMPKIN_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 7)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_CABBAGE.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_CABBAGE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(150, 5)
                 .setRPIncrease(5, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GOLDEN_CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GOLDEN_CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(300, 5)
                 .setRPIncrease(40, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.BOK_CHOY.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.BOK_CHOY.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(30, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.BOK_CHOY_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.BOK_CHOY_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.LEEK.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.LEEK.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.LEEK_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.LEEK_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.RADISH.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.RADISH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(25, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.RADISH_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.RADISH_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(50, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.SPINACH.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.SPINACH.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(44, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.SPINACH_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.SPINACH_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(90, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GREEN_PEPPER.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GREEN_PEPPER.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.GREEN_PEPPER_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.GREEN_PEPPER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(100, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.YAM.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.YAM.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(33, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.YAM_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.YAM_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(70, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.EGGPLANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.EGGPLANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(55, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.EGGPLANT_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.EGGPLANT_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(120, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.TOMATO.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.TOMATO.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.TOMATO_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.TOMATO_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(160, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CORN.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CORN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(45, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CORN_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CORN_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(110, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CUCUMBER.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CUCUMBER.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(70, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CUCUMBER_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CUCUMBER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(140, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.PUMPKIN.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.PUMPKIN.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.PUMPKIN_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.PUMPKIN_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(75, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.ONION.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.ONION.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(35, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.ONION_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.ONION_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
 
-        this.addStat(ModItems.POTATO_GIANT.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.POTATO_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(ModItems.CARROT_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+        this.addStat(RuneCraftoryItems.CARROT_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.HEALTH_GAIN.asHolder(), 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
+                .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
 
-        this.addStat(ModItems.TOYHERB.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.TOYHERB.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.TOYHERB_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.TOYHERB_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(60, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.MOONDROP_FLOWER.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.MOONDROP_FLOWER.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(18, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.MOONDROP_FLOWER_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.MOONDROP_FLOWER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(66, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.PINK_CAT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.PINK_CAT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(20, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.PINK_CAT_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.PINK_CAT_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(70, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.CHARM_BLUE.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.CHARM_BLUE.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(25, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.CHARM_BLUE_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.CHARM_BLUE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(90, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.LAMP_GRASS.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.LAMP_GRASS.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(33, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.LAMP_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.LAMP_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(80, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.CHERRY_GRASS.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.CHERRY_GRASS.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(20, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.CHERRY_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.CHERRY_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(55, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.POM_POM_GRASS.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.POM_POM_GRASS.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(15, 0)
                 .setRPRegen(10, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.POM_POM_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.POM_POM_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
                 .setRPRegen(25, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.AUTUMN_GRASS.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.AUTUMN_GRASS.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
                 .setRPRegen(15, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.AUTUMN_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.AUTUMN_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(20, 0)
                 .setRPRegen(35, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.NOEL_GRASS.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.NOEL_GRASS.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(80, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.NOEL_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.NOEL_GRASS_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(250, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.FIREFLOWER.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.FIREFLOWER.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(35, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.FIREFLOWER_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.FIREFLOWER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(85, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.FOUR_LEAF_CLOVER.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.FOUR_LEAF_CLOVER.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(25, 0)
                 .addPotion(MobEffects.LUCK, 600, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.FOUR_LEAF_CLOVER_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.FOUR_LEAF_CLOVER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(55, 0)
                 .addPotion(MobEffects.LUCK, 600, 1)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.IRONLEAF.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.IRONLEAF.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(-50, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.IRONLEAF_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.IRONLEAF_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(-100, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.WHITE_CRYSTAL.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.WHITE_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.WHITE_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.WHITE_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.RED_CRYSTAL.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.RED_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.RED_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.RED_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.GREEN_CRYSTAL.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.GREEN_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.GREEN_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.GREEN_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.BLUE_CRYSTAL.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.BLUE_CRYSTAL.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(75, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.BLUE_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.BLUE_CRYSTAL_GIANT.get(), new FoodProperties.Builder(6000)
                 .setRPRegen(150, 0)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
-        this.addStat(ModItems.EMERY_FLOWER.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 15));
+        this.addStat(RuneCraftoryItems.EMERY_FLOWER.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, 10)
                 .setRPRegen(0, 5)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
-        this.addStat(ModItems.EMERY_FLOWER_GIANT.get(), new FoodProperties.Builder(6000)
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
+        this.addStat(RuneCraftoryItems.EMERY_FLOWER_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(0, 15)
                 .setRPRegen(0, 10)
-                .addCookingBonus(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
+                .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 50));
     }
 }

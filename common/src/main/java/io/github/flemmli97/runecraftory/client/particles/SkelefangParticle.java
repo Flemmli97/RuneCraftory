@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.client.particles;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
-import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
+import io.github.flemmli97.runecraftory.client.model.monster.SkelefangModel;
+import io.github.flemmli97.runecraftory.client.render.monster.SkelefangRender;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.Skelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.PoseExtended;
@@ -28,9 +28,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class SkelefangParticle extends Particle {
 
-    private static final ModelSkelefang<EntitySkelefang> MODEL = particleModel();
+    private static final SkelefangModel<Skelefang> MODEL = particleModel();
 
-    private static final RenderType RENDER_TYPE = MODEL.renderType(RenderSkelefang.TEXTURE);
+    private static final RenderType RENDER_TYPE = MODEL.renderType(SkelefangRender.TEXTURE);
 
     private final SkelefangParticleData.SkelefangBoneType boneType;
     private final float initialRotX, initialRotY, pitchSpin, yawSpin;
@@ -88,8 +88,8 @@ public class SkelefangParticle extends Particle {
         }
     }
 
-    public static ModelSkelefang<EntitySkelefang> particleModel() {
-        ModelSkelefang<EntitySkelefang> model = new ModelSkelefang<>(RenderType::entityTranslucentCull);
+    public static SkelefangModel<Skelefang> particleModel() {
+        SkelefangModel<Skelefang> model = new SkelefangModel<>(RenderType::entityTranslucentCull);
         model.getModel().getRoot().loadPoseRecursive(PoseExtended.ZERO);
         return model;
     }

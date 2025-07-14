@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
 import io.github.flemmli97.runecraftory.common.network.C2SSpawnEgg;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -148,13 +148,13 @@ public class SpawnEggScreen extends Screen {
         });
         this.editBoxes.add(this.levelEditor);
         ItemStack stack = this.player.getItemInHand(this.hand);
-        this.level = stack.getOrDefault(ModDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1);
+        this.level = stack.getOrDefault(RuneCraftoryDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1);
         this.levelEditor.setValue(this.level + "");
         this.addWidget(this.levelEditor);
         yOff += 16 + 20 + 60;
         if (stack.getItem() instanceof NPCSpawnEgg) {
             this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeY - 32, 16, Component.literal(""));
-            NPCSpawnData itemData = stack.getOrDefault(ModDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+            NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
             this.npcID = itemData.npcDataId().orElse(null);
             if (this.npcID != null)
                 this.npcIDEditor.setValue(this.npcID.toString());

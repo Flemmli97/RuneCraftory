@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -111,7 +111,7 @@ public class QuestData implements PlayerQuestData {
         return AcceptType.ACCEPT;
     }
 
-    public Map<ResourceLocation, QuestState> submit(@Nullable EntityNPCBase npc) {
+    public Map<ResourceLocation, QuestState> submit(@Nullable NPCEntity npc) {
         if (this.currentQuests.isEmpty()) {
             return Map.of();
         }

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.resources.model.ModelManager;
 
-public class NPCArmorLayer<T extends EntityNPCBase, M extends PlayerModel<T>, A extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, A> {
+public class NPCArmorLayer<T extends NPCEntity, M extends PlayerModel<T>, A extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, A> {
 
     private boolean render;
 

@@ -1,0 +1,57 @@
+package io.github.flemmli97.runecraftory.common.entities.misc;
+
+import io.github.flemmli97.runecraftory.common.items.ItemElement;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+public class SleepAuraEntity extends BaseDamageCloud {
+
+    private final Set<UUID> hitEntities = new HashSet<>();
+
+    public SleepAuraEntity(EntityType<? extends SleepAuraEntity> type, Level world) {
+        super(type, world);
+    }
+
+    public SleepAuraEntity(Level world, LivingEntity shooter) {
+        super(RuneCraftoryEntities.SLEEP_AURA.get(), world, shooter);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.level().isClientSide) {
+            for (int i = 0; i < 12; i++) {
+                double x = this.getRandomX(0.9);
+                double y = this.getRandomY();
+                double z = this.getRandomZ(0.9);
+                this.level().addAlwaysVisibleParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 161 / 255f, 201 / 255f, 195 / 255f),
+                        x, y, z, 0, 0, 0);
+            }
+        }
+    }
+
+    @Override
+    protected boolean canHit(LivingEntity e) {
+        return super.canHit(e) && !this.hitEntities.contains(e.getUUID());
+    }
+
+    @Override
+    protected boolean damageEntity(LivingEntity target) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(4).magic().element(ItemElement.EARTH).withChangedAttribute(RuneCraftoryAttributes.SLEEP.asHolder(), 100), CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
+            this.hitEntities.add(target.getUUID());
+            return true;
+        }
+        return false;
+    }
+}

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.client.model.EntityModel;
@@ -45,7 +45,7 @@ public class ArmorModels {
 
     private static Map<Item, ArmorModelGetter> getArmorRenderer() {
         ImmutableMap.Builder<Item, ArmorModelGetter> builder = ImmutableMap.builder();
-        builder.put(ModItems.MAGIC_EARRINGS.get(), ((entityLiving, itemStack, slot, origin) -> {
+        builder.put(RuneCraftoryItems.MAGIC_EARRINGS.get(), ((entityLiving, itemStack, slot, origin) -> {
             origin.setAllVisible(false);
             origin.head.visible = true;
             origin.hat.visible = true;
@@ -67,16 +67,16 @@ public class ArmorModels {
             ITEM_MODEL.setProperties(entityLiving, itemStack, origin.getHead(), SimpleItemArmorModel.TRANSLATE_TO_HEAD);
             return ITEM_MODEL;
         };
-        for (RegistryEntrySupplier<Item, ?> sup : ModItems.ribbons())
+        for (RegistryEntrySupplier<Item, ?> sup : RuneCraftoryItems.ribbons())
             builder.put(sup.get(), normalItemModel);
-        builder.put(ModItems.PIYO_SANDALS.get(), ((entityLiving, itemStack, slot, origin) -> {
+        builder.put(RuneCraftoryItems.PIYO_SANDALS.get(), ((entityLiving, itemStack, slot, origin) -> {
             PIYO_SANDALS_MODEL.copyFrom(origin);
             PIYO_SANDALS_MODEL.setAllVisible(false);
             PIYO_SANDALS_MODEL.leftLeg.visible = true;
             PIYO_SANDALS_MODEL.rightLeg.visible = true;
             return PIYO_SANDALS_MODEL;
         }));
-        for (RegistryEntrySupplier<Item, ?> sup : ModItems.hatItems())
+        for (RegistryEntrySupplier<Item, ?> sup : RuneCraftoryItems.hatItems())
             builder.put(sup.get(), normalItemModel);
         ArmorModelGetter rings = ((entityLiving, itemStack, slot, origin) -> {
             RINGS_MODEL.copyFrom(origin);
@@ -150,16 +150,16 @@ public class ArmorModels {
     }
 
     private static List<RegistryEntrySupplier<Item, ?>> bracelets() {
-        return List.of(ModItems.CHEAP_BRACELET, ModItems.BRONZE_BRACELET, ModItems.SILVER_BRACELET,
-                ModItems.GOLD_BRACELET, ModItems.PLATINUM_BRACELET);
+        return List.of(RuneCraftoryItems.CHEAP_BRACELET, RuneCraftoryItems.BRONZE_BRACELET, RuneCraftoryItems.SILVER_BRACELET,
+                RuneCraftoryItems.GOLD_BRACELET, RuneCraftoryItems.PLATINUM_BRACELET);
     }
 
     private static List<RegistryEntrySupplier<Item, ?>> rings() {
-        return List.of(ModItems.SILVER_RING, ModItems.GOLD_RING, ModItems.PLATINUM_RING, ModItems.ENGAGEMENT_RING,
-                ModItems.SHIELD_RING, ModItems.CRITICAL_RING, ModItems.SILENT_RING, ModItems.PARALYSIS_RING, ModItems.POISON_RING, ModItems.MAGIC_RING, ModItems.THROWING_RING, ModItems.STAY_UP_RING,
-                ModItems.AQUAMARINE_RING, ModItems.AMETHYST_RING, ModItems.EMERALD_RING, ModItems.SAPPHIRE_RING, ModItems.RUBY_RING,
-                ModItems.CURSED_RING, ModItems.DIAMOND_RING,
-                ModItems.FIRE_RING, ModItems.WIND_RING, ModItems.WATER_RING, ModItems.EARTH_RING, ModItems.HAPPY_RING);
+        return List.of(RuneCraftoryItems.SILVER_RING, RuneCraftoryItems.GOLD_RING, RuneCraftoryItems.PLATINUM_RING, RuneCraftoryItems.ENGAGEMENT_RING,
+                RuneCraftoryItems.SHIELD_RING, RuneCraftoryItems.CRITICAL_RING, RuneCraftoryItems.SILENT_RING, RuneCraftoryItems.PARALYSIS_RING, RuneCraftoryItems.POISON_RING, RuneCraftoryItems.MAGIC_RING, RuneCraftoryItems.THROWING_RING, RuneCraftoryItems.STAY_UP_RING,
+                RuneCraftoryItems.AQUAMARINE_RING, RuneCraftoryItems.AMETHYST_RING, RuneCraftoryItems.EMERALD_RING, RuneCraftoryItems.SAPPHIRE_RING, RuneCraftoryItems.RUBY_RING,
+                RuneCraftoryItems.CURSED_RING, RuneCraftoryItems.DIAMOND_RING,
+                RuneCraftoryItems.FIRE_RING, RuneCraftoryItems.WIND_RING, RuneCraftoryItems.WATER_RING, RuneCraftoryItems.EARTH_RING, RuneCraftoryItems.HAPPY_RING);
     }
 
     public interface ArmorModelGetter {

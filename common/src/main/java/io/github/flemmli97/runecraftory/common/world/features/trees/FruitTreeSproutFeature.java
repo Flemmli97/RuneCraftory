@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.world.features.trees;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
@@ -23,8 +23,8 @@ public class FruitTreeSproutFeature extends Feature<FruitTreeSproutConfiguration
     @Override
     public boolean place(FeaturePlaceContext<FruitTreeSproutConfiguration> context) {
         BlockPos soil = context.origin().below();
-        if (context.level().isStateAtPosition(soil, s -> !s.is(ModBlocks.TREE_SOIL.get()))) {
-            context.level().setBlock(soil, ModBlocks.TREE_SOIL.get().defaultBlockState(), Block.UPDATE_ALL);
+        if (context.level().isStateAtPosition(soil, s -> !s.is(RuneCraftoryBlocks.TREE_SOIL.get()))) {
+            context.level().setBlock(soil, RuneCraftoryBlocks.TREE_SOIL.get().defaultBlockState(), Block.UPDATE_ALL);
         }
         BlockPos above = context.origin().above();
         BlockEntity blockEntity = context.level().getBlockEntity(context.origin());

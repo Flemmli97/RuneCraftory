@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
-import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.StatusBallEntity;
+import io.github.flemmli97.runecraftory.common.entities.misc.summoners.RafflesiaBreathSummoner;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -12,9 +12,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class RafflesiaBreathSpell extends Spell {
 
-    private final EntityStatusBall.Type type;
+    private final StatusBallEntity.Type type;
 
-    public RafflesiaBreathSpell(EntityStatusBall.Type type) {
+    public RafflesiaBreathSpell(StatusBallEntity.Type type) {
         this.type = type;
     }
 

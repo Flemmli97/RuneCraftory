@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +30,7 @@ public class FirstKillCondition implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.FIRST_KILL.get();
+        return RuneCraftoryLootRegistries.FIRST_KILL.get();
     }
 
     @Override

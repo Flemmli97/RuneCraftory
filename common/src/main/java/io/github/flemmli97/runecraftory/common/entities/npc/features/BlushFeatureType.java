@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -33,20 +33,20 @@ public class BlushFeatureType implements NPCFeature.NPCFeatureHolder<BlushFeatur
     }
 
     @Override
-    public BlushFeature create(EntityNPCBase npc) {
+    public BlushFeature create(NPCEntity npc) {
         return new BlushFeature(npc.getRandom().nextFloat() < this.chance, this.setting.getRandom(npc.getRandom()));
     }
 
     @Override
     public NPCFeatureType<BlushFeature> getType() {
-        return ModNPCLooks.BLUSH.get();
+        return RuneCraftoryNPCLooks.BLUSH.get();
     }
 
     public record BlushFeature(boolean blush, int color) implements NPCFeature {
 
         @Override
         public NPCFeatureType<?> type() {
-            return ModNPCLooks.BLUSH.get();
+            return RuneCraftoryNPCLooks.BLUSH.get();
         }
     }
 }

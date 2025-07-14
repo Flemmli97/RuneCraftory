@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class SetRainShelterTarget<E extends PathfinderMob> extends ExtendedBehaviour<E> {
 
     private static final Predicate<Holder<PoiType>> HIDING_POIS = poi ->
-            ModNPCProfessions.PROFESSIONS.registry().stream().anyMatch(j -> j.matches(poi));
+            RuneCraftoryNPCProfessions.PROFESSIONS.registry().stream().anyMatch(j -> j.matches(poi));
 
     private static final MemoryTest MEMORIES = MemoryTest.builder(1)
             .noMemory(MemoryModuleType.WALK_TARGET)
@@ -93,7 +93,7 @@ public class SetRainShelterTarget<E extends PathfinderMob> extends ExtendedBehav
         GlobalPos found = null;
         for (Pair<Holder<PoiType>, BlockPos> pos : set) {
             AABB atPos = new AABB(pos.getSecond()).inflate(10);
-            if (entity.level().getEntities(EntityTypeTest.forClass(EntityNPCBase.class), atPos, e -> true).size() < 5 && this.isUnderRoof(entity, pos.getSecond())) {
+            if (entity.level().getEntities(EntityTypeTest.forClass(NPCEntity.class), atPos, e -> true).size() < 5 && this.isUnderRoof(entity, pos.getSecond())) {
                 BrainUtils.setMemory(entity, MemoryModuleType.HIDING_PLACE, found = GlobalPos.of(entity.level().dimension(), pos.getSecond()));
                 break;
             }

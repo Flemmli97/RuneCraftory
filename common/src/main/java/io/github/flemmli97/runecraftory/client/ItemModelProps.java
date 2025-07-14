@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -47,7 +47,7 @@ public class ItemModelProps {
     };
 
     public static final ClampedItemPropertyFunction BABY_GENDER_PROPS = (stack, world, entity, i) -> {
-        if (stack.getItem() != ModItems.NPC_BABY.get())
+        if (stack.getItem() != RuneCraftoryItems.NPC_BABY.get())
             return 0;
         return BabySpawnEgg.isBoy(stack) ? 0 : 1;
     };

@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.client.gui.components.Button;
@@ -10,12 +10,12 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NPCCompanionGui extends CompanionGui<EntityNPCBase> {
+public class NPCCompanionGui extends CompanionGui<NPCEntity> {
 
     private final boolean isShopOpen;
     private final ResourceLocation quest;
 
-    public NPCCompanionGui(EntityNPCBase entity, boolean isShopOpen, ResourceLocation quest) {
+    public NPCCompanionGui(NPCEntity entity, boolean isShopOpen, ResourceLocation quest) {
         super(entity);
         this.isShopOpen = isShopOpen;
         this.quest = quest;

@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -63,7 +63,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<LootingAndLuckLootFunction> getType() {
-        return ModLootRegistries.LUCK_AND_LOOTING.get();
+        return RuneCraftoryLootRegistries.LUCK_AND_LOOTING.get();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
         } else if (entity instanceof BaseMonster monster) {
             if (monster.getOwner() != null && Platform.INSTANCE.getPlayerData(monster.getOwner()).party.isPartyMember(monster))
                 return List.of(monster);
-        } else if (entity instanceof EntityNPCBase npc) {
+        } else if (entity instanceof NPCEntity npc) {
             if (npc.followEntity() != null && Platform.INSTANCE.getPlayerData(npc.followEntity()).party.isPartyMember(npc))
                 return List.of(npc);
         }

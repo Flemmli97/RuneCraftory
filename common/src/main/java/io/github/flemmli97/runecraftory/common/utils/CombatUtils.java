@@ -13,11 +13,11 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
-import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
@@ -89,43 +89,43 @@ public class CombatUtils {
     }
 
     public static Holder<Attribute> opposing(Holder<Attribute> att) {
-        if (att.is(ModAttributes.PARALYSIS.getID()))
-            return ModAttributes.PARALYSIS_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.POISON.getID()))
-            return ModAttributes.POISON_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.SEAL.getID()))
-            return ModAttributes.SEAL_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.SLEEP.getID()))
-            return ModAttributes.SLEEP_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.FATIGUE.getID()))
-            return ModAttributes.FATIGUE_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.COLD.getID()))
-            return ModAttributes.COLD_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.DIZZY.getID()))
-            return ModAttributes.DIZZY_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.CRITICAL.getID()))
-            return ModAttributes.CRITICAL_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.STUN.getID()))
-            return ModAttributes.STUN_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.FAINT.getID()))
-            return ModAttributes.FAINT_RESISTANCE.asHolder();
-        if (att.is(ModAttributes.DRAIN.getID()))
-            return ModAttributes.DRAIN_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.PARALYSIS.getID()))
+            return RuneCraftoryAttributes.PARALYSIS_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.POISON.getID()))
+            return RuneCraftoryAttributes.POISON_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.SEAL.getID()))
+            return RuneCraftoryAttributes.SEAL_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.SLEEP.getID()))
+            return RuneCraftoryAttributes.SLEEP_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.FATIGUE.getID()))
+            return RuneCraftoryAttributes.FATIGUE_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.COLD.getID()))
+            return RuneCraftoryAttributes.COLD_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.DIZZY.getID()))
+            return RuneCraftoryAttributes.DIZZY_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.CRITICAL.getID()))
+            return RuneCraftoryAttributes.CRITICAL_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.STUN.getID()))
+            return RuneCraftoryAttributes.STUN_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.FAINT.getID()))
+            return RuneCraftoryAttributes.FAINT_RESISTANCE.asHolder();
+        if (att.is(RuneCraftoryAttributes.DRAIN.getID()))
+            return RuneCraftoryAttributes.DRAIN_RESISTANCE.asHolder();
         return null;
     }
 
     public static Skills matchingSkill(Holder<Attribute> att) {
-        if (att.is(ModAttributes.PARALYSIS.getID()))
+        if (att.is(RuneCraftoryAttributes.PARALYSIS.getID()))
             return Skills.RES_PARA;
-        if (att.is(ModAttributes.POISON.getID()))
+        if (att.is(RuneCraftoryAttributes.POISON.getID()))
             return Skills.RES_POISON;
-        if (att.is(ModAttributes.SEAL.getID()))
+        if (att.is(RuneCraftoryAttributes.SEAL.getID()))
             return Skills.RES_SEAL;
-        if (att.is(ModAttributes.SLEEP.getID()))
+        if (att.is(RuneCraftoryAttributes.SLEEP.getID()))
             return Skills.RES_SLEEP;
-        if (att.is(ModAttributes.FATIGUE.getID()))
+        if (att.is(RuneCraftoryAttributes.FATIGUE.getID()))
             return Skills.RES_FATIGUE;
-        if (att.is(ModAttributes.COLD.getID()))
+        if (att.is(RuneCraftoryAttributes.COLD.getID()))
             return Skills.RES_COLD;
         return null;
     }
@@ -144,7 +144,7 @@ public class CombatUtils {
     }
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
-        if (ArmorEffect.hasArmorEffect(entity, ModArmorEffects.SHIELD_RING.asHolder()) && entity.getRandom().nextFloat() < 0.1)
+        if (ArmorEffect.hasArmorEffect(entity, RuneCraftoryArmorEffects.SHIELD_RING.asHolder()) && entity.getRandom().nextFloat() < 0.1)
             return 1;
         float reduce = 0;
         boolean ignoreDefence = switch (GeneralConfig.defenceSystem) {
@@ -160,9 +160,9 @@ public class CombatUtils {
         if (!ignoreDefence) {
             if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
                 if (!source.is(RunecraftoryTags.DamageTypes.BYPASS_MAGIC))
-                    reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.asHolder());
+                    reduce = (float) getAttributeValue(entity, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder());
             } else if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-                reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.asHolder());
+                reduce = (float) getAttributeValue(entity, RuneCraftoryAttributes.DEFENCE.asHolder());
             }
         }
         float dmg = amount - reduce;
@@ -180,25 +180,25 @@ public class CombatUtils {
             double percent = 0;
             switch (element) {
                 case DARK:
-                    percent = getAttributeValue(entity, ModAttributes.DARK_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.DARK_RESISTANCE.asHolder());
                     break;
                 case EARTH:
-                    percent = getAttributeValue(entity, ModAttributes.EARTH_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder());
                     break;
                 case FIRE:
-                    percent = getAttributeValue(entity, ModAttributes.FIRE_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder());
                     break;
                 case LIGHT:
-                    percent = getAttributeValue(entity, ModAttributes.LIGHT_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.LIGHT_RESISTANCE.asHolder());
                     break;
                 case LOVE:
-                    percent = getAttributeValue(entity, ModAttributes.LOVE_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.LOVE_RESISTANCE.asHolder());
                     break;
                 case WATER:
-                    percent = getAttributeValue(entity, ModAttributes.WATER_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.WATER_RESISTANCE.asHolder());
                     break;
                 case WIND:
-                    percent = getAttributeValue(entity, ModAttributes.WIND_RESISTANCE.asHolder());
+                    percent = getAttributeValue(entity, RuneCraftoryAttributes.WIND_RESISTANCE.asHolder());
                     break;
                 case NONE:
                     break;
@@ -305,14 +305,14 @@ public class CombatUtils {
                 if (resetCooldown) {
                     player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
                 }
-                boolean faint = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.FAINT.asHolder(), target);
-                boolean critical = player.level().random.nextDouble() < statusEffectValue(player, ModAttributes.CRITICAL.asHolder(), target);
+                boolean faint = player.level().random.nextDouble() < statusEffectValue(player, RuneCraftoryAttributes.FAINT.asHolder(), target);
+                boolean critical = player.level().random.nextDouble() < statusEffectValue(player, RuneCraftoryAttributes.CRITICAL.asHolder(), target);
                 DynamicDamage.DamageCategory damageCategory = DynamicDamage.DamageCategory.NORMAL;
                 if (faint)
                     damageCategory = DynamicDamage.DamageCategory.FAINT;
                 else if (critical)
                     damageCategory = DynamicDamage.DamageCategory.IGNOREDEF;
-                if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
+                if (stack.has(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get())) {
                     damageCategory = DynamicDamage.DamageCategory.FIXED;
                     damage = 1;
                 }
@@ -365,8 +365,8 @@ public class CombatUtils {
         ItemStack stack = attacker.getMainHandItem();
         double damage = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level() instanceof ServerLevel serverLevel)
-            ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
-        if (stack.has(ModDataComponentTypes.SCRAP_METAL_PLUS.get())) {
+            RuneCraftorySpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
+        if (stack.has(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get())) {
             source.damageType(DynamicDamage.DamageCategory.FIXED);
             damage = 1;
         }
@@ -399,9 +399,9 @@ public class CombatUtils {
         // Setup some more things
         if (attacker instanceof LivingEntity living) {
             builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(living, att, val));
-            if (allowFaint && living.level().random.nextDouble() < statusEffectValue(living, ModAttributes.FAINT.asHolder(), target)) {
+            if (allowFaint && living.level().random.nextDouble() < statusEffectValue(living, RuneCraftoryAttributes.FAINT.asHolder(), target)) {
                 builder.damageType(DynamicDamage.DamageCategory.FAINT);
-            } else if (allowCrit && living.level().random.nextDouble() < statusEffectValue(living, ModAttributes.CRITICAL.asHolder(), target)) {
+            } else if (allowCrit && living.level().random.nextDouble() < statusEffectValue(living, RuneCraftoryAttributes.CRITICAL.asHolder(), target)) {
                 switch (builder.getDamageType()) {
                     case MAGIC -> builder.damageType(DynamicDamage.DamageCategory.IGNOREMAGICDEF);
                     case NORMAL -> builder.damageType(DynamicDamage.DamageCategory.IGNOREDEF);
@@ -483,44 +483,44 @@ public class CombatUtils {
     }
 
     public static void applyStatusEffects(LivingEntity attackingEntity, LivingEntity target) {
-        boolean poisonChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.POISON.asHolder(), target);
-        boolean sleepChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SLEEP.asHolder(), target);
-        boolean fatigueChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.FATIGUE.asHolder(), target);
-        boolean coldChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.COLD.asHolder(), target);
-        boolean paraChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.PARALYSIS.asHolder(), target);
-        boolean sealChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.SEAL.asHolder(), target);
-        boolean dizzyChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, ModAttributes.DIZZY.asHolder(), target);
-        double stunAmount = statusEffectValue(attackingEntity, ModAttributes.STUN.asHolder(), target);
+        boolean poisonChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.POISON.asHolder(), target);
+        boolean sleepChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.SLEEP.asHolder(), target);
+        boolean fatigueChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.FATIGUE.asHolder(), target);
+        boolean coldChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.COLD.asHolder(), target);
+        boolean paraChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.PARALYSIS.asHolder(), target);
+        boolean sealChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.SEAL.asHolder(), target);
+        boolean dizzyChance = attackingEntity.level().random.nextDouble() < statusEffectValue(attackingEntity, RuneCraftoryAttributes.DIZZY.asHolder(), target);
+        double stunAmount = statusEffectValue(attackingEntity, RuneCraftoryAttributes.STUN.asHolder(), target);
         if (poisonChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.POISON.asHolder(), 0);
+            EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.POISON.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_POISON, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_POISON, 15);
         }
         if (fatigueChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.asHolder(), 0);
+            EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.FATIGUE.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_FATIGUE, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_FATIGUE, 15);
         }
         if (coldChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.COLD.asHolder(), 0);
+            EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.COLD.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_COLD, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_COLD, 15);
         }
         if (paraChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.asHolder(), 0);
+            EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.PARALYSIS.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_PARA, 5);
             if (target instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_PARA, 15);
         }
         if (sealChance) {
-            EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.asHolder(), 0);
+            EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.SEAL.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SEAL, 5);
             if (target instanceof ServerPlayer player)
@@ -530,10 +530,10 @@ public class CombatUtils {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
         }
         if (stunAmount > 0.1 && attackingEntity.level().random.nextDouble() < stunAmount) {
-            target.addEffect(new MobEffectInstance(ModEffects.STUNNED.asHolder(), Mth.floor(Math.min(1, stunAmount) * 50), 0, true, false));
+            target.addEffect(new MobEffectInstance(RuneCraftoryEffects.STUNNED.asHolder(), Mth.floor(Math.min(1, stunAmount) * 50), 0, true, false));
         }
         if (sleepChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.SLEEP.asHolder(), 80, 0, true, false));
+            target.addEffect(new MobEffectInstance(RuneCraftoryEffects.SLEEP.asHolder(), 80, 0, true, false));
             if (attackingEntity instanceof ServerPlayer player)
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SLEEP, 5);
             if (target instanceof ServerPlayer player)
@@ -631,12 +631,12 @@ public class CombatUtils {
     }
 
     public static double getRange(LivingEntity entity, double bonus) {
-        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_RANGE.asHolder()) + bonus)
+        return (EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.ATTACK_RANGE.asHolder()) + bonus)
                 * entity.getScale();
     }
 
     public static double getWidth(LivingEntity entity, double bonus) {
-        return (EntityUtils.tryGetAttribute(entity, ModAttributes.ATTACK_WIDTH.asHolder()) + bonus)
+        return (EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.ATTACK_WIDTH.asHolder()) + bonus)
                 * entity.getScale();
     }
 

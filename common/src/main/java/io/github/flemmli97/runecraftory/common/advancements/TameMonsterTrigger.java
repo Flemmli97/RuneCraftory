@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.attachment.player.EntityStatsTracker;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -37,11 +37,11 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> of(int amount) {
-            return ModCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), amount));
+            return RuneCraftoryCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), amount));
         }
 
         public static Criterion<TriggerInstance> of(int amount, EntityPredicate.Builder builder) {
-            return ModCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.of(builder.build()), amount));
+            return RuneCraftoryCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.of(builder.build()), amount));
         }
 
         public static Advancement.Builder amountOfSteps(Advancement.Builder builder, String key, int amount, boolean boss) {
@@ -52,7 +52,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
         }
 
         public static Criterion<TriggerInstance> bossOf(int amount) {
-            return ModCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
+            return RuneCraftoryCriteria.TAME_MONSTER_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(),
                     Optional.of(EntityPredicate.Builder.entity().of(RunecraftoryTags.EntityTypes.BOSS_MONSTERS).build()), amount));
         }
 

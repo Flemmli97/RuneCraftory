@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalTrail;
+import io.github.flemmli97.runecraftory.common.entities.misc.ElementalTrailEntity;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +20,7 @@ public class IceTrailSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityElementalTrail ice = new EntityElementalTrail(level, entity, ItemElement.WATER);
+        ElementalTrailEntity ice = new ElementalTrailEntity(level, entity, ItemElement.WATER);
         ice.setPos(ice.getX(), ice.getY() - 0.5, ice.getZ());
         ice.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
         if (this.homing)

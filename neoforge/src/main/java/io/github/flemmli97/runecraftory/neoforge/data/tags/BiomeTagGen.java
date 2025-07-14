@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.neoforge.data.tags;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -30,7 +30,7 @@ public class BiomeTagGen extends TagsProvider<Biome> {
         this.tag(RunecraftoryTags.Biomes.GENERAL_HERBS).addOptionalTag(RunecraftoryTags.Biomes.IS_MAGICAL.location()).addTag(RunecraftoryTags.Biomes.IS_LUSH).addTag(RunecraftoryTags.Biomes.IS_DENSE_VEGETATION_OVERWORLD).addTag(RunecraftoryTags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_HILL);
 
-        ModBlocks.GENERATION_TAGS.forEach((reg, tags) -> {
+        RuneCraftoryBlocks.GENERATION_TAGS.forEach((reg, tags) -> {
             TagAppender<Biome> whitelist = this.tag(RunecraftoryTags.Biomes.getBlockBasedGenerationTag(reg, true));
             tags.whitelist().forEach(tag -> {
                 if (provider.lookupOrThrow(this.registryKey)

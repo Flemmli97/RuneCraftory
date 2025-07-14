@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SpecialSextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -91,12 +91,12 @@ public class CraftingOutputSlot extends Slot {
             }
         }
         if (ItemNBT.usedLightOre(stack))
-            ModCriteria.LIGHT_ORE.get().trigger(serverPlayer);
+            RuneCraftoryCriteria.LIGHT_ORE.get().trigger(serverPlayer);
         switch (this.craftingContainer.craftingType()) {
-            case FORGE -> ModCriteria.FORGING.get().trigger(serverPlayer);
-            case ACCESSORY_WORKBENCH -> ModCriteria.CRAFTING.get().trigger(serverPlayer);
-            case CHEMISTRY_SET -> ModCriteria.MEDICINE.get().trigger(serverPlayer);
-            case COOKING_TABLE -> ModCriteria.COOKING.get().trigger(serverPlayer);
+            case FORGE -> RuneCraftoryCriteria.FORGING.get().trigger(serverPlayer);
+            case ACCESSORY_WORKBENCH -> RuneCraftoryCriteria.CRAFTING.get().trigger(serverPlayer);
+            case CHEMISTRY_SET -> RuneCraftoryCriteria.MEDICINE.get().trigger(serverPlayer);
+            case COOKING_TABLE -> RuneCraftoryCriteria.COOKING.get().trigger(serverPlayer);
         }
         boolean refreshRecipe = false;
         for (int i = 0; i < remaining.size(); ++i) {

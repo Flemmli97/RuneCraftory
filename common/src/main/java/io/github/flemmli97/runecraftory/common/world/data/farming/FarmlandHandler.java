@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.world.data.farming;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockGiantCrop;
+import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
+import io.github.flemmli97.runecraftory.common.blocks.GiantCropBlock;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -98,7 +98,7 @@ public class FarmlandHandler extends SavedData {
         level.playSound(null, pos, SoundEvents.BOAT_PADDLE_WATER, SoundSource.BLOCKS, 1.0f, 1.1f);
         BlockPos up = pos.above();
         BlockState crop = level.getBlockState(up);
-        if (crop.getBlock() instanceof BlockCrop blockCrop && crop.getValue(BlockCrop.WILTED))
+        if (crop.getBlock() instanceof ExtendedCropBlock blockCrop && crop.getValue(ExtendedCropBlock.WILTED))
             blockCrop.onWiltedWatering(level, up, crop);
     }
 
@@ -517,14 +517,14 @@ public class FarmlandHandler extends SavedData {
                     if (s != null) {
                         BlockPos p = new BlockPos(x, y, z);
                         List<Pair<BlockPos, BlockState>> list = new ArrayList<>();
-                        if (s.getBlock() instanceof BlockGiantCrop)
-                            s = s.setValue(BlockGiantCrop.DIRECTION, Direction.SOUTH);
+                        if (s.getBlock() instanceof GiantCropBlock)
+                            s = s.setValue(GiantCropBlock.DIRECTION, Direction.SOUTH);
                         for (PositionDirection offset : OFFSETS) {
                             BlockPos newPos = p.offset(offset.pos());
                             BlockState s2 = this.crops.get(newPos.asLong());
                             if (s2 != null && s2.is(s.getBlock())) {
-                                if (s2.getBlock() instanceof BlockGiantCrop)
-                                    s2 = s2.setValue(BlockGiantCrop.DIRECTION, offset.direction());
+                                if (s2.getBlock() instanceof GiantCropBlock)
+                                    s2 = s2.setValue(GiantCropBlock.DIRECTION, offset.direction());
                                 list.add(Pair.of(newPos, s2));
                             }
                         }

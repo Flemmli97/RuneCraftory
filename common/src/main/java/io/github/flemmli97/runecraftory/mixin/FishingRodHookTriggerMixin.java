@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
+import io.github.flemmli97.runecraftory.common.entities.misc.CustomFishingHookEntity;
 import io.github.flemmli97.runecraftory.mixinhelper.ExtendedFishingRodHookTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.FishingRodHookedTrigger;
@@ -16,7 +16,7 @@ import java.util.Collection;
 public abstract class FishingRodHookTriggerMixin extends SimpleCriterionTrigger<FishingRodHookedTrigger.TriggerInstance> implements ExtendedFishingRodHookTrigger {
 
     @Override
-    public void runecraftory$customTrigger(ServerPlayer player, ItemStack rod, EntityCustomFishingHook entity, Collection<ItemStack> stacks) {
+    public void runecraftory$customTrigger(ServerPlayer player, ItemStack rod, CustomFishingHookEntity entity, Collection<ItemStack> stacks) {
         LootContext lootContext = EntityPredicate.createContext(player, entity);
         this.trigger(player, triggerInstance -> triggerInstance.matches(rod, lootContext, stacks));
     }

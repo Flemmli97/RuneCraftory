@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +22,7 @@ public class EntityWeaponHandler<T extends LivingEntity & AnimatedEntity> implem
 
     private final T entity;
 
-    private AttackAction currentAction = ModAttackActions.NONE.get();
+    private AttackAction currentAction = RuneCraftoryAttackActions.NONE.get();
     private int comboCount;
 
     private final Set<LivingEntity> hitEntityTracker = new HashSet<>();
@@ -57,7 +57,7 @@ public class EntityWeaponHandler<T extends LivingEntity & AnimatedEntity> implem
     }
 
     private AttackAction.OverrideType checkOverride(AttackAction action, boolean allowNone) {
-        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.getAnimation() == null)) {
+        if (allowNone && (this.currentAction == RuneCraftoryAttackActions.NONE.get() || this.getAnimation() == null)) {
             return AttackAction.OverrideType.REPLACE;
         }
         if (this.entity.getVehicle() != null && !action.usableOnMounts(this.comboCount + 1)) {
@@ -76,13 +76,13 @@ public class EntityWeaponHandler<T extends LivingEntity & AnimatedEntity> implem
             action = change;
         if (comboIdx != -1)
             this.comboCount = comboIdx;
-        if (action == ModAttackActions.NONE.get()) {
+        if (action == RuneCraftoryAttackActions.NONE.get()) {
             this.resetStates();
         }
         this.currentAction = action;
         this.scheduledAction = false;
         AnimationState anim = action.getAnimation(this.entity, this.getComboCount());
-        if (this.currentAction != ModAttackActions.NONE.get()) {
+        if (this.currentAction != RuneCraftoryAttackActions.NONE.get()) {
             this.comboCount++;
         }
         this.entity.yBodyRot = this.entity.yHeadRot;
@@ -107,16 +107,16 @@ public class EntityWeaponHandler<T extends LivingEntity & AnimatedEntity> implem
 
     @Override
     public void tick() {
-        if (this.currentAction != ModAttackActions.NONE.get()) {
+        if (this.currentAction != RuneCraftoryAttackActions.NONE.get()) {
             ComboContainer.ComboHandler handler = this.currentAction.combos() != null ? this.currentAction.combos().get(this.comboCount - 1) : null;
             ItemStack weapon = this.get(DataKey.USED_WEAPON);
             boolean changedItem = this.entity.getMainHandItem() != weapon;
             if (changedItem) {
-                this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1);
+                this.setAnimationBasedOnState(RuneCraftoryAttackActions.NONE.get(), -1);
                 return;
             }
             if (this.getAnimation() == null) {
-                this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1);
+                this.setAnimationBasedOnState(RuneCraftoryAttackActions.NONE.get(), -1);
             } else {
                 this.currentAction.run(this.entity, weapon, this, this.getAnimation());
             }

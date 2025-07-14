@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.loot;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import io.github.flemmli97.runecraftory.common.world.data.family.FamilyEntry;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -26,7 +26,7 @@ public record NPCRelationCondition(FamilyEntry.Relationship relation) implements
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.INTERACTINGPLAYER.get();
+        return RuneCraftoryLootRegistries.INTERACTINGPLAYER.get();
     }
 
     @Override
@@ -36,7 +36,7 @@ public record NPCRelationCondition(FamilyEntry.Relationship relation) implements
 
     @Override
     public boolean test(LootContext ctx) {
-        if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntityNPCBase npc) {
+        if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof NPCEntity npc) {
             UUID player = ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
             if (player != null)
                 return npc.relationFor(player) == this.relation;

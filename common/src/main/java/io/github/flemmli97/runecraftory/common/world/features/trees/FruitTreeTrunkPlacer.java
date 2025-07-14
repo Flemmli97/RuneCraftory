@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.common.world.features.trees;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.blocks.BlockTreeBase;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -41,7 +41,7 @@ public class FruitTreeTrunkPlacer extends TrunkPlacer {
     }
 
     protected static boolean placeIfFree(LevelSimulatedReader level, Map<BlockPos, BlockState> blockSetter, BlockPos pos, BlockState state) {
-        if (level.isStateAtPosition(pos, BlockTreeBase::isAirOrReplaceable)) {
+        if (level.isStateAtPosition(pos, TreeBaseBlock::isAirOrReplaceable)) {
             blockSetter.put(pos, state);
             return true;
         }
@@ -50,15 +50,15 @@ public class FruitTreeTrunkPlacer extends TrunkPlacer {
 
     @Override
     protected TrunkPlacerType<?> type() {
-        return ModFeatures.FRUIT_TRUNK_PLACER.get();
+        return RuneCraftoryFeatures.FRUIT_TRUNK_PLACER.get();
     }
 
     @Override
     public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader level, BiConsumer<BlockPos, BlockState> blockSetter, RandomSource random, int freeTreeHeight, BlockPos pos, TreeConfiguration config) {
         BlockPos soil = pos.below();
         Map<BlockPos, BlockState> placements = new HashMap<>();
-        if (level.isStateAtPosition(soil, s -> !s.is(ModBlocks.TREE_SOIL.get()))) {
-            placements.put(soil, ModBlocks.TREE_SOIL.get().defaultBlockState());
+        if (level.isStateAtPosition(soil, s -> !s.is(RuneCraftoryBlocks.TREE_SOIL.get()))) {
+            placements.put(soil, RuneCraftoryBlocks.TREE_SOIL.get().defaultBlockState());
         }
         List<FoliagePlacer.FoliageAttachment> foliagePos = new ArrayList<>();
         for (int i = 1; i <= freeTreeHeight; i++) {

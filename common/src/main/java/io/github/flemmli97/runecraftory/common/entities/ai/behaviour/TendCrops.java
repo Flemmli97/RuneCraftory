@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
@@ -45,7 +45,7 @@ import java.util.function.Predicate;
 public class TendCrops<E extends BaseMonster> extends ExtendedBehaviour<E> {
 
     private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORIES = MemoryTest.builder(1)
-            .hasMemory(ModMemoryTypes.FARMING.get());
+            .hasMemory(RuneCraftoryMemoryTypes.FARMING.get());
 
     private static final Predicate<ItemStack> SEED_ITEM = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
             && (s.is(RunecraftoryTags.Items.SEEDS) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);

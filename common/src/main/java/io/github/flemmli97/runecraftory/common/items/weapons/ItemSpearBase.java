@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -35,7 +35,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR.get(), stack);
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR.get(), stack);
     }
 
     @Override
@@ -60,10 +60,10 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         if (player.isCreative() || data.getSkillLevel(Skills.SPEAR).getLevel() >= 5) {
             if (player instanceof ServerPlayer) {
-                if (data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get(), false)) {
-                    data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), itemstack);
+                if (data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get(), false)) {
+                    data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), itemstack);
                 } else {
-                    if (data.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()) {
+                    if (data.getWeaponHandler().getCurrentAction() == RuneCraftoryAttackActions.NONE.get()) {
                         player.startUsingItem(hand);
                     }
                 }
@@ -78,8 +78,8 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
         if (entity instanceof ServerPlayer serverPlayer) {
             PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
             int time = stack.getUseDuration(entity) - timeLeft - 1;
-            if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(ModAttackActions.SPEAR_USE.get())) {
-                data.getWeaponHandler().doWeaponAttack(ModAttackActions.SPEAR_USE.get(), stack);
+            if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get())) {
+                data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), stack);
             }
         }
     }
@@ -112,8 +112,8 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
             list.forEach(e -> CombatUtils.attackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
         }
         if (finishing)
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.5f);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.5f);
         else
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.0f);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), player.getSoundSource(), 1.0f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2f + 1.0f);
     }
 }

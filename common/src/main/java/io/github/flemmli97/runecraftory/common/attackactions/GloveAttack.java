@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -87,7 +87,7 @@ public class GloveAttack extends AttackAction {
                 }
                 entity.resetFallDistance();
                 if (anim.isAt("attack_start"))
-                    entity.playSound(ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
+                    entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
                 if (!entity.level().isClientSide && anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)))

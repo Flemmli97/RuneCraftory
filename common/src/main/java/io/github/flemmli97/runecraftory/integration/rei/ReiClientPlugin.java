@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -17,13 +17,13 @@ public class ReiClientPlugin implements REIClientPlugin {
     @Override
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new SextupleCategory(CraftingIdentifier.FORGING));
-        registry.addWorkstations(CraftingIdentifier.FORGING.identifier(), EntryStacks.of(ModItems.FORGE.get()));
+        registry.addWorkstations(CraftingIdentifier.FORGING.identifier(), EntryStacks.of(RuneCraftoryItems.FORGE.get()));
         registry.add(new SextupleCategory(CraftingIdentifier.CHEMISTRY));
-        registry.addWorkstations(CraftingIdentifier.CHEMISTRY.identifier(), EntryStacks.of(ModItems.CHEMISTRY_SET.get()));
+        registry.addWorkstations(CraftingIdentifier.CHEMISTRY.identifier(), EntryStacks.of(RuneCraftoryItems.CHEMISTRY_SET.get()));
         registry.add(new SextupleCategory(CraftingIdentifier.COOKING));
-        registry.addWorkstations(CraftingIdentifier.COOKING.identifier(), EntryStacks.of(ModItems.COOKING_TABLE.get()));
+        registry.addWorkstations(CraftingIdentifier.COOKING.identifier(), EntryStacks.of(RuneCraftoryItems.COOKING_TABLE.get()));
         registry.add(new SextupleCategory(CraftingIdentifier.ARMOR));
-        registry.addWorkstations(CraftingIdentifier.ARMOR.identifier(), EntryStacks.of(ModItems.ACCESSORY_WORKBENCH.get()));
+        registry.addWorkstations(CraftingIdentifier.ARMOR.identifier(), EntryStacks.of(RuneCraftoryItems.ACCESSORY_WORKBENCH.get()));
     }
 
     @Override

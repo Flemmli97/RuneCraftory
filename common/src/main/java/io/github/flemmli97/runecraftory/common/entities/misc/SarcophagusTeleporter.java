@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.ChatFormatting;
@@ -45,7 +45,7 @@ public class SarcophagusTeleporter extends Entity {
         super.tick();
         if (this.level().isClientSide) {
             if (this.random.nextInt(3) == 0) {
-                this.level().addParticle(new ColoredParticleData(ModParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 1, 2.2f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 1, 2.2f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
             }
         } else {
             int day = WorldUtils.day(this.level());

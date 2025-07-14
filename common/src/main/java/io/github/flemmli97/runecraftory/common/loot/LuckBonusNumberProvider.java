@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -24,6 +24,6 @@ public record LuckBonusNumberProvider(NumberProvider base, float luck) implement
 
     @Override
     public LootNumberProviderType getType() {
-        return ModLootRegistries.LUCK_BOOSTED.get();
+        return RuneCraftoryLootRegistries.LUCK_BOOSTED.get();
     }
 }

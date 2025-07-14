@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityThrownItem;
+import io.github.flemmli97.runecraftory.common.entities.misc.ThrownItemEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +16,7 @@ public class ThrowHandItemSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityThrownItem item = new EntityThrownItem(level, entity);
+        ThrownItemEntity item = new ThrownItemEntity(level, entity);
         item.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
         item.setItem(entity.getMainHandItem());
         item.setRotating(true);

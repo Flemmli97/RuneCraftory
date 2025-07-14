@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.advancements.Criterion;
@@ -37,11 +37,11 @@ public class SkillLevelTrigger extends SimpleCriterionTrigger<SkillLevelTrigger.
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> of(int level) {
-            return ModCriteria.SKILL_LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), level));
+            return RuneCraftoryCriteria.SKILL_LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), level));
         }
 
         public static Criterion<TriggerInstance> of(Skills skill, int level) {
-            return ModCriteria.SKILL_LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.ofNullable(skill), level));
+            return RuneCraftoryCriteria.SKILL_LEVEL_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.ofNullable(skill), level));
         }
 
         public boolean matches(ServerPlayer player, Skills skill) {

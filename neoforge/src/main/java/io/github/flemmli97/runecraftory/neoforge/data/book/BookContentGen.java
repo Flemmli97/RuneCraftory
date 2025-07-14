@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.neoforge.data.book;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.favouriteless.modopedia.api.datagen.BookContentOutput;
@@ -57,59 +57,59 @@ public class BookContentGen extends ContentSetProvider {
     @Override
     public void buildEntries(HolderLookup.Provider registries, BookContentOutput output) {
         EntryBuilder.of(this.get("runecraftory.book.entry.runepoints"))
-                .icon(new ItemStack(ModItems.MYSTERY_POTION.get()))
+                .icon(new ItemStack(RuneCraftoryItems.MYSTERY_POTION.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.runepoints"), this.get("runecraftory.book.entry.runepoints.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.runepoints.2")))
                 .build("entry_runepoints", output, "category_main");
         EntryBuilder.of(this.get("runecraftory.book.entry.calendar"))
-                .icon(new ItemStack(ModItems.RED_GRASS.get()))
+                .icon(new ItemStack(RuneCraftoryItems.RED_GRASS.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.calendar"), this.get("runecraftory.book.entry.calendar.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.calendar.2")))
                 .build("entry_calendar", output, "category_main");
         EntryBuilder.of(this.get("runecraftory.book.entry.crafting"))
-                .icon(new ItemStack(ModItems.FORGE.get()))
+                .icon(new ItemStack(RuneCraftoryItems.FORGE.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.crafting"), this.get("runecraftory.book.entry.crafting.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.crafting.2")),
-                        ItemGalleryBuilder.of(new GridItemDisplay(List.of(new SimpleItemDisplay(new ItemStack(ModItems.FORGING_BREAD.get())),
-                                        new SimpleItemDisplay(new ItemStack(ModItems.ACCESSORY_BREAD.get())),
-                                        new SimpleItemDisplay(new ItemStack(ModItems.MEDICINE_BREAD.get())),
-                                        new SimpleItemDisplay(new ItemStack(ModItems.COOKING_BREAD.get()))), 4, 18, true))
+                        ItemGalleryBuilder.of(new GridItemDisplay(List.of(new SimpleItemDisplay(new ItemStack(RuneCraftoryItems.FORGING_BREAD.get())),
+                                        new SimpleItemDisplay(new ItemStack(RuneCraftoryItems.ACCESSORY_BREAD.get())),
+                                        new SimpleItemDisplay(new ItemStack(RuneCraftoryItems.MEDICINE_BREAD.get())),
+                                        new SimpleItemDisplay(new ItemStack(RuneCraftoryItems.COOKING_BREAD.get()))), 4, 18, true))
                                 .x(50)
                                 .y(70))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.crafting.3")))
-                .pages(this.displayItem("runecraftory.book.entry.crafting.forge.title", new ItemStack(ModBlocks.FORGE.get()),
+                .pages(this.displayItem("runecraftory.book.entry.crafting.forge.title", new ItemStack(RuneCraftoryBlocks.FORGE.get()),
                         "runecraftory.book.entry.crafting.forge"))
-                .pages(this.displayItem("runecraftory.book.entry.crafting.accessory_workbench.title", new ItemStack(ModBlocks.ACCESSORY_WORKBENCH.get()),
+                .pages(this.displayItem("runecraftory.book.entry.crafting.accessory_workbench.title", new ItemStack(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get()),
                         "runecraftory.book.entry.crafting.accessory_workbench"))
-                .pages(this.displayItem("runecraftory.book.entry.crafting.chemistry_set.title", new ItemStack(ModBlocks.CHEMISTRY_SET.get()),
+                .pages(this.displayItem("runecraftory.book.entry.crafting.chemistry_set.title", new ItemStack(RuneCraftoryBlocks.CHEMISTRY_SET.get()),
                         "runecraftory.book.entry.crafting.chemistry_set"))
-                .pages(this.displayItem("runecraftory.book.entry.crafting.cooking_table.title", new ItemStack(ModBlocks.COOKING_TABLE.get()),
+                .pages(this.displayItem("runecraftory.book.entry.crafting.cooking_table.title", new ItemStack(RuneCraftoryBlocks.COOKING_TABLE.get()),
                         "runecraftory.book.entry.crafting.cooking_table"))
                 .build("entry_crafting", output, "category_main");
         EntryBuilder.of(this.get("runecraftory.book.entry.minerals"))
-                .icon(new ItemStack(ModItems.MINERAL_IRON.get()))
+                .icon(new ItemStack(RuneCraftoryItems.MINERAL_IRON.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.minerals"), this.get("runecraftory.book.entry.minerals.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.minerals.2")),
-                        ShowcaseBuilder.of(ModBlocks.MINERAL_MAP
+                        ShowcaseBuilder.of(RuneCraftoryBlocks.MINERAL_MAP
                                         .entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().ordinal()))
                                         .map(e -> new ItemStack(e.getValue().get()))
                                         .toArray(ItemStack[]::new)).height(30)
                                 .y(90).scale(0.5f))
                 .build("entry_minerals", output, "category_main");
         EntryBuilder.of(this.get("runecraftory.book.entry.shipping"))
-                .icon(new ItemStack(ModItems.SHIPPING_BIN.get()))
+                .icon(new ItemStack(RuneCraftoryItems.SHIPPING_BIN.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.shipping"), this.get("runecraftory.book.entry.shipping.1")))
                 .page(CraftingPageBuilder.of(RuneCraftory.modRes("shipping_bin")))
                 .build("entry_shipping", output, "category_main");
         EntryBuilder.of(this.get("runecraftory.book.entry.entities"))
-                .icon(SpawnEgg.fromType(ModEntities.WOOLY.get()).map(ItemStack::new).orElseThrow())
+                .icon(SpawnEgg.fromType(RuneCraftoryEntities.WOOLY.get()).map(ItemStack::new).orElseThrow())
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.entities"), this.get("runecraftory.book.entry.entities.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.entities.2")))
                 .build("entry_entities", output, "category_main");
         EntryBuilder.of(this.get("runecraftory.book.entry.taming"))
-                .icon(new ItemStack(ModItems.MONSTER_BARN.get()))
+                .icon(new ItemStack(RuneCraftoryItems.MONSTER_BARN.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.taming"), this.get("runecraftory.book.entry.taming.1")),
-                        ShowcaseBuilder.of(new ItemStack(ModItems.MONSTER_BARN.get()))
+                        ShowcaseBuilder.of(new ItemStack(RuneCraftoryItems.MONSTER_BARN.get()))
                                 .width(90).y(60).height(90).scale(0.8f))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.taming.2")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.taming.3")))
@@ -126,7 +126,7 @@ public class BookContentGen extends ContentSetProvider {
                 .build("entry_party", output, "category_main");
 
         EntryBuilder.of(this.get("runecraftory.book.entry.farming"))
-                .icon(new ItemStack(ModItems.TURNIP_SEEDS.get()))
+                .icon(new ItemStack(RuneCraftoryItems.TURNIP_SEEDS.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.farming"), this.get("runecraftory.book.entry.farming.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.farming.2")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.farming.3")))
@@ -138,17 +138,17 @@ public class BookContentGen extends ContentSetProvider {
                                 .y(75))
                 .build("entry_farming", output, "category_farming");
         EntryBuilder.of(this.get("runecraftory.book.entry.trees"))
-                .icon(new ItemStack(ModItems.APPLE_SAPLING.get()))
+                .icon(new ItemStack(RuneCraftoryItems.APPLE_SAPLING.get()))
                 .page(HeaderBuilder.of(this.get("runecraftory.book.entry.trees")),
                         SeparatorBuilder.of().y(10),
-                        ShowcaseBuilder.of(new ItemStack(ModItems.APPLE_SAPLING.get()),
-                                        new ItemStack(ModItems.GRAPE_SAPLING.get()),
-                                        new ItemStack(ModItems.ORANGE_SAPLING.get()))
+                        ShowcaseBuilder.of(new ItemStack(RuneCraftoryItems.APPLE_SAPLING.get()),
+                                        new ItemStack(RuneCraftoryItems.GRAPE_SAPLING.get()),
+                                        new ItemStack(RuneCraftoryItems.ORANGE_SAPLING.get()))
                                 .y(22))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.trees.1")))
                 .build("entry_trees", output, "category_farming");
         EntryBuilder.of(this.get("runecraftory.book.entry.fertilizer"))
-                .icon(new ItemStack(ModItems.FORMULAR_A.get()))
+                .icon(new ItemStack(RuneCraftoryItems.FORMULAR_A.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.fertilizer"), this.get("runecraftory.book.entry.fertilizer.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.fertilizer.2")))
                 .build("entry_fertilizer", output, "category_farming");
@@ -159,43 +159,43 @@ public class BookContentGen extends ContentSetProvider {
                 .build("entry_weather", output, "category_farming");
 
         EntryBuilder.of(this.get("runecraftory.book.entry.weapon"))
-                .icon(new ItemStack(ModItems.SHORT_DAGGER.get()))
+                .icon(new ItemStack(RuneCraftoryItems.SHORT_DAGGER.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.weapon"), this.get("runecraftory.book.entry.weapon.1")))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.2.title", new ItemStack(ModItems.BROAD_SWORD.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.2.title", new ItemStack(RuneCraftoryItems.BROAD_SWORD.get()),
                         "runecraftory.book.entry.weapon.2"))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.3.title", new ItemStack(ModItems.CLAYMORE.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.3.title", new ItemStack(RuneCraftoryItems.CLAYMORE.get()),
                         "runecraftory.book.entry.weapon.3"))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.4.title", new ItemStack(ModItems.SPEAR.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.4.title", new ItemStack(RuneCraftoryItems.SPEAR.get()),
                         "runecraftory.book.entry.weapon.4"))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.5.title", new ItemStack(ModItems.BATTLE_AXE.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.5.title", new ItemStack(RuneCraftoryItems.BATTLE_AXE.get()),
                         "runecraftory.book.entry.weapon.5"))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.6.title", new ItemStack(ModItems.SHORT_DAGGER.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.6.title", new ItemStack(RuneCraftoryItems.SHORT_DAGGER.get()),
                         "runecraftory.book.entry.weapon.6"))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.7.title", new ItemStack(ModItems.LEATHER_GLOVE.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.7.title", new ItemStack(RuneCraftoryItems.LEATHER_GLOVE.get()),
                         "runecraftory.book.entry.weapon.7"))
-                .pages(this.framedItem("runecraftory.book.entry.weapon.8.title", new ItemStack(ModItems.ROD.get()),
+                .pages(this.framedItem("runecraftory.book.entry.weapon.8.title", new ItemStack(RuneCraftoryItems.ROD.get()),
                         "runecraftory.book.entry.weapon.8"))
                 .build("entry_weapon", output, "category_equipment");
         EntryBuilder.of(this.get("runecraftory.book.entry.tools"))
-                .icon(new ItemStack(ModItems.HOE_SCRAP.get()))
+                .icon(new ItemStack(RuneCraftoryItems.HOE_SCRAP.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.tools"), this.get("runecraftory.book.entry.tools.1")))
-                .pages(this.framedItem("runecraftory.book.entry.tools.2.title", new ItemStack(ModItems.HOE_SCRAP.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.2.title", new ItemStack(RuneCraftoryItems.HOE_SCRAP.get()),
                         "runecraftory.book.entry.tools.2"))
-                .pages(this.framedItem("runecraftory.book.entry.tools.3.title", new ItemStack(ModItems.WATERING_CAN_SCRAP.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.3.title", new ItemStack(RuneCraftoryItems.WATERING_CAN_SCRAP.get()),
                         "runecraftory.book.entry.tools.3"))
-                .pages(this.framedItem("runecraftory.book.entry.tools.4.title", new ItemStack(ModItems.SICKLE_SCRAP.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.4.title", new ItemStack(RuneCraftoryItems.SICKLE_SCRAP.get()),
                         "runecraftory.book.entry.tools.4"))
-                .pages(this.framedItem("runecraftory.book.entry.tools.5.title", new ItemStack(ModItems.HAMMER_SCRAP.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.5.title", new ItemStack(RuneCraftoryItems.HAMMER_SCRAP.get()),
                         "runecraftory.book.entry.tools.5"))
-                .pages(this.framedItem("runecraftory.book.entry.tools.6.title", new ItemStack(ModItems.AXE_SCRAP.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.6.title", new ItemStack(RuneCraftoryItems.AXE_SCRAP.get()),
                         "runecraftory.book.entry.tools.6"))
-                .pages(this.framedItem("runecraftory.book.entry.tools.7.title", new ItemStack(ModItems.FISHING_ROD_SCRAP.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.7.title", new ItemStack(RuneCraftoryItems.FISHING_ROD_SCRAP.get()),
                         "runecraftory.book.entry.tools.7"))
-                .pages(this.framedItem("runecraftory.book.entry.tools.8.title", new ItemStack(ModItems.GLASS.get()),
+                .pages(this.framedItem("runecraftory.book.entry.tools.8.title", new ItemStack(RuneCraftoryItems.GLASS.get()),
                         "runecraftory.book.entry.tools.8"))
                 .build("entry_tools", output, "category_equipment");
         EntryBuilder.of(this.get("runecraftory.book.entry.spellskills"))
-                .icon(new ItemStack(ModItems.TELEPORT.get()))
+                .icon(new ItemStack(RuneCraftoryItems.TELEPORT.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.spellskills"), this.get("runecraftory.book.entry.spellskills.1")))
                 .page(DoubleCraftingPageBuilder.of(RuneCraftory.modRes("fireball"), RuneCraftory.modRes("teleport")))
                 .build("entry_spellskills", output, "category_equipment");
@@ -211,7 +211,7 @@ public class BookContentGen extends ContentSetProvider {
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.npc.4")))
                 .build("entry_npc", output, "category_npc");
         EntryBuilder.of(this.get("runecraftory.book.entry.npc.professions"))
-                .icon(new ItemStack(ModItems.CASH_REGISTER.get()))
+                .icon(new ItemStack(RuneCraftoryItems.CASH_REGISTER.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.npc.professions.1.title"), this.get("runecraftory.book.entry.npc.professions.1")))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.npc.professions.2.title"), this.get("runecraftory.book.entry.npc.professions.2")))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.npc.professions.3.title"), this.get("runecraftory.book.entry.npc.professions.3")))
@@ -223,7 +223,7 @@ public class BookContentGen extends ContentSetProvider {
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.npc.professions.9.title"), this.get("runecraftory.book.entry.npc.professions.9")))
                 .build("entry_npc_professions", output, "category_npc");
         EntryBuilder.of(this.get("runecraftory.book.entry.quests"))
-                .icon(new ItemStack(ModItems.QUEST_BOARD.get()))
+                .icon(new ItemStack(RuneCraftoryItems.QUEST_BOARD.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.quests"), this.get("runecraftory.book.entry.quests.1")))
                 .page(CraftingRecipeBuilder.of(RuneCraftory.modRes("quest_board")))
                 .build("entry_quests", output, "category_npc");
@@ -255,7 +255,7 @@ public class BookContentGen extends ContentSetProvider {
     public void buildCategories(HolderLookup.Provider registries, BookContentOutput output) {
         CategoryBuilder.of(this.get("runecraftory.book.category.main"))
                 .landingText(this.get("runecraftory.book.category.main.desc"))
-                .icon(new ItemStack(ModItems.ICON_0.get()))
+                .icon(new ItemStack(RuneCraftoryItems.ICON_0.get()))
                 .build("category_main", output);
 
         CategoryBuilder.of(this.get("runecraftory.book.category.farming"))
@@ -265,7 +265,7 @@ public class BookContentGen extends ContentSetProvider {
 
         CategoryBuilder.of(this.get("runecraftory.book.category.equipment"))
                 .landingText(this.get("runecraftory.book.category.equipment.desc"))
-                .icon(new ItemStack(ModItems.SHORT_DAGGER.get()))
+                .icon(new ItemStack(RuneCraftoryItems.SHORT_DAGGER.get()))
                 .build("category_equipment", output);
 
         CategoryBuilder.of(this.get("runecraftory.book.category.npc"))
@@ -559,16 +559,16 @@ public class BookContentGen extends ContentSetProvider {
         this.add("runecraftory.book.category.entities.desc", "List of all monsters");
 
         List<RegistryEntrySupplier<EntityType<? extends Entity>, ?>> entities = new ArrayList<>();
-        this.entityDesc(entities, ModEntities.WOOLY, "Sheep like creature that is rather passive. Shearable.");
-        this.entityDesc(entities, ModEntities.ORC_ARCHER, "An orc but with a bow");
-        this.entityDesc(entities, ModEntities.BIG_MUCK, "Mushroom like create that attacks using spores");
+        this.entityDesc(entities, RuneCraftoryEntities.WOOLY, "Sheep like creature that is rather passive. Shearable.");
+        this.entityDesc(entities, RuneCraftoryEntities.ORC_ARCHER, "An orc but with a bow");
+        this.entityDesc(entities, RuneCraftoryEntities.BIG_MUCK, "Mushroom like create that attacks using spores");
 
-        this.entityDesc(entities, ModEntities.AMBROSIA, "Butterfly boss monster");
-        this.entityDesc(entities, ModEntities.THUNDERBOLT, "Horse said to be as fast as lightning");
-        this.entityDesc(entities, ModEntities.MARIONETTA, "Spooky old doll");
-        this.entityDesc(entities, ModEntities.HANDONETTA, "Whose hand is this???");
+        this.entityDesc(entities, RuneCraftoryEntities.AMBROSIA, "Butterfly boss monster");
+        this.entityDesc(entities, RuneCraftoryEntities.THUNDERBOLT, "Horse said to be as fast as lightning");
+        this.entityDesc(entities, RuneCraftoryEntities.MARIONETTA, "Spooky old doll");
+        this.entityDesc(entities, RuneCraftoryEntities.HANDONETTA, "Whose hand is this???");
 
-        for (RegistryEntrySupplier<EntityType<?>, ?> sup : ModEntities.getMonsters()) {
+        for (RegistryEntrySupplier<EntityType<?>, ?> sup : RuneCraftoryEntities.getMonsters()) {
             if (entities.contains(sup))
                 continue;
             this.add("runecraftory.book.entry.entity." + sup.getID(), "");

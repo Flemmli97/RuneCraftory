@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world.data.family;
 
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -44,7 +44,7 @@ public class FamilyHandler extends SavedData {
         return entry;
     }
 
-    public FamilyEntry getOrCreateEntry(EntityNPCBase npc) {
+    public FamilyEntry getOrCreateEntry(NPCEntity npc) {
         FamilyEntry entry = this.families.computeIfAbsent(npc.getUUID(), id -> new FamilyEntry(this,
                 npc.getUUID(), npc.getName(),
                 npc.isMale() ? NPCData.Gender.MALE : NPCData.Gender.FEMALE, false));

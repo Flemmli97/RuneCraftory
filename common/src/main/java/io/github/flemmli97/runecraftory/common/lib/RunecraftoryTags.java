@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.lib;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.blocks.MineralBlockTier;
+import io.github.flemmli97.runecraftory.common.blocks.util.MineralBlockTier;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

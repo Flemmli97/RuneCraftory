@@ -2,13 +2,13 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
@@ -22,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -39,7 +38,7 @@ public class CropUtils {
         if (crop.runecraftory$isAtMaxAge(state) && props.getGiantVersion().isPresent() && progress >= 0.5) {
             if (state.is(props.getGiantVersion().get()))
                 return;
-            if (state.getBlock() instanceof BlockCrop blockCrop) {
+            if (state.getBlock() instanceof ExtendedCropBlock blockCrop) {
                 int age = state.getValue(blockCrop.getAgeProperty());
                 if (age != blockCrop.getGiantAge()) {
                     level.setBlock(cropPos, state.setValue(blockCrop.getAgeProperty(), blockCrop.getGiantAge()), Block.UPDATE_ALL);
@@ -54,11 +53,11 @@ public class CropUtils {
         }
     }
 
-    public static CropProperties getPropertiesFor(CropBlock crop) {
+    public static CropProperties getPropertiesFor(net.minecraft.world.level.block.CropBlock crop) {
         return DataPackHandler.INSTANCE.cropManager().get(((CropBlockAccessor) crop).getSeedItem().asItem());
     }
 
-    public static void modifyCropDrops(BlockState state, LootParams.Builder builder, CropBlock block, List<ItemStack> list) {
+    public static void modifyCropDrops(BlockState state, LootParams.Builder builder, net.minecraft.world.level.block.CropBlock block, List<ItemStack> list) {
         CropProperties prop = getPropertiesFor(block);
         if (prop != null) {
             Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
@@ -74,7 +73,7 @@ public class CropUtils {
                 }
                 list.removeIf(remove::contains);
                 list.forEach(s -> modifyStack(prop, s, itemLevel));
-            } else if (block instanceof BlockCrop)
+            } else if (block instanceof ExtendedCropBlock)
                 list.clear();
         }
     }
@@ -92,7 +91,7 @@ public class CropUtils {
     }
 
     public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, InteractionHand hand, Function<ItemStack, ItemStack> stackConsumer) {
-        if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof CropBlock cropBlock))
+        if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock cropBlock))
             return;
         if (stackConsumer != null) {
             Block.getDrops(state, serverLevel, pos, null, entity, stack)
@@ -111,7 +110,7 @@ public class CropUtils {
         } else
             level.removeBlock(pos, false);
         if (entity instanceof ServerPlayer player) {
-            ModCriteria.HARVEST_CROP.get().trigger(player, state);
+            RuneCraftoryCriteria.HARVEST_CROP.get().trigger(player, state);
             if (cropBlock.isMaxAge(state)) {
                 spawnRuney(player, pos);
                 LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FARMING, 2f);
@@ -123,7 +122,7 @@ public class CropUtils {
 
     public static void spawnRuney(ServerPlayer player, BlockPos pos) {
         if (player.getRandom().nextFloat() < GeneralConfig.runeyChance) {
-            Entity entity = player.getRandom().nextFloat() < 0.4 ? ModEntities.RUNEY.get().create(player.serverLevel()) : ModEntities.STAT_BONUS.get().create(player.serverLevel());
+            Entity entity = player.getRandom().nextFloat() < 0.4 ? RuneCraftoryEntities.RUNEY.get().create(player.serverLevel()) : RuneCraftoryEntities.STAT_BONUS.get().create(player.serverLevel());
             entity.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
             player.level().addFreshEntity(entity);
         }

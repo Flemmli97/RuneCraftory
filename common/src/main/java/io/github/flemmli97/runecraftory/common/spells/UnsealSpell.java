@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
@@ -25,13 +25,13 @@ public class UnsealSpell extends Spell {
             return false;
         Consumer<LivingEntity> apply = living -> {
             if (lvl >= 10) {
-                entity.removeEffect(ModEffects.POISON.asHolder());
+                entity.removeEffect(RuneCraftoryEffects.POISON.asHolder());
             }
             if (lvl >= 5) {
-                entity.removeEffect(ModEffects.PARALYSIS.asHolder());
+                entity.removeEffect(RuneCraftoryEffects.PARALYSIS.asHolder());
                 entity.removeEffect(MobEffects.DIG_SLOWDOWN);
             }
-            entity.removeEffect(ModEffects.SEAL.asHolder());
+            entity.removeEffect(RuneCraftoryEffects.SEAL.asHolder());
             PoisonHealSpell.spawnStatusHealParticles(living);
         };
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), e -> {
@@ -48,7 +48,7 @@ public class UnsealSpell extends Spell {
         });
         apply.accept(entity);
         entities.forEach(apply);
-        playSound(entity, ModSounds.SPELL_GENERIC_HEAL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_HEAL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

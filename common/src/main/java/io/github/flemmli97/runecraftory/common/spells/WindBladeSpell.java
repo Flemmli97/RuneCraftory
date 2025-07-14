@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.WindBladeEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -32,7 +32,7 @@ public class WindBladeSpell extends Spell {
         float angle = -this.angle;
         float inc = (this.angle * 2) / (this.amount - 1);
         for (float y = angle; y <= this.angle; y += inc) {
-            EntityWindBlade wind = new EntityWindBlade(level, entity);
+            WindBladeEntity wind = new WindBladeEntity(level, entity);
             wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
             wind.shoot(entity, entity.getXRot(), entity.getYRot() - angle, 0, 0.45f, 0);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
@@ -45,7 +45,7 @@ public class WindBladeSpell extends Spell {
             }
             level.addFreshEntity(wind);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_WIND.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WIND.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 

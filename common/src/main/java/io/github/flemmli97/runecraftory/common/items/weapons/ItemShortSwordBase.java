@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -62,7 +62,7 @@ public class ItemShortSwordBase extends SwordItem implements ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.SHORT_SWORD.get(), stack);
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SHORT_SWORD.get(), stack);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ItemShortSwordBase extends SwordItem implements ExtendedWeapon {
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(Skills.SHORTSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.SHORT_SWORD_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.SHORTSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SHORT_SWORD_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -97,7 +97,7 @@ public class ItemShortSwordBase extends SwordItem implements ExtendedWeapon {
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.SHORT_SWORD_USE.get(), stack);
+                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SHORT_SWORD_USE.get(), stack);
                 return;
             }
             if (performRightClickAction(stack, entity, CombatUtils.getRange(entity, 0), CombatUtils.getWidth(entity, 1))) {

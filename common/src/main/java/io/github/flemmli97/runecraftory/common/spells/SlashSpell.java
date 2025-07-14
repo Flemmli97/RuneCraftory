@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
+import io.github.flemmli97.runecraftory.common.entities.misc.SlashResidueEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -17,7 +17,7 @@ public class SlashSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntitySlashResidue slash = new EntitySlashResidue(level, entity);
+        SlashResidueEntity slash = new SlashResidueEntity(level, entity);
         Vec3 pos = entity.position();
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         Vec3 dir;

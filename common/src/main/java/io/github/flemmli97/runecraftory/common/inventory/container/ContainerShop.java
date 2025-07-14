@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.network.S2CShopResponses;
-import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.NonNullList;
@@ -53,7 +53,7 @@ public class ContainerShop extends AbstractContainerMenu {
     }
 
     public ContainerShop(int windowID, Inventory playerInv, InventoryShop invShop) {
-        super(ModMenuTypes.SHOP_CONTAINER.get(), windowID);
+        super(RuneCraftoryMenuTypes.SHOP_CONTAINER.get(), windowID);
         this.invShop = invShop;
         if (this.invShop == null)
             throw new IllegalStateException("Tried creating a shop container but shop inventory was null");
@@ -183,13 +183,13 @@ public class ContainerShop extends AbstractContainerMenu {
         return this.price.get();
     }
 
-    public EntityNPCBase getShopOwner() {
+    public NPCEntity getShopOwner() {
         return this.invShop.npc;
     }
 
     private static InventoryShop read(Level level, Data data) {
         Entity entity = level.getEntity(data.entity());
-        if (entity instanceof EntityNPCBase npc) {
+        if (entity instanceof NPCEntity npc) {
             return new InventoryShop(npc, data.list());
         }
         return null;

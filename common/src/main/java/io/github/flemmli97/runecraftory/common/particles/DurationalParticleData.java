@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.particles;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -46,7 +46,7 @@ public class DurationalParticleData extends ColoredParticleData {
     }
 
     public DurationalParticleData(float red, float green, float blue, float alpha, float scale, int duration, int entityAnchor) {
-        super(ModParticles.DURATIONAL_PARTICLE.get(), red, green, blue, alpha, scale);
+        super(RuneCraftoryParticles.DURATIONAL_PARTICLE.get(), red, green, blue, alpha, scale);
         this.duration = duration;
         this.entityAnchor = entityAnchor;
     }

@@ -1,0 +1,94 @@
+package io.github.flemmli97.runecraftory.common.blocks;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
+import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+public class TreeSaplingBlock extends BushBlock implements Growable {
+
+    public static final MapCodec<TreeSaplingBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(propertiesCodec(),
+                    BuiltInRegistries.BLOCK.byNameCodec().fieldOf("base").forGetter(d -> d.treeBase.get())
+            ).apply(inst, (prop, base) -> new TreeSaplingBlock(prop, () -> base)));
+
+    protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
+
+    private final Supplier<? extends Block> treeBase;
+
+    public TreeSaplingBlock(Properties properties, Supplier<? extends Block> treeBase) {
+        super(properties);
+        this.treeBase = treeBase;
+    }
+
+    @Override
+    public MapCodec<TreeSaplingBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(Component.translatable("runecraftory.tooltip.sapling").withStyle(ChatFormatting.GRAY));
+        super.appendHoverText(stack, context, list, tooltipFlag);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return FarmlandHandler.isFarmBlock(state);
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (level instanceof ServerLevel serverLevel) {
+            FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, pos.below())
+                    .ifPresent(d -> d.onCropRemove(serverLevel, pos, newState));
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    @Override
+    public int runecraftory$getGrowableMaxAge() {
+        return TreeBaseBlock.MAX_AGE;
+    }
+
+    @Override
+    public BlockState runecraftory$getGrowableStateForAge(BlockState current, int age) {
+        if (age == 0)
+            return this.defaultBlockState();
+        return this.treeBase.get().defaultBlockState().setValue(TreeBaseBlock.AGE, 0);
+    }
+
+    @Override
+    public boolean runecraftory$isAtMaxAge(BlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean canGrow(ServerLevel level, BlockPos pos, BlockState state) {
+        return BlockPos.betweenClosedStream(pos.offset(-1, 0, -1), pos.offset(1, 2, 1))
+                .allMatch(p -> p.equals(pos) || TreeBaseBlock.isAirOrReplaceable(level.getBlockState(p)));
+    }
+}

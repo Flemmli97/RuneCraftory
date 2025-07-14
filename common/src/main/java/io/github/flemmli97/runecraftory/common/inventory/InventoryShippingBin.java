@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -36,7 +36,7 @@ public class InventoryShippingBin extends SimpleItemContainer {
                 continue;
             money += basePrice * stack.getCount();
             data.addShippingItem(stack);
-            ModCriteria.SHIPPING_TRIGGER.get().trigger(player, data, stack);
+            RuneCraftoryCriteria.SHIPPING_TRIGGER.get().trigger(player, data, stack);
             QuestHandler.getData(player).trigger(ShippingTracker.KEY, stack);
             this.setItem(i, ItemStack.EMPTY);
         }

@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
+import io.github.flemmli97.runecraftory.common.entities.misc.BulletEntity;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +19,7 @@ public class TripleFireBulletSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityBullet projectile = new EntityBullet(level, entity);
+        BulletEntity projectile = new BulletEntity(level, entity);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         Vec3 dir;
         if (target != null) {
@@ -37,14 +37,14 @@ public class TripleFireBulletSpell extends Spell {
         for (float y = -15; y <= 15; y += 30) {
             Vector3d newDir = new Vector3d(dir.x(), dir.y(), dir.z())
                     .rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
-            EntityBullet other = new EntityBullet(level, entity);
+            BulletEntity other = new BulletEntity(level, entity);
             other.setStraight();
             other.setElement(ItemElement.FIRE);
             other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             other.shoot(newDir.x(), newDir.y(), newDir.z(), 1, 0);
             level.addFreshEntity(other);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

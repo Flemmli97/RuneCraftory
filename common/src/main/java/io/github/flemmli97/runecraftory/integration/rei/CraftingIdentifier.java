@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.integration.rei;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -30,10 +30,10 @@ public record CraftingIdentifier(CategoryIdentifier<SextupleDisplay> identifier,
         this(CategoryIdentifier.of(RuneCraftory.modRes(craftingType.getId() + "_category")),
                 craftingType,
                 switch (craftingType) {
-                    case FORGE -> ModCrafting.FORGE;
-                    case ACCESSORY_WORKBENCH -> ModCrafting.ARMOR;
-                    case CHEMISTRY_SET -> ModCrafting.CHEMISTRY;
-                    case COOKING_TABLE -> ModCrafting.COOKING;
+                    case FORGE -> RuneCraftoryCrafting.FORGE;
+                    case ACCESSORY_WORKBENCH -> RuneCraftoryCrafting.ARMOR;
+                    case CHEMISTRY_SET -> RuneCraftoryCrafting.CHEMISTRY;
+                    case COOKING_TABLE -> RuneCraftoryCrafting.COOKING;
                 });
         IDENTIFIERS.put(craftingType, this);
     }

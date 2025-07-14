@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.neoforge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -18,16 +18,16 @@ public class SoundGen extends SoundDefinitionsProvider {
 
     @Override
     public void registerSounds() {
-        for (RegistryEntrySupplier<SoundEvent, ?> sup : ModSounds.SOUND_EVENTS.getEntries()) {
-            if (ModSounds.BGM.stream().anyMatch(h -> h.sound().equals(sup)))
+        for (RegistryEntrySupplier<SoundEvent, ?> sup : RuneCraftorySounds.SOUND_EVENTS.getEntries()) {
+            if (RuneCraftorySounds.BGM.stream().anyMatch(h -> h.sound().equals(sup)))
                 continue;
-            int num = ModSounds.VARIATIONS.getInt(sup.getID());
+            int num = RuneCraftorySounds.VARIATIONS.getInt(sup.getID());
             if (num > 0)
                 this.add(sup.get(), num);
             else
                 this.add(sup.get());
         }
-        for (ModSounds.BGMHolder bgm : ModSounds.BGM) {
+        for (RuneCraftorySounds.BGMHolder bgm : RuneCraftorySounds.BGM) {
             this.addBgmWith(bgm.sound().get(), bgm.bgm().location());
         }
     }

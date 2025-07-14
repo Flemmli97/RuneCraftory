@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.recipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -64,12 +64,12 @@ public class LevelUpUpgradeRecipe implements Recipe<SingleRecipeInput> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.LEVEL_UPGRADE_SERIALIZER.get();
+        return RuneCraftoryCrafting.LEVEL_UPGRADE_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModCrafting.LEVEL_UP.get();
+        return RuneCraftoryCrafting.LEVEL_UP.get();
     }
 
     @Override

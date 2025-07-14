@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -30,7 +30,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
 
     private final Player entity;
 
-    private AttackAction currentAction = ModAttackActions.NONE.get();
+    private AttackAction currentAction = RuneCraftoryAttackActions.NONE.get();
     private int comboCount;
     private boolean scheduledAction;
 
@@ -79,7 +79,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
     }
 
     private AttackAction.OverrideType checkOverride(AttackAction action, boolean allowNone) {
-        if (allowNone && (this.currentAction == ModAttackActions.NONE.get() || this.currentAnimation == null)) {
+        if (allowNone && (this.currentAction == RuneCraftoryAttackActions.NONE.get() || this.currentAnimation == null)) {
             return this.timeSinceLastChange < COOLDOWN ? AttackAction.OverrideType.NONE : AttackAction.OverrideType.REPLACE;
         }
         if (this.entity.getVehicle() != null && !action.usableOnMounts(this.comboCount + 1)) {
@@ -98,7 +98,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
             action = change;
         if (comboIdx != -1)
             this.comboCount = comboIdx;
-        if (action == ModAttackActions.NONE.get()) {
+        if (action == RuneCraftoryAttackActions.NONE.get()) {
             this.resetStates();
         }
         this.lastAnimation = this.currentAnimation;
@@ -106,7 +106,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
         this.currentAction = action;
         this.scheduledAction = false;
         this.currentAnimation = action.getAnimation(this.entity, this.getComboCount());
-        if (this.currentAction != ModAttackActions.NONE.get()) {
+        if (this.currentAction != RuneCraftoryAttackActions.NONE.get()) {
             this.comboCount++;
         }
         this.entity.yBodyRot = this.entity.yHeadRot;
@@ -140,7 +140,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
                 this.setAnimationBasedOnState(this.currentAction, handler.advanceTo().get(this), true);
                 return;
             } else if (this.currentAnimation.tick(1 + (int) (this.currentAnimation.getSpeed() * (handler != null ? handler.resetTime() : 0)))) {
-                this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, false);
+                this.setAnimationBasedOnState(RuneCraftoryAttackActions.NONE.get(), -1, false);
             } else {
                 ItemStack weapon = this.get(DataKey.USED_WEAPON);
                 if (this.entity instanceof ServerPlayer player) {
@@ -155,7 +155,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
                         }
                     }
                     if (changedItem) {
-                        this.setAnimationBasedOnState(ModAttackActions.NONE.get(), -1, true);
+                        this.setAnimationBasedOnState(RuneCraftoryAttackActions.NONE.get(), -1, true);
                     }
                 }
                 this.currentAction.run(this.entity, weapon, this, this.currentAnimation);

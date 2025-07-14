@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.ThrowItemAt;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
@@ -39,22 +39,22 @@ import java.util.function.Predicate;
 public class SerializableBehaviours {
 
     public static final SerializableBehaviour<Unit> IDLE = new SerializableBehaviour<>(MapCodec.unit(Unit.INSTANCE),
-            data -> List.of(new Idle<EntityNPCBase>().runFor(e -> 1)));
+            data -> List.of(new Idle<NPCEntity>().runFor(e -> 1)));
     public static final SerializableBehaviour<WalkToData> WALK_TO = new SerializableBehaviour<>(WalkToData.CODEC,
-            data -> List.of(new SetWalkTargetToAttackTarget<EntityNPCBase>()
+            data -> List.of(new SetWalkTargetToAttackTarget<NPCEntity>()
                             .speedMod((e, t) -> data.speed()).closeEnoughDist((e, t) -> data.closeEnough()),
                     DummyBehaviour.opt(new MoveToWalkTarget<>())));
     public static final SerializableBehaviour<WalkAwayData> WALK_AWAY = new SerializableBehaviour<>(WalkAwayData.CODEC,
-            data -> List.of(new SetWalkTargetAwayFromTarget<EntityNPCBase>()
+            data -> List.of(new SetWalkTargetAwayFromTarget<NPCEntity>()
                             .speedMod((e, t) -> data.speed()).minDist(data.minDistance()).radius(data.radius()),
                     DummyBehaviour.opt(new MoveToWalkTarget<>())));
     public static final SerializableBehaviour<KeepDistanceData> KEEP_DISTANCE = new SerializableBehaviour<>(KeepDistanceData.CODEC,
-            data -> List.of(new SetWalkTargetWithinDist<EntityNPCBase>()
+            data -> List.of(new SetWalkTargetWithinDist<NPCEntity>()
                             .speedMod((e, t) -> data.speed())
                             .min(data.min()).max(data.max()),
                     DummyBehaviour.opt(new MoveToWalkTarget<>())));
     public static final SerializableBehaviour<RandomWalkData> RANDOM_WALK = new SerializableBehaviour<>(RandomWalkData.CODEC,
-            data -> List.of(new SetRandomWalkTarget<EntityNPCBase>()
+            data -> List.of(new SetRandomWalkTarget<NPCEntity>()
                             .speedModifier((e, t) -> data.speed()).setRadius(data.radius()),
                     DummyBehaviour.opt(new MoveToWalkTarget<>())));
     public static final SerializableBehaviour<WalkToData> WALK_TO_FOLLOW = new SerializableBehaviour<>(WalkToData.CODEC,
@@ -94,7 +94,7 @@ public class SerializableBehaviours {
     public static final SerializableBehaviour<SpellAttackData> ATTACK_WITH_SPELL = new SerializableBehaviour<>(SpellAttackData.CODEC,
             new SerializableBehaviour.BehaviourSequenceFactory<>() {
                 @Override
-                public List<ExtendedBehaviour<EntityNPCBase>> create(SpellAttackData data) {
+                public List<ExtendedBehaviour<NPCEntity>> create(SpellAttackData data) {
                     return List.of(new CustomBehaviour<>(e -> {
                         LivingEntity target = BrainUtils.getTargetOfEntity(e);
                         if (target != null) {
@@ -105,7 +105,7 @@ public class SerializableBehaviours {
                 }
 
                 @Override
-                public void addCondition(SpellAttackData data, Consumer<Predicate<EntityNPCBase>> predicate) {
+                public void addCondition(SpellAttackData data, Consumer<Predicate<NPCEntity>> predicate) {
                     if (!data.ignoreSeal())
                         predicate.accept(npc -> !EntityUtils.sealed(npc));
                 }
@@ -157,7 +157,7 @@ public class SerializableBehaviours {
     public record SpellAttackData(Spell spell, boolean ignoreSeal, NumberProvider amount) {
 
         public static final MapCodec<SpellAttackData> CODEC = RecordCodecBuilder.mapCodec(inst ->
-                inst.group(ModSpells.SPELLS.registry().byNameCodec().fieldOf("spell").forGetter(SpellAttackData::spell),
+                inst.group(RuneCraftorySpells.SPELLS.registry().byNameCodec().fieldOf("spell").forGetter(SpellAttackData::spell),
                         Codec.BOOL.fieldOf("ignore_seal").forGetter(SpellAttackData::ignoreSeal),
                         NumberProviders.CODEC.fieldOf("amount").forGetter(SpellAttackData::amount)
                 ).apply(inst, SpellAttackData::new));

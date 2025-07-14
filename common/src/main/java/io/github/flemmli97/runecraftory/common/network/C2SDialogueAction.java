@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -41,7 +41,7 @@ public class C2SDialogueAction implements CustomPacketPayload {
 
     public static void handle(C2SDialogueAction pkt, ServerPlayer sender) {
         Entity entity = sender.level().getEntity(pkt.id);
-        if (entity instanceof EntityNPCBase npc) {
+        if (entity instanceof NPCEntity npc) {
             npc.handleDialogueAction(sender, pkt.convCtx, pkt.conversationID, pkt.action);
         }
     }

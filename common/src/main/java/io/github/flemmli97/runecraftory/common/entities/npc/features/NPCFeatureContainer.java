@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -25,7 +25,7 @@ public class NPCFeatureContainer {
         return (T) this.map.get(type);
     }
 
-    public void buildFromLooks(EntityNPCBase npc, Collection<NPCFeature.NPCFeatureHolder<?>> features) {
+    public void buildFromLooks(NPCEntity npc, Collection<NPCFeature.NPCFeatureHolder<?>> features) {
         this.map.clear();
         features.forEach(feat -> this.map.put(feat.getType(), feat.create(npc)));
     }

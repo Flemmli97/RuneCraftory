@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.particles.BlockStateParticleData;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +25,7 @@ public class GroundShakeParticleSpawner extends ProjectileSummonHelperEntity {
     }
 
     public GroundShakeParticleSpawner(Level level, LivingEntity caster, double arc, double range) {
-        super(ModEntities.GROUND_SHAKE_PARTICLES.get(), level, caster);
+        super(RuneCraftoryEntities.GROUND_SHAKE_PARTICLES.get(), level, caster);
         this.setPos(caster.getX(), caster.getY(), caster.getZ());
         this.maxLivingTicks = 8;
         this.arc = arc;
@@ -48,7 +48,7 @@ public class GroundShakeParticleSpawner extends ProjectileSummonHelperEntity {
                 continue;
             this.pos.add(pos);
             BlockState state = this.level().getBlockState(pos);
-            ((ServerLevel) this.level()).sendParticles(new BlockStateParticleData(ModParticles.BLOCK.get(), state, this.random.nextFloat() * 360, this.random.nextFloat() * 10, 30),
+            ((ServerLevel) this.level()).sendParticles(new BlockStateParticleData(RuneCraftoryParticles.BLOCK.get(), state, this.random.nextFloat() * 360, this.random.nextFloat() * 10, 30),
                     pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0, 0, this.random.nextDouble() * 0.05 + 0.15, 0, 1);
         }
     }

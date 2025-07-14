@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityElementalBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.ElementalBallEntity;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
@@ -21,7 +21,7 @@ public class IceBallDropSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityElementalBall ball = new EntityElementalBall(level, entity, ItemElement.WATER);
+        ElementalBallEntity ball = new ElementalBallEntity(level, entity, ItemElement.WATER);
         ball.setVariant(1);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {
@@ -33,7 +33,7 @@ public class IceBallDropSpell extends Spell {
         ball.setDeltaMovement(new Vec3(0, -1, 0).scale(0.3));
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         level.addFreshEntity(ball);
-        playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

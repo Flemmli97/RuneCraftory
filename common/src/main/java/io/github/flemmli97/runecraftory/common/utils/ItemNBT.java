@@ -15,9 +15,9 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
@@ -41,18 +41,18 @@ import java.util.function.Consumer;
 public class ItemNBT {
 
     public static int itemLevel(ItemStack stack) {
-        return stack.getOrDefault(ModDataComponentTypes.LEVEL.get(), 1);
+        return stack.getOrDefault(RuneCraftoryDataComponentTypes.LEVEL.get(), 1);
     }
 
     public static ItemStack getLeveledItem(ItemStack stack, int level) {
         if (shouldHaveLevel(stack)) {
-            stack.set(ModDataComponentTypes.LEVEL.get(), Mth.clamp(level, 1, 10));
+            stack.set(RuneCraftoryDataComponentTypes.LEVEL.get(), Mth.clamp(level, 1, 10));
         }
         return stack;
     }
 
     public static Map<Holder<Attribute>, Double> statIncrease(ItemStack stack) {
-        ItemAttributeData stats = stack.get(ModDataComponentTypes.STATS.get());
+        ItemAttributeData stats = stack.get(RuneCraftoryDataComponentTypes.STATS.get());
         if (stats == null) {
             return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats)
                     .orElse(Map.of());
@@ -93,8 +93,8 @@ public class ItemNBT {
     public static Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats(ItemStack stack) {
         FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (props == null)
-            return Pair.of(new TreeMap<>(ModAttributes.SORTED), new TreeMap<>(ModAttributes.SORTED));
-        FoodAttributeData data = stack.get(ModDataComponentTypes.FOOD_BUFF.get());
+            return Pair.of(new TreeMap<>(RuneCraftoryAttributes.SORTED), new TreeMap<>(RuneCraftoryAttributes.SORTED));
+        FoodAttributeData data = stack.get(RuneCraftoryDataComponentTypes.FOOD_BUFF.get());
         if (data == null) {
             return Pair.of(props.effects(), props.effectsMultiplier());
         }
@@ -102,12 +102,12 @@ public class ItemNBT {
     }
 
     public static void setElement(ItemElement element, ItemStack stack) {
-        ItemElement stackElement = stack.get(ModDataComponentTypes.ELEMENT.get());
-        stack.set(ModDataComponentTypes.ELEMENT.get(), stackElement == null || stackElement == element ? element : ItemElement.NONE);
+        ItemElement stackElement = stack.get(RuneCraftoryDataComponentTypes.ELEMENT.get());
+        stack.set(RuneCraftoryDataComponentTypes.ELEMENT.get(), stackElement == null || stackElement == element ? element : ItemElement.NONE);
     }
 
     public static ItemElement getElement(ItemStack stack) {
-        ItemElement stackElement = stack.get(ModDataComponentTypes.ELEMENT.get());
+        ItemElement stackElement = stack.get(RuneCraftoryDataComponentTypes.ELEMENT.get());
         if (stackElement != null) {
             return stackElement;
         }
@@ -120,9 +120,9 @@ public class ItemNBT {
             return ItemStack.EMPTY;
         ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).orElse(null);
         if (ItemNBT.shouldHaveStats(upgrade)) {
-            if (!crafting || stack.has(ModDataComponentTypes.ORIGINAL_ITEM.get()))
+            if (!crafting || stack.has(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get()))
                 return stack;
-            boolean lightOre = stack.getOrDefault(ModDataComponentTypes.LIGHT_ORE.get(), false);
+            boolean lightOre = stack.getOrDefault(RuneCraftoryDataComponentTypes.LIGHT_ORE.get(), false);
             if (stack.is(RunecraftoryTags.Items.EQUIPMENT)) {
                 if (!upgrade.is(RunecraftoryTags.Items.EQUIPMENT))
                     return stack;
@@ -152,57 +152,57 @@ public class ItemNBT {
             if (stat != null) {
                 stat.getArmorEffect().ifPresent(effect -> {
                     if (effect.value().canBeAppliedTo(stack)) {
-                        stack.getOrDefault(ModDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT).add(effect);
+                        stack.getOrDefault(RuneCraftoryDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT).add(effect);
                     }
                 });
             }
             return stack;
         }
-        stack.set(ModDataComponentTypes.LEVEL.get(), !crafting ? level + 1 : level);
+        stack.set(RuneCraftoryDataComponentTypes.LEVEL.get(), !crafting ? level + 1 : level);
 
         float efficiency = 1;
         if (!crafting) {
-            ListItemStackHolder upgrades = stack.getOrDefault(ModDataComponentTypes.UPGRADES.get(), ListItemStackHolder.DEFAULT);
+            ListItemStackHolder upgrades = stack.getOrDefault(RuneCraftoryDataComponentTypes.UPGRADES.get(), ListItemStackHolder.DEFAULT);
             int similar = upgrades.matchesItem(upgrade);
             efficiency = similar > 0 ? (float) (Math.pow(0.5, similar)) : 1;
-            stack.set(ModDataComponentTypes.UPGRADES.get(), upgrades.add(upgrade));
+            stack.set(RuneCraftoryDataComponentTypes.UPGRADES.get(), upgrades.add(upgrade));
         } else {
-            ListItemStackHolder bonus = stack.getOrDefault(ModDataComponentTypes.CRAFTING_BONUS.get(), ListItemStackHolder.DEFAULT);
-            stack.set(ModDataComponentTypes.UPGRADES.get(), bonus.add(upgrade));
+            ListItemStackHolder bonus = stack.getOrDefault(RuneCraftoryDataComponentTypes.CRAFTING_BONUS.get(), ListItemStackHolder.DEFAULT);
+            stack.set(RuneCraftoryDataComponentTypes.UPGRADES.get(), bonus.add(upgrade));
         }
         //Special Item Tags
-        if (upgrade.getItem() == ModItems.GLASS.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
-            stack.set(ModDataComponentTypes.MAGNIFYING_GLASS.get(), Unit.INSTANCE);
-        if (upgrade.getItem() == ModItems.SCRAP_PLUS.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
-            stack.set(ModDataComponentTypes.SCRAP_METAL_PLUS.get(), Unit.INSTANCE);
-        boolean hasObjectX = stack.getOrDefault(ModDataComponentTypes.OBJECT_X.get(), false);
-        if (upgrade.getItem() == ModItems.OBJECT_X.get())
-            stack.set(ModDataComponentTypes.OBJECT_X.get(), !hasObjectX);
-        if (type == CraftingType.FORGE && upgrade.getItem() == ModItems.INVIS_STONE.get())
-            stack.set(ModDataComponentTypes.INVISIBLE.get(), Unit.INSTANCE);
+        if (upgrade.getItem() == RuneCraftoryItems.GLASS.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
+            stack.set(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get(), Unit.INSTANCE);
+        if (upgrade.getItem() == RuneCraftoryItems.SCRAP_PLUS.get() && stack.is(RunecraftoryTags.Items.UPGRADABLE_HELD))
+            stack.set(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get(), Unit.INSTANCE);
+        boolean hasObjectX = stack.getOrDefault(RuneCraftoryDataComponentTypes.OBJECT_X.get(), false);
+        if (upgrade.getItem() == RuneCraftoryItems.OBJECT_X.get())
+            stack.set(RuneCraftoryDataComponentTypes.OBJECT_X.get(), !hasObjectX);
+        if (type == CraftingType.FORGE && upgrade.getItem() == RuneCraftoryItems.INVIS_STONE.get())
+            stack.set(RuneCraftoryDataComponentTypes.INVISIBLE.get(), Unit.INSTANCE);
         if (type == CraftingType.FORGE && upgrade.is(RunecraftoryTags.Items.SCALES))
-            stack.set(ModDataComponentTypes.DRAGON_SCALE.get(), Unit.INSTANCE);
-        if (crafting && upgrade.getItem() == ModItems.LIGHT_ORE.get() && !stack.has(ModDataComponentTypes.ORIGINAL_ITEM.get()))
-            stack.set(ModDataComponentTypes.LIGHT_ORE.get(), true);
+            stack.set(RuneCraftoryDataComponentTypes.DRAGON_SCALE.get(), Unit.INSTANCE);
+        if (crafting && upgrade.getItem() == RuneCraftoryItems.LIGHT_ORE.get() && !stack.has(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get()))
+            stack.set(RuneCraftoryDataComponentTypes.LIGHT_ORE.get(), true);
 
         // Apply double/tenfold steel. Works only once
-        boolean applyDoubleSteel = stack.getOrDefault(ModDataComponentTypes.DOUBLE_STEEL.get(), false);
-        if (!stack.has(ModDataComponentTypes.DOUBLE_STEEL.get())) {
-            if (upgrade.getItem() == ModItems.STEEL_DOUBLE.get())
-                stack.set(ModDataComponentTypes.DOUBLE_STEEL.get(), true);
+        boolean applyDoubleSteel = stack.getOrDefault(RuneCraftoryDataComponentTypes.DOUBLE_STEEL.get(), false);
+        if (!stack.has(RuneCraftoryDataComponentTypes.DOUBLE_STEEL.get())) {
+            if (upgrade.getItem() == RuneCraftoryItems.STEEL_DOUBLE.get())
+                stack.set(RuneCraftoryDataComponentTypes.DOUBLE_STEEL.get(), true);
         } else if (applyDoubleSteel) {
-            stack.set(ModDataComponentTypes.DOUBLE_STEEL.get(), false);
+            stack.set(RuneCraftoryDataComponentTypes.DOUBLE_STEEL.get(), false);
         }
-        boolean applyTenSteel = stack.getOrDefault(ModDataComponentTypes.TENFOLD_STEEL.get(), false);
-        if (!stack.has(ModDataComponentTypes.TENFOLD_STEEL.get())) {
-            if (upgrade.getItem() == ModItems.STEEL_TEN.get())
-                stack.set(ModDataComponentTypes.TENFOLD_STEEL.get(), true);
+        boolean applyTenSteel = stack.getOrDefault(RuneCraftoryDataComponentTypes.TENFOLD_STEEL.get(), false);
+        if (!stack.has(RuneCraftoryDataComponentTypes.TENFOLD_STEEL.get())) {
+            if (upgrade.getItem() == RuneCraftoryItems.STEEL_TEN.get())
+                stack.set(RuneCraftoryDataComponentTypes.TENFOLD_STEEL.get(), true);
         } else if (applyTenSteel) {
-            stack.set(ModDataComponentTypes.TENFOLD_STEEL.get(), false);
+            stack.set(RuneCraftoryDataComponentTypes.TENFOLD_STEEL.get(), false);
         }
 
         if (stat != null) {
-            ItemAttributeData stats = stack.getOrDefault(ModDataComponentTypes.STATS.get(), ItemAttributeData.DEFAULT);
+            ItemAttributeData stats = stack.getOrDefault(RuneCraftoryDataComponentTypes.STATS.get(), ItemAttributeData.DEFAULT);
             if (stats.getBaseStats().isEmpty()) {
                 ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
                 if (base != null && !base.itemStats().isEmpty()) {
@@ -211,7 +211,7 @@ public class ItemNBT {
             }
             boolean applyUpgradeStat = !upgrade.is(type.upgradeBlacklist) &&
                     (!upgrade.is(RunecraftoryTags.Items.ONE_TIME_UPGRADE)
-                            || stack.getOrDefault(ModDataComponentTypes.UPGRADES.get(), ListItemStackHolder.DEFAULT).matchesItem(upgrade) == 0);
+                            || stack.getOrDefault(RuneCraftoryDataComponentTypes.UPGRADES.get(), ListItemStackHolder.DEFAULT).matchesItem(upgrade) == 0);
 
             if (applyUpgradeStat) {
                 TagKey<Attribute> blacklist = null;
@@ -234,12 +234,12 @@ public class ItemNBT {
                 }
                 stats = stats.add(upgradeStats);
             }
-            stack.set(ModDataComponentTypes.STATS.get(), stats);
+            stack.set(RuneCraftoryDataComponentTypes.STATS.get(), stats);
             if (isWeapon(stack)) {
                 setElement(stat.element(), stack);
             }
             if (stack.getItem() instanceof ItemStaffBase) {
-                stack.update(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT, data -> {
+                stack.update(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT, data -> {
                     if (stat.getTier1Spell().isPresent())
                         data = data.setTier1Spell(stat.getTier1Spell().get());
                     if (stat.getTier2Spell().isPresent())
@@ -250,7 +250,7 @@ public class ItemNBT {
                 });
             }
             if (stat.getArmorEffect().isPresent() && stat.getArmorEffect().get().value().canBeAppliedTo(stack)) {
-                stack.update(ModDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT, data -> data.add(stat.getArmorEffect().get()));
+                stack.update(RuneCraftoryDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT, data -> data.add(stat.getArmorEffect().get()));
             }
         }
         return stack;
@@ -260,7 +260,7 @@ public class ItemNBT {
         ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(toApply.getItem()).orElse(null);
         //Setup base stuff
         if (stat != null) {
-            ItemAttributeData stats = stack.getOrDefault(ModDataComponentTypes.STATS.get(), ItemAttributeData.DEFAULT);
+            ItemAttributeData stats = stack.getOrDefault(RuneCraftoryDataComponentTypes.STATS.get(), ItemAttributeData.DEFAULT);
             ItemStat base = DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).orElse(null);
             if (base != null) {
                 Map<Holder<Attribute>, Double> baseStats = new HashMap<>();
@@ -273,11 +273,11 @@ public class ItemNBT {
                     } else
                         baseStats.put(entry.getKey(), entry.getValue());
                 }
-                stack.set(ModDataComponentTypes.STATS.get(), stats.base(baseStats));
+                stack.set(RuneCraftoryDataComponentTypes.STATS.get(), stats.base(baseStats));
             }
-            stack.set(ModDataComponentTypes.ELEMENT.get(), stat.element());
+            stack.set(RuneCraftoryDataComponentTypes.ELEMENT.get(), stat.element());
             if (stack.getItem() instanceof ItemStaffBase) {
-                stack.update(ModDataComponentTypes.STAFF.get(), StaffData.DEFAULT, data -> {
+                stack.update(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT, data -> {
                     if (stat.getTier1Spell().isPresent())
                         data = data.setTier1Spell(stat.getTier1Spell().get());
                     if (stat.getTier2Spell().isPresent())
@@ -288,12 +288,12 @@ public class ItemNBT {
                 });
             }
             if (stat.getArmorEffect().isPresent() && stat.getArmorEffect().get().value().canBeAppliedTo(stack)) {
-                stack.update(ModDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT, data -> data.add(stat.getArmorEffect().get()));
+                stack.update(RuneCraftoryDataComponentTypes.ARMOR_EFFECT.get(), ArmorEffectData.DEFAULT, data -> data.add(stat.getArmorEffect().get()));
             }
         }
-        stack.set(ModDataComponentTypes.ORIGINAL_ITEM.get(), new ItemStackHolder(toApply));
+        stack.set(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get(), new ItemStackHolder(toApply));
         // Reapply all items used to craft the applied item
-        ListItemStackHolder bonus = toApply.get(ModDataComponentTypes.CRAFTING_BONUS.get());
+        ListItemStackHolder bonus = toApply.get(RuneCraftoryDataComponentTypes.CRAFTING_BONUS.get());
         if (bonus != null) {
             bonus.forEach(added -> addUpgradeItem(stack, added, true, crafting));
         }
@@ -301,15 +301,15 @@ public class ItemNBT {
     }
 
     public static ItemStack addFoodBonusItem(ItemStack stack, ItemStack stackToAdd) {
-        ListItemStackHolder bonus = stack.getOrDefault(ModDataComponentTypes.CRAFTING_BONUS.get(), ListItemStackHolder.DEFAULT);
-        stack.set(ModDataComponentTypes.UPGRADES.get(), bonus.add(stackToAdd));
+        ListItemStackHolder bonus = stack.getOrDefault(RuneCraftoryDataComponentTypes.CRAFTING_BONUS.get(), ListItemStackHolder.DEFAULT);
+        stack.set(RuneCraftoryDataComponentTypes.UPGRADES.get(), bonus.add(stackToAdd));
 
         FoodProperties props = DataPackHandler.INSTANCE.foodManager().get(stackToAdd.getItem());
-        boolean hasObjectX = stack.getOrDefault(ModDataComponentTypes.OBJECT_X.get(), false);
-        if (stackToAdd.getItem() == ModItems.OBJECT_X.get())
-            stack.set(ModDataComponentTypes.OBJECT_X.get(), !hasObjectX);
+        boolean hasObjectX = stack.getOrDefault(RuneCraftoryDataComponentTypes.OBJECT_X.get(), false);
+        if (stackToAdd.getItem() == RuneCraftoryItems.OBJECT_X.get())
+            stack.set(RuneCraftoryDataComponentTypes.OBJECT_X.get(), !hasObjectX);
         if (props != null) {
-            FoodAttributeData stats = stack.getOrDefault(ModDataComponentTypes.FOOD_BUFF.get(), FoodAttributeData.DEFAULT);
+            FoodAttributeData stats = stack.getOrDefault(RuneCraftoryDataComponentTypes.FOOD_BUFF.get(), FoodAttributeData.DEFAULT);
             Map<Holder<Attribute>, Double> flatStats = new HashMap<>();
             for (Map.Entry<Holder<Attribute>, Double> entry : props.cookingBonus().entrySet()) {
                 double amount = entry.getValue();
@@ -326,7 +326,7 @@ public class ItemNBT {
                 multStats.put(entry.getKey(), amount);
             }
             stats = stats.addMultiplier(multStats);
-            stack.set(ModDataComponentTypes.FOOD_BUFF.get(), stats);
+            stack.set(RuneCraftoryDataComponentTypes.FOOD_BUFF.get(), stats);
         }
         return stack;
     }
@@ -345,14 +345,14 @@ public class ItemNBT {
 
     public static boolean usedLightOre(ItemStack stack) {
         if (shouldHaveStats(stack)) {
-            if (stack.getOrDefault(ModDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty())
+            if (stack.getOrDefault(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty())
                 return false;
-            return stack.has(ModDataComponentTypes.LIGHT_ORE.get());
+            return stack.has(RuneCraftoryDataComponentTypes.LIGHT_ORE.get());
         }
         return false;
     }
 
     public static double attackSpeedModifier(LivingEntity entity) {
-        return entity.getAttributeValue(ModAttributes.ATTACK_SPEED.asHolder());
+        return entity.getAttributeValue(RuneCraftoryAttributes.ATTACK_SPEED.asHolder());
     }
 }

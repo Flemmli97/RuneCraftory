@@ -26,11 +26,11 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeature
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SlimLookFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.TypedIndexRange;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCBehaviour;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -61,42 +61,42 @@ public class NPCDataGen extends NPCDataProvider {
     protected void add(HolderLookup.Provider provider) {
         ResourceLocation genericAttack = this.addAttackActions(RuneCraftory.modRes("generic_melee_attack"), new NPCAttackActions.Builder()
                 .addSequence(1)
-                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
-                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .add(RuneCraftoryNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
                 .timeout(UniformGenerator.between(30, 80))
                 .end());
 
         ResourceLocation meleeAndFireball = this.addAttackActions(RuneCraftory.modRes("melee_fireball_attack"), new NPCAttackActions.Builder()
                 .addSequence(5)
-                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
-                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .add(RuneCraftoryNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
                 .timeout(UniformGenerator.between(30, 80))
                 .end()
                 .addSequence(1)
-                .add(ModNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
-                .add(ModNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(ModSpells.FIREBALL.get())))
+                .add(RuneCraftoryNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(RuneCraftorySpells.FIREBALL.get())))
                 .timeout(UniformGenerator.between(50, 100))
                 .end());
         ResourceLocation meleeAndHeal = this.addAttackActions(RuneCraftory.modRes("melee_heal_attack"), new NPCAttackActions.Builder()
                 .addSequence(5)
-                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
-                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .add(RuneCraftoryNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
                 .timeout(UniformGenerator.between(30, 80))
                 .end()
                 .addSequence(1)
-                .add(ModNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 4, 7)))
-                .add(ModNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(ModSpells.CURE_ALL.get())))
+                .add(RuneCraftoryNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 4, 7)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(RuneCraftorySpells.CURE_ALL.get())))
                 .timeout(UniformGenerator.between(40, 80))
                 .end());
         ResourceLocation meleeAndWater = this.addAttackActions(RuneCraftory.modRes("melee_water_attack"), new NPCAttackActions.Builder()
                 .addSequence(5)
-                .add(ModNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
-                .add(ModNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+                .add(RuneCraftoryNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
                 .timeout(UniformGenerator.between(30, 80))
                 .end()
                 .addSequence(1)
-                .add(ModNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
-                .add(ModNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(ModSpells.WATER_LASER.get())))
+                .add(RuneCraftoryNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
+                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(RuneCraftorySpells.WATER_LASER.get())))
                 .timeout(UniformGenerator.between(50, 100))
                 .end());
 
@@ -104,7 +104,7 @@ public class NPCDataGen extends NPCDataProvider {
                 GiftData.builder(RunecraftoryTags.Items.GENERIC_TRASH, "runecraftory.gift.trash", "Trash"));
         ResourceLocation smithTrashGift = this.addGiftData(RuneCraftory.modRes("smithing_trash"),
                 GiftData.builder(RunecraftoryTags.Items.GENERIC_TRASH, "runecraftory.gift.trash.smith", "Trash")
-                        .add(ModItems.SCRAP.get(), ModItems.SCRAP_PLUS.get()));
+                        .add(RuneCraftoryItems.SCRAP.get(), RuneCraftoryItems.SCRAP_PLUS.get()));
 
         ResourceLocation mineralGift = this.addGiftData(RuneCraftory.modRes("minerals"),
                 GiftData.builder(RunecraftoryTags.Items.MINERALS, "runecraftory.gift.minerals", "minerals").max(7));
@@ -138,9 +138,9 @@ public class NPCDataGen extends NPCDataProvider {
                 GiftData.builder(RunecraftoryTags.Items.JAM, "runecraftory.gift.jam", "jam").selectable());
 
         this.addLook(RuneCraftory.modRes("generic/male_1"), new NPCLook(NPCData.Gender.MALE,
-                null, 50, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
+                null, 50, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
         this.addLook(RuneCraftory.modRes("generic/female_1"), new NPCLook(NPCData.Gender.FEMALE,
-                null, 50, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
+                null, 50, defaultNPCFeatures(true, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("generic", new IndexRange.FirstNIndices(3)), 1))))))));
 
         this.addNPCData("random_npc_1", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(trashGift, "npc.generic.1.hate", -15), "What... why would you give me this?")
@@ -327,12 +327,12 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.procreation.fail.3"), "Mmm... a child? I don’t think I have the energy for that right now."));
                 }));
 
-        ResourceLocation shopMale = this.addLook(RuneCraftory.modRes("shop_owner/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
-        ResourceLocation shopFemale = this.addLook(RuneCraftory.modRes("shop_owner/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
+        ResourceLocation shopMale = this.addLook(RuneCraftory.modRes("shop_owner/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
+        ResourceLocation shopFemale = this.addLook(RuneCraftory.modRes("shop_owner/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
 
         this.addNPCData("shop_owner/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(shopMale, NPCData.Gender.MALE), new NPCData.NPCLookId(shopFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCProfessions.GENERAL_STORE.get(), ModNPCProfessions.FLORIST.get())
+                        .withProfession(RuneCraftoryNPCProfessions.GENERAL_STORE.get(), RuneCraftoryNPCProfessions.FLORIST.get())
                         .addGiftResponse("hate", new NPCData.Gift(trashGift, "npc.shop_owner.1.hate", -15), "Uhh... what should I do with this?")
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.shop_owner.1.dislike", -7), "Sorry... but this isn't really my thing.")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.shop_owner.1.like", 10), "Oh, nice... this is something I can appreciate.")
@@ -379,12 +379,12 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.procreation.fail.2"), "I think we shoul wait a bit more before that step."));
                 }));
 
-        ResourceLocation smithMale = this.addLook(RuneCraftory.modRes("smith/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))));
-        ResourceLocation smithFemale = this.addLook(RuneCraftory.modRes("smith/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))));
+        ResourceLocation smithMale = this.addLook(RuneCraftory.modRes("smith/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))));
+        ResourceLocation smithFemale = this.addLook(RuneCraftory.modRes("smith/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))));
 
         this.addNPCData("smith/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(smithMale, NPCData.Gender.MALE), new NPCData.NPCLookId(smithFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCProfessions.GENERAL_STORE.get(), ModNPCProfessions.BLACKSMITH.get())
+                        .withProfession(RuneCraftoryNPCProfessions.GENERAL_STORE.get(), RuneCraftoryNPCProfessions.BLACKSMITH.get())
                         .addGiftResponse("dislike", new NPCData.Gift(smithTrashGift, "npc.smith.2.dislike", -7), "Hey! I'm not your trashcan!")
                         .addGiftResponse("like", new NPCData.Gift(mineralGift, "npc.smith.2.like", 10), "Wow thanks! I can make something great using this")
                         .setNeutralGiftResponse("npc.smith.2.gift.default", "Thanks. Btw did you know that I really like %like%?")
@@ -427,12 +427,12 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.procreation.fail.1"), "This is a huge step, and i feel like now is not the right time for that"));
                 }));
 
-        ResourceLocation doctorMale = this.addLook(RuneCraftory.modRes("doctor/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1))))))));
-        ResourceLocation doctorFemale = this.addLook(RuneCraftory.modRes("doctor/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1))))))));
+        ResourceLocation doctorMale = this.addLook(RuneCraftory.modRes("doctor/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1))))))));
+        ResourceLocation doctorFemale = this.addLook(RuneCraftory.modRes("doctor/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1))))))));
 
         this.addNPCData("doctor/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(doctorMale, NPCData.Gender.MALE), new NPCData.NPCLookId(doctorFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCProfessions.DOCTOR.get())
+                        .withProfession(RuneCraftoryNPCProfessions.DOCTOR.get())
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.doctor.2.dislike", -7), "I can't use this...")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.doctor.2.like", 10), "Thanks! I really like this!")
                         .setNeutralGiftResponse("npc.doctor.2.gift.default", "Oh? this might be useful. Thanks")
@@ -471,17 +471,17 @@ public class NPCDataGen extends NPCDataProvider {
                 }));
 
         ResourceLocation cookMale = this.addLook(RuneCraftory.modRes("cook/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> {
-            m.put(ModNPCLooks.HAT.get(), new SimpleHatFeatureType(List.of("chef_hat")));
-            m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1)))));
+            m.put(RuneCraftoryNPCLooks.HAT.get(), new SimpleHatFeatureType(List.of("chef_hat")));
+            m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1)))));
         })));
         ResourceLocation cookFemale = this.addLook(RuneCraftory.modRes("cook/female_1"), new NPCLook(NPCData.Gender.FEMALE, null, 0, defaultNPCFeatures(true, m -> {
-            m.put(ModNPCLooks.HAT.get(), new SimpleHatFeatureType(List.of("chef_hat")));
-            m.put(ModNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1)))));
+            m.put(RuneCraftoryNPCLooks.HAT.get(), new SimpleHatFeatureType(List.of("chef_hat")));
+            m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1)))));
         })));
 
         this.addNPCData("cook/1", new NPCData.Builder(50)
                         .withLook(new NPCData.NPCLookId(cookMale, NPCData.Gender.MALE), new NPCData.NPCLookId(cookFemale, NPCData.Gender.FEMALE))
-                        .withProfession(ModNPCProfessions.CHEF.get())
+                        .withProfession(RuneCraftoryNPCProfessions.CHEF.get())
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.cook.2.dislike", -7), "This can't even be used in my dishes...")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.cook.2.like", 10), "Wow thanks! I really like this!")
                         .setNeutralGiftResponse("npc.cook.2.gift.default", "It’s nice of you to think of me. I’ll find a use for this.")
@@ -563,21 +563,21 @@ public class NPCDataGen extends NPCDataProvider {
         Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> map = new LinkedHashMap<>();
         // Just for generic sanity check
         FeatureBuilderHelper builder = map::put;
-        builder.put(ModNPCLooks.SKIN.get(), new IndexedColorSettingType(ModNPCLooks.SKIN, List.of(0, 1, 2), ColorSetting.SKIN_COLOR_RANGE));
+        builder.put(RuneCraftoryNPCLooks.SKIN.get(), new IndexedColorSettingType(RuneCraftoryNPCLooks.SKIN, List.of(0, 1, 2), ColorSetting.SKIN_COLOR_RANGE));
         if (female) {
-            builder.put(ModNPCLooks.SLIM.get(), SlimLookFeatureType.TYPE_INSTANCE);
-            builder.put(ModNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.9f, 1.05f)));
-            builder.put(ModNPCLooks.BLUSH.get(), new BlushFeatureType(0.5f, ColorSetting.BLUSH_COLOR_RANGE));
-            builder.put(ModNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("long", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
-            builder.put(ModNPCLooks.FACE.get(), new FaceFeaturesType(
+            builder.put(RuneCraftoryNPCLooks.SLIM.get(), SlimLookFeatureType.TYPE_INSTANCE);
+            builder.put(RuneCraftoryNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.9f, 1.05f)));
+            builder.put(RuneCraftoryNPCLooks.BLUSH.get(), new BlushFeatureType(0.5f, ColorSetting.BLUSH_COLOR_RANGE));
+            builder.put(RuneCraftoryNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("long", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
+            builder.put(RuneCraftoryNPCLooks.FACE.get(), new FaceFeaturesType(
                     new IndexedColorSetting(List.of(0, 1), ColorSetting.EYE_COLOR_RANGE),
                     new IndexedColorSetting(List.of(0, 1), ColorSetting.DEFAULT),
                     new IndexedColorSetting(List.of(1, 2), ColorSetting.EYEBROW_COLOR_RANGE),
                     FaceFeaturesType.DEFAULT_EXPRESSIONS));
         } else {
-            builder.put(ModNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.95f, 1.1f)));
-            builder.put(ModNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("short", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
-            builder.put(ModNPCLooks.FACE.get(), new FaceFeaturesType(
+            builder.put(RuneCraftoryNPCLooks.SIZE.get(), new SizeFeatureType(UniformGenerator.between(0.95f, 1.1f)));
+            builder.put(RuneCraftoryNPCLooks.HAIR.get(), new HairFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("short", new IndexRange.FirstNIndices(5)), 1))), ColorSetting.HAIR_COLOR_RANGE));
+            builder.put(RuneCraftoryNPCLooks.FACE.get(), new FaceFeaturesType(
                     new IndexedColorSetting(List.of(0, 1), ColorSetting.EYE_COLOR_RANGE),
                     new IndexedColorSetting(List.of(0, 1), ColorSetting.DEFAULT),
                     new IndexedColorSetting(List.of(0, 1), ColorSetting.EYEBROW_COLOR_RANGE),

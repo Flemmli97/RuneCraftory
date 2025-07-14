@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
@@ -83,7 +83,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
                 builder.put(profession, ImmutableList.copyOf(newCollection));
                 defaultsBuilder.put(profession, ImmutableList.copyOf(defaultCollection));
             });
-            builder.put(ModNPCProfessions.TRAVELLING_MERCHANT.get(), DataPackHandler.INSTANCE.itemStatManager().all()
+            builder.put(RuneCraftoryNPCProfessions.TRAVELLING_MERCHANT.get(), DataPackHandler.INSTANCE.itemStatManager().all()
                     .stream().filter(p -> p.getSecond().getBuy() > 0)
                     .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING, Optional.empty()))
                     .toList());
@@ -99,7 +99,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((fres, el) -> {
             try {
-                Optional<NPCProfession> optionalProfession = HolderUtils.get(this.provider, ModNPCProfessions.PROFESSION_REGISTRY_KEY, fres);
+                Optional<NPCProfession> optionalProfession = HolderUtils.get(this.provider, RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY, fres);
                 if (optionalProfession.isEmpty() || !optionalProfession.get().hasShop)
                     return;
                 NPCProfession profession = optionalProfession.get();

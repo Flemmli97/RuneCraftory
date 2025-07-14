@@ -7,9 +7,9 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
@@ -49,12 +49,12 @@ public class ItemStat {
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
-                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_3_Spell").forGetter(ItemStat::getTier3Spell),
-                    ModArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("armor_effect").forGetter(ItemStat::getArmorEffect),
+                    RuneCraftorySpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_3_Spell").forGetter(ItemStat::getTier3Spell),
+                    RuneCraftoryArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("armor_effect").forGetter(ItemStat::getArmorEffect),
 
                     CodecUtils.stringEnumCodec(ItemElement.class, ItemElement.NONE).orElse(ItemElement.NONE).fieldOf("element").forGetter(ItemStat::element),
-                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_1_Spell").forGetter(ItemStat::getTier1Spell),
-                    ModSpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_2_Spell").forGetter(ItemStat::getTier2Spell),
+                    RuneCraftorySpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_1_Spell").forGetter(ItemStat::getTier1Spell),
+                    RuneCraftorySpells.SPELLS.registry().holderByNameCodec().optionalFieldOf("tier_2_Spell").forGetter(ItemStat::getTier2Spell),
 
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("item_stats").forGetter(ItemStat::itemStats),
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("monster_bonus").forGetter(ItemStat::getMonsterGiftIncrease),
@@ -67,13 +67,13 @@ public class ItemStat {
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemStat> STREAM_CODEC = new StreamCodec<>() {
 
         private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Spell>>> SPELL_CODEC = ByteBufCodecs.optional(
-                ByteBufCodecs.holderRegistry(ModSpells.SPELL_REGISTRY_KEY));
+                ByteBufCodecs.holderRegistry(RuneCraftorySpells.SPELL_REGISTRY_KEY));
 
         @Override
         public ItemStat decode(RegistryFriendlyByteBuf buf) {
             return new ItemStat(buf.readInt(), buf.readInt(), buf.readInt(), buf.readEnum(ItemElement.class),
                     SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf),
-                    ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModArmorEffects.ARMOR_EFFECT_KEY)).decode(buf),
+                    ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(RuneCraftoryArmorEffects.ARMOR_EFFECT_KEY)).decode(buf),
                     StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf), StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf))
                     .setID(buf.readResourceLocation());
         }
@@ -88,7 +88,7 @@ public class ItemStat {
             SPELL_CODEC.encode(buf, prop.getTier2Spell());
             SPELL_CODEC.encode(buf, prop.getTier2Spell());
             SPELL_CODEC.encode(buf, prop.getTier2Spell());
-            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(ModArmorEffects.ARMOR_EFFECT_KEY)).encode(buf, prop.getArmorEffect());
+            ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(RuneCraftoryArmorEffects.ARMOR_EFFECT_KEY)).encode(buf, prop.getArmorEffect());
 
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, prop.itemStats);
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, prop.monsterGiftIncrease);
@@ -126,7 +126,7 @@ public class ItemStat {
     }
 
     private static Map<Holder<Attribute>, Double> createFor(Map<Holder<Attribute>, Double> map) {
-        Object2DoubleAVLTreeMap<Holder<Attribute>> sorted = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
+        Object2DoubleAVLTreeMap<Holder<Attribute>> sorted = new Object2DoubleAVLTreeMap<>(RuneCraftoryAttributes.SORTED);
         sorted.putAll(map);
         return Object2DoubleSortedMaps.unmodifiable(sorted);
     }
@@ -164,7 +164,7 @@ public class ItemStat {
     }
 
     public Map<Holder<Attribute>, Double> itemStats() {
-        TreeMap<Holder<Attribute>, Double> map = new TreeMap<>(ModAttributes.SORTED);
+        TreeMap<Holder<Attribute>, Double> map = new TreeMap<>(RuneCraftoryAttributes.SORTED);
         map.putAll(this.itemStats);
         return map;
     }

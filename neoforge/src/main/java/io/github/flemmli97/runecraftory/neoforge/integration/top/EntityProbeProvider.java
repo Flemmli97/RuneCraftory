@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.forge.integration.top;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import mcjty.theoneprobe.api.CompoundText;
@@ -37,7 +37,7 @@ public class EntityProbeProvider implements IProbeInfoEntityProvider {
     @Override
     public void addProbeEntityInfo(ProbeMode probeMode, IProbeInfo probeInfo, Player player, Level level, Entity entity, IProbeHitEntityData iProbeHitEntityData) {
         if (entity instanceof IBaseMob mob && (probeMode == ProbeMode.DEBUG
-                || player.getMainHandItem().getItem() == ModItems.DEBUG.get() || player.isCreative()
+                || player.getMainHandItem().getItem() == RuneCraftoryItems.DEBUG.get() || player.isCreative()
                 || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
             XpLevelHolder entityLevel = mob.xpLevel();
             probeInfo.progress((int) entityLevel.getXp(), LevelCalc.xpAmountForLevelUp(entityLevel.getLevel()),
@@ -67,7 +67,7 @@ public class EntityProbeProvider implements IProbeInfoEntityProvider {
                 }
             }
         }
-        if (entity instanceof EntityNPCBase npc) {
+        if (entity instanceof NPCEntity npc) {
             if (npc.followEntity() != null) {
                 withText(probeInfo, "runecraftory.dependency.tooltips.npc.follow", npc.followEntity().getDisplayName(), ChatFormatting.YELLOW);
             }

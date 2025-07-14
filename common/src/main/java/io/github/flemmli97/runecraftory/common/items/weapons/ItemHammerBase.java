@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -31,7 +31,7 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE.get(), stack);
+        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE.get(), stack);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        boolean canCharge = (data.getSkillLevel(Skills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(ModAttackActions.HAMMER_AXE_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.HAMMER_AXE_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -66,7 +66,7 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(ModAttackActions.HAMMER_AXE_USE.get(), stack);
+                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
                 return;
             }
             if (ItemAxeBase.performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {

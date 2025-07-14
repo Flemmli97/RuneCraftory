@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.advancements;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -33,7 +33,7 @@ public class MoneyTrigger extends SimpleCriterionTrigger<MoneyTrigger.TriggerIns
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> of(int amount) {
-            return ModCriteria.MONEY_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), amount));
+            return RuneCraftoryCriteria.MONEY_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), amount));
         }
 
         public boolean matches(ServerPlayer player) {

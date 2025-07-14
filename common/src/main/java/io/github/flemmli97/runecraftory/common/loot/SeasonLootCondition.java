@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -20,7 +20,7 @@ public record SeasonLootCondition(Season season) implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.SEASONTYPE.get();
+        return RuneCraftoryLootRegistries.SEASONTYPE.get();
     }
 
     @Override

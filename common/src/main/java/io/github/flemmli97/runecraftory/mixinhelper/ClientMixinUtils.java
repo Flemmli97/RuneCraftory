@@ -13,9 +13,9 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHan
 import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
@@ -121,10 +121,10 @@ public class ClientMixinUtils {
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
         InteractionHand main = entity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         InteractionHand off = entity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-        if (model.rightArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(main).is(ModItems.UMBRELLA.get())) {
+        if (model.rightArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(main).is(RuneCraftoryItems.UMBRELLA.get())) {
             model.rightArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
-        if (model.leftArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(off).is(ModItems.UMBRELLA.get())) {
+        if (model.leftArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(off).is(RuneCraftoryItems.UMBRELLA.get())) {
             model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
         float partialTicks = ClientHandlers.getPartialTicks();
@@ -137,7 +137,7 @@ public class ClientMixinUtils {
         PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).getWeaponHandler() : null;
         if (weaponHandler == null)
             return;
-        boolean ignoreRiding = weaponHandler.getCurrentAction() == ModAttackActions.DUAL_USE.get();
+        boolean ignoreRiding = weaponHandler.getCurrentAction() == RuneCraftoryAttackActions.DUAL_USE.get();
         boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
         if (result) {
             ClientHandlers.getAnimatedPlayerModel().copyTo(model);
@@ -218,7 +218,7 @@ public class ClientMixinUtils {
                 return true;
             }
         }
-        return stack.has(ModDataComponentTypes.INVISIBLE.get());
+        return stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get());
     }
 
     public static ModelPartsContainer.ModelPartExtended createPlayerItemPart(boolean left) {

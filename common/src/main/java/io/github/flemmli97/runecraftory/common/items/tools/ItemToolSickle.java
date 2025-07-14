@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -64,7 +64,7 @@ public class ItemToolSickle extends DiggerItem {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -73,7 +73,7 @@ public class ItemToolSickle extends DiggerItem {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
@@ -83,7 +83,7 @@ public class ItemToolSickle extends DiggerItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(usedHand);
             return InteractionResultHolder.consume(stack);
@@ -93,7 +93,7 @@ public class ItemToolSickle extends DiggerItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel()) + 2;

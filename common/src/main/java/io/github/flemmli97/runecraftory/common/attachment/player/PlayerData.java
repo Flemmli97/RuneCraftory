@@ -20,10 +20,10 @@ import io.github.flemmli97.runecraftory.common.network.S2CLevelPkt;
 import io.github.flemmli97.runecraftory.common.network.S2CMoney;
 import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -122,13 +122,13 @@ public class PlayerData {
         if (!this.starting) {
             this.starting = true;
             this.player.setHealth(this.player.getMaxHealth());
-            this.setRunePoints((int) this.player.getAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder()));
+            this.setRunePoints((int) this.player.getAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder()));
         }
     }
 
     private void setForVitality(ResourceLocation modifier, double value, AttributeUpdate update) {
-        this.setAttributeValue(ModAttributes.DEFENCE.asHolder(), modifier, value * 0.5, update);
-        this.setAttributeValue(ModAttributes.MAGIC_DEFENCE.asHolder(), modifier, value * 0.5, update);
+        this.setAttributeValue(RuneCraftoryAttributes.DEFENCE.asHolder(), modifier, value * 0.5, update);
+        this.setAttributeValue(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), modifier, value * 0.5, update);
     }
 
     private void setFoodBonus(Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> bonus) {
@@ -149,27 +149,27 @@ public class PlayerData {
 
     private void updateConfigAttributes() {
         this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingHealth, AttributeUpdate.ABSOLUTE);
-        this.setAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingRp, AttributeUpdate.ABSOLUTE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingRp, AttributeUpdate.ABSOLUTE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingStr, AttributeUpdate.ABSOLUTE);
         this.setForVitality(LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingVit, AttributeUpdate.ABSOLUTE);
-        this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingIntel, AttributeUpdate.ABSOLUTE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_CONFIG_MODIFIER, GeneralConfig.startingIntel, AttributeUpdate.ABSOLUTE);
     }
 
     private void updateLevelAttributes() {
         int lvl = this.level.getLevel() - 1;
         this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * lvl, AttributeUpdate.REPLACE);
-        this.setAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.rpPerLevel * lvl, AttributeUpdate.REPLACE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.rpPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.strPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.vitPerLevel * lvl, AttributeUpdate.REPLACE);
-        this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.intPerLevel * lvl, AttributeUpdate.REPLACE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.intPerLevel * lvl, AttributeUpdate.REPLACE);
     }
 
     private void updateSkillLevelAttributes() {
         this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::healthIncrease), AttributeUpdate.REPLACE);
-        this.setAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::strIncrease), AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::vitIncrease), AttributeUpdate.REPLACE);
-        this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::intelIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::intelIncrease), AttributeUpdate.REPLACE);
     }
 
     private void clearAtributeModifier(Holder<Attribute> attribute, ResourceLocation modifier) {
@@ -189,7 +189,7 @@ public class PlayerData {
     }
 
     public int getMaxRunePoints() {
-        return (int) this.player.getAttributeValue(ModAttributes.MAX_RUNEPOINTS.asHolder());
+        return (int) this.player.getAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder());
     }
 
     public boolean useRunePoints(int amount, boolean damage) {
@@ -259,7 +259,7 @@ public class PlayerData {
     public void setMoney(int amount) {
         this.money = amount;
         if (this.player instanceof ServerPlayer serverPlayer) {
-            ModCriteria.MONEY_TRIGGER.get().trigger(serverPlayer);
+            RuneCraftoryCriteria.MONEY_TRIGGER.get().trigger(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CMoney(this), serverPlayer);
         }
     }
@@ -288,7 +288,7 @@ public class PlayerData {
         }
         if (this.player instanceof ServerPlayer serverPlayer) {
             if (levelUp)
-                ModCriteria.LEVEL_TRIGGER.get().trigger(serverPlayer);
+                RuneCraftoryCriteria.LEVEL_TRIGGER.get().trigger(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
         }
     }
@@ -343,7 +343,7 @@ public class PlayerData {
         }
         if (this.player instanceof ServerPlayer serverPlayer) {
             if (levelUp)
-                ModCriteria.SKILL_LEVEL_TRIGGER.get().trigger(serverPlayer, skill);
+                RuneCraftoryCriteria.SKILL_LEVEL_TRIGGER.get().trigger(serverPlayer, skill);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSkillLevelPkt(this, skill), serverPlayer);
         }
     }
@@ -361,7 +361,7 @@ public class PlayerData {
             case STR -> this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
                     1, AttributeUpdate.ADD);
             case INT ->
-                    this.setAttributeValue(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
+                    this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
                             1, AttributeUpdate.ADD);
             case VIT -> this.setForVitality(LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE,
                     1, AttributeUpdate.ADD);
@@ -375,10 +375,10 @@ public class PlayerData {
             case STR ->
                     this.clearAtributeModifier(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
             case INT ->
-                    this.clearAtributeModifier(ModAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
+                    this.clearAtributeModifier(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
             case VIT -> {
-                this.clearAtributeModifier(ModAttributes.DEFENCE.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
-                this.clearAtributeModifier(ModAttributes.MAGIC_DEFENCE.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
+                this.clearAtributeModifier(RuneCraftoryAttributes.DEFENCE.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
+                this.clearAtributeModifier(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
             }
             case HP -> this.clearAtributeModifier(Attributes.MAX_HEALTH, LibConstants.PLAYER_STAT_BOOST_ITEM_INCREASE);
         }
@@ -394,7 +394,7 @@ public class PlayerData {
 
     public void refreshShop() {
         if (this.player instanceof ServerPlayer serverPlayer) {
-            for (NPCProfession profession : ModNPCProfessions.PROFESSIONS.registry()) {
+            for (NPCProfession profession : RuneCraftoryNPCProfessions.PROFESSIONS.registry()) {
                 Collection<ShopItemProperties> datapack = DataPackHandler.INSTANCE.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(shopProps -> {
@@ -411,7 +411,7 @@ public class PlayerData {
                     for (float chance = 1.5f + shopItems.size() * 0.002f; this.player.level().random.nextFloat() < chance; chance -= 0.1f) {
                         ItemStack stack = shopItems.remove(this.player.level().random.nextInt(shopItems.size()));
                         shop.add(stack);
-                        if (shopItems.isEmpty() || (profession == ModNPCProfessions.TRAVELLING_MERCHANT.get() && shop.size() >= InventoryShop.SHOP_SIZE))
+                        if (shopItems.isEmpty() || (profession == RuneCraftoryNPCProfessions.TRAVELLING_MERCHANT.get() && shop.size() >= InventoryShop.SHOP_SIZE))
                             break;
                     }
                 }
@@ -499,7 +499,7 @@ public class PlayerData {
                 this.blockBreakPosForMsg = null;
             ItemStack main = this.player.getMainHandItem();
             ItemStack off = this.player.getOffhandItem();
-            if (main.is(ModItems.MOB_STAFF.get()) || off.is(ModItems.MOB_STAFF.get())) {
+            if (main.is(RuneCraftoryItems.MOB_STAFF.get()) || off.is(RuneCraftoryItems.MOB_STAFF.get())) {
                 if (this.entitySelector.poi != null) {
                     serverPlayer.serverLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
                             this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
@@ -592,7 +592,7 @@ public class PlayerData {
             NonNullList<ItemStack> list = NonNullList.create();
             ListTag items = data.getList("Items", Tag.TAG_COMPOUND);
             items.forEach(lt -> ItemStack.parse(provider, lt).ifPresent(list::add));
-            this.shopItems.put(ModNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
+            this.shopItems.put(RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
         });
         this.spells.load(nbt.getCompound("Inventory"), provider);
         this.updater.read(nbt.getCompound("DailyUpdater"));
@@ -644,7 +644,7 @@ public class PlayerData {
         ListTag shop = new ListTag();
         for (Map.Entry<NPCProfession, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
             CompoundTag data = new CompoundTag();
-            data.put("Shop", ModNPCProfessions.PROFESSIONS.registry().byNameCodec().encodeStart(ops, entry.getKey()).getOrThrow());
+            data.put("Shop", RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().encodeStart(ops, entry.getKey()).getOrThrow());
             ListTag items = new ListTag();
             for (ItemStack stack : entry.getValue())
                 items.add(stack.save(provider, new CompoundTag()));

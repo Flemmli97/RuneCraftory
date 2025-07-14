@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollenPuff;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.PollenPuffEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -28,13 +28,13 @@ public class PollenPuffSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         for (Vec3 dir : DIRS) {
-            EntityPollenPuff puff = new EntityPollenPuff(level, entity);
+            PollenPuffEntity puff = new PollenPuffEntity(level, entity);
             puff.setPos(puff.getX(), entity.getY() + entity.getBbHeight() * 0.2, puff.getZ());
             puff.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
             puff.shoot(dir.x(), dir.y(), dir.z(), 0.23f, 0);
             level.addFreshEntity(puff);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

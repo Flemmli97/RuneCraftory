@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.loot;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -25,7 +25,7 @@ public record TalkCountCondition(int count) implements LootItemCondition {
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.TALKCOUNT.get();
+        return RuneCraftoryLootRegistries.TALKCOUNT.get();
     }
 
     @Override
@@ -35,7 +35,7 @@ public record TalkCountCondition(int count) implements LootItemCondition {
 
     @Override
     public boolean test(LootContext ctx) {
-        if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof EntityNPCBase npc) {
+        if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof NPCEntity npc) {
             UUID uuid = ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
             if (uuid != null)
                 return npc.talkCount(uuid) >= this.count;

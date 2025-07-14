@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.armoreffects;
 
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -17,6 +17,6 @@ public class PiyoSandalsEffect extends ArmorEffect {
     @Override
     public void onStep(LivingEntity entity, ItemStack stack) {
         if (!entity.isShiftKeyDown())
-            entity.playSound(ModSounds.PLAYER_ARMOR_PIYO_CHIRP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            entity.playSound(RuneCraftorySounds.PLAYER_ARMOR_PIYO_CHIRP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
     }
 }

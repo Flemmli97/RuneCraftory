@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.provider.FileVerifier;
 import io.github.flemmli97.runecraftory.api.datapack.provider.StructureBossProvider;
 import io.github.flemmli97.runecraftory.common.datapack.manager.StructureBossManager;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -31,23 +31,23 @@ public class StructureBossGen extends StructureBossProvider {
     @Override
     protected void add(HolderLookup.Provider provider) {
         this.addGateSpawn(FOREST_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.AMBROSIA.get(), 10)
-                .add(ModEntities.DEAD_TREE.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.AMBROSIA.get(), 10)
+                .add(RuneCraftoryEntities.DEAD_TREE.get(), 10).build()));
         this.addGateSpawn(WATER_RUIN_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.THUNDERBOLT.get(), 8)
-                .add(ModEntities.CHIMERA.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.THUNDERBOLT.get(), 8)
+                .add(RuneCraftoryEntities.CHIMERA.get(), 10).build()));
         this.addGateSpawn(THEATER_RUIN_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.MARIONETTA.get(), 10)
-                .add(ModEntities.HANDONETTA.get(), 7).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.MARIONETTA.get(), 10)
+                .add(RuneCraftoryEntities.HANDONETTA.get(), 7).build()));
         this.addGateSpawn(PLAINS_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.RACCOON.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.RACCOON.get(), 10).build()));
         this.addGateSpawn(DESERT_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.SKELEFANG.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.SKELEFANG.get(), 10).build()));
         this.addGateSpawn(NETHER_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.RAFFLESIA.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.RAFFLESIA.get(), 10).build()));
         this.addGateSpawn(WIND_SHRINE_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.GRIMOIRE.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.GRIMOIRE.get(), 10).build()));
         this.addGateSpawn(LEON_KARNAK_BOSSES, new StructureBossManager.BossSpawnList(SimpleWeightedRandomList
-                .<EntityType<?>>builder().add(ModEntities.SANO_AND_UNO.get(), 10).build()));
+                .<EntityType<?>>builder().add(RuneCraftoryEntities.SANO_AND_UNO.get(), 10).build()));
     }
 }

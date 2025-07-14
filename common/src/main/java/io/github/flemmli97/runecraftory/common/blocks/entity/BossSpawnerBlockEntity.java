@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
 import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
-import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
+import io.github.flemmli97.runecraftory.common.blocks.BossSpawnerBlock;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.manager.StructureBossManager;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.ChatFormatting;
@@ -45,7 +45,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     private EntityType<?> nextSpawn;
 
     public BossSpawnerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.BOSS_SPAWNER_TILE.get(), blockPos, blockState);
+        super(RuneCraftoryBlocks.BOSS_SPAWNER_TILE.get(), blockPos, blockState);
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BossSpawnerBlockEntity blockEntity) {
@@ -99,7 +99,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
                         return;
                     ensemble.setLevel(LevelCalc.levelFromPos((ServerLevel) this.level, Vec3.atCenterOf(this.worldPosition), nearby));
                     ensemble.setRestrictRadius(13);
-                    switch (this.getBlockState().getValue(BlockBossSpawner.FACING)) {
+                    switch (this.getBlockState().getValue(BossSpawnerBlock.FACING)) {
                         case SOUTH -> ensemble.withDirection(Rotation.CLOCKWISE_180);
                         case WEST -> ensemble.withDirection(Rotation.COUNTERCLOCKWISE_90);
                         case EAST -> ensemble.withDirection(Rotation.CLOCKWISE_90);

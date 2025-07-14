@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.api.datapack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleAVLTreeMap;
@@ -94,7 +94,7 @@ public class FoodProperties {
     }
 
     private static Map<Holder<Attribute>, Double> createFor(Map<Holder<Attribute>, Double> map) {
-        Object2DoubleAVLTreeMap<Holder<Attribute>> sorted = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
+        Object2DoubleAVLTreeMap<Holder<Attribute>> sorted = new Object2DoubleAVLTreeMap<>(RuneCraftoryAttributes.SORTED);
         sorted.putAll(map);
         return Object2DoubleSortedMaps.unmodifiable(sorted);
     }
@@ -110,19 +110,19 @@ public class FoodProperties {
     }
 
     public int getHPGain() {
-        return this.effects.getOrDefault(ModAttributes.HEALTH_GAIN.asHolder(), 0d).intValue();
+        return this.effects.getOrDefault(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 0d).intValue();
     }
 
     public int getHpPercentGain() {
-        return this.effects.getOrDefault(ModAttributes.HEALTH_GAIN.asHolder(), 0d).intValue();
+        return this.effects.getOrDefault(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 0d).intValue();
     }
 
     public int getRPRegen() {
-        return this.effects.getOrDefault(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 0d).intValue();
+        return this.effects.getOrDefault(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 0d).intValue();
     }
 
     public int getRpPercentRegen() {
-        return this.effectsPercentage.getOrDefault(ModAttributes.RUNE_POINTS_GAIN.asHolder(), 0d).intValue();
+        return this.effectsPercentage.getOrDefault(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 0d).intValue();
     }
 
     public int duration() {
@@ -169,9 +169,9 @@ public class FoodProperties {
                 continue;
             MutableComponent comp = Component.translatable("runecraftory.tooltip.item.attribute", Component.translatable(entry.getKey().value().getDescriptionId()), this.format(entry.getValue()))
                     .withStyle(ChatFormatting.AQUA);
-            if (entry.getKey().is(ModAttributes.HEALTH_GAIN.getKey()) || entry.getKey().is(ModAttributes.RUNE_POINTS_GAIN.getKey()))
+            if (entry.getKey().is(RuneCraftoryAttributes.HEALTH_GAIN.getKey()) || entry.getKey().is(RuneCraftoryAttributes.RUNE_POINTS_GAIN.getKey()))
                 hpRpGain.add(comp);
-            else if (entry.getKey().value() == Attributes.MAX_HEALTH.value() || entry.getKey().is(ModAttributes.MAX_RUNEPOINTS.getKey()))
+            else if (entry.getKey().value() == Attributes.MAX_HEALTH.value() || entry.getKey().is(RuneCraftoryAttributes.MAX_RUNEPOINTS.getKey()))
                 hpRpIncrease.add(comp);
             else
                 attributes.add(CommonComponents.space().append(comp));
@@ -181,9 +181,9 @@ public class FoodProperties {
                 continue;
             MutableComponent comp = Component.translatable("runecraftory.tooltip.item.attribute.percentage", Component.translatable(entry.getKey().value().getDescriptionId()), this.format(entry.getValue()))
                     .withStyle(ChatFormatting.AQUA);
-            if (entry.getKey().is(ModAttributes.HEALTH_GAIN.getKey()) || entry.getKey().is(ModAttributes.RUNE_POINTS_GAIN.getKey()))
+            if (entry.getKey().is(RuneCraftoryAttributes.HEALTH_GAIN.getKey()) || entry.getKey().is(RuneCraftoryAttributes.RUNE_POINTS_GAIN.getKey()))
                 hpRpGain.add(comp);
-            else if (entry.getKey().value() == Attributes.MAX_HEALTH.value() || entry.getKey().is(ModAttributes.MAX_RUNEPOINTS.getKey()))
+            else if (entry.getKey().value() == Attributes.MAX_HEALTH.value() || entry.getKey().is(RuneCraftoryAttributes.MAX_RUNEPOINTS.getKey()))
                 hpRpIncrease.add(comp);
             else
                 attributes.add(CommonComponents.space().append(comp));
@@ -229,25 +229,25 @@ public class FoodProperties {
 
         public Builder setHPRegen(int hpRegen, int hpRegenPercent) {
             if (hpRegen != 0)
-                this.effects.put(ModAttributes.HEALTH_GAIN.asHolder(), (double) hpRegen);
+                this.effects.put(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), (double) hpRegen);
             if (hpRegenPercent != 0)
-                this.effectsPercentage.put(ModAttributes.HEALTH_GAIN.asHolder(), (double) hpRegenPercent);
+                this.effectsPercentage.put(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), (double) hpRegenPercent);
             return this;
         }
 
         public Builder setRPRegen(int rpRegen, int rpRegenPercent) {
             if (rpRegen != 0)
-                this.effects.put(ModAttributes.RUNE_POINTS_GAIN.asHolder(), (double) rpRegen);
+                this.effects.put(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), (double) rpRegen);
             if (rpRegenPercent != 0)
-                this.effectsPercentage.put(ModAttributes.RUNE_POINTS_GAIN.asHolder(), (double) rpRegenPercent);
+                this.effectsPercentage.put(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), (double) rpRegenPercent);
             return this;
         }
 
         public Builder setRPIncrease(int increase, int percentIncrease) {
             if (increase != 0)
-                this.effects.put(ModAttributes.MAX_RUNEPOINTS.asHolder(), (double) increase);
+                this.effects.put(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), (double) increase);
             if (percentIncrease != 0)
-                this.effectsPercentage.put(ModAttributes.MAX_RUNEPOINTS.asHolder(), (double) percentIncrease);
+                this.effectsPercentage.put(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), (double) percentIncrease);
             return this;
         }
 

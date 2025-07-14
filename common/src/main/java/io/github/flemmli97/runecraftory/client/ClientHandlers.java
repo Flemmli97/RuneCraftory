@@ -20,7 +20,7 @@ import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;
@@ -168,7 +168,7 @@ public class ClientHandlers {
 
     public static void openNPCChat(int id, ShopState isShopOpen, SyncedFamilyData family, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
-        if (entity instanceof EntityNPCBase npc) {
+        if (entity instanceof NPCEntity npc) {
             if (followState == 1)
                 Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
             else
@@ -220,11 +220,11 @@ public class ClientHandlers {
         }
     }
 
-    public static void updateNPCDialogue(EntityNPCBase npc, ConversationContext convCtx, String conversationID, Component component, Map<String, Component> data, List<Component> actions) {
+    public static void updateNPCDialogue(NPCEntity npc, ConversationContext convCtx, String conversationID, Component component, Map<String, Component> data, List<Component> actions) {
         if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
             gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
         } else {
-            NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
+            NPCDialogueGui<NPCEntity> gui = new NPCDialogueGui<>(npc);
             gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
             Minecraft.getInstance().setScreen(gui);
         }

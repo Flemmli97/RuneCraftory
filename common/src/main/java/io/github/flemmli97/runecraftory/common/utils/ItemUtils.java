@@ -3,13 +3,13 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResult;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,18 +26,18 @@ import org.jetbrains.annotations.Nullable;
 public class ItemUtils {
 
     public static void starterItems(Player player) {
-        ItemStack broadSword = new ItemStack(ModItems.BROAD_SWORD.get());
-        ItemStack hammer = new ItemStack(ModItems.HAMMER_SCRAP.get());
+        ItemStack broadSword = new ItemStack(RuneCraftoryItems.BROAD_SWORD.get());
+        ItemStack hammer = new ItemStack(RuneCraftoryItems.HAMMER_SCRAP.get());
         spawnItemAtEntity(player, broadSword);
         spawnItemAtEntity(player, hammer);
     }
 
     public static int getChargeTime(LivingEntity entity) {
-        return Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
+        return Mth.ceil(EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.CHARGE_TIME.asHolder()));
     }
 
     public static int getChargeTime(LivingEntity entity, ToolItemTier toolTier) {
-        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, ModAttributes.CHARGE_TIME.asHolder()));
+        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.CHARGE_TIME.asHolder()));
         if (toolTier == ToolItemTier.PLATINUM)
             time *= GeneralConfig.platinumChargeTime;
         return time;
@@ -77,7 +77,7 @@ public class ItemUtils {
         return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(stat -> getBuyPrice(stack, stat)).orElse(0);
     }
 
-    public static ShopResult buyItem(Player player, EntityNPCBase npc, ItemStack stack) {
+    public static ShopResult buyItem(Player player, NPCEntity npc, ItemStack stack) {
         if (sizeInv(player.getInventory(), stack) < stack.getCount()) {
             player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
             return ShopResult.NOSPACE;
@@ -85,7 +85,7 @@ public class ItemUtils {
         int price = getBuyPrice(stack) * stack.getCount();
         if (Platform.INSTANCE.getPlayerData(player).useMoney(price)) {
             if (player instanceof ServerPlayer serverPlayer)
-                ModCriteria.SHOP_TRIGGER.get().trigger(serverPlayer, npc, stack);
+                RuneCraftoryCriteria.SHOP_TRIGGER.get().trigger(serverPlayer, npc, stack);
             player.playSound(SoundEvents.VILLAGER_YES, 1.0f, 1.0f);
             while (stack.getCount() > 0) {
                 ItemStack copy = stack.copy();
@@ -120,9 +120,9 @@ public class ItemUtils {
     }
 
     public static float getShieldEfficiency(ItemStack stack) {
-        float eff = stack.getOrDefault(ModDataComponentTypes.SHIELD_EFFICIENCY.get(), 1f);
+        float eff = stack.getOrDefault(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 1f);
         if (eff < 1) {
-            if (stack.has(ModDataComponentTypes.DRAGON_SCALE.get()))
+            if (stack.has(RuneCraftoryDataComponentTypes.DRAGON_SCALE.get()))
                 eff = Mth.clamp(eff + 0.5f, 0.5f, 0.75f);
         }
         return eff;

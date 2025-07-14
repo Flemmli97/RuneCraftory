@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.summoners.DarkBulletSummonerEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +15,7 @@ public class DarkBulletsSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityDarkBulletSummoner summoner = new EntityDarkBulletSummoner(level, entity);
+        DarkBulletSummonerEntity summoner = new DarkBulletSummonerEntity(level, entity);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target != null) {

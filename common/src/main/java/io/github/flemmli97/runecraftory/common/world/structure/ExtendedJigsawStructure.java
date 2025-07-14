@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.world.structure;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
@@ -48,6 +48,6 @@ public class ExtendedJigsawStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return ModStructures.EXTENDED_STRUCTURE.get();
+        return RuneCraftoryStructures.EXTENDED_STRUCTURE.get();
     }
 }

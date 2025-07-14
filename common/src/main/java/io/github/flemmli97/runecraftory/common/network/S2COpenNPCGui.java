@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
@@ -61,7 +61,7 @@ public class S2COpenNPCGui implements CustomPacketPayload {
         this.family = family;
     }
 
-    public S2COpenNPCGui(EntityNPCBase entity, ServerPlayer player) {
+    public S2COpenNPCGui(NPCEntity entity, ServerPlayer player) {
         this.entityID = entity.getId();
         this.isShopOpen = entity.canTrade();
         this.actions = entity.getProfession().actions(entity, player);

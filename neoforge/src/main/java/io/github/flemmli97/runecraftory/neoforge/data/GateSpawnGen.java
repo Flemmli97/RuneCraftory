@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.neoforge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.provider.GateSpawnProvider;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 
@@ -16,6 +16,6 @@ public class GateSpawnGen extends GateSpawnProvider {
 
     @Override
     protected void add(HolderLookup.Provider provider) {
-        ModEntities.getDefaultGateSpawns().forEach(this::addGateSpawn);
+        RuneCraftoryEntities.getDefaultGateSpawns().forEach(this::addGateSpawn);
     }
 }

@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityMissile;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.MissileEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +29,7 @@ public class MissileSpell extends Spell {
         int left = this.amount / 2;
         Vec3 side = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).yRot(90).normalize();
         for (int i = 0; i < left; i++) {
-            EntityMissile missile = new EntityMissile(level, entity);
+            MissileEntity missile = new MissileEntity(level, entity);
             missile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
             missile.setPos(missile.getX() + side.x() + entity.getRandom().nextGaussian() * 0.1, missile.getY(), missile.getZ() + side.z() + entity.getRandom().nextGaussian() * 0.1);
             missile.shoot(entity, 0, entity.getYRot(), 0, 0.18f, 8);
@@ -45,7 +45,7 @@ public class MissileSpell extends Spell {
         }
         int right = this.amount / left;
         for (int i = 0; i < right; i++) {
-            EntityMissile missile = new EntityMissile(level, entity);
+            MissileEntity missile = new MissileEntity(level, entity);
             missile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             missile.setPos(missile.getX() - side.x() + entity.getRandom().nextGaussian() * 0.1, missile.getY(), missile.getZ() - side.z() + entity.getRandom().nextGaussian() * 0.1);
             missile.shoot(entity, 0, entity.getYRot(), 0, 0.18f, 8);
@@ -59,7 +59,7 @@ public class MissileSpell extends Spell {
             }
             level.addFreshEntity(missile);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 

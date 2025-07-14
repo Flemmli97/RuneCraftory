@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -19,7 +19,7 @@ public class S2CUpdateNPCData implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CUpdateNPCData> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CUpdateNPCData decode(RegistryFriendlyByteBuf buf) {
-            return new S2CUpdateNPCData(buf.readInt(), buf.readNbt(), buf.readNbt(), ByteBufCodecs.registry(ModNPCProfessions.PROFESSION_REGISTRY_KEY)
+            return new S2CUpdateNPCData(buf.readInt(), buf.readNbt(), buf.readNbt(), ByteBufCodecs.registry(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY)
                     .decode(buf));
         }
 
@@ -28,7 +28,7 @@ public class S2CUpdateNPCData implements CustomPacketPayload {
             buf.writeInt(pkt.entityID);
             buf.writeNbt(pkt.hearts);
             buf.writeNbt(pkt.schedule);
-            ByteBufCodecs.registry(ModNPCProfessions.PROFESSION_REGISTRY_KEY)
+            ByteBufCodecs.registry(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY)
                     .encode(buf, pkt.profession);
         }
     };
@@ -45,7 +45,7 @@ public class S2CUpdateNPCData implements CustomPacketPayload {
         this.profession = profession;
     }
 
-    public S2CUpdateNPCData(EntityNPCBase entity, CompoundTag hearts) {
+    public S2CUpdateNPCData(NPCEntity entity, CompoundTag hearts) {
         this.entityID = entity.getId();
         this.hearts = hearts;
         this.schedule = entity.getNPCSchedule().save();
@@ -54,7 +54,7 @@ public class S2CUpdateNPCData implements CustomPacketPayload {
 
     public static void handle(S2CUpdateNPCData pkt, Player player) {
         Entity e = player.level().getEntity(pkt.entityID);
-        if (e instanceof EntityNPCBase npc) {
+        if (e instanceof NPCEntity npc) {
             npc.handleUpdatePacket(player, pkt.hearts, pkt.schedule, pkt.profession);
         }
     }

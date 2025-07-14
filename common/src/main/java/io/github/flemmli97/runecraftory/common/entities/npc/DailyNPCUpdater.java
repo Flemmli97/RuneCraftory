@@ -11,12 +11,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class DailyNPCUpdater extends DailyEntityUpdater<EntityNPCBase> {
+public class DailyNPCUpdater extends DailyEntityUpdater<NPCEntity> {
 
     private int bread;
     private final Set<UUID> acceptedRandomQuest = new HashSet<>();
 
-    public DailyNPCUpdater(EntityNPCBase entity) {
+    public DailyNPCUpdater(NPCEntity entity) {
         super(entity);
         this.bread = entity.getRandom().nextInt(4) + 1;
     }

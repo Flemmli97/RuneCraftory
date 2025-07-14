@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.quests;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.network.S2COpenQuestGui;
 import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
@@ -64,7 +64,7 @@ public class QuestHandler {
         QuestData data = getData(player);
         LoaderNetwork.INSTANCE.sendToPlayer(new S2COpenQuestGui(false, quest.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e -> {
             List<MutableComponent> description = e.getValue().getDescription(player);
-            EntityNPCBase npc;
+            NPCEntity npc;
             if (e.getValue() instanceof NPCQuest npcQuest && (npc = npcQuest.getNpc(player.level())) != null) {
                 description = Stream.concat(Stream.of(Component.translatable("runecraftory.quest.npc.header", npc.getName(), npc.blockPosition().getX(),
                                 npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
@@ -78,7 +78,7 @@ public class QuestHandler {
         data.setQuestboardQuests(quest);
     }
 
-    public static void acceptQuestRandom(ServerPlayer player, EntityNPCBase npc, ResourceLocation res) {
+    public static void acceptQuestRandom(ServerPlayer player, NPCEntity npc, ResourceLocation res) {
         // TODO
     }
 
@@ -102,7 +102,7 @@ public class QuestHandler {
                 ));
     }
 
-    public static QuestState checkCompletionQuest(ServerPlayer player, EntityNPCBase npc) {
+    public static QuestState checkCompletionQuest(ServerPlayer player, NPCEntity npc) {
         QuestData data = getData(player);
         return data.getCurrentQuest().stream()
                 .map(p -> p.tryComplete(data, npc.getUUID().toString()))
@@ -110,7 +110,7 @@ public class QuestHandler {
                 .findFirst().orElse(QuestState.NO);
     }
 
-    public static void removeQuestFor(ServerPlayer player, EntityNPCBase npc) {
+    public static void removeQuestFor(ServerPlayer player, NPCEntity npc) {
         QuestData data = getData(player);
         List<QuestProgress> toRemove = data.getCurrentQuest().stream()
                 .filter(p -> p.getQuest() instanceof NPCQuest npcQuest && npc.getUUID().equals(npcQuest.getNpcUuid())).toList();
@@ -124,7 +124,7 @@ public class QuestHandler {
         toRemove.forEach(p -> data.reset(p.getQuest().id));
     }
 
-    public static ResourceLocation questForExists(ServerPlayer player, EntityNPCBase npc) {
+    public static ResourceLocation questForExists(ServerPlayer player, NPCEntity npc) {
         QuestData data = getData(player);
         return data.getCurrentQuest().stream().filter(p -> p.getQuest() instanceof NPCQuest npcQuest && npc.getUUID().equals(npcQuest.getNpcUuid()))
                 .map(p -> ((NPCQuest) p.getQuest()).getOriginID()).findFirst().orElse(null);

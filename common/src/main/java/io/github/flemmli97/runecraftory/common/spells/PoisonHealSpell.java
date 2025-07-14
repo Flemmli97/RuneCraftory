@@ -2,9 +2,9 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,7 +28,7 @@ public class PoisonHealSpell extends Spell {
         ServerLevel serverLevel = (ServerLevel) entity.level();
         serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
         for (int i = 0; i < 16; i++) {
-            serverLevel.sendParticles(new ColoredParticleData(ModParticles.LIGHT.get(), 57 / 255F, 112 / 255F, 179 / 255F, 0.5f, 2f), entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
+            serverLevel.sendParticles(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 57 / 255F, 112 / 255F, 179 / 255F, 0.5f, 2f), entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
         }
     }
 
@@ -38,14 +38,14 @@ public class PoisonHealSpell extends Spell {
             return false;
         Consumer<LivingEntity> apply = living -> {
             if (lvl >= 10) {
-                living.removeEffect(ModEffects.SEAL.asHolder());
+                living.removeEffect(RuneCraftoryEffects.SEAL.asHolder());
             }
             if (lvl >= 5) {
-                living.removeEffect(ModEffects.PARALYSIS.asHolder());
+                living.removeEffect(RuneCraftoryEffects.PARALYSIS.asHolder());
                 living.removeEffect(MobEffects.WITHER);
             }
             living.removeEffect(MobEffects.POISON);
-            living.removeEffect(ModEffects.POISON.asHolder());
+            living.removeEffect(RuneCraftoryEffects.POISON.asHolder());
             spawnStatusHealParticles(living);
         };
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(12), e -> {
@@ -62,7 +62,7 @@ public class PoisonHealSpell extends Spell {
         });
         apply.accept(entity);
         entities.forEach(apply);
-        playSound(entity, ModSounds.SPELL_GENERIC_HEAL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_HEAL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

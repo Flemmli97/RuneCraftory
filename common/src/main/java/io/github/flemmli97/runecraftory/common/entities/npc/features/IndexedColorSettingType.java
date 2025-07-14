@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -38,7 +38,7 @@ public class IndexedColorSettingType implements NPCFeature.NPCFeatureHolder<Inde
     }
 
     @Override
-    public IndexedColorFeature create(EntityNPCBase npc) {
+    public IndexedColorFeature create(NPCEntity npc) {
         int index = this.indices.isEmpty() ? 0 : this.indices.get(npc.getRandom().nextInt(this.indices.size()));
         return new IndexedColorFeature(this.type.get(), index, this.color.getRandom(npc.getRandom()));
     }

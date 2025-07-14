@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -49,14 +49,14 @@ public class AcquirePOITask<E extends Mob> extends ExtendedBehaviour<E> {
         this.entryCondition.put(poiMemory, MemoryStatus.VALUE_ABSENT);
     }
 
-    public static BiPredicate<EntityNPCBase, BlockPos> bedPredicate() {
+    public static BiPredicate<NPCEntity, BlockPos> bedPredicate() {
         return (entity, pos) -> {
             BlockState blockState = entity.level().getBlockState(pos);
             return blockState.is(BlockTags.BEDS) && (!blockState.getValue(BedBlock.OCCUPIED) || entity.isSleeping());
         };
     }
 
-    public static BiPredicate<EntityNPCBase, BlockPos> withinRangeOf(Function<EntityNPCBase, GlobalPos> func) {
+    public static BiPredicate<NPCEntity, BlockPos> withinRangeOf(Function<NPCEntity, GlobalPos> func) {
         return (entity, pos) -> {
             GlobalPos gPos = func.apply(entity);
             if (gPos == null)

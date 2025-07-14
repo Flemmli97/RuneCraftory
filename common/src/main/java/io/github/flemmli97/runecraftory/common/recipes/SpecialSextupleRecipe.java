@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.recipes;
 import com.google.common.base.Suppliers;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
@@ -18,11 +18,11 @@ import java.util.function.Supplier;
 public class SpecialSextupleRecipe extends SextupleRecipe {
 
     public static final Supplier<RecipeHolder<SpecialSextupleRecipe>> SCRAP = Suppliers.memoize(() -> new RecipeHolder<>(RuneCraftory.modRes("scrap_metal"),
-            new SpecialSextupleRecipe(new ItemStack(ModItems.SCRAP.get()), new AlternateResult(new ItemStack(ModItems.SCRAP_PLUS.get()), 0.1f))));
+            new SpecialSextupleRecipe(new ItemStack(RuneCraftoryItems.SCRAP.get()), new AlternateResult(new ItemStack(RuneCraftoryItems.SCRAP_PLUS.get()), 0.1f))));
     public static final Supplier<RecipeHolder<SpecialSextupleRecipe>> OBJECT_X = Suppliers.memoize(() -> new RecipeHolder<>(RuneCraftory.modRes("object_x"),
-            new SpecialSextupleRecipe(new ItemStack(ModItems.OBJECT_X.get()), null)));
+            new SpecialSextupleRecipe(new ItemStack(RuneCraftoryItems.OBJECT_X.get()), null)));
     public static final Supplier<RecipeHolder<SpecialSextupleRecipe>> FAILED_DISH = Suppliers.memoize(() -> new RecipeHolder<>(RuneCraftory.modRes("failed_dish"),
-            new SpecialSextupleRecipe(new ItemStack(ModItems.FAILED_DISH.get()), new AlternateResult(new ItemStack(ModItems.DISASTROUS_DISH.get()), 0.1f))));
+            new SpecialSextupleRecipe(new ItemStack(RuneCraftoryItems.FAILED_DISH.get()), new AlternateResult(new ItemStack(RuneCraftoryItems.DISASTROUS_DISH.get()), 0.1f))));
 
     private final AlternateResult alternateResult;
 
@@ -43,7 +43,7 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
         CraftingUtils.RAND.setSeed(Platform.INSTANCE.getPlayerData(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
         ItemStack res = this.alternateResult != null && CraftingUtils.RAND.nextFloat() < this.alternateResult.chance() ? this.alternateResult.stack().copy() :
                 this.getResultItem(inv.getPlayer().registryAccess());
-        return new RecipeOutput(res, new ItemStack(ModItems.UNKNOWN.get()), NonNullList.create());
+        return new RecipeOutput(res, new ItemStack(RuneCraftoryItems.UNKNOWN.get()), NonNullList.create());
     }
 
     @Override

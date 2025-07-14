@@ -3,13 +3,13 @@ package io.github.flemmli97.runecraftory.client.render.npc;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -23,7 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.Nullable;
 
-public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends RenderLayer<T, M> {
+public class NPCTextureLayer<T extends NPCEntity, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends RenderLayer<T, M> {
 
     private final A model;
     private final A slimModel;
@@ -39,37 +39,37 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
     public static int setColor(NPCFeatureContainer features, LayerType layer) {
         int color = switch (layer) {
             case SKIN_LAYER -> {
-                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(ModNPCLooks.SKIN.get());
+                IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(RuneCraftoryNPCLooks.SKIN.get());
                 if (feat == null)
                     yield 0xd5bfa7;
                 yield feat.color();
             }
             case IRIS_LAYER -> {
-                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
                 if (feat == null || feat.iris() == null)
                     yield 0x000000;
                 yield feat.iris().color();
             }
             case SCLERA_LAYER -> {
-                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
                 if (feat == null || feat.sclera() == null)
                     yield 0x000000;
                 yield feat.sclera().color();
             }
             case EYEBROWS_LAYER -> {
-                FaceFeaturesType.FaceFeatures feat = features.getFeature(ModNPCLooks.FACE.get());
+                FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
                 if (feat == null || feat.eyebrow() == null)
                     yield 0x000000;
                 yield feat.eyebrow().color();
             }
             case BLUSH_LAYER -> {
-                BlushFeatureType.BlushFeature feat = features.getFeature(ModNPCLooks.BLUSH.get());
+                BlushFeatureType.BlushFeature feat = features.getFeature(RuneCraftoryNPCLooks.BLUSH.get());
                 if (feat == null)
                     yield 0xffffff;
                 yield feat.color();
             }
             case HAIR_LAYER -> {
-                HairFeatureType.HairFeature feat = features.getFeature(ModNPCLooks.HAIR.get());
+                HairFeatureType.HairFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAIR.get());
                 if (feat == null)
                     yield 0xffffff;
                 yield feat.color();
@@ -90,7 +90,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
     }
 
     protected A getModel(T npc) {
-        return RenderNPC.isSlim(npc) ? this.slimModel : this.model;
+        return NPCRender.isSlim(npc) ? this.slimModel : this.model;
     }
 
     protected void setup(A layerModel) {
@@ -133,7 +133,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
                 return null;
         }
         ResourceLocation resourceLocation = this.getTexture(entity);
-        if (resourceLocation.equals(RenderNPC.EMPTY))
+        if (resourceLocation.equals(NPCRender.EMPTY))
             return null;
         if (translucent) {
             return RenderType.itemEntityTranslucentCull(resourceLocation);
@@ -152,7 +152,7 @@ public class NPCTextureLayer<T extends EntityNPCBase, M extends HumanoidModel<T>
     }
 
     protected ResourceLocation getTexture(T entity) {
-        return RenderNPC.getTextureFromLook(entity, this.layer, null);
+        return NPCRender.getTextureFromLook(entity, this.layer, null);
     }
 
     protected void setPartVisibility(A model) {

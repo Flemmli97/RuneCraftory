@@ -2,9 +2,9 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.FireballEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -25,11 +25,11 @@ public class FireballSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityFireball ball = new EntityFireball(level, entity, this.big);
+        FireballEntity ball = new FireballEntity(level, entity, this.big);
         ProjectileUtils.shoot(entity, ball, 1, 0);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.big ? 1 : 0.8f));
         level.addFreshEntity(ball);
-        playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         if (entity instanceof Player player) {
             return !Platform.INSTANCE.getPlayerData(player).getWeaponHandler().canExecuteAction(this.useAction());
         }
@@ -38,7 +38,7 @@ public class FireballSpell extends Spell {
 
     @Override
     public AttackAction useAction() {
-        return this.big ? ModAttackActions.FIREBALL_BIG_USE.get() :
-                ModAttackActions.FIREBALL_USE.get();
+        return this.big ? RuneCraftoryAttackActions.FIREBALL_BIG_USE.get() :
+                RuneCraftoryAttackActions.FIREBALL_USE.get();
     }
 }

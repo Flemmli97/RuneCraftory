@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.blocks.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

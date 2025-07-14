@@ -11,8 +11,8 @@ import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.QuestConversationContext;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.core.Holder;
@@ -47,7 +47,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
 
     public static final Map<Holder<Attribute>, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
-            ModAttributes.DEFENCE.asHolder(), 0.5d, ModAttributes.MAGIC_ATTACK.asHolder(), 1d, ModAttributes.MAGIC_DEFENCE.asHolder(), 0.5d);
+            RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5d, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1d, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5d);
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
             Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of());
 
@@ -92,7 +92,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
-                    ModNPCProfessions.PROFESSIONS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
+                    RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
                             weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
@@ -206,8 +206,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private List<NPCLookId> look;
         private List<ResourceLocation> combatAction;
 
-        private final Map<Holder<Attribute>, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
-        private final Map<Holder<Attribute>, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
+        private final Map<Holder<Attribute>, Double> baseStats = new TreeMap<>(RuneCraftoryAttributes.SORTED);
+        private final Map<Holder<Attribute>, Double> statIncrease = new TreeMap<>(RuneCraftoryAttributes.SORTED);
         private int baseLevel = 1;
         private int unique;
         private RelationShipState relationShipState = RelationShipState.DEFAULT;

@@ -5,8 +5,8 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -99,7 +99,7 @@ public abstract class Spell {
     public abstract boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level);
 
     public AttackAction useAction() {
-        return ModAttackActions.STAFF_USE.get();
+        return RuneCraftoryAttackActions.STAFF_USE.get();
     }
 
     public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
@@ -116,6 +116,6 @@ public abstract class Spell {
 
     @Override
     public String toString() {
-        return ModSpells.SPELLS.registry().getKey(this).toString();
+        return RuneCraftorySpells.SPELLS.registry().getKey(this).toString();
     }
 }

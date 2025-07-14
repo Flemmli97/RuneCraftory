@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCProfessions;
-import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryPoiTypes;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -41,15 +41,15 @@ public class NPCProfession {
         this.poiType = builder.poiType;
         this.ownerTranslationKey = builder.ownerTranslationKey;
         if (this.poiType != null) {
-            if (!builder.allowCashPOI || ModPoiTypes.CASH_REGISTER.asHolder().is(this.poiType))
+            if (!builder.allowCashPOI || RuneCraftoryPoiTypes.CASH_REGISTER.asHolder().is(this.poiType))
                 this.predicate = t -> t.is(this.poiType);
             else
-                this.predicate = t -> t.is(this.poiType) || t.is(ModPoiTypes.CASH_REGISTER.getKey());
+                this.predicate = t -> t.is(this.poiType) || t.is(RuneCraftoryPoiTypes.CASH_REGISTER.getKey());
         } else
             this.predicate = null;
     }
 
-    public boolean hasShop(EntityNPCBase npc, Player player) {
+    public boolean hasShop(NPCEntity npc, Player player) {
         return this.hasShop;
     }
 
@@ -65,21 +65,21 @@ public class NPCProfession {
         Optional<Holder.Reference<PoiType>> type = provider.lookupOrThrow(Registries.POINT_OF_INTEREST_TYPE).get(this.poiType);
         Set<BlockState> set = new HashSet<>();
         type.ifPresent(ref -> set.addAll(ref.value().matchingStates()));
-        if (this.matches(ModPoiTypes.CASH_REGISTER.asHolder()))
-            set.addAll(ModPoiTypes.CASH_REGISTER.get().matchingStates());
+        if (this.matches(RuneCraftoryPoiTypes.CASH_REGISTER.asHolder()))
+            set.addAll(RuneCraftoryPoiTypes.CASH_REGISTER.get().matchingStates());
         return set;
     }
 
-    public void handleAction(EntityNPCBase npc, Player player, String action) {
+    public void handleAction(NPCEntity npc, Player player, String action) {
     }
 
-    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(NPCEntity entity, ServerPlayer player) {
         return Map.of();
     }
 
     public String getTranslationKey() {
         if (this.translationKey == null)
-            this.translationKey = Util.makeDescriptionId("npc.profession", ModNPCProfessions.PROFESSIONS.registry().getKey(this));
+            this.translationKey = Util.makeDescriptionId("npc.profession", RuneCraftoryNPCProfessions.PROFESSIONS.registry().getKey(this));
         return this.translationKey;
     }
 

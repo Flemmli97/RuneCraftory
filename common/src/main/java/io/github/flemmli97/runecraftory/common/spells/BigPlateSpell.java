@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.misc.BigPlateEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,7 +27,7 @@ public class BigPlateSpell extends Spell {
             target.selector(e -> {
                 if (e instanceof OwnableEntity ownable && e.getUUID().equals(ownable.getOwnerUUID()))
                     return false;
-                return !(e instanceof EntityNPCBase npc) || !e.getUUID().equals(npc.getEntityToFollowUUID());
+                return !(e instanceof NPCEntity npc) || !e.getUUID().equals(npc.getEntityToFollowUUID());
             });
             LivingEntity nearest = level.getNearestEntity(LivingEntity.class, target, entity, entity.getX(), entity.getY(), entity.getZ(), entity.getBoundingBox().inflate(16));
             if (nearest != null)
@@ -37,7 +37,7 @@ public class BigPlateSpell extends Spell {
             Vec3 horizontalLook = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize();
             pos = entity.position().add(horizontalLook);
         }
-        EntityBigPlate plate = new EntityBigPlate(level, entity);
+        BigPlateEntity plate = new BigPlateEntity(level, entity);
         plate.setPos(pos.x(), pos.y() + 4, pos.z());
         plate.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
         level.addFreshEntity(plate);

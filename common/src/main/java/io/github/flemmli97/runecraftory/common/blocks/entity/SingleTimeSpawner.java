@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,7 +27,7 @@ public class SingleTimeSpawner extends BlockEntity {
     private int delay = 3;
 
     public SingleTimeSpawner(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.SINGLE_SPAWNER_TILE.get(), blockPos, blockState);
+        super(RuneCraftoryBlocks.SINGLE_SPAWNER_TILE.get(), blockPos, blockState);
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SingleTimeSpawner blockEntity) {
@@ -46,7 +46,7 @@ public class SingleTimeSpawner extends BlockEntity {
                 if (e instanceof Mob mob) {
                     mob.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(e.blockPosition()), MobSpawnType.SPAWNER, null);
                 }
-                if (e instanceof EntityNPCBase npc) {
+                if (e instanceof NPCEntity npc) {
                     npc.randomizeData(this.npcProfession);
                 }
                 e.moveTo(this.worldPosition.getX() + 0.5, this.worldPosition.getY(), this.worldPosition.getZ() + 0.5, this.level.random.nextFloat() * 360.0F, 0.0F);

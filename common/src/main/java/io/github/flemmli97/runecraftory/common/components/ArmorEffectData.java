@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -21,13 +21,13 @@ public record ArmorEffectData(Optional<Holder<ArmorEffect>> first, Optional<Hold
 
     public static final ArmorEffectData DEFAULT = new ArmorEffectData(null, null, null, 0);
     public static final Codec<ArmorEffectData> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(ModArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("first_effect").forGetter(ArmorEffectData::first),
-                    ModArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("second_effect").forGetter(ArmorEffectData::second),
-                    ModArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("third_effect").forGetter(ArmorEffectData::third),
+            instance.group(RuneCraftoryArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("first_effect").forGetter(ArmorEffectData::first),
+                    RuneCraftoryArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("second_effect").forGetter(ArmorEffectData::second),
+                    RuneCraftoryArmorEffects.ARMOR_EFFECTS.registry().holderByNameCodec().optionalFieldOf("third_effect").forGetter(ArmorEffectData::third),
                     Codec.INT.fieldOf("idx").forGetter(d -> d.appendingIndex)
             ).apply(instance, ArmorEffectData::new));
     private static final StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<ArmorEffect>>> ARMOR_EFFECTS_CODEC = ByteBufCodecs.optional(
-            ByteBufCodecs.holderRegistry(ModArmorEffects.ARMOR_EFFECTS.registry().key()));
+            ByteBufCodecs.holderRegistry(RuneCraftoryArmorEffects.ARMOR_EFFECTS.registry().key()));
     public static final StreamCodec<RegistryFriendlyByteBuf, ArmorEffectData> STREAM_CODEC = new StreamCodec<>() {
 
         @Override

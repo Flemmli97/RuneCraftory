@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.components.AttackActionData;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class SetWeaponBasedAttack<E extends LivingEntity> extends ExtendedBehaviour<E> {
 
     private static final MemoryTest MEMORIES = MemoryTest.builder(1)
-            .usesMemories(ModMemoryTypes.NPC_ATTACK_ACTION.get());
+            .usesMemories(RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get());
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
@@ -33,7 +33,7 @@ public class SetWeaponBasedAttack<E extends LivingEntity> extends ExtendedBehavi
         if (!super.checkExtraStartConditions(level, entity))
             return false;
         ItemStack weapon = entity.getMainHandItem();
-        AttackActionData action = weapon.get(ModDataComponentTypes.ATTACK_ACTION.get());
+        AttackActionData action = weapon.get(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get());
         return action != null && action.attackAction().get().isPresent();
     }
 
@@ -41,10 +41,10 @@ public class SetWeaponBasedAttack<E extends LivingEntity> extends ExtendedBehavi
     protected void start(E entity) {
         super.start(entity);
         ItemStack weapon = entity.getMainHandItem();
-        AttackActionData action = weapon.get(ModDataComponentTypes.ATTACK_ACTION.get());
+        AttackActionData action = weapon.get(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get());
         Optional<Holder<AttackAction>> opt = action.attackAction().get();
         int amount = entity.getRandom().nextInt(opt.get().value().combos().size()) + 1;
         NPCAttackAction attackAction = new NPCAttackAction(opt.get().value(), amount, Optional.empty());
-        BrainUtils.setMemory(entity, ModMemoryTypes.NPC_ATTACK_ACTION.get(), attackAction);
+        BrainUtils.setMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get(), attackAction);
     }
 }

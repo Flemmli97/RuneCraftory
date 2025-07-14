@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -51,7 +51,7 @@ public class ItemToolWateringCan extends Item {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -60,7 +60,7 @@ public class ItemToolWateringCan extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
@@ -73,12 +73,12 @@ public class ItemToolWateringCan extends Item {
         ItemStack stack = player.getItemInHand(hand);
         BlockState state = world.getBlockState(ray.getBlockPos());
         if (state.getFluidState().getType() == Fluids.WATER) {
-            stack.set(ModDataComponentTypes.WATER.get(), stack.getOrDefault(ModDataComponentTypes.MAX_WATER.get(), 0));
+            stack.set(RuneCraftoryDataComponentTypes.WATER.get(), stack.getOrDefault(RuneCraftoryDataComponentTypes.MAX_WATER.get(), 0));
             world.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
             player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
             return InteractionResultHolder.success(stack);
         }
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -88,7 +88,7 @@ public class ItemToolWateringCan extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel());
@@ -121,15 +121,15 @@ public class ItemToolWateringCan extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        int water = stack.getOrDefault(ModDataComponentTypes.WATER.get(), 0);
-        int max = stack.getOrDefault(ModDataComponentTypes.MAX_WATER.get(), 0);
+        int water = stack.getOrDefault(RuneCraftoryDataComponentTypes.WATER.get(), 0);
+        int max = stack.getOrDefault(RuneCraftoryDataComponentTypes.MAX_WATER.get(), 0);
         return (int) (water / (float) max * 13);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        int water = stack.getOrDefault(ModDataComponentTypes.WATER.get(), 0);
-        int max = stack.getOrDefault(ModDataComponentTypes.MAX_WATER.get(), 0);
+        int water = stack.getOrDefault(RuneCraftoryDataComponentTypes.WATER.get(), 0);
+        int max = stack.getOrDefault(RuneCraftoryDataComponentTypes.MAX_WATER.get(), 0);
         float f = Math.max(0.0f, water / (float) max);
         return Mth.hsvToRgb(f / 3.0f, 1.0f, 1.0f);
     }
@@ -167,11 +167,11 @@ public class ItemToolWateringCan extends Item {
             return false;
         boolean creative = !(entity instanceof Player) || ((Player) entity).isCreative();
         BlockState state = world.getBlockState(pos);
-        int water = stack.getOrDefault(ModDataComponentTypes.WATER.get(), 0);
+        int water = stack.getOrDefault(RuneCraftoryDataComponentTypes.WATER.get(), 0);
         if ((creative || water > 0) && state.is(RunecraftoryTags.Blocks.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
             FarmlandHandler.waterLand(world, pos, state);
             if (!creative) {
-                stack.set(ModDataComponentTypes.WATER.get(), water - 1);
+                stack.set(RuneCraftoryDataComponentTypes.WATER.get(), water - 1);
             }
             return true;
         }

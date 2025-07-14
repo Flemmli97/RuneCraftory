@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.registry.ModDamageType;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDamageType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -97,12 +97,12 @@ public class DynamicDamage extends DamageSource {
     }
 
     public enum DamageCategory {
-        NORMAL(ModDamageType.PHYSICAL),
-        MAGIC(ModDamageType.MAGIC),
-        IGNOREDEF(ModDamageType.IGNORE_DEFENCE),
-        IGNOREMAGICDEF(ModDamageType.IGNORE_MAGIC_DEFENCE),
-        FAINT(ModDamageType.TRUE_DAMAGE),
-        FIXED(ModDamageType.TRUE_DAMAGE);
+        NORMAL(RuneCraftoryDamageType.PHYSICAL),
+        MAGIC(RuneCraftoryDamageType.MAGIC),
+        IGNOREDEF(RuneCraftoryDamageType.IGNORE_DEFENCE),
+        IGNOREMAGICDEF(RuneCraftoryDamageType.IGNORE_MAGIC_DEFENCE),
+        FAINT(RuneCraftoryDamageType.TRUE_DAMAGE),
+        FIXED(RuneCraftoryDamageType.TRUE_DAMAGE);
 
         public final ResourceKey<DamageType> typeKey;
 
@@ -203,9 +203,9 @@ public class DynamicDamage extends DamageSource {
             Set<TagKey<DamageType>> tags = new HashSet<>();
             ResourceKey<DamageType> type = this.dmg.typeKey;
             if (this.isProjectile) {
-                ResourceKey<DamageType> proj = ModDamageType.PROJECTILE_EQUIVALENT.get(type);
+                ResourceKey<DamageType> proj = RuneCraftoryDamageType.PROJECTILE_EQUIVALENT.get(type);
                 if (proj != null)
-                    type = ModDamageType.PHYSICAL_PROJECTILE;
+                    type = RuneCraftoryDamageType.PHYSICAL_PROJECTILE;
             }
             return new DynamicDamage(provider.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(type),
                     this.cause, this.source, this.element, this.knock, this.knockAmount, this.protection,

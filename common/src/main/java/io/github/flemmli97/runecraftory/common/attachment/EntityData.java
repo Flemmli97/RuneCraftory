@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.attachment;
 
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
+import io.github.flemmli97.runecraftory.common.entities.misc.CustomFishingHookEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -21,7 +21,7 @@ public class EntityData {
     private boolean sleeping, isSilent, paralysis, stunned, noAIStunned, cold, poison, orthoView, enteredBath;
     private int disabledState;
 
-    public EntityCustomFishingHook fishingHook;
+    public CustomFishingHookEntity fishingHook;
 
     private ItemStack main, off;
 

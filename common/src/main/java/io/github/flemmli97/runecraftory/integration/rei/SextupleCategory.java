@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -36,10 +36,10 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
     @Override
     public Renderer getIcon() {
         return switch (this.identifier.craftingType()) {
-            case FORGE -> EntryStacks.of(ModItems.FORGE.get());
-            case ACCESSORY_WORKBENCH -> EntryStacks.of(ModItems.ACCESSORY_WORKBENCH.get());
-            case CHEMISTRY_SET -> EntryStacks.of(ModItems.CHEMISTRY_SET.get());
-            case COOKING_TABLE -> EntryStacks.of(ModItems.COOKING_TABLE.get());
+            case FORGE -> EntryStacks.of(RuneCraftoryItems.FORGE.get());
+            case ACCESSORY_WORKBENCH -> EntryStacks.of(RuneCraftoryItems.ACCESSORY_WORKBENCH.get());
+            case CHEMISTRY_SET -> EntryStacks.of(RuneCraftoryItems.CHEMISTRY_SET.get());
+            case COOKING_TABLE -> EntryStacks.of(RuneCraftoryItems.COOKING_TABLE.get());
         };
     }
 
@@ -66,7 +66,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
             Component level = Component.translatable("runecraftory.recipe_integration.crafting_level", display.recipe().value().getCraftingLevel());
             widgets.add(Widgets.createLabel(new Point(bounds.getX() + bounds.getWidth(), bounds.getY()), level).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
         } else {
-            widgets.add(Widgets.createSlot(new Point(bounds.getX() + 64, bounds.getY() + 14)).entry(EntryStacks.of(new ItemStack(ModItems.UNKNOWN.get()))
+            widgets.add(Widgets.createSlot(new Point(bounds.getX() + 64, bounds.getY() + 14)).entry(EntryStacks.of(new ItemStack(RuneCraftoryItems.UNKNOWN.get()))
                     .tooltip(Component.translatable("runecraftory.recipe_integration.locked"))));
         }
         widgets.add(Widgets.createSlot(new Point(bounds.getX() + 97, bounds.getY() + 15))

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.StatusBallEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -11,9 +11,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class StatusBallSpell extends Spell {
 
-    private final EntityStatusBall.Type type;
+    private final StatusBallEntity.Type type;
 
-    public StatusBallSpell(EntityStatusBall.Type type) {
+    public StatusBallSpell(StatusBallEntity.Type type) {
         this.type = type;
     }
 
@@ -21,7 +21,7 @@ public class StatusBallSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityStatusBall ball = new EntityStatusBall(level, entity);
+        StatusBallEntity ball = new StatusBallEntity(level, entity);
         ball.setType(this.type);
         ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
         ball.setPos(entity.getX(), entity.getY() + 0.4, entity.getZ());

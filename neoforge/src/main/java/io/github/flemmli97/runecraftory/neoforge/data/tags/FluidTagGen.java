@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.neoforge.data.tags;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModFluids;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -24,10 +24,10 @@ public class FluidTagGen extends IntrinsicHolderTagsProvider<Fluid> {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(RunecraftoryTags.Fluids.HOT_SPRING_FLUID)
-                .add(ModFluids.FLOWING_HOT_SPRING_WATER.get())
-                .add(ModFluids.HOT_SPRING_WATER.get());
+                .add(RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get())
+                .add(RuneCraftoryFluids.HOT_SPRING_WATER.get());
         this.tag(FluidTags.WATER)
-                .add(ModFluids.FLOWING_HOT_SPRING_WATER.get())
-                .add(ModFluids.HOT_SPRING_WATER.get());
+                .add(RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get())
+                .add(RuneCraftoryFluids.HOT_SPRING_WATER.get());
     }
 }

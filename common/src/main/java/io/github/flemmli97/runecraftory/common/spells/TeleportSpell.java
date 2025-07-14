@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
@@ -130,7 +130,7 @@ public class TeleportSpell extends Spell {
         for (Entity e : oldLevel.getEntities(EntityTypeTest.forClass(Mob.class), oldBox.inflate(24), e -> {
             if (e instanceof BaseMonster monster)
                 return player.getUUID().equals(monster.getOwnerUUID()) && monster.behaviourState() == BaseMonster.Behaviour.FOLLOW;
-            if (e instanceof EntityNPCBase npc)
+            if (e instanceof NPCEntity npc)
                 return player.getUUID().equals(npc.getEntityToFollowUUID());
             return false;
         })) {

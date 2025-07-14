@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
@@ -11,10 +11,10 @@ import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.List;
 
-public class DoNPCAttackAction extends ExtendedBehaviour<EntityNPCBase> {
+public class DoNPCAttackAction extends ExtendedBehaviour<NPCEntity> {
 
     private static final MemoryTest MEMORIES = MemoryTest.builder(1)
-            .hasMemories(ModMemoryTypes.NPC_ATTACK_ACTION.get());
+            .hasMemories(RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get());
 
     private NPCAttackAction current;
 
@@ -24,16 +24,16 @@ public class DoNPCAttackAction extends ExtendedBehaviour<EntityNPCBase> {
     }
 
     @Override
-    protected void start(EntityNPCBase entity) {
-        BrainUtils.withMemory(entity, ModMemoryTypes.NPC_ATTACK_ACTION.get(), selected -> {
+    protected void start(NPCEntity entity) {
+        BrainUtils.withMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get(), selected -> {
             this.current = selected;
             entity.weaponHandler.doWeaponAttack(selected.action(), entity.getMainHandItem(), selected.spell().orElse(null));
         });
-        BrainUtils.clearMemory(entity, ModMemoryTypes.NPC_ATTACK_ACTION.get());
+        BrainUtils.clearMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get());
     }
 
     @Override
-    protected boolean shouldKeepRunning(EntityNPCBase entity) {
+    protected boolean shouldKeepRunning(NPCEntity entity) {
         if (this.current == null)
             return false;
         if (entity.weaponHandler.isScheduledAction())
@@ -42,13 +42,13 @@ public class DoNPCAttackAction extends ExtendedBehaviour<EntityNPCBase> {
     }
 
     @Override
-    protected void stop(EntityNPCBase entity) {
+    protected void stop(NPCEntity entity) {
         super.stop(entity);
-        BrainUtils.clearMemory(entity, ModMemoryTypes.NPC_ATTACK_ACTION.get());
+        BrainUtils.clearMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get());
         this.current = null;
     }
 
-    private boolean tryScheduleCombo(EntityNPCBase npc) {
+    private boolean tryScheduleCombo(NPCEntity npc) {
         if (npc.weaponHandler.isScheduledAction())
             return false;
         int combo = npc.weaponHandler.getComboCount();

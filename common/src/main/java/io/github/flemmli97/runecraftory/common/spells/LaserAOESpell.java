@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.ThunderboltBeamEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
@@ -28,12 +28,12 @@ public class LaserAOESpell extends Spell {
         }
         Vec3 up = MathsHelper.getUp(dir);
         for (Vector3d vec : MathUtils.rotatedVecs(new Vector3d(dir.x(), dir.y(), dir.z()), new Vector3d(up.x(), up.y(), up.z()), -180, 150, 30)) {
-            EntityThunderboltBeam beam = new EntityThunderboltBeam(level, entity);
+            ThunderboltBeamEntity beam = new ThunderboltBeamEntity(level, entity);
             beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
             beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
             level.addFreshEntity(beam);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_ELECTRIC_ZAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_ELECTRIC_ZAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

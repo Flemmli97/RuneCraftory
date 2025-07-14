@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -95,7 +95,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
                         .addIngredients(ing);
             }
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 65, 15)
-                    .addItemStack(new ItemStack(ModItems.UNKNOWN.get()))
+                    .addItemStack(new ItemStack(RuneCraftoryItems.UNKNOWN.get()))
                     .addRichTooltipCallback((view, tooltip) ->
                             tooltip.add(Component.translatable("runecraftory.recipe_integration.locked")));
         }

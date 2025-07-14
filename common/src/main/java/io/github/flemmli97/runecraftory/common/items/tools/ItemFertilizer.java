@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.common.blocks.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -81,7 +81,7 @@ public class ItemFertilizer extends Item {
             if (ctx.getPlayer() instanceof ServerPlayer serverPlayer) {
                 if (!serverPlayer.isCreative())
                     ctx.getItemInHand().shrink(1);
-                ModCriteria.FERTILIZE_FARM.get().trigger(serverPlayer);
+                RuneCraftoryCriteria.FERTILIZE_FARM.get().trigger(serverPlayer);
             }
         }
         return res;

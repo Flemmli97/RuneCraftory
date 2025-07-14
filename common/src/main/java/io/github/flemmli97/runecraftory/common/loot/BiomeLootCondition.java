@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -26,7 +26,7 @@ public record BiomeLootCondition(TagKey<Biome> tag) implements LootItemCondition
 
     @Override
     public LootItemConditionType getType() {
-        return ModLootRegistries.BIOME.get();
+        return RuneCraftoryLootRegistries.BIOME.get();
     }
 
     @Override

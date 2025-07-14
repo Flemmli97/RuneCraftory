@@ -9,8 +9,8 @@ import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
-import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
-import io.github.flemmli97.runecraftory.common.blocks.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.MineralBlock;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -25,12 +25,12 @@ import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -212,7 +212,7 @@ public class EntityCalls {
             // Only trigger if caused by any entity
             if (source.getDirectEntity() != null && amount > 0) {
                 if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
-                    data.getWeaponHandler().doWeaponAttack(ModAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null);
+                    data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null);
                     return true;
                 }
             }
@@ -240,9 +240,9 @@ public class EntityCalls {
     public static void postDamage(LivingEntity entity, DamageSource src, float amount) {
         Entity attacker = src.getEntity();
         if (attacker instanceof LivingEntity)
-            entity.removeEffect(ModEffects.SLEEP.asHolder());
+            entity.removeEffect(RuneCraftoryEffects.SLEEP.asHolder());
         if (amount > 0 && attacker instanceof LivingEntity living) {
-            float drainPercent = (float) (CombatUtils.statusEffectValue(living, ModAttributes.DRAIN.asHolder(), entity));
+            float drainPercent = (float) (CombatUtils.statusEffectValue(living, RuneCraftoryAttributes.DRAIN.asHolder(), entity));
             if (drainPercent > 0f) {
                 if (attacker instanceof Player player)
                     player.heal(drainPercent * amount);
@@ -257,13 +257,13 @@ public class EntityCalls {
             if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 ItemStack deathProt = ItemStack.EMPTY;
                 for (ItemStack stack : entity.getAllSlots()) {
-                    if (stack.getItem() == ModItems.LAWN.get()) {
+                    if (stack.getItem() == RuneCraftoryItems.LAWN.get()) {
                         deathProt = stack;
                     }
                 }
                 if (deathProt.isEmpty() && entity instanceof Player player) {
                     for (ItemStack stack : player.getInventory().items) {
-                        if (stack.getItem() == ModItems.LAWN.get()) {
+                        if (stack.getItem() == RuneCraftoryItems.LAWN.get()) {
                             deathProt = stack;
                         }
                     }
@@ -438,20 +438,20 @@ public class EntityCalls {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.regenRunePoints(data.getMaxRunePoints());
             LevelCalc.levelSkill(data, Skills.SLEEPING, 75);
-            player.removeEffect(ModEffects.FATIGUE.asHolder());
+            player.removeEffect(RuneCraftoryEffects.FATIGUE.asHolder());
         }
     }
 
     public static boolean disableNatural(MobSpawnType spawnType, EntityType<?> entity) {
         if (MobConfig.disableNaturalSpawn) {
-            return (spawnType == MobSpawnType.CHUNK_GENERATION || spawnType == MobSpawnType.NATURAL) && entity != ModEntities.GATE.get();
+            return (spawnType == MobSpawnType.CHUNK_GENERATION || spawnType == MobSpawnType.NATURAL) && entity != RuneCraftoryEntities.GATE.get();
         }
         return false;
     }
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
         if (state.getBlock() instanceof CropBlock) {
-            ModCriteria.HARVEST_CROP.get().trigger(player, state);
+            RuneCraftoryCriteria.HARVEST_CROP.get().trigger(player, state);
         }
         if (!player.hasCorrectToolForDrops(state))
             return;
@@ -459,7 +459,7 @@ public class EntityCalls {
         if (state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
-            LevelCalc.levelSkill(data, Skills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1);
+            LevelCalc.levelSkill(data, Skills.MINING, state.getBlock() instanceof MineralBlock ? 10 : 1);
         }
         if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
             LevelCalc.levelSkill(data, Skills.LOGGING, 1);
@@ -486,7 +486,7 @@ public class EntityCalls {
 
     public static boolean onPlayerUseItem(Player player, InteractionHand hand) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        return data.getWeaponHandler().getCurrentAction() == ModAttackActions.NONE.get()
+        return data.getWeaponHandler().getCurrentAction() == RuneCraftoryAttackActions.NONE.get()
                 || ItemStack.isSameItemSameComponents(player.getItemInHand(hand), data.getWeaponHandler().get(DataKey.USED_WEAPON));
     }
 }

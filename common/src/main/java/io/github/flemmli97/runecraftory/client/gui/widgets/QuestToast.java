@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.client.gui.widgets;
 
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
@@ -21,7 +21,7 @@ public class QuestToast implements Toast {
 
     private static final int PAGE_TIME = 2000;
 
-    private final ItemStack stack = new ItemStack(ModItems.QUEST_BOARD.get());
+    private final ItemStack stack = new ItemStack(RuneCraftoryItems.QUEST_BOARD.get());
     private final Component title;
     private final Component subtitle;
     private boolean playedSound;

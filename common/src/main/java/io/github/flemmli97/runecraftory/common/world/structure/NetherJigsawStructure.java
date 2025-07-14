@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.world.structure;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.block.state.BlockState;
@@ -51,6 +51,6 @@ public class NetherJigsawStructure extends ExtendedJigsawStructure {
 
     @Override
     public StructureType<?> type() {
-        return ModStructures.NETHER_STRUCTURE.get();
+        return RuneCraftoryStructures.NETHER_STRUCTURE.get();
     }
 }

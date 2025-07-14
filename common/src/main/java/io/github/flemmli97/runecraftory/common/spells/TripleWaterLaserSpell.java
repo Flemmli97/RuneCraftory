@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.WaterLaserEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -21,7 +21,7 @@ public class TripleWaterLaserSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         for (int i = -1; i < 2; i++) {
-            EntityWaterLaser laser = new EntityWaterLaser(level, entity, new Vector3f(0, 0, 0.5f));
+            WaterLaserEntity laser = new WaterLaserEntity(level, entity, new Vector3f(0, 0, 0.5f));
             laser.setMaxTicks(entity instanceof Player ?
                     Mth.ceil(PlayerModelAnimations.WATER_LASER_THREE.length()) : 15);
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
@@ -29,12 +29,12 @@ public class TripleWaterLaserSpell extends Spell {
             laser.setRotationFromOffset();
             level.addFreshEntity(laser);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_WATER.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WATER.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 
     @Override
     public AttackAction useAction() {
-        return ModAttackActions.TRIPLE_WATER_LASER_USE.get();
+        return RuneCraftoryAttackActions.TRIPLE_WATER_LASER_USE.get();
     }
 }

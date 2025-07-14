@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.FireballEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -41,12 +41,12 @@ public class MultiFireballSpell extends Spell {
         for (float y = angle; y <= this.angle; y += inc) {
             Vector3d newDir = new Vector3d(dir.x(), dir.y(), dir.z())
                     .rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
-            EntityFireball other = new EntityFireball(level, entity, false);
+            FireballEntity other = new FireballEntity(level, entity, false);
             other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.damage));
             other.shoot(newDir.x(), newDir.y(), newDir.z(), 1, 0);
             level.addFreshEntity(other);
         }
-        playSound(entity, ModSounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

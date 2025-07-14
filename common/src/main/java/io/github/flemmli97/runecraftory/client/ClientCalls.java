@@ -18,10 +18,10 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -158,7 +158,7 @@ public class ClientCalls {
 
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
         if (!stack.isEmpty()) {
-            if (stack.has(ModDataComponentTypes.CRAFTING_BONUS.get()) && tooltip.getFirst() instanceof MutableComponent mut)
+            if (stack.has(RuneCraftoryDataComponentTypes.CRAFTING_BONUS.get()) && tooltip.getFirst() instanceof MutableComponent mut)
                 mut.withStyle(ChatFormatting.AQUA);
             Pair<List<Component>, List<Component>> p = injectAdditionalTooltip(stack, flag);
             tooltip.addAll(1, p.getFirst());
@@ -190,7 +190,7 @@ public class ClientCalls {
             } else if (stack.has(DataComponents.FOOD)) {
                 tooltip.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
                 MutableComponent comp = CommonComponents.space()
-                        .append(Component.translatable("runecraftory.tooltip.item.attribute", Component.translatable(ModAttributes.RUNE_POINTS_GAIN.get().getDescriptionId()), EntityUtils.getRPFromVanillaFood(stack)));
+                        .append(Component.translatable("runecraftory.tooltip.item.attribute", Component.translatable(RuneCraftoryAttributes.RUNE_POINTS_GAIN.get().getDescriptionId()), EntityUtils.getRPFromVanillaFood(stack)));
                 tooltip.add(comp.withStyle(ChatFormatting.AQUA));
             }
         }
@@ -273,15 +273,15 @@ public class ClientCalls {
         EntityData data = Platform.INSTANCE.getEntityData(entity);
         int mod = entity.tickCount % 20;
         if (mod == 0 && data.isSleeping()) {
-            entity.level().addParticle(ModParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
+            entity.level().addParticle(RuneCraftoryParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
         }
         if (mod == 5 && data.isPoisoned()) {
-            entity.level().addParticle(ModParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+            entity.level().addParticle(RuneCraftoryParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
         }
         if (data.isParalysed()) {
             boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
             if (bl2) {
-                entity.level().addParticle(ModParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
+                entity.level().addParticle(RuneCraftoryParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
             }
         }
         if (entity == Minecraft.getInstance().player) {
@@ -293,7 +293,7 @@ public class ClientCalls {
             if (ClientCalendarHolder.CLIENT_CALENDAR.currentWeather() == Weather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles().get() != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
-                    entity.level().addParticle(ModParticles.RUNEY.get(),
+                    entity.level().addParticle(RuneCraftoryParticles.RUNEY.get(),
                             entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 24,
                             entity.getY() + (entity.getRandom().nextDouble() - 0.5) * 12,
                             entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 24, 0, 0, 0);
@@ -307,7 +307,7 @@ public class ClientCalls {
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
-        boolean stunned = Minecraft.getInstance().player.hasEffect(ModEffects.STUNNED.asHolder());
+        boolean stunned = Minecraft.getInstance().player.hasEffect(RuneCraftoryEffects.STUNNED.asHolder());
         if (stunned) {
             float pT = Minecraft.getInstance().player.tickCount * 10 - partialTicks;
             setYaw.accept(yaw + Mth.sin(pT) * 0.5f);

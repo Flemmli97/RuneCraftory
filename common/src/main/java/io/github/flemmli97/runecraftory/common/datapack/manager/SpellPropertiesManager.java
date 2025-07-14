@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.api.datapack.SpellProperties;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +44,7 @@ public class SpellPropertiesManager extends SimpleJsonResourceReloadListener imp
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((key, el) -> {
             try {
-                Spell spell = HolderUtils.get(this.provider, ModSpells.SPELL_REGISTRY_KEY, key)
+                Spell spell = HolderUtils.get(this.provider, RuneCraftorySpells.SPELL_REGISTRY_KEY, key)
                         .orElseThrow(() -> new NoSuchElementException("Spell with id " + key + " doesn't exist"));
                 SpellProperties props = SpellProperties.CODEC.parse(ops, el).getOrThrow();
                 propertiesBuilder.put(spell, props);

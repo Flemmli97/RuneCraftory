@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.recipes;
 
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,16 +16,16 @@ public class ArmorRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.ACCESSORY_WORKBENCH.get());
+        return new ItemStack(RuneCraftoryItems.ACCESSORY_WORKBENCH.get());
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.ARMOR_SERIALIZER.get();
+        return RuneCraftoryCrafting.ARMOR_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<? extends SextupleRecipe> getType() {
-        return ModCrafting.ARMOR.get();
+        return RuneCraftoryCrafting.ARMOR.get();
     }
 }

@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.world.data.family;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -387,7 +387,7 @@ public class FamilyEntry {
         this.entityState = EntityState.values()[tag.getInt("EntityState")];
     }
 
-    public SyncedFamilyData forSyncing(EntityNPCBase npc, ServerPlayer player) {
+    public SyncedFamilyData forSyncing(NPCEntity npc, ServerPlayer player) {
         Component father = this.father != null ? this.familyHandler.getFamily(this.father)
                 .map(e -> e.name).orElse(null) : null;
         Component mother = this.mother != null ? this.familyHandler.getFamily(this.mother)

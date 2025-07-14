@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleAVLTreeMap;
 import net.minecraft.core.Holder;
@@ -41,10 +41,10 @@ public class FoodAttributeData {
     private final Map<Holder<Attribute>, Double> multiplierStats;
 
     private FoodAttributeData(Map<Holder<Attribute>, Double> flatStats, Map<Holder<Attribute>, Double> multiplierStats) {
-        Object2DoubleAVLTreeMap<Holder<Attribute>> stats = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
+        Object2DoubleAVLTreeMap<Holder<Attribute>> stats = new Object2DoubleAVLTreeMap<>(RuneCraftoryAttributes.SORTED);
         stats.putAll(flatStats);
         this.flatStats = stats;
-        Object2DoubleAVLTreeMap<Holder<Attribute>> stats2 = new Object2DoubleAVLTreeMap<>(ModAttributes.SORTED);
+        Object2DoubleAVLTreeMap<Holder<Attribute>> stats2 = new Object2DoubleAVLTreeMap<>(RuneCraftoryAttributes.SORTED);
         stats2.putAll(multiplierStats);
         this.multiplierStats = stats2;
     }

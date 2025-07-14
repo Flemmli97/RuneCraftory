@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.profession;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -30,7 +30,7 @@ public class Doctor extends NPCProfession {
     }
 
     @Override
-    public void handleAction(EntityNPCBase npc, Player player, String action) {
+    public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
@@ -45,7 +45,7 @@ public class Doctor extends NPCProfession {
     }
 
     @Override
-    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(NPCEntity entity, ServerPlayer player) {
         if (player.getActiveEffects().stream().anyMatch(i -> i.getEffect().value().getCategory() == MobEffectCategory.HARMFUL)) {
             return ImmutableMap.of(CURE_ACTION, List.of(Component.translatable(CURE_ACTION_DESC), Component.translatable(CURE_COST, CURE_PRICE)));
         }

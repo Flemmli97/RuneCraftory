@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityGustRocks;
-import io.github.flemmli97.runecraftory.common.registry.ModSounds;
+import io.github.flemmli97.runecraftory.common.entities.misc.GustRocksEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +16,7 @@ public class GustRockSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityGustRocks gust = new EntityGustRocks(level, entity);
+        GustRocksEntity gust = new GustRocksEntity(level, entity);
         gust.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
         gust.setPos(entity.getX(), entity.getY(), entity.getZ());
         Vec3 target = ProjectileUtils.getAimTarget(entity);
@@ -27,7 +27,7 @@ public class GustRockSpell extends Spell {
             gust.setDirection(entity.getXRot(), entity.getYRot());
         }
         level.addFreshEntity(gust);
-        playSound(entity, ModSounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+        playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }
 }

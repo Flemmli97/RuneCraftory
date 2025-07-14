@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
+import io.github.flemmli97.runecraftory.common.entities.misc.AmbrosiaWaveEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,7 +13,7 @@ public class WaveSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        EntityAmbrosiaWave wave = new EntityAmbrosiaWave(level, entity, 40);
+        AmbrosiaWaveEntity wave = new AmbrosiaWaveEntity(level, entity, 40);
         wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.6f));
         wave.setPos(wave.getX(), wave.getY() + 0.2, wave.getZ());
         level.addFreshEntity(wave);

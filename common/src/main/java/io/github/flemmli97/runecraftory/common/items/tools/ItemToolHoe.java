@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -53,7 +53,7 @@ public class ItemToolHoe extends HoeItem {
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
@@ -64,7 +64,7 @@ public class ItemToolHoe extends HoeItem {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnBlock(ctx);
         }
@@ -74,7 +74,7 @@ public class ItemToolHoe extends HoeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -84,7 +84,7 @@ public class ItemToolHoe extends HoeItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel());

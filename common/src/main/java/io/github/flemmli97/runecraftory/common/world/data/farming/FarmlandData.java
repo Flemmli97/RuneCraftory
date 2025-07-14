@@ -3,11 +3,11 @@ package io.github.flemmli97.runecraftory.common.world.data.farming;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.GrassRegrowUtil;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -255,7 +255,7 @@ public class FarmlandData {
                             state = Blocks.AIR.defaultBlockState();
                             level.destroyBlock(cropPos, true);
                         } else
-                            state = ModBlocks.WITHERED_GRASS.get().defaultBlockState();
+                            state = RuneCraftoryBlocks.WITHERED_GRASS.get().defaultBlockState();
                     } else {
                         state = Blocks.DIRT.defaultBlockState();
                         break;
@@ -375,7 +375,7 @@ public class FarmlandData {
                         wiltStage++;
                         // If crop cannot wilt we simply stop once we reach >= 2 (normally wilted)
                         // E.g. in case of vanilla crops etc.
-                        if (!cropState.hasProperty(BlockCrop.WILTED) && wiltStage > 1)
+                        if (!cropState.hasProperty(ExtendedCropBlock.WILTED) && wiltStage > 1)
                             break;
                     }
                 }
@@ -417,7 +417,7 @@ public class FarmlandData {
 
         // Finalize the tick run
         run.forEach(Runnable::run);
-        if (wiltStage > 0 && cropState.getBlock() instanceof BlockCrop blockCrop) {
+        if (wiltStage > 0 && cropState.getBlock() instanceof ExtendedCropBlock blockCrop) {
             blockCrop.onWither(wiltStage, level, cropState, cropPos);
         }
         this.cropProgress = this.growthPercent(level, cropState);

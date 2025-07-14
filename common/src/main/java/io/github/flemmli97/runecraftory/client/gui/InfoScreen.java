@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
@@ -98,11 +98,11 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         }
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, mut,
                 this.leftPos + statX, this.topPos + statY, 0, false);
-        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.data.player(), ModAttributes.DEFENCE.asHolder()),
+        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.data.player(), RuneCraftoryAttributes.DEFENCE.asHolder()),
                 this.leftPos + statX, this.topPos + statY + 13, 0, false);
-        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.data.player(), ModAttributes.MAGIC_ATTACK.asHolder()),
+        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.data.player(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()),
                 this.leftPos + statX, this.topPos + statY + 13 * 2, 0, false);
-        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.data.player(), ModAttributes.MAGIC_DEFENCE.asHolder()),
+        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, "" + (int) CombatUtils.getAttributeValue(this.data.player(), RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder()),
                 this.leftPos + statX, this.topPos + statY + 13 * 3, 0, false);
 
         LivingEntity entity = this.data.player();

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.client.gui.widgets.DialogueOptionButton;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.PlaceHolderComponent;
 import io.github.flemmli97.runecraftory.common.network.C2SDialogueAction;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
+public class NPCDialogueGui<T extends NPCEntity> extends Screen {
 
     private static final ResourceLocation TEXTURE = RuneCraftory.modRes("hud/npc_dialogue");
 

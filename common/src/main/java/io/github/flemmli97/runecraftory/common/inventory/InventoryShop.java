@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory;
 
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -18,9 +18,9 @@ public class InventoryShop implements Container {
     private int index;
     private ItemStack output = ItemStack.EMPTY;
 
-    public final EntityNPCBase npc;
+    public final NPCEntity npc;
 
-    public InventoryShop(EntityNPCBase npc, NonNullList<ItemStack> shop) {
+    public InventoryShop(NPCEntity npc, NonNullList<ItemStack> shop) {
         this.npc = npc;
         this.shop = shop;
         this.updateInv();

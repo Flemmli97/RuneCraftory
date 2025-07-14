@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
 import com.mojang.serialization.MapCodec;
-import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
+import io.github.flemmli97.runecraftory.common.blocks.BossSpawnerBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.BossSpawnerBlockEntity;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -43,14 +43,14 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
             }
         }
         BlockPos pos = origin.pos().above(off);
-        BlockState state = ModBlocks.BOSS_SPAWNER.get().defaultBlockState()
-                .setValue(BlockBossSpawner.FACING, Direction.SOUTH)
+        BlockState state = RuneCraftoryBlocks.BOSS_SPAWNER.get().defaultBlockState()
+                .setValue(BossSpawnerBlock.FACING, Direction.SOUTH)
                 .mirror(settings.getMirror()).rotate(settings.getRotation());
         return new StructureTemplate.StructureBlockInfo(pos, state, BossSpawnerBlockEntity.creatTagFor(this.boss));
     }
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return ModStructures.BOSS_PROCESSOR.get();
+        return RuneCraftoryStructures.BOSS_PROCESSOR.get();
     }
 }

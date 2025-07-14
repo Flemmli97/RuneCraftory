@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModLootRegistries;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
@@ -45,7 +45,7 @@ public class ItemLevelLootFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<ItemLevelLootFunction> getType() {
-        return ModLootRegistries.ITEM_LEVEL.get();
+        return RuneCraftoryLootRegistries.ITEM_LEVEL.get();
     }
 
     @Override

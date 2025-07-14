@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.npc.profession;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
@@ -34,7 +34,7 @@ public class Chef extends NPCProfession {
     }
 
     @Override
-    public void handleAction(EntityNPCBase npc, Player player, String action) {
+    public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
@@ -43,10 +43,10 @@ public class Chef extends NPCProfession {
             return;
         }
         ItemStack bread = switch (action) {
-            case ARMOR_BREAD_DESCRIPTION -> new ItemStack(ModItems.ACCESSORY_BREAD.get());
-            case CHEM_BREAD_SUCCESS -> new ItemStack(ModItems.MEDICINE_BREAD.get());
-            case COOKING_BREAD_SUCCESS -> new ItemStack(ModItems.COOKING_BREAD.get());
-            default -> new ItemStack(ModItems.FORGING_BREAD.get());
+            case ARMOR_BREAD_DESCRIPTION -> new ItemStack(RuneCraftoryItems.ACCESSORY_BREAD.get());
+            case CHEM_BREAD_SUCCESS -> new ItemStack(RuneCraftoryItems.MEDICINE_BREAD.get());
+            case COOKING_BREAD_SUCCESS -> new ItemStack(RuneCraftoryItems.COOKING_BREAD.get());
+            default -> new ItemStack(RuneCraftoryItems.FORGING_BREAD.get());
         };
         int level = Mth.ceil(Math.abs(npc.getRandom().nextGaussian() * 4));
         ItemNBT.getLeveledItem(bread, level);
@@ -60,7 +60,7 @@ public class Chef extends NPCProfession {
     }
 
     @Override
-    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(NPCEntity entity, ServerPlayer player) {
         int bread = entity.updater.getBreadToBuy();
         if (bread > 0) {
             Component comp = Component.translatable(BREAD_COST, BREAD_PRICE, bread);

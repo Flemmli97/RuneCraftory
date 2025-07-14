@@ -4,13 +4,13 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
+import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -99,11 +99,11 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(ModAttributes.DEFENCE.asHolder()).add(ModAttributes.MAGIC_DEFENCE.asHolder())
-                .add(ModAttributes.WATER_RESISTANCE.asHolder()).add(ModAttributes.EARTH_RESISTANCE.asHolder())
-                .add(ModAttributes.WIND_RESISTANCE.asHolder()).add(ModAttributes.FIRE_RESISTANCE.asHolder())
-                .add(ModAttributes.DARK_RESISTANCE.asHolder()).add(ModAttributes.LIGHT_RESISTANCE.asHolder())
-                .add(ModAttributes.LOVE_RESISTANCE.asHolder());
+        return Mob.createMobAttributes().add(RuneCraftoryAttributes.DEFENCE.asHolder()).add(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder())
+                .add(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder()).add(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder())
+                .add(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder()).add(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder())
+                .add(RuneCraftoryAttributes.DARK_RESISTANCE.asHolder()).add(RuneCraftoryAttributes.LIGHT_RESISTANCE.asHolder())
+                .add(RuneCraftoryAttributes.LOVE_RESISTANCE.asHolder());
     }
 
     public static boolean gateSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, BlockState state, RandomSource random) {
@@ -120,7 +120,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static ResourceKey<LootTable> getGateLootLocation(ItemElement element) {
-        ResourceKey<LootTable> def = ModEntities.GATE.get().getDefaultLootTable();
+        ResourceKey<LootTable> def = RuneCraftoryEntities.GATE.get().getDefaultLootTable();
         return LOOT_RES.computeIfAbsent(element, e -> ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(def.location().getNamespace(),
                 def.location().getPath() + "_" + e.name().toLowerCase(Locale.ROOT))));
     }
@@ -148,8 +148,8 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateAttributes() {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.gateHealth);
-        this.getAttribute(ModAttributes.DEFENCE.asHolder()).setBaseValue(MobConfig.gateDef);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).setBaseValue(MobConfig.gateMDef);
+        this.getAttribute(RuneCraftoryAttributes.DEFENCE.asHolder()).setBaseValue(MobConfig.gateDef);
+        this.getAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder()).setBaseValue(MobConfig.gateMDef);
         this.setHealth(this.getMaxHealth());
     }
 
@@ -201,9 +201,9 @@ public class GateEntity extends Mob implements IBaseMob {
             return false;
         if (!this.spawnList.isEmpty()) {
             List<Entity> nearby = this.level().getEntities(this, this.getBoundingBox().inflate(18), entity ->
-                    entity.getType() == ModEntities.TREASURE_CHEST.get() ||
-                            entity.getType() == ModEntities.MONSTER_BOX.get() ||
-                            entity.getType() == ModEntities.GOBBLE_BOX.get() ||
+                    entity.getType() == RuneCraftoryEntities.TREASURE_CHEST.get() ||
+                            entity.getType() == RuneCraftoryEntities.MONSTER_BOX.get() ||
+                            entity.getType() == RuneCraftoryEntities.GOBBLE_BOX.get() ||
                             GateEntity.this.spawnList.contains(entity.getType()));
             if (nearby.size() <= this.maxNearby) {
                 for (int amount = 0; amount < count; ++amount) {
@@ -220,7 +220,7 @@ public class GateEntity extends Mob implements IBaseMob {
                         }
                     }
                     Entity entity = type.create(this.level());
-                    if (entity instanceof EntityTreasureChest chest) {
+                    if (entity instanceof TreasureChestEntity chest) {
                         entity.absMoveTo(x, y, z, this.level().random.nextFloat() * 360.0f, 0.0f);
                         if (this.level().noCollision(chest)) {
                             EntityUtils.tieredTreasureChest(this, chest);
@@ -366,10 +366,10 @@ public class GateEntity extends Mob implements IBaseMob {
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(ATTRIBUTE_LEVEL_MOD);
         this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADD_VALUE));
-        this.getAttribute(ModAttributes.DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADD_VALUE));
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
-        this.getAttribute(ModAttributes.MAGIC_DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADD_VALUE));
+        this.getAttribute(RuneCraftoryAttributes.DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(RuneCraftoryAttributes.DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADD_VALUE));
+        this.getAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder()).removeModifier(ATTRIBUTE_LEVEL_MOD);
+        this.getAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder()).addPermanentModifier(new AttributeModifier(ATTRIBUTE_LEVEL_MOD, (this.xpLevel().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADD_VALUE));
         this.setHealth(this.getMaxHealth());
     }
 
@@ -383,9 +383,9 @@ public class GateEntity extends Mob implements IBaseMob {
         float reduce = 0.0f;
         if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
             if (!source.is(RunecraftoryTags.DamageTypes.BYPASS_MAGIC))
-                reduce = (float) this.getAttributeValue(ModAttributes.MAGIC_DEFENCE.asHolder());
+                reduce = (float) this.getAttributeValue(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder());
         } else if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-            reduce = (float) this.getAttributeValue(ModAttributes.DEFENCE.asHolder());
+            reduce = (float) this.getAttributeValue(RuneCraftoryAttributes.DEFENCE.asHolder());
         }
         float min = reduce > damageAmount * 2 ? 0 : 0.5f;
         return super.getDamageAfterArmorAbsorb(source, Math.max(min, damageAmount - reduce));

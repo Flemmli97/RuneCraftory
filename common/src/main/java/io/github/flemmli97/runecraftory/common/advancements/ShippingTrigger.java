@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.advancements;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -36,11 +36,11 @@ public class ShippingTrigger extends SimpleCriterionTrigger<ShippingTrigger.Trig
         ).apply(inst, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> shipAny(int amount) {
-            return ModCriteria.SHIPPING_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), amount));
+            return RuneCraftoryCriteria.SHIPPING_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.empty(), amount));
         }
 
         public static Criterion<TriggerInstance> shipSpecific(ItemPredicate.Builder item, int amount) {
-            return ModCriteria.SHIPPING_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.of(item.build()), amount));
+            return RuneCraftoryCriteria.SHIPPING_TRIGGER.get().createCriterion(new TriggerInstance(Optional.empty(), Optional.of(item.build()), amount));
         }
 
         public boolean matches(PlayerData data, ItemStack stack) {

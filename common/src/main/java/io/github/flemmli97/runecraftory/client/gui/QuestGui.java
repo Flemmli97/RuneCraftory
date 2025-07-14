@@ -2,12 +2,12 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.render.npc.NPCRender;
 import io.github.flemmli97.runecraftory.client.render.npc.NPCTextureLayer;
-import io.github.flemmli97.runecraftory.client.render.npc.RenderNPC;
 import io.github.flemmli97.runecraftory.common.network.C2SQuestSelect;
 import io.github.flemmli97.runecraftory.common.network.C2SSubmitQuestBoard;
 import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.tenshilib.client.gui.widget.TexturedButton;
 import io.github.flemmli97.tenshilib.client.gui.widget.list.SelectableEntry;
@@ -61,8 +61,8 @@ public class QuestGui extends Screen {
             List<Pair<Integer, ResourceLocation>> textures = new ArrayList<>();
             if (display.features() != null) {
                 for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
-                    ResourceLocation text = RenderNPC.getTextureFromLook(display.features(), display.features().view.containsKey(ModNPCLooks.SLIM.get()), layerType, null);
-                    if (!text.equals(RenderNPC.EMPTY)) {
+                    ResourceLocation text = NPCRender.getTextureFromLook(display.features(), display.features().view.containsKey(RuneCraftoryNPCLooks.SLIM.get()), layerType, null);
+                    if (!text.equals(NPCRender.EMPTY)) {
                         textures.add(Pair.of(NPCTextureLayer.setColor(display.features(), layerType), text));
                     }
                 }
@@ -166,7 +166,7 @@ public class QuestGui extends Screen {
                     graphics.blitSprite(RuneCraftory.modRes("widget/quest_entry_background"), x, y, 198, 21);
                 ClientSideQuestDisplay display = QuestGui.this.quests.get(this.index);
                 Pair<String, List<Pair<Integer, ResourceLocation>>> head = QuestGui.this.heads.get(this.index);
-                int offset = RenderNPC.renderForTooltip(graphics, x + 2, y + 2,
+                int offset = NPCRender.renderForTooltip(graphics, x + 2, y + 2,
                         head.getFirst(), head.getSecond()) ? 18 : 0;
                 graphics.drawString(widget.getFont(), display.task(), x + 2 + offset, y + 6, display.active() ? 0x518203 : 0, false);
                 if (shouldHighlight && !display.description().isEmpty())

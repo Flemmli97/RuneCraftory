@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SProcreationRequest;
@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class NPCGui<T extends EntityNPCBase> extends Screen {
+public class NPCGui<T extends NPCEntity> extends Screen {
 
     private static final ResourceLocation TEXTURE = RuneCraftory.modRes("hud/generic_view");
 

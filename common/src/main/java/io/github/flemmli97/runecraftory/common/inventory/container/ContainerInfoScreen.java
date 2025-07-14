@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
-import io.github.flemmli97.runecraftory.common.registry.ModMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -35,7 +35,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
     private final boolean main;
 
     public ContainerInfoScreen(int windowId, Inventory playerInventory, boolean main) {
-        super(main ? ModMenuTypes.INFO_CONTAINER.get() : ModMenuTypes.INFO_SUB_CONTAINER.get(), windowId);
+        super(main ? RuneCraftoryMenuTypes.INFO_CONTAINER.get() : RuneCraftoryMenuTypes.INFO_SUB_CONTAINER.get(), windowId);
         this.main = main;
         if (this.main) {
             for (int hotbar = 0; hotbar < 9; ++hotbar) {

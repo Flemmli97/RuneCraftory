@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -23,10 +23,10 @@ public class CraftingUtils {
 
     public static RecipeType<SextupleRecipe> getType(CraftingType type) {
         return switch (type) {
-            case FORGE -> ModCrafting.FORGE.get();
-            case ACCESSORY_WORKBENCH -> ModCrafting.ARMOR.get();
-            case CHEMISTRY_SET -> ModCrafting.CHEMISTRY.get();
-            default -> ModCrafting.COOKING.get();
+            case FORGE -> RuneCraftoryCrafting.FORGE.get();
+            case ACCESSORY_WORKBENCH -> RuneCraftoryCrafting.ARMOR.get();
+            case CHEMISTRY_SET -> RuneCraftoryCrafting.CHEMISTRY.get();
+            default -> RuneCraftoryCrafting.COOKING.get();
         };
     }
 

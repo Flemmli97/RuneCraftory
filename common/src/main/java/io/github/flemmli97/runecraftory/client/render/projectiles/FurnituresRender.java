@@ -1,0 +1,167 @@
+package io.github.flemmli97.runecraftory.client.render.projectiles;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.entities.misc.FurnitureEntity;
+import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
+import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+
+public class FurnituresRender extends EntityRenderer<FurnitureEntity> {
+
+    public static final ResourceLocation LOC_CHAIR = RuneCraftory.modRes("chair");
+    public static final ResourceLocation LOC_CHIPSQUEEK_PLUSH = RuneCraftory.modRes("chipsqueek_plush");
+    public static final ResourceLocation LOC_WOOLY_PLUSH = RuneCraftory.modRes("wooly_plush");
+
+    private static final ResourceLocation TEX_CHAIR = RuneCraftory.modRes("textures/entity/projectile/chair.png");
+    private static final ResourceLocation TEX_WOOLY = RuneCraftory.modRes("textures/entity/projectile/wooly_plush.png");
+    private static final ResourceLocation TEX_CHIPSQUEEK = RuneCraftory.modRes("textures/entity/projectile/chipsqueek_plush.png");
+
+    private final BlockState barrel = Blocks.BARREL.defaultBlockState();
+    private final BlockState anvil = Blocks.ANVIL.defaultBlockState();
+    private final ModelPart chestLid;
+    private final ModelPart chestBottom;
+    private final ModelPart chestLock;
+
+    private final ReloadableCache<ModelPartsContainer> chair;
+    private final ReloadableCache<ModelPartsContainer> woolyPlush;
+    private final ReloadableCache<ModelPartsContainer> chipSqueekPlush;
+
+    public FurnituresRender(EntityRendererProvider.Context ctx) {
+        super(ctx);
+        ModelPart modelPart = ctx.bakeLayer(ModelLayers.CHEST);
+        this.chestLid = modelPart.getChild("bottom");
+        this.chestBottom = modelPart.getChild("lid");
+        this.chestLock = modelPart.getChild("lock");
+
+        this.chair = GeoModelManager.getInstance().getModel(LOC_CHAIR);
+        this.woolyPlush = GeoModelManager.getInstance().getModel(LOC_WOOLY_PLUSH);
+        this.chipSqueekPlush = GeoModelManager.getInstance().getModel(LOC_CHIPSQUEEK_PLUSH);
+    }
+
+    public static LayerDefinition chairLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+
+        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, -3.1667F, -6.8333F, 12.0F, 2.0F, 12.0F, new CubeDeformation(0.0F))
+                .texOffs(16, 28).addBox(3.0F, -1.1667F, -5.8333F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(8, 28).addBox(-5.0F, -1.1667F, -5.8333F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 28).addBox(3.0F, -1.1667F, 2.1667F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(28, 14).addBox(-5.0F, -1.1667F, 2.1667F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 14).addBox(-6.0F, -15.1667F, 3.1667F, 12.0F, 12.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.1667F, 0.8333F));
+
+        return LayerDefinition.create(meshdefinition, 64, 64);
+    }
+
+    public static LayerDefinition chipSqueekPlushLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+
+        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 10).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(18, 19).addBox(-2.0F, -4.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(12, 19).addBox(1.0F, -4.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(6, 19).addBox(1.0F, -1.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 19).addBox(-2.0F, -1.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-2.5F, -10.0F, -2.5F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(4, 22).addBox(-2.0F, -11.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 22).addBox(1.0F, -11.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+
+        PartDefinition bone2 = bone.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(16, 10).addBox(-1.0F, -2.0F, 0.0F, 2.0F, 2.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 2.0F, 0.6545F, 0.0F, 0.0F));
+
+        return LayerDefinition.create(meshdefinition, 32, 32);
+    }
+
+    public static LayerDefinition woolyPlushLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+
+        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 10).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(12, 22).addBox(-2.0F, -4.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(6, 22).addBox(1.0F, -4.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 22).addBox(1.0F, -1.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(16, 19).addBox(-2.0F, -1.0F, -4.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-2.5F, -10.0F, -2.5F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(10, 19).addBox(-1.0F, -2.0F, 2.0F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+
+        PartDefinition bone2 = bone.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(0, 19).addBox(0.0F, 0.0F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.5F, -9.0F, 0.0F, 0.0F, 0.0F, 0.5236F));
+
+        PartDefinition bone3 = bone.addOrReplaceChild("bone3", CubeListBuilder.create().texOffs(16, 10).addBox(-3.0F, 0.0F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.5F, -9.0F, 0.0F, 0.0F, 0.0F, -0.5236F));
+
+        return LayerDefinition.create(meshdefinition, 32, 32);
+    }
+
+    @Override
+    public void render(FurnitureEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+        stack.pushPose();
+        stack.scale(1.2f, 1.2f, 1.2f);
+        stack.mulPose(Axis.YP.rotationDegrees(entity.getRandomRotationOffset()));
+        switch (entity.getFurnitureType()) {
+            case BARREL -> this.renderBlockModel(this.barrel, stack, buffer, packedLight);
+            case ANVIL -> this.renderBlockModel(this.anvil, stack, buffer, packedLight);
+            case CHEST -> {
+                stack.scale(-1.0f, -1.0f, 1.0f);
+                stack.translate(0.5, -1.501f, -0.5);
+                this.renderModel(stack, Sheets.CHEST_LOCATION.buffer(buffer, RenderType::entityCutout), packedLight, this.chestBottom, this.chestLid, this.chestLock);
+            }
+            case CHAIR -> this.renderModel(stack, this.simpleConsumer(buffer, TEX_CHAIR), packedLight, this.chair);
+            case WOOLYPLUSH ->
+                    this.renderModel(stack, this.simpleConsumer(buffer, TEX_WOOLY), packedLight, this.woolyPlush);
+            case CHIPSQUEEKPLUSH ->
+                    this.renderModel(stack, this.simpleConsumer(buffer, TEX_CHIPSQUEEK), packedLight, this.chipSqueekPlush);
+        }
+        stack.popPose();
+        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(FurnitureEntity entity) {
+        return null;
+    }
+
+    private void renderBlockModel(BlockState state, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+        stack.translate(-0.5, 0, -0.5);
+        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        dispatcher.renderSingleBlock(state, stack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
+    }
+
+    private void renderModel(PoseStack stack, VertexConsumer ivertexbuilder, int packedLight, ModelPart... parts) {
+        stack.scale(-1, -1, 1);
+        stack.translate(0.0, -1.501f, 0.0);
+        for (ModelPart part : parts)
+            part.render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
+    }
+
+    @SafeVarargs
+    private void renderModel(PoseStack stack, VertexConsumer ivertexbuilder, int packedLight, ReloadableCache<ModelPartsContainer>... parts) {
+        stack.scale(-1, -1, 1);
+        stack.translate(0.0, -1.501f, 0.0);
+        for (ReloadableCache<ModelPartsContainer> part : parts)
+            part.get().getRoot().render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
+    }
+
+    private VertexConsumer simpleConsumer(MultiBufferSource buffer, ResourceLocation tex) {
+        return buffer.getBuffer(RenderType.entityCutout(tex));
+    }
+}

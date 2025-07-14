@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.goal;
 
-import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.RafflesiaPart;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -9,11 +9,11 @@ import java.util.EnumSet;
 
 public class RafflesiaPartAttackGoal extends Goal {
 
-    protected final EntityRafflesiaPart attacker;
+    protected final RafflesiaPart attacker;
     protected LivingEntity target;
     protected int idleTime;
 
-    public RafflesiaPartAttackGoal(EntityRafflesiaPart entity) {
+    public RafflesiaPartAttackGoal(RafflesiaPart entity) {
         this.attacker = entity;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.idleTime = this.attacker.getRandom().nextInt(120) + 20;

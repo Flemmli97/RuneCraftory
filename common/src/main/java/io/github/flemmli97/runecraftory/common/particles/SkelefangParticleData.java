@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.particles;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -70,7 +70,7 @@ public class SkelefangParticleData implements ParticleOptions {
 
     @Override
     public ParticleType<?> getType() {
-        return ModParticles.SKELEFANG_BONES.get();
+        return RuneCraftoryParticles.SKELEFANG_BONES.get();
     }
 
     public SkelefangBoneType getBoneType() {

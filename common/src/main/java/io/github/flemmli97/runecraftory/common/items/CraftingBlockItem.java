@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.items;
 
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
+import io.github.flemmli97.runecraftory.common.blocks.CraftingBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -18,7 +18,7 @@ public class CraftingBlockItem extends BlockItem implements MultiBlockItem {
     public CraftingBlockItem(Block block, Properties properties) {
         super(block, properties);
         this.states = Suppliers.memoize(() -> List.of(Pair.of(BlockPos.ZERO, block.defaultBlockState()),
-                Pair.of(new BlockPos(1, 0, 0), block.defaultBlockState().setValue(BlockCrafting.PART, BlockCrafting.EnumPart.RIGHT))));
+                Pair.of(new BlockPos(1, 0, 0), block.defaultBlockState().setValue(CraftingBlock.PART, CraftingBlock.EnumPart.RIGHT))));
     }
 
     @Override

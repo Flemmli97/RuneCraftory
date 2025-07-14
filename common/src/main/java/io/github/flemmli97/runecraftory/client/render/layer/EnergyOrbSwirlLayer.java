@@ -1,22 +1,22 @@
 package io.github.flemmli97.runecraftory.client.render.layer;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
+import io.github.flemmli97.runecraftory.client.model.misc.EnergyOrbModel;
+import io.github.flemmli97.runecraftory.common.entities.misc.HomingEnergyOrbEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
 
-public class EnergyOrbSwirlLayer extends EnergySwirlLayer<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> {
+public class EnergyOrbSwirlLayer extends EnergySwirlLayer<HomingEnergyOrbEntity, EntityModel<HomingEnergyOrbEntity>> {
 
     public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/projectile/energy_orb_layer.png");
-    private final EntityModel<EntityHomingEnergyOrb> model;
+    private final EntityModel<HomingEnergyOrbEntity> model;
 
-    public EnergyOrbSwirlLayer(RenderLayerParent<EntityHomingEnergyOrb, EntityModel<EntityHomingEnergyOrb>> parent, EntityModelSet entityModelSet) {
+    public EnergyOrbSwirlLayer(RenderLayerParent<HomingEnergyOrbEntity, EntityModel<HomingEnergyOrbEntity>> parent, EntityModelSet entityModelSet) {
         super(parent);
-        this.model = new ModelEnergyOrb<>(1.5f);
+        this.model = new EnergyOrbModel<>(1.5f);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class EnergyOrbSwirlLayer extends EnergySwirlLayer<EntityHomingEnergyOrb,
     }
 
     @Override
-    protected EntityModel<EntityHomingEnergyOrb> model() {
+    protected EntityModel<HomingEnergyOrbEntity> model() {
         return this.model;
     }
 }

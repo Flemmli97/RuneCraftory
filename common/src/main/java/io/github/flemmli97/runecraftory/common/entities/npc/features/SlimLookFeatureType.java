@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
@@ -20,13 +20,13 @@ public class SlimLookFeatureType implements NPCFeature.NPCFeatureHolder<SlimLook
     }
 
     @Override
-    public SlimLookFeature create(EntityNPCBase npc) {
+    public SlimLookFeature create(NPCEntity npc) {
         return FEATURE;
     }
 
     @Override
     public NPCFeatureType<SlimLookFeature> getType() {
-        return ModNPCLooks.SLIM.get();
+        return RuneCraftoryNPCLooks.SLIM.get();
     }
 
     public static class SlimLookFeature implements NPCFeature {
@@ -36,7 +36,7 @@ public class SlimLookFeatureType implements NPCFeature.NPCFeatureHolder<SlimLook
 
         @Override
         public NPCFeatureType<SlimLookFeature> type() {
-            return ModNPCLooks.SLIM.get();
+            return RuneCraftoryNPCLooks.SLIM.get();
         }
     }
 }

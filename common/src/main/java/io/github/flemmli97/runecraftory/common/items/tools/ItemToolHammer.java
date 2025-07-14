@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModAttackActions;
-import io.github.flemmli97.runecraftory.common.registry.ModDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -45,7 +45,7 @@ public class ItemToolHammer extends PickaxeItem {
 
     public static void onHammering(ServerPlayer player, boolean level) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        if (data.getWeaponHandler().getCurrentAction() == ModAttackActions.TOOL_HAMMER_USE.get()) // Action does rp use itself
+        if (data.getWeaponHandler().getCurrentAction() == RuneCraftoryAttackActions.TOOL_HAMMER_USE.get()) // Action does rp use itself
             return;
         LevelCalc.useRP(data, 5, true, 0, true, Skills.MINING);
         if (level)
@@ -56,7 +56,7 @@ public class ItemToolHammer extends PickaxeItem {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+            ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
             int chargeTime = ItemUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
@@ -65,7 +65,7 @@ public class ItemToolHammer extends PickaxeItem {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        ToolItemTier tier = ctx.getItemInHand().getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = ctx.getItemInHand().getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() == 0) {
             return this.useOnSingleBlock(ctx, false);
         }
@@ -75,7 +75,7 @@ public class ItemToolHammer extends PickaxeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
@@ -85,16 +85,16 @@ public class ItemToolHammer extends PickaxeItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        ToolItemTier tier = stack.getOrDefault(ModDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
+        ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
-            int useTime = data.getWeaponHandler().canExecuteAction(ModAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier));
+            int useTime = data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier));
             int range = Math.min(useTime, tier.getTierLevel());
             BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
             if (range == 0) {
                 this.useOnSingleBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
             } else {
-                data.getWeaponHandler().doWeaponAttack(ModAttackActions.TOOL_HAMMER_USE.get(), stack);
+                data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), stack);
                 data.getWeaponHandler().store(DataKey.TOOL_DATA, new ToolUseData(result, range));
             }
         }

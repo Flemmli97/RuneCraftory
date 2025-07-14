@@ -36,11 +36,11 @@ import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
-import io.github.flemmli97.runecraftory.common.registry.ModActivities;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -263,7 +263,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23)
                 .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
-        for (RegistryEntrySupplier<Attribute, ?> att : ModAttributes.ENTITY_ATTRIBUTES)
+        for (RegistryEntrySupplier<Attribute, ?> att : RuneCraftoryAttributes.ENTITY_ATTRIBUTES)
             map.add(att.asHolder());
         return map;
     }
@@ -444,9 +444,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.tickBrain(this);
         if (this.tickCount % 10 == 0) {
             if (this.isStaying()) {
-                BrainUtils.setMemory(this, ModMemoryTypes.STAYING.get(), Unit.INSTANCE);
+                BrainUtils.setMemory(this, RuneCraftoryMemoryTypes.STAYING.get(), Unit.INSTANCE);
             } else {
-                BrainUtils.clearMemory(this, ModMemoryTypes.STAYING.get());
+                BrainUtils.clearMemory(this, RuneCraftoryMemoryTypes.STAYING.get());
             }
         }
         if (!(this.getControllingPassenger() instanceof Player) && this.getMoveControl().operation != MoveControl.Operation.WAIT
@@ -617,22 +617,22 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
-        map.put(ModActivities.STAY.get(), new BrainActivityGroup<BaseMonster>(ModActivities.STAY.get()).priority(20).behaviours(new Idle<>())
-                .onlyStartWithMemoryStatus(ModMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
+        map.put(RuneCraftoryActivities.STAY.get(), new BrainActivityGroup<BaseMonster>(RuneCraftoryActivities.STAY.get()).priority(20).behaviours(new Idle<>())
+                .onlyStartWithMemoryStatus(RuneCraftoryMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
         map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
                 .priority(20).behaviours(
                         new MoveToWalkTarget<>(),
                         new FirstApplicableBehaviour<>(
                                 new SetMoveToRestriction<>(),
                                 new TendCrops<>())
-                ).onlyStartWithMemoryStatus(ModMemoryTypes.FARMING.get(), MemoryStatus.VALUE_PRESENT)
+                ).onlyStartWithMemoryStatus(RuneCraftoryMemoryTypes.FARMING.get(), MemoryStatus.VALUE_PRESENT)
         );
         return map;
     }
 
     @Override
     public List<Activity> getActivityPriorities() {
-        return ObjectArrayList.of(ModActivities.STAY.get(), Activity.WORK, Activity.FIGHT, Activity.IDLE);
+        return ObjectArrayList.of(RuneCraftoryActivities.STAY.get(), Activity.WORK, Activity.FIGHT, Activity.IDLE);
     }
 
     protected ExtendedBehaviour<? extends BaseMonster> getWanderBehaviour() {
@@ -709,7 +709,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 if (this.level() instanceof ServerLevel serverLevel)
                     FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
-            BrainUtils.clearMemory(this, ModMemoryTypes.FARMING.get());
+            BrainUtils.clearMemory(this, RuneCraftoryMemoryTypes.FARMING.get());
             switch (this.behaviourState()) {
                 case WANDER_HOME -> {
                     if (this.getOwner() != null) {
@@ -757,7 +757,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 }
                 case FARM -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
-                    BrainUtils.setMemory(this, ModMemoryTypes.FARMING.get(), Unit.INSTANCE);
+                    BrainUtils.setMemory(this, RuneCraftoryMemoryTypes.FARMING.get(), Unit.INSTANCE);
                     BlockPos nearestInv = this.nearestBlockEntityWithInv();
                     if (this.getSeedInventory() == null)
                         this.setSeedInventory(nearestInv);
@@ -1360,7 +1360,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (owner instanceof ServerPlayer serverPlayer) {
             PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
             data.entityStatsTracker.tameEntity(this);
-            ModCriteria.TAME_MONSTER_TRIGGER.get().trigger(serverPlayer, this, data.entityStatsTracker);
+            RuneCraftoryCriteria.TAME_MONSTER_TRIGGER.get().trigger(serverPlayer, this, data.entityStatsTracker);
             LevelCalc.levelSkill(data, Skills.TAMING, 10);
             QuestHandler.getData(serverPlayer).trigger(TamingTracker.KEY, this);
         }
@@ -1523,7 +1523,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     return InteractionResult.CONSUME;
                 }
             }
-            if (stack.getItem() == ModItems.BRUSH.get()) {
+            if (stack.getItem() == RuneCraftoryItems.BRUSH.get()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     int day = WorldUtils.day(this.level());
                     if (this.updater.getLastUpdateBrush() == day)
@@ -1548,12 +1548,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             }
             return InteractionResult.PASS;
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
-            if (stack.getItem() == ModItems.TAME.get()) {
+            if (stack.getItem() == RuneCraftoryItems.TAME.get()) {
                 if (!clientSide)
                     this.tameEntity(player);
                 return InteractionResult.sidedSuccess(clientSide);
             } else {
-                if (stack.getItem() == ModItems.BRUSH.get() && this.isAlive()) {
+                if (stack.getItem() == RuneCraftoryItems.BRUSH.get() && this.isAlive()) {
                     if (player instanceof ServerPlayer serverPlayer) {
                         if (this.tamingTick == -1)
                             return InteractionResult.PASS;
@@ -1571,9 +1571,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public void onBrushing() {
         Holder<Attribute> toIncrease = switch (this.random.nextInt(4)) {
-            case 1 -> ModAttributes.DEFENCE.asHolder();
-            case 2 -> ModAttributes.MAGIC_ATTACK.asHolder();
-            case 3 -> ModAttributes.MAGIC_DEFENCE.asHolder();
+            case 1 -> RuneCraftoryAttributes.DEFENCE.asHolder();
+            case 2 -> RuneCraftoryAttributes.MAGIC_ATTACK.asHolder();
+            case 3 -> RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder();
             default -> Attributes.ATTACK_DAMAGE;
         };
         AttributeInstance inst = this.getAttribute(toIncrease);
@@ -1650,7 +1650,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     private void updateFriendPointAttributeBonus() {
         List<Holder<Attribute>> increasable = List.of(Attributes.MAX_HEALTH, Attributes.ATTACK_DAMAGE,
-                ModAttributes.DEFENCE.asHolder(), ModAttributes.MAGIC_ATTACK.asHolder(), ModAttributes.MAGIC_DEFENCE.asHolder());
+                RuneCraftoryAttributes.DEFENCE.asHolder(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder());
         for (Holder<Attribute> att : increasable) {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
@@ -1833,7 +1833,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public boolean applyFoodEffect(ItemStack stack) {
         if (this.level().isClientSide)
             return false;
-        if (stack.getItem() == ModItems.OBJECT_X.get())
+        if (stack.getItem() == RuneCraftoryItems.OBJECT_X.get())
             ItemObjectX.applyEffect(this, stack);
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null) {

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.blocks.entity;
 
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
@@ -29,7 +29,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
     private BarnData barnData;
 
     public MonsterBarnBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(ModBlocks.MONSTER_BARN_BLOCK_ENTITY.get(), blockPos, blockState);
+        super(RuneCraftoryBlocks.MONSTER_BARN_BLOCK_ENTITY.get(), blockPos, blockState);
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, MonsterBarnBlockEntity blockEntity) {
@@ -88,7 +88,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
 
     private static boolean matches(Level level, BlockPos pos, boolean ground) {
         BlockState state = level.getBlockState(pos);
-        return ground ? state.is(RunecraftoryTags.Blocks.BARN_GROUND) : !state.is(ModBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
+        return ground ? state.is(RunecraftoryTags.Blocks.BARN_GROUND) : !state.is(RuneCraftoryBlocks.MONSTER_BARN.get()) && state.getCollisionShape(level, pos).isEmpty();
     }
 
     @Nullable

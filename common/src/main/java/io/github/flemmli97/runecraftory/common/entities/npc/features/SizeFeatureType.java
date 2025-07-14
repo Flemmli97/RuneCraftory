@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.registry.ModNPCLooks;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -24,13 +24,13 @@ public record SizeFeatureType(NumberProvider size) implements NPCFeature.NPCFeat
     public static final float MAX = 10;
 
     @Override
-    public SizeFeature create(EntityNPCBase npc) {
+    public SizeFeature create(NPCEntity npc) {
         return new SizeFeature(this.size.getFloat(RuneCraftory.createContext(npc)));
     }
 
     @Override
     public NPCFeatureType<SizeFeature> getType() {
-        return ModNPCLooks.SIZE.get();
+        return RuneCraftoryNPCLooks.SIZE.get();
     }
 
     public record SizeFeature(float size) implements NPCFeature {
@@ -41,7 +41,7 @@ public record SizeFeatureType(NumberProvider size) implements NPCFeature.NPCFeat
 
         @Override
         public NPCFeatureType<SizeFeature> type() {
-            return ModNPCLooks.SIZE.get();
+            return RuneCraftoryNPCLooks.SIZE.get();
         }
     }
 }

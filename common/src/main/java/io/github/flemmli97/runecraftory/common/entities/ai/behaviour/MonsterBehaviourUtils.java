@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModMemoryTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.PlayAnimation;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetAnimationToPlay;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
@@ -34,7 +34,7 @@ public class MonsterBehaviourUtils {
 
     public static <E extends BaseMonster> SetAnimationToPlay<E> checkedAttack(String... animations) {
         return new SetAnimationToPlay<E>(animations).filter((animation, entity) -> {
-            String previous = BrainUtils.getMemory(entity, ModMemoryTypes.LAST_ANIMATION.get());
+            String previous = BrainUtils.getMemory(entity, RuneCraftoryMemoryTypes.LAST_ANIMATION.get());
             return entity.allowAnimation(previous, animation);
         });
     }
@@ -42,7 +42,7 @@ public class MonsterBehaviourUtils {
     @SafeVarargs
     public static <E extends BaseMonster> SetAnimationToPlay<E> checkedAttack(AnimationPlayHolder<E>... animations) {
         return new SetAnimationToPlay<>(animations).filter((animation, entity) -> {
-            String previous = BrainUtils.getMemory(entity, ModMemoryTypes.LAST_ANIMATION.get());
+            String previous = BrainUtils.getMemory(entity, RuneCraftoryMemoryTypes.LAST_ANIMATION.get());
             return entity.allowAnimation(previous, animation);
         });
     }
@@ -62,7 +62,7 @@ public class MonsterBehaviourUtils {
             }
             int cooldown = Mth.ceil(calc);
             BrainUtils.setForgettableMemory(entity, MemoryModuleType.ATTACK_COOLING_DOWN, true, cooldown);
-            BrainUtils.setForgettableMemory(entity, ModMemoryTypes.LAST_ANIMATION.get(), animation, cooldown + 80);
+            BrainUtils.setForgettableMemory(entity, RuneCraftoryMemoryTypes.LAST_ANIMATION.get(), animation, cooldown + 80);
         };
     }
 

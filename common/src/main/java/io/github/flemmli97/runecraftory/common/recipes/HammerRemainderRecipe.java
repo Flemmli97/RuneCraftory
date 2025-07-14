@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.recipes;
 
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.mixin.ShapelessRecipeAccessor;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -38,7 +38,7 @@ public class HammerRemainderRecipe extends ShapelessRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModCrafting.HAMMER_REMAINDER_SERIALIZER.get();
+        return RuneCraftoryCrafting.HAMMER_REMAINDER_SERIALIZER.get();
     }
 
     public static class Serializer extends ShapelessRecipe.Serializer {

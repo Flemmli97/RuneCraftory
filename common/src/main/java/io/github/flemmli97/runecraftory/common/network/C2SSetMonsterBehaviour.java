@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -57,7 +57,7 @@ public class C2SSetMonsterBehaviour implements CustomPacketPayload {
                 case FARM -> {
                     monster.setBehaviour(BaseMonster.Behaviour.FARM);
                     sender.displayClientMessage(Component.translatable(monster.behaviourState().interactKey, monster.getDisplayName()), false);
-                    ModCriteria.COMMAND_FARMING.get().trigger(sender);
+                    RuneCraftoryCriteria.COMMAND_FARMING.get().trigger(sender);
                 }
                 case CENTER, CENTER_FARM -> {
                     PlayerData data = Platform.INSTANCE.getPlayerData(sender);
