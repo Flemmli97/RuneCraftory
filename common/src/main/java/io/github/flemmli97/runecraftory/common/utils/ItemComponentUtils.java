@@ -9,8 +9,10 @@ import io.github.flemmli97.runecraftory.common.components.ItemAttributeData;
 import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.ListItemStackHolder;
 import io.github.flemmli97.runecraftory.common.components.StaffData;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
+import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -38,7 +40,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-public class ItemNBT {
+public class ItemComponentUtils {
 
     public static int itemLevel(ItemStack stack) {
         return stack.getOrDefault(RuneCraftoryDataComponentTypes.LEVEL.get(), 1);
@@ -49,15 +51,6 @@ public class ItemNBT {
             stack.set(RuneCraftoryDataComponentTypes.LEVEL.get(), Mth.clamp(level, 1, 10));
         }
         return stack;
-    }
-
-    public static Map<Holder<Attribute>, Double> statIncrease(ItemStack stack) {
-        ItemAttributeData stats = stack.get(RuneCraftoryDataComponentTypes.STATS.get());
-        if (stats == null) {
-            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats)
-                    .orElse(Map.of());
-        }
-        return stats.getTotalStats();
     }
 
     public static void modifyAttribute(ItemStack stack, Consumer<ItemAttributeModifiers.Entry> remove, Consumer<ItemAttributeModifiers.Entry> add) {
@@ -80,14 +73,23 @@ public class ItemNBT {
 
     public static Pair<EquipmentSlot, Map<Holder<Attribute>, Double>> getStatsAttributes(ItemStack stack) {
         Equipable equipable = Equipable.get(stack);
-        if (ItemNBT.shouldHaveStats(stack)) {
+        if (ItemComponentUtils.shouldHaveStats(stack)) {
             EquipmentSlot slot = equipable != null ? equipable.getEquipmentSlot() : EquipmentSlot.MAINHAND;
-            Map<Holder<Attribute>, Double> stats = ItemNBT.statIncrease(stack);
+            Map<Holder<Attribute>, Double> stats = ItemComponentUtils.statIncrease(stack);
             if (stats.isEmpty())
                 return null;
             return Pair.of(slot, stats);
         }
         return null;
+    }
+
+    public static Map<Holder<Attribute>, Double> statIncrease(ItemStack stack) {
+        ItemAttributeData stats = stack.get(RuneCraftoryDataComponentTypes.STATS.get());
+        if (stats == null) {
+            return DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats)
+                    .orElse(Map.of());
+        }
+        return stats.getTotalStats();
     }
 
     public static Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats(ItemStack stack) {
@@ -116,10 +118,10 @@ public class ItemNBT {
 
     public static ItemStack addUpgradeItem(ItemStack stack, ItemStack upgrade, boolean crafting, CraftingType type) {
         int level = itemLevel(stack);
-        if (upgrade.isEmpty() || !ItemNBT.shouldHaveStats(stack) || level >= 10)
+        if (upgrade.isEmpty() || !ItemComponentUtils.shouldHaveStats(stack) || level >= 10)
             return ItemStack.EMPTY;
         ItemStat stat = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).orElse(null);
-        if (ItemNBT.shouldHaveStats(upgrade)) {
+        if (ItemComponentUtils.shouldHaveStats(upgrade)) {
             if (!crafting || stack.has(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get()))
                 return stack;
             boolean lightOre = stack.getOrDefault(RuneCraftoryDataComponentTypes.LIGHT_ORE.get(), false);
@@ -352,7 +354,27 @@ public class ItemNBT {
         return false;
     }
 
-    public static double attackSpeedModifier(LivingEntity entity) {
-        return entity.getAttributeValue(RuneCraftoryAttributes.ATTACK_SPEED.asHolder());
+    public static int getChargeTime(LivingEntity entity) {
+        return Mth.ceil(EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.CHARGE_TIME.asHolder()));
+    }
+
+    public static int getChargeTime(LivingEntity entity, ToolItemTier toolTier) {
+        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.CHARGE_TIME.asHolder()));
+        if (toolTier == ToolItemTier.PLATINUM)
+            time *= GeneralConfig.platinumChargeTime;
+        return time;
+    }
+
+    public static float getShieldEfficiency(LivingEntity entity) {
+        return getShieldEfficiency(entity.getMainHandItem());
+    }
+
+    public static float getShieldEfficiency(ItemStack stack) {
+        float eff = stack.getOrDefault(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 1f);
+        if (eff < 1) {
+            if (stack.has(RuneCraftoryDataComponentTypes.DRAGON_SCALE.get()))
+                eff = Mth.clamp(eff + 0.5f, 0.5f, 0.75f);
+        }
+        return eff;
     }
 }

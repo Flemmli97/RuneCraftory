@@ -303,7 +303,7 @@ public class CombatUtils {
                     }
                 }
                 if (resetCooldown) {
-                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player)));
+                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * EntityUtils.attackSpeedModifier(player)));
                 }
                 boolean faint = player.level().random.nextDouble() < statusEffectValue(player, RuneCraftoryAttributes.FAINT.asHolder(), target);
                 boolean critical = player.level().random.nextDouble() < statusEffectValue(player, RuneCraftoryAttributes.CRITICAL.asHolder(), target);
@@ -316,7 +316,7 @@ public class CombatUtils {
                     damageCategory = DynamicDamage.DamageCategory.FIXED;
                     damage = 1;
                 }
-                DynamicDamage.Builder source = new DynamicDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageCategory)
+                DynamicDamage.Builder source = new DynamicDamage.Builder(player).element(ItemComponentUtils.getElement(stack)).damageType(damageCategory)
                         .knock(DynamicDamage.KnockBackType.VANILLA).hurtResistant(0);
                 DynamicDamage tempBuild = source.get(player.registryAccess());
 
@@ -357,7 +357,7 @@ public class CombatUtils {
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
-        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).hurtResistant(5).element(ItemNBT.getElement(stack));
+        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).hurtResistant(5).element(ItemComponentUtils.getElement(stack));
         return mobAttack(attacker, target, source);
     }
 
@@ -592,7 +592,7 @@ public class CombatUtils {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         //Weapons
         if (stack.getItem() instanceof ItemStaffBase) {
-            switch (ItemNBT.getElement(stack)) {
+            switch (ItemComponentUtils.getElement(stack)) {
                 case WATER -> LevelCalc.levelSkill(data, Skills.WATER, 3);
                 case EARTH -> LevelCalc.levelSkill(data, Skills.EARTH, 3);
                 case WIND -> LevelCalc.levelSkill(data, Skills.WIND, 3);
@@ -642,7 +642,7 @@ public class CombatUtils {
 
     public static int getSpellLevelFromStack(ItemStack stack) {
         if (stack.getItem() instanceof ItemSpell)
-            return ItemNBT.itemLevel(stack);
+            return ItemComponentUtils.itemLevel(stack);
         return 1;
     }
 

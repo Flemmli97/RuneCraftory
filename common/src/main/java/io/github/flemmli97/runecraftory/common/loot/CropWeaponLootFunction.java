@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import net.minecraft.core.BlockPos;
@@ -42,7 +42,7 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        if (!ItemNBT.shouldHaveStats(stack))
+        if (!ItemComponentUtils.shouldHaveStats(stack))
             return stack;
         boolean equipment = stack.is(RunecraftoryTags.Items.EQUIPMENT) && stack.getItem() instanceof ShieldItem;
         int level = 1;
@@ -60,15 +60,15 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
                 .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(RunecraftoryTags.Items.UPGRADABLE_HELD));
         if (!base.isEmpty()) {
             stack.set(RuneCraftoryDataComponentTypes.LIGHT_ORE.get(), true);
-            ItemNBT.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
+            ItemComponentUtils.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         }
         List<Pair<ItemStack, ItemStat>> bonus = DataPackHandler.INSTANCE.itemStatManager()
                 .all(s -> !s.is(RunecraftoryTags.Items.WEAPONS) && !s.is(RunecraftoryTags.Items.EQUIPMENT));
         int bonusAmount = ctx.getRandom().nextInt(3) + 1;
         for (int i = 0; i < bonusAmount; i++)
-            ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
+            ItemComponentUtils.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         for (int i = 1; i < level; i++) {
-            ItemNBT.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), false, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
+            ItemComponentUtils.addUpgradeItem(stack, bonus.get(ctx.getRandom().nextInt(bonus.size())).getFirst(), false, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         }
         return stack;
     }

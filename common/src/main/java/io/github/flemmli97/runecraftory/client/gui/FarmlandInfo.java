@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandDataContainer;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import net.minecraft.ChatFormatting;
@@ -16,6 +16,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -31,8 +33,14 @@ public class FarmlandInfo {
         this.mc = mc;
     }
 
+    public static boolean shouldShowFarmlandView(LivingEntity entity) {
+        ItemStack main = entity.getMainHandItem();
+        ItemStack off = entity.getOffhandItem();
+        return main.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) || off.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get());
+    }
+
     public void render(GuiGraphics graphics) {
-        if (!EntityUtils.shouldShowFarmlandView(this.mc.player))
+        if (!shouldShowFarmlandView(this.mc.player))
             return;
         HitResult res = this.mc.hitResult;
         if (res == null || res.getType() != HitResult.Type.BLOCK)

@@ -61,7 +61,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessio
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -904,7 +904,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         }
         Equipable equipable = Equipable.get(stack);
         EquipmentSlot slot = equipable != null ? equipable.getEquipmentSlot() : null;
-        if (slot != EquipmentSlot.MAINHAND || ItemNBT.isWeapon(stack) || stack.getItem() instanceof SwordItem || stack.getItem() instanceof AxeItem) {
+        if (slot != EquipmentSlot.MAINHAND || ItemComponentUtils.isWeapon(stack) || stack.getItem() instanceof SwordItem || stack.getItem() instanceof AxeItem) {
             ItemStack copy = stack.copy();
             copy.setCount(1);
             this.setItemSlot(slot == null ? EquipmentSlot.MAINHAND : slot, copy);
@@ -1107,7 +1107,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public static boolean attack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
-        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).hurtResistant(0).element(ItemNBT.getElement(stack));
+        DynamicDamage.Builder source = new DynamicDamage.Builder(attacker).hurtResistant(0).element(ItemComponentUtils.getElement(stack));
         return CombatUtils.mobAttack(attacker, target, source);
     }
 
@@ -1370,7 +1370,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             return false;
         }
         this.eat(this.level(), stack);
-        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemComponentUtils.foodStats(stack);
         if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
             this.removeFoodEffect();
             for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getSecond().entrySet()) {

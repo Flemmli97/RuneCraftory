@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.DualWeapon;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
@@ -41,7 +41,7 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            if (duration == ItemUtils.getChargeTime(entity))
+            if (duration == ItemComponentUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
@@ -62,7 +62,7 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+        if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.GLOVE_USE.get(), stack);
         }
     }

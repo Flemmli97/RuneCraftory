@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -42,13 +42,13 @@ public class LevelUpUpgradeRecipe implements Recipe<SingleRecipeInput> {
     @Override
     public boolean matches(SingleRecipeInput input, Level level) {
         ItemStack stack = input.getItem(0);
-        return ItemNBT.itemLevel(stack) == this.level;
+        return ItemComponentUtils.itemLevel(stack) == this.level;
     }
 
     @Override
     public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registries) {
         ItemStack stack = input.getItem(0).copy();
-        ItemNBT.getLeveledItem(stack, ItemNBT.itemLevel(stack) + 1);
+        ItemComponentUtils.getLeveledItem(stack, ItemComponentUtils.itemLevel(stack) + 1);
         return stack;
     }
 

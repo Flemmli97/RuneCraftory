@@ -1,13 +1,10 @@
 package io.github.flemmli97.runecraftory.client;
 
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
-import io.github.flemmli97.runecraftory.mixin.SoundManagerAccessor;
-import io.github.flemmli97.runecraftory.mixinhelper.SoundEngineUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -28,7 +25,6 @@ public class BossBarTracker {
     // The bossbars that are visible on the screen for the player
     private static final Map<UUID, BossBarData> ACTIVE_BOSS_BARS = new HashMap<>();
     private static final Map<UUID, BossSoundInstance> ACTIVE_BOSS_BGM = new HashMap<>();
-    private static final Map<UUID, BossSoundInstance> FADING_CHANNEL = new HashMap<>();
     private static SoundInstance activeMusic;
     private static int lastPlay, tick;
 
@@ -42,7 +38,13 @@ public class BossBarTracker {
 
     public static void tickSounds() {
         tick++;
-        FADING_CHANNEL.values().removeIf(BossSoundInstance::done);
+        ACTIVE_BOSS_BGM.values().removeIf(inst -> {
+            if (inst.isStopped()) {
+                stopMusic(inst);
+                return true;
+            }
+            return false;
+        });
     }
 
     public static void addActiveBossbar(UUID id, UUID musicID, ResourceLocation type, SoundEvent music) {
@@ -53,11 +55,7 @@ public class BossBarTracker {
             if (old.music != null && (sound = ACTIVE_BOSS_BGM.get(old.music)) != null) {
                 // Update old music if music changed
                 if (music == null || !sound.getLocation().equals(music.getLocation())) {
-                    // Stop old music
-                    sound.instances.remove(id);
-                    if (sound.instances.isEmpty())
-                        ACTIVE_BOSS_BGM.remove(old.music);
-                    Minecraft.getInstance().getSoundManager().stop(sound);
+                    sound.removeBossBar(id, true);
                     // Generate and play the changed music
                     BossSoundInstance bgm = createSound(musicID, music);
                     old.music = musicID;
@@ -67,41 +65,36 @@ public class BossBarTracker {
             }
             return;
         }
-        // Try lookup if the music is fading away
-        BossSoundInstance inst = FADING_CHANNEL.get(musicID);
+        BossSoundInstance inst = ACTIVE_BOSS_BGM.get(musicID);
         if (inst != null) {
-            inst.reverse(true);
+            inst.linkBossBar(id, false);
         } else {
-            BossSoundInstance existing = ACTIVE_BOSS_BGM.get(musicID);
-            if (existing == null) {
-                // Create a new music instance if missing
-                inst = createSound(musicID, music);
-                playMusic(inst);
-                inst.instances.add(id);
-                ACTIVE_BOSS_BGM.put(musicID, inst);
-            } else {
-                existing.instances.add(id);
-            }
+            inst = createSound(musicID, music);
+            inst.linkBossBar(id, true);
+            playMusic(inst);
+            ACTIVE_BOSS_BGM.put(musicID, inst);
         }
         BossBarData data = new BossBarData(type, musicID);
         ACTIVE_BOSS_BARS.put(id, data);
     }
 
-    public static void updateMusic(UUID id, UUID musicID, boolean stop) {
+    public static void updateMusic(UUID id, UUID musicID, SoundEvent sound) {
         BossSoundInstance bgm = ACTIVE_BOSS_BGM.get(musicID);
         if (bgm != null) {
-            if (stop) {
-                bgm.instances.remove(id);
-                if (bgm.instances.isEmpty()) {
-                    stopMusic(bgm);
-                }
+            if (sound == null) {
+                bgm.removeBossBar(id, true);
             } else {
                 boolean empty = bgm.instances.isEmpty();
-                bgm.instances.add(id);
+                bgm.linkBossBar(id, false);
                 if (empty) {
                     playMusic(bgm);
                 }
             }
+        } else if (sound != null) {
+            BossSoundInstance inst = createSound(musicID, sound);
+            inst.linkBossBar(id, true);
+            playMusic(inst);
+            ACTIVE_BOSS_BGM.put(musicID, inst);
         }
     }
 
@@ -111,33 +104,8 @@ public class BossBarTracker {
             BossSoundInstance sound = ACTIVE_BOSS_BGM.get(data.music);
             if (sound == null)
                 return;
-            sound.instances.remove(id);
-            if (!sound.instances.isEmpty())
-                return;
-            ACTIVE_BOSS_BGM.remove(data.music);
-            if (immediate || ClientConfig.bossMusicFadeDelay == 0) {
-                // Stop the sound without fading away
-                FADING_CHANNEL.remove(data.music);
-                stopMusic(sound);
-            } else {
-                BossSoundInstance inst = FADING_CHANNEL.get(data.music);
-                if (inst != null) {
-                    inst.reverse(false);
-                } else {
-                    FADING_CHANNEL.put(data.music, sound.reverse(false));
-                }
-            }
+            sound.removeBossBar(id, immediate);
         }
-    }
-
-    public static int tryRenderCustomBossbar(GuiGraphics graphics, int x, int y, BossEvent bossEvent, boolean withName) {
-        BossBarData data = ACTIVE_BOSS_BARS.get(bossEvent.getId());
-        if (data != null) {
-            ClientBossBarType type = BOSS_BARS.get(data.type);
-            if (type != null)
-                return type.renderFrom(graphics, x, y, bossEvent, withName);
-        }
-        return 0;
     }
 
     public static BossSoundInstance createSound(UUID id, SoundEvent sound) {
@@ -159,8 +127,8 @@ public class BossBarTracker {
     }
 
     private static void stopMusic(BossSoundInstance sound) {
-        if (activeMusic == sound && sound.instances.isEmpty()) {
-            Minecraft.getInstance().getSoundManager().stop(sound);
+        Minecraft.getInstance().getSoundManager().stop(sound);
+        if (activeMusic == sound) {
             // Find any other active boss music to play
             ACTIVE_BOSS_BGM.values().stream().filter(bgm -> bgm != sound && !bgm.instances.isEmpty()).findFirst()
                     .ifPresent(bgm -> {
@@ -168,6 +136,20 @@ public class BossBarTracker {
                         activeMusic = bgm;
                     });
         }
+    }
+
+    public static boolean hasActiveMusic() {
+        return activeMusic != null;
+    }
+
+    public static int tryRenderCustomBossbar(GuiGraphics graphics, int x, int y, BossEvent bossEvent, boolean withName) {
+        BossBarData data = ACTIVE_BOSS_BARS.get(bossEvent.getId());
+        if (data != null) {
+            ClientBossBarType type = BOSS_BARS.get(data.type);
+            if (type != null)
+                return type.renderFrom(graphics, x, y, bossEvent, withName);
+        }
+        return 0;
     }
 
     public static class BossBarData {
@@ -184,10 +166,11 @@ public class BossBarTracker {
     public static class BossSoundInstance extends AbstractTickableSoundInstance {
 
         public final UUID id;
+
         private final int fadeTime;
         private final float defaultVol, volDecrease;
         private int tick = 1;
-        private boolean reverse, fade;
+        private boolean fadeAway, adjustingVolume;
 
         // Amount of bossbars assigned to this sound instance
         private final Set<UUID> instances = new HashSet<>();
@@ -211,88 +194,49 @@ public class BossBarTracker {
             return Minecraft.getInstance().options.getSoundSourceVolume(category);
         }
 
-        public BossSoundInstance reverse(boolean reverse) {
-            this.reverse = reverse;
+        public void linkBossBar(UUID barId, boolean init) {
+            this.instances.add(barId);
+            if (!init)
+                this.setFadeState(true);
+        }
+
+        public void removeBossBar(UUID barId, boolean immediate) {
+            this.instances.remove(barId);
+            if (this.instances.isEmpty()) {
+                if (immediate) {
+                    this.stop();
+                } else
+                    this.setFadeState(false);
+            }
+        }
+
+        private void setFadeState(boolean fadeAway) {
+            this.fadeAway = fadeAway;
             this.tick = Mth.clamp(this.tick, 0, this.fadeTime);
-            this.fade = true;
-            return this;
+            this.adjustingVolume = true;
         }
 
         public boolean done() {
-            return this.tick > this.fadeTime || this.tick < 0 || this.instances.isEmpty();
+            return this.tick > this.fadeTime || this.tick < 0;
         }
 
         @Override
         public void tick() {
-            if (!this.fade)
-                return;
-            if (this.instances.isEmpty()) {
-                this.stop();
+            if (!this.adjustingVolume) {
+                if (this.instances.isEmpty()) {
+                    this.stop();
+                }
                 return;
             }
             boolean done = this.done();
-            if (this.reverse)
+            if (this.fadeAway)
                 --this.tick;
             else
                 ++this.tick;
             this.volume = this.defaultVol * Mth.clamp(1 - this.volDecrease * this.tick, 0, 1);
             if (done) {
-                if (!this.reverse) {
-                    stopMusic(this);
-                    this.looping = false;
-                }
-                this.fade = false;
+                this.adjustingVolume = false;
             }
-        }
-    }
-
-    public static class TickingSoundChannel {
-
-        private final SoundInstance inst;
-        private final ChannelAccess.ChannelHandle channel;
-        private final int fadeTime;
-        private final float defaultVol, volDecrease;
-        private int tick;
-        private boolean reverse;
-
-        public TickingSoundChannel(SoundInstance inst, int fadeTime) {
-            this.inst = inst;
-            SoundEngineUtil engine = (SoundEngineUtil) ((SoundManagerAccessor) Minecraft.getInstance().getSoundManager()).getSoundEngine();
-            this.channel = engine.runecraftory$getHandle(inst);
-            this.fadeTime = fadeTime;
-            this.tick = 0;
-            this.volDecrease = 1f / this.fadeTime;
-            this.defaultVol = calculateVolume(inst);
-        }
-
-        private static float calculateVolume(SoundInstance sound) {
-            return Mth.clamp(sound.getVolume() * getVolume(sound.getSource()), 0.0f, 1.0f);
-        }
-
-        private static float getVolume(@Nullable SoundSource category) {
-            if (category == null || category == SoundSource.MASTER) {
-                return 1.0f;
-            }
-            return Minecraft.getInstance().options.getSoundSourceVolume(category);
-        }
-
-        public boolean tick() {
-            if (this.channel == null)
-                return true;
-            boolean done = this.tick > this.fadeTime || this.tick < 0;
-            if (this.reverse)
-                this.tick--;
-            else
-                this.tick++;
-            float vol = this.defaultVol * Mth.clamp(1 - this.volDecrease * this.tick, 0, 1);
-            this.channel.execute(ch -> ch.setVolume(vol));
-            if (done && !this.reverse)
-                ;//stopMusic(this.inst);
-            return done;
-        }
-
-        public void reverse(boolean reverse) {
-            this.reverse = reverse;
         }
     }
 

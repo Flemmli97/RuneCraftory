@@ -1,20 +1,15 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResult;
-import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,17 +25,6 @@ public class ItemUtils {
         ItemStack hammer = new ItemStack(RuneCraftoryItems.HAMMER_SCRAP.get());
         spawnItemAtEntity(player, broadSword);
         spawnItemAtEntity(player, hammer);
-    }
-
-    public static int getChargeTime(LivingEntity entity) {
-        return Mth.ceil(EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.CHARGE_TIME.asHolder()));
-    }
-
-    public static int getChargeTime(LivingEntity entity, ToolItemTier toolTier) {
-        int time = Mth.ceil(EntityUtils.tryGetAttribute(entity, RuneCraftoryAttributes.CHARGE_TIME.asHolder()));
-        if (toolTier == ToolItemTier.PLATINUM)
-            time *= GeneralConfig.platinumChargeTime;
-        return time;
     }
 
     public static void spawnItemAtEntity(LivingEntity entity, ItemStack stack) {
@@ -59,7 +43,7 @@ public class ItemUtils {
 
     public static void spawnLeveledItem(LivingEntity entity, ItemStack stack, int level) {
         if (!entity.level().isClientSide) {
-            ItemEntity item = new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), ItemNBT.getLeveledItem(stack, level));
+            ItemEntity item = new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), ItemComponentUtils.getLeveledItem(stack, level));
             item.setPickUpDelay(0);
             entity.level().addFreshEntity(item);
         }
@@ -70,7 +54,7 @@ public class ItemUtils {
     }
 
     public static int getSellPrice(ItemStack stack, ItemStat stat) {
-        return stat.getSell() * ItemNBT.itemLevel(stack);
+        return stat.getSell() * ItemComponentUtils.itemLevel(stack);
     }
 
     public static int getBuyPrice(ItemStack stack) {
@@ -113,18 +97,5 @@ public class ItemUtils {
 
     public static int getBuyPrice(ItemStack stack, ItemStat stat) {
         return stat.getBuy();
-    }
-
-    public static float getShieldEfficiency(LivingEntity entity) {
-        return getShieldEfficiency(entity.getMainHandItem());
-    }
-
-    public static float getShieldEfficiency(ItemStack stack) {
-        float eff = stack.getOrDefault(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 1f);
-        if (eff < 1) {
-            if (stack.has(RuneCraftoryDataComponentTypes.DRAGON_SCALE.get()))
-                eff = Mth.clamp(eff + 0.5f, 0.5f, 0.75f);
-        }
-        return eff;
     }
 }

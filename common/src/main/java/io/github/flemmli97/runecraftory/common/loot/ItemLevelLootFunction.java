@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.loot;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import net.minecraft.core.BlockPos;
@@ -63,7 +63,7 @@ public class ItemLevelLootFunction extends LootItemConditionalFunction {
         }
         if (level == 0)
             level = this.getLevel(ctx);
-        return ItemNBT.getLeveledItem(stack, Math.abs(level));
+        return ItemComponentUtils.getLeveledItem(stack, Math.abs(level));
     }
 
     public int getLevel(LootContext ctx) {

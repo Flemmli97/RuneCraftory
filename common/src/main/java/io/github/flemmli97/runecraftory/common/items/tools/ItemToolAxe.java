@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +24,7 @@ public class ItemToolAxe extends AxeItem {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
             ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
-            int chargeTime = ItemUtils.getChargeTime(entity, tier);
+            int chargeTime = ItemComponentUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }

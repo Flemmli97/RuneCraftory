@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.neoforge.event;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.TriState;
@@ -120,7 +120,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void itemStackAttributes(ItemAttributeModifierEvent event) {
-        ItemNBT.modifyAttribute(event.getItemStack(),
+        ItemComponentUtils.modifyAttribute(event.getItemStack(),
                 entry -> event.removeModifier(entry.attribute(), entry.modifier().id()),
                 entry -> event.addModifier(entry.attribute(), entry.modifier(), entry.slot()));
     }

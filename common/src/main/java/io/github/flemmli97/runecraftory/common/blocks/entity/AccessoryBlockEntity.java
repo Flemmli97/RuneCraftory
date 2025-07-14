@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks.entity;
 
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Equipable;
@@ -19,7 +19,7 @@ public class AccessoryBlockEntity extends UpgradingCraftingBlockEntity {
     public boolean isItemValid(int slot, ItemStack stack) {
         if (slot == 0) {
             Equipable slotType = Equipable.get(stack);
-            return slotType != null && slotType.getEquipmentSlot() != EquipmentSlot.MAINHAND && ItemNBT.shouldHaveStats(stack);
+            return slotType != null && slotType.getEquipmentSlot() != EquipmentSlot.MAINHAND && ItemComponentUtils.shouldHaveStats(stack);
         }
         return true;
     }

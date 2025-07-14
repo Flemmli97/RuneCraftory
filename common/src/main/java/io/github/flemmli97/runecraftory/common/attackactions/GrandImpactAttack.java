@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +25,7 @@ public class GrandImpactAttack extends AttackAction {
 
     @Override
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
-        double speed = ItemNBT.attackSpeedModifier(entity);
+        double speed = EntityUtils.attackSpeedModifier(entity);
         return AttackAction.create(PlayerModelAnimations.GRAND_IMPACT, speed);
     }
 

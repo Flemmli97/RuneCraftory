@@ -10,7 +10,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.StreamCodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
@@ -192,8 +192,8 @@ public class ItemStat {
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
         List<Component> header = new ArrayList<>();
-        if (ItemNBT.shouldHaveLevel(stack))
-            header.add(Component.translatable("runecraftory.tooltip.item.level", ItemNBT.itemLevel(stack)));
+        if (ItemComponentUtils.shouldHaveLevel(stack))
+            header.add(Component.translatable("runecraftory.tooltip.item.level", ItemComponentUtils.itemLevel(stack)));
         int buyPrice = ItemUtils.getBuyPrice(stack, this);
         if (buyPrice > 0) {
             header.add(Component.translatable("runecraftory.tooltip.item.buy", buyPrice));
@@ -204,7 +204,7 @@ public class ItemStat {
         }
         if (!header.isEmpty())
             list.add(ComponentUtils.formatList(header, CommonComponents.space(), Function.identity()).withStyle(ChatFormatting.YELLOW));
-        boolean shouldHaveStats = ItemNBT.shouldHaveStats(stack);
+        boolean shouldHaveStats = ItemComponentUtils.shouldHaveStats(stack);
         if (!shouldHaveStats && this.getDiff() > 0)
             list.add(Component.translatable("runecraftory.tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat && !shouldHaveStats) {

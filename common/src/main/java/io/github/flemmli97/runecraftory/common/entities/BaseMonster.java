@@ -45,7 +45,7 @@ import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
@@ -1846,7 +1846,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             return false;
         }
         this.eat(this.level(), stack);
-        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemComponentUtils.foodStats(stack);
         if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
             this.removeFoodEffect();
             for (Map.Entry<Holder<Attribute>, Double> entry : foodStats.getSecond().entrySet()) {

@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.components.ItemStackHolder;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -27,8 +27,8 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
 
     public UpgradeTooltipComponent(UpgradeComponent comp) {
         ItemStack stack = comp.stack;
-        if (ItemNBT.isWeapon(stack)) {
-            ItemElement element = ItemNBT.getElement(stack);
+        if (ItemComponentUtils.isWeapon(stack)) {
+            ItemElement element = ItemComponentUtils.getElement(stack);
             if (element != ItemElement.NONE)
                 this.stacks.add(element.icon.get());
         }
@@ -46,7 +46,7 @@ public class UpgradeTooltipComponent implements ClientTooltipComponent {
     }
 
     public static boolean shouldAdd(ItemStack stack) {
-        return (stack.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != RuneCraftoryItems.GLASS.get()) || (ItemNBT.isWeapon(stack) && ItemNBT.getElement(stack) != ItemElement.NONE) || stack.has(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get())
+        return (stack.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) && stack.getItem() != RuneCraftoryItems.GLASS.get()) || (ItemComponentUtils.isWeapon(stack) && ItemComponentUtils.getElement(stack) != ItemElement.NONE) || stack.has(RuneCraftoryDataComponentTypes.SCRAP_METAL_PLUS.get())
                 || stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get()) || !stack.getOrDefault(RuneCraftoryDataComponentTypes.ORIGINAL_ITEM.get(), ItemStackHolder.DEFAULT).isEmpty();
     }
 

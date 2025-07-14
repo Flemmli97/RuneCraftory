@@ -86,7 +86,7 @@ public class CropUtils {
     private static void modifyStack(CropProperties props, ItemStack stack, int level) {
         if (stack.is(RunecraftoryTags.Items.CROPS)) {
             stack.setCount(props.maxDrops());
-            ItemNBT.getLeveledItem(stack, level);
+            ItemComponentUtils.getLeveledItem(stack, level);
         }
     }
 

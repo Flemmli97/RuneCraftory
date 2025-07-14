@@ -8,8 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackAction
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
@@ -48,7 +47,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
         Collection<LivingEntity> list = CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 60, entity.getYRot() + 60, (float) range)
                 .apply(entity, null);
         if (!list.isEmpty()) {
-            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(DynamicDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
+            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack)).knock(DynamicDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.2;
             for (LivingEntity e : list) {
@@ -74,7 +73,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            if (duration == ItemUtils.getChargeTime(entity))
+            if (duration == ItemComponentUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
@@ -95,7 +94,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.LONGSWORD_USE.get(), stack);
                 return;

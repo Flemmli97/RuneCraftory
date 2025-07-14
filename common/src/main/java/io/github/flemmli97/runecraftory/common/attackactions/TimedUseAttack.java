@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,7 +31,7 @@ public class TimedUseAttack extends AttackAction {
 
     @Override
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
-        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        float speed = (float) (EntityUtils.attackSpeedModifier(entity));
         return AttackAction.create(this.animation, this.ignoreAttackSpeed ? 1 : speed);
     }
 

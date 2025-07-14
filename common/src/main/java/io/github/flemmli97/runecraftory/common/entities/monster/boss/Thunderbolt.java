@@ -71,7 +71,7 @@ public class Thunderbolt extends BossMonster {
     public static final String LASER_KICK_2 = BUILDER.add("laser_kick_2", LASER_KICK);
     public static final String LASER_KICK_3 = BUILDER.add("laser_kick_3", LASER_KICK);
     public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.72).marker("attack", 0.36));
-    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(2).marker("neigh", 0.96));
+    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.44).marker("neigh", 6.48));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final String NEIGH = BUILDER.add("neigh", AnimationsBuilder.definition(1.16).marker("neigh", 0.48));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
@@ -306,8 +306,9 @@ public class Thunderbolt extends BossMonster {
                 this.getAnimationHandler().setAnimation(NEIGH);
                 this.getNavigation().stop();
             } else {
-                this.getAnimationHandler().setAnimation(DEFEAT);
+                this.getAnimationHandler().setAnimation(FEINT);
                 this.getNavigation().stop();
+                this.feintDeath();
                 this.bossInfo.setProgress(0);
             }
         }
@@ -316,7 +317,7 @@ public class Thunderbolt extends BossMonster {
 
     @Override
     protected void updateBossBar() {
-        if (!this.feintedDeath)
+        if (!this.feintedDeath || this.getAnimationHandler().isCurrent(FEINT))
             this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * FEINT_THRESHOLD)) / (this.getMaxHealth() * (1 - FEINT_THRESHOLD)));
         else
             this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
@@ -344,13 +345,7 @@ public class Thunderbolt extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrent(DEFEAT) && !this.feintedDeath && !this.isTamed()) {
-            AnimationState anim = this.getAnimationHandler().getAnimation();
-            if (anim.done(0)) {
-                this.feintDeath();
-            }
-        }
-        if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT) && !this.isTamed()) {
+        if (this.getAnimationHandler().isCurrent(FEINT) && !this.isTamed()) {
             Vec3 delta = this.getDeltaMovement();
             this.setDeltaMovement(0, delta.y, 0);
             if (this.getAnimationHandler().getAnimation().is(DEFEAT)) {

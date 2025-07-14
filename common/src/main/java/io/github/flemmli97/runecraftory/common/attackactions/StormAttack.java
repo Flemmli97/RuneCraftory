@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -25,7 +25,7 @@ public class StormAttack extends AttackAction {
 
     @Override
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
-        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        float speed = (float) (EntityUtils.attackSpeedModifier(entity));
         return AttackAction.create(PlayerModelAnimations.STORM.get(comboIdx), speed);
     }
 

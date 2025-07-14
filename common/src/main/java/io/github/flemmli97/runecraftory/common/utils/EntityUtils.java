@@ -11,7 +11,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAdditional;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -62,6 +62,10 @@ public class EntityUtils {
         return inst.getValue();
     }
 
+    public static double attackSpeedModifier(LivingEntity entity) {
+        return tryGetAttribute(entity, RuneCraftoryAttributes.ATTACK_SPEED.asHolder());
+    }
+
     public static Rotation fromDirection(Direction direction) {
         return switch (direction) {
             case EAST -> Rotation.CLOCKWISE_90;
@@ -71,18 +75,10 @@ public class EntityUtils {
         };
     }
 
-    public static boolean isExhaust(LivingEntity entity) {
-        return entity.hasEffect(RuneCraftoryEffects.FATIGUE.asHolder());
-    }
-
     public static void applyPermanentEffect(LivingEntity entity, Holder<MobEffect> effect, int amplifier) {
         if (!entity.hasEffect(effect)) {
-            entity.addEffect(new MobEffectInstance(effect, Integer.MAX_VALUE, amplifier));
+            entity.addEffect(new MobEffectInstance(effect, -1, amplifier, true, false));
         }
-    }
-
-    public static boolean paralysed(LivingEntity entity) {
-        return entity.hasEffect(RuneCraftoryEffects.PARALYSIS.asHolder());
     }
 
     public static boolean sealed(LivingEntity entity) {
@@ -104,12 +100,6 @@ public class EntityUtils {
         } else {
             player.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), entity.getAttributes().getAttributesToUpdate()));
         }
-    }
-
-    public static boolean shouldShowFarmlandView(LivingEntity entity) {
-        ItemStack main = entity.getMainHandItem();
-        ItemStack off = entity.getOffhandItem();
-        return main.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get()) || off.has(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get());
     }
 
     public static void foodHealing(LivingEntity entity, float amount) {

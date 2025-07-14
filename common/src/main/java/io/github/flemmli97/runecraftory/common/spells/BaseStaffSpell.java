@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementalBallEntity;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -25,7 +25,7 @@ public class BaseStaffSpell extends Spell {
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (stack.getItem() instanceof ItemStaffBase staff) {
-            ItemElement element = ItemNBT.getElement(stack);
+            ItemElement element = ItemComponentUtils.getElement(stack);
             if (element == ItemElement.NONE)
                 return false;
             if (staff.amount == 1) {

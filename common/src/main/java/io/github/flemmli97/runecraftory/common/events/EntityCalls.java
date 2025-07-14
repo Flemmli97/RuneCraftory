@@ -35,8 +35,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.runecraftory.common.world.data.family.FamilyHandler;
@@ -157,7 +156,7 @@ public class EntityCalls {
             }
         }
         if (changed.containsKey(EquipmentSlot.MAINHAND) || changed.containsKey(EquipmentSlot.OFFHAND)) {
-            float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
+            float shieldEfficiency = ItemComponentUtils.getShieldEfficiency(entity);
             recalcOffhandBonus(entity, shieldEfficiency);
         }
         if (entity instanceof ServerPlayer serverPlayer) {
@@ -169,7 +168,7 @@ public class EntityCalls {
     }
 
     private static void updateWeaponState(LivingEntity entity) {
-        boolean weapon = ItemNBT.isWeapon(entity.getMainHandItem());
+        boolean weapon = ItemComponentUtils.isWeapon(entity.getMainHandItem());
         AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             ((AttributeInstanceExtension) inst)
@@ -196,7 +195,7 @@ public class EntityCalls {
     }
 
     public static boolean playerAttack(Player player, Entity target) {
-        if (!player.level().isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
+        if (!player.level().isClientSide && ItemComponentUtils.isWeapon(player.getMainHandItem())) {
             CombatUtils.attackWithItem(player, target, true, true);
             return true;
         }
@@ -357,7 +356,7 @@ public class EntityCalls {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player).tick();
             if (GeneralConfig.disableHunger) {
-                int food = EntityUtils.paralysed(player) ? 6 : 14;
+                int food = player.hasEffect(RuneCraftoryEffects.PARALYSIS.asHolder()) ? 6 : 14;
                 player.getFoodData().setFoodLevel(food);
                 player.getFoodData().setSaturation(0);
             }

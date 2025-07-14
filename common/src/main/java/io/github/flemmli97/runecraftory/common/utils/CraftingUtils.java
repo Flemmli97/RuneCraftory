@@ -34,7 +34,7 @@ public class CraftingUtils {
         int cost = CraftingUtils.upgradeCost(type, data, stack, ingredient);
         if (cost < 0)
             return Pair.of(cost, ItemStack.EMPTY);
-        return Pair.of(cost, ItemNBT.addUpgradeItem(stack.copy(), ingredient, false, type));
+        return Pair.of(cost, ItemComponentUtils.addUpgradeItem(stack.copy(), ingredient, false, type));
     }
 
     public static int upgradeCost(CraftingType type, PlayerData data, ItemStack stack, ItemStack ingredient) {
@@ -49,10 +49,10 @@ public class CraftingUtils {
                 int skillLevel = type == CraftingType.FORGE ? data.getSkillLevel(Skills.FORGING).getLevel() : data.getSkillLevel(Skills.CRAFTING).getLevel();
                 int result;
                 if (skillLevel >= stat.getDiff()) {
-                    result = stat.getDiff() * 2 + (ItemNBT.itemLevel(stack) - 1) * 2;
+                    result = stat.getDiff() * 2 + (ItemComponentUtils.itemLevel(stack) - 1) * 2;
                 } else {
                     int diff = stat.getDiff() - skillLevel;
-                    int equip = ItemNBT.itemLevel(stack) - 1;
+                    int equip = ItemComponentUtils.itemLevel(stack) - 1;
                     result = (4 * diff + 2) * stat.getDiff() // Base
                             + 2 * stat.getDiff() * (2 * equip) + equip * 2; //EquipmentLvl Addition
                 }
@@ -89,7 +89,7 @@ public class CraftingUtils {
     private static float xpForUpgrade(Skills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
         float mult = LevelCalc.getSkillXpMultiplier(skill) * 1.5f;
         int difficulty = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
-        float xp = mult * (10 + ItemNBT.itemLevel(equip));
+        float xp = mult * (10 + ItemComponentUtils.itemLevel(equip));
         if (skillLevel < difficulty)
             xp += 2 * difficulty - skillLevel;
         return xp;
@@ -141,17 +141,17 @@ public class CraftingUtils {
     public static ItemStack getCraftingOutput(ItemStack stack, PlayerBoundCraftingContainer inv, SextupleRecipe.MatchResult materials, CraftingType type) {
         if (type == CraftingType.COOKING_TABLE) {
             for (ItemStack base : materials.recipeMatches()) {
-                ItemNBT.addFoodBonusItem(stack, base);
+                ItemComponentUtils.addFoodBonusItem(stack, base);
             }
             for (ItemStack bonus : materials.bonusItems()) {
-                ItemNBT.addFoodBonusItem(stack, bonus);
+                ItemComponentUtils.addFoodBonusItem(stack, bonus);
             }
             return stack;
         }
         int i = 0;
         for (ItemStack bonus : materials.bonusItems()) {
             i++;
-            ItemNBT.addUpgradeItem(stack, bonus, true, type);
+            ItemComponentUtils.addUpgradeItem(stack, bonus, true, type);
             if (i == 3)
                 break;
         }
@@ -162,7 +162,7 @@ public class CraftingUtils {
                 ItemStack rand = recipeStacks.get(RAND.nextInt(recipeStacks.size()));
                 if (!rand.isEmpty()) {
                     recipeStacks.remove(rand);
-                    ItemNBT.addUpgradeItem(stack, rand, true, type);
+                    ItemComponentUtils.addUpgradeItem(stack, rand, true, type);
                 }
                 i++;
             }

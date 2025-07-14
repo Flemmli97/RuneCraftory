@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -50,7 +50,7 @@ public class MultiArrowSpell extends Spell {
         for (float y = angle; y <= this.angle; y += inc) {
             Vector3d newDir = dir3d.rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z(), new Vector3d());
             MobArrowEntity arrow = new MobArrowEntity(level, entity, CombatUtils.getAbilityDamageBonus(lvl, this.damage));
-            arrow.setRemainingFireTicks(ItemNBT.getElement(stack) == ItemElement.FIRE ? 200 : 0);
+            arrow.setRemainingFireTicks(ItemComponentUtils.getElement(stack) == ItemElement.FIRE ? 200 : 0);
             arrow.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
             level.addFreshEntity(arrow);
         }

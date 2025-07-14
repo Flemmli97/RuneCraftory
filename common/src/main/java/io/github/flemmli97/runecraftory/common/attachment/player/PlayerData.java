@@ -22,11 +22,11 @@ import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -196,7 +196,7 @@ public class PlayerData {
         if (!GeneralConfig.useRp && !this.player.level().isClientSide)
             return true;
         if (!this.player.isCreative()) {
-            if (EntityUtils.isExhaust(this.player)) {
+            if (this.player.hasEffect(RuneCraftoryEffects.FATIGUE.asHolder())) {
                 amount *= 2;
             }
             if (this.runePoints >= amount)
@@ -428,7 +428,7 @@ public class PlayerData {
     }
 
     public void addShippingItem(ItemStack stack) {
-        int level = ItemNBT.itemLevel(stack);
+        int level = ItemComponentUtils.itemLevel(stack);
         this.shippedItems.compute(stack.getItem(), (k, v) -> v == null ?
                 new ShippedItemData(stack.getCount(), level) : new ShippedItemData(v.amount + stack.getCount(), Math.max(v.maxLevel, level)));
     }
@@ -449,7 +449,7 @@ public class PlayerData {
         FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
         if (food == null)
             return;
-        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemNBT.foodStats(stack);
+        Pair<Map<Holder<Attribute>, Double>, Map<Holder<Attribute>, Double>> foodStats = ItemComponentUtils.foodStats(stack);
         if (!foodStats.getFirst().isEmpty() || !foodStats.getSecond().isEmpty()) {
             this.removeFoodEffect(this.player);
             this.setFoodBonus(foodStats);

@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -29,7 +29,7 @@ public class HammerAxeAttack extends AttackAction {
 
     @Override
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
-        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        float speed = (float) (EntityUtils.attackSpeedModifier(entity));
         return AttackAction.create(PlayerModelAnimations.HAMMER_AXE.get(comboIdx), speed);
     }
 

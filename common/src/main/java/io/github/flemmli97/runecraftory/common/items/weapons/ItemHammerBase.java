@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.core.BlockPos;
@@ -43,7 +43,7 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            if (duration == ItemUtils.getChargeTime(entity))
+            if (duration == ItemComponentUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
@@ -64,7 +64,7 @@ public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWe
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
                 return;

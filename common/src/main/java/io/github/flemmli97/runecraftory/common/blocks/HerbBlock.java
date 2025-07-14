@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -79,12 +79,12 @@ public class HerbBlock extends BushBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return super.getStateForPlacement(context).setValue(LEVEL, ItemNBT.itemLevel(context.getItemInHand()));
+        return super.getStateForPlacement(context).setValue(LEVEL, ItemComponentUtils.itemLevel(context.getItemInHand()));
     }
 
     @Override
     public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
-        return ItemNBT.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
+        return ItemComponentUtils.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
     }
 
     @Override

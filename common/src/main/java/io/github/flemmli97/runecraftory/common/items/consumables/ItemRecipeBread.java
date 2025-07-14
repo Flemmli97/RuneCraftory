@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.ForgingRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -55,7 +55,7 @@ public class ItemRecipeBread extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
         if (living instanceof ServerPlayer player) {
-            int amount = Math.max(1, ItemNBT.itemLevel(stack) / 3);
+            int amount = Math.max(1, ItemComponentUtils.itemLevel(stack) / 3);
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             // Group equal recipes together. E.g. if an item has multiple variants of a recipe
             Map<Pair<Item, Integer>, List<RecipeHolder<SextupleRecipe>>> grouped = new HashMap<>();

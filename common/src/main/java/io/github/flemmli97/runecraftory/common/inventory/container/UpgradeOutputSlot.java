@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingCont
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -59,7 +59,7 @@ public class UpgradeOutputSlot extends Slot {
         ItemStack toUpgrade = this.ingredientInv.getItem(0);
         ItemStack material = this.ingredientInv.getItem(1);
         RuneCraftoryCriteria.UPGRADE_ITEM.get().trigger(serverPlayer);
-        if (ItemNBT.getElement(toUpgrade) != ItemNBT.getElement(stack))
+        if (ItemComponentUtils.getElement(toUpgrade) != ItemComponentUtils.getElement(stack))
             RuneCraftoryCriteria.CHANGE_ELEMENT.get().trigger(serverPlayer);
         PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
         if (stack.getItem() instanceof ItemStaffBase) {

@@ -4,8 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.CustomFishingHookEn
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,7 +34,7 @@ public class ItemToolFishingRod extends FishingRodItem {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
             ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
-            int chargeTime = ItemUtils.getChargeTime(entity, tier);
+            int chargeTime = ItemComponentUtils.getChargeTime(entity, tier);
             if (duration > 0 && duration / chargeTime <= tier.getTierLevel() && duration % chargeTime == 0)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
@@ -57,7 +56,7 @@ public class ItemToolFishingRod extends FishingRodItem {
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
-            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemUtils.getChargeTime(entity, tier);
+            int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier);
             int charge = Math.min(useTime, tier.getTierLevel());
             this.throwRod(world, entity, stack, charge);
             entity.swing(entity.getUsedItemHand());
@@ -95,9 +94,9 @@ public class ItemToolFishingRod extends FishingRodItem {
                 int luck = EnchantmentHelper.getFishingLuckBonus(serverLevel, stack, entity);
                 ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
                 hook = new CustomFishingHookEntity(level, entity, speed + tier.getTierLevel(), luck, charge);
-                hook.setElement(ItemNBT.getElement(stack));
+                hook.setElement(ItemComponentUtils.getElement(stack));
                 if (entity instanceof Player player)
-                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * ItemNBT.attackSpeedModifier(player))));
+                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(20 * EntityUtils.attackSpeedModifier(player))));
                 level.addFreshEntity(hook);
             }
             if (entity instanceof Player player)

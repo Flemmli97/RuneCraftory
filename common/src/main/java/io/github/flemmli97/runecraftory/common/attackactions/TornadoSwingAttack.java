@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -32,7 +32,7 @@ public class TornadoSwingAttack extends AttackAction {
 
     @Override
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {
-        float speed = (float) (ItemNBT.attackSpeedModifier(entity));
+        float speed = (float) (EntityUtils.attackSpeedModifier(entity));
         if (comboIdx > 0) {
             AnimationDefinition definition = PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.TORNADO_SWING);
             double offset = definition.marker("chain_offset", 0) * 20;

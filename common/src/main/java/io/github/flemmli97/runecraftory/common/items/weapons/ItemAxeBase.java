@@ -10,8 +10,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackAction
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
@@ -89,7 +88,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
                 ((ServerLevel) entity.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
         }
         if (!list.isEmpty()) {
-            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemNBT.getElement(stack))
+            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack))
                     .knock(DynamicDamage.KnockBackType.UP).knockAmount(knockback).hurtResistant(5);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.1;
@@ -134,7 +133,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            if (duration == ItemUtils.getChargeTime(entity))
+            if (duration == ItemComponentUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
@@ -155,7 +154,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
 
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemUtils.getChargeTime(entity)) {
+        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
                 return;

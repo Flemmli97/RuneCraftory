@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
@@ -90,7 +90,7 @@ public class CraftingOutputSlot extends Slot {
                         CraftingUtils.giveCraftingXPTo(data, Skills.COOKING, this.craftingContainer.getSelected().value());
             }
         }
-        if (ItemNBT.usedLightOre(stack))
+        if (ItemComponentUtils.usedLightOre(stack))
             RuneCraftoryCriteria.LIGHT_ORE.get().trigger(serverPlayer);
         switch (this.craftingContainer.craftingType()) {
             case FORGE -> RuneCraftoryCriteria.FORGING.get().trigger(serverPlayer);

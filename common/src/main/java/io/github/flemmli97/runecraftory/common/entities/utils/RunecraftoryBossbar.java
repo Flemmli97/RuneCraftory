@@ -85,12 +85,12 @@ public class RunecraftoryBossbar extends ServerBossEvent {
         super.setProgress(progress);
         if (this.isVisible()) {
             if (prev != 0 && progress == 0) {
-                S2CBossbarMusicUpdate pkt = new S2CBossbarMusicUpdate(this.getId(), this.getMusicId(), true);
+                CustomPacketPayload pkt = new S2CBossbarMusicUpdate(this.getId(), this.getMusicId());
                 for (ServerPlayer serverPlayer : this.getPlayers()) {
                     LoaderNetwork.INSTANCE.sendToPlayer(pkt, serverPlayer);
                 }
             } else if (prev == 0 && progress != 0) {
-                S2CBossbarMusicUpdate pkt = new S2CBossbarMusicUpdate(this.getId(), this.getMusicId(), false);
+                CustomPacketPayload pkt = new S2CBossbarMusicUpdate(this.getId(), this.getMusicId(), this.music);
                 for (ServerPlayer serverPlayer : this.getPlayers()) {
                     LoaderNetwork.INSTANCE.sendToPlayer(pkt, serverPlayer);
                 }

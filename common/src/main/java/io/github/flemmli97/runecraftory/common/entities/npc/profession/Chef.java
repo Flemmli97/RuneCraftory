@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,7 +49,7 @@ public class Chef extends NPCProfession {
             default -> new ItemStack(RuneCraftoryItems.FORGING_BREAD.get());
         };
         int level = Mth.ceil(Math.abs(npc.getRandom().nextGaussian() * 4));
-        ItemNBT.getLeveledItem(bread, level);
+        ItemComponentUtils.getLeveledItem(bread, level);
         if (!player.addItem(bread))
             player.spawnAtLocation(bread);
         npc.updater.onBuyBread();

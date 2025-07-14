@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackAction
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
@@ -47,7 +47,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
         if (entity instanceof ServerPlayer player) {
             int duration = stack.getUseDuration(entity) - remainingUseDuration;
-            if (duration == ItemUtils.getChargeTime(entity))
+            if (duration == ItemComponentUtils.getChargeTime(entity))
                 EntityUtils.playSoundForPlayer(player, SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
         }
     }
@@ -78,7 +78,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
         if (entity instanceof ServerPlayer serverPlayer) {
             PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
             int time = stack.getUseDuration(entity) - timeLeft - 1;
-            if (time >= ItemUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get())) {
+            if (time >= ItemComponentUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get())) {
                 data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), stack);
             }
         }

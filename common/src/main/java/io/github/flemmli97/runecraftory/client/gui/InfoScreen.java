@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.gui.widget.TexturedButton;
@@ -93,7 +93,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         float statX = 205 - 2;
         float statY = 61 + 3.5f;
         MutableComponent mut = Component.literal("" + (int) CombatUtils.getAttributeValue(this.data.player(), Attributes.ATTACK_DAMAGE));
-        if (!ItemNBT.isWeapon(this.data.player().getMainHandItem())) {
+        if (!ItemComponentUtils.isWeapon(this.data.player().getMainHandItem())) {
             mut.withStyle(ChatFormatting.DARK_RED);
         }
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, mut,
