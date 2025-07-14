@@ -13,7 +13,7 @@ public class SpikesRender<T extends SpikeEntity> extends SimpleModelRenderer<T> 
 
     private static final ResourceLocation EARTH_SPIKE = RuneCraftory.modRes("textures/entity/projectile/spikes_dirt_tiled.png");
     private static final ResourceLocation BRANCHES = RuneCraftory.modRes("textures/entity/projectile/spikes_wood_tiled.png");
-    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("spikes");
+    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("entity/spikes");
 
     public SpikesRender(EntityRendererProvider.Context ctx) {
         super(ctx, new SimpleGeoModel<>(MODEL_LOCATION));

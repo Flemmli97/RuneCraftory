@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public class PlateRender extends SimpleModelRenderer<BigPlateEntity> {
 
     private static final ResourceLocation TEX = RuneCraftory.modRes("textures/entity/projectile/plate.png");
-    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("plate");
+    private static final ResourceLocation MODEL_LOCATION = RuneCraftory.modRes("entity/plate");
 
     public PlateRender(EntityRendererProvider.Context ctx) {
         super(ctx, new SimpleGeoModel<>(MODEL_LOCATION));

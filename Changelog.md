@@ -1,8 +1,10 @@
 RuneCraftory 2.0.0
 ================
 - Update to 1.21.1
+  - Huge internal refactoring
 - Overhauled various UIs
 - All mobs now use brains instead of goals
+- Pathouli book now removed and replaced by modopedia
 - Added Serene Seasons compat
 - Added hot spring fluid, replaces previous bath system
 

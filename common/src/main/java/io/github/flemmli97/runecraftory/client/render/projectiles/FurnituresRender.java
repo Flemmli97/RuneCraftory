@@ -31,9 +31,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class FurnituresRender extends EntityRenderer<FurnitureEntity> {
 
-    public static final ResourceLocation LOC_CHAIR = RuneCraftory.modRes("chair");
-    public static final ResourceLocation LOC_CHIPSQUEEK_PLUSH = RuneCraftory.modRes("chipsqueek_plush");
-    public static final ResourceLocation LOC_WOOLY_PLUSH = RuneCraftory.modRes("wooly_plush");
+    public static final ResourceLocation LOC_CHAIR = RuneCraftory.modRes("entity/chair");
+    public static final ResourceLocation LOC_CHIPSQUEEK_PLUSH = RuneCraftory.modRes("entity/chipsqueek_plush");
+    public static final ResourceLocation LOC_WOOLY_PLUSH = RuneCraftory.modRes("entity/wooly_plush");
 
     private static final ResourceLocation TEX_CHAIR = RuneCraftory.modRes("textures/entity/projectile/chair.png");
     private static final ResourceLocation TEX_WOOLY = RuneCraftory.modRes("textures/entity/projectile/wooly_plush.png");
