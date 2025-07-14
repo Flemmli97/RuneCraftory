@@ -21,6 +21,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.phys.Vec3;
@@ -223,6 +224,11 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
     @Override
     public boolean isPickable() {
         return this.getOwner() != null;
+    }
+
+    @Override
+    public ItemStack getPickResult() {
+        return this.getOwner() != null ? this.getOwner().getPickResult() : null;
     }
 
     @Override

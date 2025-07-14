@@ -28,10 +28,11 @@ public abstract class HotSpringFluid extends WaterFluid {
         }
         if (random.nextInt(20) == 0) {
             level.addParticle(ParticleTypes.END_ROD,
-                    pos.getX() + random.nextDouble(), pos.getY() + 0.3 + random.nextDouble(), pos.getZ() + random.nextDouble(),
+                    pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble() * 1.2, pos.getZ() + random.nextDouble(),
                     0.0, 0.0, 0.0);
         }
-        if (random.nextInt(48) == 0) {
+        BlockState above;
+        if (random.nextInt(48) == 0 && (above = level.getBlockState(pos.above())).getFluidState().isEmpty() && above.getCollisionShape(level, pos.above()).isEmpty()) {
             level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     pos.getX() + random.nextDouble(), pos.getY() + 0.3 + random.nextDouble(), pos.getZ() + random.nextDouble(),
                     0.0, 0.07, 0.0);
