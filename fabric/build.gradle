@@ -34,5 +34,5 @@ dependencies {
     modRuntimeOnly "maven.modrinth:jade:${jade_fabric}"
     modRuntimeOnly "net.favouriteless.modopedia:modopedia-fabric-${minecraft_version}:${modopedia}"
 
-    modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.7-fabric"
+    modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.8-fabric"
 }
