@@ -116,7 +116,7 @@ public class DeadTree extends BossMonster {
                             this.healCooldown = this.getRandom().nextInt(100) + 100;
                     }
                 } else if (anim != null && anim.animation().equals("summon")) {
-                    int rand = this.random.nextInt(3);
+                    int rand = this.random.nextInt(3) + 1;
                     AnimationDefinition animNew = AnimationsBuilder.definition(anim.length(), false)
                             .animationId(anim.animation() + "_" + rand)
                             .withTransitionTime(anim.startTransition(), anim.endTransition())
