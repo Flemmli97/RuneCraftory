@@ -1,4 +1,4 @@
-RuneCraftory 2.0.0
+RuneCraftory 2.0.0-beta
 ================
 - Update to 1.21.1
   - Huge internal refactoring
