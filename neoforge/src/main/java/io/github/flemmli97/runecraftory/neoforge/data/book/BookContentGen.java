@@ -253,24 +253,29 @@ public class BookContentGen extends ContentSetProvider {
 
     @Override
     public void buildCategories(HolderLookup.Provider registries, BookContentOutput output) {
+        int sort = 0;
         CategoryBuilder.of(this.get("runecraftory.book.category.main"))
                 .landingText(this.get("runecraftory.book.category.main.desc"))
                 .icon(new ItemStack(RuneCraftoryItems.ICON_0.get()))
+                .sortNum(sort++)
                 .build("category_main", output);
 
         CategoryBuilder.of(this.get("runecraftory.book.category.farming"))
                 .landingText(this.get("runecraftory.book.category.farming.desc"))
                 .icon(new ItemStack(Blocks.FARMLAND))
+                .sortNum(sort++)
                 .build("category_farming", output);
 
         CategoryBuilder.of(this.get("runecraftory.book.category.equipment"))
                 .landingText(this.get("runecraftory.book.category.equipment.desc"))
                 .icon(new ItemStack(RuneCraftoryItems.SHORT_DAGGER.get()))
+                .sortNum(sort++)
                 .build("category_equipment", output);
 
         CategoryBuilder.of(this.get("runecraftory.book.category.npc"))
                 .landingText(this.get("runecraftory.book.category.npc.desc"))
                 .icon(new ItemStack(Items.PLAYER_HEAD))
+                .sortNum(sort)
                 .build("category_npc", output);
     }
 

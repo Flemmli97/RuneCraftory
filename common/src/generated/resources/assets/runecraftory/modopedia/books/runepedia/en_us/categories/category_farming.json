@@ -10,5 +10,6 @@
     "id": "minecraft:farmland"
   },
   "landing_text": "An overview and guide about the agricultural aspects",
+  "sort_num": 1,
   "title": "Agriculture"
 }
