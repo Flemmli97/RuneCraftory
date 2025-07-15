@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.neoforge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDamageType;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
@@ -17,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class DamageTypeGen extends JsonCodecProvider<DamageType> {
 
     public DamageTypeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, PackOutput.Target.DATA_PACK, "damage_type", PackType.SERVER_DATA, DamageType.DIRECT_CODEC,
+        super(output, PackOutput.Target.DATA_PACK, Registries.DAMAGE_TYPE.location().getPath(), PackType.SERVER_DATA, DamageType.DIRECT_CODEC,
                 lookupProvider, RuneCraftory.MODID, existingFileHelper);
     }
 
