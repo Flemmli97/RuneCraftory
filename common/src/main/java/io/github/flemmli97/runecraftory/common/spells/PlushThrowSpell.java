@@ -27,7 +27,7 @@ public class PlushThrowSpell extends Spell {
             } else {
                 dir = Vec3.directionFromRotation(entity.getXRot(), entity.getYRot());
             }
-            dir = dir.scale(0.45 + entity.getRandom().nextDouble() * 0.2).add(0, 2.5, 0);
+            dir = dir.scale(0.45 + entity.getRandom().nextDouble() * 0.2).add(0, 2.3, 0);
             furniture.shoot(dir.x, dir.y, dir.z, 0.9f + entity.getRandom().nextFloat() * 0.25f, 7);
             level.addFreshEntity(furniture);
         }

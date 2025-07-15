@@ -29,6 +29,7 @@ public class ButterflyEntity extends BaseProjectile {
     protected static final EntityDataAccessor<Float> HIT_X = SynchedEntityData.defineId(ButterflyEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> HIT_Y = SynchedEntityData.defineId(ButterflyEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> HIT_Z = SynchedEntityData.defineId(ButterflyEntity.class, EntityDataSerializers.FLOAT);
+
     private static final int DEFAULT_MAX_TICK = 50;
 
     private LivingEntity stuckEntity;
@@ -73,7 +74,7 @@ public class ButterflyEntity extends BaseProjectile {
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.applyTempAttribute(living, RuneCraftoryAttributes.DRAIN.asHolder(), 80);
                 DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(0);
-                builder.get(this.registryAccess()).hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier * 0.7));
+                builder.get(this.registryAccess()).hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier));
                 if (this.getOwner() instanceof LivingEntity living)
                     CombatUtils.removeTempAttribute(living, RuneCraftoryAttributes.DRAIN.asHolder());
             }

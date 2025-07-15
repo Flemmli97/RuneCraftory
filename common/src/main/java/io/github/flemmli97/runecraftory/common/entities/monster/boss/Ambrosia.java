@@ -133,6 +133,7 @@ public class Ambrosia extends BossMonster {
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Ambrosia>builder(KICK_1)
                         .start(KICK_2).chain(KICK_3).build())).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(8))
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(7)
@@ -159,7 +160,7 @@ public class Ambrosia extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(9)).build();
+                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(10)).build();
     }
 
     @Override
@@ -194,12 +195,12 @@ public class Ambrosia extends BossMonster {
 
     @Override
     public void setupAttack(AnimationDefinition anim) {
+        super.setupAttack(anim);
         if (anim.is(BUTTERFLY) && this.getTarget() != null) {
             LivingEntity target = this.getTarget();
             this.setTargetPosition(new TargetPosition(target.position(),
                     target.getY(), target.getY() + target.getBbHeight() * 0.3));
-        } else
-            super.setupAttack(anim);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
@@ -56,10 +57,11 @@ public class SetWalkTargetWithinDist<E extends PathfinderMob> extends ExtendedBe
 
         double distSqr = entity.distanceToSqr(target);
         if (!entity.getSensing().hasLineOfSight(target) || distSqr >= this.max * this.max) {
+            int close = Mth.floor(Math.max(this.min, this.max - 2));
             BrainUtils.setMemory(brain, MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
-            BrainUtils.setMemory(brain, MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityTracker(target, false), this.speedMod.apply(entity, target), (int) this.min));
+            BrainUtils.setMemory(brain, MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityTracker(target, false), this.speedMod.apply(entity, target), close));
         } else if (distSqr <= this.min * this.min) {
-            int range = (int) (this.max - this.min);
+            int range = Mth.ceil(this.max - Math.sqrt(distSqr));
             Vec3 posAway = DefaultRandomPos.getPosAway(entity, range, range, target.position());
             if (posAway != null) {
                 BrainUtils.setMemory(brain, MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));

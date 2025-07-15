@@ -191,17 +191,16 @@ public class Handonetta extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<Handonetta>create()
                 .start(MonsterBehaviourUtils.checkedAttack(SWIPE)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> (m.getTarget() != null && m.distanceToSqr(m.getTarget()) < 16) || m.getRandom().nextFloat() < 0.5)
+                .condition(MonsterBehaviourUtils.ifCloserThan(5))
                 .prepare(new SetWalkTargetToAttackTarget<Handonetta>().speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(FLICK)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> (m.getTarget() != null && m.distanceToSqr(m.getTarget()) < 16) || m.getRandom().nextFloat() < 0.5)
+                .condition(MonsterBehaviourUtils.ifCloserThan(5))
                 .prepare(new SetWalkTargetToAttackTarget<Handonetta>().speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -214,7 +213,7 @@ public class Handonetta extends BossMonster {
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(GRAB)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
-                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(5)))
+                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(7)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -228,7 +227,7 @@ public class Handonetta extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(9)).build();
+                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(11)).build();
     }
 
     @Override
@@ -300,12 +299,12 @@ public class Handonetta extends BossMonster {
         if (anim.is(PUNCH)) {
             float[] rots = MathsHelper.YXRotFrom(dir);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow + 0.2, grow, grow + 0.2), rots[0], rots[1], this.position());
+                    .inflate(grow + 0.2, grow, grow + 1.2), rots[0], rots[1], this.position());
         }
         if (anim.is(GRAB)) {
             float[] rots = MathsHelper.YXRotFrom(dir);
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow, 0, grow), rots[0], rots[1], this.position());
+                    .inflate(grow + 0.5, 0, grow + 1), rots[0], rots[1], this.position());
         }
         return super.calculateAttackAABB(anim, target, grow).inflate(0, grow * 2, 0);
     }

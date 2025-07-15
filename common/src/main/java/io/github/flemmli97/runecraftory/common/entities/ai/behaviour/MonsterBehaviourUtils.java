@@ -95,21 +95,29 @@ public class MonsterBehaviourUtils {
 
     public static <E extends LivingEntity> Predicate<E> ifCloserThan(double dist) {
         return entity -> {
+            double distance = dist + entity.getBbWidth() * 0.5;
             LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
             if (target == null && entity instanceof Mob mob) {
                 target = mob.getTarget();
             }
-            return entity.distanceToSqr(target) <= dist * dist;
+            if (target == null)
+                return false;
+            distance += target.getBbWidth() * 0.5;
+            return entity.distanceToSqr(target) <= distance * distance;
         };
     }
 
     public static <E extends LivingEntity> Predicate<E> ifFurtherThan(double dist) {
         return entity -> {
+            double distance = dist + entity.getBbWidth() * 0.5;
             LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
             if (target == null && entity instanceof Mob mob) {
                 target = mob.getTarget();
             }
-            return entity.distanceToSqr(target) >= dist * dist;
+            if (target == null)
+                return false;
+            distance += target.getBbWidth() * 0.5;
+            return entity.distanceToSqr(target) >= distance * distance;
         };
     }
 }

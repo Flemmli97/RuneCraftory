@@ -239,7 +239,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                 STAT_INCREASE.forEach(att -> {
                     AttributeInstance inst = this.getAttribute(att.get());
                     if (inst.getModifier(STAT_INCREASE_ID) == null)
-                        inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                        inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
                 });
             } else {
                 STAT_INCREASE.forEach(att -> this.getAttribute(att.get()).removeModifier(STAT_INCREASE_ID));

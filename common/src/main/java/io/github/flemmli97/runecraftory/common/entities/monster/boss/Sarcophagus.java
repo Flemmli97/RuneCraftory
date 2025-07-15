@@ -241,6 +241,7 @@ public class Sarcophagus extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(TELEPORT)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(5))
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged())

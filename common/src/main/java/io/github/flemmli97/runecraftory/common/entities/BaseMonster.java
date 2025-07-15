@@ -1002,6 +1002,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (this.getTarget() != null) {
             this.setTargetPosition(this.getTarget());
         }
+        this.getNavigation().stop();
     }
 
     public void handleAttack(AnimationState anim) {

@@ -179,6 +179,7 @@ public class Marionetta extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<Marionetta>create()
                 .start(MonsterBehaviourUtils.checkedAttack(MELEE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>().speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(9)
@@ -190,22 +191,22 @@ public class Marionetta extends BossMonster {
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(SPIN)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(16)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(CHEST_ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(16)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(STUFFED_ANIMALS)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Marionetta>()
-                        .min(3).max(7).speedMod((e, t) -> 1.1f))
+                        .min(4).max(7).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(DARK_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(10)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(6)
                 .start(MonsterBehaviourUtils.checkedAttack(FURNITURE)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -223,8 +224,8 @@ public class Marionetta extends BossMonster {
                                         return LeapInDirection.createBackwardsVec(entity.position(), target.position());
                                     return LeapInDirection.createSidewaysVec(entity.position(), target.position(), entity.getRandom().nextBoolean());
                                 }),
-                        new StrafeTarget<BaseMonster>().strafeDistance(8))
-                .add(10, new StrafeTarget<BaseMonster>().strafeDistance(8)).build();
+                        new StrafeTarget<BaseMonster>().strafeDistance(9))
+                .add(10, new StrafeTarget<BaseMonster>().strafeDistance(9)).build();
     }
 
     @Override
@@ -297,12 +298,12 @@ public class Marionetta extends BossMonster {
         if (anim.is(SPIN)) {
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(dir.x(), dir.z()) * Mth.RAD_TO_DEG));
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow + 1.6, 0.1, grow + 1.6), rotY, 0, this.position());
+                    .inflate(grow + 0.5, 0.1, grow + 1.2), rotY, 0, this.position());
         }
         if (anim.is(CHEST_ATTACK)) {
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(dir.x(), dir.z()) * Mth.RAD_TO_DEG));
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(grow + 1.2, 0.1, grow + 1.2), rotY, 0, this.position());
+                    .inflate(grow + 0.5, 0.1, grow + 1.2), rotY, 0, this.position());
         }
         return super.calculateAttackAABB(anim, target, grow);
     }

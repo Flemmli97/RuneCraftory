@@ -167,6 +167,7 @@ public class DeadTree extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<DeadTree>create()
                 .start(MonsterBehaviourUtils.checkedAttack(ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(5))
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(FALLING_APPLES)).play(MonsterBehaviourUtils.cooldownedPlay())
