@@ -109,7 +109,7 @@ public class BarnData {
         if (this.monsters.containsKey(monster.getUUID()) && this.changeCooldown > 0)
             return false;
         if (this.roofHeight > 0) {
-            return this.roofHeight > monster.getBbHeight() + 1;
+            return this.roofHeight < monster.getBbHeight() + 1;
         }
         return !monster.getProp().needsRoof;
     }

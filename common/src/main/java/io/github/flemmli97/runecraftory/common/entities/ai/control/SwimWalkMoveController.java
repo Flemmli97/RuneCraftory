@@ -28,7 +28,7 @@ public class SwimWalkMoveController extends MoveControlerEx {
             this.mob.setYRot(this.rotlerp(this.mob.getYRot(), yXRot[0], 90));
             this.mob.setXRot(this.rotlerp(this.mob.getXRot(), yXRot[1], 30));
             Path path = this.mob.getNavigation().getPath();
-            Node node = path != null && !path.isDone() ? path.getPreviousNode() : null;
+            Node node = path != null && !path.isDone() ? path.getNextNode() : null;
             if (node != null && node.type == BlockPathTypes.WATER_BORDER && this.mob.isInWater() && this.mob.getDeltaMovement().y() < 0.2) {
                 this.mob.getJumpControl().jump();
             }

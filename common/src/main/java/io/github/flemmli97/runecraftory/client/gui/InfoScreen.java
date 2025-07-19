@@ -76,10 +76,10 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         this.blit(stack, this.leftPos + barX, this.topPos + 30, 2, 58, runeWidth, 6);
         this.blit(stack, this.leftPos + barX, this.topPos + 41, 2, 66, exp, 9);
         ClientHandlers.drawCenteredScaledString(stack, this.font, (int) this.minecraft.player.getHealth() + "/" + (int) this.minecraft.player.getMaxHealth(), this.leftPos + barX + 50, this.topPos + 21f, 0.6f, 0xffffff);
-        ClientHandlers.drawCenteredScaledString(stack, this.font, this.data.getRunePoints() + "/" + this.data.getMaxRunePoints(), this.leftPos + barX + 50, this.topPos + 31f, 0.6f, 0xffffff);
+        ClientHandlers.drawCenteredScaledString(stack, this.font, this.data.getRunePoints() + "/" + this.data.getMaxRunePoints(), this.leftPos + barX + 50, this.topPos + 31f, 1, 0xffffff);
         this.minecraft.font.draw(stack, this.levelTxt, this.leftPos + 120, this.topPos + 42, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getPlayerLevel().getLevel(), this.leftPos + barX + 99, this.topPos + 42, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 0.6f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 1, 0);
         int statX = 216;
         int statY = 59;
         MutableComponent mut = new TextComponent("" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE));

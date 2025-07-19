@@ -85,11 +85,14 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
     public static ResourceLocation getTextureFromLook(EntityNPCBase npc, NPCTextureLayer.LayerType type, @Nullable String subType) {
         NPCLook look = npc.getLook();
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
+            if (look == NPCLook.DEFAULT_LOOK) {
+                return DefaultPlayerSkin.getDefaultSkin(npc.getUUID());
+            }
             String skin = look.playerSkin();
             if (skin != null) {
                 return PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkin(skin)).getLocation();
             }
-        } else if (look.playerSkin() != null) {
+        } else if (look.playerSkin() != null || look == NPCLook.DEFAULT_LOOK) {
             // Ignore other layers if using a player skin
             return EMPTY;
         }
