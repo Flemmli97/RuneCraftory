@@ -1,3 +1,9 @@
+RuneCraftory 1.11.2
+================
+- Fix npc spawnegg crash
+- Fix some water movecontroller issues
+- Fix barn condition being inverted
+
 RuneCraftory 1.11.1
 ================
 - Update for library changes
