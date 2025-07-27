@@ -651,7 +651,7 @@ public class Skelefang extends BossMonster {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
             OrientedBoundingBox obb = new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
-                    .inflate(0.2, 0, 0.2)
+                    .inflate(0.8, 0, 0.2)
                     .expandTowards(0, 0, speed), this.getYRot(), 0, this.position());
             this.level().getEntitiesOfClass(LivingEntity.class, obb.getEncompassingBox(),
                     entity -> this.hitPred.test(entity) && obb.intersects(entity.getBoundingBox())).forEach(cons);
@@ -666,13 +666,13 @@ public class Skelefang extends BossMonster {
                     this.getYRot(), 0, this.position()));
         }
         if (anim.is(TAIL_SLAM)) {
-            float angle = this.yHeadRot;
+            float angle = this.yHeadRot - 5;
             if (this.getControllingPassenger() instanceof Player player)
                 angle = player.yHeadRot;
-            if (anim.isAt("attack_2"))
-                angle -= 35;
-            else if (anim.isAt("attack_3"))
+            if (anim.isAt("attack_3"))
                 angle += 20;
+            else if (!anim.isAt("attack_2"))
+                angle -= 35;
             obbs.add(new OrientedBoundingBox(new AABB(-1.25, -0.02, -0, 1.25, 2.1 + 0.02, 7),
                     angle, 0, this.position()));
         }
