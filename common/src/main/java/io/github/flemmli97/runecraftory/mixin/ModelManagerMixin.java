@@ -18,8 +18,7 @@ public abstract class ModelManagerMixin {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @WrapOperation(method = "loadModels",
-            at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;asMap()Ljava/util/Map;"),
-            remap = false)
+            at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;asMap()Ljava/util/Map;", remap = false))
     private static <K, V> Map<K, Collection<V>> supresssWarning(Multimap instance, Operation<Map<K, Collection<V>>> original) {
         instance.keySet().removeIf(k -> ((ModelResourceLocation) k).id().getNamespace().startsWith(RuneCraftory.MODID));
         return original.call(instance);
