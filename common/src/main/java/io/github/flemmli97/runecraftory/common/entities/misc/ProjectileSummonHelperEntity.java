@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +41,11 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    }
+
+    @Override
+    public boolean ignoreExplosion(Explosion explosion) {
+        return true;
     }
 
     @Override

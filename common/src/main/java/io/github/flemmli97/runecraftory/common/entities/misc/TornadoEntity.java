@@ -11,6 +11,7 @@ import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -43,6 +44,11 @@ public class TornadoEntity extends BaseDamageCloud {
         this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
         this.yRotO = this.getYRot();
         this.xRotO = this.getXRot();
+    }
+
+    @Override
+    public boolean ignoreExplosion(Explosion explosion) {
+        return true;
     }
 
     @Override

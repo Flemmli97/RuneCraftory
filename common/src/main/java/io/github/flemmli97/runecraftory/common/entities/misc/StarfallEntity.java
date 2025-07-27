@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -26,6 +27,11 @@ public class StarfallEntity extends BaseProjectile {
     @Override
     public int livingTickMax() {
         return 60;
+    }
+
+    @Override
+    public boolean ignoreExplosion(Explosion explosion) {
+        return true;
     }
 
     @Override
