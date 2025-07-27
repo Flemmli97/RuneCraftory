@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SinkIfTooHigh;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
 import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
@@ -556,6 +557,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return BrainActivityGroup.coreTasks(
                 new FloatToSurfaceOfFluid<BaseMonster>().startCondition(BaseMonster::canFloatInWater),
                 new SetTargetFromRider<>(),
+                new SinkIfTooHigh<>(),
                 new FollowEntityEx<BaseMonster, Player>()
                         .startFollowingWhen((e, f) -> e.behaviourState() == Behaviour.FOLLOW ? 8. : 12)
                         .ignoreIfTargetingTill(20)
