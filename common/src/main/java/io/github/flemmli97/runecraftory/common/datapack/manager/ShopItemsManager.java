@@ -84,7 +84,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener implement
                 defaultsBuilder.put(profession, ImmutableList.copyOf(defaultCollection));
             });
             builder.put(RuneCraftoryNPCProfessions.TRAVELLING_MERCHANT.get(), DataPackHandler.INSTANCE.itemStatManager().all()
-                    .stream().filter(p -> p.getSecond().getBuy() > 0)
+                    .stream().filter(p -> p.getSecond().value().getBuy() > 0)
                     .map(p -> new ShopItemProperties(p.getFirst(), ShopItemProperties.UnlockType.NEEDS_SHIPPING, Optional.empty()))
                     .toList());
             this.shopItems = builder.build();

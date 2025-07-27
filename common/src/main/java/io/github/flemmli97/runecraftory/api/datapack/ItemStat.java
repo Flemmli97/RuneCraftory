@@ -27,7 +27,6 @@ import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -74,8 +73,7 @@ public class ItemStat {
             return new ItemStat(buf.readInt(), buf.readInt(), buf.readInt(), buf.readEnum(ItemElement.class),
                     SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf), SPELL_CODEC.decode(buf),
                     ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(RuneCraftoryArmorEffects.ARMOR_EFFECT_KEY)).decode(buf),
-                    StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf), StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf))
-                    .setID(buf.readResourceLocation());
+                    StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf), StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf));
         }
 
         @Override
@@ -92,7 +90,6 @@ public class ItemStat {
 
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, prop.itemStats);
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, prop.monsterGiftIncrease);
-            buf.writeResourceLocation(prop.id);
         }
     };
 
@@ -106,8 +103,6 @@ public class ItemStat {
     private final Optional<Holder<ArmorEffect>> armorEffect;
     private final Map<Holder<Attribute>, Double> itemStats;
     private final Map<Holder<Attribute>, Double> monsterGiftIncrease;
-
-    private transient ResourceLocation id;
 
     private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, ItemElement element,
                      Optional<Holder<Spell>> tier1Spell, Optional<Holder<Spell>> tier2Spell, Optional<Holder<Spell>> tier3Spell,
@@ -135,16 +130,6 @@ public class ItemStat {
         if (attribute.is(RunecraftoryTags.Attributes.PERCENTAGE_DISPLAY) && original.operation() == AttributeModifier.Operation.ADD_VALUE)
             return new AttributeModifier(original.id(), original.amount() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         return original;
-    }
-
-    public ItemStat setID(ResourceLocation id) {
-        if (this.id == null)
-            this.id = id;
-        return this;
-    }
-
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     public int getBuy() {
@@ -250,10 +235,7 @@ public class ItemStat {
 
     @Override
     public String toString() {
-        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, Holder::getRegisteredName, Object::toString) + "]}";
-        if (this.id != null)
-            s = this.id + ":" + s;
-        return s;
+        return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, Holder::getRegisteredName, Object::toString) + "]}";
     }
 
     public static class Builder {

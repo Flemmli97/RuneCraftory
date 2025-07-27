@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.datapack.SyncableListener;
 import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import net.minecraft.core.HolderLookup;
@@ -31,34 +32,36 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class FoodManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, FoodProperties>> {
+public class FoodManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, ReloadableHolder<FoodProperties>>> {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("food_stats");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, Map<Item, FoodProperties>> CODEC = new StreamCodec<>() {
+    private static final StreamCodec<RegistryFriendlyByteBuf, ReloadableHolder<FoodProperties>> HOLDER_CODEC = ReloadableHolder.streamCodec(FoodProperties.STREAM_CODEC);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Map<Item, ReloadableHolder<FoodProperties>>> CODEC = new StreamCodec<>() {
         @Override
-        public Map<Item, FoodProperties> decode(RegistryFriendlyByteBuf buf) {
+        public Map<Item, ReloadableHolder<FoodProperties>> decode(RegistryFriendlyByteBuf buf) {
             int size = buf.readVarInt();
-            ImmutableMap.Builder<Item, FoodProperties> builder = ImmutableMap.builder();
+            ImmutableMap.Builder<Item, ReloadableHolder<FoodProperties>> builder = ImmutableMap.builder();
             for (int i = 0; i < size; i++)
-                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), FoodProperties.STREAM_CODEC.decode(buf));
+                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), HOLDER_CODEC.decode(buf));
             return builder.build();
         }
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buf, Map<Item, FoodProperties> props) {
+        public void encode(RegistryFriendlyByteBuf buf, Map<Item, ReloadableHolder<FoodProperties>> props) {
             buf.writeVarInt(props.size());
             props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
-                FoodProperties.STREAM_CODEC.encode(buf, prop);
+                HOLDER_CODEC.encode(buf, prop);
             });
         }
     };
 
-    private Map<Item, FoodProperties> food = ImmutableMap.of();
+    private Map<Item, ReloadableHolder<FoodProperties>> food = ImmutableMap.of();
     private boolean resolved;
-    private Map<TagKey<Item>, FoodProperties> tagFood = ImmutableMap.of();
+    private Map<TagKey<Item>, ReloadableHolder<FoodProperties>> tagFood = ImmutableMap.of();
 
     private HolderLookup.Provider provider;
 
@@ -71,13 +74,21 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
         if (GeneralConfig.disableFoodSystem)
             return null;
         this.resolveTags(false);
+        return this.food.get(item).value();
+    }
+
+    @Nullable
+    public ReloadableHolder<FoodProperties> getWithId(Item item) {
+        if (GeneralConfig.disableFoodSystem)
+            return null;
+        this.resolveTags(false);
         return this.food.get(item);
     }
 
     public void resolveTags(boolean forced) {
         if (!this.resolved || forced) {
             this.resolved = true;
-            HashMap<Item, FoodProperties> itemEntries = new HashMap<>(this.food);
+            HashMap<Item, ReloadableHolder<FoodProperties>> itemEntries = new HashMap<>(this.food);
             this.tagFood.entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().location()))
                     .forEach(entry -> HolderUtils.expandTag(this.provider, Registries.ITEM, entry.getKey()).forEach(item -> {
                         if (!itemEntries.containsKey(item))
@@ -90,8 +101,8 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         this.resolved = false;
-        ImmutableMap.Builder<Item, FoodProperties> itemEntries = ImmutableMap.builder();
-        ImmutableMap.Builder<TagKey<Item>, FoodProperties> tagEntries = ImmutableMap.builder();
+        ImmutableMap.Builder<Item, ReloadableHolder<FoodProperties>> itemEntries = ImmutableMap.builder();
+        ImmutableMap.Builder<TagKey<Item>, ReloadableHolder<FoodProperties>> tagEntries = ImmutableMap.builder();
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((fres, el) -> {
             try {
@@ -99,16 +110,10 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
                 String key = GsonHelper.getAsString(obj, "item");
                 if (key.startsWith("#")) {
                     TagKey<Item> tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(key.substring(1)));
-                    FoodProperties props = FoodProperties.CODEC.parse(ops, el).getOrThrow();
-                    props.setID(fres);
-                    tagEntries.put(tag, props);
+                    tagEntries.put(tag, new ReloadableHolder<>(fres, FoodProperties.CODEC.parse(ops, el).getOrThrow()));
                 } else {
                     Optional<Item> item = HolderUtils.get(this.provider, Registries.ITEM, ResourceLocation.parse(key));
-                    item.ifPresent(i -> {
-                        FoodProperties props = FoodProperties.CODEC.parse(ops, el).getOrThrow();
-                        props.setID(fres);
-                        itemEntries.put(i, props);
-                    });
+                    item.ifPresent(i -> itemEntries.put(i, new ReloadableHolder<>(fres, FoodProperties.CODEC.parse(ops, el).getOrThrow())));
                 }
             } catch (Exception ex) {
                 RuneCraftory.LOGGER.error("Couldn't parse food stat json {} {}", fres, ex);
@@ -130,18 +135,18 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
     }
 
     @Override
-    public StreamCodec<RegistryFriendlyByteBuf, Map<Item, FoodProperties>> codec() {
+    public StreamCodec<RegistryFriendlyByteBuf, Map<Item, ReloadableHolder<FoodProperties>>> codec() {
         return CODEC;
     }
 
     @Override
-    public Map<Item, FoodProperties> toSync() {
+    public Map<Item, ReloadableHolder<FoodProperties>> toSync() {
         this.resolveTags(false);
         return Collections.unmodifiableMap(this.food);
     }
 
     @Override
-    public void update(HolderLookup.Provider provider, Map<Item, FoodProperties> value) {
+    public void update(HolderLookup.Provider provider, Map<Item, ReloadableHolder<FoodProperties>> value) {
         this.insertRegistryAccess(provider);
         this.food = value;
     }

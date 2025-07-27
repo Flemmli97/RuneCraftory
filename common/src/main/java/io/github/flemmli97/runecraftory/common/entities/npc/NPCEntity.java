@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetFromMemory;
@@ -241,12 +242,12 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     private final XpLevelHolder levelPair = new XpLevelHolder();
 
     private NPCProfession profession = RuneCraftoryNPCProfessions.NONE.get();
-    private NPCData data = NPCData.DEFAULT_DATA;
-    private NPCLook look = NPCLook.DEFAULT_LOOK;
+    private ReloadableHolder<NPCData> data = NPCData.DEFAULT;
+    private ReloadableHolder<NPCLook> look = NPCLook.DEFAULT;
     public final NPCFeatureContainer lookFeatures = new NPCFeatureContainer();
-    private NPCAttackActions attackActions;
+    private ReloadableHolder<NPCAttackActions> attackActions;
     private Pair<Season, Integer> birthday = Pair.of(Season.SPRING, 1);
-    private Map<String, GiftData> gifts;
+    private Map<String, ReloadableHolder<GiftData>> gifts;
     private final Random dataRandom = new Random();
 
     private int foodBuffTick;
@@ -312,8 +313,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     protected void applyAttributes(boolean regenHealth) {
-        if (this.data != null && this.data.baseStats() != null) {
-            this.data.baseStats().forEach((att, d) -> {
+        if (this.data != null && this.data.value().baseStats() != null) {
+            this.data.value().baseStats().forEach((att, d) -> {
                 AttributeInstance inst = this.getAttribute(att);
                 if (inst != null) {
                     inst.setBaseValue(d);
@@ -446,7 +447,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public BrainActivityGroup<? extends NPCEntity> getFightTasks() {
         return BrainActivityGroup.fightTasks(
                 new InvalidateAttackTarget<NPCEntity>(),
-                this.getAttackActions().create()
+                this.getAttackActions().value().create()
         );
     }
 
@@ -615,23 +616,23 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     private CompoundTag saveNPCData() {
         CompoundTag tag = new CompoundTag();
-        tag.putString("Data", DataPackHandler.INSTANCE.npcDataManager().getId(this.data).toString());
-        tag.putString("Look", DataPackHandler.INSTANCE.npcLookManager().getId(this.getLook()).toString());
+        tag.putString("Data", this.data.id().toString());
+        tag.putString("Look", this.getLook().id().toString());
         tag.put("Profession", RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().encodeStart(NbtOps.INSTANCE, this.getProfession()).getOrThrow());
         tag.putBoolean("Male", this.isMale());
         tag.putInt("BirthdayMonth", this.getBirthday().getFirst().ordinal());
         tag.putInt("Birthday", this.getBirthday().getSecond());
-        tag.putString("Combat", DataPackHandler.INSTANCE.npcActionsManager().getId(this.getAttackActions()).toString());
+        tag.putString("Combat", this.getAttackActions().id().toString());
         tag.put("Schedule", this.schedule.save());
         tag.put("LookFeatures", this.lookFeatures.save(this.registryAccess()));
         CompoundTag gifts = new CompoundTag();
-        this.gifts.forEach((s, g) -> gifts.putString(s, DataPackHandler.INSTANCE.giftManager().getId(g).toString()));
+        this.gifts.forEach((s, g) -> gifts.putString(s, g.id().toString()));
         tag.put("GiftData", gifts);
         return tag;
     }
 
     private void loadNpcData(CompoundTag tag) {
-        NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(ResourceLocation.parse(tag.getString("Data")));
+        ReloadableHolder<NPCData> data = DataPackHandler.INSTANCE.npcDataManager().get(ResourceLocation.parse(tag.getString("Data")));
         this.look = DataPackHandler.INSTANCE.npcLookManager().get(ResourceLocation.parse(tag.getString("Look")));
         this.setProfession(RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(NbtOps.INSTANCE, tag.get("Profession"))
                 .getOrThrow());
@@ -647,12 +648,12 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         try {
             this.lookFeatures.read(tag.get("LookFeatures"), this.registryAccess());
         } catch (Exception e) {
-            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
+            this.lookFeatures.buildFromLooks(this, this.look.value().additionalFeatures().values());
         }
         CompoundTag gifts = tag.getCompound("GiftData");
-        ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
+        ImmutableMap.Builder<String, ReloadableHolder<GiftData>> b = ImmutableMap.builder();
         gifts.getAllKeys().forEach(key -> {
-            GiftData giftData = DataPackHandler.INSTANCE.giftManager().get(ResourceLocation.parse(gifts.getString(key)));
+            ReloadableHolder<GiftData> giftData = DataPackHandler.INSTANCE.giftManager().get(ResourceLocation.parse(gifts.getString(key)));
             if (giftData != null)
                 b.put(key, giftData);
         });
@@ -878,7 +879,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 } else {
                     if (family.getRelationship() == FamilyEntry.Relationship.DATING) {
                         float chance = this.friendPoints(player) >= 10 ? 0.2f * (this.friendPoints(player) - 9) : 0;
-                        if (chance > 0 && this.relationManager.getCompletedQuests(player.getUUID()).containsAll(this.data.questHandler().requiredQuests()) &&
+                        if (chance > 0 && this.relationManager.getCompletedQuests(player.getUUID()).containsAll(this.data.value().questHandler().requiredQuests()) &&
                                 this.updater.getDailyRandom().nextFloat() < chance) {
                             this.speak(serverPlayer, ConversationContext.MARRIAGE_ACCEPT);
                             family.updateRelationship(FamilyEntry.Relationship.MARRIED, player.getUUID());
@@ -918,7 +919,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                     this.tellDialogue(serverPlayer, null, null, Component.translatable(gift.responseKey()), List.of());
             } else {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (5 * mult)))
-                    this.tellDialogue(serverPlayer, null, null, Component.translatable(this.data.neutralGiftResponse()), List.of());
+                    this.tellDialogue(serverPlayer, null, null, Component.translatable(this.data.value().neutralGiftResponse()), List.of());
             }
         }
         stack.shrink(1);
@@ -939,7 +940,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public void speak(ServerPlayer player, ConversationContext convCtx) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        ConversationSet conversations = this.data.getConversation(convCtx);
+        ConversationSet conversations = this.data.value().getConversation(convCtx);
         LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
@@ -986,7 +987,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         } else
             this.relationManager.advanceQuest(player.getUUID(), quest);
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        ConversationSet conversations = this.data.getFromQuest(quest, questCtx, questState);
+        ConversationSet conversations = this.data.value().getFromQuest(quest, questCtx, questState);
         LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
@@ -1029,7 +1030,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     public void handleDialogueAction(ServerPlayer sender, ConversationContext convCtx, String conversationID, int actionIdx) {
-        ConversationSet conversations = this.data.getConversation(convCtx);
+        ConversationSet conversations = this.data.value().getConversation(convCtx);
         ConversationSet.Conversation conversation = conversations.conversations().get(conversationID);
         if (conversation != null && actionIdx < conversation.actions().size()) {
             ConversationSet.ConversationActionHolder action = conversation.actions().get(actionIdx);
@@ -1175,7 +1176,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         super.remove(reason);
         if (this.getServer() != null) {
             NPCHandler handler = RunecraftorySavedData.get(this.getServer()).npcHandler;
-            if (reason.shouldDestroy() && this.data != null && this.data.unique() > 0)
+            if (reason.shouldDestroy() && this.data != null && this.data.value().unique() > 0)
                 handler.removeUniqueNPC(this.getUUID(), this.data);
             handler.removeNPC(this, reason);
         }
@@ -1255,7 +1256,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         ((AttributeMapAccessor) this.getAttributes()).getAttributes()
                 .forEach((att, inst) -> inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER));
         if (this.data != null) {
-            Map<Holder<Attribute>, Double> gain = this.data.statIncrease() != null ? this.data.statIncrease() : NPCData.DEFAULT_GAIN;
+            Map<Holder<Attribute>, Double> gain = this.data.value().statIncrease() != null ? this.data.value().statIncrease() : NPCData.DEFAULT_GAIN;
             gain.forEach((att, val) -> {
                 val *= 0.01;
                 AttributeInstance inst = this.getAttribute(att);
@@ -1602,10 +1603,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         if (baby == null)
             return false;
         baby.setBaby(true);
-        List<ResourceLocation> childIDs = new ArrayList<>(this.data.possibleChildren());
+        List<ResourceLocation> childIDs = new ArrayList<>(this.data.value().possibleChildren());
         NPCDataManager manager = DataPackHandler.INSTANCE.npcDataManager();
         if (this.procreationEntity instanceof NPCEntity npc) {
-            childIDs.addAll(npc.data.possibleChildren());
+            childIDs.addAll(npc.data.value().possibleChildren());
         }
         childIDs.removeIf(r -> !manager.has(r));
         if (childIDs.isEmpty()) {
@@ -1634,12 +1635,12 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     public void tryUpdateName(Component component) {
-        if (this.data.name() == null)
+        if (this.data.value().name() == null)
             this.setCustomName(component);
     }
 
     public Optional<String> getDataName() {
-        return Optional.ofNullable(this.data.name());
+        return Optional.ofNullable(this.data.value().name());
     }
 
     public boolean isMale() {
@@ -1650,12 +1651,12 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         this.entityData.set(MALE, flag);
     }
 
-    public NPCLook getLook() {
+    public ReloadableHolder<NPCLook> getLook() {
         if (this.look == null) {
-            if (this.data == NPCData.DEFAULT_DATA)
-                this.look = NPCLook.DEFAULT_LOOK;
+            if (this.data == NPCData.DEFAULT)
+                this.look = NPCLook.DEFAULT;
             else {
-                List<ResourceLocation> looks = this.data.look() == null ? List.of() : this.data.look().stream().filter(e -> e.gender() == NPCData.Gender.UNDEFINED || (e.gender() == NPCData.Gender.MALE) == this.isMale())
+                List<ResourceLocation> looks = this.data.value().look() == null ? List.of() : this.data.value().look().stream().filter(e -> e.gender() == NPCData.Gender.UNDEFINED || (e.gender() == NPCData.Gender.MALE) == this.isMale())
                         .map(NPCData.NPCLookId::id).toList();
                 if (!looks.isEmpty())
                     this.look = DataPackHandler.INSTANCE.npcLookManager().get(looks.get(this.random.nextInt(looks.size())));
@@ -1666,12 +1667,12 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         return this.look;
     }
 
-    public NPCAttackActions getAttackActions() {
+    public ReloadableHolder<NPCAttackActions> getAttackActions() {
         if (this.attackActions == null) {
-            if (this.data == null || this.data == NPCData.DEFAULT_DATA || this.data.combatActions() == null)
+            if (this.data == null || this.data == NPCData.DEFAULT || this.data.value().combatActions() == null)
                 this.attackActions = NPCAttackActions.DEFAULT;
             else {
-                List<ResourceLocation> actions = this.data.combatActions();
+                List<ResourceLocation> actions = this.data.value().combatActions();
                 this.attackActions = DataPackHandler.INSTANCE.npcActionsManager().get(actions.isEmpty() ? null : actions.get(this.random.nextInt(actions.size())));
             }
         }
@@ -1680,10 +1681,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public Pair<Season, Integer> getBirthday() {
         if (this.birthday == null) {
-            if (this.data == NPCData.DEFAULT_DATA)
+            if (this.data == NPCData.DEFAULT)
                 this.birthday = Pair.of(Season.SPRING, 1);
-            else if (this.data.birthday() != null)
-                this.birthday = this.data.birthday();
+            else if (this.data.value().birthday() != null)
+                this.birthday = this.data.value().birthday();
             else {
                 Season randSeason = Season.values()[this.random.nextInt(Season.values().length)];
                 int day = this.random.nextInt(30) + 1;
@@ -1693,7 +1694,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         return this.birthday;
     }
 
-    public void setClientLook(NPCLook look) {
+    public void setClientLook(ReloadableHolder<NPCLook> look) {
         if (this.level().isClientSide) {
             this.look = look;
             this.refreshDimensions();
@@ -1702,8 +1703,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public NPCData.Gift giftOf(ItemStack stack) {
         this.calcGifts();
-        for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            if (this.gifts.get(e.getKey()).is(stack))
+        for (Map.Entry<String, NPCData.Gift> e : this.data.value().giftItems().entrySet()) {
+            if (this.gifts.get(e.getKey()).value().is(stack))
                 return e.getValue();
         }
         return null;
@@ -1712,9 +1713,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     protected Optional<Component> randomGiftContext(int min, int max) {
         this.calcGifts();
         List<GiftData> gifts = new ArrayList<>();
-        this.data.giftItems().forEach((key, gift) -> {
+        this.data.value().giftItems().forEach((key, gift) -> {
             if (gift.xp() >= min && gift.xp() <= max)
-                gifts.add(this.gifts.get(key));
+                gifts.add(this.gifts.get(key).value());
         });
         if (gifts.isEmpty())
             return Optional.empty();
@@ -1724,9 +1725,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     private void calcGifts() {
         if (this.gifts == null) {
-            ImmutableMap.Builder<String, GiftData> b = ImmutableMap.builder();
-            this.data.giftItems().forEach((s, g) -> {
-                GiftData giftData = g.giftID() == null ? DataPackHandler.INSTANCE.giftManager().getRandomGift(this.updater.getDailyRandom(), g.xp())
+            ImmutableMap.Builder<String, ReloadableHolder<GiftData>> b = ImmutableMap.builder();
+            this.data.value().giftItems().forEach((s, g) -> {
+                ReloadableHolder<GiftData> giftData = g.giftID() == null ? DataPackHandler.INSTANCE.giftManager().getRandomGift(this.updater.getDailyRandom(), g.xp())
                         : DataPackHandler.INSTANCE.giftManager().get(g.giftID());
                 if (giftData != null)
                     b.put(s, giftData);
@@ -1762,40 +1763,41 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public void randomizeData(NPCProfession profession, boolean overwrite) {
         if (this.getServer() != null) {
             this.setNPCData(DataPackHandler.INSTANCE.npcDataManager().getRandom(this.random, d ->
-                    (d.profession().isEmpty() || d.profession().stream().anyMatch(j -> j.equals(profession)))
+                    (d.value().profession().isEmpty() || d.value().profession().stream().anyMatch(j -> j.equals(profession)))
                             && RunecraftorySavedData.get(this.getServer()).npcHandler.canAssignNPC(d), profession == null ? null :
-                    d -> d.profession().stream().anyMatch(j -> j.equals(profession))), !overwrite);
+                    d -> d.value().profession().stream().anyMatch(j -> j.equals(profession))), !overwrite);
             if (profession != null)
                 this.setProfession(profession);
         }
     }
 
     public ResourceLocation getDataID() {
-        return DataPackHandler.INSTANCE.npcDataManager().getId(this.data);
+        return this.data.id();
     }
 
-    public void setNPCData(NPCData data, boolean load) {
+    public void setNPCData(ReloadableHolder<NPCData> holder, boolean load) {
         if (this.getServer() != null) {
             if (this.data != null)
                 RunecraftorySavedData.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
-            RunecraftorySavedData.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), data);
+            RunecraftorySavedData.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), holder);
         }
-        this.data = data;
+        this.data = holder;
+        NPCData data = this.data.value();
         this.dataRandom.setSeed(this.getUUID().hashCode());
         if (!load) {
             this.releaseWorkplacePoi();
-            this.setProfession(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
+            this.setProfession(!data.profession().isEmpty() ? data.profession().get(this.dataRandom.nextInt(data.profession().size()))
                     : RuneCraftoryNPCProfessions.PROFESSIONS.registry().getRandom(this.random).map(Holder::value).get());
-            this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
-            if (this.data.name() == null) {
+            this.setMale(data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : data.gender() != NPCData.Gender.FEMALE);
+            if (data.name() == null) {
                 String name = DataPackHandler.INSTANCE.nameManager().getRandomFullName(this.random, this.isMale());
                 if (name != null) {
                     this.setCustomName(Component.literal(name));
                 }
             } else {
-                String name = this.data.name();
-                if (this.data.surname() != null)
-                    name += " " + this.data.surname();
+                String name = data.name();
+                if (data.surname() != null)
+                    name += " " + data.surname();
                 this.setCustomName(Component.literal(name));
             }
             this.birthday = null;
@@ -1808,38 +1810,38 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 this.schedule.load(new NPCSchedule(this, this.random).save());
             else
                 this.schedule.with(data.schedule());
-            this.lookFeatures.buildFromLooks(this, this.look.additionalFeatures().values());
+            this.lookFeatures.buildFromLooks(this, this.look.value().additionalFeatures().values());
             this.gifts = null;
             this.calcGifts();
         } else {
             // Apply non null things else
-            if (this.data.look() != null && !this.data.look().isEmpty()) {
+            if (data.look() != null && !data.look().isEmpty()) {
                 this.look = null;
                 this.getLook();
             }
-            if (!this.data.profession().isEmpty() && !this.data.profession().contains(this.getProfession()))
-                this.setProfession(!this.data.profession().isEmpty() ? this.data.profession().get(this.dataRandom.nextInt(this.data.profession().size()))
+            if (!data.profession().isEmpty() && !data.profession().contains(this.getProfession()))
+                this.setProfession(!data.profession().isEmpty() ? data.profession().get(this.dataRandom.nextInt(data.profession().size()))
                         : RuneCraftoryNPCProfessions.PROFESSIONS.registry().getRandom(this.random).map(Holder::value).get());
-            if (this.data.gender() != NPCData.Gender.UNDEFINED && (this.data.gender() == NPCData.Gender.MALE) != this.isMale())
-                this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
-            if (this.data.name() != null) {
-                String name = this.data.name();
-                if (this.data.surname() != null)
-                    name += " " + this.data.surname();
+            if (data.gender() != NPCData.Gender.UNDEFINED && (data.gender() == NPCData.Gender.MALE) != this.isMale())
+                this.setMale(data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : data.gender() != NPCData.Gender.FEMALE);
+            if (data.name() != null) {
+                String name = data.name();
+                if (data.surname() != null)
+                    name += " " + data.surname();
                 this.setCustomName(Component.literal(name));
             }
-            if (this.data.birthday() != null) {
+            if (data.birthday() != null) {
                 this.birthday = null;
                 this.getBirthday();
             }
-            if (this.data.combatActions() != null && !this.data.combatActions().isEmpty())
+            if (data.combatActions() != null && !data.combatActions().isEmpty())
                 this.attackActions = null;
             if (data.schedule() != null)
                 this.schedule.with(data.schedule());
         }
         this.applyAttributes(!load);
-        if (this.xpLevel().getLevel() < this.data.baseLevel()) {
-            this.setXPLevel(this.data.baseLevel());
+        if (this.xpLevel().getLevel() < data.baseLevel()) {
+            this.setXPLevel(data.baseLevel());
         }
         this.refreshBrain((ServerLevel) this.level());
         this.refreshDimensions();

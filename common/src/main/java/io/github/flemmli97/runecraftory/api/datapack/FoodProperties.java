@@ -19,7 +19,6 @@ import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -54,8 +53,7 @@ public class FoodProperties {
                     StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
                     buf.readInt(),
                     buf.readList(b -> SimpleEffect.STREAM_CODEC.decode(buf)),
-                    buf.readList(b -> ByteBufCodecs.holderRegistry(Registries.MOB_EFFECT).decode(buf)))
-                    .setID(buf.readResourceLocation());
+                    buf.readList(b -> ByteBufCodecs.holderRegistry(Registries.MOB_EFFECT).decode(buf)));
         }
 
         @Override
@@ -67,7 +65,6 @@ public class FoodProperties {
             buf.writeInt(props.duration);
             buf.writeCollection(props.potionApply, (b, val) -> SimpleEffect.STREAM_CODEC.encode(buf, val));
             buf.writeCollection(props.potionRemove, (b, val) -> ByteBufCodecs.holderRegistry(Registries.MOB_EFFECT).encode(buf, val));
-            buf.writeResourceLocation(props.id);
         }
     };
 
@@ -78,8 +75,6 @@ public class FoodProperties {
     private final int duration;
     private final List<SimpleEffect> potionApply;
     private final List<Holder<MobEffect>> potionRemove;
-
-    private ResourceLocation id;
 
     public FoodProperties(Map<Holder<Attribute>, Double> effects, Map<Holder<Attribute>, Double> effectsPercentage,
                           Map<Holder<Attribute>, Double> cookingBonus, Map<Holder<Attribute>, Double> cookingBonusPercent, int duration,
@@ -97,16 +92,6 @@ public class FoodProperties {
         Object2DoubleAVLTreeMap<Holder<Attribute>> sorted = new Object2DoubleAVLTreeMap<>(RuneCraftoryAttributes.SORTED);
         sorted.putAll(map);
         return Object2DoubleSortedMaps.unmodifiable(sorted);
-    }
-
-    public FoodProperties setID(ResourceLocation id) {
-        if (this.id == null)
-            this.id = id;
-        return this;
-    }
-
-    public ResourceLocation getId() {
-        return this.id;
     }
 
     public int getHPGain() {
@@ -204,10 +189,7 @@ public class FoodProperties {
 
     @Override
     public String toString() {
-        String s = "[Duration:" + this.duration + "]" + "{effects:[" + this.effects + "], potions:[" + this.potionRemove + "]";
-        if (this.id != null)
-            s = this.id + ":" + s;
-        return s;
+        return "[Duration:" + this.duration + "]" + "{effects:[" + this.effects + "], potions:[" + this.potionRemove + "]";
     }
 
     /**

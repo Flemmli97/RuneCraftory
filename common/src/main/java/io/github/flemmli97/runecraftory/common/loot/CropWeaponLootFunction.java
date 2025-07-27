@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
@@ -56,13 +57,13 @@ public class CropWeaponLootFunction extends LootItemConditionalFunction {
                         .map(FarmlandData::getCropLevel).orElse(1);
             }
         }
-        List<Pair<ItemStack, ItemStat>> base = DataPackHandler.INSTANCE.itemStatManager()
+        List<Pair<ItemStack, ReloadableHolder<ItemStat>>> base = DataPackHandler.INSTANCE.itemStatManager()
                 .all(s -> !s.is(stack.getItem()) && equipment ? s.getItem() instanceof ShieldItem : s.is(RunecraftoryTags.Items.UPGRADABLE_HELD));
         if (!base.isEmpty()) {
             stack.set(RuneCraftoryDataComponentTypes.LIGHT_ORE.get(), true);
             ItemComponentUtils.addUpgradeItem(stack, base.get(ctx.getRandom().nextInt(base.size())).getFirst(), true, equipment ? CraftingType.ACCESSORY_WORKBENCH : CraftingType.FORGE);
         }
-        List<Pair<ItemStack, ItemStat>> bonus = DataPackHandler.INSTANCE.itemStatManager()
+        List<Pair<ItemStack, ReloadableHolder<ItemStat>>> bonus = DataPackHandler.INSTANCE.itemStatManager()
                 .all(s -> !s.is(RunecraftoryTags.Items.WEAPONS) && !s.is(RunecraftoryTags.Items.EQUIPMENT));
         int bonusAmount = ctx.getRandom().nextInt(3) + 1;
         for (int i = 0; i < bonusAmount; i++)

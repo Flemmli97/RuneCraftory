@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
@@ -47,10 +48,10 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
             NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
             boolean profession = true;
             if (itemData.npcDataId().isPresent()) {
-                NPCData data = DataPackHandler.INSTANCE.npcDataManager().get(itemData.npcDataId().get());
+                ReloadableHolder<NPCData> data = DataPackHandler.INSTANCE.npcDataManager().get(itemData.npcDataId().get());
                 if (data != null) {
                     npc.setNPCData(data, false);
-                    profession = data.profession().isEmpty();
+                    profession = data.value().profession().isEmpty();
                 }
             }
             if (profession) {

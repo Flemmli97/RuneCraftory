@@ -22,8 +22,7 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener imp
     public static final ResourceLocation ID = RuneCraftory.modRes("conversations");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
-    private Map<ResourceLocation, ConversationSet> keyData = ImmutableMap.of();
-    private Map<ConversationSet, ResourceLocation> dataKey = ImmutableMap.of();
+    private Map<ResourceLocation, ConversationSet> data = ImmutableMap.of();
 
     private HolderLookup.Provider provider;
 
@@ -32,11 +31,7 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener imp
     }
 
     public ConversationSet get(ResourceLocation res, ConversationSet fallback) {
-        return this.keyData.getOrDefault(res, fallback);
-    }
-
-    public ResourceLocation getId(ConversationSet data) {
-        return this.dataKey.get(data);
+        return this.data.getOrDefault(res, fallback);
     }
 
     @Override
@@ -52,10 +47,7 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener imp
                 ex.fillInStackTrace();
             }
         });
-        this.keyData = builder.build();
-        ImmutableMap.Builder<ConversationSet, ResourceLocation> reverse = ImmutableMap.builder();
-        this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
-        this.dataKey = reverse.build();
+        this.data = builder.build();
     }
 
     @Override

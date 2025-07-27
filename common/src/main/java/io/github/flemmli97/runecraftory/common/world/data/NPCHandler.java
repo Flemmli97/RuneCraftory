@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.world.data;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import net.minecraft.core.HolderLookup;
@@ -52,26 +52,23 @@ public class NPCHandler {
         }
     }
 
-    public boolean canAssignNPC(NPCData data) {
-        if (data.unique() == 0)
+    public boolean canAssignNPC(ReloadableHolder<NPCData> data) {
+        if (data.value().unique() == 0)
             return true;
-        ResourceLocation res = DataPackHandler.INSTANCE.npcDataManager().getId(data);
-        Set<UUID> uuids = this.uniqueNPCS.get(res);
-        return uuids == null || uuids.size() < data.unique();
+        Set<UUID> uuids = this.uniqueNPCS.get(data.id());
+        return uuids == null || uuids.size() < data.value().unique();
     }
 
-    public boolean addUniqueNPC(UUID uuid, NPCData data) {
-        if (data.unique() == 0)
+    public boolean addUniqueNPC(UUID uuid, ReloadableHolder<NPCData> data) {
+        if (data.value().unique() == 0)
             return false;
-        ResourceLocation res = DataPackHandler.INSTANCE.npcDataManager().getId(data);
-        return this.uniqueNPCS.computeIfAbsent(res, key -> new HashSet<>()).add(uuid);
+        return this.uniqueNPCS.computeIfAbsent(data.id(), key -> new HashSet<>()).add(uuid);
     }
 
-    public boolean removeUniqueNPC(UUID uuid, NPCData data) {
-        if (data.unique() == 0)
+    public boolean removeUniqueNPC(UUID uuid, ReloadableHolder<NPCData> data) {
+        if (data.value().unique() == 0)
             return false;
-        ResourceLocation res = DataPackHandler.INSTANCE.npcDataManager().getId(data);
-        return this.uniqueNPCS.computeIfAbsent(res, key -> new HashSet<>()).remove(uuid);
+        return this.uniqueNPCS.computeIfAbsent(data.id(), key -> new HashSet<>()).remove(uuid);
     }
 
     /**

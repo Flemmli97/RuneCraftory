@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.datapack.SyncableListener;
 import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import net.minecraft.core.HolderLookup;
@@ -31,34 +32,36 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class CropManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, CropProperties>> {
+public class CropManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, ReloadableHolder<CropProperties>>> {
 
     public static final ResourceLocation ID = RuneCraftory.modRes("crop_properties");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, Map<Item, CropProperties>> CODEC = new StreamCodec<>() {
+    private static final StreamCodec<RegistryFriendlyByteBuf, ReloadableHolder<CropProperties>> HOLDER_CODEC = ReloadableHolder.streamCodec(CropProperties.STREAM_CODEC);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Map<Item, ReloadableHolder<CropProperties>>> CODEC = new StreamCodec<>() {
         @Override
-        public Map<Item, CropProperties> decode(RegistryFriendlyByteBuf buf) {
-            ImmutableMap.Builder<Item, CropProperties> builder = ImmutableMap.builder();
+        public Map<Item, ReloadableHolder<CropProperties>> decode(RegistryFriendlyByteBuf buf) {
+            ImmutableMap.Builder<Item, ReloadableHolder<CropProperties>> builder = ImmutableMap.builder();
             int size = buf.readVarInt();
             for (int i = 0; i < size; i++)
-                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), CropProperties.STREAM_CODEC.decode(buf));
+                builder.put(ByteBufCodecs.registry(Registries.ITEM).decode(buf), HOLDER_CODEC.decode(buf));
             return builder.build();
         }
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buf, Map<Item, CropProperties> props) {
+        public void encode(RegistryFriendlyByteBuf buf, Map<Item, ReloadableHolder<CropProperties>> props) {
             buf.writeVarInt(props.size());
             props.forEach((item, prop) -> {
                 ByteBufCodecs.registry(Registries.ITEM).encode(buf, item);
-                CropProperties.STREAM_CODEC.encode(buf, prop);
+                HOLDER_CODEC.encode(buf, prop);
             });
         }
     };
 
-    private Map<Item, CropProperties> crops = ImmutableMap.of();
+    private Map<Item, ReloadableHolder<CropProperties>> crops = ImmutableMap.of();
     private boolean resolved;
-    private Map<TagKey<Item>, CropProperties> tagCrops = ImmutableMap.of();
+    private Map<TagKey<Item>, ReloadableHolder<CropProperties>> tagCrops = ImmutableMap.of();
 
     private HolderLookup.Provider provider;
 
@@ -71,13 +74,21 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
         if (GeneralConfig.disableCropSystem)
             return null;
         this.resolveTags(false);
+        return this.crops.get(item).value();
+    }
+
+    @Nullable
+    public ReloadableHolder<CropProperties> getWithId(Item item) {
+        if (GeneralConfig.disableCropSystem)
+            return null;
+        this.resolveTags(false);
         return this.crops.get(item);
     }
 
     public void resolveTags(boolean forced) {
         if (!this.resolved || forced) {
             this.resolved = true;
-            HashMap<Item, CropProperties> itemEntries = new HashMap<>(this.crops);
+            HashMap<Item, ReloadableHolder<CropProperties>> itemEntries = new HashMap<>(this.crops);
             this.tagCrops.entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().location()))
                     .forEach(entry -> HolderUtils.expandTag(this.provider, Registries.ITEM, entry.getKey()).forEach(item -> {
                         if (!itemEntries.containsKey(item))
@@ -90,8 +101,8 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         this.resolved = false;
-        ImmutableMap.Builder<Item, CropProperties> itemEntries = ImmutableMap.builder();
-        ImmutableMap.Builder<TagKey<Item>, CropProperties> tagEntries = ImmutableMap.builder();
+        ImmutableMap.Builder<Item, ReloadableHolder<CropProperties>> itemEntries = ImmutableMap.builder();
+        ImmutableMap.Builder<TagKey<Item>, ReloadableHolder<CropProperties>> tagEntries = ImmutableMap.builder();
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((fres, el) -> {
             try {
@@ -100,14 +111,12 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
                 if (key.startsWith("#")) {
                     TagKey<Item> tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(key.substring(1)));
                     CropProperties props = CropProperties.CODEC.parse(ops, el).getOrThrow();
-                    props.setID(fres);
-                    tagEntries.put(tag, props);
+                    tagEntries.put(tag, new ReloadableHolder<>(fres, props));
                 } else {
                     Optional<Item> item = HolderUtils.get(this.provider, Registries.ITEM, ResourceLocation.parse(key));
                     item.ifPresent(i -> {
                         CropProperties props = CropProperties.CODEC.parse(ops, el).getOrThrow();
-                        props.setID(fres);
-                        itemEntries.put(i, props);
+                        itemEntries.put(i, new ReloadableHolder<>(fres, props));
                     });
                 }
             } catch (Exception ex) {
@@ -130,18 +139,18 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
     }
 
     @Override
-    public StreamCodec<RegistryFriendlyByteBuf, Map<Item, CropProperties>> codec() {
+    public StreamCodec<RegistryFriendlyByteBuf, Map<Item, ReloadableHolder<CropProperties>>> codec() {
         return CODEC;
     }
 
     @Override
-    public Map<Item, CropProperties> toSync() {
+    public Map<Item, ReloadableHolder<CropProperties>> toSync() {
         this.resolveTags(false);
         return Collections.unmodifiableMap(this.crops);
     }
 
     @Override
-    public void update(HolderLookup.Provider provider, Map<Item, CropProperties> value) {
+    public void update(HolderLookup.Provider provider, Map<Item, ReloadableHolder<CropProperties>> value) {
         this.insertRegistryAccess(provider);
         this.crops = value;
     }

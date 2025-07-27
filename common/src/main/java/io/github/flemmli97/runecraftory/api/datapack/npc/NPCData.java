@@ -5,10 +5,12 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.QuestConversationContext;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
@@ -48,8 +50,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public static final Map<Holder<Attribute>, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
             RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5d, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1d, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5d);
-    public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
-            Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of());
+    public static final ReloadableHolder<NPCData> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_npc"),
+            new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
+                    Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of()));
 
     public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
         Function<Map<ConversationContext, T>, DataResult<Map<ConversationContext, T>>> check = map -> {

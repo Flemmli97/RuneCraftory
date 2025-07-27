@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.items.MultiBlockItem;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
@@ -170,23 +171,23 @@ public class ClientCalls {
         List<Component> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
         List<Component> debug = new ArrayList<>();
-        DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).ifPresent(stat -> {
-            tooltip.addAll(stat.texts(stack, shift));
+        DataPackHandler.INSTANCE.itemStatManager().getWithId(stack.getItem()).ifPresent(stat -> {
+            tooltip.addAll(stat.value().texts(stack, shift));
             if (flag.isAdvanced())
-                debug.add(Component.translatable("runecraftory.tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
+                debug.add(Component.translatable("runecraftory.tooltip.debug.stat", stat.id().toString()).withStyle(ChatFormatting.GRAY));
         });
-        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(stack.getItem());
+        ReloadableHolder<CropProperties> props = DataPackHandler.INSTANCE.cropManager().getWithId(stack.getItem());
         if (props != null) {
-            tooltip.addAll(props.texts());
+            tooltip.addAll(props.value().texts());
             if (flag.isAdvanced())
-                debug.add(Component.translatable("runecraftory.tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
+                debug.add(Component.translatable("runecraftory.tooltip.debug.crop", props.id().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (shift) {
-            FoodProperties food = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
+            ReloadableHolder<FoodProperties> food = DataPackHandler.INSTANCE.foodManager().getWithId(stack.getItem());
             if (food != null) {
-                tooltip.addAll(food.texts(stack));
+                tooltip.addAll(food.value().texts(stack));
                 if (flag.isAdvanced())
-                    debug.add(Component.translatable("runecraftory.tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
+                    debug.add(Component.translatable("runecraftory.tooltip.debug.food", food.id().toString()).withStyle(ChatFormatting.GRAY));
             } else if (stack.has(DataComponents.FOOD)) {
                 tooltip.add(Component.translatable("runecraftory.tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
                 MutableComponent comp = CommonComponents.space()

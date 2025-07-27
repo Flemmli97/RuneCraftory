@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ListenerExtension;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -28,10 +29,9 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_npc");
 
-    private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
-    private Map<NPCData, ResourceLocation> dataKey = ImmutableMap.of();
-    private final WeightedList<NPCData> view = new WeightedList<>();
-    private final WeightedList<NPCData> viewNoProfessionDefined = new WeightedList<>();
+    private Map<ResourceLocation, ReloadableHolder<NPCData>> data = ImmutableMap.of();
+    private final WeightedList<ReloadableHolder<NPCData>> view = new WeightedList<>();
+    private final WeightedList<ReloadableHolder<NPCData>> viewNoProfessionDefined = new WeightedList<>();
 
     private HolderLookup.Provider provider;
 
@@ -39,43 +39,36 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
         super(DataPackHandler.GSON, DIRECTORY);
     }
 
-    public NPCData get(ResourceLocation res) {
-        return this.keyData.getOrDefault(res, NPCData.DEFAULT_DATA);
+    public ReloadableHolder<NPCData> get(ResourceLocation res) {
+        return this.data.getOrDefault(res, NPCData.DEFAULT);
     }
 
     public boolean has(ResourceLocation res) {
-        return this.keyData.containsKey(res);
+        return this.data.containsKey(res);
     }
 
-    public ResourceLocation getId(NPCData data) {
-        return this.dataKey.getOrDefault(data, DEFAULT_ID);
-    }
-
-    public NPCData getRandom(RandomSource random, Predicate<NPCData> func, @Nullable Predicate<NPCData> other) {
-        return this.view.getRandom(random, NPCData.DEFAULT_DATA, func, other);
+    public ReloadableHolder<NPCData> getRandom(RandomSource random, Predicate<ReloadableHolder<NPCData>> func, @Nullable Predicate<ReloadableHolder<NPCData>> other) {
+        return this.view.getRandom(random, NPCData.DEFAULT, func, other);
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
-        ImmutableMap.Builder<ResourceLocation, NPCData> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<ResourceLocation, ReloadableHolder<NPCData>> builder = ImmutableMap.builder();
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         map.forEach((fres, el) -> {
             if (!fres.equals(DEFAULT_ID)) {
                 try {
                     JsonObject obj = el.getAsJsonObject();
-                    builder.put(fres, NPCData.CODEC.parse(ops, obj).getOrThrow());
+                    builder.put(fres, new ReloadableHolder<>(fres, NPCData.CODEC.parse(ops, obj).getOrThrow()));
                 } catch (Exception ex) {
                     RuneCraftory.LOGGER.error("Couldn't parse npc data json {} {}", fres, ex);
                     ex.fillInStackTrace();
                 }
             }
         });
-        this.keyData = builder.build();
-        ImmutableMap.Builder<NPCData, ResourceLocation> reverse = ImmutableMap.builder();
-        this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
-        this.dataKey = reverse.build();
-        this.view.setList(this.keyData.values().stream().map(d -> WeightedEntry.wrap(d, d.weight())).toList());
-        this.viewNoProfessionDefined.setList(this.keyData.values().stream().filter(d -> d.profession().isEmpty()).map(d -> WeightedEntry.wrap(d, d.weight())).toList());
+        this.data = builder.build();
+        this.view.setList(this.data.values().stream().map(d -> WeightedEntry.wrap(d, d.value().weight())).toList());
+        this.viewNoProfessionDefined.setList(this.data.values().stream().filter(d -> d.value().profession().isEmpty()).map(d -> WeightedEntry.wrap(d, d.value().weight())).toList());
     }
 
     @Override

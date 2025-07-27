@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -31,7 +33,8 @@ import java.util.function.Predicate;
 public class NPCAttackActions {
 
     public static final Codec<NPCAttackActions> CODEC = NPCAttackSequence.CODEC.listOf().xmap(NPCAttackActions::new, h -> h.behaviours);
-    public static final NPCAttackActions DEFAULT = new NPCAttackActions(List.of());
+    public static final ReloadableHolder<NPCAttackActions> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_action"),
+            new NPCAttackActions(List.of()));
 
     private final List<NPCAttackSequence> behaviours;
 

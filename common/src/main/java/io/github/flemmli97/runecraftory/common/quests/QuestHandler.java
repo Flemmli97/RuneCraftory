@@ -70,7 +70,7 @@ public class QuestHandler {
                                 npc.blockPosition().getY(), npc.blockPosition().getZ()).withStyle(ChatFormatting.GOLD),
                         (MutableComponent) MutableComponent.EMPTY), description.stream()).toList();
                 return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
-                        npc.lookFeatures, npc.getLook().playerSkin(), data.isActive(e.getKey()));
+                        npc.lookFeatures, npc.getLook().value().playerSkin(), data.isActive(e.getKey()));
             }
             return new ClientSideQuestDisplay(e.getKey(), e.getValue().getName(player), description,
                     null, null, data.isActive(e.getKey()));

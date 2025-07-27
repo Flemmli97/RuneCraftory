@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Collection;
@@ -39,8 +38,7 @@ public class CropProperties {
         public CropProperties decode(RegistryFriendlyByteBuf buf) {
             return new CropProperties(buf.readInt(), buf.readInt(), buf.readBoolean(),
                     ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.BLOCK)).decode(buf),
-                    buf.readEnumSet(Season.class), buf.readEnumSet(Season.class))
-                    .setID(buf.readResourceLocation());
+                    buf.readEnumSet(Season.class), buf.readEnumSet(Season.class));
         }
 
         @Override
@@ -51,7 +49,6 @@ public class CropProperties {
             ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.BLOCK)).encode(buf, props.getGiantVersion());
             buf.writeEnumSet(props.bestSeasons, Season.class);
             buf.writeEnumSet(props.badSeasons, Season.class);
-            buf.writeResourceLocation(props.id);
         }
     };
 
@@ -64,8 +61,7 @@ public class CropProperties {
 
     private final Optional<Block> giantVersion;
 
-    private ResourceLocation id;
-    private List<Component> translationTexts;
+    private final List<Component> translationTexts;
 
     public CropProperties(int growth, int maxDrops, boolean regrowable, Optional<Block> giantVersion, Collection<Season> bestSeasons, Collection<Season> badSeasons) {
         this.growth = growth;
@@ -74,16 +70,46 @@ public class CropProperties {
         this.regrowable = regrowable;
         this.bestSeasons.addAll(bestSeasons);
         this.badSeasons.addAll(badSeasons);
+        this.translationTexts = this.generateText();
     }
 
-    public CropProperties setID(ResourceLocation id) {
-        if (this.id == null)
-            this.id = id;
-        return this;
-    }
-
-    public ResourceLocation getId() {
-        return this.id;
+    private List<Component> generateText() {
+        ImmutableList.Builder<Component> list = ImmutableList.builder();
+        if (!this.bestSeasons.isEmpty()) {
+            MutableComponent txt = null;
+            for (Season season : this.bestSeasons) {
+                if (txt == null) {
+                    txt = Component.translatable(season.translationKey()).withStyle(season.getColor());
+                } else {
+                    txt.append(Component.literal("/").withStyle(ChatFormatting.GRAY))
+                            .append(Component.translatable(season.translationKey()).withStyle(season.getColor()));
+                }
+            }
+            list.add(Component.translatable("runecraftory.tooltip.crops.season.best", txt).withStyle(ChatFormatting.GRAY));
+        }
+        EnumSet<Season> badSeasons = EnumSet.copyOf(this.badSeasons);
+        badSeasons.removeAll(this.bestSeasons);
+        if (!badSeasons.isEmpty()) {
+            MutableComponent txt = null;
+            for (Season season : badSeasons) {
+                if (txt == null) {
+                    txt = Component.translatable(season.translationKey()).withStyle(season.getColor());
+                } else {
+                    txt.append(Component.literal("/").withStyle(ChatFormatting.GRAY))
+                            .append(Component.translatable(season.translationKey()).withStyle(season.getColor()));
+                }
+            }
+            list.add(Component.translatable("runecraftory.tooltip.crops.season.bad", txt).withStyle(ChatFormatting.GRAY));
+        }
+        MutableComponent growth = Component.translatable("runecraftory.tooltip.crops.growth", this.growth()).withStyle(ChatFormatting.GOLD);
+        Component harvest = Component.translatable("runecraftory.tooltip.crops.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
+        if (this.regrowable()) {
+            Component regrowable = Component.translatable("runecraftory.tooltip.crops.regrowable").withStyle(ChatFormatting.GREEN);
+            list.add(Component.translatable("runecraftory.tooltip.crops.entry.3", growth, harvest, regrowable));
+        } else {
+            list.add(Component.translatable("runecraftory.tooltip.crops.entry.2", growth, harvest));
+        }
+        return list.build();
     }
 
     public Set<Season> bestSeasons() {
@@ -119,53 +145,12 @@ public class CropProperties {
     }
 
     public List<Component> texts() {
-        if (this.translationTexts == null) {
-            ImmutableList.Builder<Component> list = ImmutableList.builder();
-            if (!this.bestSeasons.isEmpty()) {
-                MutableComponent txt = null;
-                for (Season season : this.bestSeasons) {
-                    if (txt == null) {
-                        txt = Component.translatable(season.translationKey()).withStyle(season.getColor());
-                    } else {
-                        txt.append(Component.literal("/").withStyle(ChatFormatting.GRAY))
-                                .append(Component.translatable(season.translationKey()).withStyle(season.getColor()));
-                    }
-                }
-                list.add(Component.translatable("runecraftory.tooltip.crops.season.best", txt).withStyle(ChatFormatting.GRAY));
-            }
-            EnumSet<Season> badSeasons = EnumSet.copyOf(this.badSeasons);
-            badSeasons.removeAll(this.bestSeasons);
-            if (!badSeasons.isEmpty()) {
-                MutableComponent txt = null;
-                for (Season season : badSeasons) {
-                    if (txt == null) {
-                        txt = Component.translatable(season.translationKey()).withStyle(season.getColor());
-                    } else {
-                        txt.append(Component.literal("/").withStyle(ChatFormatting.GRAY))
-                                .append(Component.translatable(season.translationKey()).withStyle(season.getColor()));
-                    }
-                }
-                list.add(Component.translatable("runecraftory.tooltip.crops.season.bad", txt).withStyle(ChatFormatting.GRAY));
-            }
-            MutableComponent growth = Component.translatable("runecraftory.tooltip.crops.growth", this.growth()).withStyle(ChatFormatting.GOLD);
-            Component harvest = Component.translatable("runecraftory.tooltip.crops.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
-            if (this.regrowable()) {
-                Component regrowable = Component.translatable("runecraftory.tooltip.crops.regrowable").withStyle(ChatFormatting.GREEN);
-                list.add(Component.translatable("runecraftory.tooltip.crops.entry.3", growth, harvest, regrowable));
-            } else {
-                list.add(Component.translatable("runecraftory.tooltip.crops.entry.2", growth, harvest));
-            }
-            this.translationTexts = list.build();
-        }
         return this.translationTexts;
     }
 
     @Override
     public String toString() {
-        String s = "[BestSeasons:" + this.bestSeasons + ";BadSeasons:" + this.badSeasons + ";Growth:" + this.growth + ";Drops:" + this.maxDrops + ";Regrowable:" + this.regrowable + "]";
-        if (this.id != null)
-            s = this.id + ":" + s;
-        return s;
+        return "[BestSeasons:" + this.bestSeasons + ";BadSeasons:" + this.badSeasons + ";Growth:" + this.growth + ";Drops:" + this.maxDrops + ";Regrowable:" + this.regrowable + "]";
     }
 
     /**
