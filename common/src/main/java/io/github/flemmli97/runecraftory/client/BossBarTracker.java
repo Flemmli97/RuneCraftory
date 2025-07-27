@@ -122,6 +122,7 @@ public class BossBarTracker {
         if (activeMusic != null) {
             Minecraft.getInstance().getSoundManager().stop(activeMusic);
         }
+        Minecraft.getInstance().getMusicManager().stopPlaying();
         Minecraft.getInstance().getSoundManager().play(sound);
         activeMusic = sound;
     }
