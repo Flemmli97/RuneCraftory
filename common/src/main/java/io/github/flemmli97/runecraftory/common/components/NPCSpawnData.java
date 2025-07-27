@@ -9,11 +9,10 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 public record NPCSpawnData(Optional<Holder<NPCProfession>> profession, Optional<ResourceLocation> npcDataId) {
@@ -28,24 +27,15 @@ public record NPCSpawnData(Optional<Holder<NPCProfession>> profession, Optional<
             ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY)), NPCSpawnData::profession,
             ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), NPCSpawnData::npcDataId, NPCSpawnData::new);
 
-    public NPCSpawnData cycleProfession(HolderLookup.Provider provider) {
-        List<Holder.Reference<NPCProfession>> professions = provider.lookupOrThrow(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY).listElements()
-                .sorted(Comparator.comparing(Holder::getRegisteredName)).toList();
-        if (professions.isEmpty())
-            return new NPCSpawnData(Optional.empty(), this.npcDataId);
-        if (this.profession.isEmpty())
-            return new NPCSpawnData(Optional.ofNullable(professions.getFirst()), this.npcDataId);
-        Holder<NPCProfession> next = null;
-        for (int i = 0; i < professions.size(); i++) {
-            if (professions.get(i).is(this.profession.get())) {
-                next = professions.get((i + 1) % professions.size());
-                break;
-            }
-        }
-        return new NPCSpawnData(Optional.ofNullable(next), this.npcDataId);
-    }
-
     public NPCSpawnData withId(@Nullable ResourceLocation id) {
         return new NPCSpawnData(this.profession(), Optional.ofNullable(id));
+    }
+
+    public NPCSpawnData withProfession(HolderLookup.Provider provider, @Nullable ResourceLocation profession) {
+        if (profession == null)
+            return new NPCSpawnData(Optional.empty(), this.npcDataId());
+        return new NPCSpawnData(provider.lookupOrThrow(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY)
+                .get(ResourceKey.create(RuneCraftoryNPCProfessions.PROFESSION_REGISTRY_KEY, profession))
+                .map(r -> r), this.npcDataId());
     }
 }

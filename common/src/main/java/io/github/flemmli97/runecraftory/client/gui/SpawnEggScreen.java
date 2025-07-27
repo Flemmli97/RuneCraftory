@@ -5,6 +5,8 @@ import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
 import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
 import io.github.flemmli97.runecraftory.common.network.C2SSpawnEgg;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.tenshilib.client.gui.widget.SuggestionEditBox;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -39,7 +41,7 @@ public class SpawnEggScreen extends Screen {
     private final List<EditBox> editBoxes = new ArrayList<>();
     private EditBox levelEditor, npcIDEditor;
     private int level;
-    private ResourceLocation npcID;
+    private ResourceLocation npcProfession, npcID;
 
     public SpawnEggScreen(InteractionHand hand) {
         super(Component.literal(""));
@@ -98,11 +100,11 @@ public class SpawnEggScreen extends Screen {
         int padding = 16;
         int yOff = padding;
         graphics.drawString(this.minecraft.font, Component.translatable("runecraftory.gui.level"), this.leftPos + padding, this.topPos + yOff, 0xffffff);
-        this.levelEditor.render(graphics, mouseX, mouseY, partialTick);
-        yOff += 16 + 20 + 60;
         if (this.npcIDEditor != null) {
+            yOff += 8 * 9;
+            graphics.drawString(this.minecraft.font, Component.translatable("runecraftory.gui.npc.profession"), this.leftPos + padding, this.topPos + yOff, 0xffffff);
+            yOff += 20 + 16;
             graphics.drawString(this.minecraft.font, Component.translatable("runecraftory.gui.npc.id"), this.leftPos + padding, this.topPos + yOff, 0xffffff);
-            this.npcIDEditor.render(graphics, mouseX, mouseY, partialTick);
         }
         int max = Math.min(4, this.entities.size());
         for (int i = 0; i < max; i++) {
@@ -150,11 +152,26 @@ public class SpawnEggScreen extends Screen {
         ItemStack stack = this.player.getItemInHand(this.hand);
         this.level = stack.getOrDefault(RuneCraftoryDataComponentTypes.SPAWN_EGG_LEVEL.get(), 1);
         this.levelEditor.setValue(this.level + "");
-        this.addWidget(this.levelEditor);
-        yOff += 16 + 20 + 60;
+        this.addRenderableWidget(this.levelEditor);
         if (stack.getItem() instanceof NPCSpawnEgg) {
-            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeY - 32, 16, Component.literal(""));
+            yOff += 8 * 9;
+            EditBox npcProfessionEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 130, 16, Component.literal(""),
+                    5, false, SuggestionEditBox.ofResourceLocation(RuneCraftoryNPCProfessions.PROFESSIONS.registry().keySet()));
             NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
+            this.npcProfession = itemData.profession().map(h -> h.unwrapKey().orElseThrow().location()).orElse(null);
+            if (this.npcProfession != null)
+                npcProfessionEditor.setValue(this.npcProfession.toString());
+            npcProfessionEditor.setResponder(s -> {
+                try {
+                    this.npcProfession = s.isEmpty() ? null : ResourceLocation.parse(s);
+                } catch (ResourceLocationException ignored) {
+                }
+            });
+            this.addRenderableWidget(npcProfessionEditor);
+            this.editBoxes.add(npcProfessionEditor);
+            yOff += 20 + 16;
+
+            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""));
             this.npcID = itemData.npcDataId().orElse(null);
             if (this.npcID != null)
                 this.npcIDEditor.setValue(this.npcID.toString());
@@ -164,14 +181,13 @@ public class SpawnEggScreen extends Screen {
                 } catch (ResourceLocationException ignored) {
                 }
             });
-            this.addWidget(this.npcIDEditor);
+            this.addRenderableWidget(this.npcIDEditor);
             this.editBoxes.add(this.npcIDEditor);
         }
-        yOff += (16 + 8) * 2;
         this.addRenderableWidget(Button.builder(Component.translatable("runecraftory.gui.save"), b -> {
-            LoaderNetwork.INSTANCE.sendToServer(new C2SSpawnEgg(this.hand, this.level, this.npcID));
+            LoaderNetwork.INSTANCE.sendToServer(new C2SSpawnEgg(this.hand, this.level, this.npcProfession, this.npcID));
             this.minecraft.setScreen(null);
-        }).bounds(this.leftPos + this.sizeX / 2 - 50, this.topPos + yOff, 100, 20).build());
+        }).bounds(this.leftPos + this.sizeX / 2 - 50, this.topPos + this.sizeY - 32, 100, 20).build());
     }
 
     @Override

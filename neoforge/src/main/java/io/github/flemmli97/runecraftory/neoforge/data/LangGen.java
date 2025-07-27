@@ -232,7 +232,7 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.tooltip.item.eaten", "When eaten");
 
-        this.add("runecraftory.tooltip.item.spawn", "Right click in air to change mob level");
+        this.add("runecraftory.tooltip.item.spawn", "Right click in air to configure spawnegg");
         this.add("runecraftory.tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
 
         this.add("runecraftory.tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
@@ -240,7 +240,6 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.debug.stat", "Itemstat-ID: %s");
         this.add("runecraftory.tooltip.debug.crop", "Cropdata-ID: %s");
         this.add("runecraftory.tooltip.debug.food", "Fooddata-ID: %s");
-        this.add("runecraftory.tooltip.item.npc", "Shift-right-click to change profession");
         this.add("runecraftory.tooltip.sapling", "Needs to be placed on farmland");
 
         this.add("runecraftory.tooltip.crops.season.best", "Good Season: %s");

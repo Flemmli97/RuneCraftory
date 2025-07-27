@@ -21,13 +21,17 @@ public class C2SSpawnEgg implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, C2SSpawnEgg> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public C2SSpawnEgg decode(RegistryFriendlyByteBuf buf) {
-            return new C2SSpawnEgg(buf.readEnum(InteractionHand.class), buf.readInt(), buf.readBoolean() ? buf.readResourceLocation() : null);
+            return new C2SSpawnEgg(buf.readEnum(InteractionHand.class), buf.readInt(),
+                    buf.readBoolean() ? buf.readResourceLocation() : null, buf.readBoolean() ? buf.readResourceLocation() : null);
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, C2SSpawnEgg pkt) {
             buf.writeEnum(pkt.hand);
             buf.writeInt(pkt.level);
+            buf.writeBoolean(pkt.npcProfession != null);
+            if (pkt.npcProfession != null)
+                buf.writeResourceLocation(pkt.npcProfession);
             buf.writeBoolean(pkt.npcID != null);
             if (pkt.npcID != null)
                 buf.writeResourceLocation(pkt.npcID);
@@ -36,11 +40,12 @@ public class C2SSpawnEgg implements CustomPacketPayload {
 
     private final InteractionHand hand;
     private final int level;
-    private final ResourceLocation npcID;
+    private final ResourceLocation npcProfession, npcID;
 
-    public C2SSpawnEgg(InteractionHand hand, int level, @Nullable ResourceLocation npcID) {
+    public C2SSpawnEgg(InteractionHand hand, int level, @Nullable ResourceLocation npcProfession, @Nullable ResourceLocation npcID) {
         this.hand = hand;
         this.level = level;
+        this.npcProfession = npcProfession;
         this.npcID = npcID;
     }
 
@@ -50,7 +55,8 @@ public class C2SSpawnEgg implements CustomPacketPayload {
             stack.set(RuneCraftoryDataComponentTypes.SPAWN_EGG_LEVEL.get(), Math.max(1, pkt.level));
             if (stack.getItem() instanceof NPCSpawnEgg) {
                 NPCSpawnData data = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
-                stack.set(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), data.withId(pkt.npcID));
+                stack.set(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), data.withId(pkt.npcID)
+                        .withProfession(sender.registryAccess(), pkt.npcProfession));
             }
         }
     }
