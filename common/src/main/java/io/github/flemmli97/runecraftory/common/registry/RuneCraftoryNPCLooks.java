@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.CustomModelFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
@@ -30,6 +31,7 @@ public class RuneCraftoryNPCLooks {
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<HairFeatureType.HairFeature>> HAIR = NPC_FEATURES.register().register("hair_feature", () -> new NPCFeatureType<>(HairFeatureType.TYPE_CODEC, HairFeatureType.CODEC, HairFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<OutfitFeatureType.OutfitFeature>> OUTFIT = NPC_FEATURES.register().register("outfit_feature", () -> new NPCFeatureType<>(OutfitFeatureType.TYPE_CODEC, OutfitFeatureType.CODEC, OutfitFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<SimpleHatFeatureType.SimpleHatFeature>> HAT = NPC_FEATURES.register().register("simple_hat_feature", () -> new NPCFeatureType<>(SimpleHatFeatureType.TYPE_CODEC, SimpleHatFeatureType.CODEC, SimpleHatFeatureType.STREAM_CODEC));
+    public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<CustomModelFeatureType.ModelFeature>> MODEL = NPC_FEATURES.register().register("model_feature", () -> new NPCFeatureType<>(CustomModelFeatureType.TYPE_CODEC, CustomModelFeatureType.CODEC, CustomModelFeatureType.STREAM_CODEC));
 
     private static NPCFeatureType<IndexedColorSettingType.IndexedColorFeature> skin() {
         return IndexedColorSettingType.createSimple(SKIN);

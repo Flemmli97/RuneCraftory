@@ -13,13 +13,14 @@ public class NPCFeatureRenderers {
 
     public static void init() {
         empty(RuneCraftoryNPCLooks.SLIM.get());
-        register(RuneCraftoryNPCLooks.SIZE.get(), new SizeRenderer());
+        empty(RuneCraftoryNPCLooks.SIZE.get());
         empty(RuneCraftoryNPCLooks.SKIN.get());
         empty(RuneCraftoryNPCLooks.FACE.get());
         empty(RuneCraftoryNPCLooks.BLUSH.get());
         empty(RuneCraftoryNPCLooks.HAIR.get());
         empty(RuneCraftoryNPCLooks.OUTFIT.get());
         empty(RuneCraftoryNPCLooks.HAT.get());
+        register(RuneCraftoryNPCLooks.MODEL.get(), new ModelFeatureRender());
     }
 
     public static synchronized <F extends NPCFeature> void empty(NPCFeatureType<F> type) {

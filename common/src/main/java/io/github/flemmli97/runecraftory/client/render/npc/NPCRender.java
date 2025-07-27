@@ -71,6 +71,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
                 this.textureLayers.add(new NPCTextureLayer<>(this, new PlayerModel<>(ctx.bakeLayer(layerType.location), false), new PlayerModel<>(ctx.bakeLayer(layerType.slimLocation), true), layerType));
         }
         this.textureLayers.forEach(this::addLayer);
+        this.addLayer(new NPCFeatureRenderLayer<>(this));
     }
 
     public static boolean isSlim(NPCEntity npc) {
@@ -237,9 +238,6 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
         }
         this.setModelProperties(entity);
         super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
-        for (NPCFeature feature : entity.lookFeatures.view.values()) {
-            NPCFeatureRenderers.get(feature).render(feature, entity, entityYaw, partialTicks, stack, buffer, packedLight);
-        }
     }
 
     private void setModelProperties(NPCEntity npc) {

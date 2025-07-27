@@ -24,6 +24,8 @@ public class NPCFeatureRenderer<T extends NPCFeature> {
     /**
      * Do any other rendering here
      */
-    public void render(T feature, NPCEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    public <E extends NPCEntity> void render(T feature, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
+                                             int packedLight, float partialTicks,
+                                             float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }
