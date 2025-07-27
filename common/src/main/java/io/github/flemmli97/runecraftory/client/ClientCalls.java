@@ -286,8 +286,10 @@ public class ClientCalls {
         }
         if (entity == Minecraft.getInstance().player) {
             ShakeHandler.shakeTick--;
-            if (entity.getVehicle() instanceof BaseMonster && Minecraft.getInstance().player.input.jumping)
+            if (entity.getVehicle() instanceof BaseMonster monster && Minecraft.getInstance().player.input.jumping) {
                 LoaderNetwork.INSTANCE.sendToServer(C2SRideJump.INSTANCE);
+                monster.setDoJumping(true);
+            }
         }
         if (entity == Minecraft.getInstance().cameraEntity) {
             if (ClientCalendarHolder.CLIENT_CALENDAR.currentWeather() == Weather.RUNEY) {

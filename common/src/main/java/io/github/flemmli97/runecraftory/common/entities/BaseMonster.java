@@ -797,6 +797,41 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return super.getRestrictRadius();
     }
 
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getControllingPassenger() instanceof Player || this.playDeath() || this.tamingTick > 0;
+    }
+
+    @Override
+    protected float getWaterSlowDown() {
+        return 0.83F;
+    }
+
+    /**
+     * Makes it so this entity is always server authorative.
+     * Remove to make client riding player be able to control it.
+     * Currently here to see how server authorative mounts play out
+     */
+    @Override
+    public boolean isControlledByLocalInstance() {
+        return this.isEffectiveAi();
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.shouldFreezeTravel()) {
+            this.xxa = 0;
+            this.yya = 0;
+            this.zza = 0;
+            return;
+        }
+        if (this.getControllingPassenger() instanceof Player player) {
+            this.handlePlayerInput(player, this.isNoGravity(), this::handleLandTravel);
+        } else {
+            this.handleLandTravel(vec);
+        }
+    }
+
     public void handleFreeTravel(Vec3 vec) {
         if (this.shouldFreezeTravel()) {
             this.xxa = 0;
@@ -823,31 +858,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.noPhysics = currentNophysics;
     }
 
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getControllingPassenger() instanceof Player || this.playDeath() || this.tamingTick > 0;
-    }
-
-    @Override
-    protected float getWaterSlowDown() {
-        return 0.83F;
-    }
-
-    @Override
-    public void travel(Vec3 vec) {
-        if (this.shouldFreezeTravel()) {
-            this.xxa = 0;
-            this.yya = 0;
-            this.zza = 0;
-            return;
-        }
-        if (this.getControllingPassenger() instanceof Player player) {
-            this.handlePlayerInput(player, this.isNoGravity(), this::handleLandTravel);
-        } else {
-            this.handleLandTravel(vec);
-        }
-    }
-
     public boolean shouldFreezeTravel() {
         return false;
     }
@@ -857,32 +867,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.setMovingFlag(MoveType.NONE);
             this.setSprinting(false);
             cons.accept(Vec3.ZERO);
-            this.calculateEntityAnimation(false);
             return;
         }
         if (!this.isControlledByLocalInstance()) {
             this.setDeltaMovement(Vec3.ZERO);
             this.setDoJumping(false);
-            this.calculateEntityAnimation(false);
             return;
         }
-        if (!this.level().isClientSide) {
-            if (this.adjustRotFromRider(player)) {
-                this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
-                this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
-            }
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.yBodyRot;
+        if (this.adjustRotFromRider(player)) {
+            this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
+            this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
         }
+        this.yBodyRot = this.getYRot();
+        this.yHeadRot = this.yBodyRot;
         // For info: Vanilla speed has a constant 0.98 modifier
         double attrSpeed = !this.onGround() && this.getAttributes().hasAttribute(Attributes.FLYING_SPEED) ? this.getAttributeValue(Attributes.FLYING_SPEED) : this.getAttributeValue(Attributes.MOVEMENT_SPEED);
         float speed = (float) (attrSpeed / 1.3 * this.ridingSpeedModifier());
         float strafing = (player.xxa / 0.98f) * speed * 0.8f;
-        if (player.xxa < 0)
-            strafing *= -1;
         float forward = (player.zza / 0.98f) * speed;
         if (player.zza < 0)
-            forward *= -0.5f;
+            forward *= 0.5f;
         float vertical = 0;
 
         if (hovers && forward > 0) {
@@ -914,10 +918,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
         this.setMovingFlag(type);
         this.setSprinting(type == MoveType.RUN);
-        cons.accept(new Vec3(strafing, vertical, forward));
-
         this.setDoJumping(false);
-        this.calculateEntityAnimation(false);
+        cons.accept(new Vec3(strafing, vertical, forward));
     }
 
     public void handleLandTravel(Vec3 vec) {
@@ -929,6 +931,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public void setDoJumping(boolean jump) {
         this.doJumping = jump;
+    }
+
+    public boolean doJumping() {
+        return this.doJumping;
     }
 
     public boolean adjustRotFromRider(LivingEntity rider) {
@@ -943,10 +949,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public double ridingSpeedModifier() {
         return 1.3;
-    }
-
-    public boolean doJumping() {
-        return this.doJumping;
     }
 
     protected Vec3 directionToLookAt() {
