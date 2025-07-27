@@ -67,15 +67,19 @@ public class HomingEnergyOrbEntity extends BaseDamageCloud implements PowerableM
             this.spawnPos = this.position().add(0, this.getBbHeight() * 0.5, 0);
         if (!this.level().isClientSide) {
             if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
-                this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner(), 10);
+                this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner(), 16);
                 if (this.targetMob != null)
                     this.entityData.set(TARGET_UUID, Optional.of(this.targetMob.getUUID()));
                 else
                     this.entityData.set(TARGET_UUID, Optional.empty());
             } else {
-                Vec3 dir = this.targetMob.position().add(0, this.targetMob.getBbHeight() * 0.5, 0).subtract(this.position());
-                if (dir.lengthSqr() > 0.27 * 0.27)
-                    dir = dir.normalize().scale(0.27);
+                Vec3 root = this.rootPosition(1);
+                Vec3 dirTarget = this.targetMob.position().add(0, this.targetMob.getBbHeight() * 0.5, 0).subtract(root);
+                if (dirTarget.lengthSqr() > 144)
+                    dirTarget = dirTarget.normalize().scale(12);
+                Vec3 dir = root.add(dirTarget).subtract(this.position());
+                if (dir.lengthSqr() > 0.28 * 0.28)
+                    dir = dir.normalize().scale(0.28);
                 this.setDeltaMovement(dir);
                 this.hasImpulse = true;
             }
