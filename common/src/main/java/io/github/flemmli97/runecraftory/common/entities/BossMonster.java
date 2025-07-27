@@ -90,8 +90,8 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
             if (!this.isTamed() && this.isAlive()) {
                 this.updatePlayers();
                 this.updateBossBar();
-                if (this.getTarget() == null && this.bossInfo.getPlayers().isEmpty()) {
-                    if (++this.combatTick > 400) {
+                if (this.getTarget() == null && this.bossInfo.getPlayers().stream().noneMatch(Player::canBeSeenAsEnemy)) {
+                    if (++this.combatTick > 300) {
                         if (++this.noPlayerRegenTick > 40) {
                             this.heal(this.getMaxHealth() * 0.1f);
                             if (this.getHealth() >= this.getMaxHealth())
@@ -99,7 +99,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                             this.noPlayerRegenTick = 0;
                         }
                     }
-                    if (this.combatTick > 600 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
+                    if (this.combatTick > 400 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
                         BlockPos restrict = this.getRestrictCenter();
                         if (this.level().dimension() == this.restrictDimension) {
                             TeleportSpell.safeTeleportTo(this, restrict.getX(), restrict.getY(), restrict.getZ());
@@ -326,7 +326,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
         // If boss killed all players (or every nearby player simply died) heal it back to full
-        if (this.isAlive() && !this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
+        if (this.isAlive() && !this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().stream().noneMatch(Player::canBeSeenAsEnemy)) {
             this.fullHealDelay = 10;
         }
     }
