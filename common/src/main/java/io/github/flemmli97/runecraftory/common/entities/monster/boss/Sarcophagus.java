@@ -93,7 +93,7 @@ public class Sarcophagus extends BossMonster {
                 entity.setDeltaMovement(entity.chargeMotion.x(), entity.getDeltaMovement().y(), entity.chargeMotion.z());
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK).knockAmount(2))) {
+                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK, 2))) {
                         entity.hitEntity.add(e);
                     }
                 });

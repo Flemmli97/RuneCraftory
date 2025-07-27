@@ -168,7 +168,7 @@ public class Ghost extends ChargingMonster {
     public DynamicDamage.Builder damageSourceAttack() {
         DynamicDamage.Builder source = super.damageSourceAttack();
         if (this.getAnimationHandler().isCurrent(CHARGE))
-            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(1);
+            source.knock(DynamicDamage.KnockBackType.BACK, 1);
         return source;
     }
 

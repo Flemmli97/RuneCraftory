@@ -331,12 +331,10 @@ public class Handonetta extends BossMonster {
     public DynamicDamage.Builder damageSourceAttack() {
         DynamicDamage.Builder builder = super.damageSourceAttack();
         if (this.getAnimationHandler().isCurrent(SWIPE)) {
-            builder.knock(DynamicDamage.KnockBackType.BACK);
-            builder.knockAmount(1.2f);
+            builder.knock(DynamicDamage.KnockBackType.BACK, 1.2f);
         }
         if (this.getAnimationHandler().isCurrent(FLICK)) {
-            builder.knock(DynamicDamage.KnockBackType.UP);
-            builder.knockAmount(0.9f);
+            builder.knock(DynamicDamage.KnockBackType.UP, 0.9f);
         }
         return builder;
     }

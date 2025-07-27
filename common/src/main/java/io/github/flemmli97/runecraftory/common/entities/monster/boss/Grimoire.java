@@ -104,7 +104,7 @@ public class Grimoire extends BossMonster {
                 entity.setDeltaMovement(entity.moveDirection);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK).knockAmount(2))) {
+                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK, 2))) {
                         entity.hitEntity.add(e);
                     }
                 });

@@ -47,7 +47,7 @@ public class ItemShortSwordBase extends SwordItem implements ExtendedWeapon {
         Collection<LivingEntity> list = CombatUtils.EntityAttack.aabbTargets(new AABB(-width * 0.5, 0, 0, width * 0.5, entity.getBbHeight() + 0.2, range), false)
                 .apply(entity, null);
         if (!list.isEmpty()) {
-            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack)).knock(DynamicDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20);
+            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack)).knock(DynamicDamage.KnockBackType.UP, 0.7f).hurtResistant(20);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.4;
             for (LivingEntity e : list) {

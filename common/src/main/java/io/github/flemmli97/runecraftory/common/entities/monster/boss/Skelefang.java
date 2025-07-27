@@ -179,7 +179,7 @@ public class Skelefang extends BossMonster {
             }
             entity.mobAttack(anim, null, e -> {
                 if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                        new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP).withChangedAttribute(RuneCraftoryAttributes.STUN.asHolder(), 70))) {
+                        new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP, 0.7f).withChangedAttribute(RuneCraftoryAttributes.STUN.asHolder(), 70))) {
                     entity.hitEntity.add(e);
                 }
             });

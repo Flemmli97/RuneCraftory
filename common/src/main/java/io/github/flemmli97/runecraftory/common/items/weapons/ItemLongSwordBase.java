@@ -47,7 +47,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
         Collection<LivingEntity> list = CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 60, entity.getYRot() + 60, (float) range)
                 .apply(entity, null);
         if (!list.isEmpty()) {
-            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack)).knock(DynamicDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
+            Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack)).knock(DynamicDamage.KnockBackType.UP, 1f).hurtResistant(10);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.2;
             for (LivingEntity e : list) {

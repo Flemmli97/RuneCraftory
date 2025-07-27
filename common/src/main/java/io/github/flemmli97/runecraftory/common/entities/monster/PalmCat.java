@@ -104,7 +104,7 @@ public class PalmCat extends LeapingMonster {
     public boolean doHurtTarget(Entity entity) {
         DynamicDamage.Builder source = new DynamicDamage.Builder(this).noKnockback().hurtResistant(1);
         if (this.getAnimationHandler().isCurrent(LEAP))
-            source.knock(DynamicDamage.KnockBackType.UP).knockAmount(1);
+            source.knock(DynamicDamage.KnockBackType.UP, 1);
         boolean hurt = CombatUtils.mobAttack(this, entity, source);
         if (hurt)
             this.hitAny = true;

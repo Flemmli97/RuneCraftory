@@ -89,7 +89,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
         }
         if (!list.isEmpty()) {
             Supplier<DynamicDamage.Builder> base = () -> new DynamicDamage.Builder(entity).element(ItemComponentUtils.getElement(stack))
-                    .knock(DynamicDamage.KnockBackType.UP).knockAmount(knockback).hurtResistant(5);
+                    .knock(DynamicDamage.KnockBackType.UP, knockback).hurtResistant(5);
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.1;
             for (Entity e : list) {

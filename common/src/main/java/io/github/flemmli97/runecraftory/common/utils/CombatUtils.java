@@ -316,8 +316,8 @@ public class CombatUtils {
                     damageCategory = DynamicDamage.DamageCategory.FIXED;
                     damage = 1;
                 }
-                DynamicDamage.Builder source = new DynamicDamage.Builder(player).element(ItemComponentUtils.getElement(stack)).damageType(damageCategory)
-                        .knock(DynamicDamage.KnockBackType.VANILLA).hurtResistant(0);
+                DynamicDamage.Builder source = new DynamicDamage.Builder(player).element(ItemComponentUtils.getElement(stack))
+                        .damageType(damageCategory).hurtResistant(0);
                 DynamicDamage tempBuild = source.get(player.registryAccess());
 
                 double enchantBonus = EnchantmentHelper.modifyDamage(serverLevel, stack, player, tempBuild, damage) - damage;
@@ -530,7 +530,7 @@ public class CombatUtils {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
         }
         if (stunAmount > 0.1 && attackingEntity.level().random.nextDouble() < stunAmount) {
-            target.addEffect(new MobEffectInstance(RuneCraftoryEffects.STUNNED.asHolder(), Mth.floor(Math.min(1, stunAmount) * 50), 0, true, false));
+            target.addEffect(new MobEffectInstance(RuneCraftoryEffects.STUNNED.asHolder(), Mth.floor(Math.min(1, stunAmount) * 60), 0, true, false));
         }
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(RuneCraftoryEffects.SLEEP.asHolder(), 80, 0, true, false));

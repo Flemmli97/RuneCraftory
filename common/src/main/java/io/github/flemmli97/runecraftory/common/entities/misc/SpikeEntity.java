@@ -157,7 +157,7 @@ public class SpikeEntity extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).element(ItemElement.EARTH).knock(DynamicDamage.KnockBackType.UP).knockAmount(0.6f).magic().hurtResistant(0);
+        DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).element(ItemElement.EARTH).knock(DynamicDamage.KnockBackType.UP, 0.5f).magic().hurtResistant(0);
         return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null);
     }
 

@@ -146,8 +146,9 @@ public class DynamicDamage extends DamageSource {
             return this;
         }
 
-        public Builder knock(KnockBackType k) {
+        public Builder knock(KnockBackType k, float amount) {
             this.knock = k;
+            this.knockAmount = amount;
             return this;
         }
 
@@ -158,6 +159,7 @@ public class DynamicDamage extends DamageSource {
 
         public Builder noKnockback() {
             this.knock = KnockBackType.NONE;
+            this.knockAmount = 0;
             return this;
         }
 

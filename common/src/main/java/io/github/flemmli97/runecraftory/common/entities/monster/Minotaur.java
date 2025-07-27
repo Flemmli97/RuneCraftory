@@ -116,7 +116,7 @@ public class Minotaur extends ChargingMonster {
     public DynamicDamage.Builder damageSourceAttack() {
         DynamicDamage.Builder source = super.damageSourceAttack();
         if (this.getAnimationHandler().isCurrent(CHARGE))
-            source.knock(DynamicDamage.KnockBackType.BACK).knockAmount(2);
+            source.knock(DynamicDamage.KnockBackType.BACK, 2);
         else if (this.getAnimationHandler().isCurrent(SWING))
             source.withChangedAttribute(RuneCraftoryAttributes.STUN.asHolder(), 30);
         return source;

@@ -96,7 +96,7 @@ public class Chimera extends BossMonster {
                 entity.setDeltaMovement(entity.chargeMotion.x, entity.getDeltaMovement().y, entity.chargeMotion.z);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP))) {
+                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP, 0.4f))) {
                         entity.chargeAttackSuccess = true;
                         entity.hitEntity.add(e);
                     }
@@ -111,7 +111,7 @@ public class Chimera extends BossMonster {
         b.put(BITE, (anim, entity) -> {
             if (anim.isAt("attack_1")) {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e,
-                        new DynamicDamage.Builder(entity).hurtResistant(5).knockAmount(0)));
+                        new DynamicDamage.Builder(entity).hurtResistant(5).noKnockback()));
             } else if (anim.isAt("attack_2")) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
