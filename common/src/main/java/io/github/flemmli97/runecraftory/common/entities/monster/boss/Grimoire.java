@@ -65,7 +65,7 @@ public class Grimoire extends BossMonster {
     public static final String WIND_BREATH = BUILDER.add("wind_breath", AnimationsBuilder.definition(1.36).marker("attack", 0.44));
     public static final String TORNADO = BUILDER.add("tornado", AnimationsBuilder.definition(1.24).marker("attack", 0.4));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.44).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.44));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
