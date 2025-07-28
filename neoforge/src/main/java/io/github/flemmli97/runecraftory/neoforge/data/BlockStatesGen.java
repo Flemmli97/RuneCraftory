@@ -160,10 +160,11 @@ public class BlockStatesGen extends BlockStateProvider {
         this.craftingModel(RuneCraftoryBlocks.ACCESSORY_WORKBENCH);
         this.craftingModel(RuneCraftoryBlocks.COOKING_TABLE);
         this.craftingModel(RuneCraftoryBlocks.CHEMISTRY_SET);
-        //this.simpleBlock(ModBlocks.board.get());
         this.simpleBlock(RuneCraftoryBlocks.BOSS_SPAWNER.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPAWNER).getPath())));
         this.simpleBlock(RuneCraftoryBlocks.SINGLE_SPAWN_BLOCK.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPAWNER).getPath())));
         this.simpleBlock(RuneCraftoryBlocks.MONSTER_BARN.get(), this.models().getExistingFile(RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/" + RuneCraftoryBlocks.MONSTER_BARN.getID().getPath())));
+        this.simpleBlock(RuneCraftoryBlocks.HOT_SPRING_WATER.get(),
+                this.models().getExistingFile(this.blockTexture(Blocks.WATER)));
 
         this.getVariantBuilder(RuneCraftoryBlocks.SHIPPING.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().orientableVertical(RuneCraftoryBlocks.SHIPPING.getID().getPath(), this.modLoc(ModelProvider.BLOCK_FOLDER + "/shipping_bin"), this.modLoc(ModelProvider.BLOCK_FOLDER + "/shipping_bin_top")))
