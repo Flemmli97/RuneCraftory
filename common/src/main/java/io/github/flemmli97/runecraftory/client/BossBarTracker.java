@@ -37,6 +37,10 @@ public class BossBarTracker {
     }
 
     public static void tickSounds() {
+        // Not in world anymore
+        if (Minecraft.getInstance().level == null) {
+            ACTIVE_BOSS_BGM.clear();
+        }
         tick++;
         ACTIVE_BOSS_BGM.values().removeIf(inst -> {
             if (inst.isStopped()) {
