@@ -71,10 +71,8 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
 
     @Nullable
     public CropProperties get(Item item) {
-        if (GeneralConfig.disableCropSystem)
-            return null;
-        this.resolveTags(false);
-        return this.crops.get(item).value();
+        ReloadableHolder<CropProperties> value = this.getWithId(item);
+        return value != null ? value.value() : null;
     }
 
     @Nullable

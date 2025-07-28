@@ -74,11 +74,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener implements
     }
 
     public Optional<ItemStat> get(Item item) {
-        if (GeneralConfig.disableItemStatSystem)
-            return Optional.empty();
-        this.resolveTags(false);
-        ReloadableHolder<ItemStat> stats = this.itemstats.get(item);
-        return Optional.ofNullable(stats != null ? stats.value() : null);
+        return this.getWithId(item).map(ReloadableHolder::value);
     }
 
     public Optional<ReloadableHolder<ItemStat>> getWithId(Item item) {

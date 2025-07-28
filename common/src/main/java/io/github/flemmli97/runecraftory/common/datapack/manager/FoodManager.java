@@ -71,10 +71,8 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
 
     @Nullable
     public FoodProperties get(Item item) {
-        if (GeneralConfig.disableFoodSystem)
-            return null;
-        this.resolveTags(false);
-        return this.food.get(item).value();
+        ReloadableHolder<FoodProperties> value = this.getWithId(item);
+        return value != null ? value.value() : null;
     }
 
     @Nullable
