@@ -90,8 +90,9 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
             if (!this.isTamed() && this.isAlive()) {
                 this.updatePlayers();
                 this.updateBossBar();
-                if (this.getTarget() == null && this.bossInfo.getPlayers().stream().noneMatch(Player::canBeSeenAsEnemy)) {
-                    if (++this.combatTick > 300) {
+                if ((this.getTarget() == null || !this.getTarget().isAlive())
+                        && this.bossInfo.getPlayers().stream().noneMatch(Player::canBeSeenAsEnemy)) {
+                    if (++this.combatTick > 200) {
                         if (++this.noPlayerRegenTick > 40) {
                             this.heal(this.getMaxHealth() * 0.1f);
                             if (this.getHealth() >= this.getMaxHealth())
@@ -99,7 +100,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                             this.noPlayerRegenTick = 0;
                         }
                     }
-                    if (this.combatTick > 400 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
+                    if (this.combatTick > 300 && this.hasRestriction() && !this.isWithinRestriction() && this.restrictDimension != null) {
                         BlockPos restrict = this.getRestrictCenter();
                         if (this.level().dimension() == this.restrictDimension) {
                             TeleportSpell.safeTeleportTo(this, restrict.getX(), restrict.getY(), restrict.getZ());
