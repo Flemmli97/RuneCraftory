@@ -36,7 +36,7 @@ import java.util.Optional;
  */
 public class ShopItemsManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("shop_items");
+    public static final ResourceLocation ID = RuneCraftory.modRes("shop_item");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<NPCProfession, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();

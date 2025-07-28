@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class StructureBossManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("runecraftory_bosses");
+    public static final ResourceLocation ID = RuneCraftory.modRes("boss_spawn");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<ResourceLocation, BossSpawnList> spawnList = new HashMap<>();

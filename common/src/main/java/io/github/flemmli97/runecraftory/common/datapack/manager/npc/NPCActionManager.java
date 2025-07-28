@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class NPCActionManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("npc_actions");
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_action");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<ResourceLocation, ReloadableHolder<NPCAttackActions>> data = ImmutableMap.of();

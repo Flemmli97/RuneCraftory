@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class NPCConversationManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("conversations");
+    public static final ResourceLocation ID = RuneCraftory.modRes("conversation");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<ResourceLocation, ConversationSet> data = ImmutableMap.of();

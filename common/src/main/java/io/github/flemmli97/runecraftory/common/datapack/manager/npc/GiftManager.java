@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class GiftManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("npc_gifts");
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_gift");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<ResourceLocation, ReloadableHolder<GiftData>> gifts;

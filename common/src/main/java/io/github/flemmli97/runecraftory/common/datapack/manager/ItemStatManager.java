@@ -38,7 +38,7 @@ import java.util.function.Predicate;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, ReloadableHolder<ItemStat>>> {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("item_stats");
+    public static final ResourceLocation ID = RuneCraftory.modRes("item_property");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private static final StreamCodec<RegistryFriendlyByteBuf, ReloadableHolder<ItemStat>> HOLDER_CODEC = ReloadableHolder.streamCodec(ItemStat.STREAM_CODEC);

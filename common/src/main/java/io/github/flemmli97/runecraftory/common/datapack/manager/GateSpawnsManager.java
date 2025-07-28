@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 
 public class GateSpawnsManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("gate_spawning");
+    public static final ResourceLocation ID = RuneCraftory.modRes("gate_spawn");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<TagKey<Biome>, List<SpawnResource>> biomeSpawns = new HashMap<>();

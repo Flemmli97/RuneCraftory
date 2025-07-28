@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 
 public class SpellPropertiesManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("spells");
+    public static final ResourceLocation ID = RuneCraftory.modRes("spell");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<Spell, SpellProperties> propertiesMap = new HashMap<>();

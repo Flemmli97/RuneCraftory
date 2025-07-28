@@ -34,7 +34,7 @@ import java.util.Optional;
 
 public class FoodManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, ReloadableHolder<FoodProperties>>> {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("food_stats");
+    public static final ResourceLocation ID = RuneCraftory.modRes("food_property");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private static final StreamCodec<RegistryFriendlyByteBuf, ReloadableHolder<FoodProperties>> HOLDER_CODEC = ReloadableHolder.streamCodec(FoodProperties.STREAM_CODEC);

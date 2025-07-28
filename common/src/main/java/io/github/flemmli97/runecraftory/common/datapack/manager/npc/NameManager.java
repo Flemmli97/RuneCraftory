@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class NameManager extends SimpleJsonResourceReloadListener implements ListenerExtension {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("names");
+    public static final ResourceLocation ID = RuneCraftory.modRes("npc_names");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private Map<String, List<String>> surnames;

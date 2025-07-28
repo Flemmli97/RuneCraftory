@@ -34,7 +34,7 @@ import java.util.Optional;
 
 public class CropManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, ReloadableHolder<CropProperties>>> {
 
-    public static final ResourceLocation ID = RuneCraftory.modRes("crop_properties");
+    public static final ResourceLocation ID = RuneCraftory.modRes("crop_property");
     public static final String DIRECTORY = String.format("%s/%s", ID.getNamespace(), ID.getPath());
 
     private static final StreamCodec<RegistryFriendlyByteBuf, ReloadableHolder<CropProperties>> HOLDER_CODEC = ReloadableHolder.streamCodec(CropProperties.STREAM_CODEC);
