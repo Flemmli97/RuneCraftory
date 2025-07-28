@@ -49,7 +49,7 @@ public class RaccoonModel<T extends Raccoon> extends RaccoonBaseModel<T> {
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.isMoving()) {
-                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.WALK, partialTicks));
+                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 this.anim.get().doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
             }
         }

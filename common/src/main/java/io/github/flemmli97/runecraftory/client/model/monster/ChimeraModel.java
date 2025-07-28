@@ -52,7 +52,7 @@ public class ChimeraModel<T extends Chimera> extends EntityModel<T> implements E
             this.upperBody.xRot += headPitch * Mth.DEG_TO_RAD;
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.isMoving()) {
-                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.WALK, partialTicks));
+                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 this.anim.get().doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
             }
         }
