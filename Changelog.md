@@ -1,3 +1,28 @@
+RuneCraftory 2.0.1-beta
+================
+- Update boss out of combat healing
+  - Players in creative now ignored
+  - Time till healing reduced
+- Flying mobs now slowly glide down if too high so they dont fly away too much
+- Skelefang energy orb now has a range limit
+- Stop vanilla music when boss music starts
+- Make some entities (projectiles mostly) immune to explosions
+- Add model feature to npc looks allowing attaching arbitrary models to npcs
+- Update npc spawnegg ui
+- Add hotspring lakes to mountains
+- Better target entity sync between goal and brain target
+- Update quest api so quests should work again
+- Fix skelefang attack boxes for some attacks
+- Fix monster riding not working correctly
+- Wrap various datapack elements in a holder like structure
+  - Fixes missing ids when reloading datapacks
+- Replace water in bathhouse with hotspring water
+- Spell damage now modifiable with spell properties aka datapack
+- Fix mixin crash on fabric
+- Fix grimoire angry animation being infinite
+- Fix boss music dangling when not in world anymore
+- Fix move ticks not clamped so it took longer than intended for move animation to stop
+
 RuneCraftory 2.0.0-beta
 ================
 - Update to 1.21.1
