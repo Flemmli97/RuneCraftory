@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#runecraftory:has_hot_springs",
+  "features": "runecraftory:hot_spring_lake",
+  "step": "lakes"
+}

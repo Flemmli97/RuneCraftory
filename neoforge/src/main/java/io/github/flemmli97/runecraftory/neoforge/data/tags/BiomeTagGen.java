@@ -51,6 +51,9 @@ public class BiomeTagGen extends TagsProvider<Biome> {
             });
         });
 
+        this.tag(RunecraftoryTags.Biomes.HAS_HOT_SPRINGS)
+                .addTag(RunecraftoryTags.Biomes.IS_MOUNTAIN_PEAK);
+
         this.tag(RunecraftoryTags.Biomes.FOREST_GROVE).addTag(BiomeTags.IS_FOREST);
         this.tag(RunecraftoryTags.Biomes.WATER_RUINS).addTag(BiomeTags.IS_OCEAN);
         this.tag(RunecraftoryTags.Biomes.THEATER_RUINS).addTag(RunecraftoryTags.Biomes.IS_SPOOKY);

@@ -276,6 +276,7 @@ public class RunecraftoryTags {
 
         public static final TagKey<Biome> COMMON_GROUND_BLACKLIST = biome("common_ground_blacklist");
         public static final TagKey<Biome> GENERAL_HERBS = biome("general_herbs");
+        public static final TagKey<Biome> HAS_HOT_SPRINGS = biome("has_hot_springs");
 
         // Structure gen tags
         public static final TagKey<Biome> FOREST_GROVE = biome("forest_grove");

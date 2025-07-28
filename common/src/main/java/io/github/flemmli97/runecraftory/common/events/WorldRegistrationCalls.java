@@ -28,10 +28,12 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -84,6 +86,7 @@ public class WorldRegistrationCalls {
      *
      * @param placedFeatureHandler Placed features should use this in order to add the feature to biomes on respective loaders
      */
+    @SuppressWarnings("deprecation")
     public static void createFeatures(@Nullable FeatureRegister register,
                                       Consumer<FeatureBiomeModifier> placedFeatureHandler) {
         ResourceLocation herbs = RuneCraftoryFeatures.CONFIGRED_HERB_FEATURE.location();
@@ -126,8 +129,22 @@ public class WorldRegistrationCalls {
         placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_EMERALD, 66, 1, 3));
         placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_SAPPHIRE, 66, 2, 3));
         placedFeatures.forEach(placedFeatureHandler);
+
+        if (register != null) {
+            register.registerConfigured(RuneCraftoryFeatures.HOT_SPRING_LAKE.location(), p -> new ConfiguredFeature<>(Feature.LAKE,
+                    new LakeFeature.Configuration(BlockStateProvider.simple(RuneCraftoryBlocks.HOT_SPRING_WATER.get()),
+                            BlockStateProvider.simple(Blocks.STONE))));
+            register.registerPlaced(RuneCraftoryFeatures.HOT_SPRING_LAKE.location(),
+                    (provider, feat) -> new PlacedFeature(feat, List.of(
+                            RarityFilter.onAverageOnceEvery(4),
+                            InSquarePlacement.spread(),
+                            PlacementUtils.HEIGHTMAP_WORLD_SURFACE
+                    )));
+        }
+        placedFeatureHandler.accept(new FeatureBiomeModifier(RunecraftoryTags.Biomes.HAS_HOT_SPRINGS, GenerationStep.Decoration.LAKES, RuneCraftoryFeatures.HOT_SPRING_LAKE.location()));
     }
 
+    @SuppressWarnings("deprecation")
     private static List<FeatureBiomeModifier> registerMineralFeatures(@Nullable FeatureRegister register, RegistryEntrySupplier<Block, ? extends MineralBlock> block,
                                                                       int chance, int min, int max) {
         ResourceLocation id = RuneCraftory.modRes("mineral_" + block.getID().getPath().replace("ore_", ""));

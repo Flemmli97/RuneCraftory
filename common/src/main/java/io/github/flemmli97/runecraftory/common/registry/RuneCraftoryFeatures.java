@@ -52,6 +52,8 @@ public class RuneCraftoryFeatures {
     public static ResourceKey<ConfiguredFeature<?, ?>> GRAPE_2 = ResourceKey.create(Registries.CONFIGURED_FEATURE, RuneCraftory.modRes("grape_stage_2"));
     public static ResourceKey<ConfiguredFeature<?, ?>> GRAPE_3 = ResourceKey.create(Registries.CONFIGURED_FEATURE, RuneCraftory.modRes("grape_stage_3"));
 
+    public static ResourceKey<ConfiguredFeature<?, ?>> HOT_SPRING_LAKE = ResourceKey.create(Registries.CONFIGURED_FEATURE, RuneCraftory.modRes("hot_spring_lake"));
+
     @SuppressWarnings("rawtypes")
     private static TrunkPlacerType<?> createTrunkPlacerType(MapCodec<? extends TrunkPlacer> codec) {
         try {
