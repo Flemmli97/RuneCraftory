@@ -171,7 +171,7 @@ public class RuneCraftoryNeoForge {
 
     public void addReloadListener(AddReloadListenerEvent event) {
         DataPackHandler.addListeners(ext -> {
-            ext.insertRegistryAccess(event.getRegistryAccess());
+            ext.insertRegistryAccess(event.getServerResources().getRegistryLookup());
             event.addListener(ext);
         });
     }
