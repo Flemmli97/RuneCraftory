@@ -20,13 +20,13 @@ public class MoveStateTracker {
         MoveType current = this.currentState.get();
         for (int i = 0; i < this.states.length; i++) {
             if (i == current.ordinal()) {
-                this.states[i] = ++this.states[i];
+                this.states[i] = Math.min(this.transitionTime, ++this.states[i]);
             } else {
                 this.states[i] = Math.max(-1, --this.states[i]);
             }
         }
         if (current != MoveType.NONE) {
-            ++this.genericMoveTick;
+            this.genericMoveTick = Math.min(this.transitionTime, ++this.genericMoveTick);
         } else {
             this.genericMoveTick = Math.max(-1, --this.genericMoveTick);
         }
