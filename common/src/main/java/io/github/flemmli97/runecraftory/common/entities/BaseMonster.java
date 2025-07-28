@@ -183,13 +183,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
-            if (this.getControllingPassenger() instanceof Player)
+            if (this.hasPassenger(e) || !this.canAttack(e))
                 return false;
             if (this.isTamed()) {
                 return e instanceof Enemy && EntityUtils.canAttackOwned(e, false, true, this.targetPred);
             }
-            if (e instanceof Player)
-                return e.canBeSeenAsEnemy();
             if (e instanceof Mob mob && this == mob.getTarget())
                 return true;
             return EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, false, entity -> entity instanceof Player ? entity.canBeSeenAsEnemy() : this.targetPred.test(entity));
@@ -198,7 +196,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     };
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
-            if (this.hasPassenger(e) || !e.canBeSeenAsEnemy())
+            if (this.hasPassenger(e) || !this.canAttack(e))
                 return false;
             if (e instanceof Mob && this == ((Mob) e).getTarget())
                 return true;
@@ -996,6 +994,22 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public LivingEntity getTarget() {
         LivingEntity brainTarget = BrainUtils.getTargetOfEntity(this);
         return brainTarget != null ? brainTarget : super.getTarget();
+    }
+
+    public LivingEntity getGoalTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        // In case setTarget is called without BrainUtils
+        // Sync to memory
+        if (this.getGoalTarget() == null) {
+            BrainUtils.clearMemory(this, MemoryModuleType.ATTACK_TARGET);
+        } else {
+            BrainUtils.setMemory(this, MemoryModuleType.ATTACK_TARGET, this.getGoalTarget());
+        }
     }
 
     public boolean attackOtherTamedMobs() {
