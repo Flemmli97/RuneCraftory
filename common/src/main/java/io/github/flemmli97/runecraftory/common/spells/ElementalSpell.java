@@ -23,22 +23,22 @@ public class ElementalSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        ElementalTrailEntity flame = new ElementalTrailEntity(level, entity, this.element);
-        flame.knockback();
-        flame.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        ElementalTrailEntity trail = new ElementalTrailEntity(level, entity, this.element);
+        trail.knockback();
+        trail.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         if (this.element == ItemElement.DARK) {
-            Vec3 target = ProjectileUtils.getAimTarget(entity, flame.position());
+            Vec3 target = ProjectileUtils.getAimTarget(entity, trail.position());
             if (target != null)
-                flame.shootAtEntity(target, 0.05f, 0);
+                trail.shootAtEntity(target, 0.05f, 0);
             else
-                flame.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 0.05f, 0);
+                trail.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 0.05f, 0);
         } else {
             Vec3 eye = entity.getEyePosition();
             Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().getEyePosition().subtract(eye).normalize().scale(1.4)
                     : entity.getLookAngle().scale(1.4);
-            flame.setPos(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
+            trail.setPos(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
         }
-        level.addFreshEntity(flame);
+        level.addFreshEntity(trail);
         return true;
     }
 }

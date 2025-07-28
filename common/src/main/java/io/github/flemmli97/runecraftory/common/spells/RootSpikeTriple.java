@@ -14,7 +14,7 @@ public class RootSpikeTriple extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         RootSpikeSummoner summoner = new RootSpikeSummoner(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(summoner);
         return true;
     }

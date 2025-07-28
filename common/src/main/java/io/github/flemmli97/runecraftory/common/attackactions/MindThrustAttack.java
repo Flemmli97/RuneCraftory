@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -34,7 +35,7 @@ public class MindThrustAttack extends AttackAction {
                         .withBonusAttributes(RuneCraftoryAttributes.PARALYSIS.asHolder(), 40)
                         .withBonusAttributes(RuneCraftoryAttributes.POISON.asHolder(), 10)
                         .withBonusAttributes(RuneCraftoryAttributes.SEAL.asHolder(), 25)
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.MIND_THRUST))
                         .executeAttack();
         }
     }

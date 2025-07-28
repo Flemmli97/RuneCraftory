@@ -19,7 +19,7 @@ public class LightBarrierSpell extends Spell {
             return false;
         List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof LightBallEntity light && light.getOwner() == entity);
         lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-        LightBallEntity.createFrontLights(level, entity, CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        LightBallEntity.createFrontLights(level, entity, CombatUtils.getAbilityDamageBonus(lvl, this));
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }

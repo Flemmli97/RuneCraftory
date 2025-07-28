@@ -23,7 +23,7 @@ public class StatusBallSpell extends Spell {
             return false;
         StatusBallEntity ball = new StatusBallEntity(level, entity);
         ball.setType(this.type);
-        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ball.setPos(entity.getX(), entity.getY() + 0.4, entity.getZ());
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target != null) {

@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -29,7 +30,7 @@ public class UpperCutAttack extends AttackAction {
                 AABB aabb = new AABB(-1, -0.02, 0, 1, entity.getBbHeight() + 1, entity.getBbWidth() + 2);
                 OrientedBoundingBox obb = new OrientedBoundingBox(aabb, entity.getYRot(), 0, entity.position());
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(obb))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.UPPER_CUT))
                         .doOnSuccess(e -> e.setDeltaMovement(e.getDeltaMovement().add(0, 0.8, 0)))
                         .executeAttack();
             }

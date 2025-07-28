@@ -21,16 +21,11 @@ public class ExplosionSpell extends Spell {
     }
 
     @Override
-    public int coolDown() {
-        return 25;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ExplosionSpellEntity spell = new ExplosionSpellEntity(level, entity);
-        spell.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
+        spell.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, spell, 1.3f, 0);
         level.addFreshEntity(spell);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

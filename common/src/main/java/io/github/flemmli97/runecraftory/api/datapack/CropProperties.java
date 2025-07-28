@@ -28,7 +28,6 @@ public class CropProperties {
             instance.group(Codec.INT.fieldOf("growth").forGetter(CropProperties::growth),
                     Codec.INT.fieldOf("max_drops").forGetter(CropProperties::maxDrops),
                     Codec.BOOL.fieldOf("regrowable").forGetter(CropProperties::regrowable),
-
                     BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("giant_crop").forGetter(CropProperties::getGiantVersion),
                     CodecUtils.stringEnumCodec(Season.class, Season.SPRING).listOf().fieldOf("best_season").forGetter(d -> List.copyOf(d.bestSeasons)),
                     CodecUtils.stringEnumCodec(Season.class, Season.SPRING).listOf().fieldOf("bad_season").forGetter(d -> List.copyOf(d.badSeasons))

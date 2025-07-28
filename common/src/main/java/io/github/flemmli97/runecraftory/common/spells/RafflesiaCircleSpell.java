@@ -16,7 +16,7 @@ public class RafflesiaCircleSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         RafflesiaCircleSummoner summoner = new RafflesiaCircleSummoner(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 position = entity.position().add(0, Math.min(0.4, entity.getBbHeight() * 0.4), 0);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {

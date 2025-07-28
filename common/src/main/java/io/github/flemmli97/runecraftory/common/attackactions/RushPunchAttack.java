@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -26,14 +27,14 @@ public class RushPunchAttack extends AttackAction {
         if (anim.isAt("attack")) {
             if (!entity.level().isClientSide) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 0, false))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, 1.1f)).executeAttack();
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.RUSH_PUNCH)).executeAttack();
             }
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
         }
         if (anim.isAt("attack_crit")) {
             if (!entity.level().isClientSide) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 0, false))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, 1.1f))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.RUSH_PUNCH))
                         .withBonusAttributes(RuneCraftoryAttributes.CRITICAL.asHolder(), 100d).executeAttack();
             }
             entity.playSound(SoundEvents.PLAYER_ATTACK_CRIT, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);

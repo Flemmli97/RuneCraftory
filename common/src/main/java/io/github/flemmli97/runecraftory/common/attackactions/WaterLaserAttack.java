@@ -69,7 +69,7 @@ public class WaterLaserAttack extends AttackAction {
                 Spell spell = handler.get(DataKey.USED_SPELL);
                 ItemStack stack = handler.get(DataKey.USED_WEAPON);
                 if (stack.getItem() instanceof ItemSpell)
-                    player.getCooldowns().addCooldown(stack.getItem(), spell.coolDown());
+                    player.getCooldowns().addCooldown(stack.getItem(), spell.properties().cooldown());
             }
             return this;
         }

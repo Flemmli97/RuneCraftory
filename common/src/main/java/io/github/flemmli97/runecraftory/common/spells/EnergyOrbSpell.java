@@ -15,16 +15,11 @@ public class EnergyOrbSpell extends Spell {
     }
 
     @Override
-    public int coolDown() {
-        return 20;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         HomingEnergyOrbEntity orb = new HomingEnergyOrbEntity(level, entity);
-        orb.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        orb.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(orb);
         return true;
     }

@@ -1,6 +1,7 @@
 {
+  "base_damage_multiplier": 1.0,
   "cooldown": 3,
-  "percentage": 0.0,
-  "rp_cost": 4,
+  "percentage_cost": 0.0,
+  "runepoints_cost": 4,
   "skill_xp": {}
 }

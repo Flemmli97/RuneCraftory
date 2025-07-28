@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -32,7 +33,7 @@ public class ReaperSlashAttack extends AttackAction {
                     handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 170, 0);
             if (attack != null) {
                 handler.addHitEntityTracker(attack
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.REAPER_SLASH))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .executeAttack());
             }

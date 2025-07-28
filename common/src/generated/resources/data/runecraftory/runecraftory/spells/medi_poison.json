@@ -1,7 +1,8 @@
 {
+  "base_damage_multiplier": 1.0,
   "cooldown": 20,
-  "percentage": 0.1,
-  "rp_cost": 0,
+  "percentage_cost": 0.1,
+  "runepoints_cost": 0,
   "skill_xp": {
     "LOVE": 10.0
   },

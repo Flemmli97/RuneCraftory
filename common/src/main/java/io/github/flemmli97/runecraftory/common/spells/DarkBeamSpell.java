@@ -16,7 +16,7 @@ public class DarkBeamSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         DarkBeamEntity beam = new DarkBeamEntity(level, entity);
-        beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, beam, 0);
         level.addFreshEntity(beam);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_DARK.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

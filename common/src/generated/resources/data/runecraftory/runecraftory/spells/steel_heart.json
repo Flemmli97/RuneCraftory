@@ -1,7 +1,8 @@
 {
+  "base_damage_multiplier": 1.0,
   "cooldown": 5,
-  "percentage": 0.15,
-  "rp_cost": 10,
+  "percentage_cost": 0.15,
+  "runepoints_cost": 10,
   "skill_xp": {
     "LONGSWORD": 11.0
   },

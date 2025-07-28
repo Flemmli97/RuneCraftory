@@ -25,7 +25,7 @@ public class PrismSpell extends Spell {
             return false;
         List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof LightBallEntity light && light.getOwner() == entity);
         lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-        LightBallEntity.createLights(level, entity, this.longDuration ? LightBallEntity.Type.PIERCING_LONG : LightBallEntity.Type.PIERCING_SHORT, CombatUtils.getAbilityDamageBonus(lvl, 0.8f), 4);
+        LightBallEntity.createLights(level, entity, this.longDuration ? LightBallEntity.Type.PIERCING_LONG : LightBallEntity.Type.PIERCING_SHORT, CombatUtils.getAbilityDamageBonus(lvl, this), 4);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }

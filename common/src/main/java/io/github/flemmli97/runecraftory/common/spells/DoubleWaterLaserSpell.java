@@ -44,7 +44,7 @@ public class DoubleWaterLaserSpell extends Spell {
             else laser.setTwinId(other);
             laser.setRange(this.range);
             laser.setMaxTicks(entity instanceof Player ? Mth.ceil(PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.WATER_LASER_TWO).length()) : 15);
-            laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
+            laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             Vec3 target = laser.position().add(dir);
             laser.setRotationTo(target.x(), target.y(), target.z(), 0);
             level.addFreshEntity(laser);

@@ -1,7 +1,8 @@
 {
+  "base_damage_multiplier": 0.9,
   "cooldown": 30,
-  "percentage": 0.05,
-  "rp_cost": 50,
+  "percentage_cost": 0.05,
+  "runepoints_cost": 50,
   "skill_xp": {
     "EARTH": 6.0
   },

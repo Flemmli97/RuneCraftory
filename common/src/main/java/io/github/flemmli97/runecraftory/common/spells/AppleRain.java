@@ -33,10 +33,10 @@ public class AppleRain extends Spell {
         for (int i = 0; i < apples; i++) {
             AppleProjectileEntity apple = new AppleProjectileEntity(level, entity);
             if (this.type == Type.BIG) {
-                apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
+                apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
                 apple.withSizeInc(1);
             } else
-                apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.1f));
+                apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * range;
             double y = entity.getY() + entity.getBbHeight() + 2 + entity.getRandom().nextDouble() * 6;
             double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * range;

@@ -17,7 +17,7 @@ public class ButterflySpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ButterflySummonerEntity summoner = new ButterflySummonerEntity(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.5f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null)
             target = Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(5);

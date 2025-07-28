@@ -23,7 +23,7 @@ public class DarkBallSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         DarkBallEntity ball = new DarkBallEntity(level, entity, this.type);
-        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.type == DarkBallEntity.Type.BALL ? 1 : 0.9f));
+        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         float vel = this.type == DarkBallEntity.Type.BALL ? 0.09f : 0.23f;
         Vec3 target = ProjectileUtils.getAimTarget(entity, ball.position());
         if (target != null) {

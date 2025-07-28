@@ -47,15 +47,15 @@ public record StaffData(Optional<Holder<Spell>> tier1, Optional<Holder<Spell>> t
     };
 
     public StaffData setTier1Spell(@Nullable Holder<Spell> spell) {
-        return new StaffData(Optional.ofNullable(spell), this.tier2, this.tier3, spell != null ? spell.value().coolDown() : this.chargeTime);
+        return new StaffData(Optional.ofNullable(spell), this.tier2, this.tier3, spell != null ? spell.value().properties().cooldown() : this.chargeTime);
     }
 
     public StaffData setTier2Spell(@Nullable Holder<Spell> spell) {
-        return new StaffData(this.tier1, Optional.ofNullable(spell), this.tier3, spell != null && this.tier1.isEmpty() ? spell.value().coolDown() : this.chargeTime);
+        return new StaffData(this.tier1, Optional.ofNullable(spell), this.tier3, spell != null && this.tier1.isEmpty() ? spell.value().properties().cooldown() : this.chargeTime);
     }
 
     public StaffData setTier3Spell(@Nullable Holder<Spell> spell) {
-        return new StaffData(this.tier1, this.tier2, Optional.ofNullable(spell), spell != null && this.tier1.isEmpty() && this.tier2.isEmpty() ? spell.value().coolDown() : this.chargeTime);
+        return new StaffData(this.tier1, this.tier2, Optional.ofNullable(spell), spell != null && this.tier1.isEmpty() && this.tier2.isEmpty() ? spell.value().properties().cooldown() : this.chargeTime);
     }
 
     public Spell fromChargeLevel(ItemStack stack, int level) {

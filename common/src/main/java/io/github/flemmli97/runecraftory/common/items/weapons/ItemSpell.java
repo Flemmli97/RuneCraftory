@@ -53,7 +53,7 @@ public class ItemSpell extends Item {
             return false;
         } else {
             if (player.getCooldowns().getCooldownPercent(this, 0) <= 0 && this.spell.get().use(player.serverLevel(), player, stack)) {
-                player.getCooldowns().addCooldown(this, this.getSpell().coolDown());
+                player.getCooldowns().addCooldown(this, this.getSpell().properties().cooldown());
                 this.spell.get().levelSkill(player);
                 return true;
             }

@@ -20,11 +20,10 @@ import org.joml.Vector3d;
 public class MultiArrowSpell extends Spell {
 
     public final int amount;
-    public final float damage, angle;
+    public final float angle;
 
-    public MultiArrowSpell(int amount, float damage, float angle) {
+    public MultiArrowSpell(int amount, float angle) {
         this.amount = amount;
-        this.damage = damage;
         this.angle = angle;
     }
 
@@ -49,7 +48,7 @@ public class MultiArrowSpell extends Spell {
         float inc = (this.angle * 2) / (this.amount - 1);
         for (float y = angle; y <= this.angle; y += inc) {
             Vector3d newDir = dir3d.rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z(), new Vector3d());
-            MobArrowEntity arrow = new MobArrowEntity(level, entity, CombatUtils.getAbilityDamageBonus(lvl, this.damage));
+            MobArrowEntity arrow = new MobArrowEntity(level, entity, CombatUtils.getAbilityDamageBonus(lvl, this));
             arrow.setRemainingFireTicks(ItemComponentUtils.getElement(stack) == ItemElement.FIRE ? 200 : 0);
             arrow.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
             level.addFreshEntity(arrow);

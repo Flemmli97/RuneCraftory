@@ -33,7 +33,7 @@ public class WindBladeSpell extends Spell {
         float inc = (this.angle * 2) / (this.amount - 1);
         for (float y = angle; y <= this.angle; y += inc) {
             WindBladeEntity wind = new WindBladeEntity(level, entity);
-            wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+            wind.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             wind.shoot(entity, entity.getXRot(), entity.getYRot() - angle, 0, 0.45f, 0);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 wind.setTarget(mob.getTarget());

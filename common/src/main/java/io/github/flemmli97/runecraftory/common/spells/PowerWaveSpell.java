@@ -22,7 +22,7 @@ public class PowerWaveSpell extends WeaponSpell {
         if (result) {
             PowerWaveEntity wave = new PowerWaveEntity(level, entity);
             wave.setPos(wave.getX(), entity.getY() + entity.getBbHeight() * 0.1, wave.getZ());
-            wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+            wave.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             ProjectileUtils.shoot(entity, wave, 0.9f, 0);
             level.addFreshEntity(wave);
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), entity.getSoundSource(), 1.4f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);

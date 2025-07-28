@@ -16,7 +16,7 @@ public class LightBeamSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         LightBeamEntity beam = new LightBeamEntity(level, entity);
-        beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, beam, 1);
         level.addFreshEntity(beam);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

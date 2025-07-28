@@ -17,9 +17,9 @@ public class DoubleBulletSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         BulletEntity bullet = new BulletEntity(level, entity);
-        bullet.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+        bullet.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         BulletEntity bullet2 = new BulletEntity(level, entity);
-        bullet2.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+        bullet2.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         bullet2.reverseMovement();
         ProjectileUtils.shoot(entity, bullet, 0.3f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);
         ProjectileUtils.shoot(entity, bullet2, 0.3f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);

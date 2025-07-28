@@ -22,7 +22,7 @@ public class FireWallSpell extends Spell {
         if (target == null)
             target = entity.position().add(entity.getLookAngle().scale(10));
         wall.setTarget(target.x, target.y, target.z);
-        wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+        wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(wall);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

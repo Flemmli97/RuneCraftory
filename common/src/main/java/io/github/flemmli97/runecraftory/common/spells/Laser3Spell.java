@@ -29,7 +29,7 @@ public class Laser3Spell extends Spell {
         Vec3 up = MathsHelper.getUp(dir);
         for (Vector3d vec : MathUtils.rotatedVecs(new Vector3d(dir.x(), dir.y(), dir.z()), new Vector3d(up.x(), up.y(), up.z()), -20, 20, 20)) {
             ThunderboltBeamEntity beam = new ThunderboltBeamEntity(level, entity);
-            beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+            beam.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
             level.addFreshEntity(beam);
         }

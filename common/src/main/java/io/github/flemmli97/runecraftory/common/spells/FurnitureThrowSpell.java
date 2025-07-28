@@ -19,7 +19,7 @@ public class FurnitureThrowSpell extends Spell {
         for (int i = 0; i < furnitureAmount; ++i) {
             FurnitureEntity.Type randType = FurnitureEntity.Type.values()[entity.getRandom().nextInt(FurnitureEntity.Type.values().length)];
             FurnitureEntity furniture = new FurnitureEntity(level, entity, randType);
-            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1));
+            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             furniture.setNoGravity(true);
             double xRand = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 13;
             double yRand = entity.getY() + (entity.getRandom().nextDouble()) * 2;

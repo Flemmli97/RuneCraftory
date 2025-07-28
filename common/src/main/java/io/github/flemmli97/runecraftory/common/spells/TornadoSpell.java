@@ -16,7 +16,7 @@ public class TornadoSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         TornadoEntity tornado = new TornadoEntity(level, entity);
-        tornado.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+        tornado.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 pos = entity.position();
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {

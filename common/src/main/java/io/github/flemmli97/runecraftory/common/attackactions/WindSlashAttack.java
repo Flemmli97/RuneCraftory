@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -53,7 +54,7 @@ public class WindSlashAttack extends AttackAction {
             entity.resetFallDistance();
             if (!entity.level().isClientSide) {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.WIND_SLASH))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .executeAttack());
             }

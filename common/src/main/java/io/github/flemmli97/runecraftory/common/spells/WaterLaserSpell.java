@@ -28,7 +28,7 @@ public class WaterLaserSpell extends Spell {
             return false;
         WaterLaserEntity laser = new WaterLaserEntity(level, entity);
         laser.setMaxTicks(entity instanceof Player ? Mth.ceil(PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.WATER_LASER_ONE).length()) : 15);
-        laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         laser.setRange(this.range);
         ProjectileUtils.shoot(entity, laser, 0);
         level.addFreshEntity(laser);

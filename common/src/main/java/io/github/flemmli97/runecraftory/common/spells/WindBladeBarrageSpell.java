@@ -16,7 +16,7 @@ public class WindBladeBarrageSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         WindBladeBarrageSummoner summoner = new WindBladeBarrageSummoner(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.75f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 look = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(entity.getBbWidth() * 0.8);
         Vec3 pos = entity.position().add(look.x, entity.getBbHeight() * 0.7, look.z);
         Vec3 target = ProjectileUtils.getAimTarget(entity);

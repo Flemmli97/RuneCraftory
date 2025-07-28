@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
+import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
@@ -67,6 +68,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class CombatUtils {
 
@@ -646,12 +648,12 @@ public class CombatUtils {
         return 1;
     }
 
-    public static double getAbilityDamageBonus(ItemStack stack) {
-        return getAbilityDamageBonus(getSpellLevelFromStack(stack), 1);
+    public static double getAbilityDamageBonus(ItemStack stack, Supplier<? extends Spell> source) {
+        return getAbilityDamageBonus(getSpellLevelFromStack(stack), source.get().properties().baseDamageMultiplier());
     }
 
-    public static double getAbilityDamageBonus(ItemStack stack, float origin) {
-        return getAbilityDamageBonus(getSpellLevelFromStack(stack), origin);
+    public static float getAbilityDamageBonus(int level, Spell source) {
+        return getAbilityDamageBonus(level, source.properties().baseDamageMultiplier());
     }
 
     public static float getAbilityDamageBonus(int level, float origin) {

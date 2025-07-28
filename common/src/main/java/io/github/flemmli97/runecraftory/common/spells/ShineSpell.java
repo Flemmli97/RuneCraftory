@@ -19,7 +19,7 @@ public class ShineSpell extends Spell {
             return false;
         List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof LightBallEntity light && light.getOwner() == entity);
         lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-        LightBallEntity.createLights(level, entity, LightBallEntity.Type.LONG, CombatUtils.getAbilityDamageBonus(lvl, 0.9f), 4);
+        LightBallEntity.createLights(level, entity, LightBallEntity.Type.LONG, CombatUtils.getAbilityDamageBonus(lvl, this), 4);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;
     }

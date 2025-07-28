@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -39,7 +40,7 @@ public class DashSlashAttack extends AttackAction {
                     OrientedBoundingBox obb = new OrientedBoundingBox(new AABB(-entity.getBbWidth(), 0, 0, entity.getBbWidth(), 1, entity.getBbWidth() + 1)
                             .inflate(0.3), entity.getYRot(), 0, entity.position());
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(obb))
-                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                            .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.DASH_SLASH))
                             .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1))
                             .executeAttack();
                 }
@@ -63,7 +64,7 @@ public class DashSlashAttack extends AttackAction {
                     double range = CombatUtils.getRange(entity, -1);
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(range * 0.5, 0, 0)
                                     .expandTowards(0, 0, range)))
-                            .withBonusAttributes(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                            .withBonusAttributes(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.DASH_SLASH))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .executeAttack());
                 }

@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -44,7 +45,7 @@ public class FlashStrikeAttack extends AttackAction {
                 double range = Math.max(0, CombatUtils.getRange(entity, -1));
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()
                                 .inflate(1, 0, 0).expandTowards(0, 0, range)))
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.FLASH_STRIKE))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .doOnSuccess(target -> CombatUtils.knockBackEntity(entity, target, 1.2f))
                         .executeAttack());

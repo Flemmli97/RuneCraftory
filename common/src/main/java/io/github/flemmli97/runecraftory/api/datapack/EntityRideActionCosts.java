@@ -18,8 +18,7 @@ import java.util.Optional;
 public class EntityRideActionCosts {
 
     public static final Codec<EntityRideActionCosts> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    RideActionCost.CODEC.fieldOf("command_1").forGetter(d -> d.command1),
+            instance.group(RideActionCost.CODEC.fieldOf("command_1").forGetter(d -> d.command1),
                     RideActionCost.CODEC.optionalFieldOf("command_2").forGetter(d -> Optional.ofNullable(d.command2)),
                     RideActionCost.CODEC.optionalFieldOf("command_3").forGetter(d -> Optional.ofNullable(d.command3)),
                     RideActionCost.CODEC.optionalFieldOf("command_4").forGetter(d -> Optional.ofNullable(d.command4))

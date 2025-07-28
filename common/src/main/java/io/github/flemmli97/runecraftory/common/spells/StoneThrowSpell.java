@@ -17,7 +17,7 @@ public class StoneThrowSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         StoneEntity stone = new StoneEntity(level, entity);
-        stone.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        stone.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, stone, 1.3f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FISHING_BOBBER_THROW, entity.getSoundSource(), 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
         level.addFreshEntity(stone);

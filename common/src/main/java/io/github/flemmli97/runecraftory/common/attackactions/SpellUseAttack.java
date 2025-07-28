@@ -31,7 +31,7 @@ public class SpellUseAttack extends AttackAction {
                 Spell spell = handler.get(DataKey.USED_SPELL);
                 if (spell.use(serverLevel, entity, stack) && entity instanceof ServerPlayer player) {
                     if (stack.getItem() instanceof ItemSpell)
-                        player.getCooldowns().addCooldown(stack.getItem(), spell.coolDown());
+                        player.getCooldowns().addCooldown(stack.getItem(), spell.properties().cooldown());
                     spell.levelSkill(player);
                 }
             }

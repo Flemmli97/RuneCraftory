@@ -18,7 +18,7 @@ public class PlushThrowSpell extends Spell {
         int plushAmount = entity.getRandom().nextInt(7) + 7;
         for (int i = 0; i < plushAmount; ++i) {
             FurnitureEntity furniture = new FurnitureEntity(level, entity, entity.getRandom().nextBoolean() ? FurnitureEntity.Type.WOOLYPLUSH : FurnitureEntity.Type.CHIPSQUEEKPLUSH);
-            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+            furniture.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
 
             Vec3 target = ProjectileUtils.getAimTarget(entity);
             Vec3 dir;

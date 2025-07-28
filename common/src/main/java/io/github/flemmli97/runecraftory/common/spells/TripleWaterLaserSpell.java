@@ -24,7 +24,7 @@ public class TripleWaterLaserSpell extends Spell {
             WaterLaserEntity laser = new WaterLaserEntity(level, entity, new Vector3f(0, 0, 0.5f));
             laser.setMaxTicks(entity instanceof Player ?
                     Mth.ceil(PlayerModelAnimations.WATER_LASER_THREE.length()) : 15);
-            laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
+            laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             laser.setYawOffset(i * 130);
             laser.setRotationFromOffset();
             level.addFreshEntity(laser);

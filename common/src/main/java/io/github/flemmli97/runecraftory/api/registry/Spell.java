@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.api.registry;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.api.datapack.SpellProperties;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -34,7 +35,7 @@ public abstract class Spell {
         if (!(entity instanceof ServerPlayer player))
             return true;
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
-        if (!LevelCalc.useRP(data, spell.rpCost() * costMultiplier, hurt, spell.percentageCost(), true, spell.costReductionSkills())) {
+        if (!LevelCalc.useRP(data, spell.properties().rpCost() * costMultiplier, hurt, spell.properties().percentageCost(), true, spell.costReductionSkills())) {
             if (!hurt)
                 EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
             return false;
@@ -47,27 +48,19 @@ public abstract class Spell {
     }
 
     public void levelSkill(ServerPlayer player) {
-        Map<Skills, Float> skillXp = DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skillXP;
+        Map<Skills, Float> skillXp = this.properties().skillXP();
         if (!skillXp.isEmpty()) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(data, Skills.DARK, xp));
         }
     }
 
-    public int coolDown() {
-        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).cooldown;
-    }
-
-    public int rpCost() {
-        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).rpCost;
-    }
-
-    public float percentageCost() {
-        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).percentage;
-    }
-
     public Skills[] costReductionSkills() {
-        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skills.toArray(Skills[]::new);
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this).skills().toArray(Skills[]::new);
+    }
+
+    public SpellProperties properties() {
+        return DataPackHandler.INSTANCE.spellPropertiesManager().getPropertiesFor(this);
     }
 
     public boolean use(LivingEntity entity) {

@@ -15,7 +15,7 @@ public class DarknessSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         DarknessEntity darkness = new DarknessEntity(level, entity);
-        darkness.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.05f));
+        darkness.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(darkness);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_DARK.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

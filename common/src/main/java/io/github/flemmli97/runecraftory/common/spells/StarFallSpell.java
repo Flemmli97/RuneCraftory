@@ -20,7 +20,7 @@ public class StarFallSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         StarFallSummoner summoner = new StarFallSummoner(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         summoner.setMaxLivingTicks(this.longVersion ? 140 : 60);
         level.addFreshEntity(summoner);
         return true;

@@ -22,7 +22,7 @@ public class RootSpike extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         SpikeEntity spike = new SpikeEntity(level, entity, 0, 10, SpikeEntity.SpikeType.ROOT);
-        spike.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+        spike.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 targetPos = null;
         if (entity instanceof Mob mob) {
             Entity target = EntityUtils.ownedProjectileTarget(mob, 14);

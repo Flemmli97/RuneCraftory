@@ -23,7 +23,7 @@ public class ElementalCircleSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ElementalCircleSummoner summoner = new ElementalCircleSummoner(level, entity, this.element);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.4, 0);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {

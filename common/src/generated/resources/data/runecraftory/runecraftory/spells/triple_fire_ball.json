@@ -1,7 +1,8 @@
 {
+  "base_damage_multiplier": 0.85,
   "cooldown": 20,
-  "percentage": 0.0,
-  "rp_cost": 50,
+  "percentage_cost": 0.0,
+  "runepoints_cost": 50,
   "skill_xp": {
     "FIRE": 6.0
   },

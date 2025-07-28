@@ -27,7 +27,7 @@ public class SlashSpell extends Spell {
             dir = entity.getLookAngle().scale(1.2);
         }
         slash.setPos(pos.x + dir.x, pos.y + Mth.clamp(dir.y, -0.3, 0.8), pos.z + dir.z);
-        slash.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+        slash.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         slash.lookAt(EntityAnchorArgument.Anchor.FEET, entity.position());
         level.addFreshEntity(slash);
         return true;

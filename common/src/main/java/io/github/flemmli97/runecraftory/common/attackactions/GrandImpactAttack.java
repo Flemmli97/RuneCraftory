@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -35,7 +36,7 @@ public class GrandImpactAttack extends AttackAction {
             float reach = (float) entity.getAttributeValue(RuneCraftoryAttributes.ATTACK_RANGE.asHolder());
             S2CScreenShake.sendAround(entity, 16, 6, 3);
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
-            CombatUtils.applyTempAttribute(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack));
+            CombatUtils.applyTempAttribute(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.GRAND_IMPACT));
             ItemAxeBase.performRightClickAction(stack, entity, reach + 1, 0.1f);
             CombatUtils.removeTempAttribute(entity, Attributes.ATTACK_DAMAGE);
         }

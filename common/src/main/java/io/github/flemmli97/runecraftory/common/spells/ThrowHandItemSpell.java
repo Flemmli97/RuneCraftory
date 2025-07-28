@@ -17,7 +17,7 @@ public class ThrowHandItemSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ThrownItemEntity item = new ThrownItemEntity(level, entity);
-        item.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        item.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         item.setItem(entity.getMainHandItem());
         item.setRotating(true);
         ProjectileUtils.shoot(entity, item, 1.2f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);

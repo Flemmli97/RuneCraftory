@@ -32,37 +32,33 @@ import java.util.Map;
 public class FoodProperties {
 
     public static final Codec<FoodProperties> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
-                    SimpleEffect.CODEC.listOf().fieldOf("potion_apply").forGetter(d -> d.potionApply),
-                    BuiltInRegistries.MOB_EFFECT.holderByNameCodec().listOf().fieldOf("potion_remove").forGetter(d -> d.potionRemove),
-
-                    Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
+            instance.group(Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
                     Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("effects_percentage").forGetter(d -> d.effectsPercentage),
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus)
-            ).apply(instance, (cookingPercent, potion, remove,
-                               duration, effects, effPercent, cooking)
-                    -> new FoodProperties(effects, effPercent, cooking, cookingPercent, duration, potion, remove)));
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus").forGetter(d -> d.cookingBonus),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("cooking_bonus_percent").forGetter(d -> d.cookingBonusPercent),
+                    SimpleEffect.CODEC.listOf().fieldOf("potion_apply").forGetter(d -> d.potionApply),
+                    BuiltInRegistries.MOB_EFFECT.holderByNameCodec().listOf().fieldOf("potion_remove").forGetter(d -> d.potionRemove)
+            ).apply(instance, FoodProperties::new));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, FoodProperties> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public FoodProperties decode(RegistryFriendlyByteBuf buf) {
-            return new FoodProperties(StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
+            return new FoodProperties(buf.readInt(), StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
                     StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
                     StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
                     StreamCodecUtils.ATTRIBUTE_CODEC.decode(buf),
-                    buf.readInt(),
                     buf.readList(b -> SimpleEffect.STREAM_CODEC.decode(buf)),
                     buf.readList(b -> ByteBufCodecs.holderRegistry(Registries.MOB_EFFECT).decode(buf)));
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, FoodProperties props) {
+            buf.writeInt(props.duration);
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, props.effects);
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, props.effectsPercentage);
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, props.cookingBonus);
             StreamCodecUtils.ATTRIBUTE_CODEC.encode(buf, props.cookingBonusPercent);
-            buf.writeInt(props.duration);
             buf.writeCollection(props.potionApply, (b, val) -> SimpleEffect.STREAM_CODEC.encode(buf, val));
             buf.writeCollection(props.potionRemove, (b, val) -> ByteBufCodecs.holderRegistry(Registries.MOB_EFFECT).encode(buf, val));
         }
@@ -76,8 +72,8 @@ public class FoodProperties {
     private final List<SimpleEffect> potionApply;
     private final List<Holder<MobEffect>> potionRemove;
 
-    public FoodProperties(Map<Holder<Attribute>, Double> effects, Map<Holder<Attribute>, Double> effectsPercentage,
-                          Map<Holder<Attribute>, Double> cookingBonus, Map<Holder<Attribute>, Double> cookingBonusPercent, int duration,
+    public FoodProperties(int duration, Map<Holder<Attribute>, Double> effects, Map<Holder<Attribute>, Double> effectsPercentage,
+                          Map<Holder<Attribute>, Double> cookingBonus, Map<Holder<Attribute>, Double> cookingBonusPercent,
                           List<SimpleEffect> potionApply, List<Holder<MobEffect>> potionRemove) {
         this.effects = createFor(effects);
         this.effectsPercentage = createFor(effectsPercentage);
@@ -264,7 +260,7 @@ public class FoodProperties {
         }
 
         public FoodProperties build() {
-            return new FoodProperties(this.effects, this.effectsPercentage, this.cookingBonus, this.cookingBonusPercent, this.duration, this.potionApply, this.potionRemove);
+            return new FoodProperties(this.duration, this.effects, this.effectsPercentage, this.cookingBonus, this.cookingBonusPercent, this.potionApply, this.potionRemove);
         }
     }
 }

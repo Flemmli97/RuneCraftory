@@ -38,7 +38,7 @@ public class SmallLeafSpell extends Spell {
         for (Vector3d vec : MathUtils.rotatedVecs(new Vector3d(dir.x(), dir.y(), dir.z()), new Vector3d(up.x(), up.y(), up.z()), -degs, degs, degs * 2 / this.amount)) {
             SmallRaccoonLeafEntity leaf = new SmallRaccoonLeafEntity(level, entity);
             leaf.setPos(leaf.getX() + vec.x() * 0.1, leaf.getY() + vec.y() * 0.1, leaf.getZ() + vec.z() * 0.1);
-            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.9f));
+            leaf.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             leaf.shoot(vec.x(), vec.y(), vec.z(), 0.75f, 0);
             level.addFreshEntity(leaf);
         }

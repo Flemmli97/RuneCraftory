@@ -16,7 +16,7 @@ public class DarkBulletsSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         DarkBulletSummonerEntity summoner = new DarkBulletSummonerEntity(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target != null) {
             summoner.setTarget(target.x(), target.y(), target.z());

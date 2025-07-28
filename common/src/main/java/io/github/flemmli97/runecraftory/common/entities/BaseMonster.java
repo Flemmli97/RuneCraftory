@@ -279,7 +279,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     protected void applyAttributes() {
-        for (Map.Entry<Holder<Attribute>, Double> att : this.prop.getBaseValues().entrySet()) {
+        for (Map.Entry<Holder<Attribute>, Double> att : this.prop.baseValues().entrySet()) {
             AttributeInstance inst = this.getAttribute(att.getKey());
             if (inst != null) {
                 inst.setBaseValue(att.getValue());
@@ -1621,7 +1621,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         if (!this.level().isClientSide)
             LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        this.prop.getAttributeGains().forEach((att, val) -> {
+        this.prop.levelGains().forEach((att, val) -> {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
                 val *= 0.01;

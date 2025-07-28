@@ -15,7 +15,7 @@ public class SporeCircleSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         SporeCircleSummoner summoner = new SporeCircleSummoner(level, entity);
-        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
+        summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         summoner.setPos(entity.position().x, entity.position().y, entity.position().z);
         level.addFreshEntity(summoner);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

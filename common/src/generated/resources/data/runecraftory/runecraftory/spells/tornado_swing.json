@@ -1,7 +1,8 @@
 {
+  "base_damage_multiplier": 1.0,
   "cooldown": 5,
-  "percentage": 0.0,
-  "rp_cost": 13,
+  "percentage_cost": 0.0,
+  "runepoints_cost": 13,
   "skill_xp": {
     "HAMMERAXE": 6.0
   },

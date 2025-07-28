@@ -29,7 +29,7 @@ public class CardThrowSpell extends Spell {
         Vec3 up = Vec3.directionFromRotation(yxRot[1] + 90, yxRot[0]);
         for (Vector3d vec : MathUtils.rotatedVecs(new Vector3d(dir.x(), dir.y(), dir.z()), new Vector3d(up.x(), up.y(), up.z()), -50, 50, 10)) {
             CardsEntity cards = new CardsEntity(level, entity, entity.getRandom().nextInt(8));
-            cards.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
+            cards.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             cards.shoot(vec.x(), vec.y(), vec.z(), 1.5f, 0);
             level.addFreshEntity(cards);
         }

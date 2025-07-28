@@ -22,7 +22,7 @@ public class IceTrailSpell extends Spell {
             return false;
         ElementalTrailEntity ice = new ElementalTrailEntity(level, entity, ItemElement.WATER);
         ice.setPos(ice.getX(), ice.getY() - 0.5, ice.getZ());
-        ice.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1f));
+        ice.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         if (this.homing)
             ice.homing();
         level.addFreshEntity(ice);

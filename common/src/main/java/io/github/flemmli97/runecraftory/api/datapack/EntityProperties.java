@@ -28,24 +28,23 @@ public class EntityProperties {
             .xp(5).money(5).tamingChance(0.3f).build();
 
     public static final Codec<EntityProperties> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("base_values").forGetter(d -> d.baseValues),
-                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("level_gains").forGetter(d -> d.levelGains),
-                    EntityPredicate.CODEC.optionalFieldOf("spawner_predicate").forGetter(EntityProperties::spawnerPredicate),
-
-                    Codec.BOOL.fieldOf("needs_roof").forGetter(d -> d.needsRoof),
-                    OnKilledIncrease.CODEC.listOf().optionalFieldOf("level_increase_on_kill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
-                    EntityRideActionCosts.CODEC.fieldOf("ride_action_costs").forGetter(d -> d.rideActionCosts),
-
+            instance.group(ExtraCodecs.POSITIVE_INT.fieldOf("min_level").forGetter(d -> d.minLevel),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xp").forGetter(d -> d.xp),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money),
+                    Codec.FLOAT.fieldOf("taming_chance").forGetter(d -> d.tamingChance),
                     Codec.BOOL.fieldOf("rideable").forGetter(d -> d.rideable),
                     Codec.BOOL.fieldOf("flying").forGetter(d -> d.flying),
                     ExtraCodecs.POSITIVE_INT.fieldOf("size").forGetter(d -> d.size),
-
-                    ExtraCodecs.POSITIVE_INT.fieldOf("min_level").forGetter(d -> d.minLevel),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xp").forGetter(d -> d.xp),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money),
-                    Codec.FLOAT.fieldOf("taming_chance").forGetter(d -> d.tamingChance)
-            ).apply(instance, (baseValues, levelGains, spawnerPredicate, needsRoof, levelIncreaseOnKill, rideActionCosts, rideable, flying, size, minLevel, xp, money, tamingChance) ->
+                    Codec.BOOL.fieldOf("needs_roof").forGetter(d -> d.needsRoof),
+                    EntityRideActionCosts.CODEC.fieldOf("ride_action_costs").forGetter(d -> d.rideActionCosts),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("base_values").forGetter(d -> d.baseValues),
+                    Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.holderByNameCodec(), Codec.DOUBLE).fieldOf("level_gains").forGetter(d -> d.levelGains),
+                    OnKilledIncrease.CODEC.listOf().optionalFieldOf("level_increase_on_kill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
+                    EntityPredicate.CODEC.optionalFieldOf("spawner_predicate").forGetter(EntityProperties::spawnerPredicate)
+            ).apply(instance, (minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof,
+                               rideActionCosts,
+                               baseValues, levelGains,
+                               levelIncreaseOnKill, spawnerPredicate) ->
                     new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, rideActionCosts, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()), spawnerPredicate)));
 
     public final int minLevel;
@@ -57,6 +56,7 @@ public class EntityProperties {
     public final int size;
     public final boolean needsRoof;
     public final EntityRideActionCosts rideActionCosts;
+
     private final Map<Holder<Attribute>, Double> baseValues;
     private final Map<Holder<Attribute>, Double> levelGains;
 
@@ -74,18 +74,18 @@ public class EntityProperties {
         this.size = size;
         this.needsRoof = needsRoof;
         this.rideActionCosts = rideActionCosts;
-        this.baseValues = baseValues;
-        this.levelGains = levelGains;
+        this.baseValues = ImmutableMap.copyOf(baseValues);
+        this.levelGains = ImmutableMap.copyOf(levelGains);
         this.levelIncreaseOnKill = levelIncreaseOnKill.stream().sorted().toList();
         this.spawnerPredicate = spawnerPredicate.orElse(null);
     }
 
-    public Map<Holder<Attribute>, Double> getBaseValues() {
-        return ImmutableMap.copyOf(this.baseValues);
+    public Map<Holder<Attribute>, Double> baseValues() {
+        return this.baseValues;
     }
 
-    public Map<Holder<Attribute>, Double> getAttributeGains() {
-        return ImmutableMap.copyOf(this.levelGains);
+    public Map<Holder<Attribute>, Double> levelGains() {
+        return this.levelGains;
     }
 
     public Optional<EntityPredicate> spawnerPredicate() {

@@ -15,7 +15,7 @@ public class SleepAuraSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         SleepAuraEntity aura = new SleepAuraEntity(level, entity);
-        aura.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.85f));
+        aura.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(aura);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_POOF.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         return true;

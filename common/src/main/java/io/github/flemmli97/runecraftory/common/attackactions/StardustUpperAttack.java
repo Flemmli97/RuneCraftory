@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -41,7 +42,7 @@ public class StardustUpperAttack extends AttackAction {
                     handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 410, 0);
             if (attack != null) {
                 handler.addHitEntityTracker(attack
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.STARDUST_UPPER))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .executeAttack());
             }
@@ -49,7 +50,7 @@ public class StardustUpperAttack extends AttackAction {
                     handler.get(DataKey.SPIN_ROTATION) + 410, handler.get(DataKey.SPIN_ROTATION) + 680, p -> Mth.sin(p * Mth.PI) * 50, 0);
             if (attack2 != null) {
                 handler.addHitEntityTracker(attack2
-                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack))
+                        .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.STARDUST_UPPER))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                         .doOnSuccess(target -> {
                             CombatUtils.knockBackEntity(entity, target, 0.4f);

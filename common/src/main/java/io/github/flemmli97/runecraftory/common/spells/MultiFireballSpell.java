@@ -15,11 +15,10 @@ import org.joml.Vector3d;
 public class MultiFireballSpell extends Spell {
 
     public final int amount;
-    public final float damage, angle;
+    public final float angle;
 
-    public MultiFireballSpell(int amount, float damage, float angle) {
+    public MultiFireballSpell(int amount, float angle) {
         this.amount = amount;
-        this.damage = damage;
         this.angle = angle;
     }
 
@@ -42,7 +41,7 @@ public class MultiFireballSpell extends Spell {
             Vector3d newDir = new Vector3d(dir.x(), dir.y(), dir.z())
                     .rotateAxis(y * Mth.DEG_TO_RAD, up.x(), up.y(), up.z());
             FireballEntity other = new FireballEntity(level, entity, false);
-            other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.damage));
+            other.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             other.shoot(newDir.x(), newDir.y(), newDir.z(), 1, 0);
             level.addFreshEntity(other);
         }

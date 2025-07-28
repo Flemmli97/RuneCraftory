@@ -16,7 +16,7 @@ public class BigLightningBoltSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ThiccLightningBoltEntity bolt = new ThiccLightningBoltEntity(level, entity);
-        bolt.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.95f));
+        bolt.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, bolt, 0.2f, 0);
         level.addFreshEntity(bolt);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_ELECTRIC_ZAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);

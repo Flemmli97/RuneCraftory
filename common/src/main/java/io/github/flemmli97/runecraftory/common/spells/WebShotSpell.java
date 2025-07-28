@@ -17,7 +17,7 @@ public class WebShotSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         SpiderWebEntity web = new SpiderWebEntity(level, entity);
-        web.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+        web.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, web, 1.3f, entity instanceof Player ? 1 : 7 - level.getDifficulty().getId() * 2);
         level.addFreshEntity(web);
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SKELETON_SHOOT, entity.getSoundSource(), 1.0f, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));

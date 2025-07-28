@@ -1,7 +1,8 @@
 {
+  "base_damage_multiplier": 0.75,
   "cooldown": 60,
-  "percentage": 0.05,
-  "rp_cost": 40,
+  "percentage_cost": 0.05,
+  "runepoints_cost": 40,
   "skill_xp": {
     "WIND": 7.0
   },

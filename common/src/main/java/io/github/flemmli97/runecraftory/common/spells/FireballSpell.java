@@ -27,7 +27,7 @@ public class FireballSpell extends Spell {
             return false;
         FireballEntity ball = new FireballEntity(level, entity, this.big);
         ProjectileUtils.shoot(entity, ball, 1, 0);
-        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this.big ? 1 : 0.8f));
+        ball.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(ball);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_FIRE_BALL.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         if (entity instanceof Player player) {

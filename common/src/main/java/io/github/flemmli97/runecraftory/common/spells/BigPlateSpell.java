@@ -39,7 +39,7 @@ public class BigPlateSpell extends Spell {
         }
         BigPlateEntity plate = new BigPlateEntity(level, entity);
         plate.setPos(pos.x(), pos.y() + 4, pos.z());
-        plate.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.25f));
+        plate.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(plate);
         return true;
     }

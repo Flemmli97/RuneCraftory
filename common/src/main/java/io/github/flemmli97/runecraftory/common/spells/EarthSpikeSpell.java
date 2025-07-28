@@ -20,7 +20,7 @@ public class EarthSpikeSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         SpikeEntity spike = new SpikeEntity(level, entity, 30, 5, SpikeEntity.SpikeType.EARTH);
-        spike.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 1.2f));
+        spike.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         if (entity instanceof Player player) {
             HitResult result = HitResultUtils.entityRayTrace(player, 12, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, true, false, e -> e instanceof LivingEntity);
             if (result instanceof EntityHitResult hitResult && hitResult.getEntity() instanceof LivingEntity target) {

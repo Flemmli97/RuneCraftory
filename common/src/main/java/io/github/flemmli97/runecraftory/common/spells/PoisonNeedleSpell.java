@@ -17,7 +17,7 @@ public class PoisonNeedleSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         PoisonNeedleEntity projectile = new PoisonNeedleEntity(level, entity);
-        projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, 0.8f));
+        projectile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         ProjectileUtils.shoot(entity, projectile, 1.2f, entity instanceof Player ? 0.5f : 4 - level.getDifficulty().getId());
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
         level.addFreshEntity(projectile);
