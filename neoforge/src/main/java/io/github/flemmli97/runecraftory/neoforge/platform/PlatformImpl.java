@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.neoforge.platform;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.neoforge.registry.ModAttachments;
+import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryAttachments;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -45,12 +45,12 @@ public class PlatformImpl implements Platform {
 
     @Override
     public PlayerData getPlayerData(Player player) {
-        return player.getData(ModAttachments.PLAYER_DATA);
+        return player.getData(RuneCraftoryAttachments.PLAYER_DATA);
     }
 
     @Override
     public EntityData getEntityData(LivingEntity living) {
-        return living.getData(ModAttachments.ENTITY_DATA);
+        return living.getData(RuneCraftoryAttachments.ENTITY_DATA);
     }
 
     @Override

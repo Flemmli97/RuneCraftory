@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.neoforge.registry.ModFluidTypes;
+import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryFluidTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -47,7 +47,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import java.io.IOException;
 import java.util.function.Function;
 
-public class ForgeClientRegister {
+public class NeoForgeClientRegister {
 
     @SuppressWarnings("deprecation")
     @SubscribeEvent
@@ -112,7 +112,7 @@ public class ForgeClientRegister {
             public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
                 return getter.getBlockTint(pos, ClientRegister.HOT_SPRING_COLOR) | 0xff000000;
             }
-        }, ModFluidTypes.HOT_SPRING_TYPE.get());
+        }, RuneCraftoryFluidTypes.HOT_SPRING_TYPE.get());
     }
 
     @SubscribeEvent

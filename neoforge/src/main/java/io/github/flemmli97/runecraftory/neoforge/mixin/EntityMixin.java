@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.neoforge.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import io.github.flemmli97.runecraftory.neoforge.registry.ModFluidTypes;
+import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryFluidTypes;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.common.extensions.IEntityExtension;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +15,6 @@ public abstract class EntityMixin implements IEntityExtension {
      */
     @ModifyReturnValue(method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z", at = @At(value = "RETURN", ordinal = 0), remap = false)
     private boolean allowTagReturn(boolean orig) {
-        return orig || this.isInFluidType(ModFluidTypes.HOT_SPRING_TYPE.get());
+        return orig || this.isInFluidType(RuneCraftoryFluidTypes.HOT_SPRING_TYPE.get());
     }
 }

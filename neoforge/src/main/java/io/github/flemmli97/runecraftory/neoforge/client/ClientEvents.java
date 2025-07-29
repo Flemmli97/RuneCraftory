@@ -30,7 +30,7 @@ import java.util.List;
 public class ClientEvents {
 
     public static void register(IEventBus modBus) {
-        modBus.register(ForgeClientRegister.class);
+        modBus.register(NeoForgeClientRegister.class);
         NeoForge.EVENT_BUS.register(ClientEvents.class);
         BossBarTracker.register();
     }

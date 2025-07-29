@@ -37,8 +37,8 @@ import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
 import io.github.flemmli97.runecraftory.neoforge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.neoforge.network.PacketHandler;
-import io.github.flemmli97.runecraftory.neoforge.registry.ModAttachments;
-import io.github.flemmli97.runecraftory.neoforge.registry.ModFluidTypes;
+import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryAttachments;
+import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryFluidTypes;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -118,7 +118,7 @@ public class RuneCraftoryNeoForge {
         RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
         RuneCraftoryCrafting.RECIPETYPE.registerContent(modBus);
         RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent(modBus);
-        ModAttachments.ATTACHMENT_TYPES.register(modBus);
+        RuneCraftoryAttachments.ATTACHMENT_TYPES.register(modBus);
         RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
         RuneCraftoryCriteria.TRIGGERS.registerContent(modBus);
         RuneCraftoryCreativeRuneCraftoryTabs.CREATIVE_MODE_TABS.registerContent(modBus);
@@ -128,7 +128,7 @@ public class RuneCraftoryNeoForge {
         RuneCraftoryFeatures.TRUNK_PLACER.registerContent(modBus);
         RuneCraftoryFeatures.TREE_DECORATORS.registerContent(modBus);
         RuneCraftoryFluids.FLUIDS.registerContent(modBus);
-        ModFluidTypes.FLUID_TYPES.register(modBus);
+        RuneCraftoryFluidTypes.FLUID_TYPES.register(modBus);
     }
 
     public void common(FMLCommonSetupEvent event) {

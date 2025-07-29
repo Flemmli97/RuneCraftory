@@ -16,7 +16,7 @@ authors = "Flemmli97"
 description = '''A minecrafty Harvest Moon'''
 [[dependencies.runecraftory]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "[${mcversion},)"
 ordering = "NONE"
 side = "BOTH"
