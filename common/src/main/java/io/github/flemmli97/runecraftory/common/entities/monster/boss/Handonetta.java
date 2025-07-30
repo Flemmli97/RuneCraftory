@@ -131,7 +131,7 @@ public class Handonetta extends BossMonster {
                     entity.getAnimationHandler().setAnimation(GRAB_CAUGHT);
             } else if (anim.isPast("attack") && !anim.isPast("grab_done")) {
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.caughtEntities.contains(e)) {
+                    if ((entity.getBbWidth() < 5 || entity.getBbHeight() < 8) && !entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
                     }
                 });
@@ -261,12 +261,17 @@ public class Handonetta extends BossMonster {
             boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPast("invis_start") : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
             this.caughtEntities.forEach(entity -> {
                 if (entity.isAlive()) {
-                    if (entity instanceof ServerPlayer player)
+                    if (entity instanceof ServerPlayer player) {
+                        Vec3 dir = this.position().subtract(player.position());
+                        player.setDeltaMovement(dir);
                         player.moveTo(this.getX(), this.getY(), this.getZ());
-                    else
+                    } else {
+                        entity.setDeltaMovement(Vec3.ZERO);
                         entity.setPos(this.getX(), this.getY(), this.getZ());
+                    }
                     if (invis)
                         Platform.INSTANCE.getEntityData(entity).setInvis(10);
+                    entity.hurtMarked = true;
                 }
             });
         }

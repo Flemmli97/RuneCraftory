@@ -44,6 +44,12 @@ public class MarionettaTrapRender extends EntityRenderer<MarionettaTrapEntity> {
         stack.mulPose(Axis.YP.rotationDegrees(180.0F + yaw));
         stack.scale(-1.0f, -1.0f, 1.0f);
         stack.translate(0.0, -1.5, 0.0);
+        float shaking = entity.shake(partialTicks);
+        if (shaking > 0) {
+            float pT = Mth.sin(shaking * 15);
+            float pT2 = Mth.cos(shaking * 30);
+            stack.translate(pT * 0.15, 0, pT2 * 0.1);
+        }
         this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTicks);
         this.model.setupAnim(entity, 0.0F, 0.0F, partialLivingTicks, yaw, pitch);
         VertexConsumer ivertexbuilder = buffer.getBuffer(this.model.renderType(this.getTextureLocation(entity)));

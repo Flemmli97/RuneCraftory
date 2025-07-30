@@ -238,6 +238,7 @@ public class Marionetta extends BossMonster {
                     player.setDeltaMovement(dir);
                     player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
                 } else {
+                    entity.setDeltaMovement(Vec3.ZERO);
                     entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
                 }
                 entity.hurtMarked = true;

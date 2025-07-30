@@ -53,7 +53,9 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
     private LivingEntity shooter;
     private UUID shooterUUID;
     private float damageMultiplier = 0.7f;
+
     private final boolean[] playSpawnSound = new boolean[SWORDS];
+    private int shakeTicks;
 
     public MarionettaTrapEntity(EntityType<? extends MarionettaTrapEntity> entityType, Level level) {
         super(entityType, level);
@@ -158,6 +160,11 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
                 });
                 this.discard();
             }
+        } else {
+            --this.shakeTicks;
+            if (this.canAttack() && !this.caughtEntities.isEmpty()) {
+                this.shakeTicks = 2;
+            }
         }
     }
 
@@ -196,6 +203,12 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
     public float getAttackProgress(int idx, float partialTicks) {
         int time = ATTACK_TIMES[idx] + 2;
         return 1 - Mth.clamp(((this.getTickLeft() - time) - partialTicks) / 6, 0, 1);
+    }
+
+    public float shake(float partialTicks) {
+        if (this.shakeTicks <= 0)
+            return 0;
+        return this.shakeTicks - partialTicks;
     }
 
     public void playSpawnSound(int idx) {
