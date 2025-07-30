@@ -25,6 +25,7 @@ public class GeneralConfigSpec {
     public final ModConfigSpec.BooleanValue disableCropSystem;
     public final ModConfigSpec.BooleanValue seasonedSnow;
     public final ModConfigSpec.IntValue maxPartySize;
+    public final ModConfigSpec.BooleanValue hotSpringSource;
 
     public final ModConfigSpec.DoubleValue witherChance;
     public final ModConfigSpec.DoubleValue runeyChance;
@@ -104,6 +105,7 @@ public class GeneralConfigSpec {
         this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", GeneralConfig.disableCropSystem);
         this.seasonedSnow = builder.comment("If biome temperature should be adjusted based on current season. Can cause snowfall during winter").define("Seasoned Biome Temp", GeneralConfig.seasonedSnow);
         this.maxPartySize = builder.comment("Max size of a players party (Entities that follow you). Set to 0 for no limit").defineInRange("Max Party Size", GeneralConfig.maxPartySize, 0, Integer.MAX_VALUE);
+        this.hotSpringSource = builder.comment("Whether hotspring water can convert to source blocks like vanilla water").define("Hotspring Water Source", GeneralConfig.hotSpringSource);
         builder.pop();
 
         builder.push("Farming");

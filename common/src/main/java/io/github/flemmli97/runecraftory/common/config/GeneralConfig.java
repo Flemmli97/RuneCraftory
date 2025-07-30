@@ -21,6 +21,7 @@ public class GeneralConfig {
     public static boolean disableCropSystem = false;
     public static boolean seasonedSnow = true;
     public static int maxPartySize = 3;
+    public static boolean hotSpringSource;
 
     public static float witherChance = 0.5f;
     public static float runeyChance = 0.05f;

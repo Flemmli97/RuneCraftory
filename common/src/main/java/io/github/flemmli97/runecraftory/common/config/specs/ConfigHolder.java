@@ -46,6 +46,7 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
         GeneralConfig.seasonedSnow = spec.seasonedSnow.get() && !TenshiLibCrossPlat.INSTANCE.isModLoaded("sereneseasons");
         GeneralConfig.maxPartySize = spec.maxPartySize.get();
+        GeneralConfig.hotSpringSource = spec.hotSpringSource.get();
 
         GeneralConfig.witherChance = spec.witherChance.get().floatValue();
         GeneralConfig.runeyChance = spec.runeyChance.get().floatValue();

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.fluid;
 
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
@@ -56,7 +57,7 @@ public abstract class HotSpringFluid extends WaterFluid {
 
     @Override
     protected boolean canConvertToSource(Level level) {
-        return false;
+        return GeneralConfig.hotSpringSource;
     }
 
     @Override
