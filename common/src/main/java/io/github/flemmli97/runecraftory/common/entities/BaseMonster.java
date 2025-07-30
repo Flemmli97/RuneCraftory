@@ -805,16 +805,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return 0.83F;
     }
 
-    /**
-     * Makes it so this entity is always server authorative.
-     * Remove to make client riding player be able to control it.
-     * Currently here to see how server authorative mounts play out
-     */
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return this.isEffectiveAi();
-    }
-
     @Override
     public void travel(Vec3 vec) {
         if (this.shouldFreezeTravel()) {
