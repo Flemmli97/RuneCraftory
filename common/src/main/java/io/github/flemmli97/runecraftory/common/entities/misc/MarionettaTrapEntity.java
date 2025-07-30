@@ -16,6 +16,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -35,6 +36,12 @@ import java.util.UUID;
 
 public class MarionettaTrapEntity extends Entity implements OwnableEntity, AnimatedEntity {
 
+    public static int SWORDS = 7;
+    public static int DURATION = 120;
+    public static int SPIN_START = 80;
+    public static int SPIN_STOP = 40;
+    public static int[] ATTACK_TIMES = calculateAttackTimes();
+
     private static final EntityDataAccessor<CompoundTag> CAUGHT_ENTITIES = SynchedEntityData.defineId(MarionettaTrapEntity.class, EntityDataSerializers.COMPOUND_TAG);
 
     private static final AnimationDefinitionContainer ANIMS = new AnimationDefinitionContainer(Map.of());
@@ -42,10 +49,11 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private boolean dirty = true;
     private final AnimationHandler<MarionettaTrapEntity> animationHandler = new AnimationHandler<>(this, ANIMS);
-    private int tickLeft = 100;
+    private int tickLeft = DURATION;
     private LivingEntity shooter;
     private UUID shooterUUID;
     private float damageMultiplier = 0.7f;
+    private final boolean[] playSpawnSound = new boolean[SWORDS];
 
     public MarionettaTrapEntity(EntityType<? extends MarionettaTrapEntity> entityType, Level level) {
         super(entityType, level);
@@ -61,6 +69,16 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
 
     public static double horizontalMag(Vec3 vec) {
         return vec.x * vec.x + vec.z * vec.z;
+    }
+
+    private static int[] calculateAttackTimes() {
+        int[] times = new int[SWORDS];
+        int time = 27;
+        for (int i = 0; i < SWORDS; i++) {
+            times[i] = time;
+            time -= 3;
+        }
+        return times;
     }
 
     public void addCaughtEntity(LivingEntity entity) {
@@ -120,9 +138,18 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
                 this.entityData.set(CAUGHT_ENTITIES, this.writeCaughtEntities());
                 this.dirty = false;
             }
-            if (this.tickLeft <= 21 && this.tickLeft >= 9) {
-                if (this.getOwner() != null && this.tickLeft % 3 == 0)
-                    this.caughtEntities.forEach(e -> CombatUtils.mobAttack(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier));
+            if (this.getOwner() != null && this.canAttack()) {
+                boolean[] success = new boolean[]{false};
+                this.caughtEntities.forEach(e -> {
+                    if (CombatUtils.mobAttack(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner())
+                                    .hurtResistant(this.tickLeft == 9 ? 10 : 0),
+                            CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier) && !success[0]) {
+                        success[0] = true;
+                    }
+                });
+                if (success[0]) {
+                    this.playSound(SoundEvents.PLAYER_ATTACK_CRIT, 1, 1);
+                }
             }
             if (this.tickLeft <= 0) {
                 this.caughtEntities.forEach(entity -> {
@@ -132,6 +159,14 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
                 this.discard();
             }
         }
+    }
+
+    protected boolean canAttack() {
+        for (int i : ATTACK_TIMES) {
+            if (this.tickLeft == i)
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -151,6 +186,29 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
 
     public int getTickLeft() {
         return this.tickLeft;
+    }
+
+    public float getSpinProgress(float partialTicks) {
+        int duration = SPIN_START - SPIN_STOP;
+        return 1 - Mth.clamp(((this.getTickLeft() - SPIN_STOP) - partialTicks) / duration, 0, 1);
+    }
+
+    public float getAttackProgress(int idx, float partialTicks) {
+        int time = ATTACK_TIMES[idx] + 2;
+        return 1 - Mth.clamp(((this.getTickLeft() - time) - partialTicks) / 6, 0, 1);
+    }
+
+    public void playSpawnSound(int idx) {
+        if (idx < 0 || idx >= this.playSpawnSound.length)
+            return;
+        if (!this.playSpawnSound[idx]) {
+            this.playSpawnSound[idx] = true;
+            if (this.level().isClientSide) {
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ARROW_SHOOT, this.getSoundSource(), 1, 1, false);
+            } else {
+                this.playSound(SoundEvents.ARROW_SHOOT, 1, 1);
+            }
+        }
     }
 
     private float updateRotation(float prev, float current) {

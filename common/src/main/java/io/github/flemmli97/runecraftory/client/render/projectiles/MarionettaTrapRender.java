@@ -23,6 +23,7 @@ import net.minecraft.world.item.Items;
 public class MarionettaTrapRender extends EntityRenderer<MarionettaTrapEntity> {
 
     protected static final ResourceLocation COMMON = RuneCraftory.modRes("textures/entity/chest.png");
+    private static final float SWORD_OFFSET = 360f / MarionettaTrapEntity.SWORDS;
 
     protected final EntityModel<MarionettaTrapEntity> model;
 
@@ -42,30 +43,32 @@ public class MarionettaTrapRender extends EntityRenderer<MarionettaTrapEntity> {
         float partialLivingTicks = (float) entity.tickCount + partialTicks;
         stack.mulPose(Axis.YP.rotationDegrees(180.0F + yaw));
         stack.scale(-1.0f, -1.0f, 1.0f);
-        stack.translate(0.0, -1.501f, 0.0);
+        stack.translate(0.0, -1.5, 0.0);
         this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTicks);
         this.model.setupAnim(entity, 0.0F, 0.0F, partialLivingTicks, yaw, pitch);
         VertexConsumer ivertexbuilder = buffer.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
         this.model.renderToBuffer(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
         stack.popPose();
-        if (entity.getTickLeft() < 50) {
-            float subX = 1 / 6f;
-            for (int i = 0; i < 6; i++) {
-                float x = Math.max(0, 5 - Math.max(0, (-entity.getTickLeft() + 15 + i * 3)) * subX * 4);
-                if (x <= 0)
-                    continue;
-                stack.pushPose();
-                stack.translate(0, 2 - Math.max(0, (-entity.getTickLeft() + 15 + i * 3)) * subX * 1.6, 0);
-                stack.mulPose(Axis.YP.rotationDegrees((entity.tickCount + partialTicks) * 4 + 72 * i));
-                stack.translate(x, 0, 0);
-                stack.mulPose(Axis.YP.rotationDegrees(90));
-                stack.mulPose(Axis.XP.rotationDegrees(-50));
-                Minecraft.getInstance().getItemRenderer().renderStatic(this.sword, ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-                        LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, stack, buffer, entity.level(), entity.getId());
-                stack.popPose();
-            }
+        for (int i = 0; i < MarionettaTrapEntity.SWORDS; i++) {
+            float rotationSword = entity.getSpinProgress(partialTicks) * 480 - SWORD_OFFSET * i;
+            if (rotationSword <= 0)
+                return;
+            entity.playSpawnSound(i);
+            this.renderSwords(stack, entity, buffer, rotationSword, entity.getAttackProgress(i, partialTicks));
         }
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+    }
+
+    private void renderSwords(PoseStack stack, MarionettaTrapEntity entity, MultiBufferSource buffer,
+                              float rotation, float attackProgress) {
+        stack.pushPose();
+        stack.mulPose(Axis.YP.rotationDegrees(rotation));
+        stack.mulPose(Axis.XP.rotationDegrees(-15));
+        stack.translate(0, 0, 5 - (5 * attackProgress));
+        stack.mulPose(Axis.XP.rotationDegrees(-12));
+        Minecraft.getInstance().getItemRenderer().renderStatic(this.sword, ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+                LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, stack, buffer, entity.level(), entity.getId());
+        stack.popPose();
     }
 
     @Override

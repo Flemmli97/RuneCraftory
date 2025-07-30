@@ -59,7 +59,7 @@ public class Marionetta extends BossMonster {
     public static final String CARD_ATTACK = BUILDER.add("card_attack", AnimationsBuilder.definition(0.64).marker("attack", 0.36));
     public static final String CHEST_ATTACK = BUILDER.add("chest_attack", AnimationsBuilder.definition(1.2)
             .marker("attack_start", 0.28).marker("attack_end", 1));
-    public static final String CHEST_THROW = BUILDER.add("chest_throw", AnimationsBuilder.definition(5).marker("attack", 0.28));
+    public static final String CHEST_THROW = BUILDER.add("chest_throw", AnimationsBuilder.definition(MarionettaTrapEntity.DURATION, false).marker("attack", 0.28));
     public static final String STUFFED_ANIMALS = BUILDER.add("stuffed_animals", AnimationsBuilder.definition(0.76).marker("attack", 0.44));
     public static final String DARK_BEAM = BUILDER.add("dark_beam", AnimationsBuilder.definition(0.8).marker("attack", 0.36));
     public static final String FURNITURE = BUILDER.add("furniture", AnimationsBuilder.definition(1.2).marker("attack", 0.4));
@@ -114,7 +114,7 @@ public class Marionetta extends BossMonster {
                 Vec3 throwVec = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z())
                         .normalize().scale(1.2).add(0, 0.85, 0);
                 MarionettaTrapEntity trap = new MarionettaTrapEntity(entity.level(), entity);
-                trap.setDamageMultiplier(0.9f);
+                trap.setDamageMultiplier(0.8f);
                 entity.caughtEntities.forEach(trap::addCaughtEntity);
                 trap.setDeltaMovement(throwVec);
                 entity.level().addFreshEntity(trap);
