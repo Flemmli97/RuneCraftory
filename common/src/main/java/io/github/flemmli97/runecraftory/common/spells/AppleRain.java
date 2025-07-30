@@ -34,7 +34,7 @@ public class AppleRain extends Spell {
             AppleProjectileEntity apple = new AppleProjectileEntity(level, entity);
             if (this.type == Type.BIG) {
                 apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
-                apple.withSizeInc(1);
+                apple.withSizeInc(2);
             } else
                 apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * range;

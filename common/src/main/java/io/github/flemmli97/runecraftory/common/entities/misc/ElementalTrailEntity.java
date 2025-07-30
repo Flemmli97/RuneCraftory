@@ -138,7 +138,7 @@ public class ElementalTrailEntity extends BaseDamageCloud {
                 }
             }
         } else {
-            if (this.livingTicks % 2 == 0) {
+            if (this.livingTicks % 4 == 0) {
                 if (this.element == ItemElement.WATER)
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 0.9f, 0.8f, false);
                 if (this.element == ItemElement.EARTH)

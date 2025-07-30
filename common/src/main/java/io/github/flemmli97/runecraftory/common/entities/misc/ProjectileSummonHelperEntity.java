@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -27,6 +28,9 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
     protected float damageMultiplier = 1;
     protected int ticksExisted;
     protected int maxLivingTicks = 40;
+
+    protected Vec3 lockedPosition;
+    protected float lockedYaw, lockedPitch;
 
     public ProjectileSummonHelperEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -52,6 +56,14 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
     public void tick() {
         super.tick();
         this.ticksExisted++;
+        if (this.lockedPosition == null) {
+            this.lockedPosition = this.position();
+            this.lockedPitch = this.getXRot();
+            this.lockedYaw = this.getYRot();
+        }
+        this.setPos(this.lockedPosition);
+        this.setXRot(this.lockedPitch);
+        this.setYRot(this.lockedYaw);
         if (!this.level().isClientSide) {
             if (this.getOwner() != null && this.getOwner().isAlive()) {
                 this.summonProjectiles();

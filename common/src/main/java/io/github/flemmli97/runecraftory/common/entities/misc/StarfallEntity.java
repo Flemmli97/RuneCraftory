@@ -6,13 +6,19 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Predicate;
 
 public class StarfallEntity extends BaseProjectile {
 
@@ -53,6 +59,24 @@ public class StarfallEntity extends BaseProjectile {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected EntityHitResult getEntityHit(Vec3 from, Vec3 to) {
+        if (!this.isAlive()) {
+            return null;
+        }
+        return getEntityHitResult(this, to, this::canHit);
+    }
+
+    private static EntityHitResult getEntityHitResult(AdvancedProjectile projectile, Vec3 to, Predicate<Entity> pred) {
+        double dY = to.y() - projectile.getY();
+        AABB bb = projectile.getBoundingBox().expandTowards(0, dY, 0);
+        for (Entity e : projectile.level().getEntities(projectile, bb.inflate(1), pred)) {
+            if (e.getBoundingBox().inflate(0.3).intersects(bb))
+                return new EntityHitResult(e);
+        }
+        return null;
     }
 
     @Override

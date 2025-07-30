@@ -81,14 +81,14 @@ public class AppleProjectileEntity extends BaseProjectile {
                     Vec3 ownerPos = owner.position();
                     Vec3 pos = new Vec3(owner.getBbWidth() + 0.5, 0, 0)
                             .yRot((13 * this.livingTicks + this.angleOffset));
-                    this.setDeltaMovement(ownerPos.x + pos.x() - this.getX(), ownerPos.y + this.getOwner().getBbHeight() * 0.25 - this.getY(), ownerPos.z + pos.z() - this.getZ());
+                    this.setDeltaMovement(ownerPos.x + pos.x() - this.getX(), ownerPos.y + this.getOwner().getEyeHeight() - 0.2 - this.getY(), ownerPos.z + pos.z() - this.getZ());
                     this.hasImpulse = true;
                     this.checkedEntities.clear();
                 } else if (this.circleTime == 0) {
                     if (owner instanceof Mob mob && mob.getTarget() != null) {
                         this.shootAtEntity(mob.getTarget(), 1, 0);
                     } else {
-                        this.shoot(owner, owner.getXRot(), owner.getYRot(), 0, 1, 0);
+                        this.shoot(owner, owner.getXRot(), owner.getYRot(), -5, 1, 0);
                     }
                 }
             }
@@ -97,7 +97,7 @@ public class AppleProjectileEntity extends BaseProjectile {
 
     @Override
     protected float getGravityVelocity() {
-        return this.circling ? 0.005f : super.getGravityVelocity();
+        return this.circling ? 0.002f : super.getGravityVelocity();
     }
 
     @Override

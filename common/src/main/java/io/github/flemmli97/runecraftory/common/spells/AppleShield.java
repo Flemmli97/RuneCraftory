@@ -13,7 +13,7 @@ public class AppleShield extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        int apples = 12;
+        int apples = 9;
         for (int i = 0; i < apples; i++) {
             AppleProjectileEntity apple = new AppleProjectileEntity(level, entity);
             apple.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));

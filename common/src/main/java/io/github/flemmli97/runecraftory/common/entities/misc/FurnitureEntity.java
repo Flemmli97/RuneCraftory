@@ -4,11 +4,13 @@ import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -22,7 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Predicate;
+import java.util.List;
 
 public class FurnitureEntity extends BaseProjectile {
 
@@ -85,26 +87,21 @@ public class FurnitureEntity extends BaseProjectile {
     protected EntityHitResult getEntityHit(Vec3 from, Vec3 to) {
         if (!this.isAlive()) {
             return null;
-        } else {
-            return this.entityCollision(this::canHit);
         }
-    }
-
-    private EntityHitResult entityCollision(Predicate<Entity> pred) {
-        double distVar = Double.MAX_VALUE;
-        Entity ret = null;
-        AABB entityBB = this.getBoundingBox();
-        for (Entity entity1 : this.level().getEntities(this, this.getBoundingBox().inflate(0.5).expandTowards(this.getDeltaMovement()), pred)) {
-            AABB axisalignedbb = entity1.getBoundingBox().inflate(0.33F);
-            if (entityBB.intersects(axisalignedbb)) {
-                double dist = this.position().distanceToSqr(entity1.position());
-                if (dist < distVar) {
-                    ret = entity1;
-                    distVar = dist;
-                }
+        OrientedBoundingBox obb = new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(0.3)
+                .expandTowards(to.subtract(from)),
+                0, 0, this.position());
+        List<Entity> list = this.level().getEntities(this, obb.getEncompassingBox());
+        for (Entity e : list) {
+            if (!this.checkedEntities.contains(e.getUUID()) && this.canHit(e) && obb.intersects(e.getBoundingBox())) {
+                AABB outer = obb.getEncompassingBox();
+                Vec3 hit = new Vec3(Mth.clamp(e.position().x, outer.minX, outer.maxX),
+                        Mth.clamp(e.position().y, outer.minY, outer.maxY),
+                        Mth.clamp(e.position().z, outer.minZ, outer.maxZ));
+                return new EntityHitResult(e, hit);
             }
         }
-        return ret == null ? null : new EntityHitResult(ret);
+        return null;
     }
 
     @Override

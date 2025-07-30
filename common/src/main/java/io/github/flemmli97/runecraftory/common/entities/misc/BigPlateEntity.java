@@ -35,10 +35,10 @@ public class BigPlateEntity extends BaseProjectile {
         if (!this.isAlive()) {
             return null;
         }
-        return getEntityHitResult(this, from, to, this::canHit);
+        return getEntityHitResult(this, to, this::canHit);
     }
 
-    private static EntityHitResult getEntityHitResult(AdvancedProjectile projectile, Vec3 from, Vec3 to, Predicate<Entity> pred) {
+    private static EntityHitResult getEntityHitResult(AdvancedProjectile projectile, Vec3 to, Predicate<Entity> pred) {
         double dY = to.y() - projectile.getY();
         AABB bb = projectile.getBoundingBox().expandTowards(0, dY, 0);
         for (Entity e : projectile.level().getEntities(projectile, bb.inflate(1), pred)) {
