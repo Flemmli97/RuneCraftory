@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = RuneCraftory.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = RuneCraftory.MODID)
 public class DataEvent {
 
     @SubscribeEvent
