@@ -12,12 +12,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class DarkBeamEntity extends BaseBeam {
 
-    public DarkBeamEntity(EntityType<? extends DarkBeamEntity> type, Level world) {
-        super(type, world);
+    public DarkBeamEntity(EntityType<? extends DarkBeamEntity> type, Level level) {
+        super(type, level);
     }
 
-    public DarkBeamEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.DARK_BEAM.get(), world, shooter);
+    public DarkBeamEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.DARK_BEAM.get(), level, shooter);
     }
 
     @Override

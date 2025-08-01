@@ -31,8 +31,8 @@ public class PommePomme extends ChargingMonster {
 
     private final AnimationHandler<PommePomme> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public PommePomme(EntityType<? extends PommePomme> type, Level world) {
-        super(type, world);
+    public PommePomme(EntityType<? extends PommePomme> type, Level level) {
+        super(type, level);
     }
 
     @Override

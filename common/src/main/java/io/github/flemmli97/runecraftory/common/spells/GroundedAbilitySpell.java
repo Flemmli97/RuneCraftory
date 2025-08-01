@@ -16,7 +16,7 @@ public class GroundedAbilitySpell extends WeaponSpell {
     }
 
     @Override
-    public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        return (entity.onGround() || entity.isNoGravity()) && super.canUse(world, entity, stack);
+    public boolean canUse(ServerLevel level, LivingEntity entity, ItemStack stack) {
+        return (entity.onGround() || entity.isNoGravity()) && super.canUse(level, entity, stack);
     }
 }

@@ -11,8 +11,8 @@ import net.minecraft.util.Mth;
 
 public class SinkingParticle extends ColoredParticle {
 
-    protected SinkingParticle(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean collide) {
-        super(world, x, y, z, motionX, motionY, motionZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, collide, false, true);
+    protected SinkingParticle(ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean collide) {
+        super(level, x, y, z, motionX, motionY, motionZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, collide, false, true);
     }
 
     @Override

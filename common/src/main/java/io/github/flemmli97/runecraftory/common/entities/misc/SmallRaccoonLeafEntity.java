@@ -13,12 +13,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class SmallRaccoonLeafEntity extends BaseProjectile {
 
-    public SmallRaccoonLeafEntity(EntityType<? extends BaseProjectile> type, Level world) {
-        super(type, world);
+    public SmallRaccoonLeafEntity(EntityType<? extends BaseProjectile> type, Level level) {
+        super(type, level);
     }
 
-    public SmallRaccoonLeafEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.SMALL_RACCOON_LEAF.get(), world, shooter);
+    public SmallRaccoonLeafEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.SMALL_RACCOON_LEAF.get(), level, shooter);
         if (shooter.getBbHeight() > 2)
             this.setPos(this.getX(), shooter.getY() + shooter.getBbHeight() * 0.5, this.getZ());
     }

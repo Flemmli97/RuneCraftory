@@ -67,8 +67,8 @@ public class Sano extends SanoUno {
 
     private Uno other;
 
-    public Sano(EntityType<? extends Sano> type, Level world) {
-        super(type, world);
+    public Sano(EntityType<? extends Sano> type, Level level) {
+        super(type, level);
     }
 
     @Override

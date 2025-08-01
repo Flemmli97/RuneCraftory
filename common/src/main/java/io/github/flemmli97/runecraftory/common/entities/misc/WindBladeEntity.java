@@ -26,12 +26,12 @@ public class WindBladeEntity extends BaseProjectile {
     private Entity target;
     private Type type = Type.HOMING;
 
-    public WindBladeEntity(EntityType<? extends WindBladeEntity> type, Level world) {
-        super(type, world);
+    public WindBladeEntity(EntityType<? extends WindBladeEntity> type, Level level) {
+        super(type, level);
     }
 
-    public WindBladeEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.WIND_BLADE.get(), world, shooter);
+    public WindBladeEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.WIND_BLADE.get(), level, shooter);
     }
 
     public void setTarget(Entity entity) {

@@ -29,12 +29,12 @@ public class AppleProjectileEntity extends BaseProjectile {
     private boolean circling;
     private int angleOffset, circleTime;
 
-    public AppleProjectileEntity(EntityType<? extends BaseProjectile> type, Level world) {
-        super(type, world);
+    public AppleProjectileEntity(EntityType<? extends BaseProjectile> type, Level level) {
+        super(type, level);
     }
 
-    public AppleProjectileEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.APPLE.get(), world, shooter);
+    public AppleProjectileEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.APPLE.get(), level, shooter);
     }
 
     public void setAngleOffset(int angleOffset) {

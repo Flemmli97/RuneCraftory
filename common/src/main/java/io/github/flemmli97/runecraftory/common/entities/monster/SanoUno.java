@@ -36,8 +36,8 @@ public abstract class SanoUno extends BossMonster {
 
     protected boolean reversedSwipe;
 
-    public SanoUno(EntityType<? extends SanoUno> type, Level world) {
-        super(type, world);
+    public SanoUno(EntityType<? extends SanoUno> type, Level level) {
+        super(type, level);
         this.lookControl = new NonLookControl(this);
     }
 

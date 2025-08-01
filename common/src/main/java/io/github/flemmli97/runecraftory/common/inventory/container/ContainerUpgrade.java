@@ -66,8 +66,8 @@ public class ContainerUpgrade extends AbstractContainerMenu {
         this.updateOutput();
     }
 
-    public static UpgradingCraftingBlockEntity getTile(Level world, BlockPos pos) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
+    public static UpgradingCraftingBlockEntity getTile(Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof UpgradingCraftingBlockEntity) {
             return (UpgradingCraftingBlockEntity) blockEntity;
         }

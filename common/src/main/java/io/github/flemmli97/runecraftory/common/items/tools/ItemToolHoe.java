@@ -72,7 +72,7 @@ public class ItemToolHoe extends HoeItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
@@ -83,12 +83,12 @@ public class ItemToolHoe extends HoeItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel());
-            BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
+            BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
             if (range == 0) {
                 this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
             } else {
@@ -108,7 +108,7 @@ public class ItemToolHoe extends HoeItem {
                 }
             }
         }
-        super.releaseUsing(stack, world, entity, timeLeft);
+        super.releaseUsing(stack, level, entity, timeLeft);
     }
 
     @Override

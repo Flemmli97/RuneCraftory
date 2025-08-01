@@ -39,8 +39,8 @@ public class Buffamoo extends ChargingMonster {
 
     private final AnimationHandler<Buffamoo> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Buffamoo(EntityType<? extends Buffamoo> type, Level world) {
-        super(type, world);
+    public Buffamoo(EntityType<? extends Buffamoo> type, Level level) {
+        super(type, level);
     }
 
     @Override

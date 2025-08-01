@@ -219,8 +219,8 @@ public class Sarcophagus extends BossMonster {
     private String previousAttack = "", forceSetNextAttack;
     private int starfallCooldown;
 
-    public Sarcophagus(EntityType<? extends Sarcophagus> type, Level world) {
-        super(type, world);
+    public Sarcophagus(EntityType<? extends Sarcophagus> type, Level level) {
+        super(type, level);
     }
 
     @Override

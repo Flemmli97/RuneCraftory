@@ -61,14 +61,14 @@ public class ItemGloveBase extends Item implements DualWeapon, ExtendedWeapon {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.GLOVE_USE.get(), stack);
         }
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
 

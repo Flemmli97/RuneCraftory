@@ -61,8 +61,8 @@ public class Uno extends SanoUno {
     private final AnimationHandler<Uno> animationHandler = new AnimationHandler<>(this, ANIMS);
     private Sano other;
 
-    public Uno(EntityType<? extends Uno> type, Level world) {
-        super(type, world);
+    public Uno(EntityType<? extends Uno> type, Level level) {
+        super(type, level);
     }
 
     @Override

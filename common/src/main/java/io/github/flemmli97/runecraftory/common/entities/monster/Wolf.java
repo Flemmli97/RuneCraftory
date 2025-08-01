@@ -42,8 +42,8 @@ public class Wolf extends LeapingMonster {
 
     private final AnimationHandler<Wolf> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Wolf(EntityType<? extends Wolf> type, Level world) {
-        super(type, world);
+    public Wolf(EntityType<? extends Wolf> type, Level level) {
+        super(type, level);
     }
 
     public static void wolfAttack(LivingEntity attacker, Entity target) {

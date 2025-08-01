@@ -18,13 +18,13 @@ public class CardsEntity extends BaseProjectile {
 
     private static final EntityDataAccessor<Integer> CARD_TYPE = SynchedEntityData.defineId(CardsEntity.class, EntityDataSerializers.INT);
 
-    public CardsEntity(EntityType<? extends CardsEntity> type, Level world) {
-        super(type, world);
+    public CardsEntity(EntityType<? extends CardsEntity> type, Level level) {
+        super(type, level);
         this.damageMultiplier = 0.6f;
     }
 
-    public CardsEntity(Level world, LivingEntity shooter, int type) {
-        super(RuneCraftoryEntities.CARDS.get(), world, shooter);
+    public CardsEntity(Level level, LivingEntity shooter, int type) {
+        super(RuneCraftoryEntities.CARDS.get(), level, shooter);
         this.damageMultiplier = 0.6f;
     }
 

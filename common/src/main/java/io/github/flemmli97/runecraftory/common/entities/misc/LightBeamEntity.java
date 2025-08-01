@@ -12,12 +12,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class LightBeamEntity extends BaseBeam {
 
-    public LightBeamEntity(EntityType<? extends LightBeamEntity> type, Level world) {
-        super(type, world);
+    public LightBeamEntity(EntityType<? extends LightBeamEntity> type, Level level) {
+        super(type, level);
     }
 
-    public LightBeamEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.LIGHT_BEAM.get(), world, shooter);
+    public LightBeamEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.LIGHT_BEAM.get(), level, shooter);
     }
 
     @Override

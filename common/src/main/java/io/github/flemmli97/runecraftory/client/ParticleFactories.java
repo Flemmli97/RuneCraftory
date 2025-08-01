@@ -12,8 +12,8 @@ public class ParticleFactories {
     public record ShortLightParticleFactory(SpriteSet sprite) implements ParticleProvider<ColoredParticleData> {
 
         @Override
-        public Particle createParticle(ColoredParticleData data, ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ) {
-            return new ColoredParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 3, 0.8f, 1.2f, false, true, false);
+        public Particle createParticle(ColoredParticleData data, ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ) {
+            return new ColoredParticle(level, x, y, z, motionX, motionY, motionZ, data, this.sprite, 3, 0.8f, 1.2f, false, true, false);
         }
     }
 }

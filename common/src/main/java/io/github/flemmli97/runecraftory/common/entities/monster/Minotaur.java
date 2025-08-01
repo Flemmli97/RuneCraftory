@@ -50,8 +50,8 @@ public class Minotaur extends ChargingMonster {
     private Vec3 spinDirection;
     private float spinAngle;
 
-    public Minotaur(EntityType<? extends Minotaur> type, Level world) {
-        super(type, world);
+    public Minotaur(EntityType<? extends Minotaur> type, Level level) {
+        super(type, level);
     }
 
     @Override

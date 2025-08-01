@@ -51,8 +51,8 @@ public class Demon extends BaseMonster implements HealingPredicateEntity, Elemen
         return this.getOwnerUUID().equals(e.getUUID());
     };
 
-    public Demon(EntityType<? extends Demon> type, Level world) {
-        super(type, world);
+    public Demon(EntityType<? extends Demon> type, Level level) {
+        super(type, level);
     }
 
     @Override

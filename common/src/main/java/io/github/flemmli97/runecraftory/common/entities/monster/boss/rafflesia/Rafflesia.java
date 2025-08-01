@@ -102,8 +102,8 @@ public class Rafflesia extends BossMonster {
     private RafflesiaPart pitcherEntity;
     private int summonCooldown = 100;
 
-    public Rafflesia(EntityType<? extends Rafflesia> type, Level world) {
-        super(type, world);
+    public Rafflesia(EntityType<? extends Rafflesia> type, Level level) {
+        super(type, level);
     }
 
     public static boolean isMirrorAttack(AnimationDefinition anim) {

@@ -41,27 +41,27 @@ public class ItemToolFishingRod extends FishingRodItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && Platform.INSTANCE.getEntityData(player).fishingHook == null) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
         }
-        this.throwRod(world, player, stack, 0);
-        return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
+        this.throwRod(level, player, stack, 0);
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier);
             int charge = Math.min(useTime, tier.getTierLevel());
-            this.throwRod(world, entity, stack, charge);
+            this.throwRod(level, entity, stack, charge);
             entity.swing(entity.getUsedItemHand());
         }
-        super.releaseUsing(stack, world, entity, timeLeft);
+        super.releaseUsing(stack, level, entity, timeLeft);
     }
 
     @Override

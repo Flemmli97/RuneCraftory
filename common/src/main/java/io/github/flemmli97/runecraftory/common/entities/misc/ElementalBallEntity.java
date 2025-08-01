@@ -27,12 +27,12 @@ public class ElementalBallEntity extends BaseProjectile {
     private ItemElement element = ItemElement.NONE;
     private int maxLivingTicks = 6;
 
-    public ElementalBallEntity(EntityType<? extends ElementalBallEntity> type, Level world) {
-        super(type, world);
+    public ElementalBallEntity(EntityType<? extends ElementalBallEntity> type, Level level) {
+        super(type, level);
     }
 
-    public ElementalBallEntity(Level world, LivingEntity shooter, ItemElement element) {
-        super(RuneCraftoryEntities.ELEMENTAL_BALL.get(), world, shooter);
+    public ElementalBallEntity(Level level, LivingEntity shooter, ItemElement element) {
+        super(RuneCraftoryEntities.ELEMENTAL_BALL.get(), level, shooter);
         this.element = element;
         this.entityData.set(ELEMENT_DATA, this.element.ordinal());
         this.damageMultiplier = 0.8f;

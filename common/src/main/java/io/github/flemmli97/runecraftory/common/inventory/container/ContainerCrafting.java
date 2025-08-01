@@ -75,8 +75,8 @@ public class ContainerCrafting extends AbstractContainerMenu {
         this.addDataSlot(this.runePointCost = DataSlot.standalone());
     }
 
-    public static CraftingBlockEntity getTile(Level world, BlockPos pos) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
+    public static CraftingBlockEntity getTile(Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof CraftingBlockEntity) {
             return (CraftingBlockEntity) blockEntity;
         }

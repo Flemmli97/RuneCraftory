@@ -22,12 +22,12 @@ public class BigPlateEntity extends BaseProjectile {
 
     private boolean hitSomething;
 
-    public BigPlateEntity(EntityType<? extends BigPlateEntity> type, Level world) {
-        super(type, world);
+    public BigPlateEntity(EntityType<? extends BigPlateEntity> type, Level level) {
+        super(type, level);
     }
 
-    public BigPlateEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.BIG_PLATE.get(), world, shooter);
+    public BigPlateEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.BIG_PLATE.get(), level, shooter);
     }
 
     @Override

@@ -15,12 +15,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class ThunderboltBeamEntity extends BaseBeam {
 
-    public ThunderboltBeamEntity(EntityType<? extends ThunderboltBeamEntity> type, Level world) {
-        super(type, world);
+    public ThunderboltBeamEntity(EntityType<? extends ThunderboltBeamEntity> type, Level level) {
+        super(type, level);
     }
 
-    public ThunderboltBeamEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.LIGHTNING_BEAM.get(), world, shooter);
+    public ThunderboltBeamEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.LIGHTNING_BEAM.get(), level, shooter);
     }
 
     @Override

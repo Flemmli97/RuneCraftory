@@ -40,8 +40,8 @@ public class FlowerLily extends BaseMonster {
 
     private final AnimationHandler<FlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public FlowerLily(EntityType<? extends FlowerLily> type, Level world) {
-        super(type, world);
+    public FlowerLily(EntityType<? extends FlowerLily> type, Level level) {
+        super(type, level);
     }
 
     @Override

@@ -75,27 +75,27 @@ public abstract class Spell {
         return false;
     }
 
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        return this.use(world, entity, stack, false);
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack) {
+        return this.use(level, entity, stack, false);
     }
 
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
         if (!ignoreSeal && EntityUtils.sealed(entity)) {
             if (entity instanceof ServerPlayer player) {
                 EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
             }
             return false;
         }
-        return this.use(world, entity, stack, 1, 1, CombatUtils.getSpellLevelFromStack(stack));
+        return this.use(level, entity, stack, 1, 1, CombatUtils.getSpellLevelFromStack(stack));
     }
 
-    public abstract boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level);
+    public abstract boolean use(ServerLevel serverLevel, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level);
 
     public AttackAction useAction() {
         return RuneCraftoryAttackActions.STAFF_USE.get();
     }
 
-    public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
+    public boolean canUse(ServerLevel serverLevel, LivingEntity entity, ItemStack stack) {
         return entity.getVehicle() == null || this.usableOnMounts();
     }
 

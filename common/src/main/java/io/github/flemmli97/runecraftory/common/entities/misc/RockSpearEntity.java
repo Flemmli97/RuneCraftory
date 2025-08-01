@@ -18,12 +18,12 @@ public class RockSpearEntity extends BaseBeam {
 
     private static final EntityDataAccessor<Boolean> BIG = SynchedEntityData.defineId(RockSpearEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public RockSpearEntity(EntityType<? extends RockSpearEntity> type, Level world) {
-        super(type, world);
+    public RockSpearEntity(EntityType<? extends RockSpearEntity> type, Level level) {
+        super(type, level);
     }
 
-    public RockSpearEntity(Level world, LivingEntity shooter, boolean big) {
-        super(RuneCraftoryEntities.ROCK_SPEAR.get(), world, shooter);
+    public RockSpearEntity(Level level, LivingEntity shooter, boolean big) {
+        super(RuneCraftoryEntities.ROCK_SPEAR.get(), level, shooter);
         this.setPos(this.getX(), this.getY() - 0.1, this.getZ());
         this.entityData.set(BIG, big);
     }

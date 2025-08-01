@@ -16,16 +16,16 @@ public abstract class BaseDamageCloud extends DamageCloudEntity {
     private Predicate<LivingEntity> pred = e -> !e.getUUID().equals(this.getOwnerUUID());
     protected float damageMultiplier = 1;
 
-    public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level world) {
-        super(type, world);
+    public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level level) {
+        super(type, level);
     }
 
-    public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level world, double x, double y, double z) {
-        super(type, world, x, y, z);
+    public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level level, double x, double y, double z) {
+        super(type, level, x, y, z);
     }
 
-    public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level world, LivingEntity shooter) {
-        super(type, world, shooter);
+    public BaseDamageCloud(EntityType<? extends BaseDamageCloud> type, Level level, LivingEntity shooter) {
+        super(type, level, shooter);
         if (shooter instanceof TargetableOpponent targetableOpponent)
             this.pred = targetableOpponent.validTargetPredicate();
     }

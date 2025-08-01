@@ -74,7 +74,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer) {
             PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
             int time = stack.getUseDuration(entity) - timeLeft - 1;
@@ -85,7 +85,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
 

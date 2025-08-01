@@ -13,8 +13,8 @@ import net.minecraft.world.level.Level;
 
 public class Ignis extends WispBase {
 
-    public Ignis(EntityType<? extends WispBase> type, Level world) {
-        super(type, world);
+    public Ignis(EntityType<? extends WispBase> type, Level level) {
+        super(type, level);
     }
 
     @Override

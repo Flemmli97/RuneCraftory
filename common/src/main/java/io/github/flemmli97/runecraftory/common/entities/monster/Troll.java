@@ -39,8 +39,8 @@ public class Troll extends BaseMonster {
 
     private final AnimationHandler<Troll> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Troll(EntityType<? extends Troll> type, Level world) {
-        super(type, world);
+    public Troll(EntityType<? extends Troll> type, Level level) {
+        super(type, level);
     }
 
     @Override

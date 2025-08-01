@@ -27,12 +27,12 @@ public class ThrownItemEntity extends BaseProjectile {
 
     private boolean actAsFood;
 
-    public ThrownItemEntity(EntityType<? extends ThrownItemEntity> type, Level world) {
-        super(type, world);
+    public ThrownItemEntity(EntityType<? extends ThrownItemEntity> type, Level level) {
+        super(type, level);
     }
 
-    public ThrownItemEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.THROWN_ITEM.get(), world, shooter);
+    public ThrownItemEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.THROWN_ITEM.get(), level, shooter);
     }
 
     @Override

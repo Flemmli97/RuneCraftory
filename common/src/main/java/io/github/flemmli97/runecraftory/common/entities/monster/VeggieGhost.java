@@ -54,8 +54,8 @@ public class VeggieGhost extends BaseMonster {
         return false;
     });
 
-    public VeggieGhost(EntityType<? extends VeggieGhost> type, Level world) {
-        super(type, world);
+    public VeggieGhost(EntityType<? extends VeggieGhost> type, Level level) {
+        super(type, level);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);
         this.setNoGravity(true);

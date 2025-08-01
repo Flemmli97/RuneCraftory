@@ -18,12 +18,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class TornadoEntity extends BaseDamageCloud {
 
-    public TornadoEntity(EntityType<? extends TornadoEntity> type, Level world) {
-        super(type, world);
+    public TornadoEntity(EntityType<? extends TornadoEntity> type, Level level) {
+        super(type, level);
     }
 
-    public TornadoEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.TORNADO.get(), world, shooter);
+    public TornadoEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.TORNADO.get(), level, shooter);
     }
 
     @Override

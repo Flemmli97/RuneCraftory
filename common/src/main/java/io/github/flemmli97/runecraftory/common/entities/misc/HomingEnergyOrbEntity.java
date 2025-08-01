@@ -28,13 +28,13 @@ public class HomingEnergyOrbEntity extends BaseDamageCloud implements PowerableM
 
     protected static final EntityDataAccessor<Optional<UUID>> TARGET_UUID = SynchedEntityData.defineId(HomingEnergyOrbEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    public HomingEnergyOrbEntity(EntityType<? extends BaseDamageCloud> type, Level world) {
-        super(type, world);
+    public HomingEnergyOrbEntity(EntityType<? extends BaseDamageCloud> type, Level level) {
+        super(type, level);
         this.setRadius(0.5f);
     }
 
-    public HomingEnergyOrbEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.ENERGY_ORB.get(), world, shooter);
+    public HomingEnergyOrbEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.ENERGY_ORB.get(), level, shooter);
         this.setPos(this.getX(), this.getY() + shooter.getBbHeight() * 0.5, this.getZ());
         this.setRadius(0.5f);
     }

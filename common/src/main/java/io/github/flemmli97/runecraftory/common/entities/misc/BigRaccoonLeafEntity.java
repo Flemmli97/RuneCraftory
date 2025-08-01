@@ -28,12 +28,12 @@ public class BigRaccoonLeafEntity extends BaseProjectile {
     private Vec3 shootDir, center, axis;
     private float circleRadius;
 
-    public BigRaccoonLeafEntity(EntityType<? extends BaseProjectile> type, Level world) {
-        super(type, world);
+    public BigRaccoonLeafEntity(EntityType<? extends BaseProjectile> type, Level level) {
+        super(type, level);
     }
 
-    public BigRaccoonLeafEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.BIG_RACCOON_LEAF.get(), world, shooter);
+    public BigRaccoonLeafEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.BIG_RACCOON_LEAF.get(), level, shooter);
         if (shooter.getBbHeight() > 2)
             this.setPos(this.getX(), shooter.getY() + shooter.getBbHeight() * 0.5, this.getZ());
     }

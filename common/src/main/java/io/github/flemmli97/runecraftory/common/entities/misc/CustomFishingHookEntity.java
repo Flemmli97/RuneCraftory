@@ -82,8 +82,8 @@ public class CustomFishingHookEntity extends AdvancedProjectile {
         this.nibbleBonus = 0;
     }
 
-    public CustomFishingHookEntity(Level world, LivingEntity shooter, float speed, int luck, int charge) {
-        super(RuneCraftoryEntities.FISHING_HOOK.get(), world, shooter);
+    public CustomFishingHookEntity(Level level, LivingEntity shooter, float speed, int luck, int charge) {
+        super(RuneCraftoryEntities.FISHING_HOOK.get(), level, shooter);
         this.setPos(this.getX(), this.getY() + 0.1, this.getZ());
         this.shoot(shooter, Math.max(-90, shooter.getXRot() - 5), shooter.getYRot(), 0, 1.1f + Math.max(-0.3f, Mth.sin(-shooter.getXRot() * Mth.DEG_TO_RAD)), 0);
         this.lureSpeedBonus = speed;

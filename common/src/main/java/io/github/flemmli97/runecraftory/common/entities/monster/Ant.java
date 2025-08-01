@@ -27,8 +27,8 @@ public class Ant extends BaseMonster {
 
     private final AnimationHandler<Ant> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Ant(EntityType<? extends Ant> type, Level world) {
-        super(type, world);
+    public Ant(EntityType<? extends Ant> type, Level level) {
+        super(type, level);
     }
 
     @Override

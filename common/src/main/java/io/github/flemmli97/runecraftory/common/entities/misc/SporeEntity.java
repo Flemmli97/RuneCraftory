@@ -20,12 +20,12 @@ public class SporeEntity extends BaseDamageCloud {
 
     private static final List<Vector3f> PARTICLE_CIRCLE = MathUtils.rotatedVecs(new Vector3f(0.025f, 0.065f, 0), new Vector3f(0, 1, 0), -180, 160, 20);
 
-    public SporeEntity(EntityType<? extends SporeEntity> type, Level world) {
-        super(type, world);
+    public SporeEntity(EntityType<? extends SporeEntity> type, Level level) {
+        super(type, level);
     }
 
-    public SporeEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.SPORE.get(), world, shooter);
+    public SporeEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.SPORE.get(), level, shooter);
     }
 
     @Override

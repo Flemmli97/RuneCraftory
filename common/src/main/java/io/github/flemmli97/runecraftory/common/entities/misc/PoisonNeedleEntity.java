@@ -13,12 +13,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class PoisonNeedleEntity extends BaseProjectile {
 
-    public PoisonNeedleEntity(EntityType<? extends PoisonNeedleEntity> type, Level world) {
-        super(type, world);
+    public PoisonNeedleEntity(EntityType<? extends PoisonNeedleEntity> type, Level level) {
+        super(type, level);
     }
 
-    public PoisonNeedleEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.POISON_NEEDLE.get(), world, shooter);
+    public PoisonNeedleEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.POISON_NEEDLE.get(), level, shooter);
     }
 
     @Override

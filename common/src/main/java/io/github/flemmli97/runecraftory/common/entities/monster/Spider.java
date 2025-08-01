@@ -46,8 +46,8 @@ public class Spider extends BaseMonster {
     private final AnimationHandler<Spider> animationHandler = new AnimationHandler<>(this, ANIMS);
     public int climbingTicker = -1;
 
-    public Spider(EntityType<? extends Spider> type, Level world) {
-        super(type, world);
+    public Spider(EntityType<? extends Spider> type, Level level) {
+        super(type, level);
     }
 
     @Override

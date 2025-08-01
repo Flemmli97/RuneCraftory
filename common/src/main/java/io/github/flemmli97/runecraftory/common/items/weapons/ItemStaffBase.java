@@ -68,16 +68,16 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.fail(stack);
         if (this.chargeAmount(stack) > 0) {
-            if (!world.isClientSide) {
+            if (!level.isClientSide) {
                 if (this.getStaffChargeTime(player, stack) <= 0) {
-                    int level = Math.min(3, this.chargeAmount(stack));
+                    int chargeLevel = Math.min(3, this.chargeAmount(stack));
                     Spell spell = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
-                            .fromChargeLevel(stack, level);
+                            .fromChargeLevel(stack, chargeLevel);
                     if (spell != null && player instanceof ServerPlayer serverPlayer) {
                         Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
                     }
@@ -90,24 +90,24 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (!level.isClientSide) {
             int tier = (stack.getUseDuration(entity) - timeLeft - 1) / this.getStaffChargeTime(entity, stack);
-            int level = Math.min(tier, this.chargeAmount(stack));
+            int chargeLevel = Math.min(tier, this.chargeAmount(stack));
             Spell spell = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
-                    .fromChargeLevel(stack, level);
+                    .fromChargeLevel(stack, chargeLevel);
             if (spell != null) {
                 if (entity instanceof ServerPlayer player) {
                     Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
                     return;
                 }
-                spell.use((ServerLevel) world, entity, stack);
+                spell.use((ServerLevel) level, entity, stack);
             }
         }
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
 

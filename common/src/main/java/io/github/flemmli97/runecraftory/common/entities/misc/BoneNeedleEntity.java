@@ -13,12 +13,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class BoneNeedleEntity extends BaseProjectile {
 
-    public BoneNeedleEntity(EntityType<? extends BaseProjectile> type, Level world) {
-        super(type, world);
+    public BoneNeedleEntity(EntityType<? extends BaseProjectile> type, Level level) {
+        super(type, level);
     }
 
-    public BoneNeedleEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.BONE_NEEDLE.get(), world, shooter);
+    public BoneNeedleEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.BONE_NEEDLE.get(), level, shooter);
     }
 
     @Override

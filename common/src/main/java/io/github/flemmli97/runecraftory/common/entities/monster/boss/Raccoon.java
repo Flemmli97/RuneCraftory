@@ -252,8 +252,8 @@ public class Raccoon extends BossMonster {
     private final EntityDimensions berserkDimensions = EntityDimensions.scalable(1.4f, 2.5f)
             .withAttachments(EntityAttachments.builder().attach(EntityAttachment.PASSENGER, new Vec3(0, 30 / 16d, -7 / 16d)));
 
-    public Raccoon(EntityType<? extends Raccoon> type, Level world) {
-        super(type, world);
+    public Raccoon(EntityType<? extends Raccoon> type, Level level) {
+        super(type, level);
     }
 
     @Override

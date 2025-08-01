@@ -48,8 +48,8 @@ public class SkyFish extends BaseMonster {
 
     private final AnimationHandler<SkyFish> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public SkyFish(EntityType<? extends BaseMonster> type, Level world) {
-        super(type, world);
+    public SkyFish(EntityType<? extends BaseMonster> type, Level level) {
+        super(type, level);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.moveControl = new FreeMoveControl(this, () -> false);
         this.setNoGravity(true);

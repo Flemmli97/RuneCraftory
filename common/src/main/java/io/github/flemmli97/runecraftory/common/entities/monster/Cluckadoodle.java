@@ -32,8 +32,8 @@ public class Cluckadoodle extends BaseMonster {
 
     private final AnimationHandler<Cluckadoodle> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Cluckadoodle(EntityType<? extends Cluckadoodle> type, Level world) {
-        super(type, world);
+    public Cluckadoodle(EntityType<? extends Cluckadoodle> type, Level level) {
+        super(type, level);
     }
 
     @Override

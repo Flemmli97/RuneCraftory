@@ -25,7 +25,7 @@ import java.util.Optional;
 public class TeleportSpell extends Spell {
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
+    public boolean use(ServerLevel serverLevel, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         if (entity instanceof Mob mob && mob.level() instanceof ServerLevel) {
             if (mob.hasRestriction()) {
                 Vec3 home = Vec3.atCenterOf(mob.getRestrictCenter());

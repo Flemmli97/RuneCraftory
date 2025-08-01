@@ -18,8 +18,8 @@ public class BaseStaffSpell extends Spell {
     private static final float[] OFFSET_THREE = {-1f, 0, 1f};
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        return super.use(world, entity, stack, stack.getItem() instanceof ItemStaffBase staff && staff.amount <= 1);
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack) {
+        return super.use(level, entity, stack, stack.getItem() instanceof ItemStaffBase staff && staff.amount <= 1);
     }
 
     @Override

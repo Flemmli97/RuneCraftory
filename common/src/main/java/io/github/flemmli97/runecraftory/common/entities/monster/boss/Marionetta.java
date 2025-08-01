@@ -154,8 +154,8 @@ public class Marionetta extends BossMonster {
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private Vec3 moveDirection;
 
-    public Marionetta(EntityType<? extends Marionetta> type, Level world) {
-        super(type, world);
+    public Marionetta(EntityType<? extends Marionetta> type, Level level) {
+        super(type, level);
     }
 
     @Override

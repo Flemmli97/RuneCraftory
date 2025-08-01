@@ -39,8 +39,8 @@ public class Duck extends ChargingMonster {
 
     private final AnimationHandler<Duck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Duck(EntityType<? extends Duck> type, Level world) {
-        super(type, world);
+    public Duck(EntityType<? extends Duck> type, Level level) {
+        super(type, level);
     }
 
     @Override

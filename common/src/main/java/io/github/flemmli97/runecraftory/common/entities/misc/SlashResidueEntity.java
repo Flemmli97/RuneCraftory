@@ -29,12 +29,12 @@ public class SlashResidueEntity extends BaseDamageCloud {
 
     private boolean oneTimeDamage;
 
-    public SlashResidueEntity(EntityType<? extends BaseDamageCloud> type, Level world) {
-        super(type, world);
+    public SlashResidueEntity(EntityType<? extends BaseDamageCloud> type, Level level) {
+        super(type, level);
     }
 
-    public SlashResidueEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.SLASH_RESIDUE.get(), world, shooter);
+    public SlashResidueEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.SLASH_RESIDUE.get(), level, shooter);
     }
 
     @Override

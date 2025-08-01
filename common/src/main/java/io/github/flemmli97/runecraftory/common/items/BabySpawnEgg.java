@@ -74,16 +74,16 @@ public class BabySpawnEgg extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        Level world = ctx.getLevel();
-        if (!(world instanceof ServerLevel)) {
+        Level level = ctx.getLevel();
+        if (!(level instanceof ServerLevel)) {
             return InteractionResult.SUCCESS;
         } else {
             ItemStack stack = ctx.getItemInHand();
             BlockPos blockpos = ctx.getClickedPos();
             Direction direction = ctx.getClickedFace();
-            BlockState blockstate = world.getBlockState(blockpos);
-            BlockPos blockpos1 = blockstate.getCollisionShape(world, blockpos).isEmpty() ? blockpos : blockpos.relative(direction);
-            Entity e = this.spawnEntity((ServerLevel) world, ctx.getPlayer(), stack, blockpos1, MobSpawnType.SPAWN_EGG, true, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP);
+            BlockState blockstate = level.getBlockState(blockpos);
+            BlockPos blockpos1 = blockstate.getCollisionShape(level, blockpos).isEmpty() ? blockpos : blockpos.relative(direction);
+            Entity e = this.spawnEntity((ServerLevel) level, ctx.getPlayer(), stack, blockpos1, MobSpawnType.SPAWN_EGG, true, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP);
             if (e != null) {
                 stack.shrink(1);
             }
@@ -92,19 +92,19 @@ public class BabySpawnEgg extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        BlockHitResult raytraceresult = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
+        BlockHitResult raytraceresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         if (raytraceresult.getType() != HitResult.Type.BLOCK) {
             return InteractionResultHolder.pass(stack);
-        } else if (!(world instanceof ServerLevel)) {
+        } else if (!(level instanceof ServerLevel)) {
             return InteractionResultHolder.success(stack);
         } else {
             BlockPos blockpos = raytraceresult.getBlockPos();
-            if (!(world.getBlockState(blockpos).getBlock() instanceof LiquidBlock)) {
+            if (!(level.getBlockState(blockpos).getBlock() instanceof LiquidBlock)) {
                 return InteractionResultHolder.pass(stack);
-            } else if (world.mayInteract(player, blockpos) && player.mayUseItemAt(blockpos, raytraceresult.getDirection(), stack)) {
-                Entity e = this.spawnEntity((ServerLevel) world, player, stack, blockpos, MobSpawnType.SPAWN_EGG, true, true, false);
+            } else if (level.mayInteract(player, blockpos) && player.mayUseItemAt(blockpos, raytraceresult.getDirection(), stack)) {
+                Entity e = this.spawnEntity((ServerLevel) level, player, stack, blockpos, MobSpawnType.SPAWN_EGG, true, true, false);
                 if (e != null) {
                     if (!player.isCreative())
                         stack.shrink(1);

@@ -15,12 +15,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class MobArrowEntity extends BaseProjectile {
 
-    public MobArrowEntity(EntityType<? extends MobArrowEntity> type, Level world) {
-        super(type, world);
+    public MobArrowEntity(EntityType<? extends MobArrowEntity> type, Level level) {
+        super(type, level);
     }
 
-    public MobArrowEntity(Level world, LivingEntity shooter, float dmgMulti) {
-        super(RuneCraftoryEntities.ARROW.get(), world, shooter);
+    public MobArrowEntity(Level level, LivingEntity shooter, float dmgMulti) {
+        super(RuneCraftoryEntities.ARROW.get(), level, shooter);
         this.damageMultiplier = dmgMulti;
     }
 

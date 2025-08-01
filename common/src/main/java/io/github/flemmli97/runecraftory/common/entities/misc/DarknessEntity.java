@@ -13,12 +13,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class DarknessEntity extends BaseDamageCloud {
 
-    public DarknessEntity(EntityType<? extends DarknessEntity> type, Level world) {
-        super(type, world);
+    public DarknessEntity(EntityType<? extends DarknessEntity> type, Level level) {
+        super(type, level);
     }
 
-    public DarknessEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.DARKNESS.get(), world, shooter);
+    public DarknessEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.DARKNESS.get(), level, shooter);
         this.setPos(this.getX(), this.getY() + 0.1, this.getZ());
     }
 

@@ -32,8 +32,8 @@ public class BigMuck extends BaseMonster {
 
     private final AnimationHandler<BigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public BigMuck(EntityType<? extends BigMuck> type, Level world) {
-        super(type, world);
+    public BigMuck(EntityType<? extends BigMuck> type, Level level) {
+        super(type, level);
     }
 
     @Override

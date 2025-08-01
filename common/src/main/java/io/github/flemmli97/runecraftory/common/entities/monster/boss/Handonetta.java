@@ -163,8 +163,8 @@ public class Handonetta extends BossMonster {
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private Vec3 moveDirection;
 
-    public Handonetta(EntityType<? extends Handonetta> type, Level world) {
-        super(type, world);
+    public Handonetta(EntityType<? extends Handonetta> type, Level level) {
+        super(type, level);
         this.setNoGravity(true);
         this.moveControl = new HandonettaMoveController(this);
     }

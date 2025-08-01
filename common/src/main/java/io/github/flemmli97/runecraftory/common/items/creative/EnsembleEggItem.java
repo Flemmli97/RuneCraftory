@@ -41,8 +41,8 @@ public class EnsembleEggItem extends SpawnEgg {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        InteractionResultHolder<ItemStack> res = super.use(world, player, hand);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        InteractionResultHolder<ItemStack> res = super.use(level, player, hand);
         if (res.getResult() == InteractionResult.PASS) {
             if (player instanceof ServerPlayer serverPlayer)
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CSpawnEggScreen(hand), serverPlayer);

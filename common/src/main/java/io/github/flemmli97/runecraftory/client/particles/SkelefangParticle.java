@@ -39,8 +39,8 @@ public class SkelefangParticle extends Particle {
     private float cameraLastPitch, cameraLastYaw;
     private boolean first = true;
 
-    public SkelefangParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, SkelefangParticleData data) {
-        super(world, x, y, z);
+    public SkelefangParticle(ClientLevel level, double x, double y, double z, double dirX, double dirY, double dirZ, SkelefangParticleData data) {
+        super(level, x, y, z);
         this.setParticleSpeed(dirX, dirY, dirZ);
         if (data.hasGravity())
             this.gravity = 1;

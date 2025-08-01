@@ -16,12 +16,12 @@ public class GustRocksEntity extends BaseDamageCloud {
 
     private Vec3 up, side;
 
-    public GustRocksEntity(EntityType<? extends GustRocksEntity> type, Level world) {
-        super(type, world);
+    public GustRocksEntity(EntityType<? extends GustRocksEntity> type, Level level) {
+        super(type, level);
     }
 
-    public GustRocksEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.GUST_ROCK.get(), world, shooter);
+    public GustRocksEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.GUST_ROCK.get(), level, shooter);
     }
 
     @Override

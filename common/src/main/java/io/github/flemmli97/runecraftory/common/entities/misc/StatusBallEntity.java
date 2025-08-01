@@ -31,12 +31,12 @@ public class StatusBallEntity extends BaseDamageCloud {
     private Type type = Type.SLEEP;
     private int maxLivingTicks;
 
-    public StatusBallEntity(EntityType<? extends StatusBallEntity> type, Level world) {
-        super(type, world);
+    public StatusBallEntity(EntityType<? extends StatusBallEntity> type, Level level) {
+        super(type, level);
     }
 
-    public StatusBallEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.STATUS_BALL.get(), world, shooter);
+    public StatusBallEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.STATUS_BALL.get(), level, shooter);
         this.setPos(shooter.getX(), shooter.getY(), shooter.getZ());
     }
 

@@ -44,8 +44,8 @@ public class Goblin extends LeapingMonster {
 
     private final AnimationHandler<Goblin> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Goblin(EntityType<? extends Goblin> type, Level world) {
-        super(type, world);
+    public Goblin(EntityType<? extends Goblin> type, Level level) {
+        super(type, level);
     }
 
     @Override

@@ -23,8 +23,8 @@ public class TrickyMuck extends BigMuck {
 
     private final AnimationHandler<BigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public TrickyMuck(EntityType<? extends TrickyMuck> type, Level world) {
-        super(type, world);
+    public TrickyMuck(EntityType<? extends TrickyMuck> type, Level level) {
+        super(type, level);
     }
 
     @Override

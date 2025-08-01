@@ -33,14 +33,14 @@ public class FurnitureEntity extends BaseProjectile {
     private Type furnitureType = Type.CHEST;
     private float randomRotationOffset;
 
-    public FurnitureEntity(EntityType<? extends FurnitureEntity> type, Level world) {
-        super(type, world);
+    public FurnitureEntity(EntityType<? extends FurnitureEntity> type, Level level) {
+        super(type, level);
         this.randomRotationOffset = this.random.nextFloat() * 360;
         this.setFurnitureType(Type.WOOLYPLUSH);
     }
 
-    public FurnitureEntity(Level world, LivingEntity shooter, Type furnitureType) {
-        super(RuneCraftoryEntities.FURNITURE.get(), world, shooter);
+    public FurnitureEntity(Level level, LivingEntity shooter, Type furnitureType) {
+        super(RuneCraftoryEntities.FURNITURE.get(), level, shooter);
         this.setFurnitureType(furnitureType);
     }
 

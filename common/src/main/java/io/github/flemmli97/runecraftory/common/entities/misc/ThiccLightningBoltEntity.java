@@ -15,12 +15,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class ThiccLightningBoltEntity extends BaseProjectile {
 
-    public ThiccLightningBoltEntity(EntityType<? extends ThiccLightningBoltEntity> type, Level world) {
-        super(type, world);
+    public ThiccLightningBoltEntity(EntityType<? extends ThiccLightningBoltEntity> type, Level level) {
+        super(type, level);
     }
 
-    public ThiccLightningBoltEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.LIGHTNING_ORB_BOLT.get(), world, shooter);
+    public ThiccLightningBoltEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.LIGHTNING_ORB_BOLT.get(), level, shooter);
     }
 
     @Override

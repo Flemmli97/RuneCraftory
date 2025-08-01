@@ -7,8 +7,8 @@ import net.minecraft.world.level.Level;
 
 public class FlowerLion extends FlowerLily {
 
-    public FlowerLion(EntityType<? extends FlowerLily> type, Level world) {
-        super(type, world);
+    public FlowerLion(EntityType<? extends FlowerLily> type, Level level) {
+        super(type, level);
     }
 
     @Override

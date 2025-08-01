@@ -49,8 +49,8 @@ public class Mage extends BaseMonster implements HealingPredicateEntity {
         return this.getOwnerUUID().equals(e.getUUID());
     };
 
-    public Mage(EntityType<? extends Mage> type, Level world) {
-        super(type, world);
+    public Mage(EntityType<? extends Mage> type, Level level) {
+        super(type, level);
     }
 
     @Override

@@ -17,12 +17,12 @@ public class PollenPuffEntity extends BaseProjectile {
 
     public static final DustParticleOptions PARTICLE = new DustParticleOptions(Vec3.fromRGB24(0xd4fcd7).toVector3f(), 1.0f);
 
-    public PollenPuffEntity(EntityType<? extends PollenPuffEntity> type, Level world) {
-        super(type, world);
+    public PollenPuffEntity(EntityType<? extends PollenPuffEntity> type, Level level) {
+        super(type, level);
     }
 
-    public PollenPuffEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.POLLEN_PUFF.get(), world, shooter);
+    public PollenPuffEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.POLLEN_PUFF.get(), level, shooter);
     }
 
     @Override

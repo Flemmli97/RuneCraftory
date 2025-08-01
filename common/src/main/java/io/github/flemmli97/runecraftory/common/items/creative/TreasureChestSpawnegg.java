@@ -48,16 +48,16 @@ public class TreasureChestSpawnegg extends SpawnEgg {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             ItemStack stack = player.getItemInHand(hand);
-            if (!world.isClientSide) {
+            if (!level.isClientSide) {
                 ChestTier tier = this.getTier(stack);
                 stack.set(RuneCraftoryDataComponentTypes.SPAWN_EGG_CHEST_TIER.get(), tier.cycle());
             }
             return InteractionResultHolder.consume(stack);
         }
-        return super.use(world, player, hand);
+        return super.use(level, player, hand);
     }
 
     @Override

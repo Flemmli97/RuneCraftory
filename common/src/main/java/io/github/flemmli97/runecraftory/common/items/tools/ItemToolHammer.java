@@ -73,7 +73,7 @@ public class ItemToolHammer extends PickaxeItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0) {
@@ -84,13 +84,13 @@ public class ItemToolHammer extends PickaxeItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             int useTime = data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier));
             int range = Math.min(useTime, tier.getTierLevel());
-            BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
+            BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
             if (range == 0) {
                 this.useOnSingleBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
             } else {
@@ -98,7 +98,7 @@ public class ItemToolHammer extends PickaxeItem {
                 data.getWeaponHandler().store(DataKey.TOOL_DATA, new ToolUseData(result, range));
             }
         }
-        super.releaseUsing(stack, world, entity, timeLeft);
+        super.releaseUsing(stack, level, entity, timeLeft);
     }
 
     @Override
@@ -128,23 +128,23 @@ public class ItemToolHammer extends PickaxeItem {
         return InteractionResult.PASS;
     }
 
-    public HammerState hammer(ServerLevel world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
+    public HammerState hammer(ServerLevel level, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
         if (entity instanceof Player && !((Player) entity).mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return HammerState.FAIL;
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         if (canHammer && state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (serverPlayer.gameMode.destroyBlock(pos)) {
-                    world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
-                    serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, world.getBlockState(pos)));
+                    level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+                    serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, level.getBlockState(pos)));
                     return HammerState.BREAK;
                 }
             } else {
-                return world.destroyBlock(pos, true, entity, 3) ? HammerState.BREAK : HammerState.FAIL;
+                return level.destroyBlock(pos, true, entity, 3) ? HammerState.BREAK : HammerState.FAIL;
             }
-        } else if (state.is(RunecraftoryTags.Blocks.HAMMER_FLATTENABLE) && world.getBlockState(pos.above()).isAir()) {
-            if (world.setBlockAndUpdate(pos, Block.pushEntitiesUp(state, Blocks.DIRT.defaultBlockState(), world, pos))) {
-                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1, 1);
+        } else if (state.is(RunecraftoryTags.Blocks.HAMMER_FLATTENABLE) && level.getBlockState(pos.above()).isAir()) {
+            if (level.setBlockAndUpdate(pos, Block.pushEntitiesUp(state, Blocks.DIRT.defaultBlockState(), level, pos))) {
+                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1, 1);
                 return HammerState.FLATTEN;
             }
         }

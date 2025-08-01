@@ -135,8 +135,8 @@ public class Chimera extends BossMonster {
     protected List<LivingEntity> hitEntity;
     private Vec3 chargeMotion;
 
-    public Chimera(EntityType<? extends Chimera> type, Level world) {
-        super(type, world);
+    public Chimera(EntityType<? extends Chimera> type, Level level) {
+        super(type, level);
     }
 
     @Override

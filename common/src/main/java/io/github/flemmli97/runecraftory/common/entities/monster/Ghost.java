@@ -60,8 +60,8 @@ public class Ghost extends ChargingMonster {
 
     private boolean vanishNext;
 
-    public Ghost(EntityType<? extends Ghost> type, Level world) {
-        super(type, world);
+    public Ghost(EntityType<? extends Ghost> type, Level level) {
+        super(type, level);
         this.setNoGravity(true);
         this.noPhysics = true;
         this.moveControl = new FreeMoveControl(this);

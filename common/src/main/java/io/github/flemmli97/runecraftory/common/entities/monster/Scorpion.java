@@ -34,8 +34,8 @@ public class Scorpion extends BaseMonster {
 
     private final AnimationHandler<Scorpion> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Scorpion(EntityType<? extends Scorpion> type, Level world) {
-        super(type, world);
+    public Scorpion(EntityType<? extends Scorpion> type, Level level) {
+        super(type, level);
     }
 
     @Override

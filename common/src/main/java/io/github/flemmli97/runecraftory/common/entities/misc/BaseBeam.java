@@ -16,16 +16,16 @@ public abstract class BaseBeam extends BeamEntity {
     private Predicate<LivingEntity> pred = e -> !e.getUUID().equals(this.getOwnerUUID());
     protected float damageMultiplier = 1;
 
-    public BaseBeam(EntityType<? extends BaseBeam> type, Level world) {
-        super(type, world);
+    public BaseBeam(EntityType<? extends BaseBeam> type, Level level) {
+        super(type, level);
     }
 
-    public BaseBeam(EntityType<? extends BaseBeam> type, Level world, double x, double y, double z) {
-        super(type, world, x, y, z);
+    public BaseBeam(EntityType<? extends BaseBeam> type, Level level, double x, double y, double z) {
+        super(type, level, x, y, z);
     }
 
-    public BaseBeam(EntityType<? extends BaseBeam> type, Level world, LivingEntity shooter) {
-        super(type, world, shooter);
+    public BaseBeam(EntityType<? extends BaseBeam> type, Level level, LivingEntity shooter) {
+        super(type, level, shooter);
         if (shooter instanceof TargetableOpponent targetableOpponent)
             this.pred = targetableOpponent.validTargetPredicate();
     }

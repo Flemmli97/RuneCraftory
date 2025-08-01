@@ -55,8 +55,8 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
         return this.getOwnerUUID().equals(e.getUUID());
     };
 
-    public Fairy(EntityType<? extends Fairy> type, Level world) {
-        super(type, world);
+    public Fairy(EntityType<? extends Fairy> type, Level level) {
+        super(type, level);
         this.setNoGravity(true);
         this.moveControl = new FreeMoveControl(this);
     }

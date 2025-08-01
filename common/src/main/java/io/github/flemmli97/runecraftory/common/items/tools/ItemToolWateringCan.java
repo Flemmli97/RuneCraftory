@@ -68,13 +68,13 @@ public class ItemToolWateringCan extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        BlockHitResult ray = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        BlockHitResult ray = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         ItemStack stack = player.getItemInHand(hand);
-        BlockState state = world.getBlockState(ray.getBlockPos());
+        BlockState state = level.getBlockState(ray.getBlockPos());
         if (state.getFluidState().getType() == Fluids.WATER) {
             stack.set(RuneCraftoryDataComponentTypes.WATER.get(), stack.getOrDefault(RuneCraftoryDataComponentTypes.MAX_WATER.get(), 0));
-            world.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
+            level.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
             player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
             return InteractionResultHolder.success(stack);
         }
@@ -87,12 +87,12 @@ public class ItemToolWateringCan extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier);
             int range = Math.min(useTime, tier.getTierLevel());
-            BlockHitResult result = getPlayerPOVHitResult(world, (Player) entity, ClipContext.Fluid.NONE);
+            BlockHitResult result = getPlayerPOVHitResult(level, (Player) entity, ClipContext.Fluid.NONE);
             if (range == 0) {
                 this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result));
             } else {
@@ -101,7 +101,7 @@ public class ItemToolWateringCan extends Item {
                     pos = result.getBlockPos();
                 }
                 int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.moisten((ServerLevel) world, p.immutable(), stack, entity))
+                        .filter(p -> this.moisten((ServerLevel) level, p.immutable(), stack, entity))
                         .count();
                 if (amount > 0) {
                     PlayerData data = Platform.INSTANCE.getPlayerData(player);
@@ -111,7 +111,7 @@ public class ItemToolWateringCan extends Item {
                 }
             }
         }
-        super.releaseUsing(stack, world, entity, timeLeft);
+        super.releaseUsing(stack, level, entity, timeLeft);
     }
 
     @Override
@@ -162,14 +162,14 @@ public class ItemToolWateringCan extends Item {
         return InteractionResult.PASS;
     }
 
-    private boolean moisten(ServerLevel world, BlockPos pos, ItemStack stack, LivingEntity entity) {
+    private boolean moisten(ServerLevel level, BlockPos pos, ItemStack stack, LivingEntity entity) {
         if (entity instanceof Player && !((Player) entity).mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return false;
         boolean creative = !(entity instanceof Player) || ((Player) entity).isCreative();
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         int water = stack.getOrDefault(RuneCraftoryDataComponentTypes.WATER.get(), 0);
         if ((creative || water > 0) && state.is(RunecraftoryTags.Blocks.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
-            FarmlandHandler.waterLand(world, pos, state);
+            FarmlandHandler.waterLand(level, pos, state);
             if (!creative) {
                 stack.set(RuneCraftoryDataComponentTypes.WATER.get(), water - 1);
             }

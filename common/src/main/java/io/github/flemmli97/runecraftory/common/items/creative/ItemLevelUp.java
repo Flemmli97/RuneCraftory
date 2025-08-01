@@ -17,8 +17,8 @@ public class ItemLevelUp extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        if (!world.isClientSide) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (!level.isClientSide) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             data.addXp(LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
         }

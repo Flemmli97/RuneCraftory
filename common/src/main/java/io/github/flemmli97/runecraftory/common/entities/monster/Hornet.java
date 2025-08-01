@@ -40,8 +40,8 @@ public class Hornet extends BaseMonster {
 
     private final AnimationHandler<Hornet> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Hornet(EntityType<? extends BaseMonster> type, Level world) {
-        super(type, world);
+    public Hornet(EntityType<? extends BaseMonster> type, Level level) {
+        super(type, level);
         this.moveControl = new FreeMoveControl(this);
         this.setNoGravity(true);
     }

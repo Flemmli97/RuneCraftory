@@ -183,8 +183,8 @@ public class Thunderbolt extends BossMonster {
     protected boolean feintedDeath, hornAttackSuccess, chargeAttackSuccess;
     private Vec3 chargeMotion;
 
-    public Thunderbolt(EntityType<? extends BossMonster> type, Level world) {
-        super(type, world);
+    public Thunderbolt(EntityType<? extends BossMonster> type, Level level) {
+        super(type, level);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
@@ -93,8 +93,8 @@ public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigW
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (!world.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (!level.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.LONGSWORD_USE.get(), stack);
                 return;

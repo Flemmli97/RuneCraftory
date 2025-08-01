@@ -34,8 +34,8 @@ public class Chipsqueek extends ChargingMonster {
 
     private final AnimationHandler<Chipsqueek> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Chipsqueek(EntityType<? extends Chipsqueek> type, Level world) {
-        super(type, world);
+    public Chipsqueek(EntityType<? extends Chipsqueek> type, Level level) {
+        super(type, level);
     }
 
     @Override

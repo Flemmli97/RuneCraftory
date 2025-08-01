@@ -19,8 +19,8 @@ public class CirclingParticle extends ColoredParticle {
 
     private double angle, radius;
 
-    public CirclingParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float angleIncrease, float expansion) {
-        super(world, x, y, z, 0, 0, 0, colorData, sprite, maxAge, minAgeRand, maxAgeRand, false, false, false);
+    public CirclingParticle(ClientLevel level, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float angleIncrease, float expansion) {
+        super(level, x, y, z, 0, 0, 0, colorData, sprite, maxAge, minAgeRand, maxAgeRand, false, false, false);
         if (dirX == 0 && dirY == 0 && dirZ == 0)
             dirY = 1;
         double len = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);

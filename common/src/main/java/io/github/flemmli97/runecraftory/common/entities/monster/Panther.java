@@ -39,8 +39,8 @@ public class Panther extends LeapingMonster {
 
     private final AnimationHandler<Panther> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Panther(EntityType<? extends Panther> type, Level world) {
-        super(type, world);
+    public Panther(EntityType<? extends Panther> type, Level level) {
+        super(type, level);
     }
 
     @Override

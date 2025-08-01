@@ -13,8 +13,8 @@ import net.minecraft.world.level.Level;
 
 public class Spirit extends WispBase {
 
-    public Spirit(EntityType<? extends WispBase> type, Level world) {
-        super(type, world);
+    public Spirit(EntityType<? extends WispBase> type, Level level) {
+        super(type, level);
     }
 
     @Override

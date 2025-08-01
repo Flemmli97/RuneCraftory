@@ -10,8 +10,8 @@ import net.minecraft.client.particle.SpriteSet;
 
 public class TornadoParticle extends CirclingParticle {
 
-    public TornadoParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float radInc, float expansion) {
-        super(world, x, y, z, dirX, dirY, dirZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, radius, speedMod, radAdd, radInc, expansion);
+    public TornadoParticle(ClientLevel level, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float radInc, float expansion) {
+        super(level, x, y, z, dirX, dirY, dirZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, radius, speedMod, radAdd, radInc, expansion);
     }
 
     @Override

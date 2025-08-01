@@ -45,8 +45,8 @@ public class PalmCat extends LeapingMonster {
     private boolean hitAny;
     private boolean consecutive;
 
-    public PalmCat(EntityType<? extends PalmCat> type, Level world) {
-        super(type, world);
+    public PalmCat(EntityType<? extends PalmCat> type, Level level) {
+        super(type, level);
     }
 
     @Override

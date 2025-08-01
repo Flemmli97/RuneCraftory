@@ -37,8 +37,8 @@ public class LeafBall extends BaseMonster {
 
     private final AnimationHandler<LeafBall> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public LeafBall(EntityType<? extends LeafBall> type, Level world) {
-        super(type, world);
+    public LeafBall(EntityType<? extends LeafBall> type, Level level) {
+        super(type, level);
         this.setNoGravity(true);
         this.moveControl = new FreeMoveControl(this, 60, 30, () -> true);
     }

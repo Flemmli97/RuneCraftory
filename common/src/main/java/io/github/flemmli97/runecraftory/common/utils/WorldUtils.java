@@ -64,8 +64,8 @@ public class WorldUtils {
         return day(level, 0);
     }
 
-    public static int day(Level world, int tickOffset) {
-        return (int) ((world.getDayTime() + tickOffset) / 24000 % Integer.MAX_VALUE);
+    public static int day(Level level, int tickOffset) {
+        return (int) ((level.getDayTime() + tickOffset) / 24000 % Integer.MAX_VALUE);
     }
 
     public static <T extends Mob> EntityInLevelCallback wrappedCallbackFor(T member, Supplier<Player> partyOwner, EntityInLevelCallback callback) {

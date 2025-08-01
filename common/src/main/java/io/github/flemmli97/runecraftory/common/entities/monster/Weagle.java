@@ -63,8 +63,8 @@ public class Weagle extends BaseMonster {
                 return false;
             });
 
-    public Weagle(EntityType<? extends BaseMonster> type, Level world) {
-        super(type, world);
+    public Weagle(EntityType<? extends BaseMonster> type, Level level) {
+        super(type, level);
         this.moveControl = new FreeMoveControl(this, 90, 50, FreeMoveControl.TRUE);
         this.setNoGravity(true);
     }

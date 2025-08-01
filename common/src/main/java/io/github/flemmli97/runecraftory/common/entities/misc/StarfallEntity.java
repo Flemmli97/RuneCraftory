@@ -22,12 +22,12 @@ import java.util.function.Predicate;
 
 public class StarfallEntity extends BaseProjectile {
 
-    public StarfallEntity(EntityType<? extends StarfallEntity> type, Level world) {
-        super(type, world);
+    public StarfallEntity(EntityType<? extends StarfallEntity> type, Level level) {
+        super(type, level);
     }
 
-    public StarfallEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.STARFALL.get(), world, shooter);
+    public StarfallEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.STARFALL.get(), level, shooter);
     }
 
     @Override

@@ -62,8 +62,8 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
         this.noCulling = true;
     }
 
-    public MarionettaTrapEntity(Level world, LivingEntity shooter) {
-        this(RuneCraftoryEntities.TRAP_CHEST.get(), world);
+    public MarionettaTrapEntity(Level level, LivingEntity shooter) {
+        this(RuneCraftoryEntities.TRAP_CHEST.get(), level);
         this.shooter = shooter;
         this.shooterUUID = shooter.getUUID();
         this.setPos(shooter.getX(), shooter.getEyeY(), shooter.getZ());

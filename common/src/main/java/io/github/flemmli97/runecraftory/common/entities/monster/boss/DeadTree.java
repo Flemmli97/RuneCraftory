@@ -129,8 +129,8 @@ public class DeadTree extends BossMonster {
             });
     private int shieldCooldown, healCooldown;
 
-    public DeadTree(EntityType<? extends DeadTree> type, Level world) {
-        super(type, world);
+    public DeadTree(EntityType<? extends DeadTree> type, Level level) {
+        super(type, level);
     }
 
     @Override

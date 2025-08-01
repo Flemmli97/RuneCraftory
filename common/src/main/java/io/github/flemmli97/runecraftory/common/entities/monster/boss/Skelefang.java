@@ -234,8 +234,8 @@ public class Skelefang extends BossMonster {
     private final MultiPartContainer rightLeg;
     private final MultiPartContainer leftLeg;
 
-    public Skelefang(EntityType<? extends Skelefang> type, Level world) {
-        super(type, world);
+    public Skelefang(EntityType<? extends Skelefang> type, Level level) {
+        super(type, level);
         this.head = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.3f)
                 .updatePosition(new Vec3(0, 2.15, 2.9)));
         this.back = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.5f)

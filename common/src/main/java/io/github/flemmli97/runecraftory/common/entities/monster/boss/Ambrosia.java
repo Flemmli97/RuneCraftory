@@ -110,8 +110,8 @@ public class Ambrosia extends BossMonster {
     });
     private Vec3 moveDirection;
 
-    public Ambrosia(EntityType<? extends Ambrosia> type, Level world) {
-        super(type, world);
+    public Ambrosia(EntityType<? extends Ambrosia> type, Level level) {
+        super(type, level);
     }
 
     @Override

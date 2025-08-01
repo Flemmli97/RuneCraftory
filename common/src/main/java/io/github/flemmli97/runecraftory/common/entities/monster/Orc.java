@@ -41,8 +41,8 @@ public class Orc extends BaseMonster {
 
     private final AnimationHandler<Orc> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Orc(EntityType<? extends Orc> type, Level world) {
-        super(type, world);
+    public Orc(EntityType<? extends Orc> type, Level level) {
+        super(type, level);
     }
 
     @Override

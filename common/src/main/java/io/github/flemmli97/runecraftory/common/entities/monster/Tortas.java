@@ -47,8 +47,8 @@ public class Tortas extends ChargingMonster {
     protected final PathNavigation groundNavigator;
     private final AnimationHandler<Tortas> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Tortas(EntityType<? extends Tortas> type, Level world) {
-        super(type, world);
+    public Tortas(EntityType<? extends Tortas> type, Level level) {
+        super(type, level);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.moveControl = new SwimWalkMoveController(this, 1.2);
         this.waterNavigator = new AmphibiousNavigator(this, world);

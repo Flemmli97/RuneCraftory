@@ -12,12 +12,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class StoneEntity extends BaseProjectile {
 
-    public StoneEntity(EntityType<? extends StoneEntity> type, Level world) {
-        super(type, world);
+    public StoneEntity(EntityType<? extends StoneEntity> type, Level level) {
+        super(type, level);
     }
 
-    public StoneEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.STONE.get(), world, shooter);
+    public StoneEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.STONE.get(), level, shooter);
     }
 
     @Override

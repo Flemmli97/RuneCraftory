@@ -22,12 +22,12 @@ public class MissileEntity extends BaseProjectile {
 
     private Entity target;
 
-    public MissileEntity(EntityType<? extends MissileEntity> type, Level world) {
-        super(type, world);
+    public MissileEntity(EntityType<? extends MissileEntity> type, Level level) {
+        super(type, level);
     }
 
-    public MissileEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.MISSILE.get(), world, shooter);
+    public MissileEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.MISSILE.get(), level, shooter);
     }
 
     public void setTarget(Entity entity) {

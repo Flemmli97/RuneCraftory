@@ -17,8 +17,8 @@ public class MineralSqueek extends Chipsqueek {
 
     public static final ResourceKey<LootTable> MINERAL_SQUEEK_HURT = ResourceKey.create(Registries.LOOT_TABLE, RuneCraftory.modRes("entities/mineral_squeek_hurt"));
 
-    public MineralSqueek(EntityType<? extends Chipsqueek> type, Level world) {
-        super(type, world);
+    public MineralSqueek(EntityType<? extends Chipsqueek> type, Level level) {
+        super(type, level);
     }
 
     @Override

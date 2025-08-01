@@ -13,12 +13,12 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class DarkBulletEntity extends BaseProjectile {
 
-    public DarkBulletEntity(EntityType<? extends DarkBulletEntity> type, Level world) {
-        super(type, world);
+    public DarkBulletEntity(EntityType<? extends DarkBulletEntity> type, Level level) {
+        super(type, level);
     }
 
-    public DarkBulletEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.DARK_BULLET.get(), world, shooter);
+    public DarkBulletEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.DARK_BULLET.get(), level, shooter);
     }
 
     @Override

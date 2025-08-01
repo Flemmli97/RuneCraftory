@@ -44,8 +44,8 @@ public class Nappie extends PommePomme implements HealingPredicateEntity {
         return this.getOwnerUUID().equals(e.getUUID());
     };
 
-    public Nappie(EntityType<? extends Nappie> type, Level world) {
-        super(type, world);
+    public Nappie(EntityType<? extends Nappie> type, Level level) {
+        super(type, level);
     }
 
     @Override

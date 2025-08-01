@@ -15,9 +15,9 @@ public class NaiveBladeSpell extends WeaponSpell {
     }
 
     @Override
-    public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
+    public boolean canUse(ServerLevel level, LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player && Platform.INSTANCE.getPlayerData(player).getWeaponHandler().getCurrentAction() == this.useAction())
             return false;
-        return super.canUse(world, entity, stack);
+        return super.canUse(level, entity, stack);
     }
 }

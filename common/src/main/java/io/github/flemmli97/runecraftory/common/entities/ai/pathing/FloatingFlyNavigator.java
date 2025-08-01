@@ -9,8 +9,8 @@ import net.tslat.smartbrainlib.api.core.navigation.SmoothFlyingPathNavigation;
 
 public class FloatingFlyNavigator extends SmoothFlyingPathNavigation {
 
-    public FloatingFlyNavigator(Mob entity, Level world) {
-        super(entity, world);
+    public FloatingFlyNavigator(Mob entity, Level level) {
+        super(entity, level);
     }
 
     @Override

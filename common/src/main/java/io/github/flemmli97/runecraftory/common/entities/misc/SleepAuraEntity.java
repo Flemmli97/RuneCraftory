@@ -19,12 +19,12 @@ public class SleepAuraEntity extends BaseDamageCloud {
 
     private final Set<UUID> hitEntities = new HashSet<>();
 
-    public SleepAuraEntity(EntityType<? extends SleepAuraEntity> type, Level world) {
-        super(type, world);
+    public SleepAuraEntity(EntityType<? extends SleepAuraEntity> type, Level level) {
+        super(type, level);
     }
 
-    public SleepAuraEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.SLEEP_AURA.get(), world, shooter);
+    public SleepAuraEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.SLEEP_AURA.get(), level, shooter);
     }
 
     @Override

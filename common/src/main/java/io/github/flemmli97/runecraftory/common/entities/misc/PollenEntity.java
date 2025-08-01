@@ -21,12 +21,12 @@ public class PollenEntity extends BaseDamageCloud {
     private static final List<Vector3f> POLLEN_BASE = MathUtils.rotatedVecs(new Vector3f(1, 0, 0), new Vector3f(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> POLLEN_IND = MathUtils.rotatedVecs(new Vector3f(0.04f, 0.07f, 0), new Vector3f(0, 1, 0), -180, 160, 20);
 
-    public PollenEntity(EntityType<? extends PollenEntity> type, Level world) {
-        super(type, world);
+    public PollenEntity(EntityType<? extends PollenEntity> type, Level level) {
+        super(type, level);
     }
 
-    public PollenEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.POLLEN.get(), world, shooter);
+    public PollenEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.POLLEN.get(), level, shooter);
     }
 
     private double radiusSqWithOffset(double offset) {

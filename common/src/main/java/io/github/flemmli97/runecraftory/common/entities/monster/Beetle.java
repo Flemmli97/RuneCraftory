@@ -31,8 +31,8 @@ public class Beetle extends ChargingMonster {
 
     private final AnimationHandler<Beetle> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public Beetle(EntityType<? extends Beetle> type, Level world) {
-        super(type, world);
+    public Beetle(EntityType<? extends Beetle> type, Level level) {
+        super(type, level);
     }
 
     @Override

@@ -69,8 +69,8 @@ public class Mimic extends LeapingMonster {
     private int sleepTick = -1;
     private boolean sleeping;
 
-    public Mimic(EntityType<? extends Mimic> type, Level world) {
-        super(type, world);
+    public Mimic(EntityType<? extends Mimic> type, Level level) {
+        super(type, level);
         this.moveControl = new JumpingMover(this);
     }
 

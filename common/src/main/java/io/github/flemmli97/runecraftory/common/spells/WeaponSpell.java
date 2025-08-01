@@ -32,8 +32,8 @@ public class WeaponSpell extends Spell {
     }
 
     @Override
-    public boolean canUse(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        if (!super.canUse(world, entity, stack))
+    public boolean canUse(ServerLevel level, LivingEntity entity, ItemStack stack) {
+        if (!super.canUse(level, entity, stack))
             return false;
         return entity.getMainHandItem().is(RunecraftoryTags.Items.WEAPONS) || entity.getMainHandItem().is(RunecraftoryTags.Items.TOOLS);
     }

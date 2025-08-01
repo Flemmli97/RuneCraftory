@@ -24,12 +24,12 @@ public class WindGustEntity extends BeamEntity {
     private Vec3 pMotion, up, side;
     private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
 
-    public WindGustEntity(EntityType<? extends WindGustEntity> type, Level world) {
-        super(type, world);
+    public WindGustEntity(EntityType<? extends WindGustEntity> type, Level level) {
+        super(type, level);
     }
 
-    public WindGustEntity(Level world, LivingEntity shooter) {
-        super(RuneCraftoryEntities.GUST.get(), world, shooter);
+    public WindGustEntity(Level level, LivingEntity shooter) {
+        super(RuneCraftoryEntities.GUST.get(), level, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> ((BaseMonster) shooter).hitPred.test(e);
     }

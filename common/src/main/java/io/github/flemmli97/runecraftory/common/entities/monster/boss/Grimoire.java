@@ -156,8 +156,8 @@ public class Grimoire extends BossMonster {
     private boolean commanded;
     private Vec3 moveDirection;
 
-    public Grimoire(EntityType<? extends Grimoire> type, Level world) {
-        super(type, world);
+    public Grimoire(EntityType<? extends Grimoire> type, Level level) {
+        super(type, level);
     }
 
     @Override
