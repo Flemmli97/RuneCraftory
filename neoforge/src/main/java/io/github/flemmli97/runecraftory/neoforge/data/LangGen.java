@@ -255,7 +255,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.tooltip.baby.owner", "Parent: %s");
 
         for (ResourceKey<DamageType> types : RuneCraftoryDamageType.ATTACK_TYPES) {
-            this.add("death.attack." + types.location().toLanguageKey(), "%1$s was knocked");
+            this.add("death.attack." + types.location().toLanguageKey(), "%1$s was knocked down by %2$s");
             this.add("death.attack." + types.location().toLanguageKey() + ".player", "%1$s was knocked down by %2$s");
             this.add("death.attack." + types.location().toLanguageKey() + ".item", "%1$s was knocked down by %2$s using %3$s");
         }
