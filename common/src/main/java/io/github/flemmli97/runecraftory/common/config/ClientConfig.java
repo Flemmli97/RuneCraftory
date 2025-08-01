@@ -33,6 +33,7 @@ public class ClientConfig {
 
     public static boolean bossMusic = true;
     public static int bossMusicFadeDelay = 80;
+    public static boolean customBossbars = true;
 
     public enum HealthRPRenderType {
         NONE,

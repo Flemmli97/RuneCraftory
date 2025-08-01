@@ -1,6 +1,9 @@
 package io.github.flemmli97.runecraftory.client;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.gui.GuiUtils;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
@@ -16,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,7 +37,25 @@ public class BossBarTracker {
     }
 
     public static void register() {
+        registerBossBarFor(RuneCraftoryEntities.CHIMERA.getID());
+        registerBossBarFor(RuneCraftoryEntities.RAFFLESIA.getID());
+        registerBossBarFor(RuneCraftoryEntities.GRIMOIRE.getID());
+        registerBossBarFor(RuneCraftoryEntities.DEAD_TREE.getID());
+        registerBossBarFor(RuneCraftoryEntities.RACCOON.getID());
+        registerBossBarFor(RuneCraftoryEntities.SKELEFANG.getID());
+        registerBossBarFor(RuneCraftoryEntities.AMBROSIA.getID());
+        registerBossBarFor(RuneCraftoryEntities.THUNDERBOLT.getID());
+        registerBossBarFor(RuneCraftoryEntities.MARIONETTA.getID());
+        registerBossBarFor(RuneCraftoryEntities.HANDONETTA.getID());
+        registerBossBarFor(RuneCraftoryEntities.SANO_AND_UNO.getID());
+        registerBossBarFor(RuneCraftoryEntities.SARCOPHAGUS.getID());
+    }
 
+    private static void registerBossBarFor(ResourceLocation id) {
+        registerCustomBossbarType(id, new ClientBossBarType(
+                new BossbarTexture(RuneCraftory.modRes(String.format("bossbar/%s_bossbar", id.getPath())), 198, 15, 0, 0),
+                new BossbarTexture(RuneCraftory.modRes(String.format("bossbar/%s_bossbar_progress", id.getPath())), 198, 15, 0, 0),
+                new BossbarTexture(RuneCraftory.modRes(String.format("bossbar/%s_bossbar_overlay", id.getPath())), 198, 15, 0, 0)));
     }
 
     public static void tickSounds() {
@@ -61,10 +83,11 @@ public class BossBarTracker {
                 if (music == null || !sound.getLocation().equals(music.getLocation())) {
                     sound.removeBossBar(id, true);
                     // Generate and play the changed music
-                    BossSoundInstance bgm = createSound(musicID, music);
-                    old.music = musicID;
-                    ACTIVE_BOSS_BGM.put(musicID, bgm);
-                    playMusic(bgm);
+                    createSound(musicID, music).ifPresent(bgm -> {
+                        old.music = musicID;
+                        ACTIVE_BOSS_BGM.put(musicID, bgm);
+                        playMusic(bgm);
+                    });
                 }
             }
             return;
@@ -73,10 +96,11 @@ public class BossBarTracker {
         if (inst != null) {
             inst.linkBossBar(id, false);
         } else {
-            inst = createSound(musicID, music);
-            inst.linkBossBar(id, true);
-            playMusic(inst);
-            ACTIVE_BOSS_BGM.put(musicID, inst);
+            createSound(musicID, music).ifPresent(instance -> {
+                instance.linkBossBar(id, true);
+                playMusic(instance);
+                ACTIVE_BOSS_BGM.put(musicID, instance);
+            });
         }
         BossBarData data = new BossBarData(type, musicID);
         ACTIVE_BOSS_BARS.put(id, data);
@@ -95,10 +119,11 @@ public class BossBarTracker {
                 }
             }
         } else if (sound != null) {
-            BossSoundInstance inst = createSound(musicID, sound);
-            inst.linkBossBar(id, true);
-            playMusic(inst);
-            ACTIVE_BOSS_BGM.put(musicID, inst);
+            createSound(musicID, sound).ifPresent(instance -> {
+                instance.linkBossBar(id, true);
+                playMusic(instance);
+                ACTIVE_BOSS_BGM.put(musicID, instance);
+            });
         }
     }
 
@@ -112,10 +137,10 @@ public class BossBarTracker {
         }
     }
 
-    public static BossSoundInstance createSound(UUID id, SoundEvent sound) {
+    public static Optional<BossSoundInstance> createSound(UUID id, SoundEvent sound) {
         if (sound == null || !ClientConfig.bossMusic)
-            return null;
-        return new BossSoundInstance(id, sound, SoundSource.RECORDS, 1, 1, ClientConfig.bossMusicFadeDelay);
+            return Optional.empty();
+        return Optional.of(new BossSoundInstance(id, sound, SoundSource.RECORDS, 1, 1, ClientConfig.bossMusicFadeDelay));
     }
 
     private static void playMusic(BossSoundInstance sound) {
@@ -148,13 +173,15 @@ public class BossBarTracker {
     }
 
     public static int tryRenderCustomBossbar(GuiGraphics graphics, int x, int y, BossEvent bossEvent, boolean withName) {
+        if (!ClientConfig.customBossbars)
+            return -1;
         BossBarData data = ACTIVE_BOSS_BARS.get(bossEvent.getId());
         if (data != null) {
             ClientBossBarType type = BOSS_BARS.get(data.type);
             if (type != null)
                 return type.renderFrom(graphics, x, y, bossEvent, withName);
         }
-        return 0;
+        return -1;
     }
 
     public static class BossBarData {
@@ -245,23 +272,27 @@ public class BossBarTracker {
         }
     }
 
-    public record ClientBossBarType(BossbarTexture texture, BossbarTexture overlay) {
+    public record ClientBossBarType(BossbarTexture background, BossbarTexture progress, BossbarTexture overlay) {
+
+        private static final int BAR_WIDTH = 182;
 
         public int renderFrom(GuiGraphics graphics, int x, int y, BossEvent bossEvent, boolean withName) {
             Minecraft mc = Minecraft.getInstance();
+            int diff = (this.background().width() - BAR_WIDTH) / 2;
+            x -= diff;
+            graphics.blitSprite(this.background().texture(), x, y, this.background().width(), this.background().height());
+            int overlayWidth = (int) (bossEvent.getProgress() * BAR_WIDTH);
+            GuiUtils.drawBorderedBar(graphics, this.progress().texture(), x, y,
+                    this.progress().width(), this.progress().height(), overlayWidth, 8, 5);
+            graphics.blitSprite(this.overlay().texture(), x, y, this.overlay().width(), this.overlay().height());
             if (withName) {
                 int screenX = mc.getWindow().getGuiScaledWidth();
                 Component component = bossEvent.getName();
                 int len = mc.font.width(component);
                 int txtX = screenX / 2 - len / 2;
-                graphics.drawString(mc.font, component, txtX, y - 9, 0xFFFFFF);
+                graphics.drawString(mc.font, component, txtX, y - mc.font.lineHeight, 0xFFFFFF);
             }
-
-            graphics.blit(this.texture.texture, x, y, 0, this.texture.offsetX, this.texture.offsetY, this.texture.width, this.texture.height, 256, 256);
-
-            int overlayWidth = (int) (bossEvent.getProgress() * this.overlay.width);
-            graphics.blit(this.overlay.texture, x, y, 0, this.overlay.offsetX, this.overlay.offsetY, overlayWidth, this.overlay.height, 256, 256);
-            return y + mc.font.lineHeight + Math.max(this.texture.height, this.overlay.height) + 5;
+            return mc.font.lineHeight + this.background().height() + 1;
         }
     }
 

@@ -120,6 +120,7 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
 
         ClientConfig.bossMusic = spec.bossMusic.get();
         ClientConfig.bossMusicFadeDelay = spec.bossMusicFadeDelay.get();
+        ClientConfig.customBossbars = spec.customBossbars.get();
     }
 
     public static void loadMobs(MobConfigSpec spec) {

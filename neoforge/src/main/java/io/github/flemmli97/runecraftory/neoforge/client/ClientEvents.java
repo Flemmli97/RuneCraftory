@@ -96,7 +96,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void bossbar(CustomizeGuiOverlayEvent.BossEventProgress event) {
         int i = BossBarTracker.tryRenderCustomBossbar(event.getGuiGraphics(), event.getX(), event.getY(), event.getBossEvent(), true);
-        if (i != 0) {
+        if (i != -1) {
             event.setIncrement(i);
             event.setCanceled(true);
         }
