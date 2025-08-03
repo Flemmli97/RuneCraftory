@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.neoforge.data.tags.DamageTypeTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.EntityTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.FluidTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.tags.ItemTagGen;
+import io.github.flemmli97.runecraftory.neoforge.data.tags.MobEffectTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.FeatureWorldGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
 import net.minecraft.core.HolderLookup;
@@ -65,6 +66,7 @@ public class DataEvent {
         data.addProvider(true, new EntityTagGen(packOutput, provider, fileHelper));
         data.addProvider(true, new FluidTagGen(packOutput, provider, fileHelper));
         data.addProvider(true, new ItemTagGen(packOutput, provider, blocks.contentsGetter(), fileHelper));
+        data.addProvider(true, new MobEffectTagGen(packOutput, provider, fileHelper));
 
         data.addProvider(true, new AdvancementGen(packOutput, provider, fileHelper));
         data.addProvider(true, new AnimationDefinitionGen(packOutput, provider));

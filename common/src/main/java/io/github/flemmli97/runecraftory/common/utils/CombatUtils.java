@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.utils.ElementalAttackMob;
-import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
@@ -457,28 +456,41 @@ public class CombatUtils {
     }
 
     public static float modifyDmgElement(ItemElement element, Entity target, float dmg) {
-        if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
-            if (element == ItemElement.WATER && target instanceof LivingEntity living && (living.fireImmune() || living.isSensitiveToWater()))
-                dmg *= 1.1;
+        if (!target.getType().is(RunecraftoryTags.EntityTypes.ELEMENTAL_DAMAGE_UNAFFECTED) && target instanceof LivingEntity living) {
+            switch (element) {
+                case WATER -> {
+                    if (living.fireImmune() || living.isSensitiveToWater())
+                        dmg *= 1.2;
+                }
+                case FIRE -> {
+                    if (living.fireImmune())
+                        dmg *= 0.8;
+                    if (target.getType().is(EntityTypeTags.AQUATIC))
+                        dmg *= 1.2;
+                }
+                case LIGHT -> {
+                    if (target.getType().is(EntityTypeTags.UNDEAD))
+                        dmg *= 1.2;
+                }
+            }
         }
         return dmg;
     }
 
     public static void elementalEffects(Entity attacker, ItemElement element, Entity target) {
-        if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
+        if (!target.getType().is(RunecraftoryTags.EntityTypes.ELEMENTAL_SECONDARY_UNAFFECTED) && target instanceof LivingEntity living) {
             switch (element) {
-                case FIRE -> target.igniteForSeconds(3);
-                case DARK -> {
-                    if (target instanceof LivingEntity living)
-                        living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
-                }
+                case FIRE -> target.igniteForSeconds(4);
+                case DARK -> living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
                 case WIND -> {
-                    if (target instanceof LivingEntity living && attacker != null)
+                    if (attacker != null)
                         living.knockback(1.5, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
                 }
-                case WATER -> {
-                    if (target instanceof LivingEntity living)
-                        living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
+                case WATER -> living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
+                case EARTH -> {
+                    if (living.getInBlockState().getCollisionShape(living.level(), living.blockPosition()).isEmpty()) {
+                        living.setPos(living.getX(), living.getY() - 0.5, living.getZ());
+                    }
                 }
             }
         }

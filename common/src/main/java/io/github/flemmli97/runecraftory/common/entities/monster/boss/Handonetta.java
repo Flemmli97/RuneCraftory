@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNa
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -132,7 +133,7 @@ public class Handonetta extends BossMonster {
                     entity.getAnimationHandler().setAnimation(GRAB_CAUGHT);
             } else if (anim.isPast("attack") && !anim.isPast("grab_done")) {
                 entity.mobAttack(anim, null, e -> {
-                    if ((entity.getBbWidth() < 5 || entity.getBbHeight() < 8) && !entity.caughtEntities.contains(e)) {
+                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.HANDONETTA_GRAP_IGNORE) && (entity.getBbWidth() < 5 || entity.getBbHeight() < 8) && !entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
                     }
                 });

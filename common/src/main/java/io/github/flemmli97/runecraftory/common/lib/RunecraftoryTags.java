@@ -200,6 +200,11 @@ public class RunecraftoryTags {
          * E.g. iron golems and snow golems
          */
         public static final TagKey<EntityType<?>> TAMED_MONSTER_IGNORE = entity("ignore_tamed_monsters");
+        public static final TagKey<EntityType<?>> ELEMENTAL_DAMAGE_UNAFFECTED = entity("elemental_damage_unaffected");
+        public static final TagKey<EntityType<?>> ELEMENTAL_SECONDARY_UNAFFECTED = entity("elemental_secondary_unaffected");
+
+        public static final TagKey<EntityType<?>> MARIONETTA_TRAP_IGNORE = entity("marionetta_trap_ignore");
+        public static final TagKey<EntityType<?>> HANDONETTA_GRAP_IGNORE = entity("handonetta_grab_ignore");
     }
 
     public static class Biomes {

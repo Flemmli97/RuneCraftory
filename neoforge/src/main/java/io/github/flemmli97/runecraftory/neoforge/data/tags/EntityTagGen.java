@@ -73,6 +73,13 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
                 .add(RuneCraftoryEntities.TOMATO_GHOST.get())
                 .add(RuneCraftoryEntities.SKELEFANG.get());
 
+        this.tag(RunecraftoryTags.EntityTypes.ELEMENTAL_DAMAGE_UNAFFECTED)
+                .addTag(RunecraftoryTags.EntityTypes.MONSTERS)
+                .add(EntityType.PLAYER);
+        this.tag(RunecraftoryTags.EntityTypes.ELEMENTAL_SECONDARY_UNAFFECTED)
+                .addTag(RunecraftoryTags.EntityTypes.MONSTERS)
+                .add(EntityType.PLAYER);
+
         this.tag(RunecraftoryTags.EntityTypes.RAFFLESIA_SUMMONS)
                 .add(RuneCraftoryEntities.HORNET.get())
                 .add(RuneCraftoryEntities.ANT.get())

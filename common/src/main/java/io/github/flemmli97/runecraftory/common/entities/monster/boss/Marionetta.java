@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.MarionettaTrapEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
@@ -113,7 +114,7 @@ public class Marionetta extends BossMonster {
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 entity.setDeltaMovement(entity.moveDirection);
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.caughtEntities.contains(e)) {
+                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.MARIONETTA_TRAP_IGNORE) && !entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
                     }
                 });

@@ -409,7 +409,7 @@ public class Thunderbolt extends BossMonster {
         STAT_INCREASE.forEach(att -> {
             AttributeInstance inst = this.getAttribute(att.get());
             inst.removeModifier(STAT_INCREASE_ID);
-            inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            inst.addPermanentModifier(new AttributeModifier(STAT_INCREASE_ID, 0.33, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         });
     }
 
