@@ -52,6 +52,10 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
         return true;
     }
 
+    public int getMaxLivingTicks() {
+        return this.maxLivingTicks;
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -68,7 +72,7 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
             if (this.getOwner() != null && this.getOwner().isAlive()) {
                 this.summonProjectiles();
             }
-            if (this.ticksExisted >= this.maxLivingTicks) {
+            if (this.ticksExisted >= this.getMaxLivingTicks()) {
                 this.discard();
             }
         }

@@ -28,7 +28,7 @@ public class TornadoEntity extends BaseDamageCloud {
 
     @Override
     public int livingTickMax() {
-        return 80;
+        return 100;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class TornadoEntity extends BaseDamageCloud {
         double newY = this.getY() + motion.y;
         double newZ = this.getZ() + motion.z;
         this.setPos(newX, newY, newZ);
-        this.setDeltaMovement(motion.scale(0.98));
+        this.setDeltaMovement(motion.scale(0.99));
     }
 
     @Override

@@ -1,5 +1,5 @@
 {
-  "base_damage_multiplier": 0.85,
+  "base_damage_multiplier": 0.9,
   "cooldown": 30,
   "percentage_cost": 0.0,
   "runepoints_cost": 50,

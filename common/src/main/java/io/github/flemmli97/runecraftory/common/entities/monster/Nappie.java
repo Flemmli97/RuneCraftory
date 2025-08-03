@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.function.Predicate;
@@ -70,8 +70,8 @@ public class Nappie extends PommePomme implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetWalkTargetAwayFromTarget<>(), new MoveToWalkTarget<>())
-                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()).build();
+                .add(2, new SetWalkTargetAwayFromTarget<>(), new MoveToWalkTillClose<>())
+                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
     }
 
     @Override

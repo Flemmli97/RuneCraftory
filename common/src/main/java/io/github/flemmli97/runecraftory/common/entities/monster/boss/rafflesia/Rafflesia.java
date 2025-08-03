@@ -15,6 +15,7 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -61,7 +62,7 @@ public class Rafflesia extends BossMonster {
     public static final String SLEEP_BREATH = BUILDER.add("sleep_breath", POISON_BREATH);
     public static final String SLEEP_BREATH_REV = BUILDER.add("sleep_breath_2", POISON_BREATH);
     public static final String INTERACT = BUILDER.add("interact", POISON_BREATH);
-    public static final String WIND_BLADE_X8 = BUILDER.add("casting", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
+    public static final String WIND_BLADE_X8 = BUILDER.add("casting", AnimationsBuilder.definition(1.24).marker("attack", 0.72));
     public static final String WIND_BLADE_X16 = BUILDER.add("wind_blade_x16", WIND_BLADE_X8);
     public static final String RESUMMON = BUILDER.add("resummon", WIND_BLADE_X8);
     public static final String STATUS_CIRCLE = BUILDER.add("status_circle", WIND_BLADE_X8);
@@ -71,6 +72,9 @@ public class Rafflesia extends BossMonster {
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Rafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimationState, Rafflesia> cons = (anim, entity) -> {
+            if (entity.getTargetPosition() != null) {
+                entity.lookAt(EntityAnchorArgument.Anchor.EYES, entity.getTargetPosition().position());
+            }
             if (anim.isAt("attack")) {
                 entity.useAttack(anim);
             }
@@ -281,6 +285,12 @@ public class Rafflesia extends BossMonster {
         BiConsumer<AnimationState, Rafflesia> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
+    }
+
+    @Override
+    public int animationCooldown(String anim) {
+        int diffAdd = this.difficultyCooldown();
+        return (this.isEnraged() ? 25 + this.getRandom().nextInt(20) : 30 + this.getRandom().nextInt(30)) + diffAdd;
     }
 
     @Override

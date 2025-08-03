@@ -31,7 +31,7 @@ public class BoneNeedleSpell extends Spell {
         Vec3 up = Vec3.directionFromRotation(yxRot[1] + 90, yxRot[0]);
         double offset = -3;
         double max = Math.abs(offset);
-        double inc = max * 2.7 / 16;
+        double inc = max * 2.6 / 16;
         while (offset <= max) {
             BoneNeedleEntity needle = new BoneNeedleEntity(level, entity);
             Vector3d direction = new Vector3d(dir.x(), dir.y(), dir.z())

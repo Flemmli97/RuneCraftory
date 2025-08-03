@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.GroundShakeParticleSpawner;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
@@ -17,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
@@ -50,7 +53,6 @@ import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.SequentialBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.Optional;
@@ -62,35 +64,35 @@ public class Raccoon extends BossMonster {
     protected static final EntityDataAccessor<Boolean> BERSERK = SynchedEntityData.defineId(Raccoon.class, EntityDataSerializers.BOOLEAN);
 
     public static final Vec3[] CLONE_POS = new Vec3[]{
-            new Vec3(-4, 0, 0),
-            new Vec3(0, 0, -4),
-            new Vec3(4, 0, 0),
-            new Vec3(0, 0, 4)
+            new Vec3(-6, 0, 0),
+            new Vec3(0, 0, -6),
+            new Vec3(6, 0, 0),
+            new Vec3(0, 0, 6)
     };
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String DOUBLE_PUNCH = BUILDER.add("double_punch", AnimationsBuilder.definition(0.88).marker("attack", 0.4, 0.68));
     public static final String INTERACT = BUILDER.add("interact", DOUBLE_PUNCH);
-    public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(0.92).marker("attack", 0.56));
+    public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(0.96).marker("attack", 0.6));
     public static final String INTERACT_BERSERK = BUILDER.add("interact_berserk", PUNCH);
-    public static final String JUMP = BUILDER.add("jump", AnimationsBuilder.definition(1.08)
-            .marker("jump", 0.2).infinite());
-    public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.28).marker("attack", 0.12));
-    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(1.36)
-            .marker("attack_1", 0.56).marker("attack_2", 1.12));
-    public static final String LEAF_SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(0.88).marker("attack", 0.44));
+    public static final String JUMP = BUILDER.add("jump", AnimationsBuilder.definition(1.12)
+            .marker("jump", 0.24).infinite());
+    public static final String LAND = BUILDER.add("land", AnimationsBuilder.definition(0.36).marker("attack", 0.12));
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(1.4)
+            .marker("attack_1", 0.6).marker("attack_2", 1.16));
+    public static final String LEAF_SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(1).marker("attack", 0.56));
     public static final String LEAF_BOOMERANG = BUILDER.add("spinning_shoot", LEAF_SHOOT);
-    public static final String LEAF_SHOT_CLONE = BUILDER.add("leaf_clone", AnimationsBuilder.definition(0.88)
-            .animationId("shoot").marker("attack", 0.44, 0.64));
-    public static final String BARRAGE = BUILDER.add("punch_barrage", AnimationsBuilder.definition(3.32)
-            .marker("attack", 0.44, 0.84, 1.28).marker("vulnerable_start", 1.52).marker("vulnerable_end", 3.04));
-    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(1.24).marker("roar", 0.12));
+    public static final String LEAF_SHOT_CLONE = BUILDER.add("leaf_clone", AnimationsBuilder.definition(1)
+            .animationId("shoot").marker("attack", 0.56, 0.76));
+    public static final String BARRAGE = BUILDER.add("punch_barrage", AnimationsBuilder.definition(3.4)
+            .marker("attack", 0.6, 0.92, 1.36).marker("vulnerable_start", 1.64).marker("vulnerable_end", 3.08));
+    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(1.28).marker("roar", 0.16));
     public static final String ANGRY = BUILDER.add("angry", ROAR);
     public static final String CLONE = BUILDER.add("clone", ROAR);
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final String TRANSFORM = BUILDER.add("transform", AnimationsBuilder.definition(1.5));
     public static final String UNTRANSFORM = BUILDER.add("untransform", AnimationsBuilder.definition(2.2)
             .marker("knockback_start", 1).marker("knockback_end", 1.5));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Raccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -117,24 +119,31 @@ public class Raccoon extends BossMonster {
                     dir = new Vec3(targetPos.x - entity.getX(), 0.0, targetPos.z - entity.getZ()).normalize();
                     entity.setTargetPosition(target);
                 } else
-                    dir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize();
+                    dir = EntityUtils.horizontalLookAngle(entity);
                 entity.setDeltaMovement(entity.getDeltaMovement().add(dir.scale(0.6)));
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
         b.put(JUMP, (anim, entity) -> {
             entity.getNavigation().stop();
-            double length = anim.getLength() - 3;
-            if (entity.jumpDir == null) {
-                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : entity.getLookAngle();
-                dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(8);
-                entity.jumpDir = dir.multiply(1 / length, 1, 1 / length);
+            if (anim.isAt("jump")) {
+                Vec3 dir;
+                if (entity.getTarget() != null) {
+                    dir = entity.getTarget().position().subtract(entity.position());
+                    dir = new Vec3(dir.x(), 0, dir.z());
+                    if (dir.lengthSqr() > 20)
+                        dir = dir.normalize().scale(20 * 0.14);
+                    else
+                        dir = dir.scale(0.14);
+                } else {
+                    dir = EntityUtils.horizontalLookAngle(entity).scale(0.5);
+                }
+                entity.setDeltaMovement(dir.x(), 2.2, dir.z());
             }
-            if (anim.isAt("jump"))
-                entity.setDeltaMovement(entity.jumpDir.x, 2, entity.jumpDir.z);
             if (anim.isPast("jump")) {
                 entity.fallDistance = 0;
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0, -0.08, 0));
+                entity.lookAt(EntityAnchorArgument.Anchor.EYES, entity.position().add(entity.getDeltaMovement().x(), 0, entity.getDeltaMovement().z()));
                 if (entity.getDeltaMovement().y < -1.1) {
                     entity.setDeltaMovement(entity.getDeltaMovement().x, -1.1, entity.getDeltaMovement().z);
                 }
@@ -233,9 +242,8 @@ public class Raccoon extends BossMonster {
 
     private final AnimationHandler<Raccoon> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
-                if (this.level().isClientSide) {
+                if (!this.level().isClientSide) {
                     this.setClonePos(null);
-                    this.jumpDir = null;
                     if (anim == null && this.getAnimationHandler().isCurrent(CLONE)) {
                         this.getAnimationHandler().setAnimation(this.getRandom().nextBoolean() ? LEAF_SHOT_CLONE : LEAF_BOOMERANG);
                         return true;
@@ -244,7 +252,6 @@ public class Raccoon extends BossMonster {
                 return false;
             });
     private Vec3 cloneCenter;
-    private Vec3 jumpDir;
 
     private int hit;
     private int hitCountdown = -1;
@@ -288,38 +295,46 @@ public class Raccoon extends BossMonster {
         return AttackBehaviourBuilder.<Raccoon>create()
                 .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isBerserk())
-                .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod((e, t) -> 1.2f)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod((e, t) -> 1.2f))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isBerserk())
-                .prepare(new SetWalkTargetToAttackTarget<Raccoon>().speedMod((e, t) -> 1.2f)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Raccoon>().speedMod((e, t) -> 1.2f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(17)
                 .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(raccoon -> raccoon.isBerserk() && MonsterBehaviourUtils.ifCloserThan(5).test(raccoon))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .condition(raccoon -> raccoon.isBerserk() && MonsterBehaviourUtils.ifCloserThan(6).test(raccoon))
+                .prepare(new SetWalkTargetToAttackTarget<Raccoon>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(JUMP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Raccoon::isBerserk)
                 .prepare(new SetWalkTargetToAttackTarget<Raccoon>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(16))).prepareOptional(new MoveToAttackTarget<>())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(raccoon -> raccoon.isBerserk() && MonsterBehaviourUtils.ifCloserThan(5).test(raccoon))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .condition(raccoon -> raccoon.isBerserk() && MonsterBehaviourUtils.ifCloserThan(8).test(raccoon))
+                .prepare(new SetWalkTargetToAttackTarget<Raccoon>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(5)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(LEAF_SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Raccoon::isBerserk)
-                .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod(1.1f).minDist(3).radius(5)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod(1.1f).minDist(4).radius(6)).prepareOptional(new MoveToAttackTarget<>())
                 .end(17)
                 .start(MonsterBehaviourUtils.checkedAttack(LEAF_BOOMERANG)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Raccoon::isBerserk)
-                .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod(1.1f).minDist(3).radius(5)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod(1.1f).minDist(4).radius(6)).prepareOptional(new MoveToAttackTarget<>())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(ROAR)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Raccoon::isBerserk)
                 .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(BARRAGE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Raccoon::isBerserk)
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Raccoon>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(9))).prepareOptional(new MoveToAttackTarget<>())
                 .end(1)
                 .start(MonsterBehaviourUtils.checkedAttack(CLONE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && m.isBerserk())
@@ -330,10 +345,10 @@ public class Raccoon extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return new OneRandomBehaviour<>(
-                DummyBehaviour.opt(new SequentialBehaviour<Raccoon>(new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()))
+                DummyBehaviour.opt(new SequentialBehaviour<Raccoon>(new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()))
                         .startCondition(Raccoon::isBerserk),
                 DummyBehaviour.opt(new SequentialBehaviour<Raccoon>(new SetWalkTargetAwayFromTarget<>()
-                        .minDist(4).radius(6).speedMod(1.1f), new MoveToWalkTarget<>())).startCondition(m -> !m.isBerserk())
+                        .minDist(4).radius(6).speedMod(1.1f), new MoveToWalkTillClose<>())).startCondition(m -> !m.isBerserk())
         );
     }
 
@@ -451,6 +466,13 @@ public class Raccoon extends BossMonster {
     }
 
     @Override
+    public MoveType getMoveFlag() {
+        if (this.getAnimationHandler().isCurrent(TRANSFORM, UNTRANSFORM))
+            return MoveType.NONE;
+        return super.getMoveFlag();
+    }
+
+    @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.is(JUMP, LAND)) {
             return new OrientedBoundingBox(this.attackBB(anim), 0, 0, this.position());
@@ -472,11 +494,11 @@ public class Raccoon extends BossMonster {
     @Override
     public AABB attackBB(AnimationState anim) {
         if (anim.is(JUMP, LAND)) {
-            double attackSize = this.getBbWidth() * 1.5;
+            double attackSize = this.getBbWidth() * 1.6;
             return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize);
         }
         if (anim.is(STOMP)) {
-            return new AABB(-1.8, -0.5, -2.2, 1.8, 2, 2.2);
+            return new AABB(-1.9, -0.5, -2.3, 1.9, 2, 2.3);
         }
         double width = this.getBbWidth() * 1.4;
         double length = this.getBbWidth() * 1.5;

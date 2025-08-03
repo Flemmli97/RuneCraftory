@@ -4,13 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.spells.HealT1Spell;
-import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
@@ -37,7 +36,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import net.tslat.smartbrainlib.api.core.navigation.SmoothGroundNavigation;
 import org.jetbrains.annotations.Nullable;
@@ -50,17 +48,17 @@ public class DeadTree extends BossMonster {
     private static final EntityDataAccessor<Byte> SUMMON_ANIMATION = SynchedEntityData.defineId(DeadTree.class, EntityDataSerializers.BYTE);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
-    public static final String ATTACK = BUILDER.add("attack", AnimationsBuilder.definition(0.92).marker("attack", 0.44, 0.68));
+    public static final String ATTACK = BUILDER.add("attack", AnimationsBuilder.definition(1.16).marker("attack", 0.72, 0.92));
     public static final String INTERACT = BUILDER.add("interact", ATTACK);
-    public static final String FALLING_APPLES = BUILDER.add("falling_apples", AnimationsBuilder.definition(0.72)
-            .marker("attack", 0.36).animationId("summon"));
+    public static final String FALLING_APPLES = BUILDER.add("falling_apples", AnimationsBuilder.definition(0.92)
+            .marker("attack", 0.6).animationId("summon"));
     public static final String APPLE_SHIELD = BUILDER.add("apple_shield", FALLING_APPLES);
     public static final String SPIKE = BUILDER.add("spike", FALLING_APPLES);
     public static final String BIG_FALLING_APPLES = BUILDER.add("big_falling_apples", FALLING_APPLES);
     public static final String MORE_FALLING_APPLES = BUILDER.add("more_falling_apples", FALLING_APPLES);
     public static final String HEAL = BUILDER.add("heal", FALLING_APPLES);
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.56));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.24));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, DeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -96,7 +94,7 @@ public class DeadTree extends BossMonster {
         });
         b.put(HEAL, (anim, entity) -> {
             if (anim.isAt("attack")) {
-                float healAmount = (float) (CombatUtils.getAttributeValue(entity, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * 3);
+                float healAmount = entity.getMaxHealth() * (entity.getRandom().nextFloat() * 0.1f + 0.1f);
                 entity.heal(healAmount);
                 ServerLevel serverLevel = (ServerLevel) entity.level();
                 serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
@@ -114,7 +112,7 @@ public class DeadTree extends BossMonster {
                         if (anim.is(APPLE_SHIELD))
                             this.shieldCooldown = this.getRandom().nextInt(60) + 100;
                         if (anim.is(HEAL))
-                            this.healCooldown = this.getRandom().nextInt(100) + 100;
+                            this.healCooldown = this.getRandom().nextInt(80) + 100;
                     }
                 } else if (anim != null && anim.animation().equals("summon")) {
                     int rand = this.random.nextInt(3) + 1;
@@ -169,7 +167,7 @@ public class DeadTree extends BossMonster {
         return AttackBehaviourBuilder.<DeadTree>create()
                 .start(MonsterBehaviourUtils.checkedAttack(ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(FALLING_APPLES)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged())
@@ -193,14 +191,14 @@ public class DeadTree extends BossMonster {
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(HEAL)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.healCooldown <= 0)
-                .end(7)
+                .end(6)
                 .build();
     }
 
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()).build();
+                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
     }
 
     @Override

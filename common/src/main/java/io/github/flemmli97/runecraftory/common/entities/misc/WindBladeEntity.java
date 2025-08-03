@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +26,7 @@ public class WindBladeEntity extends BaseProjectile {
 
     private Entity target;
     private Type type = Type.HOMING;
+    private int livingTickMax = 70;
 
     public WindBladeEntity(EntityType<? extends WindBladeEntity> type, Level level) {
         super(type, level);
@@ -40,6 +42,11 @@ public class WindBladeEntity extends BaseProjectile {
 
     public void setType(Type type) {
         this.type = type;
+        this.livingTickMax = this.isPiercing() ? 70 : 40;
+    }
+
+    public void maxTicks(int maxTicks) {
+        this.livingTickMax = maxTicks;
     }
 
     @Override
@@ -49,7 +56,7 @@ public class WindBladeEntity extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return this.isPiercing() ? 60 : 30;
+        return this.livingTickMax;
     }
 
     @Override
@@ -127,6 +134,20 @@ public class WindBladeEntity extends BaseProjectile {
             blockstate.onProjectileHit(this.level(), blockstate, raytraceresult, this);
             this.onBlockHit(raytraceresult);
         }
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setType(Type.values()[compound.getInt("Type")]);
+        this.maxTicks(compound.getInt("MaxTicks"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("Type", this.type.ordinal());
+        compound.putInt("MaxTicks", this.livingTickMax());
     }
 
     public enum Type {

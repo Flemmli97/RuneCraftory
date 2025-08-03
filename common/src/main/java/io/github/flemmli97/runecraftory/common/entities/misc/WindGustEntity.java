@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +14,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3d;
 
 import java.util.function.Predicate;
 
@@ -77,10 +75,8 @@ public class WindGustEntity extends BeamEntity {
     public HitResult getHitRay() {
         HitResult res = super.getHitRay();
         Vec3 dir = res.getLocation().subtract(this.getEyePosition()).normalize();
-        this.up = this.getUpVector(1).normalize().scale(this.radius());
-        Vector3d rot = new Vector3d(dir.x(), dir.y(), dir.z())
-                .rotateAxis(90 * Mth.DEG_TO_RAD, this.up.x(), this.up.y(), this.up.z());
-        this.side = new Vec3(rot.x(), rot.y(), rot.z()).normalize();
+        this.up = this.calculateViewVector(this.getXRot() - 90, this.getYRot()).scale(this.radius());
+        this.side = dir.cross(this.up).normalize().scale(this.radius());
         this.pMotion = dir.scale(0.5);
         return res;
     }

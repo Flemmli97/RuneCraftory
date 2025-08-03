@@ -41,7 +41,7 @@ public class HandonettaModel<T extends Handonetta> extends EntityModel<T> implem
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getModel().resetPoses();
         float partialTicks = ClientHandlers.getPartialTicks();
-        this.anim.get().setVariable("head_x_rotation", entity::getXRot);
+        this.anim.get().setVariable("query.head_x_rotation", entity::getXRot);
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
         }

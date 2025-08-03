@@ -53,7 +53,7 @@ public abstract class RafflesiaPart extends Mob implements AnimatedEntity, Ownab
         this.parent = parent;
         this.entityData.set(PARENT, Optional.of(this.parent.getUUID()));
         this.getAttributes().load(parent.getAttributes().save());
-        double health = parent.getAttributeValue(Attributes.MAX_HEALTH) * 0.5;
+        double health = parent.getAttributeValue(Attributes.MAX_HEALTH) * 0.33;
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(health);
         this.setHealth(this.getMaxHealth());
     }

@@ -26,7 +26,7 @@ public class TeleportSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel serverLevel, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        if (entity instanceof Mob mob && mob.level() instanceof ServerLevel) {
+        if (entity instanceof Mob mob) {
             if (mob.hasRestriction()) {
                 Vec3 home = Vec3.atCenterOf(mob.getRestrictCenter());
                 if (mob.distanceToSqr(home) > 100) {
@@ -39,9 +39,9 @@ public class TeleportSpell extends Spell {
                 Vec3 home = Vec3.atCenterOf(mem.get().pos());
                 ResourceKey<Level> levelKey = mem.get().dimension();
                 if (mob.level().dimension() != levelKey) {
-                    ServerLevel serverLevel = mob.getServer().getLevel(levelKey);
-                    if (serverLevel != null) {
-                        changeDimension(mob, serverLevel, home.x(), home.y(), home.z());
+                    ServerLevel homeLevel = mob.getServer().getLevel(levelKey);
+                    if (homeLevel != null) {
+                        changeDimension(mob, homeLevel, home.x(), home.y(), home.z());
                         return true;
                     }
                 }
@@ -64,9 +64,9 @@ public class TeleportSpell extends Spell {
                 levelKey = player.getServer().overworld().dimension();
             }
             if (player.level().dimension() != levelKey) {
-                ServerLevel serverLevel = player.getServer().getLevel(levelKey);
-                if (serverLevel != null) {
-                    changeDimension(player, serverLevel, home.x(), home.y(), home.z());
+                ServerLevel respawnLevel = player.getServer().getLevel(levelKey);
+                if (respawnLevel != null) {
+                    changeDimension(player, respawnLevel, home.x(), home.y(), home.z());
                     return true;
                 }
             }

@@ -30,6 +30,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,17 +45,20 @@ import java.util.function.BiConsumer;
 public class Ambrosia extends BossMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
-    public static final String KICK_1 = BUILDER.add("kick_1", AnimationsBuilder.definition(0.6).marker("attack", 0.32));
-    public static final String INTERACT = BUILDER.add("interact", KICK_1);
-    public static final String KICK_2 = BUILDER.add("kick_2", AnimationsBuilder.definition(0.6).marker("attack", 0.32));
-    public static final String KICK_3 = BUILDER.add("kick_3", AnimationsBuilder.definition(0.84).marker("attack", 0.28));
-    public static final String BUTTERFLY = BUILDER.add("butterfly", AnimationsBuilder.definition(2.04).marker("attack", 0.32));
+    public static final String KICK_1 = BUILDER.add("kick_1", AnimationsBuilder.definition(0.8)
+            .marker("move", 0.44).marker("attack", 0.52));
+    public static final String KICK_2 = BUILDER.add("kick_2", AnimationsBuilder.definition(0.6)
+            .marker("move", 0.24).marker("attack", 0.32));
+    public static final String KICK_3 = BUILDER.add("kick_3", AnimationsBuilder.definition(0.84)
+            .marker("move", 0.44).marker("attack", 0.28));
+    public static final String BUTTERFLY = BUILDER.add("butterfly", AnimationsBuilder.definition(2.08).marker("attack", 0.36));
     public static final String WAVE = BUILDER.add("wave", AnimationsBuilder.definition(2.24).marker("attack", 0.24));
-    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0.76).marker("attack", 0.24));
-    public static final String POLLEN = BUILDER.add("pollen", AnimationsBuilder.definition(0.72).marker("attack", 0.28));
-    public static final String POLLEN_2 = BUILDER.add("pollen_2", POLLEN);
+    public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(1).marker("attack", 0.52));
+    public static final String POLLEN = BUILDER.add("pollen", AnimationsBuilder.definition(0.96).marker("attack", 0.52));
+    public static final String POLLEN_2 = BUILDER.add("pollen_2", AnimationsBuilder.definition(0.8).marker("attack", 0.4));
+    public static final String INTERACT = BUILDER.add("interact", KICK_1);
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2.72));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2.4));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Ambrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -65,8 +69,15 @@ public class Ambrosia extends BossMonster {
         });
         BiConsumer<AnimationState, Ambrosia> kick = (anim, entity) -> {
             LivingEntity target = entity.getTarget();
-            if (target != null) {
-                entity.getNavigation().moveTo(target, 1.0);
+            if (anim.isAt("move")) {
+                Vec3 dir;
+                if (target != null) {
+                    dir = target.position().subtract(entity.position());
+                    dir = new Vec3(dir.x(), 0, dir.z()).normalize();
+                } else {
+                    dir = EntityUtils.horizontalLookAngle(entity);
+                }
+                entity.move(MoverType.SELF, dir.scale(0.7));
             }
             if (anim.isAt("attack")) {
                 entity.mobAttack(anim, target, entity::doHurtTarget);
@@ -94,6 +105,7 @@ public class Ambrosia extends BossMonster {
             if (anim.isAt("attack") && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
                 PollenEntity pollen = new PollenEntity(entity.level(), entity);
+                pollen.setDamageMultiplier(1.1f);
                 pollen.setPos(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
                 entity.level().addFreshEntity(pollen);
             }
@@ -130,30 +142,30 @@ public class Ambrosia extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<Ambrosia>create()
                 .start(MonsterBehaviourUtils.checkedAttack(BUTTERFLY)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<Ambrosia>().speedMod(1.1f).radius(7)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<Ambrosia>().speedMod(1.1f).radius(8)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Ambrosia>builder(KICK_1)
                         .start(KICK_2).chain(KICK_3).build())).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(8))
+                .condition(MonsterBehaviourUtils.ifCloserThan(6))
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(SLEEP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f)
                         .closeEnoughDist(MonsterBehaviourUtils.closeEnough(2)))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(WAVE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f)
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(2)))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Ambrosia>builder(POLLEN)
                         .start(POLLEN_2).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f)
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(2)))
-                .prepareOptional(new MoveToAttackTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(9)
                 .build();
     }

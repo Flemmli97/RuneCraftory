@@ -27,7 +27,7 @@ public class SlashResidueEntity extends BaseDamageCloud {
 
     protected static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SlashResidueEntity.class, EntityDataSerializers.FLOAT);
 
-    private boolean oneTimeDamage;
+    private boolean dummy;
 
     public SlashResidueEntity(EntityType<? extends BaseDamageCloud> type, Level level) {
         super(type, level);
@@ -57,8 +57,8 @@ public class SlashResidueEntity extends BaseDamageCloud {
         this.refreshDimensions();
     }
 
-    public void setOneTime() {
-        this.oneTimeDamage = true;
+    public void dummy() {
+        this.dummy = true;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SlashResidueEntity extends BaseDamageCloud {
 
     @Override
     public boolean canStartDamage() {
-        return !this.oneTimeDamage && this.livingTicks % 3 == 1;
+        return !this.dummy && this.livingTicks % 3 == 1;
     }
 
     @Override
@@ -99,14 +99,14 @@ public class SlashResidueEntity extends BaseDamageCloud {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(SIZE, compound.getFloat("Size"));
-        this.oneTimeDamage = compound.getBoolean("OneTime");
+        this.dummy = compound.getBoolean("Dummy");
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("Size", this.entityData.get(SIZE));
-        compound.putBoolean("OneTime", this.oneTimeDamage);
+        compound.putBoolean("Dummy", this.dummy);
     }
 
     public enum Type {

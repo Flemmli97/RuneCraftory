@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -30,9 +31,7 @@ public class GloveUseAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
         if (anim.isPast("attack_start") && !handler.getAnimation().isPast("attack_end")) {
-            Vec3 look = entity.getLookAngle();
-            Vec3 move = new Vec3(look.x, 0.0, look.z).normalize()
-                    .scale(entity.onGround() ? 0.5 : 0.3).add(0, entity.getDeltaMovement().y, 0);
+            Vec3 move = EntityUtils.horizontalLookAngle(entity).scale(entity.onGround() ? 0.5 : 0.3).add(0, entity.getDeltaMovement().y, 0);
             entity.setDeltaMovement(move);
             if (anim.isAt("reset"))
                 handler.resetHitEntityTracker();

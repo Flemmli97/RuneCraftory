@@ -21,7 +21,7 @@ public class DarkBulletsSpell extends Spell {
         if (target != null) {
             summoner.setTarget(target.x(), target.y(), target.z());
         } else {
-            Vec3 look = Vec3.directionFromRotation(entity.getXRot(), entity.getYRot()).scale(5);
+            Vec3 look = entity.getLookAngle().scale(5);
             summoner.setTarget(entity.getX() + look.x(), entity.getEyeY() + look.y(), entity.getZ() + look.z());
         }
         level.addFreshEntity(summoner);

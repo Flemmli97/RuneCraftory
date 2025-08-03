@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWaterPrioritizingWalkTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.SwimWalkMoveController;
@@ -31,7 +32,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
@@ -51,7 +51,7 @@ public class Tortas extends ChargingMonster {
         super(type, level);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
         this.moveControl = new SwimWalkMoveController(this, 1.2);
-        this.waterNavigator = new AmphibiousNavigator(this, world);
+        this.waterNavigator = new AmphibiousNavigator(this, level);
         this.groundNavigator = this.navigation;
     }
 
@@ -81,8 +81,8 @@ public class Tortas extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
-                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>())
+                .add(1, new SetRandomWalkTarget<>(), new MoveToWalkTillClose<>())
                 .add(4, new Idle<>()).build();
     }
 

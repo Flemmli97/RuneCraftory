@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -43,7 +44,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.joml.Vector3d;
 
@@ -56,18 +56,18 @@ public class Grimoire extends BossMonster {
     private static final List<Vector3d> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3d(0.25, 0, 0), new Vector3d(0, 1, 0), -180, 175, 5);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
-    public static final String TAIL_SWIPE = BUILDER.add("tail_swipe", AnimationsBuilder.definition(0.84).marker("attack", 0.48));
+    public static final String TAIL_SWIPE = BUILDER.add("tail_swipe", AnimationsBuilder.definition(0.92).marker("attack", 0.52));
     public static final String INTERACT = BUILDER.add("interact", TAIL_SWIPE);
-    public static final String BITE = BUILDER.add("bite", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
+    public static final String BITE = BUILDER.add("bite", AnimationsBuilder.definition(0.84).marker("attack", 0.48));
     public static final String GUST = BUILDER.add("gust", AnimationsBuilder.definition(1.96).marker("attack", 0.32));
-    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.72).infinite()
-            .marker("charge_start", 0.16).marker("charge_end", 1.6));
-    public static final String CHARGE_LAND = BUILDER.add("charge_land", AnimationsBuilder.definition(0.48).marker("attack", 0.16));
-    public static final String WIND_BREATH = BUILDER.add("wind_breath", AnimationsBuilder.definition(1.36).marker("attack", 0.44));
-    public static final String TORNADO = BUILDER.add("tornado", AnimationsBuilder.definition(1.24).marker("attack", 0.4));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.44));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.76).infinite()
+            .marker("charge_start", 0.24).marker("charge_end", 1.76));
+    public static final String CHARGE_LAND = BUILDER.add("charge_land", AnimationsBuilder.definition(0.6).marker("attack", 0.16));
+    public static final String WIND_BREATH = BUILDER.add("wind_breath", AnimationsBuilder.definition(1.44).marker("attack", 0.52));
+    public static final String TORNADO = BUILDER.add("tornado", AnimationsBuilder.definition(1.4).marker("attack", 0.52));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.64));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Grimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -177,29 +177,31 @@ public class Grimoire extends BossMonster {
         return AttackBehaviourBuilder.<BossMonster>create()
                 .start(MonsterBehaviourUtils.checkedAttack(TAIL_SWIPE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .prepare(new SetWalkTargetToAttackTarget<BossMonster>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<BossMonster>().speedMod((e, t) -> 1.1f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<BossMonster>builder(BITE)
                         .start(TAIL_SWIPE, BossMonster::isEnraged).build())).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .prepare(new SetWalkTargetToAttackTarget<BossMonster>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
+                .prepare(new SetWalkTargetToAttackTarget<BossMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4))
+                        .speedMod((e, t) -> 1.1f))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(GUST)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(5).max(12))
+                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(4).max(13))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(3).max(8))
+                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(3).max(11))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(TORNADO)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
-                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(4).max(7))
+                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(3).max(9))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .build();
@@ -208,7 +210,7 @@ public class Grimoire extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()).build();
+                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
     }
 
     @Override

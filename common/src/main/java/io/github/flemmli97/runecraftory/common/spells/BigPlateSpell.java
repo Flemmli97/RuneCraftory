@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.BigPlateEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -34,7 +35,7 @@ public class BigPlateSpell extends Spell {
                 pos = nearest.position().add(0, nearest.getBbHeight(), 0);
         }
         if (pos == null) {
-            Vec3 horizontalLook = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize();
+            Vec3 horizontalLook = EntityUtils.horizontalLookAngle(entity);
             pos = entity.position().add(horizontalLook);
         }
         BigPlateEntity plate = new BigPlateEntity(level, entity);

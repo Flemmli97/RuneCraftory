@@ -30,7 +30,7 @@ import java.util.Set;
 public class AmbrosiaWaveEntity extends BaseDamageCloud {
 
     private static final EntityDataAccessor<Integer> MAX_TICK = SynchedEntityData.defineId(AmbrosiaWaveEntity.class, EntityDataSerializers.INT);
-    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3f(0.25f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5);
+    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3f(0.28f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5);
 
     private final Set<FrozenEntity> hitEntityPos = new HashSet<>();
 
@@ -47,12 +47,12 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
 
     @Override
     public float radiusIncrease() {
-        return 0.5f;
+        return 0.45f;
     }
 
     @Override
     public double maxRadius() {
-        return 5;
+        return 6.5;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(MAX_TICK, 140);
+        builder.define(MAX_TICK, 120);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
         super.tick();
         if (this.level().isClientSide) {
             if (this.livingTicks < (this.entityData.get(MAX_TICK) - 8) && this.livingTicks % 5 == 1) {
-                for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
+                for (Vector3f vec : MathUtils.rotatedVecs(new Vector3f(0.3f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5)) {
                     this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
                 }
             }

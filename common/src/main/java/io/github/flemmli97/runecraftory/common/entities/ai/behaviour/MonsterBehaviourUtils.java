@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.ai.behaviour;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.PlayAnimation;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetAnimationToPlay;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
@@ -48,21 +49,32 @@ public class MonsterBehaviourUtils {
     }
 
     public static <E extends BaseMonster> PlayAnimation<E> cooldownedPlay() {
-        return new PlayAnimation<E>().withCallback(cooldownHandler());
+        return new PlayAnimation<E>().withCallback(cooldownHandler())
+                .withCallback(cooldownHandlerCont());
     }
 
     public static <E extends BaseMonster> PlayAnimation.OnStart<E> cooldownHandler() {
-        return (animation, chains, entity) -> {
+        return (animation, entity) -> {
             double calc = entity.animationCooldown(animation);
             calc += entity.getAnimationHandler().get(animation).length();
+            int cooldown = Mth.ceil(calc);
+            BrainUtils.setForgettableMemory(entity, MemoryModuleType.ATTACK_COOLING_DOWN, true, cooldown);
+            BrainUtils.setForgettableMemory(entity, RuneCraftoryMemoryTypes.LAST_ANIMATION.get(), animation, cooldown + 80);
+        };
+    }
+
+    public static <E extends BaseMonster> PlayAnimation.OnContinue<E> cooldownHandlerCont() {
+        return (animation, chains, entity) -> {
+            // Extend cooldown by chained attacks
+            double calc = BrainUtils.getTimeUntilMemoryExpires(entity, MemoryModuleType.ATTACK_COOLING_DOWN);
             if (chains != null) {
                 for (AnimationPlayHolder.AnimationHolder chain : chains) {
                     calc += entity.getAnimationHandler().get(chain.animation()).length();
                 }
+                int cooldown = Mth.ceil(calc);
+                BrainUtils.setForgettableMemory(entity, MemoryModuleType.ATTACK_COOLING_DOWN, true, cooldown);
+                BrainUtils.setForgettableMemory(entity, RuneCraftoryMemoryTypes.LAST_ANIMATION.get(), animation, cooldown);
             }
-            int cooldown = Mth.ceil(calc);
-            BrainUtils.setForgettableMemory(entity, MemoryModuleType.ATTACK_COOLING_DOWN, true, cooldown);
-            BrainUtils.setForgettableMemory(entity, RuneCraftoryMemoryTypes.LAST_ANIMATION.get(), animation, cooldown + 80);
         };
     }
 
@@ -76,6 +88,7 @@ public class MonsterBehaviourUtils {
     public static <E extends BaseMonster> PlayAnimation<E> requireInRangePlay() {
         return (PlayAnimation<E>) new PlayAnimation<E>()
                 .withCallback(cooldownHandler())
+                .withCallback(cooldownHandlerCont())
                 .startCondition(entity -> {
                     AnimationPlayHolder<?> anim = BrainUtils.getMemory(entity, MoreMemoryModules.ANIMATION_TO_PLAY.get());
                     Entity target = BrainUtils.getTargetOfEntity(entity);
@@ -119,5 +132,15 @@ public class MonsterBehaviourUtils {
             distance += target.getBbWidth() * 0.5;
             return entity.distanceToSqr(target) >= distance * distance;
         };
+    }
+
+    public static <E extends BaseMonster> MoveToAttackTarget<E> fastMovement() {
+        return fastMovement(40, 60);
+    }
+
+    public static <E extends BaseMonster> MoveToAttackTarget<E> fastMovement(int min, int max) {
+        MoveToAttackTarget<E> behaviour = new MoveToAttackTarget<>();
+        behaviour.runFor(e -> min + e.getRandom().nextInt(max - min));
+        return behaviour;
     }
 }

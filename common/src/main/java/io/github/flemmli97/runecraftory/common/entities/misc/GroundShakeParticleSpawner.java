@@ -27,16 +27,20 @@ public class GroundShakeParticleSpawner extends ProjectileSummonHelperEntity {
     public GroundShakeParticleSpawner(Level level, LivingEntity caster, double arc, double range) {
         super(RuneCraftoryEntities.GROUND_SHAKE_PARTICLES.get(), level, caster);
         this.setPos(caster.getX(), caster.getY(), caster.getZ());
-        this.maxLivingTicks = 8;
         this.arc = arc;
         this.range = range;
+    }
+
+    @Override
+    public int getMaxLivingTicks() {
+        return 8;
     }
 
     @Override
     protected void summonProjectiles() {
         Vec3 dir = new Vec3(this.targetX - this.getX(), 0, this.targetZ - this.getZ()).normalize();
         float yRot = MathsHelper.YRotFrom(dir);
-        double progress = (double) this.ticksExisted / this.maxLivingTicks;
+        double progress = (double) this.ticksExisted / this.getMaxLivingTicks();
         double range = progress * this.range;
         int amount = Mth.ceil(1.2 * this.arc * Math.ceil(range) / 90);
         for (int i = 0; i < amount; i++) {

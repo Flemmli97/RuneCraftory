@@ -388,6 +388,7 @@ public class EntityCalls {
         // Block all ticking if stunned
         if (Platform.INSTANCE.getEntityData(entity).isStunned()) {
             ((LivingEntityAccessor) entity).tickEffectsManually();
+            --entity.invulnerableTime;
             return true;
         }
         return false;

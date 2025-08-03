@@ -23,7 +23,7 @@ public class CardThrowSpell extends Spell {
         if (target != null) {
             dir = target.subtract(entity.getEyePosition());
         } else {
-            dir = entity.calculateViewVector(entity.getXRot(), entity.getYRot());
+            dir = entity.getLookAngle();
         }
         float[] yxRot = MathsHelper.YXRotFrom(dir);
         Vec3 up = Vec3.directionFromRotation(yxRot[1] + 90, yxRot[0]);

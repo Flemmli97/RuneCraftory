@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SinkIfTooHigh;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
@@ -149,7 +150,6 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtAttackTarget
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
@@ -173,7 +173,7 @@ import java.util.function.Predicate;
 
 public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, CommonMonsterHandler, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
 
-    public static final int MOVE_TICK_MAX = 4;
+    public static final int MOVE_TICK_MAX = 5;
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
@@ -190,7 +190,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             }
             if (e instanceof Mob mob && this == mob.getTarget())
                 return true;
-            return EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, false, entity -> entity instanceof Player ? entity.canBeSeenAsEnemy() : this.targetPred.test(entity));
+            return EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, e instanceof Player, entity -> entity instanceof Player ? entity.canBeSeenAsEnemy() : this.targetPred.test(entity));
         }
         return false;
     };
@@ -217,7 +217,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     return baseMonster.hitPred.test(e);
                 riderTarget = controller instanceof Mob mob && e == mob.getTarget();
             }
-            return riderTarget || e == this.getTarget() || EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, false, this.targetPred) || e instanceof Player;
+            return riderTarget || e == this.getTarget() || EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, e instanceof Player, this.targetPred) || e instanceof Player;
         }
         return false;
     };
@@ -393,8 +393,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 this.level().addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
         AnimationState animation = this.getAnimationHandler().getAnimation();
-        if (animation == null) {
-            this.targetPosition = null;
+        if (animation == null && this.getTargetPosition() != null) {
+            this.setTargetPosition((TargetPosition) null);
         }
         if (animation == null || (this.scheduledAnimationHandling != null && !this.scheduledAnimationHandling.getFirst().equals(animation.getID()))) {
             this.scheduledAnimationHandling = null;
@@ -583,7 +583,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public BrainActivityGroup<? extends BaseMonster> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
-                new MoveToWalkTarget<>(),
+                new MoveToWalkTillClose<>(),
                 new FirstApplicableBehaviour<>(
                         new TargetOrRetaliate<BaseMonster>(),
                         new SetMoveToRestriction<BaseMonster>(),
@@ -621,7 +621,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 .onlyStartWithMemoryStatus(RuneCraftoryMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
         map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
                 .priority(20).behaviours(
-                        new MoveToWalkTarget<>(),
+                        new MoveToWalkTillClose<>(),
                         new FirstApplicableBehaviour<>(
                                 new SetMoveToRestriction<>(),
                                 new TendCrops<>())
@@ -948,6 +948,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new float[]{60, 30};
     }
 
+    @Override
+    public Vec3 getLookAngle() {
+        return this.calculateViewVector(this.getXRot(), Mth.wrapDegrees(this.getYHeadRot()));
+    }
+
     // "Disable" this as we don't use it and it will mess with the AI check
     @Override
     protected AABB getAttackBoundingBox() {
@@ -982,8 +987,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public LivingEntity getTarget() {
-        LivingEntity brainTarget = BrainUtils.getTargetOfEntity(this);
-        return brainTarget != null ? brainTarget : super.getTarget();
+        return BrainUtils.getTargetOfEntity(this);
     }
 
     public LivingEntity getGoalTarget() {
@@ -995,6 +999,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         super.setTarget(target);
         // In case setTarget is called without BrainUtils
         // Sync to memory
+        // If BrainUtils is used it will override the brain target anyway
         if (this.getGoalTarget() == null) {
             BrainUtils.clearMemory(this, MemoryModuleType.ATTACK_TARGET);
         } else {
@@ -1007,6 +1012,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void setupAttack(AnimationDefinition anim) {
+        BrainUtils.clearMemory(this, MemoryModuleType.LOOK_TARGET);
         if (this.getTarget() != null) {
             this.setTargetPosition(this.getTarget());
         }
@@ -1075,10 +1081,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, @Nullable Vec3 target, double grow) {
-        float yRot = this.getYRot();
+        float yRot = this.getYHeadRot();
         float xRot = this.getXRot();
         if (this.getControllingPassenger() instanceof Player player) {
-            yRot = player.getYRot();
+            yRot = player.getYHeadRot();
             xRot = player.getXRot();
         } else if (target != null) {
             Vec3 dir = target.subtract(this.position()).normalize();

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
@@ -25,7 +26,6 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
@@ -80,7 +80,7 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(9)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(LIGHT).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(12))).prepareOptional(new MoveToWalkTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(12))).prepareOptional(new MoveToWalkTillClose<>())
                 .end(3)
                 .start(HEAL).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(2)
@@ -90,7 +90,7 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(5, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(5, new SetRandomWalkTarget<>(), new MoveToWalkTillClose<>())
                 .add(3, new Idle<>()).build();
     }
 

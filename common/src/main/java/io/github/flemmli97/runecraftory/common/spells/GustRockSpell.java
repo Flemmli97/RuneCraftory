@@ -22,9 +22,10 @@ public class GustRockSpell extends Spell {
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target != null) {
             Vec3 dir = (new Vec3(target.x() - gust.getX(), target.y() - gust.getY(), target.z() - gust.getZ()));
-            gust.setDirection(dir.x, dir.y, dir.z);
+            gust.setRotationToDir(dir.x, dir.y, dir.z, 0);
         } else {
-            gust.setDirection(entity.getXRot(), entity.getYRot());
+            gust.setYRot(entity.getYRot());
+            gust.setXRot(entity.getXRot());
         }
         level.addFreshEntity(gust);
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

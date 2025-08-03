@@ -57,7 +57,7 @@ public class Handonetta extends BossMonster {
     public static final String SWIPE = BUILDER.add("swipe", AnimationsBuilder.definition(1.28).marker("attack", 0.64));
     public static final String INTERACT = BUILDER.add("interact", SWIPE);
     public static final String FLICK = BUILDER.add("flick", AnimationsBuilder.definition(1.32).marker("attack", 0.64));
-    public static final String SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(1.44).marker("attack", 0.36));
+    public static final String SHOOT = BUILDER.add("shoot", AnimationsBuilder.definition(1.52).marker("attack", 0.44));
     public static final String LASER = BUILDER.add("laser", AnimationsBuilder.definition(1.24)
             .marker("aim", 0.3).marker("attack", 0.4));
     public static final String PLATE = BUILDER.add("plate", AnimationsBuilder.definition(0.88).marker("attack", 0.56));
@@ -193,23 +193,25 @@ public class Handonetta extends BossMonster {
         return AttackBehaviourBuilder.<Handonetta>create()
                 .start(MonsterBehaviourUtils.checkedAttack(SWIPE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().speedMod((e, t) -> 1.1f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(FLICK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Handonetta>().speedMod((e, t) -> 1.1f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<Handonetta>().min(6).max(9))
+                .prepare(new SetWalkTargetWithinDist<Handonetta>().min(4).max(12))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(PLATE)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<Handonetta>().min(6).max(11))
+                .prepare(new SetWalkTargetWithinDist<Handonetta>().min(3).max(14))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(GRAB)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -219,7 +221,7 @@ public class Handonetta extends BossMonster {
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
-                .prepare(new SetWalkTargetWithinDist<Handonetta>().min(6).max(10))
+                .prepare(new SetWalkTargetWithinDist<Handonetta>().min(3).max(11))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .build();
@@ -228,7 +230,7 @@ public class Handonetta extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(11)).build();
+                .add(1, new StrafeTarget<BaseMonster>().strafeDistance(12)).build();
     }
 
     @Override
@@ -412,9 +414,9 @@ public class Handonetta extends BossMonster {
             Operation current = this.operation;
             super.tick();
             if (current == Operation.STRAFE && this.mob.getTarget() != null) {
-                Vec3 target = this.mob.getTarget().position();
+                Vec3 target = this.mob.getTarget().position().add(0, this.mob.getTarget().getBbHeight(), 0);
                 Vec3 dist = this.mob.position().subtract(target);
-                if (dist.y() < 4) {
+                if (dist.y() < 3) {
                     this.mob.setYya(1);
                 } else {
                     this.mob.setYya(-1);

@@ -61,6 +61,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity
 import io.github.flemmli97.runecraftory.common.entities.misc.WaterLaserEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.WindBladeEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.WindGustEntity;
+import io.github.flemmli97.runecraftory.common.entities.misc.summoners.AppleRainSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.summoners.BlazeBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.summoners.ButterflySummonerEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.summoners.DarkBulletSummonerEntity;
@@ -1226,7 +1227,7 @@ public class RuneCraftoryEntities {
                     .passengerAttachments(new Vec3(0, 30 / 16d, -3 / 16d)).sized(1.95f, 3).clientTrackingRange(8), RuneCraftory.modRes("skelefang"),
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
-                    .putAttributes(Attributes.MAX_HEALTH, 275).putLevelGains(Attributes.MAX_HEALTH, 600)
+                    .putAttributes(Attributes.MAX_HEALTH, 225).putLevelGains(Attributes.MAX_HEALTH, 600)
                     .putAttributes(Attributes.ATTACK_DAMAGE, 19).putLevelGains(Attributes.ATTACK_DAMAGE, 294)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 5).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 261)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 16).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 264)
@@ -1510,7 +1511,7 @@ public class RuneCraftoryEntities {
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<BulletEntity>> CIRCLING_BULLET = reg(EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("circling_bullet"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<ThrownItemEntity>> THROWN_ITEM = reg(EntityType.Builder.<ThrownItemEntity>of(ThrownItemEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("thrown_item"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<AppleProjectileEntity>> APPLE = reg(EntityType.Builder.<AppleProjectileEntity>of(AppleProjectileEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("apple"));
-    public static final RegistryEntrySupplier<EntityType<?>, EntityType<SlashResidueEntity>> SLASH_RESIDUE = reg(EntityType.Builder.<SlashResidueEntity>of(SlashResidueEntity::new, MobCategory.MISC).sized(1.3f, 1.3f).clientTrackingRange(4), RuneCraftory.modRes("slash_residue"));
+    public static final RegistryEntrySupplier<EntityType<?>, EntityType<SlashResidueEntity>> SLASH_RESIDUE = reg(EntityType.Builder.<SlashResidueEntity>of(SlashResidueEntity::new, MobCategory.MISC).sized(1, 1).clientTrackingRange(4), RuneCraftory.modRes("slash_residue"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<SmallRaccoonLeafEntity>> SMALL_RACCOON_LEAF = reg(EntityType.Builder.<SmallRaccoonLeafEntity>of(SmallRaccoonLeafEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("small_raccoon_leaf"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<BigRaccoonLeafEntity>> BIG_RACCOON_LEAF = reg(EntityType.Builder.<BigRaccoonLeafEntity>of(BigRaccoonLeafEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), RuneCraftory.modRes("big_raccoon_leaf"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<BoneNeedleEntity>> BONE_NEEDLE = reg(EntityType.Builder.<BoneNeedleEntity>of(BoneNeedleEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), RuneCraftory.modRes("bone_needle"));
@@ -1539,6 +1540,7 @@ public class RuneCraftoryEntities {
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<ElementalCircleSummoner>> ELEMENTAL_CIRCLE_SUMMONER = reg(EntityType.Builder.<ElementalCircleSummoner>of(ElementalCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), RuneCraftory.modRes("elemental_circle_summoner"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<StarFallSummoner>> STARFALL_SUMMONER = reg(EntityType.Builder.<StarFallSummoner>of(StarFallSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), RuneCraftory.modRes("star_fall_summoner"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<GroundShakeParticleSpawner>> GROUND_SHAKE_PARTICLES = reg(EntityType.Builder.<GroundShakeParticleSpawner>of(GroundShakeParticleSpawner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), RuneCraftory.modRes("ground_shake_particles"));
+    public static final RegistryEntrySupplier<EntityType<?>, EntityType<AppleRainSummoner>> APPLE_RAIN_SUMMONER = reg(EntityType.Builder.<AppleRainSummoner>of(AppleRainSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), RuneCraftory.modRes("apple_rain_summoner"));
 
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<SarcophagusTeleporter>> SARCOPHAGUS_TELEPORTER = reg(EntityType.Builder.of(SarcophagusTeleporter::new, MobCategory.MISC).sized(1f, 1f).clientTrackingRange(4), RuneCraftory.modRes("sarcophagus_teleporter"));
 

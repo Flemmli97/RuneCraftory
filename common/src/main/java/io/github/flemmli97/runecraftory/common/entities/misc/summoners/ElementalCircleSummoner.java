@@ -34,6 +34,7 @@ public class ElementalCircleSummoner extends ProjectileSummonHelperEntity {
                 WindBladeEntity proj = new WindBladeEntity(this.level(), this.getOwner());
                 proj.setType(WindBladeEntity.Type.PLAIN);
                 proj.setDamageMultiplier(this.damageMultiplier);
+                proj.maxTicks(100);
                 proj.shoot(this, 0, rot, 0, 0.32f, 0);
                 proj.setPos(proj.getX(), this.getY(), proj.getZ());
                 this.level().addFreshEntity(proj);

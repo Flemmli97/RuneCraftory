@@ -153,7 +153,7 @@ public class StatusBallEntity extends BaseDamageCloud {
 
     public enum Type {
 
-        SLEEP(b -> b.magic().element(ItemElement.EARTH).withChangedAttribute(RuneCraftoryAttributes.SLEEP.asHolder(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 40),
+        SLEEP(b -> b.magic().element(ItemElement.EARTH).withChangedAttribute(RuneCraftoryAttributes.SLEEP.asHolder(), 100), new Vector3f(207 / 255F, 13 / 255F, 38 / 255F), 80),
         MUSHROOM_POISON(b -> b.magic().withChangedAttribute(RuneCraftoryAttributes.POISON.asHolder(), 50), new Vector3f(112 / 255F, 201 / 255F, 95 / 255F), 40),
         PARALYSIS(b -> b.magic().withChangedAttribute(RuneCraftoryAttributes.PARALYSIS.asHolder(), 50), new Vector3f(196 / 255F, 186 / 255F, 35 / 255F), 40),
         RAFFLESIA_SLEEP(b -> b.hurtResistant(2).magic().withChangedAttribute(RuneCraftoryAttributes.SLEEP.asHolder(), 10)

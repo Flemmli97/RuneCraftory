@@ -2,11 +2,13 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
@@ -30,7 +32,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
@@ -85,7 +86,7 @@ public class VeggieGhost extends BaseMonster {
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
                 .end(5)
                 .start(CAST).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepareOptional(new SetWalkTargetWithinDist<BaseMonster>().min(3).max(9), new MoveToWalkTarget<>())
+                .prepareOptional(new SetWalkTargetWithinDist<BaseMonster>().min(3).max(9), new MoveToWalkTillClose<>())
                 .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(9)
@@ -95,7 +96,7 @@ public class VeggieGhost extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTarget<>())
+                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTillClose<>())
                 .add(5, new StrafeTarget<>()).build();
     }
 
@@ -227,7 +228,7 @@ public class VeggieGhost extends BaseMonster {
     }
 
     private void teleportTowards(Entity entity) {
-        Vec3 look = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(-1.5);
+        Vec3 look = EntityUtils.horizontalLookAngle(entity).scale(-1.5);
         Vec3 behindEntity = entity.position().add(look);
         Vec3 dir = new Vec3(behindEntity.x - this.getX(), behindEntity.y - this.getY(), behindEntity.z - this.getZ());
         if (dir.lengthSqr() < 100)

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
@@ -38,7 +39,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
@@ -88,10 +88,10 @@ public class Wooly extends LeapingMonster {
                 .end(1)
                 .start(KICK).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetToAttackTarget<BaseMonster>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTillClose<>())
                 .end(1)
                 .start(KICK).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepareOptional(new SetWalkTargetAwayFromTarget<BaseMonster>().radius(5, 4), new MoveToWalkTarget<>())
+                .prepareOptional(new SetWalkTargetAwayFromTarget<BaseMonster>().radius(5, 4), new MoveToWalkTillClose<>())
                 .end(1)
                 .build()
                 .startCondition(MonsterBehaviourUtils.chancedStart(this::attackChance));
@@ -100,8 +100,8 @@ public class Wooly extends LeapingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>())
-                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTarget<>())
+                .add(2, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>())
+                .add(2, new SetRandomWalkTarget<>(), new MoveToWalkTillClose<>())
                 .add(5, new Idle<>()).build();
     }
 

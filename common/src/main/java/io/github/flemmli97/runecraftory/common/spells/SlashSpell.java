@@ -18,13 +18,14 @@ public class SlashSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         SlashResidueEntity slash = new SlashResidueEntity(level, entity);
+        slash.setSize(1.7f);
         Vec3 pos = entity.position();
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         Vec3 dir;
         if (target != null) {
-            dir = target.subtract(pos).normalize().scale(1.2);
+            dir = target.subtract(pos).normalize().scale(1 + entity.getBbWidth() * 0.5);
         } else {
-            dir = entity.getLookAngle().scale(1.2);
+            dir = entity.getLookAngle().scale(1 + entity.getBbWidth() * 0.5);
         }
         slash.setPos(pos.x + dir.x, pos.y + Mth.clamp(dir.y, -0.3, 0.8), pos.z + dir.z);
         slash.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));

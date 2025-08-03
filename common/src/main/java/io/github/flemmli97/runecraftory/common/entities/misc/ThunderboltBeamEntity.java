@@ -25,12 +25,12 @@ public class ThunderboltBeamEntity extends BaseBeam {
 
     @Override
     public float getRange() {
-        return 9;
+        return 14;
     }
 
     @Override
     public float radius() {
-        return 0.3f;
+        return 0.4f;
     }
 
     @Override

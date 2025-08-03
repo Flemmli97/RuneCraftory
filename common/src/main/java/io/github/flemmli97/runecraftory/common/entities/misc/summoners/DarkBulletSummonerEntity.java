@@ -16,7 +16,7 @@ public class DarkBulletSummonerEntity extends ProjectileSummonHelperEntity {
 
     public DarkBulletSummonerEntity(Level level, LivingEntity caster) {
         super(RuneCraftoryEntities.DARK_BULLET_SUMMONER.get(), level, caster);
-        this.maxLivingTicks = 18;
+        this.maxLivingTicks = 22;
     }
 
     @Override

@@ -3,10 +3,12 @@ package io.github.flemmli97.runecraftory.common.entities.monster.wisp;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
@@ -31,7 +33,6 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +97,7 @@ public abstract class WispBase extends BaseMonster {
 
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
-        return SelectableBehaviourBuilder.<BaseMonster>builder().add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTarget<>())
+        return SelectableBehaviourBuilder.<BaseMonster>builder().add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTillClose<>())
                 .add(6, new Idle<>()).build();
     }
 
@@ -217,7 +218,7 @@ public abstract class WispBase extends BaseMonster {
     }
 
     private void teleportTowards(Entity entity) {
-        Vec3 look = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(-2.5);
+        Vec3 look = EntityUtils.horizontalLookAngle(entity).scale(-2.5);
         Vec3 behindEntity = entity.position().add(look);
         Vec3 dir = new Vec3(behindEntity.x - this.getX(), behindEntity.y - this.getY(), behindEntity.z - this.getZ());
         if (dir.lengthSqr() < 100)

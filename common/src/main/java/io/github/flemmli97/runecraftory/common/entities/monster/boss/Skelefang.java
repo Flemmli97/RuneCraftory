@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.misc.SlashResidueEntity;
 import io.github.flemmli97.runecraftory.common.entities.monster.MultiPartContainer;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -48,7 +49,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.joml.Vector3f;
 
@@ -87,10 +87,10 @@ public class Skelefang extends BossMonster {
     public static final String TAIL_SLAM = BUILDER.add("tail_slam", AnimationsBuilder.definition(2)
             .marker("attack_1", 0.72).marker("attack_2", 1.2).marker("attack_3", 1.64));
     public static final String INTERACT = BUILDER.add("interact", TAIL_SLAM);
-    public static final String NEEDLE_THROW = BUILDER.add("needle_throw", AnimationsBuilder.definition(1.16).marker("attack", 0.8));
-    public static final String TAIL_SLAP = BUILDER.add("tail_slap", AnimationsBuilder.definition(0.84).marker("attack", 0.52));
-    public static final String SLASH = BUILDER.add("slash", AnimationsBuilder.definition(0.96).marker("attack", 0.6));
-    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.5).marker("attack_start", 0).marker("attack_end"));
+    public static final String NEEDLE_THROW = BUILDER.add("needle_throw", AnimationsBuilder.definition(1.24).marker("attack", 0.88));
+    public static final String TAIL_SLAP = BUILDER.add("tail_slap", AnimationsBuilder.definition(0.92).marker("attack", 0.6));
+    public static final String SLASH = BUILDER.add("slash", AnimationsBuilder.definition(1.04).marker("attack", 0.68));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.76).marker("attack_start", 0.4));
     // 4.5 till start beam, 2 sec beam charge, 4 sec beam duration, 2 sec till restore, 1 sec restoring time
     public static final String BEAM = BUILDER.add("beam", AnimationsBuilder.definition(13)
             .marker("charge", 4.5).marker("beam", 6.5)
@@ -144,8 +144,8 @@ public class Skelefang extends BossMonster {
                 if (entity.remainingLeftLegBones() > 0) {
                     Vec3 leftPos = entity.position().add(dir).add(side.scale(-1.3));
                     SlashResidueEntity slash = new SlashResidueEntity(entity.level(), entity);
-                    slash.setSize(1.5f);
-                    slash.setOneTime();
+                    slash.setSize(2f);
+                    slash.dummy();
                     slash.setPos(leftPos.x, leftPos.y, leftPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
@@ -154,8 +154,8 @@ public class Skelefang extends BossMonster {
                 if (entity.remainingRightLegBones() > 0) {
                     Vec3 rightPos = entity.position().add(dir).add(side.scale(1.3));
                     SlashResidueEntity slash = new SlashResidueEntity(entity.level(), entity);
-                    slash.setSize(1.5f);
-                    slash.setOneTime();
+                    slash.setSize(2f);
+                    slash.dummy();
                     slash.setPos(rightPos.x, rightPos.y, rightPos.z);
                     slash.setXRot(0);
                     slash.setYRot(entity.yBodyRot);
@@ -166,24 +166,26 @@ public class Skelefang extends BossMonster {
         b.put(CHARGE, (anim, entity) -> {
             if (entity.hitEntity == null)
                 entity.hitEntity = new ArrayList<>();
-            Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : Vec3.directionFromRotation(0, entity.getYRot());
-            dir = new Vec3(dir.x(), 0, dir.z());
-            if (dir.lengthSqr() < 0.5)
-                entity.setDeltaMovement(0, entity.getDeltaMovement().y, 0);
-            else {
-                dir = dir.normalize().scale(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.3);
-                entity.setDeltaMovement(dir.x(), entity.getDeltaMovement().y, dir.z());
-            }
-            if (entity.tickCount % 5 == 0) {
-                entity.playSound(RuneCraftorySounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
-                S2CScreenShake.sendAround(entity, 24, 10, 1);
-            }
-            entity.mobAttack(anim, null, e -> {
-                if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
-                        new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP, 0.7f).withChangedAttribute(RuneCraftoryAttributes.STUN.asHolder(), 70))) {
-                    entity.hitEntity.add(e);
+            if (anim.isPast("attack_start")) {
+                Vec3 dir = entity.getTarget() != null ? entity.getTarget().position().subtract(entity.position()) : Vec3.directionFromRotation(0, entity.getYRot());
+                dir = new Vec3(dir.x(), 0, dir.z());
+                if (dir.lengthSqr() < 0.5)
+                    entity.setDeltaMovement(0, entity.getDeltaMovement().y, 0);
+                else {
+                    dir = dir.normalize().scale(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.3);
+                    entity.setDeltaMovement(dir.x(), entity.getDeltaMovement().y, dir.z());
                 }
-            });
+                if (entity.tickCount % 5 == 0) {
+                    entity.playSound(RuneCraftorySounds.ENTITY_GENERIC_HEAVY_CHARGE.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
+                    S2CScreenShake.sendAround(entity, 24, 10, 1);
+                }
+                entity.mobAttack(anim, null, e -> {
+                    if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
+                            new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP, 0.7f).withChangedAttribute(RuneCraftoryAttributes.STUN.asHolder(), 70))) {
+                        entity.hitEntity.add(e);
+                    }
+                });
+            }
         });
         b.put(BEAM, (anim, entity) -> {
             if (anim.isAt("charge"))
@@ -281,22 +283,23 @@ public class Skelefang extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<Skelefang>create()
                 .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAM)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> m.remainingTailBones() > 10 && MonsterBehaviourUtils.ifCloserThan(6).test(m))
-                .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4))).prepareOptional(new MoveToAttackTarget<>())
-                .end(10)
-                .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAP)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> m.remainingTailBones() > 10 && MonsterBehaviourUtils.ifCloserThan(6).test(m))
+                .condition(m -> (m.isEnraged() || m.remainingTailBones() > 10) && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(12)
+                .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAP)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> (m.isEnraged() || m.remainingTailBones() > 10) && MonsterBehaviourUtils.ifCloserThan(6).test(m))
+                .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(NEEDLE_THROW)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(10)))
                 .prepareOptional(new MoveToAttackTarget<>())
-                .end(9)
+                .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(SLASH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)))
-                .prepareOptional(new MoveToAttackTarget<>())
-                .end(9)
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(11)
@@ -306,7 +309,7 @@ public class Skelefang extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTarget<>()).build();
+                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
     }
 
     @Override
@@ -627,7 +630,13 @@ public class Skelefang extends BossMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE)) {
-            return null;
+            AnimationState anim = this.getAnimationHandler().getAnimation();
+            if (!anim.isPast("attack_start")) {
+                if (this.getTarget() == null)
+                    return null;
+                return this.getTarget().position().subtract(this.position());
+            }
+            return this.getDeltaMovement();
         }
         return super.directionToLookAt();
     }
@@ -706,6 +715,14 @@ public class Skelefang extends BossMonster {
                 S2CAttackDebug.sendDebugPacket(obb, S2CAttackDebug.EnumAABBType.ATTACK, this);
         }
         targets.forEach(cons);
+    }
+
+    @Override
+    public DynamicDamage.Builder damageSourceAttack() {
+        DynamicDamage.Builder builder = super.damageSourceAttack();
+        if (this.getAnimationHandler().isCurrent(TAIL_SLAP))
+            builder.knock(DynamicDamage.KnockBackType.BACK, 1);
+        return builder;
     }
 
     @Override

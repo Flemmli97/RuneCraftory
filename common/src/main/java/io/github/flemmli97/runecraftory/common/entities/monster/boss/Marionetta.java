@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -41,7 +42,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.ArrayList;
@@ -53,19 +53,20 @@ public class Marionetta extends BossMonster {
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(Marionetta.class, EntityDataSerializers.BOOLEAN);
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
-    public static final String MELEE = BUILDER.add("melee", AnimationsBuilder.definition(0.48).marker("attack", 0.28));
+    public static final String MELEE = BUILDER.add("melee", AnimationsBuilder.definition(0.6).marker("attack", 0.4));
     public static final String INTERACT = BUILDER.add("interact", MELEE);
-    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(1.52)
-            .marker("attack_start", 0.28).marker("attack_end", 1.4));
-    public static final String CARD_ATTACK = BUILDER.add("card_attack", AnimationsBuilder.definition(0.64).marker("attack", 0.36));
-    public static final String CHEST_ATTACK = BUILDER.add("chest_attack", AnimationsBuilder.definition(1.2)
-            .marker("attack_start", 0.28).marker("attack_end", 1));
+    public static final String SPIN = BUILDER.add("spin", AnimationsBuilder.definition(1.68)
+            .marker("attack_start", 0.36).marker("attack_end", 1.56));
+    public static final String CARD_ATTACK = BUILDER.add("card_attack", AnimationsBuilder.definition(0.76).marker("attack", 0.48));
+    public static final String CHEST_ATTACK = BUILDER.add("chest_attack", AnimationsBuilder.definition(1.08)
+            .marker("attack_start", 0.36).marker("attack_end", 0.88));
     public static final String CHEST_THROW = BUILDER.add("chest_throw", AnimationsBuilder.definition(MarionettaTrapEntity.DURATION, false).marker("attack", 0.28));
-    public static final String STUFFED_ANIMALS = BUILDER.add("stuffed_animals", AnimationsBuilder.definition(0.76).marker("attack", 0.44));
-    public static final String DARK_BEAM = BUILDER.add("dark_beam", AnimationsBuilder.definition(0.8).marker("attack", 0.36));
-    public static final String FURNITURE = BUILDER.add("furniture", AnimationsBuilder.definition(1.2).marker("attack", 0.4));
+    public static final String STUFFED_ANIMALS = BUILDER.add("stuffed_animals", AnimationsBuilder.definition(0.88).marker("attack", 0.52));
+    public static final String DARK_BEAM = BUILDER.add("dark_beam", AnimationsBuilder.definition(0.88).marker("attack", 0.48));
+    public static final String FURNITURE = BUILDER.add("furniture", AnimationsBuilder.definition(1.12).marker("attack", 0.52));
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.6));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.32));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.2));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Marionetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -84,9 +85,18 @@ public class Marionetta extends BossMonster {
                 entity.setMoveDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
                         .scale(0.5));
             }
-            entity.setDeltaMovement(entity.moveDirection);
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
-                entity.mobAttack(anim, null, e -> CombatUtils.mobAttack(entity, e, new DynamicDamage.Builder(entity).hurtResistant(8)));
+                entity.setDeltaMovement(entity.moveDirection);
+                entity.mobAttack(anim, null, e -> {
+                    if (CombatUtils.mobAttack(entity, e, new DynamicDamage.Builder(entity).hurtResistant(8))) {
+                        float strength = (float) (2 * (1.0D - e.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+                        if (strength > 0) {
+                            e.setDeltaMovement(e.getDeltaMovement().add(entity.moveDirection.scale(strength)));
+                        }
+                    }
+                });
+            } else {
+                entity.setDeltaMovement(entity.getDeltaMovement().scale(0.95));
             }
         });
         b.put(CARD_ATTACK, (anim, entity) -> {
@@ -98,10 +108,10 @@ public class Marionetta extends BossMonster {
             entity.getNavigation().stop();
             if (entity.moveDirection == null) {
                 entity.setMoveDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
-                        .scale(0.5));
+                        .scale(0.65));
             }
-            entity.setDeltaMovement(entity.moveDirection);
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
+                entity.setDeltaMovement(entity.moveDirection);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
@@ -112,8 +122,7 @@ public class Marionetta extends BossMonster {
         b.put(CHEST_THROW, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt("attack")) {
-                Vec3 throwVec = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z())
-                        .normalize().scale(1.2).add(0, 0.85, 0);
+                Vec3 throwVec = EntityUtils.horizontalLookAngle(entity).scale(1.7).add(0, 0.85, 0);
                 MarionettaTrapEntity trap = new MarionettaTrapEntity(entity.level(), entity);
                 trap.setDamageMultiplier(0.8f);
                 entity.caughtEntities.forEach(trap::addCaughtEntity);
@@ -181,13 +190,16 @@ public class Marionetta extends BossMonster {
         return AttackBehaviourBuilder.<Marionetta>create()
                 .start(MonsterBehaviourUtils.checkedAttack(MELEE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(4))
-                .prepare(new SetWalkTargetToAttackTarget<Marionetta>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Marionetta>().speedMod((e, t) -> 1.1f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(CARD_ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new LeapInDirection<Marionetta>()
                         .shouldLeap((entity, target) -> entity.distanceToSqr(target) < 9)
-                        .horizontalDirection((entity, target) -> LeapInDirection.createBackwardsVec(entity.position(), target.position())))
+                        .strength(1.2)
+                        .horizontalDirection((entity, target) -> LeapInDirection.createBackwardsVec(entity.position(), target.position()))
+                        .whenStarting(m -> m.getAnimationHandler().setAnimation(LEAP)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(SPIN)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -199,15 +211,15 @@ public class Marionetta extends BossMonster {
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
                         .closeEnoughDist(MonsterBehaviourUtils.closeEnough(16)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
-                .end(10)
+                .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(STUFFED_ANIMALS)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Marionetta>()
-                        .min(4).max(7).speedMod((e, t) -> 1.1f))
+                        .min(2).max(8).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
-                .end(9)
+                .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(DARK_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(10)).speedMod((e, t) -> 1.1f))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(12)).speedMod((e, t) -> 1.1f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(6)
                 .start(MonsterBehaviourUtils.checkedAttack(FURNITURE)).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -221,12 +233,16 @@ public class Marionetta extends BossMonster {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(7, new LeapInDirection<BaseMonster>()
                                 .horizontalDirection((entity, target) -> {
-                                    if (entity.distanceToSqr(target) <= 4)
+                                    if (entity.distanceToSqr(target) <= 5)
                                         return LeapInDirection.createBackwardsVec(entity.position(), target.position());
                                     return LeapInDirection.createSidewaysVec(entity.position(), target.position(), entity.getRandom().nextBoolean());
-                                }),
-                        new StrafeTarget<BaseMonster>().strafeDistance(9))
-                .add(10, new StrafeTarget<BaseMonster>().strafeDistance(9)).build();
+                                })
+                                .strength(1.2)
+                                .whenStarting(m -> m.getAnimationHandler().setAnimation(LEAP))
+                                .cooldownFor(e -> 20),
+                        new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7), new MoveToWalkTillClose<>())
+                .add(6, new SetWalkTargetWithinDist<BaseMonster>().min(3).max(7), new MoveToWalkTillClose<>())
+                .add(10, new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTillClose<>()).build();
     }
 
     @Override
@@ -300,6 +316,7 @@ public class Marionetta extends BossMonster {
         if (anim.is(SPIN)) {
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(dir.x(), dir.z()) * Mth.RAD_TO_DEG));
             return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
+                    .expandTowards(0, 0, -1)
                     .inflate(grow + 0.5, 0.1, grow + 1.2), rotY, 0, this.position());
         }
         if (anim.is(CHEST_ATTACK)) {
@@ -315,6 +332,15 @@ public class Marionetta extends BossMonster {
         double width = this.getBbWidth() * 1.5;
         double length = this.getBbWidth() * 1.7;
         return new AABB(-width * 0.5, -0.02, 0, width * 0.5, this.getBbHeight() + 0.02, length);
+    }
+
+    @Override
+    public int animationCooldown(String anim) {
+        int cooldown = super.animationCooldown(anim);
+        if (anim.equals(CHEST_ATTACK)) {
+            cooldown += this.getAnimationHandler().get(CHEST_THROW).length();
+        }
+        return cooldown;
     }
 
     @Override

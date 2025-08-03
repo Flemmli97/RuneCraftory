@@ -30,7 +30,7 @@ public class ButterflyEntity extends BaseProjectile {
     protected static final EntityDataAccessor<Float> HIT_Y = SynchedEntityData.defineId(ButterflyEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Float> HIT_Z = SynchedEntityData.defineId(ButterflyEntity.class, EntityDataSerializers.FLOAT);
 
-    private static final int DEFAULT_MAX_TICK = 50;
+    private static final int DEFAULT_MAX_TICK = 60;
 
     private LivingEntity stuckEntity;
     private int livingTickMax = DEFAULT_MAX_TICK;
@@ -66,13 +66,19 @@ public class ButterflyEntity extends BaseProjectile {
         super.tick();
         LivingEntity stuck = this.getHitEntity();
         if (stuck != null) {
+            if (!stuck.isAlive()) {
+                this.stuckEntity = null;
+                this.entityData.set(HIT, Optional.empty());
+                this.discard();
+                return;
+            }
             this.setXRot(this.entityData.get(LOCKED_PITCH));
             this.setYRot(this.entityData.get(LOCKED_YAW));
             Vec3 pos = stuck.position().add(this.entityData.get(HIT_X), this.entityData.get(HIT_Y), this.entityData.get(HIT_Z));
             this.setPos(pos);
             if (!this.level().isClientSide && this.livingTicks % 40 == 0 && this.getOwner() != null) {
                 if (this.getOwner() instanceof LivingEntity living)
-                    CombatUtils.applyTempAttribute(living, RuneCraftoryAttributes.DRAIN.asHolder(), 80);
+                    CombatUtils.applyTempAttribute(living, RuneCraftoryAttributes.DRAIN.asHolder(), 50);
                 DynamicDamage.Builder builder = new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(0);
                 builder.get(this.registryAccess()).hurtEntity(stuck, (float) (CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier));
                 if (this.getOwner() instanceof LivingEntity living)
@@ -88,7 +94,7 @@ public class ButterflyEntity extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(4), CombatUtils.getAttributeValue(this.getOwner(), RuneCraftoryAttributes.MAGIC_ATTACK.asHolder()) * this.damageMultiplier, null)) {
             if (result.getEntity() instanceof LivingEntity livingTarget) {
                 this.hitEntity(livingTarget);
             } else {

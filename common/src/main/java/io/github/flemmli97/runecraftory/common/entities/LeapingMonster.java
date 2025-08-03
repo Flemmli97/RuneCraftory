@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -89,7 +90,7 @@ public abstract class LeapingMonster extends BaseMonster {
         if (target != null) {
             return new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ()).normalize();
         }
-        return this.getLookAngle();
+        return EntityUtils.horizontalLookAngle(this);
     }
 
     public double leapHeightMotion() {

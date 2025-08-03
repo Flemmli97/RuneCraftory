@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,6 +26,7 @@ public class CardsEntity extends BaseProjectile {
 
     public CardsEntity(Level level, LivingEntity shooter, int type) {
         super(RuneCraftoryEntities.CARDS.get(), level, shooter);
+        this.entityData.set(CARD_TYPE, type);
         this.damageMultiplier = 0.6f;
     }
 
@@ -58,5 +60,17 @@ public class CardsEntity extends BaseProjectile {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         this.discard();
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(CARD_TYPE, compound.getInt("CardType"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("CardType", this.getCardType());
     }
 }

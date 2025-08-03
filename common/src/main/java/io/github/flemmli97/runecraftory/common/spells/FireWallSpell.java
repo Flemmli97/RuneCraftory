@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.summoners.FireWallSummoner;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,7 +31,7 @@ public class FireWallSpell extends Spell {
 
     public static Vec3 offset(LivingEntity entity) {
         Vec3 pos = entity.position().add(0, entity.getEyeHeight(), 0);
-        Vec3 lookDir = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(entity.getBbWidth() * 0.8);
+        Vec3 lookDir = EntityUtils.horizontalLookAngle(entity).scale(entity.getBbWidth() * 0.8);
         return pos.add(lookDir).add(0, -entity.getBbHeight() * 0.2, 0);
     }
 }

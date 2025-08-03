@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
@@ -38,7 +39,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomHoverTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
@@ -106,7 +106,7 @@ public class Ghost extends ChargingMonster {
                 .end(5)
                 .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetToAttackTarget<ChargingMonster>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTarget<>(), new SetChargeTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTillClose<>(), new SetChargeTarget<>())
                 .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(9)
@@ -116,7 +116,7 @@ public class Ghost extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTarget<>())
+                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTillClose<>())
                 .add(6, new Idle<>()).build();
     }
 
@@ -262,7 +262,7 @@ public class Ghost extends ChargingMonster {
     }
 
     private void teleportTowards(Entity entity) {
-        Vec3 look = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(-1.5);
+        Vec3 look = EntityUtils.horizontalLookAngle(entity).scale(-1.5);
         Vec3 behindEntity = entity.position().add(look);
         Vec3 dir = new Vec3(behindEntity.x - this.getX(), behindEntity.y - this.getY(), behindEntity.z - this.getZ());
         if (dir.lengthSqr() < 100)

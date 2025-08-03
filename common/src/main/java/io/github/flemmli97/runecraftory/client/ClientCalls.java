@@ -312,7 +312,7 @@ public class ClientCalls {
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
         boolean stunned = Minecraft.getInstance().player.hasEffect(RuneCraftoryEffects.STUNNED.asHolder());
         if (stunned) {
-            float pT = Minecraft.getInstance().player.tickCount * 10 - partialTicks;
+            float pT = ((Minecraft.getInstance().player.tickCount - partialTicks) * 24) % 1000;
             setYaw.accept(yaw + Mth.sin(pT) * 0.5f);
             setPitch.accept(pitch + Mth.sin(pT * 2) * 1);
         }
@@ -321,7 +321,7 @@ public class ClientCalls {
             return;
         float strengthPitch = ShakeHandler.shakeStrength;
         float strengthRoll = ShakeHandler.shakeStrength;
-        float pT = t * 24 - partialTicks;
+        float pT = (t - partialTicks) * 24;
         setPitch.accept(pitch + Mth.sin(pT * 2) * strengthPitch);
         setRoll.accept(roll + Mth.sin(pT) * strengthRoll);
     }
@@ -332,7 +332,7 @@ public class ClientCalls {
             return;
         float yRot = Mth.lerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
         Vec3 dir = Vec3.directionFromRotation(0, yRot + 90).scale(0.1);
-        float pT = Mth.sin(Minecraft.getInstance().player.tickCount * 10 - partialTicks);
+        float pT = Mth.sin(((entity.tickCount - partialTicks) * 10) % 1000);
         stack.translate(pT * dir.x(), 0, pT * dir.z());
     }
 

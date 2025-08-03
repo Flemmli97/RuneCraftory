@@ -201,7 +201,7 @@ public class Sarcophagus extends BossMonster {
             }
             if (anim.is(STARFALL)) {
                 this.gravityPre = this.isNoGravity();
-                this.starfallCooldown = 240 + this.getRandom().nextInt(600);
+                this.starfallCooldown = 240 + this.getRandom().nextInt(400);
                 this.setNoGravity(true);
             }
         } else {
@@ -243,7 +243,7 @@ public class Sarcophagus extends BossMonster {
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .end(8)
+                .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged())
                 .end(8)
@@ -259,10 +259,10 @@ public class Sarcophagus extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(EARTH_CIRCLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(LIGHT_2X)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .end(8)
+                .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(LIGHT_4X)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
-                .end(8)
+                .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(SHINE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged())
                 .end(7)

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -38,7 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
@@ -49,23 +49,26 @@ import java.util.function.BiConsumer;
 public class Chimera extends BossMonster {
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
-    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(1.36).marker("attack_start", 0).marker("attack_end", 1.2));
+    public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(1.68).marker("attack_start", 0.36).marker("attack_end", 1.44));
     public static final String FIRE_TAIL_BUBBLE = BUILDER.add("tail_beam", AnimationsBuilder.definition(1.48).marker("attack", 0.44));
     public static final String WATER_TAIL_BUBBLE = BUILDER.add("water_tail_bubble", FIRE_TAIL_BUBBLE);
     public static final String WATER_TAIL_BEAM = BUILDER.add("water_tail_beam", FIRE_TAIL_BUBBLE);
-    public static final String FIRE_BREATH = BUILDER.add("breath_attack", AnimationsBuilder.definition(1.2).marker("attack", 0.4));
+    public static final String FIRE_BREATH = BUILDER.add("breath_attack", AnimationsBuilder.definition(1.24).marker("attack", 0.48));
     public static final String BUBBLE_BEAM = BUILDER.add("bubble_beam", FIRE_BREATH);
-    public static final String SLASH = BUILDER.add("claw_attack", AnimationsBuilder.definition(0.64).marker("attack", 0.36, 0.72));
+    public static final String SLASH = BUILDER.add("claw_attack", AnimationsBuilder.definition(0.76).marker("attack", 0.48));
     public static final String INTERACT = BUILDER.add("interact", SLASH);
     public static final String BITE = BUILDER.add("bite_attack", AnimationsBuilder.definition(1.04)
-            .marker("attack_1", 0.4).marker("attack_2", 0.72));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.04));
+            .marker("attack_1", 0.4).marker("attack_2", 0.76));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.4));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Chimera>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimationState, Chimera> summonFire = (anim, entity) -> {
+            if (!anim.isPast("attack") && entity.getTarget() != null) {
+                entity.setTargetPosition(entity.getTarget());
+            }
             if (anim.isAt("attack")) {
                 RuneCraftorySpells.FIREBALL_BARRAGE.get().use(entity);
             }
@@ -73,6 +76,9 @@ public class Chimera extends BossMonster {
         b.put(FIRE_TAIL_BUBBLE, summonFire);
         b.put(FIRE_BREATH, summonFire);
         BiConsumer<AnimationState, Chimera> summonWater = (anim, entity) -> {
+            if (!anim.isPast("attack") && entity.getTarget() != null) {
+                entity.setTargetPosition(entity.getTarget());
+            }
             if (anim.isAt("attack")) {
                 RuneCraftorySpells.BUBBLE_BEAM.get().use(entity);
             }
@@ -80,6 +86,9 @@ public class Chimera extends BossMonster {
         b.put(BUBBLE_BEAM, summonWater);
         b.put(WATER_TAIL_BUBBLE, summonWater);
         b.put(WATER_TAIL_BEAM, (anim, entity) -> {
+            if (!anim.isPast("attack") && entity.getTarget() != null) {
+                entity.setTargetPosition(entity.getTarget());
+            }
             if (anim.isAt("attack")) {
                 RuneCraftorySpells.WATER_LASER.get().use(entity);
             }
@@ -91,7 +100,7 @@ public class Chimera extends BossMonster {
 
                 if (entity.chargeMotion == null) {
                     Vec3 dir = EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
-                            .scale(0.4);
+                            .scale(0.5);
                     entity.setChargeMotion(new Vec3(dir.x, 0, dir.z));
                 }
                 entity.setDeltaMovement(entity.chargeMotion.x, entity.getDeltaMovement().y, entity.chargeMotion.z);
@@ -167,32 +176,34 @@ public class Chimera extends BossMonster {
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(FIRE_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(10)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(FIRE_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(10)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WATER_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(10)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WATER_TAIL_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(10)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(BUBBLE_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(10)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SLASH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<Chimera>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Chimera>().speedMod((e, t) -> 1.1f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(SLASH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
-                .prepare(new SetWalkTargetToAttackTarget<Chimera>().speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Chimera>().speedMod((e, t) -> 1.1f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(15)
                 .build();
     }
@@ -200,8 +211,8 @@ public class Chimera extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(10, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTarget<>())
-                .add(7, new SetWalkTargetAwayFromTarget<BaseMonster>().radius(5).speedMod((e, t) -> 1.1f), new MoveToWalkTarget<>()).build();
+                .add(10, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTillClose<>())
+                .add(7, new SetWalkTargetAwayFromTarget<BaseMonster>().radius(4).speedMod((e, t) -> 1.1f), new MoveToWalkTillClose<>()).build();
     }
 
     @Override

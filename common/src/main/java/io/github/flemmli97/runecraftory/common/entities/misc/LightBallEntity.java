@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -107,8 +108,7 @@ public class LightBallEntity extends BaseDamageCloud {
                 Vec3 ownerPos = owner.position();
                 Vec3 pos = switch (this.lightType) {
                     case FRONT -> {
-                        Vec3 look = this.getOwner().getLookAngle();
-                        look = new Vec3(look.x, 0, look.z).scale(1.2);
+                        Vec3 look = EntityUtils.horizontalLookAngle(this.getOwner()).scale(1.2);
                         yield look.yRot(Mth.DEG_TO_RAD * this.angleOffset);
                     }
                     case LONG, PIERCING_SHORT, PIERCING_LONG -> new Vec3(owner.getBbWidth() + 0.5, 0, 0)

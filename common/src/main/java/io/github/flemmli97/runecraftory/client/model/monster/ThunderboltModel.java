@@ -54,7 +54,7 @@ public class ThunderboltModel<T extends Thunderbolt> extends EntityModel<T> impl
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.15f;
 
         float partialTicks = ClientHandlers.getPartialTicks();
-        if (entity.deathTime <= 0 && !entity.playDeath()) {
+        if (entity.deathTime <= 0 && !entity.playDeath() && !entity.getAnimationHandler().isCurrent(Thunderbolt.FEINT)) {
             this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             this.anim.get().doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
         }

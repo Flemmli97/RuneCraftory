@@ -189,6 +189,11 @@ public class EntityUtils {
         return 0;
     }
 
+    public static Vec3 horizontalLookAngle(Entity entity) {
+        Vec3 look = entity.getLookAngle();
+        return new Vec3(look.x(), 0, look.z()).normalize();
+    }
+
     public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {
         AABB aabb = target.getBoundingBox().inflate(target.getBbHeight() * 0.1);
         return getStraightProjectileTarget(from, target.position(), aabb.minY, aabb.maxY);

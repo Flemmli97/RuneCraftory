@@ -349,7 +349,7 @@ public class ClientRegister {
 
         consumer.register(RuneCraftoryEntities.ARROW.get(), MobArrowRender::new);
         consumer.register(RuneCraftoryEntities.SPORE.get(), EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.GUST.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.GUST.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.STONE.get(), ctx -> new ItemProjectileRenderer<>(ctx) {
             private final ItemStack stack = new ItemStack(RuneCraftoryItems.STONE_ROUND.get());
 
@@ -363,13 +363,13 @@ public class ClientRegister {
                 return this.stack;
             }
         });
-        consumer.register(RuneCraftoryEntities.STATUS_BALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.POLLEN_PUFF.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.POLLEN.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.AMBROSIA_WAVE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STATUS_BALL.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.POLLEN_PUFF.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.POLLEN.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.AMBROSIA_WAVE.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.BUTTERFLY.get(), ButterflyRender::new);
-        consumer.register(RuneCraftoryEntities.LIGHTNING_ORB_BOLT.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.LIGHTNING_BEAM.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHTNING_ORB_BOLT.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHTNING_BEAM.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.ELEMENTAL_TRAIL.get(), ElementalTrailRender::new);
         consumer.register(RuneCraftoryEntities.SPIDER_WEB.get(), SpiderWebRender::new);
         consumer.register(RuneCraftoryEntities.DARK_BEAM.get(), ctx -> new SingleFrameBeamRender<>(ctx, SingleFrameBeamRender.DARK_BEAM));
@@ -378,60 +378,61 @@ public class ClientRegister {
         consumer.register(RuneCraftoryEntities.TRAP_CHEST.get(), MarionettaTrapRender::new);
         consumer.register(RuneCraftoryEntities.ELEMENTAL_BALL.get(), ElementBallRender::new);
         consumer.register(RuneCraftoryEntities.FIRE_BALL.get(), FireballRender::new);
-        consumer.register(RuneCraftoryEntities.EXPLOSION.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.EXPLOSION.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.ROCK_SPEAR.get(), RockSpearRender::new);
         consumer.register(RuneCraftoryEntities.WIND_BLADE.get(), WindBladeRender::new);
         consumer.register(RuneCraftoryEntities.WATER_LASER.get(), WaterLaserRender::new);
         consumer.register(RuneCraftoryEntities.SWIPING_WATER_LASER.get(), WaterLaserRender::new);
-        consumer.register(RuneCraftoryEntities.LIGHT_BALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.DARK_BALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.LIGHT_BALL.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.DARK_BALL.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.DARKNESS.get(), DarknessRender::new);
         consumer.register(RuneCraftoryEntities.BIG_PLATE.get(), PlateRender::new);
         consumer.register(RuneCraftoryEntities.DARK_BULLET.get(), DarkBulletRender::new);
         consumer.register(RuneCraftoryEntities.POISON_NEEDLE.get(), PoisonNeedleRender::new);
-        consumer.register(RuneCraftoryEntities.SLEEP_AURA.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SLEEP_AURA.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.CIRCLING_BULLET.get(), ctx -> new BulletRender(ctx, RuneCraftory.modRes("textures/entity/projectile/bullet.png")));
         consumer.register(RuneCraftoryEntities.THROWN_ITEM.get(), ThrownItemRender::new);
         consumer.register(RuneCraftoryEntities.APPLE.get(), AppleProjectileRender::new);
-        consumer.register(RuneCraftoryEntities.SLASH_RESIDUE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SLASH_RESIDUE.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.SMALL_RACCOON_LEAF.get(), SmallRaccoonLeafRender::new);
         consumer.register(RuneCraftoryEntities.BIG_RACCOON_LEAF.get(), BigRaccoonLeafRender::new);
         consumer.register(RuneCraftoryEntities.BONE_NEEDLE.get(), BoneNeedleRender::new);
         consumer.register(RuneCraftoryEntities.ENERGY_ORB.get(), EnergyOrbRender::new);
         consumer.register(RuneCraftoryEntities.HOMING_SPIKES.get(), SpikesRender::new);
-        consumer.register(RuneCraftoryEntities.POWER_WAVE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.GUST_ROCK.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.TORNADO.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.POWER_WAVE.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.GUST_ROCK.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.TORNADO.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.LIGHT_BEAM.get(), ctx -> new SingleFrameBeamRender<>(ctx, SingleFrameBeamRender.LIGHT_BEAM));
         consumer.register(RuneCraftoryEntities.MISSILE.get(), MissileRender::new);
-        consumer.register(RuneCraftoryEntities.STARFALL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STARFALL.get(), EmptyRender::new);
 
         consumer.register(RuneCraftoryEntities.RUNEY.get(), RenderRuney::new);
-        consumer.register(RuneCraftoryEntities.STAT_BONUS.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STAT_BONUS.get(), EmptyRender::new);
 
-        consumer.register(RuneCraftoryEntities.SPORE_CIRCLE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.BUTTERFLY_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.DARK_BULLET_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.ROOT_SPIKE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.RAFFLESIA_BREATH_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.BLAZE_BARRAGE.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.FIRE_WALL_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.STARFALL_SUMMONER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.GROUND_SHAKE_PARTICLES.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SPORE_CIRCLE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.BUTTERFLY_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ROOT_SPIKE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_BREATH_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.BLAZE_BARRAGE.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.WIND_BLADE_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.FIRE_WALL_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.ELEMENTAL_CIRCLE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.STARFALL_SUMMONER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.GROUND_SHAKE_PARTICLES.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.APPLE_RAIN_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(RuneCraftoryEntities.FISHING_HOOK.get(), CustomFishingHookerRender::new);
-        consumer.register(RuneCraftoryEntities.SARCOPHAGUS_TELEPORTER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SARCOPHAGUS_TELEPORTER.get(), EmptyRender::new);
 
-        consumer.register(RuneCraftoryEntities.MULTIPART.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.RAFFLESIA_HORSETAIL.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.RAFFLESIA_FLOWER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
-        consumer.register(RuneCraftoryEntities.RAFFLESIA_PITCHER.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.MULTIPART.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_HORSETAIL.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_FLOWER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.RAFFLESIA_PITCHER.get(), EmptyRender::new);
 
-        consumer.register(RuneCraftoryEntities.SANO_AND_UNO.get(), io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.SANO_AND_UNO.get(), EmptyRender::new);
 
         NPCFeatureRenderers.init();
     }

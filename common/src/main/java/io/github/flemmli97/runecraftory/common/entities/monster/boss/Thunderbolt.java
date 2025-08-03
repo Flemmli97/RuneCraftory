@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -43,7 +44,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
@@ -57,24 +57,24 @@ public class Thunderbolt extends BossMonster {
     private static final float FEINT_THRESHOLD = 0.35f;
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
-    public static final String BACK_KICK = BUILDER.add("back_kick", AnimationsBuilder.definition(0.64).marker("attack", 0.32));
+    public static final String BACK_KICK = BUILDER.add("back_kick", AnimationsBuilder.definition(0.84).marker("attack", 0.56));
     public static final String BACK_KICK_HORN = BUILDER.add("back_kick_horn", BACK_KICK);
-    public static final String LASER_X5 = BUILDER.add("laser_x5", AnimationsBuilder.definition(1.44).marker("attack", 1.2));
+    public static final String LASER_X5 = BUILDER.add("laser_x5", AnimationsBuilder.definition(1.52).marker("attack", 1.32));
     public static final String LASER_AOE = BUILDER.add("laser_aoe", LASER_X5);
-    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(0.44).marker("attack", 0.28));
+    public static final String STOMP = BUILDER.add("stomp", AnimationsBuilder.definition(0.6).marker("attack", 0.44));
     public static final String INTERACT = BUILDER.add("interact", STOMP);
-    public static final String HORN_ATTACK = BUILDER.add("horn_attack", AnimationsBuilder.definition(0.44).marker("attack", 0.24));
-    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.64)
-            .marker("attack_start", 0.44).marker("attack_end", 1.12));
+    public static final String HORN_ATTACK = BUILDER.add("horn_attack", AnimationsBuilder.definition(0.56).marker("attack", 0.4));
+    public static final String CHARGE = BUILDER.add("charge", AnimationsBuilder.definition(1.68)
+            .marker("attack_start", 0.6).marker("attack_end", 1.24));
     public static final String CHARGE_2 = BUILDER.add("charge_2", CHARGE);
     public static final String CHARGE_3 = BUILDER.add("charge_3", CHARGE);
-    public static final String LASER_KICK = BUILDER.add("laser_kick", AnimationsBuilder.definition(1.2).marker("attack", 0.32));
+    public static final String LASER_KICK = BUILDER.add("laser_kick", AnimationsBuilder.definition(1.32).marker("attack", 0.4));
     public static final String LASER_KICK_2 = BUILDER.add("laser_kick_2", LASER_KICK);
     public static final String LASER_KICK_3 = BUILDER.add("laser_kick_3", LASER_KICK);
-    public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.72).marker("attack", 0.36));
-    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.44).marker("neigh", 6.48));
+    public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
+    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.52).marker("neigh", 6.52));
+    public static final String NEIGH = BUILDER.add("neigh", AnimationsBuilder.definition(1.48).marker("neigh", 0.52));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String NEIGH = BUILDER.add("neigh", AnimationsBuilder.definition(1.16).marker("neigh", 0.48));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Thunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -195,7 +195,7 @@ public class Thunderbolt extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.31);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.34);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(Attributes.STEP_HEIGHT.value().getDefaultValue() + 1);
         super.applyAttributes();
     }
@@ -205,23 +205,26 @@ public class Thunderbolt extends BossMonster {
         return AttackBehaviourBuilder.<Thunderbolt>create()
                 .start(MonsterBehaviourUtils.checkedAttack(BACK_KICK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.feintedDeath && MonsterBehaviourUtils.ifCloserThan(5).test(m))
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER_X5)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged() && !m.feintedDeath)
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)).speedMod((e, t) -> 1.2f))
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.feintedDeath && MonsterBehaviourUtils.ifCloserThan(5).test(m))
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(HORN_ATTACK)
                         .start(BACK_KICK, m -> m.hornAttackSuccess).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.feintedDeath && MonsterBehaviourUtils.ifCloserThan(5).test(m))
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f))
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(CHARGE)
@@ -232,29 +235,28 @@ public class Thunderbolt extends BossMonster {
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER_AOE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath)
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)).speedMod((e, t) -> 1.2f))
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(LASER_KICK)
                         .start(LASER_KICK_2).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath)
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f)
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(6)))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement(50, 80))
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath)
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(7)).speedMod((e, t) -> 1.2f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath && (m.getTarget() != null && m.getTarget().getY() - m.getY() > 4))
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)).speedMod((e, t) -> 1.2f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(10)
                 // After feinting death only use those below
                 .start(MonsterBehaviourUtils.checkedAttack(LASER_AOE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Thunderbolt::afterFeint)
-                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4)).speedMod((e, t) -> 1.2f))
+                .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
                 .prepareOptional(new MoveToAttackTarget<>())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(CHARGE)
@@ -267,7 +269,7 @@ public class Thunderbolt extends BossMonster {
                         .start(LASER_KICK_2).chain(LASER_KICK_3).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Thunderbolt::afterFeint)
                 .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.fastMovement(50, 80))
                 .end(12)
                 .build();
     }
@@ -275,7 +277,7 @@ public class Thunderbolt extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(7, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTarget<>())
+                .add(7, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTillClose<>())
                 .add(10, new StrafeTarget<BaseMonster>().strafeDistance(8)).build();
     }
 
