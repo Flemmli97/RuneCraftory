@@ -17,23 +17,22 @@ public class S2CFarmlandUpdatePacket implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CFarmlandUpdatePacket> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CFarmlandUpdatePacket decode(RegistryFriendlyByteBuf buf) {
-            return new S2CFarmlandUpdatePacket(buf.readLong(), buf.readList(FarmlandDataContainer::fromBuffer), true);
+            return new S2CFarmlandUpdatePacket(buf.readLong(), buf.readList(FarmlandDataContainer.STREAM_CODEC), true);
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, S2CFarmlandUpdatePacket pkt) {
             buf.writeLong(pkt.packedChunk);
-            buf.writeCollection(pkt.data, (b, d) -> d.writeToBuffer(b));
+            buf.writeCollection(pkt.holder, FarmlandDataContainer.STREAM_CODEC);
         }
     };
 
     private final long packedChunk;
-    private List<FarmlandData> data;
-    private List<FarmlandDataContainer> holder;
+    private final List<FarmlandDataContainer> holder;
 
     public S2CFarmlandUpdatePacket(long packedChunk, List<FarmlandData> data) {
         this.packedChunk = packedChunk;
-        this.data = data;
+        this.holder = data.stream().map(FarmlandData::forSync).toList();
     }
 
     private S2CFarmlandUpdatePacket(long packedChunk, List<FarmlandDataContainer> holder, boolean flag) {

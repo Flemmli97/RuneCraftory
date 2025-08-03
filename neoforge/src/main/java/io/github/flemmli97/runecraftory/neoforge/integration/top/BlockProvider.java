@@ -2,7 +2,9 @@ package io.github.flemmli97.runecraftory.forge.integration.top;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.MonsterBarnBlock;
+import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -44,6 +46,12 @@ public class BlockProvider implements IProbeInfoProvider {
                     }
                     iProbeInfo.text(Component.translatable("runecraftory.dependency.tooltips.barn.2", data.usedCapacity(), data.getCapacity()));
                 }
+            }
+        }
+        if (blockState.getBlock() instanceof TreeBaseBlock) {
+            BlockEntity entity = level.getBlockEntity(iProbeHitData.getPos());
+            if (entity instanceof TreeBlockEntity tree) {
+                iProbeInfo.text(Component.translatable("runecraftory.dependency.tooltips.tree", tree.getHealth()));
             }
         }
     }

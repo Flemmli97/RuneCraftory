@@ -423,8 +423,8 @@ public class BookContentGen extends ContentSetProvider {
         this.add("runecraftory.book.entry.trees.1", """
                 You might come across some special saplings that are unlike the other saplings. These saplings act similar to $(c:darkgreen)crops$() instead and need to be planted on farmland.
                 The saplings take a long time to grow but once fully grown will bear fruit everyday you can harvest.
-                Another major difference is that these trees are $(c:red)unbreakable$() except for the base of the tree.
-                Breaking the base will also remove the tree!""");
+                Breaking the logs will keep providing you with logs as long as it has enough health.
+                Make sure to keep track of its health if you do this though as otherwise you will break the whole tree!""");
 
         this.add("runecraftory.book.entry.fertilizer", "Fertilizer");
         this.add("runecraftory.book.entry.fertilizer.1", """

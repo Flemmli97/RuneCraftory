@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
+import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
 import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
@@ -56,6 +57,11 @@ public class FarmlandInfo {
             cropBlock = blockState.getBlock() instanceof Growable;
             blockState = this.mc.level.getBlockState(pos);
         }
+        if (blockState.getBlock() instanceof TreeBaseBlock) {
+            pos = pos.below();
+            cropBlock = true;
+            blockState = this.mc.level.getBlockState(pos);
+        }
         if (FarmlandHandler.isFarmBlock(blockState))
             data = ClientFarmlandHandler.INSTANCE.getData(pos);
         if (data == null)
@@ -75,12 +81,14 @@ public class FarmlandInfo {
             if (data.ageProgress() == 100)
                 growth.withStyle(ChatFormatting.GREEN);
             graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000, false);
-            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000, false);
+            yPos += 10;
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos, 0x000000, false);
+            yPos += 10;
             MutableComponent giant = Component.literal(data.cropSizeProgress() + "%");
             if (data.cropSizeProgress() == 100)
                 giant.withStyle(ChatFormatting.GREEN);
-            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000, false);
-            yPos += 10 * 4;
+            graphics.drawString(this.mc.font, Component.translatable("runecraftory.magnifying_glass.view.crop.giant", giant), xPos, yPos, 0x000000, false);
+            yPos += 10;
         }
         MutableComponent growth = Component.literal(this.formattedValue(data.growth()));
         if (data.growth() <= 0.5)

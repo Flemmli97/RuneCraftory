@@ -45,7 +45,8 @@
       "state": {
         "Name": "runecraftory:orange_wood",
         "Properties": {
-          "axis": "y"
+          "axis": "y",
+          "is_tree_part": "true"
         }
       }
     }

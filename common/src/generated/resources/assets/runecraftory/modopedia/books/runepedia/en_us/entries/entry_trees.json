@@ -39,7 +39,7 @@
       "components": [
         {
           "type": "modopedia:text",
-          "text": "You might come across some special saplings that are unlike the other saplings. These saplings act similar to $(c:darkgreen)crops$() instead and need to be planted on farmland.\nThe saplings take a long time to grow but once fully grown will bear fruit everyday you can harvest.\nAnother major difference is that these trees are $(c:red)unbreakable$() except for the base of the tree.\nBreaking the base will also remove the tree!"
+          "text": "You might come across some special saplings that are unlike the other saplings. These saplings act similar to $(c:darkgreen)crops$() instead and need to be planted on farmland.\nThe saplings take a long time to grow but once fully grown will bear fruit everyday you can harvest.\nBreaking the logs will keep providing you with logs as long as it has enough health.\nMake sure to keep track of its health if you do this though as otherwise you will break the whole tree!"
         }
       ]
     }

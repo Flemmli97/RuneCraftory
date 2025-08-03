@@ -43,6 +43,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -56,6 +57,7 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -867,7 +869,28 @@ public class Loottables extends LootTableProvider {
 
             this.add(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
 
+            this.dropOther(RuneCraftoryBlocks.APPLE_TREE.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.ORANGE_TREE.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.GRAPE_TREE.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.APPLE_WOOD.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.ORANGE_WOOD.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.GRAPE_WOOD.get(), Blocks.OAK_LOG);
+            this.add(RuneCraftoryBlocks.APPLE_LEAVES.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.ORANGE_LEAVES.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.GRAPE_LEAVES.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.APPLE.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.ORANGE.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.GRAPE.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
             this.loots.forEach(biConsumer);
+        }
+
+        private LootTable.Builder simpleLeaves(Block leaveBlock) {
+            return new LootTable.Builder().withPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1))
+                    .when(HAS_SHEARS.or(this.hasSilkTouch()).invert())
+                    .add(this.applyExplosionDecay(Blocks.OAK_LEAVES, LootItem.lootTableItem(Items.STICK)
+                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))))
+                    .when(BonusLevelTableCondition.bonusLevelFlatChance(this.registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), 0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F)));
         }
 
         @Override

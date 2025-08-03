@@ -17,7 +17,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -39,7 +38,7 @@ public class FarmlandData {
     public static final float DEFAULT_QUALITY = 0;
     public static final float DEFAULT_SIZE = 0;
     public static final int DEFAULT_DEFENCE = 0;
-    public static final int DEFAULT_HEALTH = 32;
+    public static final int DEFAULT_HEALTH = 64;
 
     public static final float MAX_SPEED = 5;
     public static final float MAX_QUALITY = 2;
@@ -66,6 +65,8 @@ public class FarmlandData {
     private final List<ExternalModifiers> scheduledData = new ArrayList<>();
 
     private boolean isLoaded, isFarmBlock;
+
+    private boolean isGrowing;
 
     public FarmlandData(BlockPos pos) {
         this.pos = pos;
@@ -196,14 +197,20 @@ public class FarmlandData {
         int stage = Math.round(this.cropAge * maxAge) / props.growth();
         //Update the blockstate according to the growth age
         BlockState newState = crop.runecraftory$getGrowableStateForAge(state, Math.min(stage, maxAge));
-        level.getServer().tell(new TickTask(1, () -> level.setBlock(pos, newState, Block.UPDATE_ALL)));
+        level.getServer().tell(new TickTask(1, () -> {
+            this.isGrowing = true;
+            level.setBlock(pos, newState, Block.UPDATE_ALL);
+            this.isGrowing = false;
+        }));
         this.cropProgress = this.growthPercent(level, state);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     public void onCropRemove(ServerLevel level, BlockPos pos, BlockState state) {
-        this.resetCrop();
-        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
+        if (!this.isGrowing) {
+            this.resetCrop();
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
+        }
     }
 
     //===== Update stuff
@@ -360,10 +367,12 @@ public class FarmlandData {
                             int stage = Mth.floor(this.cropAge * maxAge) / props.growth();
                             //Update the blockstate according to the growth age
                             BlockState newState = crop.runecraftory$getGrowableStateForAge(cropState, Math.min(stage, maxAge));
+                            this.isGrowing = true;
                             if (newState.getBlock() instanceof Growable newGrowable)
                                 newGrowable.onGrow(level, cropPos, newState, cropState);
                             else
                                 level.setBlock(cropPos, newState, Block.UPDATE_ALL);
+                            this.isGrowing = false;
                             Platform.INSTANCE.cropGrowEventPost(level, cropPos, level.getBlockState(cropPos));
                         });
                     } else {
@@ -522,19 +531,10 @@ public class FarmlandData {
         return nbt;
     }
 
-    /**
-     * Needs to match {@link FarmlandDataContainer#fromBuffer}
-     */
-    public void writeToBuffer(FriendlyByteBuf buf) {
-        buf.writeBlockPos(this.pos);
-        buf.writeFloat(this.growth);
-        buf.writeFloat(this.quality);
-        buf.writeFloat(this.size);
-        buf.writeInt(this.health);
-        buf.writeInt(this.defence);
-        buf.writeInt(this.cropProgress);
-        buf.writeInt(Math.min(100, (int) this.cropSize * 100));
-        buf.writeFloat(this.cropLevel);
+    public FarmlandDataContainer forSync() {
+        return new FarmlandDataContainer(this.pos, this.growth, this.quality, this.size,
+                this.health, this.defence, this.cropProgress, Math.min(100, (int) this.cropSize * 100),
+                this.cropLevel);
     }
 
     @Override

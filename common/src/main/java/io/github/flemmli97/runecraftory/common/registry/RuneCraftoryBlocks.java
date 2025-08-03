@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.blocks.QuestboardBlock;
 import io.github.flemmli97.runecraftory.common.blocks.ShippingBinBlock;
 import io.github.flemmli97.runecraftory.common.blocks.SingleTimeSpawnerBlock;
 import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
+import io.github.flemmli97.runecraftory.common.blocks.TreeLogBlock;
 import io.github.flemmli97.runecraftory.common.blocks.TreeRootBlock;
 import io.github.flemmli97.runecraftory.common.blocks.TreeSaplingBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.AccessoryBlockEntity;
@@ -29,6 +30,7 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.ForgingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.SingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.TreeLogBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.util.MineralBlockTier;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
@@ -47,7 +49,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -230,19 +231,19 @@ public class RuneCraftoryBlocks {
     public static final RegistryEntrySupplier<Block, TreeRootBlock> TREE_SOIL = BLOCKS.register("tree_soil", () -> new TreeRootBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).sound(SoundType.GRAVEL).strength(-1, 99999)));
     public static final RegistryEntrySupplier<Block, TreeBaseBlock> APPLE_TREE = BLOCKS.register("apple_tree", () -> new TreeBaseBlock(logProps(), RuneCraftoryFeatures.APPLE_1, RuneCraftoryFeatures.APPLE_2, RuneCraftoryFeatures.APPLE_3, RuneCraftoryItems.APPLE_SAPLING.getKey()));
     public static final RegistryEntrySupplier<Block, TreeSaplingBlock> APPLE_SAPLING = BLOCKS.register("apple_sapling", () -> new TreeSaplingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), APPLE_TREE));
-    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> APPLE_WOOD = BLOCKS.register("apple_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, LeavesBlock> APPLE_LEAVES = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, FruitTreeLeafBlock> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new FruitTreeLeafBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), ofVanilla(Items.APPLE)));
+    public static final RegistryEntrySupplier<Block, TreeLogBlock> APPLE_WOOD = BLOCKS.register("apple_wood", () -> new TreeLogBlock(logProps()));
+    public static final RegistryEntrySupplier<Block, LeavesBlock> APPLE_LEAVES = BLOCKS.register("apple_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+    public static final RegistryEntrySupplier<Block, FruitTreeLeafBlock> APPLE = BLOCKS.register("apple_leaves_fruit", () -> new FruitTreeLeafBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES), ofVanilla(Items.APPLE)));
     public static final RegistryEntrySupplier<Block, TreeBaseBlock> ORANGE_TREE = BLOCKS.register("orange_tree", () -> new TreeBaseBlock(logProps(), RuneCraftoryFeatures.ORANGE_1, RuneCraftoryFeatures.ORANGE_2, RuneCraftoryFeatures.ORANGE_3, RuneCraftoryItems.ORANGE_SAPLING.getKey()));
     public static final RegistryEntrySupplier<Block, TreeSaplingBlock> ORANGE_SAPLING = BLOCKS.register("orange_sapling", () -> new TreeSaplingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), ORANGE_TREE));
-    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> ORANGE_WOOD = BLOCKS.register("orange_wood", () -> new RotatedPillarBlock(logProps().strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, LeavesBlock> ORANGE_LEAVES = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, FruitTreeLeafBlock> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new FruitTreeLeafBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), RuneCraftoryItems.ORANGE.getKey()));
+    public static final RegistryEntrySupplier<Block, TreeLogBlock> ORANGE_WOOD = BLOCKS.register("orange_wood", () -> new TreeLogBlock(logProps()));
+    public static final RegistryEntrySupplier<Block, LeavesBlock> ORANGE_LEAVES = BLOCKS.register("orange_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+    public static final RegistryEntrySupplier<Block, FruitTreeLeafBlock> ORANGE = BLOCKS.register("orange_leaves_fruit", () -> new FruitTreeLeafBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES), RuneCraftoryItems.ORANGE.getKey()));
     public static final RegistryEntrySupplier<Block, TreeBaseBlock> GRAPE_TREE = BLOCKS.register("grape_tree", () -> new TreeBaseBlock(logProps(), RuneCraftoryFeatures.GRAPE_1, RuneCraftoryFeatures.GRAPE_2, RuneCraftoryFeatures.GRAPE_3, RuneCraftoryItems.GRAPE_SAPLING.getKey()));
     public static final RegistryEntrySupplier<Block, TreeSaplingBlock> GRAPE_SAPLING = BLOCKS.register("grape_sapling", () -> new TreeSaplingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING), GRAPE_TREE));
-    public static final RegistryEntrySupplier<Block, RotatedPillarBlock> GRAPE_WOOD = BLOCKS.register("grape_wood", () -> new RotatedPillarBlock(logProps().sound(SoundType.WOOD).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999)));
-    public static final RegistryEntrySupplier<Block, FruitTreeLeafBlock> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new FruitTreeLeafBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).strength(-1, 99999), RuneCraftoryItems.GRAPES.getKey()));
+    public static final RegistryEntrySupplier<Block, TreeLogBlock> GRAPE_WOOD = BLOCKS.register("grape_wood", () -> new TreeLogBlock(logProps()));
+    public static final RegistryEntrySupplier<Block, LeavesBlock> GRAPE_LEAVES = BLOCKS.register("grape_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+    public static final RegistryEntrySupplier<Block, FruitTreeLeafBlock> GRAPE = BLOCKS.register("grape_leaves_fruit", () -> new FruitTreeLeafBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES), RuneCraftoryItems.GRAPES.getKey()));
 
     public static final RegistryEntrySupplier<Block, LiquidBlock> HOT_SPRING_WATER = BLOCKS.register("hot_spring_water", () -> new LiquidBlock(RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)));
 
@@ -255,6 +256,7 @@ public class RuneCraftoryBlocks {
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<SingleTimeSpawner>> SINGLE_SPAWNER_TILE = BLOCK_ENTITY_TYPES.register("single_spawner_tile", () -> BlockEntityType.Builder.of(SingleTimeSpawner::new, SINGLE_SPAWN_BLOCK.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<MonsterBarnBlockEntity>> MONSTER_BARN_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("monster_barn_block_entity", () -> BlockEntityType.Builder.of(MonsterBarnBlockEntity::new, MONSTER_BARN.get()).build(null));
     public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeBlockEntity>> TREE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tree", () -> BlockEntityType.Builder.of(TreeBlockEntity::new, APPLE_TREE.get(), ORANGE_TREE.get(), GRAPE_TREE.get()).build(null));
+    public static final RegistryEntrySupplier<BlockEntityType<?>, BlockEntityType<TreeLogBlockEntity>> TREE_LOG_ENTITY = BLOCK_ENTITY_TYPES.register("tree_log", () -> BlockEntityType.Builder.of(TreeLogBlockEntity::new, APPLE_WOOD.get(), ORANGE_WOOD.get(), GRAPE_WOOD.get()).build(null));
 
     public static RegistryEntrySupplier<Block, MineralBlock> mineral(MineralBlockTier name, List<TagKey<Biome>> whitelist, List<TagKey<Biome>> blacklist) {
         RegistryEntrySupplier<Block, MineralBlock> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new MineralBlock(name, BlockBehaviour.Properties.of().lightLevel(s -> 1).strength(5, 10)

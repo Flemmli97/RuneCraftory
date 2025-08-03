@@ -17,7 +17,8 @@
       "state": {
         "Name": "runecraftory:grape_wood",
         "Properties": {
-          "axis": "y"
+          "axis": "y",
+          "is_tree_part": "true"
         }
       }
     }

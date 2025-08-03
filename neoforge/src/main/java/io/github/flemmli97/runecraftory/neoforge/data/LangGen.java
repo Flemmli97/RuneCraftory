@@ -336,6 +336,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.magnifying_glass.view.level", "Quality: %s");
         this.add("runecraftory.magnifying_glass.view.giant", "Size: %s");
         this.add("runecraftory.magnifying_glass.view.defence", "Defence: %s");
+        this.add("runecraftory.magnifying_glass.view.tree.health", "Tree Health: %s");
 
         this.add("runecraftory.gui.date.format", "%s %s");
 
@@ -560,6 +561,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.dependency.tooltips.barn.1", "No Roof - Size: %1$s");
         this.add("runecraftory.dependency.tooltips.barn.1.alt", "Roof Height: %1$s - Size: %2$s");
         this.add("runecraftory.dependency.tooltips.barn.2", "Capacity: %1$s / %2$s");
+        this.add("runecraftory.dependency.tooltips.tree", "Health: %1$s");
 
         this.add("config.jade.plugin_runecraftory.jade_block_plugin", "Runecraftory Jade Block-Plugin");
         this.add("config.jade.plugin_runecraftory.jade_entity_plugin", "Runecraftory Jade Entity-Plugin");

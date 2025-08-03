@@ -10,7 +10,7 @@
             "Name": "runecraftory:apple_leaves_fruit",
             "Properties": {
               "distance": "7",
-              "has_fruit": "true",
+              "has_fruit": "false",
               "persistent": "false",
               "waterlogged": "false"
             }
@@ -61,7 +61,8 @@
       "state": {
         "Name": "runecraftory:apple_wood",
         "Properties": {
-          "axis": "y"
+          "axis": "y",
+          "is_tree_part": "true"
         }
       }
     }

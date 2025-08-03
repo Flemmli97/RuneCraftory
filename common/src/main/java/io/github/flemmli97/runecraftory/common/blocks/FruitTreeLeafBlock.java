@@ -32,12 +32,12 @@ public class FruitTreeLeafBlock extends LeavesBlock {
     private final LazyResolvedRegistryEntry<Item> fruit;
 
     public FruitTreeLeafBlock(Properties properties, ResourceKey<Item> fruit) {
-        super(properties);
-        this.fruit = new LazyResolvedRegistryEntry<>(fruit);
+        this(properties, new LazyResolvedRegistryEntry<>(fruit));
     }
 
     private FruitTreeLeafBlock(Properties properties, LazyResolvedRegistryEntry<Item> fruit) {
         super(properties);
+        this.registerDefaultState(this.defaultBlockState().setValue(HAS_FRUIT, false));
         this.fruit = fruit;
     }
 
@@ -47,14 +47,14 @@ public class FruitTreeLeafBlock extends LeavesBlock {
     }
 
     @Override
-    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
-        return super.getDestroyProgress(state, player, level, pos);
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(HAS_FRUIT);
+    }
+
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        return super.getDestroyProgress(state, player, level, pos);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class FruitTreeSproutFeature extends Feature<FruitTreeSproutConfiguration
             leaves.add(pos);
         }
         if (blockEntity instanceof TreeBlockEntity tree) {
-            tree.updateTreeLogs(List.of(above));
+            tree.updateTreeLogs(context.level(), List.of(above));
             tree.updateTreeLeaves(leaves);
         }
         return true;

@@ -19,17 +19,17 @@ public abstract class TreeFeatureMixin {
     @Unique
     private TreeBlockEntity runecraftory_placingFruitTree;
 
-    @ModifyVariable(method = "place", at = @At("TAIL"), ordinal = 0)
+    @ModifyVariable(method = "place", at = @At("TAIL"), ordinal = 1)
     private Set<BlockPos> handleLogSet(Set<BlockPos> logs, FeaturePlaceContext<TreeConfiguration> context) {
         BlockEntity entity = context.level().getBlockEntity(context.origin());
         if (entity instanceof TreeBlockEntity tree) {
             this.runecraftory_placingFruitTree = tree;
-            tree.updateTreeLogs(logs);
+            tree.updateTreeLogs(context.level(), logs);
         }
         return logs;
     }
 
-    @ModifyVariable(method = "place", at = @At("TAIL"), ordinal = 1)
+    @ModifyVariable(method = "place", at = @At("TAIL"), ordinal = 2)
     private Set<BlockPos> handleLeaveSet(Set<BlockPos> leaves) {
         if (this.runecraftory_placingFruitTree != null) {
             this.runecraftory_placingFruitTree.updateTreeLeaves(leaves);
@@ -37,7 +37,7 @@ public abstract class TreeFeatureMixin {
         return leaves;
     }
 
-    @ModifyVariable(method = "place", at = @At("TAIL"), ordinal = 2)
+    @ModifyVariable(method = "place", at = @At("TAIL"), ordinal = 3)
     private Set<BlockPos> handleDecoratorSet(Set<BlockPos> decorators) {
         if (this.runecraftory_placingFruitTree != null) {
             this.runecraftory_placingFruitTree.updateTreeFruits(decorators);

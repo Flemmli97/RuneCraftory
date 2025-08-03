@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.neoforge.data.worldgen.features;
 
+import io.github.flemmli97.runecraftory.common.blocks.TreeLogBlock;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitLeaveDecorator;
@@ -46,12 +47,12 @@ public class ConfiguredFeatureGen extends CodecBasedProvider<ConfiguredFeature<?
     }
 
     private ConfiguredFeature<FruitTreeSproutConfiguration, ?> fruitSprout(Block log, Block leave) {
-        return new ConfiguredFeature<>(RuneCraftoryFeatures.FRUIT_SPROUT.get(), new FruitTreeSproutConfiguration(BlockStateProvider.simple(log), BlockStateProvider.simple(leave)));
+        return new ConfiguredFeature<>(RuneCraftoryFeatures.FRUIT_SPROUT.get(), new FruitTreeSproutConfiguration(BlockStateProvider.simple(log.defaultBlockState().setValue(TreeLogBlock.IS_TREE_PART, true)), BlockStateProvider.simple(leave)));
     }
 
     private ConfiguredFeature<TreeConfiguration, ?> fruitTree(Block log, Block leave, Block fruit, boolean max) {
         return new ConfiguredFeature<>(Feature.TREE,
-                new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(log),
+                new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(log.defaultBlockState().setValue(TreeLogBlock.IS_TREE_PART, true)),
                         new FruitTreeTrunkPlacer(max ? 3 : 1, 1, max ? 2 : 1, max ? 3 : 1),
                         BlockStateProvider.simple(leave),
                         new FancyFoliagePlacer(max ? ConstantInt.of(2) : ConstantInt.of(1), ConstantInt.of(0), max ? 3 : 2),

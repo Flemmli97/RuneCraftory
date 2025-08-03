@@ -4,7 +4,9 @@ import com.mojang.authlib.GameProfile;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.blocks.MonsterBarnBlock;
+import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
@@ -42,7 +44,8 @@ import snownee.jade.impl.ui.SimpleProgressStyle;
 public class JadePlugin implements IWailaPlugin {
 
     private static final ResourceLocation ID = RuneCraftory.modRes("jade_entity_plugin");
-    private static final ResourceLocation IDBLOCK = RuneCraftory.modRes("jade_block_plugin");
+    private static final ResourceLocation BARN_BLOCK_PLUGIN = RuneCraftory.modRes("jade_barn_block_plugin");
+    private static final ResourceLocation TREE_BLOCK_PLUGIN = RuneCraftory.modRes("jade_tree_block_plugin");
 
     @Override
     public void register(IWailaCommonRegistration registration) {
@@ -63,9 +66,22 @@ public class JadePlugin implements IWailaPlugin {
 
             @Override
             public ResourceLocation getUid() {
-                return IDBLOCK;
+                return BARN_BLOCK_PLUGIN;
             }
         }, MonsterBarnBlockEntity.class);
+        registration.registerBlockDataProvider(new IServerDataProvider<>() {
+            @Override
+            public void appendServerData(CompoundTag compoundTag, BlockAccessor accessor) {
+                if (accessor.getBlockEntity() instanceof TreeBlockEntity tree) {
+                    compoundTag.putInt("Health", tree.getHealth());
+                }
+            }
+
+            @Override
+            public ResourceLocation getUid() {
+                return TREE_BLOCK_PLUGIN;
+            }
+        }, TreeBaseBlock.class);
         registration.registerEntityDataProvider(new IServerDataProvider<>() {
             @Override
             public void appendServerData(CompoundTag compoundTag, EntityAccessor accessor) {
@@ -138,9 +154,23 @@ public class JadePlugin implements IWailaPlugin {
 
             @Override
             public ResourceLocation getUid() {
-                return IDBLOCK;
+                return BARN_BLOCK_PLUGIN;
             }
         }, MonsterBarnBlock.class);
+        registration.registerBlockComponent(new IBlockComponentProvider() {
+            @Override
+            public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
+                CompoundTag tag = blockAccessor.getServerData();
+                if (blockAccessor.getBlockEntity() instanceof TreeBlockEntity) {
+                    iTooltip.add(Component.translatable("runecraftory.dependency.tooltips.tree", tag.getInt("Health")));
+                }
+            }
+
+            @Override
+            public ResourceLocation getUid() {
+                return TREE_BLOCK_PLUGIN;
+            }
+        }, TreeBaseBlock.class);
         registration.addRayTraceCallback((hitResult, accessor, origin) -> {
             if (accessor instanceof EntityAccessor entityAccessor) {
                 if (entityAccessor.getEntity() instanceof MultiPartEntity entity) {

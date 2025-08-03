@@ -8,13 +8,17 @@ import io.github.flemmli97.runecraftory.common.blocks.util.LazyResolvedRegistryE
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixinhelper.LevelSnapshotHandler;
+import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -29,11 +33,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Growable {
+public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Growable, ExtendedBlock {
 
     public static final MapCodec<TreeBaseBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(propertiesCodec(),
@@ -53,11 +58,7 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
 
     public TreeBaseBlock(Properties properties, ResourceKey<ConfiguredFeature<?, ?>> stump, ResourceKey<ConfiguredFeature<?, ?>> stage1,
                          ResourceKey<ConfiguredFeature<?, ?>> stage2, ResourceKey<Item> seed) {
-        super(properties);
-        this.stump = stump;
-        this.stage1 = stage1;
-        this.stage2 = stage2;
-        this.sapling = new LazyResolvedRegistryEntry<>(seed);
+        this(properties, stump, stage1, stage2, new LazyResolvedRegistryEntry<>(seed));
     }
 
     private TreeBaseBlock(BlockBehaviour.Properties prop, ResourceKey<ConfiguredFeature<?, ?>> stump, ResourceKey<ConfiguredFeature<?, ?>> stage1,
@@ -79,12 +80,14 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
     }
 
     public boolean growTree(ServerLevel level, BlockPos pos, BlockState state, RandomSource rand) {
+        if (!(level.getBlockEntity(pos) instanceof TreeBlockEntity tree))
+            return false;
+        if (!tree.isTreeValid(level))
+            return false;
         return switch (state.getValue(AGE)) {
             case 2 -> {
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                    tree.onRemove(level, false);
-                }
+                tree.onRemove(level, false);
                 boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                         .getOrThrow(this.stage2).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
@@ -92,9 +95,7 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
             }
             case 1 -> {
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                    tree.onRemove(level, false);
-                }
+                tree.onRemove(level, false);
                 boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                         .getOrThrow(this.stage1).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
@@ -103,12 +104,29 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
             case 0 -> level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                     .getOrThrow(this.stump).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
             default -> {
-                if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                    tree.update(level);
-                }
+                tree.update(level);
                 yield false;
             }
         };
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (!(player instanceof ServerPlayer serverPlayer))
+            return false;
+        if (player.isCreative() || player.isShiftKeyDown() || !(level.getBlockEntity(pos) instanceof TreeBlockEntity tree)) {
+            this.playerWillDestroy(level, pos, state, player);
+            return level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
+        }
+        if (tree.getHealth() <= 0) {
+            tree.onRemove(level, true);
+            serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, state));
+            return level.setBlock(tree.getBlockPos(), fluid.createLegacyBlock(), Block.UPDATE_ALL);
+        }
+        tree.onBreak();
+        dropResources(state, level, pos, null, player, player.getMainHandItem());
+        serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, state));
+        return false;
     }
 
     @Override
