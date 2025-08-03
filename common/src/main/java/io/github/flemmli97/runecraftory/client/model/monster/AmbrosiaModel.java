@@ -54,7 +54,7 @@ public class AmbrosiaModel<T extends Ambrosia> extends EntityModel<T> implements
             this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.isMoving() && anim == null)
+            if (entity.interpolatedMoveTick(partialTicks) > 0 && anim == null)
                 this.body.xRot += Mth.DEG_TO_RAD * 2 * entity.interpolatedMoveTick(partialTicks);
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);

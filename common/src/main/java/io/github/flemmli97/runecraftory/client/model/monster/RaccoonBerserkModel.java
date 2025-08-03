@@ -47,7 +47,7 @@ public class RaccoonBerserkModel<T extends Raccoon> extends RaccoonBaseModel<T> 
             this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.8;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.isMoving()) {
+            {
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
         }

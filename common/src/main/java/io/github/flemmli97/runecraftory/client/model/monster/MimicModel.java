@@ -21,8 +21,7 @@ public class MimicModel<T extends Mimic> extends ChestModel<T> implements Rideab
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.isAwake())
                 this.anim.get().doAnimation(this, "open_idle", entity.tickCount, partialTicks);
-            if (entity.isMoving())
-                this.anim.get().doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            this.anim.get().doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }

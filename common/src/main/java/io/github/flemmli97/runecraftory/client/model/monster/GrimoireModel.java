@@ -53,7 +53,7 @@ public class GrimoireModel<T extends Grimoire> extends EntityModel<T> implements
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (!entity.onGround())
                 this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks);
-            else if (entity.isMoving()) {
+            else {
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
             }

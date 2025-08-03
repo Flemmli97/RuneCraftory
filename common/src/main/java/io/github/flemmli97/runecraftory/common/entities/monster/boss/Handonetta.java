@@ -133,7 +133,7 @@ public class Handonetta extends BossMonster {
                     entity.getAnimationHandler().setAnimation(GRAB_CAUGHT);
             } else if (anim.isPast("attack") && !anim.isPast("grab_done")) {
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.HANDONETTA_GRAP_IGNORE) && (entity.getBbWidth() < 5 || entity.getBbHeight() < 8) && !entity.caughtEntities.contains(e)) {
+                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.HANDONETTA_GRAP_IGNORE) && !entity.caughtEntities.contains(e)) {
                         entity.catchEntity(e);
                     }
                 });

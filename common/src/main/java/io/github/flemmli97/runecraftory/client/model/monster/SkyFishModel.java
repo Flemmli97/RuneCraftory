@@ -43,8 +43,7 @@ public class SkyFishModel<T extends SkyFish> extends EntityModel<T> implements E
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.isMoving())
-                this.anim.get().doAnimation(this, "swim", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            this.anim.get().doAnimation(this, "swim", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }

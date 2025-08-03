@@ -48,11 +48,9 @@ public class WeagleModel<T extends Weagle> extends EntityModel<T> implements Ext
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.3f;
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
         float partialTicks = ClientHandlers.getPartialTicks();
-        if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (entity.isMoving()) {
-                this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-            } else if (!entity.getAnimationHandler().isCurrent(Weagle.SLEEP))
-                this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0 && !entity.playDeath() && !entity.getAnimationHandler().isCurrent(Weagle.SLEEP)) {
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
+            this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }

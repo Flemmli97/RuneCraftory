@@ -50,7 +50,7 @@ public class ChipsqueekModel<T extends Chipsqueek> extends EntityModel<T> implem
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (entity.isMoving()) {
+            {
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
         }

@@ -652,10 +652,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new SmartBrainProvider<>(this);
     }
 
-    public boolean isMoving() {
-        return this.getMoveFlag() != MoveType.NONE;
-    }
-
     public float interpolatedMoveTick(float partialTicks) {
         return this.moveStateTracker.interpolatedMoveTick(partialTicks);
     }

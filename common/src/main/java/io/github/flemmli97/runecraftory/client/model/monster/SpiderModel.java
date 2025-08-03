@@ -49,8 +49,7 @@ public class SpiderModel<T extends Spider> extends EntityModel<T> implements Ext
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (entity.isMoving())
-                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }

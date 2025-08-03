@@ -52,7 +52,7 @@ public class BeetleModel<T extends Beetle> extends EntityModel<T> implements Ext
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (!entity.onGround())
                 this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks);
-            else if (entity.isMoving())
+            else
                 this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
