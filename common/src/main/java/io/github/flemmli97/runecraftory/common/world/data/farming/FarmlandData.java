@@ -49,10 +49,10 @@ public class FarmlandData {
     public final BlockPos pos;
 
     //Soil Stats
-    private float growth = 1;
-    private float quality, size;
-    private int health = 32;
-    private int defence;
+    private float growth = DEFAULT_SPEED;
+    private float quality = DEFAULT_QUALITY, size = DEFAULT_SIZE;
+    private int health = DEFAULT_HEALTH;
+    private int defence = DEFAULT_DEFENCE;
 
     //Crop Stats
     private float cropAge;
@@ -187,7 +187,7 @@ public class FarmlandData {
             return;
         }
         CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
-        if (props == null || !props.regrowable()) {
+        if (props == null || !props.regrowable() || this.getHealth() <= 0) {
             this.resetCrop();
             return;
         }
@@ -203,6 +203,7 @@ public class FarmlandData {
             this.isGrowing = false;
         }));
         this.cropProgress = this.growthPercent(level, state);
+        this.modifyHealth(null, -3);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
@@ -380,7 +381,9 @@ public class FarmlandData {
                     }
                 }
                 if (!isWet) {
-                    if (level.random.nextFloat() < GeneralConfig.witherChance) {
+                    float mod = (MAX_HEALTH - this.getHealth()) / (MAX_HEALTH - 25f);
+                    float chance = mod * GeneralConfig.witherChance;
+                    if (level.random.nextFloat() < chance) {
                         wiltStage++;
                         // If crop cannot wilt we simply stop once we reach >= 2 (normally wilted)
                         // E.g. in case of vanilla crops etc.

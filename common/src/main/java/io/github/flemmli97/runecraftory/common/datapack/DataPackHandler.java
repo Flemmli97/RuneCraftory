@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.datapack;
 
 import com.google.gson.Gson;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.FarmlandHoeTileActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
@@ -42,6 +43,7 @@ public class DataPackHandler {
     private final MonsterPropertiesManager mobProperties = add(new MonsterPropertiesManager());
     private final SpellPropertiesManager spellProperties = add(new SpellPropertiesManager());
     private final SkillPropertiesManager skillPropertiesManager = add(new SkillPropertiesManager());
+    private final FarmlandHoeTileActionManager fertilizerManager = add(new FarmlandHoeTileActionManager());
     private final NameManager names = add(new NameManager());
     private final GiftManager gifts = add(new GiftManager());
     private final NPCDataManager npcData = add(new NPCDataManager());
@@ -101,6 +103,10 @@ public class DataPackHandler {
 
     public SkillPropertiesManager skillPropertiesManager() {
         return this.skillPropertiesManager;
+    }
+
+    public FarmlandHoeTileActionManager fertilizerManager() {
+        return this.fertilizerManager;
     }
 
     public NameManager nameManager() {

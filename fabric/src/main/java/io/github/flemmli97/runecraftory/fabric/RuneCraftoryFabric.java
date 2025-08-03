@@ -80,6 +80,7 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -135,6 +136,9 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         //MobCalls
         ServerEntityEvents.ENTITY_LOAD.register(((entity, world) -> {
+            if (entity.getClass().equals(ItemEntity.class)) {
+                EntityCalls.handleItemJoinLevel((ItemEntity) entity);
+            }
             if (entity instanceof LivingEntity living)
                 EntityCalls.onLoadEntity(living);
         }));

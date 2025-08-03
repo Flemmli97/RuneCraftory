@@ -21,6 +21,14 @@
           "text": "▶ $(c:darkgreen)Formular a, b and c$() increases the growth rate of the soil with a being the weakest and c the strongest.\n▶ $(c:darkgreen)Wettable powder$() increases the soils defence. If the defence is 0 storms have a chance to destroy the crop.\n▶ $(c:darkgreen)Giantizer/Minimizer$() are used to grow giant crops.\n▶ $(c:darkgreen)Greenifier$() increases soil level and as such also crop level (Not implemented $(b)ATM$())."
         }
       ]
+    },
+    {
+      "components": [
+        {
+          "type": "modopedia:text",
+          "text": "Various items can be used to regenerate the health of farmlands.\nFor that simply drop the item on the ground and use a hoe on it.\n$(c:darkpurple)Withered grass$() is a common item that can be used for that."
+        }
+      ]
     }
   ],
   "title": "Fertilizer"

@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
@@ -101,6 +102,10 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void joinWorld(EntityJoinLevelEvent event) {
+        if (event.getEntity().getClass().equals(ItemEntity.class)) {
+            if (EntityCalls.handleItemJoinLevel((ItemEntity) event.getEntity()))
+                event.setCanceled(true);
+        }
         if (event.getEntity() instanceof LivingEntity living)
             EntityCalls.onLoadEntity(living);
     }

@@ -90,9 +90,12 @@ public class DataEvent {
         data.addProvider(true, new SkillPropertiesgen(packOutput));
         data.addProvider(true, new SoundGen(packOutput, fileHelper));
         data.addProvider(true, new SpellPropertiesgen(packOutput));
+        data.addProvider(true, new FarmlandHoeTileActionGen(packOutput, provider));
+
         data.addProvider(true, new StructureBossGen(packOutput, verifier, provider));
         data.addProvider(true, new StructureWorldGen(packOutput, provider, verifier));
         data.addProvider(true, new FeatureWorldGen(packOutput, provider));
+
         data.addProvider(true, new BookGen(provider, packOutput));
         data.addProvider(true, new BookContentGen(provider, packOutput));
     }

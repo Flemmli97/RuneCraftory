@@ -104,7 +104,8 @@ public class CropUtils {
         } else
             Block.dropResources(state, level, pos, null, entity, stack);
         level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
-        if (props != null && props.regrowable()) {
+        if (props != null && props.regrowable() && FarmlandHandler.get(serverLevel.getServer())
+                .getData(serverLevel, pos.below()).map(d -> d.getHealth() > 0).orElse(false)) {
             //Actually handled at block state change detection
             level.setBlock(pos, state.setValue(((CropBlockAccessor) cropBlock).cropAgeProperty(), 0), Block.UPDATE_ALL);
         } else

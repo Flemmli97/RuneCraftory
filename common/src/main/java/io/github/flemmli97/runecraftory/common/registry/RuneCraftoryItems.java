@@ -83,7 +83,6 @@ public class RuneCraftoryItems {
     public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> VEGGIES = new ArrayList<>();
     public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> FRUITS = new ArrayList<>();
     public static final List<Pair<String, RegistryEntrySupplier<Item, ?>>> FLOWERS = new ArrayList<>();
-    public static final List<RegistryEntrySupplier<Item, ?>> CROPS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item, ?>> GIANT_CROPS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item, ?>> FOOD = new ArrayList<>();
 

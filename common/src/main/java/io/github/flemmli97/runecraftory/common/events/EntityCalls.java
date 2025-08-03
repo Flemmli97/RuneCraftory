@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.misc.HoeTillableItemEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
@@ -73,6 +74,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -130,6 +132,15 @@ public class EntityCalls {
     public static void trackEntity(Player player, Entity target) {
         if (player instanceof ServerPlayer serverPlayer && target instanceof LivingEntity living)
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CEntityDataSyncAll(living), serverPlayer);
+    }
+
+    public static boolean handleItemJoinLevel(ItemEntity entity) {
+        if (DataPackHandler.INSTANCE.fertilizerManager().get(entity.getItem().getItem()) != null) {
+            entity.discard();
+            entity.level().addFreshEntity(new HoeTillableItemEntity(entity.level(), entity));
+            return true;
+        }
+        return false;
     }
 
     public static void onLoadEntity(LivingEntity living) {

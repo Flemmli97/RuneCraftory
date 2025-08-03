@@ -139,6 +139,7 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -431,6 +432,7 @@ public class ClientRegister {
         consumer.register(RuneCraftoryEntities.RAFFLESIA_HORSETAIL.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.RAFFLESIA_FLOWER.get(), EmptyRender::new);
         consumer.register(RuneCraftoryEntities.RAFFLESIA_PITCHER.get(), EmptyRender::new);
+        consumer.register(RuneCraftoryEntities.HOE_TILLABLE_ITEM_ENTITY.get(), ItemEntityRenderer::new);
 
         consumer.register(RuneCraftoryEntities.SANO_AND_UNO.get(), EmptyRender::new);
 

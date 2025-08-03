@@ -151,6 +151,7 @@ public class BookContentGen extends ContentSetProvider {
                 .icon(new ItemStack(RuneCraftoryItems.FORMULAR_A.get()))
                 .page(HeaderedTextBuilder.of(this.get("runecraftory.book.entry.fertilizer"), this.get("runecraftory.book.entry.fertilizer.1")))
                 .page(TextBuilder.of(this.get("runecraftory.book.entry.fertilizer.2")))
+                .page(TextBuilder.of(this.get("runecraftory.book.entry.fertilizer.3")))
                 .build("entry_fertilizer", output, "category_farming");
         EntryBuilder.of(this.get("runecraftory.book.entry.weather"))
                 .icon(new ItemStack(Items.SUNFLOWER))
@@ -437,6 +438,10 @@ public class BookContentGen extends ContentSetProvider {
                 ▶ $(c:darkgreen)Wettable powder$() increases the soils defence. If the defence is 0 storms have a chance to destroy the crop.
                 ▶ $(c:darkgreen)Giantizer/Minimizer$() are used to grow giant crops.
                 ▶ $(c:darkgreen)Greenifier$() increases soil level and as such also crop level (Not implemented $(b)ATM$()).""");
+        this.add("runecraftory.book.entry.fertilizer.3", """
+                Various items can be used to regenerate the health of farmlands.
+                For that simply drop the item on the ground and use a hoe on it.
+                $(c:darkpurple)Withered grass$() is a common item that can be used for that.""");
 
         this.add("runecraftory.book.entry.weather", "Weather");
         this.add("runecraftory.book.entry.weather.1", """

@@ -29,6 +29,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.FireballEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.FurnitureEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.GroundShakeParticleSpawner;
 import io.github.flemmli97.runecraftory.common.entities.misc.GustRocksEntity;
+import io.github.flemmli97.runecraftory.common.entities.misc.HoeTillableItemEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.HomingEnergyOrbEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.LightBallEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.LightBeamEntity;
@@ -1550,6 +1551,7 @@ public class RuneCraftoryEntities {
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<RafflesiaHorseTail>> RAFFLESIA_HORSETAIL = reg(EntityType.Builder.<RafflesiaHorseTail>of(RafflesiaHorseTail::new, MobCategory.MISC).noSummon().sized(0.5F, 2.1F), RuneCraftory.modRes("rafflesia_horse_tail"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<RafflesiaFlower>> RAFFLESIA_FLOWER = reg(EntityType.Builder.<RafflesiaFlower>of(RafflesiaFlower::new, MobCategory.MISC).noSummon().sized(0.5F, 1.2F), RuneCraftory.modRes("rafflesia_flower"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<RafflesiaPitcher>> RAFFLESIA_PITCHER = reg(EntityType.Builder.<RafflesiaPitcher>of(RafflesiaPitcher::new, MobCategory.MISC).noSummon().sized(0.5F, 1.8F), RuneCraftory.modRes("rafflesia_pitcher"));
+    public static final RegistryEntrySupplier<EntityType<?>, EntityType<HoeTillableItemEntity>> HOE_TILLABLE_ITEM_ENTITY = reg(EntityType.Builder.<HoeTillableItemEntity>of(HoeTillableItemEntity::new, MobCategory.MISC).noSummon().sized(0.4F, 0.4F).eyeHeight(0.4f * 0.85f).clientTrackingRange(6).updateInterval(20), RuneCraftory.modRes("hoe_tillable_item_entity"));
 
     public static List<RegistryEntrySupplier<EntityType<?>, EntityType<?>>> getMonsters() {
         return ImmutableList.copyOf(MONSTERS);
