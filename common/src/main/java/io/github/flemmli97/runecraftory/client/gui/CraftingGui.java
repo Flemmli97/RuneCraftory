@@ -65,7 +65,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             entries.add(new RecipeOutputEntry(i));
         }
         this.addRenderableWidget(this.recipes = new SelectableListWidget(this.leftPos + 173, this.topPos + 13, 29, 140, this.font, entries)
-                .withPadding(8)
+                .setEntryHeight(20, 0)
                 .scrollbar(new SelectableListWidget.Scrollbar(SCROLLBAR, SCROLLBAR_DISABLED, 6, 27, 1, 0)));
         this.lastChange = this.menu.getMatchingRecipesClient().lastChange();
     }

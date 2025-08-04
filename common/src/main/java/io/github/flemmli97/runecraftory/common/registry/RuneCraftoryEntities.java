@@ -1593,25 +1593,25 @@ public class RuneCraftoryEntities {
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regEnsemble(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MONSTERS);
+        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties()), RuneCraftoryCreativeTabs.MONSTERS);
         return reg;
     }
 
     public static <V extends Mob> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regWithEgg(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new RuneCraftoryEggItem(reg, primary, secondary, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MONSTERS);
+        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new RuneCraftoryEggItem(reg, primary, secondary, new Item.Properties()), RuneCraftoryCreativeTabs.MONSTERS);
         return reg;
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<?>, EntityType<V>> treasureChest(EntityType.Builder<V> v, ResourceLocation name) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new TreasureChestSpawnegg(reg, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MONSTERS);
+        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new TreasureChestSpawnegg(reg, new Item.Properties()), RuneCraftoryCreativeTabs.MONSTERS);
         return reg;
     }
 
     public static <V extends Mob> RegistryEntrySupplier<EntityType<?>, EntityType<V>> npc(EntityType.Builder<V> v, ResourceLocation name) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new NPCSpawnEgg(reg, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MONSTERS);
+        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new NPCSpawnEgg(reg, new Item.Properties()), RuneCraftoryCreativeTabs.MONSTERS);
         return reg;
     }
 

@@ -44,7 +44,7 @@ public class InfoSubScreen extends InfoScreen {
                 .withSprite(SpriteResources.PAGE_BUTTON));
         this.addRenderableWidget(new SelectableListWidget(this.leftPos + 27, this.topPos + 124, 160, 65, this.font, Arrays.stream(Skills.values())
                 .<SelectableEntry>map(SkillListEntry::new).toList())
-                .withPadding(1));
+                .setEntryHeight(13, 0));
     }
 
     private class SkillListEntry implements SelectableEntry {

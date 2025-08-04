@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackAction
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeRuneCraftoryTabs;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeTabs;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
@@ -121,7 +121,7 @@ public class RuneCraftoryNeoForge {
         RuneCraftoryAttachments.ATTACHMENT_TYPES.register(modBus);
         RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
         RuneCraftoryCriteria.TRIGGERS.registerContent(modBus);
-        RuneCraftoryCreativeRuneCraftoryTabs.CREATIVE_MODE_TABS.registerContent(modBus);
+        RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent(modBus);
         RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
         RuneCraftoryStructures.STRUCTURES.registerContent(modBus);
         RuneCraftoryFeatures.FEATURES.registerContent(modBus);

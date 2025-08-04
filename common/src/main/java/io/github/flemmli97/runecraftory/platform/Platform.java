@@ -2,11 +2,11 @@ package io.github.flemmli97.runecraftory.platform;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
 import io.github.flemmli97.tenshilib.loader.LoaderInitializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -61,7 +62,7 @@ public interface Platform {
 
     <T extends AbstractContainerMenu, D> MenuType<T> menuType(TriFunction<Integer, Inventory, D, T> create, StreamCodec<RegistryFriendlyByteBuf, D> codec);
 
-    CreativeModeTab.Builder tabBuilder(ResourceLocation... after);
+    CreativeModeTab.Builder tabBuilder(List<SubTab> subTabs);
 
     boolean matchingInventory(BlockEntity blockEntity, Predicate<ItemStack> func);
 

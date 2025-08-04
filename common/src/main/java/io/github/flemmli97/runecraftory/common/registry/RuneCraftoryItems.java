@@ -54,7 +54,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -127,24 +126,24 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_SILVER = fishingRod(ToolItemTier.SILVER);
     public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_GOLD = fishingRod(ToolItemTier.GOLD);
     public static final RegistryEntrySupplier<Item, ItemToolFishingRod> FISHING_ROD_PLATINUM = fishingRod(ToolItemTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item, ItemCommandStaff> MOB_STAFF = register("monster_command_staff", () -> new ItemCommandStaff(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, Item> BRUSH = register("brush", () -> new Item(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemCommandStaff> MOB_STAFF = register("monster_command_staff", () -> new ItemCommandStaff(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, Item> BRUSH = register("brush", () -> new Item(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
     public static final RegistryEntrySupplier<Item, Item> GLASS = register("magnifying_glass", () -> new Item(new Item.Properties().stacksTo(1)
-            .component(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get(), Unit.INSTANCE)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+            .component(RuneCraftoryDataComponentTypes.MAGNIFYING_GLASS.get(), Unit.INSTANCE)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
 
-    public static final RegistryEntrySupplier<Item, ItemStatIncrease> LEVELISER = register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
-    public static final RegistryEntrySupplier<Item, ItemStatIncrease> HEART_DRINK = register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
-    public static final RegistryEntrySupplier<Item, ItemStatIncrease> VITAL_GUMMI = register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
-    public static final RegistryEntrySupplier<Item, ItemStatIncrease> INTELLIGENCER = register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
-    public static final RegistryEntrySupplier<Item, ItemStatIncrease> PROTEIN = register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_A = register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_B = register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_C = register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> MINIMIZER = register("minimizer", () -> new ItemFertilizer(ItemFertilizer.MINIMIZER, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> GIANTIZER = register("giantizer", () -> new ItemFertilizer(ItemFertilizer.GIANTIZER, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> GREENIFIER = register("greenifier", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> GREENIFIER_PLUS = register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER_PLUS, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemFertilizer> WETTABLE_POWDER = register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.WETTABLE, new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> LEVELISER = register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties()), RuneCraftoryCreativeTabs.MEDICINE);
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> HEART_DRINK = register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties()), RuneCraftoryCreativeTabs.MEDICINE);
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> VITAL_GUMMI = register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties()), RuneCraftoryCreativeTabs.MEDICINE);
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> INTELLIGENCER = register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties()), RuneCraftoryCreativeTabs.MEDICINE);
+    public static final RegistryEntrySupplier<Item, ItemStatIncrease> PROTEIN = register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties()), RuneCraftoryCreativeTabs.MEDICINE);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_A = register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_B = register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> FORMULAR_C = register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> MINIMIZER = register("minimizer", () -> new ItemFertilizer(ItemFertilizer.MINIMIZER, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> GIANTIZER = register("giantizer", () -> new ItemFertilizer(ItemFertilizer.GIANTIZER, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> GREENIFIER = register("greenifier", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> GREENIFIER_PLUS = register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER_PLUS, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemFertilizer> WETTABLE_POWDER = register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.WETTABLE, new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
 
     public static final RegistryEntrySupplier<Item, ItemShortSwordBase> BROAD_SWORD = shortSword("broad_sword", Texture.Y);
     public static final RegistryEntrySupplier<Item, ItemShortSwordBase> STEEL_SWORD = shortSword("steel_sword", Texture.Y);
@@ -179,7 +178,7 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemShortSwordBase> BACK_SCRATCHER = shortSword("back_scratcher", Texture.N);
     public static final RegistryEntrySupplier<Item, ItemShortSwordBase> SPOON = shortSword("spoon", Texture.N);
     public static final RegistryEntrySupplier<Item, ItemShortSwordBase> VEGGIE_BLADE = shortSword("veggie_blade", Texture.N);
-    public static final RegistryEntrySupplier<Item, ItemShortSwordBase> PLANT_SWORD = register("plant_sword", () -> new ItemShortSwordBase(new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemShortSwordBase> PLANT_SWORD = register("plant_sword", () -> new ItemShortSwordBase(new Item.Properties()), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
 
     public static final RegistryEntrySupplier<Item, ItemLongSwordBase> CLAYMORE = longSword("claymore", Texture.Y);
     public static final RegistryEntrySupplier<Item, ItemLongSwordBase> ZWEIHAENDER = longSword("zweihaender", Texture.Y);
@@ -385,9 +384,9 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemStaffBase> ELVISH_HARP = staff("elvish_harp", ItemElement.LOVE, 3, Texture.N);
     public static final RegistryEntrySupplier<Item, ItemStaffBase> SYRINGE = staff("syringe", ItemElement.WATER, 2, Texture.N);
 
-    public static final RegistryEntrySupplier<Item, Item> LOVE_LETTER = register("love_letter", () -> new Item(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, Item> DIVORCE_PAPER = register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
-    public static final RegistryEntrySupplier<Item, ItemArmorBase> ENGAGEMENT_RING = register("engagement_ring", () -> new ItemArmorBase(ArmorItem.Type.LEGGINGS, new Item.Properties(), RuneCraftory.modRes("engagement_ring"), false), RuneCraftoryCreativeRuneCraftoryTabs.EQUIPMENT);
+    public static final RegistryEntrySupplier<Item, Item> LOVE_LETTER = register("love_letter", () -> new Item(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, Item> DIVORCE_PAPER = register("divorce_paper", () -> new Item(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
+    public static final RegistryEntrySupplier<Item, ItemArmorBase> ENGAGEMENT_RING = register("engagement_ring", () -> new ItemArmorBase(ArmorItem.Type.LEGGINGS, new Item.Properties(), RuneCraftory.modRes("engagement_ring"), false), RuneCraftoryCreativeTabs.EQUIPMENT);
     public static final RegistryEntrySupplier<Item, ItemArmorBase> CHEAP_BRACELET = equipment(ArmorItem.Type.LEGGINGS, "cheap_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item, ItemArmorBase> BRONZE_BRACELET = equipment(ArmorItem.Type.LEGGINGS, "bronze_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item, ItemArmorBase> SILVER_BRACELET = equipment(ArmorItem.Type.LEGGINGS, "silver_bracelet", Texture.Y);
@@ -545,12 +544,12 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ShieldItem> MAGICAL_SHIELD = shield("magical_shield", Texture.N);
     public static final RegistryEntrySupplier<Item, ShieldItem> PRISM_SHIELD = shield("prism_shield", Texture.N);
     public static final RegistryEntrySupplier<Item, ShieldItem> RUNE_SHIELD = shield("rune_shield", Texture.N);
-    public static final RegistryEntrySupplier<Item, ShieldItem> PLANT_SHIELD = register("plant_shield", () -> new ShieldItem(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.EQUIPMENT);
+    public static final RegistryEntrySupplier<Item, ShieldItem> PLANT_SHIELD = register("plant_shield", () -> new ShieldItem(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.EQUIPMENT);
 
-    public static final RegistryEntrySupplier<Item, CraftingBlockItem> FORGE = register("forge", () -> new CraftingBlockItem(RuneCraftoryBlocks.FORGE.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
-    public static final RegistryEntrySupplier<Item, CraftingBlockItem> ACCESSORY_WORKBENCH = register("accessory_workbench", () -> new CraftingBlockItem(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
-    public static final RegistryEntrySupplier<Item, CraftingBlockItem> CHEMISTRY_SET = register("chemistry_set", () -> new CraftingBlockItem(RuneCraftoryBlocks.CHEMISTRY_SET.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
-    public static final RegistryEntrySupplier<Item, CraftingBlockItem> COOKING_TABLE = register("cooking_table", () -> new CraftingBlockItem(RuneCraftoryBlocks.COOKING_TABLE.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> FORGE = register("forge", () -> new CraftingBlockItem(RuneCraftoryBlocks.FORGE.get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> ACCESSORY_WORKBENCH = register("accessory_workbench", () -> new CraftingBlockItem(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> CHEMISTRY_SET = register("chemistry_set", () -> new CraftingBlockItem(RuneCraftoryBlocks.CHEMISTRY_SET.get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, CraftingBlockItem> COOKING_TABLE = register("cooking_table", () -> new CraftingBlockItem(RuneCraftoryBlocks.COOKING_TABLE.get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
 
     public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_IRON = mineral(MineralBlockTier.IRON);
     public static final RegistryEntrySupplier<Item, BlockItem> MINERAL_TIN = mineral(MineralBlockTier.TIN);
@@ -579,13 +578,13 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_EMERALD = brokenMineral(MineralBlockTier.EMERALD);
     public static final RegistryEntrySupplier<Item, BlockItem> BROKEN_MINERAL_SAPPHIRE = brokenMineral(MineralBlockTier.SAPPHIRE);
 
-    public static final RegistryEntrySupplier<Item, Item> RAW_TIN = register("raw_tin", () -> new Item(new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MATERIALS);
+    public static final RegistryEntrySupplier<Item, Item> RAW_TIN = register("raw_tin", () -> new Item(new Item.Properties()), RuneCraftoryCreativeTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> TIN_INGOT = mat("tin_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> BRONZE_DUST = register("bronze_dust", () -> new Item(new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MATERIALS);
+    public static final RegistryEntrySupplier<Item, Item> BRONZE_DUST = register("bronze_dust", () -> new Item(new Item.Properties()), RuneCraftoryCreativeTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> BRONZE_INGOT = mat("bronze_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> RAW_SILVER = register("raw_silver", () -> new Item(new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MATERIALS);
+    public static final RegistryEntrySupplier<Item, Item> RAW_SILVER = register("raw_silver", () -> new Item(new Item.Properties()), RuneCraftoryCreativeTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> SILVER_INGOT = mat("silver_ingot", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> RAW_PLATINUM = register("raw_platinum", () -> new Item(new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.MATERIALS);
+    public static final RegistryEntrySupplier<Item, Item> RAW_PLATINUM = register("raw_platinum", () -> new Item(new Item.Properties()), RuneCraftoryCreativeTabs.MATERIALS);
     public static final RegistryEntrySupplier<Item, Item> PLATINUM_INGOT = mat("platinum_ingot", Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> ORICHALCUM = mat("orichalcum", Rarity.UNCOMMON, Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> DRAGONIC = mat("dragonic_stone", Rarity.UNCOMMON, Texture.Y);
@@ -979,9 +978,9 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> SWORD_SEEDS = seed("sword", () -> RuneCraftoryBlocks.SWORD_CROP);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> DUNGEON_SEEDS = seed("dungeon", () -> RuneCraftoryBlocks.DUNGEON);
 
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> APPLE_SAPLING = register("apple_sapling", () -> new ItemNameBlockItem(RuneCraftoryBlocks.APPLE_SAPLING.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.FARMING);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> ORANGE_SAPLING = register("orange_sapling", () -> new ItemNameBlockItem(RuneCraftoryBlocks.ORANGE_SAPLING.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.FARMING);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GRAPE_SAPLING = register("grape_sapling", () -> new ItemNameBlockItem(RuneCraftoryBlocks.GRAPE_SAPLING.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.FARMING);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> APPLE_SAPLING = register("apple_sapling", () -> new ItemNameBlockItem(RuneCraftoryBlocks.APPLE_SAPLING.get(), new Item.Properties()), RuneCraftoryCreativeTabs.FARMING);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> ORANGE_SAPLING = register("orange_sapling", () -> new ItemNameBlockItem(RuneCraftoryBlocks.ORANGE_SAPLING.get(), new Item.Properties()), RuneCraftoryCreativeTabs.FARMING);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GRAPE_SAPLING = register("grape_sapling", () -> new ItemNameBlockItem(RuneCraftoryBlocks.GRAPE_SAPLING.get(), new Item.Properties()), RuneCraftoryCreativeTabs.FARMING);
 
     public static final RegistryEntrySupplier<Item, ItemMedicine> ROUNDOFF = medicine("roundoff", false);
     public static final RegistryEntrySupplier<Item, ItemMedicine> PARA_GONE = medicine("para_gone", false);
@@ -994,7 +993,7 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, Item> INVINCIROID = drinkable("invinciroid");
     public static final RegistryEntrySupplier<Item, Item> LOVE_POTION = drinkable("love_potion");
     public static final RegistryEntrySupplier<Item, Item> FORMUADE = drinkable("formuade");
-    public static final RegistryEntrySupplier<Item, ItemObjectX> OBJECT_X = register("object_x", () -> new ItemObjectX(new Item.Properties().food(FOOD_PROP)), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
+    public static final RegistryEntrySupplier<Item, ItemObjectX> OBJECT_X = register("object_x", () -> new ItemObjectX(new Item.Properties().food(FOOD_PROP)), RuneCraftoryCreativeTabs.MEDICINE);
 
     public static final RegistryEntrySupplier<Item, BlockItem> ELLI_LEAVES = herb("elli_leaves", () -> RuneCraftoryBlocks.ELLI_LEAVES);
     public static final RegistryEntrySupplier<Item, BlockItem> WITHERED_GRASS = herb("withered_grass", () -> RuneCraftoryBlocks.WITHERED_GRASS);
@@ -1011,8 +1010,8 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, BlockItem> ANTIDOTE_GRASS = herb("antidote_grass", () -> RuneCraftoryBlocks.ANTIDOTE_GRASS);
     public static final RegistryEntrySupplier<Item, BlockItem> MEDICINAL_HERB = herb("medicinal_herb", () -> RuneCraftoryBlocks.MEDICINAL_HERB);
     public static final RegistryEntrySupplier<Item, BlockItem> BAMBOO_SPROUT = herb("bamboo_sprout", () -> RuneCraftoryBlocks.BAMBOO_SPROUT);
-    public static final RegistryEntrySupplier<Item, ItemMushroom> MUSHROOM = register("mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
-    public static final RegistryEntrySupplier<Item, ItemMushroom> MONARCH_MUSHROOM = register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemMushroom> MUSHROOM = register("mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP)), RuneCraftoryCreativeTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemMushroom> MONARCH_MUSHROOM = register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(LOW_FOOD_PROP)), RuneCraftoryCreativeTabs.FOOD);
 
     public static final RegistryEntrySupplier<Item, Item> RICE = food("rice", Texture.Y, FOOD_PROP, RunecraftoryTags.Items.RICE);
     public static final RegistryEntrySupplier<Item, Item> RICE_FLOUR = food("rice_flour", Texture.Y, LOW_FOOD_PROP);
@@ -1215,17 +1214,17 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, Item> GRAPES = food("grapes", Texture.Y, LOW_FOOD_PROP);
     public static final RegistryEntrySupplier<Item, Item> MEALY_APPLE = food("mealy_apple", Texture.Y, LOW_FOOD_PROP);
 
-    public static final RegistryEntrySupplier<Item, ItemRecipeBread> FORGING_BREAD = register("forging_bread", () -> new ItemRecipeBread(CraftingType.FORGE, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
-    public static final RegistryEntrySupplier<Item, ItemRecipeBread> ACCESSORY_BREAD = register("accessory_bread", () -> new ItemRecipeBread(CraftingType.ACCESSORY_WORKBENCH, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
-    public static final RegistryEntrySupplier<Item, ItemRecipeBread> MEDICINE_BREAD = register("medicine_bread", () -> new ItemRecipeBread(CraftingType.CHEMISTRY_SET, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
-    public static final RegistryEntrySupplier<Item, ItemRecipeBread> COOKING_BREAD = register("cooking_bread", () -> new ItemRecipeBread(CraftingType.COOKING_TABLE, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> FORGING_BREAD = register("forging_bread", () -> new ItemRecipeBread(CraftingType.FORGE, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> ACCESSORY_BREAD = register("accessory_bread", () -> new ItemRecipeBread(CraftingType.ACCESSORY_WORKBENCH, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> MEDICINE_BREAD = register("medicine_bread", () -> new ItemRecipeBread(CraftingType.CHEMISTRY_SET, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeTabs.FOOD);
+    public static final RegistryEntrySupplier<Item, ItemRecipeBread> COOKING_BREAD = register("cooking_bread", () -> new ItemRecipeBread(CraftingType.COOKING_TABLE, new Item.Properties().stacksTo(16)), RuneCraftoryCreativeTabs.FOOD);
 
     public static final RegistryEntrySupplier<Item, BlockItem> SHIPPING_BIN = blockItem("shipping_bin", () -> RuneCraftoryBlocks.SHIPPING);
-    public static final RegistryEntrySupplier<Item, BlockItem> SPAWNER = blockItem("boss_spawner", () -> RuneCraftoryBlocks.BOSS_SPAWNER, RuneCraftoryCreativeRuneCraftoryTabs.MONSTERS);
+    public static final RegistryEntrySupplier<Item, BlockItem> SPAWNER = blockItem("boss_spawner", () -> RuneCraftoryBlocks.BOSS_SPAWNER, RuneCraftoryCreativeTabs.MONSTERS);
     public static final RegistryEntrySupplier<Item, BlockItem> CASH_REGISTER = blockItem("cash_register", () -> RuneCraftoryBlocks.CASH_REGISTER);
     public static final RegistryEntrySupplier<Item, BlockItem> MONSTER_BARN = blockItem("monster_barn", () -> RuneCraftoryBlocks.MONSTER_BARN);
-    public static final RegistryEntrySupplier<Item, QuestBoardItem> QUEST_BOARD = register("quest_board", () -> new QuestBoardItem(RuneCraftoryBlocks.QUEST_BOARD.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
-    public static final RegistryEntrySupplier<Item, BucketItem> HOT_SPRING_BUCKET = register("hot_spring_bucket", () -> new BucketItem(RuneCraftoryFluids.HOT_SPRING_WATER.get(), new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, QuestBoardItem> QUEST_BOARD = register("quest_board", () -> new QuestBoardItem(RuneCraftoryBlocks.QUEST_BOARD.get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
+    public static final RegistryEntrySupplier<Item, BucketItem> HOT_SPRING_BUCKET = register("hot_spring_bucket", () -> new BucketItem(RuneCraftoryFluids.HOT_SPRING_WATER.get(), new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.BLOCKS);
 
     public static final RegistryEntrySupplier<Item, Item> ICON_0 = register("icon_0", () -> new Item(new Item.Properties()));
     public static final RegistryEntrySupplier<Item, ItemDebug> DEBUG = register("debug_item", () -> new ItemDebug(new Item.Properties()));
@@ -1249,7 +1248,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemToolHoe> sup = register("hoe_" + tier.getName(), () -> new ItemToolHoe(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
-                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1259,7 +1258,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemToolWateringCan> sup = register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(new Item.Properties()
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)
-                .component(RuneCraftoryDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.WATERINGCANS, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1269,7 +1268,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemToolSickle> sup = register("sickle_" + tier.getName(), () -> new ItemToolSickle(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
-                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1279,7 +1278,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemToolHammer> sup = register("hammer_" + tier.getName(), () -> new ItemToolHammer(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
-                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1289,7 +1288,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemToolAxe> sup = register("axe_" + tier.getName(), () -> new ItemToolAxe(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
-                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1298,7 +1297,7 @@ public class RuneCraftoryItems {
     private static RegistryEntrySupplier<Item, ItemToolFishingRod> fishingRod(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolFishingRod> sup = register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(new Item.Properties()
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
-                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier).stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier).stacksTo(1)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISHING_RODS, t -> new ArrayList<>()).add(sup);
         return sup;
@@ -1314,7 +1313,7 @@ public class RuneCraftoryItems {
         }
         RegistryEntrySupplier<Item, ItemShortSwordBase> sup = register(name, () -> new ItemShortSwordBase(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.SHORT_SWORD))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.SHORT_SWORD))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1334,7 +1333,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemLongSwordBase> sup = register(name, () -> new ItemLongSwordBase(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.LONG_SWORD))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.LONG_SWORD))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.LONGSWORDS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1354,7 +1353,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemSpearBase> sup = register(name, () -> new ItemSpearBase(new Item.Properties()
                 .stacksTo(1)
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.SPEAR))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.SPEAR))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SPEARS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1374,7 +1373,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemAxeBase> sup = register(name, () -> new ItemAxeBase(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.HAMMER_AXE))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.HAMMER_AXE))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.AXES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1394,7 +1393,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemHammerBase> sup = register(name, () -> new ItemHammerBase(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.HAMMER_AXE))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.HAMMER_AXE))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.HAMMERS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1414,7 +1413,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemDualBladeBase> sup = register(name, () -> new ItemDualBladeBase(new Item.Properties()
                 .component(DataComponents.UNBREAKABLE, new Unbreakable(false))
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.DUAL_BLADES))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.DUAL_BLADES))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.DUALBLADES, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1434,7 +1433,7 @@ public class RuneCraftoryItems {
         RegistryEntrySupplier<Item, ItemGloveBase> sup = register(name, () -> new ItemGloveBase(new Item.Properties()
                 .stacksTo(1)
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.GLOVES))), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.GLOVES))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.FISTS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1452,7 +1451,7 @@ public class RuneCraftoryItems {
         }
         RegistryEntrySupplier<Item, ItemStaffBase> sup = register(name, () -> new ItemStaffBase(starterElement, amount, new Item.Properties()
                 .component(RuneCraftoryDataComponentTypes.SHIELD_EFFICIENCY.get(), 0.5f)
-                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.STAFF)).stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB);
+                .component(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get(), AttackActionData.of(RuneCraftoryAttackActions.STAFF)).stacksTo(1)), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.STAFFS, t -> new ArrayList<>()).add(sup);
             TIER_3_CHEST.add(sup);
@@ -1470,7 +1469,7 @@ public class RuneCraftoryItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties().stacksTo(1), RuneCraftory.modRes(name), useItemTexture), RuneCraftoryCreativeRuneCraftoryTabs.EQUIPMENT);
+        RegistryEntrySupplier<Item, ItemArmorBase> sup = register(name, () -> new ItemArmorBase(slot, new Item.Properties().stacksTo(1), RuneCraftory.modRes(name), useItemTexture), RuneCraftoryCreativeTabs.EQUIPMENT);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             switch (slot) {
@@ -1493,7 +1492,7 @@ public class RuneCraftoryItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, ShieldItem> sup = register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.EQUIPMENT);
+        RegistryEntrySupplier<Item, ShieldItem> sup = register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.EQUIPMENT);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_3_CHEST.add(sup);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SHIELDS, t -> new ArrayList<>()).add(sup);
@@ -1502,16 +1501,16 @@ public class RuneCraftoryItems {
     }
 
     private static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<? extends Block>> block) {
-        return register(name, () -> new BlockItem(block.get().get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
+        return register(name, () -> new BlockItem(block.get().get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
     }
 
-    private static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<? extends Block>> block, RegistryEntrySupplier<CreativeModeTab, CreativeModeTab> group) {
+    private static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<? extends Block>> block, ResourceLocation group) {
         return register(name, () -> new BlockItem(block.get().get(), new Item.Properties()), group);
     }
 
     private static RegistryEntrySupplier<Item, BlockItem> mineral(MineralBlockTier tier) {
         Supplier<Block> block = () -> RuneCraftoryBlocks.MINERAL_MAP.get(tier).get();
-        return register("ore_" + tier.getSerializedName(), () -> new BlockItem(block.get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.BLOCKS);
+        return register("ore_" + tier.getSerializedName(), () -> new BlockItem(block.get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
     }
 
     private static RegistryEntrySupplier<Item, BlockItem> brokenMineral(MineralBlockTier tier) {
@@ -1529,7 +1528,7 @@ public class RuneCraftoryItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().rarity(rarity)), RuneCraftoryCreativeRuneCraftoryTabs.MATERIALS);
+        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().rarity(rarity)), RuneCraftoryCreativeTabs.MATERIALS);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             if (rarity == Rarity.COMMON)
                 TIER_1_CHEST.add(sup);
@@ -1538,7 +1537,7 @@ public class RuneCraftoryItems {
     }
 
     private static RegistryEntrySupplier<Item, ItemMedicine> medicine(String name, boolean affectStats) {
-        RegistryEntrySupplier<Item, ItemMedicine> sup = register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(FOOD_PROP).stacksTo(16)), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
+        RegistryEntrySupplier<Item, ItemMedicine> sup = register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(FOOD_PROP).stacksTo(16)), RuneCraftoryCreativeTabs.MEDICINE);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_2_CHEST.add(sup);
         return sup;
@@ -1550,7 +1549,7 @@ public class RuneCraftoryItems {
             public UseAnim getUseAnimation(ItemStack stack) {
                 return UseAnim.DRINK;
             }
-        }, RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
+        }, RuneCraftoryCreativeTabs.MEDICINE);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_2_CHEST.add(sup);
         return sup;
@@ -1563,7 +1562,7 @@ public class RuneCraftoryItems {
     private static RegistryEntrySupplier<Item, ItemSpell> spell(Supplier<Supplier<? extends Spell>> sup, String name, boolean canHold, int type) {
         RegistryEntrySupplier<Item, ItemSpell> ret = register(name, () -> canHold ?
                 new ItemHoldSpell(sup.get(), new Item.Properties().stacksTo(1)) :
-                new ItemSpell(sup.get(), new Item.Properties().stacksTo(1)), RuneCraftoryCreativeRuneCraftoryTabs.SPELLS);
+                new ItemSpell(sup.get(), new Item.Properties().stacksTo(1)), RuneCraftoryCreativeTabs.SPELLS);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(ret);
             DATAGENTAGS.computeIfAbsent(RunecraftoryTags.Items.SPELLS, t -> new ArrayList<>()).add(ret);
@@ -1581,14 +1580,14 @@ public class RuneCraftoryItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
+        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties()), RuneCraftoryCreativeTabs.FOOD);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;
     }
 
     private static RegistryEntrySupplier<Item, ItemNameBlockItem> seed(String name, Supplier<Supplier<? extends Block>> block) {
-        RegistryEntrySupplier<Item, ItemNameBlockItem> sup = register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties()), RuneCraftoryCreativeRuneCraftoryTabs.FARMING);
+        RegistryEntrySupplier<Item, ItemNameBlockItem> sup = register(name + "_seeds", () -> new ItemNameBlockItem(block.get().get(), new Item.Properties()), RuneCraftoryCreativeTabs.FARMING);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             SEEDS.add(sup);
         return sup;
@@ -1617,9 +1616,9 @@ public class RuneCraftoryItems {
         }
         RegistryEntrySupplier<Item, Item> sup;
         if (small != null)
-            sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), RuneCraftoryCreativeRuneCraftoryTabs.FARMING);
+            sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), RuneCraftoryCreativeTabs.FARMING);
         else
-            sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)), RuneCraftoryCreativeRuneCraftoryTabs.FARMING);
+            sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)), RuneCraftoryCreativeTabs.FARMING);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_1_CHEST.add(sup);
             if (small != null)
@@ -1635,7 +1634,7 @@ public class RuneCraftoryItems {
     }
 
     private static RegistryEntrySupplier<Item, BlockItem> herb(String name, Supplier<Supplier<? extends Block>> block) {
-        RegistryEntrySupplier<Item, BlockItem> sup = register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(LOW_FOOD_PROP)), RuneCraftoryCreativeRuneCraftoryTabs.MEDICINE);
+        RegistryEntrySupplier<Item, BlockItem> sup = register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(LOW_FOOD_PROP)), RuneCraftoryCreativeTabs.MEDICINE);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             TIER_1_CHEST.add(sup);
         return sup;
@@ -1653,7 +1652,7 @@ public class RuneCraftoryItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().food(foodProp)), RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
+        RegistryEntrySupplier<Item, Item> sup = register(name, () -> new Item(new Item.Properties().food(foodProp)), RuneCraftoryCreativeTabs.FOOD);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(sup);
             FOOD.add(sup);
@@ -1681,7 +1680,7 @@ public class RuneCraftoryItems {
             public UseAnim getUseAnimation(ItemStack stack) {
                 return UseAnim.DRINK;
             }
-        }, RuneCraftoryCreativeRuneCraftoryTabs.FOOD);
+        }, RuneCraftoryCreativeTabs.FOOD);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             TIER_2_CHEST.add(sup);
             FOOD.add(sup);
@@ -1696,10 +1695,10 @@ public class RuneCraftoryItems {
         return register(name, item, null);
     }
 
-    public static <T extends Item> RegistryEntrySupplier<Item, T> register(String name, Supplier<T> item, RegistryEntrySupplier<CreativeModeTab, CreativeModeTab> creativeModTabs) {
+    public static <T extends Item> RegistryEntrySupplier<Item, T> register(String name, Supplier<T> item, ResourceLocation tab) {
         RegistryEntrySupplier<Item, T> res = ITEMS.register(name, item);
-        if (creativeModTabs != null) {
-            RuneCraftoryCreativeRuneCraftoryTabs.appendTo(creativeModTabs.getID(), res);
+        if (tab != null) {
+            RuneCraftoryCreativeTabs.appendTo(tab, res);
         }
         return res;
     }

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.neoforge.data.book;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeRuneCraftoryTabs;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeTabs;
 import net.favouriteless.modopedia.api.book.Book;
 import net.favouriteless.modopedia.api.datagen.builders.BookBuilder;
 import net.favouriteless.modopedia.api.datagen.providers.BookProvider;
@@ -21,7 +21,7 @@ public class BookGen extends BookProvider {
     protected void build(HolderLookup.Provider provider, BiConsumer<String, Book> biConsumer) {
         BookBuilder.of("runecraftory.book.title")
                 .landingText("runecraftory.book.landing")
-                .tab(RuneCraftoryCreativeRuneCraftoryTabs.WEAPON_TOOL_TAB.getID())
+                .tab(RuneCraftoryCreativeTabs.TAB.getID())
                 .build("runepedia", biConsumer);
     }
 }

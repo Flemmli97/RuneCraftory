@@ -2,13 +2,19 @@ package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.mixinhelper.CreativeScreenSubTab;
+import io.github.flemmli97.tenshilib.client.gui.widget.list.SelectableListWidget;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ClickArea;
+import me.shedaniel.rei.api.client.registry.screen.ExclusionZones;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import me.shedaniel.rei.plugin.client.exclusionzones.DefaultRecipeBookExclusionZones;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 
 import java.util.List;
 
@@ -36,6 +42,18 @@ public class ReiClientPlugin implements REIClientPlugin {
                 new SextupleDisplayGenerator(CraftingIdentifier.CHEMISTRY));
         registry.registerDisplayGenerator(CraftingIdentifier.COOKING.identifier(),
                 new SextupleDisplayGenerator(CraftingIdentifier.COOKING));
+    }
+
+    @Override
+    public void registerExclusionZones(ExclusionZones zones) {
+        zones.register(CreativeModeInventoryScreen.class, screen -> {
+            SelectableListWidget widget = ((CreativeScreenSubTab) screen).runecraftory$subTabWidget();
+            if (widget != null) {
+                return List.of(new Rectangle(widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight()));
+            }
+            return List.of();
+        });
+        zones.register(RecipeUpdateListener.class, new DefaultRecipeBookExclusionZones());
     }
 
     @Override

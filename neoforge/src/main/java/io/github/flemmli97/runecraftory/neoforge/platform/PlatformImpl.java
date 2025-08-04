@@ -2,12 +2,13 @@ package io.github.flemmli97.runecraftory.neoforge.platform;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.creativetab.CreativeTabBuilderExtension;
+import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
 import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryAttachments;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -37,6 +38,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.network.IContainerFactory;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -84,8 +86,10 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public CreativeModeTab.Builder tabBuilder(ResourceLocation... after) {
-        return CreativeModeTab.builder().withTabsBefore(after);
+    public CreativeModeTab.Builder tabBuilder(List<SubTab> subTabs) {
+        CreativeModeTab.Builder builder = CreativeModeTab.builder();
+        ((CreativeTabBuilderExtension) builder).runecraftory$withSubTab(subTabs);
+        return builder;
     }
 
     @Override

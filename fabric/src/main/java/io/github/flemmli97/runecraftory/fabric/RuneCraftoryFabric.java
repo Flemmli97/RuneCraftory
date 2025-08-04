@@ -21,7 +21,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackAction
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeRuneCraftoryTabs;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeTabs;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
@@ -229,7 +229,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent();
         RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent();
         RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent();
-        RuneCraftoryCreativeRuneCraftoryTabs.CREATIVE_MODE_TABS.registerContent();
+        RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent();
         RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent();
         RuneCraftoryArmorMaterials.MATERIALS.registerContent();
 

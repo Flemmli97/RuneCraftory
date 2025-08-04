@@ -35,7 +35,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeRuneCraftoryTabs;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeTabs;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDamageType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -55,7 +55,6 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -281,8 +280,9 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.barn.interact.block", "Barn with capacity %1$s (Free: %2$s).");
         this.add("runecraftory.barn.interact.block.roofed", "Roofed barn with capacity %1$s (Free: %2$s).");
 
-        for (RegistryEntrySupplier<CreativeModeTab, ? extends CreativeModeTab> tab : RuneCraftoryCreativeRuneCraftoryTabs.CREATIVE_MODE_TABS.getEntries()) {
-            this.add("itemGroup." + tab.getID().getNamespace() + "." + tab.getID().getPath(), this.simpleTranslation(tab.getID().getPath()));
+        this.add("itemGroup." + RuneCraftoryCreativeTabs.TAB.getID().getNamespace() + "." + RuneCraftoryCreativeTabs.TAB.getID().getPath(), "RuneCraftory");
+        for (ResourceLocation tab : RuneCraftoryCreativeTabs.subTabs()) {
+            this.add("itemGroup." + tab.getNamespace() + "." + tab.getPath(), this.simpleTranslation(tab.getPath()));
         }
 
         this.add("runecraftory.keycategory", "Runecraftory");

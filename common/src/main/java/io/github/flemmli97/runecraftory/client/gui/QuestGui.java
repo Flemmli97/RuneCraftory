@@ -83,7 +83,7 @@ public class QuestGui extends Screen {
             entries.add(new QuestEntry(i));
         }
         this.addRenderableWidget(new SelectableListWidget(this.leftPos + 14, this.topPos + 14, 210, 147, this.font, entries)
-                .withPadding(9)
+                .withPadding(21)
                 .scrollbar(new SelectableListWidget.Scrollbar(SCROLLBAR, SCROLLBAR, 12, 21, 2, 0)));
 
         this.addRenderableOnly(this.popup = new SelectPopup(this.leftPos, this.topPos, () -> {

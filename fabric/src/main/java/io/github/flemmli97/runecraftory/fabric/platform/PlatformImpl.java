@@ -2,6 +2,8 @@ package io.github.flemmli97.runecraftory.fabric.platform;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.creativetab.CreativeTabBuilderExtension;
+import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -13,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -103,8 +105,10 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public CreativeModeTab.Builder tabBuilder(ResourceLocation... after) {
-        return FabricItemGroup.builder();
+    public CreativeModeTab.Builder tabBuilder(List<SubTab> subTabs) {
+        CreativeModeTab.Builder builder = FabricItemGroup.builder();
+        ((CreativeTabBuilderExtension) builder).runecraftory$withSubTab(subTabs);
+        return builder;
     }
 
     @Override
