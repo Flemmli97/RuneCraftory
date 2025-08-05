@@ -870,17 +870,17 @@ public class Loottables extends LootTableProvider {
             this.add(RuneCraftoryBlocks.ACCESSORY_WORKBENCH.get(), block -> this.createSinglePropConditionTable(block, CraftingBlock.PART, CraftingBlock.EnumPart.LEFT));
 
             this.dropOther(RuneCraftoryBlocks.APPLE_TREE.get(), Blocks.OAK_LOG);
-            this.dropOther(RuneCraftoryBlocks.ORANGE_TREE.get(), Blocks.OAK_LOG);
-            this.dropOther(RuneCraftoryBlocks.GRAPE_TREE.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.ORANGE_TREE.get(), Blocks.BIRCH_LOG);
+            this.dropOther(RuneCraftoryBlocks.GRAPE_TREE.get(), Blocks.SPRUCE_LOG);
             this.dropOther(RuneCraftoryBlocks.APPLE_WOOD.get(), Blocks.OAK_LOG);
-            this.dropOther(RuneCraftoryBlocks.ORANGE_WOOD.get(), Blocks.OAK_LOG);
-            this.dropOther(RuneCraftoryBlocks.GRAPE_WOOD.get(), Blocks.OAK_LOG);
+            this.dropOther(RuneCraftoryBlocks.ORANGE_WOOD.get(), Blocks.BIRCH_LOG);
+            this.dropOther(RuneCraftoryBlocks.GRAPE_WOOD.get(), Blocks.SPRUCE_LOG);
             this.add(RuneCraftoryBlocks.APPLE_LEAVES.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
-            this.add(RuneCraftoryBlocks.ORANGE_LEAVES.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
-            this.add(RuneCraftoryBlocks.GRAPE_LEAVES.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.ORANGE_LEAVES.get(), this.simpleLeaves(Blocks.BIRCH_LEAVES));
+            this.add(RuneCraftoryBlocks.GRAPE_LEAVES.get(), this.simpleLeaves(Blocks.DARK_OAK_LEAVES));
             this.add(RuneCraftoryBlocks.APPLE.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
-            this.add(RuneCraftoryBlocks.ORANGE.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
-            this.add(RuneCraftoryBlocks.GRAPE.get(), this.simpleLeaves(Blocks.OAK_LEAVES));
+            this.add(RuneCraftoryBlocks.ORANGE.get(), this.simpleLeaves(Blocks.BIRCH_LEAVES));
+            this.add(RuneCraftoryBlocks.GRAPE.get(), this.simpleLeaves(Blocks.DARK_OAK_LEAVES));
             this.loots.forEach(biConsumer);
         }
 

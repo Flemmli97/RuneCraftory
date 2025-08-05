@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -57,6 +58,6 @@ public class ConfiguredFeatureGen extends CodecBasedProvider<ConfiguredFeature<?
                         BlockStateProvider.simple(leave),
                         new FancyFoliagePlacer(max ? ConstantInt.of(2) : ConstantInt.of(1), ConstantInt.of(0), max ? 3 : 2),
                         new TwoLayersFeatureSize(1, 0, 2))
-                        .decorators(max ? List.of(new FruitLeaveDecorator(BlockStateProvider.simple(fruit))) : List.of()).ignoreVines().build());
+                        .decorators(max ? List.of(new FruitLeaveDecorator(BlockStateProvider.simple(fruit), UniformInt.of(4, 9))) : List.of()).ignoreVines().build());
     }
 }

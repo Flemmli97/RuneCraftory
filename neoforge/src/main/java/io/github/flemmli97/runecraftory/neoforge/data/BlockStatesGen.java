@@ -201,22 +201,22 @@ public class BlockStatesGen extends BlockStateProvider {
                         .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
                 .addModel();
 
-        this.axisBlock(RuneCraftoryBlocks.ORANGE_TREE.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.OAK_LOG).getPath())),
-                this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.OAK_LOG).getPath() + "_horizontal")));
+        this.axisBlock(RuneCraftoryBlocks.ORANGE_TREE.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.BIRCH_LOG).getPath())),
+                this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.BIRCH_LOG).getPath() + "_horizontal")));
         this.simpleBlock(RuneCraftoryBlocks.ORANGE_SAPLING.get(), this.models().cross(RuneCraftoryBlocks.ORANGE_SAPLING.getID().toString(), this.itemTexture(RuneCraftoryItems.ORANGE_SAPLING.get())));
-        this.axisBlock(RuneCraftoryBlocks.ORANGE_WOOD.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.OAK_LOG).getPath())),
-                this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.OAK_LOG).getPath() + "_horizontal")));
-        this.simpleBlock(RuneCraftoryBlocks.ORANGE_LEAVES.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.OAK_LEAVES).getPath())));
+        this.axisBlock(RuneCraftoryBlocks.ORANGE_WOOD.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.BIRCH_LOG).getPath())),
+                this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.BIRCH_LOG).getPath() + "_horizontal")));
+        this.simpleBlock(RuneCraftoryBlocks.ORANGE_LEAVES.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.BIRCH_LEAVES).getPath())));
         this.getVariantBuilder(RuneCraftoryBlocks.ORANGE.get())
                 .partialState().with(FruitTreeLeafBlock.HAS_FRUIT, true)
                 .modelForState().modelFile(this.models().withExistingParent(RuneCraftoryBlocks.ORANGE.getID().toString(), this.modLoc("fruit_leaves"))
-                        .texture("base", this.blockTexture(Blocks.OAK_LEAVES))
-                        .texture("particle", this.blockTexture(Blocks.OAK_LEAVES))
+                        .texture("base", this.blockTexture(Blocks.BIRCH_LEAVES))
+                        .texture("particle", this.blockTexture(Blocks.BIRCH_LEAVES))
                         .texture("overlay", this.blockTexture(RuneCraftoryBlocks.ORANGE.get())))
                 .addModel()
                 .partialState().with(FruitTreeLeafBlock.HAS_FRUIT, false)
                 .modelForState().modelFile(this.models().withExistingParent(RuneCraftoryBlocks.ORANGE.getID().toString() + "_fruitless", ModelProvider.BLOCK_FOLDER + "/leaves")
-                        .texture("all", this.blockTexture(Blocks.OAK_LEAVES)))
+                        .texture("all", this.blockTexture(Blocks.BIRCH_LEAVES)))
                 .addModel();
 
         this.axisBlock(RuneCraftoryBlocks.GRAPE_TREE.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPRUCE_LOG).getPath())),
@@ -224,17 +224,17 @@ public class BlockStatesGen extends BlockStateProvider {
         this.simpleBlock(RuneCraftoryBlocks.GRAPE_SAPLING.get(), this.models().cross(RuneCraftoryBlocks.GRAPE_SAPLING.getID().toString(), this.itemTexture(RuneCraftoryItems.GRAPE_SAPLING.get())));
         this.axisBlock(RuneCraftoryBlocks.GRAPE_WOOD.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPRUCE_LOG).getPath())),
                 this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPRUCE_LOG).getPath() + "_horizontal")));
-        this.simpleBlock(RuneCraftoryBlocks.GRAPE_LEAVES.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.SPRUCE_LEAVES).getPath())));
+        this.simpleBlock(RuneCraftoryBlocks.GRAPE_LEAVES.get(), this.models().getExistingFile(ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + this.key(Blocks.DARK_OAK_LEAVES).getPath())));
         this.getVariantBuilder(RuneCraftoryBlocks.GRAPE.get())
                 .partialState().with(FruitTreeLeafBlock.HAS_FRUIT, true)
                 .modelForState().modelFile(this.models().withExistingParent(RuneCraftoryBlocks.GRAPE.getID().toString(), this.modLoc("fruit_leaves"))
-                        .texture("base", this.blockTexture(Blocks.SPRUCE_LEAVES))
-                        .texture("particle", this.blockTexture(Blocks.SPRUCE_LEAVES))
+                        .texture("base", this.blockTexture(Blocks.DARK_OAK_LEAVES))
+                        .texture("particle", this.blockTexture(Blocks.DARK_OAK_LEAVES))
                         .texture("overlay", this.blockTexture(RuneCraftoryBlocks.GRAPE.get())))
                 .addModel()
                 .partialState().with(FruitTreeLeafBlock.HAS_FRUIT, false)
                 .modelForState().modelFile(this.models().withExistingParent(RuneCraftoryBlocks.GRAPE.getID().toString() + "_fruitless", ModelProvider.BLOCK_FOLDER + "/leaves")
-                        .texture("all", this.blockTexture(Blocks.SPRUCE_LEAVES)))
+                        .texture("all", this.blockTexture(Blocks.DARK_OAK_LEAVES)))
                 .addModel();
     }
 

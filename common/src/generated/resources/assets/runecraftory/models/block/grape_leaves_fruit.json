@@ -1,8 +1,8 @@
 {
   "parent": "runecraftory:block/fruit_leaves",
   "textures": {
-    "base": "minecraft:block/spruce_leaves",
+    "base": "minecraft:block/dark_oak_leaves",
     "overlay": "runecraftory:block/grape_leaves_fruit",
-    "particle": "minecraft:block/spruce_leaves"
+    "particle": "minecraft:block/dark_oak_leaves"
   }
 }

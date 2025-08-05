@@ -4,6 +4,11 @@
     "decorators": [
       {
         "type": "runecraftory:fruit_decorator",
+        "amount": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 9,
+          "min_inclusive": 4
+        },
         "fruit": {
           "type": "minecraft:simple_state_provider",
           "state": {
