@@ -98,6 +98,7 @@ public class DataEvent {
 
         data.addProvider(true, new BookGen(provider, packOutput));
         data.addProvider(true, new BookContentGen(provider, packOutput));
+        data.addProvider(true, new ImprovedMobsDataGen(packOutput, provider));
     }
 
     protected static class IgnoreFileHelper extends ExistingFileHelper {

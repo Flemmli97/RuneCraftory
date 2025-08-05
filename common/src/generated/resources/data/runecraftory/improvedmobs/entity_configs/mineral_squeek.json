@@ -1,0 +1,18 @@
+{
+  "type": "runecraftory:mineral_squeek",
+  "attributes": {
+    "replace_config": false,
+    "value": {
+      "additional": {},
+      "attributes": {}
+    }
+  },
+  "breakable_blocks": {
+    "replace_config": false,
+    "value": []
+  },
+  "features": [
+    "BLOCKBREAK",
+    "LADDER"
+  ]
+}

@@ -19,11 +19,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
 
-    public static final TagKey<EntityType<?>> IM_HELD = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("improvedmobs", "default_blacklist_helditems"));
-    public static final TagKey<EntityType<?>> IM_USE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("improvedmobs", "default_blacklist_useitem"));
-    public static final TagKey<EntityType<?>> IM_VILLAGERS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("improvedmobs", "default_blacklist_villager"));
-    public static final TagKey<EntityType<?>> IM_ARMOR = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("improvedmobs", "default_blacklist_armor"));
-
     public static final TagKey<EntityType<?>> MINECOLONIES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("minecolonies", "mob_attack_blacklist"));
 
     @SuppressWarnings("deprecation")
@@ -34,10 +29,6 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         for (RegistryEntrySupplier<EntityType<?>, ?> type : RuneCraftoryEntities.getMonsters()) {
-            this.tag(IM_HELD).add(type.get());
-            this.tag(IM_USE).add(type.get());
-            this.tag(IM_VILLAGERS).add(type.get());
-            this.tag(IM_ARMOR).add(type.get());
             this.tag(MINECOLONIES).add(type.get());
             this.tag(RunecraftoryTags.EntityTypes.MONSTERS).add(type.get());
         }

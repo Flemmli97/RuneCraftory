@@ -1,0 +1,18 @@
+{
+  "type": "runecraftory:troll",
+  "attributes": {
+    "replace_config": false,
+    "value": {
+      "additional": {},
+      "attributes": {}
+    }
+  },
+  "breakable_blocks": {
+    "replace_config": false,
+    "value": []
+  },
+  "features": [
+    "BLOCKBREAK",
+    "LADDER"
+  ]
+}
