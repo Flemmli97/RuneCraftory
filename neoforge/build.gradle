@@ -56,7 +56,7 @@ dependencies {
 
     // Mods useful for testing things
     modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.8-neoforge"
-    modRuntimeOnly "io.github.flemmli97:mobbattle:1.21.1-2.5.4-neoforge"
+    modRuntimeOnly "io.github.flemmli97:mobbattle:1.21.1-2.6.2-neoforge"
     modRuntimeOnly "curse.maven:moonlight-499980:6682378"
     modRuntimeOnly "curse.maven:dummy-225738:6608246"
     modRuntimeOnly "curse.maven:spark-361579:6225208"

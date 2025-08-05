@@ -36,7 +36,7 @@ public class RuneCraftoryCreativeTabs {
     public static final ResourceLocation SPELLS = registerSub("spells_and_rune_abilities", () -> RuneCraftoryItems.TELEPORT);
     public static final ResourceLocation FOOD = registerSub("food", () -> RuneCraftoryItems.ONIGIRI);
     public static final ResourceLocation FARMING = registerSub("farming", () -> RuneCraftoryItems.TURNIP_SEEDS);
-    public static final ResourceLocation MONSTERS = registerSub("monsters", () -> RuneCraftoryItems.ICON_0);
+    public static final ResourceLocation MONSTERS = registerSub("spawn_eggs", () -> RuneCraftoryItems.ICON_0);
 
     public static final RegistryEntrySupplier<CreativeModeTab, CreativeModeTab> TAB = registerMain("creative_tab", () -> RuneCraftoryItems.ICON_0);
 
