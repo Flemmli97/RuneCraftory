@@ -106,7 +106,7 @@ public class NPCQuest extends QuestBase {
     private NPCQuest forNPC(NPCEntity npc) {
         ResourceLocation newID = withUuid(this.id, npc.getUUID());
         NPCQuest quest = new NPCQuest(newID, this.category, this.name, this.description,
-                this.npcDataIDs, this.redoParent, this.repeatDelay, this.maxRepeat, this.sortingId,
+                this.neededParentQuests, this.redoParent, this.repeatDelay, this.maxRepeat, this.sortingId,
                 this.unlockCondition, this.npcDataIDs, this.quests, this.loot.location(), this.global);
         quest.withNPC(npc, this.id);
         return quest;
@@ -128,7 +128,8 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public boolean isUnlocked(ServerPlayer player) {
-        return super.isUnlocked(player) && (this.getNpc(player.level()) == null || this.getNpc(player.level()).canAcceptNPCQuest(player, this));
+        return super.isUnlocked(player) &&
+                (this.getNpc(player.level()) == null || this.getNpc(player.level()).canAcceptNPCQuest(player, this));
     }
 
     @Override
