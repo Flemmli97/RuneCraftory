@@ -70,6 +70,10 @@ public class TreeBlockEntity extends BlockEntity {
         return true;
     }
 
+    public boolean isPartOf(TreeLogBlockEntity log) {
+        return this.logs.contains(log.getBlockPos());
+    }
+
     public int getHealth() {
         if (this.getLevel() == null)
             return -1;

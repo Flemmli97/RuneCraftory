@@ -38,7 +38,8 @@ public class TreeLogBlock extends RotatedPillarBlock implements EntityBlock, Ext
             return false;
         if (player.isCreative() || !state.getValue(IS_TREE_PART)
                 || !(level.getBlockEntity(pos) instanceof TreeLogBlockEntity log)
-                || !(level.getBlockEntity(log.treeBase()) instanceof TreeBlockEntity tree)) {
+                || !(level.getBlockEntity(log.treeBase()) instanceof TreeBlockEntity tree)
+                || !tree.isPartOf(log)) {
             this.playerWillDestroy(level, pos, state, player);
             return level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
         }
