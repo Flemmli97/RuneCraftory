@@ -30,7 +30,7 @@ import java.util.Set;
 public class AmbrosiaWaveEntity extends BaseDamageCloud {
 
     private static final EntityDataAccessor<Integer> MAX_TICK = SynchedEntityData.defineId(AmbrosiaWaveEntity.class, EntityDataSerializers.INT);
-    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3f(0.28f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5);
+    private static final List<Vector3f> CIRCLE_PARTICLE_MOTION = MathUtils.rotatedVecs(new Vector3f(0.3f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5);
 
     private final Set<FrozenEntity> hitEntityPos = new HashSet<>();
 
@@ -76,7 +76,7 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
         super.tick();
         if (this.level().isClientSide) {
             if (this.livingTicks < (this.entityData.get(MAX_TICK) - 8) && this.livingTicks % 5 == 1) {
-                for (Vector3f vec : MathUtils.rotatedVecs(new Vector3f(0.3f, 0, 0), new Vector3f(0, 1, 0), -180, 175, 5)) {
+                for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
                     this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
                 }
             }
@@ -90,6 +90,7 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
                     player.moveTo(frozenEntity.pos.x(), frozenEntity.pos.y(), frozenEntity.pos.z());
                 else
                     frozenEntity.entity.setPos(frozenEntity.pos.x(), frozenEntity.pos.y(), frozenEntity.pos.z());
+                frozenEntity.entity.hurtMarked = true;
             });
         }
     }

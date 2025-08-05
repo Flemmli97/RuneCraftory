@@ -152,7 +152,7 @@ public class Ambrosia extends BossMonster {
                 .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(SLEEP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f)
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(2)))
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(1)))
                 .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(WAVE)).play(MonsterBehaviourUtils.cooldownedPlay())

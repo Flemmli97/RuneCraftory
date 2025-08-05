@@ -1061,9 +1061,9 @@ public class RuneCraftoryEntities {
             0x536983, 0xaaa7c8,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 315).putLevelGains(Attributes.MAX_HEALTH, 615)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 18).putLevelGains(Attributes.ATTACK_DAMAGE, 302)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 17).putLevelGains(Attributes.ATTACK_DAMAGE, 302)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 242)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 289)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 14).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 289)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 248)
                     .putAttributes(RuneCraftoryAttributes.POISON.asHolder(), 2)
                     .putAttributes(RuneCraftoryAttributes.PARALYSIS.asHolder(), 2)
@@ -1099,9 +1099,9 @@ public class RuneCraftoryEntities {
             0x9b58ba, 0x0a8414,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 330).putLevelGains(Attributes.MAX_HEALTH, 625)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 14).putLevelGains(Attributes.ATTACK_DAMAGE, 271)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 13).putLevelGains(Attributes.ATTACK_DAMAGE, 271)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 238)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 291)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 16).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 291)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 249)
                     .putAttributes(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 15)
                     .putAttributes(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder(), 15)
@@ -1133,9 +1133,9 @@ public class RuneCraftoryEntities {
             0x3b785c, 0x2e4d3f,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 350).putLevelGains(Attributes.MAX_HEALTH, 625)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 20).putLevelGains(Attributes.ATTACK_DAMAGE, 292)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 18).putLevelGains(Attributes.ATTACK_DAMAGE, 292)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 5.5).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 253)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 18).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 278)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 16).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 278)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 253)
                     .putAttributes(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 10)
                     .putAttributes(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder(), -100)
@@ -1163,7 +1163,7 @@ public class RuneCraftoryEntities {
             0x3e4a40, 0x227904,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 300).putLevelGains(Attributes.MAX_HEALTH, 640)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 18).putLevelGains(Attributes.ATTACK_DAMAGE, 287)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 17).putLevelGains(Attributes.ATTACK_DAMAGE, 287)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 246)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 282)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 246)
@@ -1229,7 +1229,7 @@ public class RuneCraftoryEntities {
             0x615237, 0xc2a982,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 225).putLevelGains(Attributes.MAX_HEALTH, 600)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 19).putLevelGains(Attributes.ATTACK_DAMAGE, 294)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 18).putLevelGains(Attributes.ATTACK_DAMAGE, 294)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 5).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 261)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 16).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 264)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 237)
@@ -1264,7 +1264,7 @@ public class RuneCraftoryEntities {
                     .putAttributes(Attributes.MAX_HEALTH, 300).putLevelGains(Attributes.MAX_HEALTH, 630)
                     .putAttributes(Attributes.ATTACK_DAMAGE, 16).putLevelGains(Attributes.ATTACK_DAMAGE, 275)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 230)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 14).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 280)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 13).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 280)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 245)
                     .putAttributes(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 25)
                     .putAttributes(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder(), -25)
@@ -1294,7 +1294,7 @@ public class RuneCraftoryEntities {
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 325).putLevelGains(Attributes.MAX_HEALTH, 610)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 20).putLevelGains(Attributes.ATTACK_DAMAGE, 280)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 19).putLevelGains(Attributes.ATTACK_DAMAGE, 280)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 240)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 16).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 272)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 240)
@@ -1327,9 +1327,9 @@ public class RuneCraftoryEntities {
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 320).putLevelGains(Attributes.MAX_HEALTH, 620)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 23).putLevelGains(Attributes.ATTACK_DAMAGE, 286)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 20).putLevelGains(Attributes.ATTACK_DAMAGE, 286)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 5).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 247)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 18).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 279)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 279)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 247)
                     .putAttributes(RuneCraftoryAttributes.DARK_RESISTANCE.asHolder(), 25)
                     .putAttributes(RuneCraftoryAttributes.LIGHT_RESISTANCE.asHolder(), -25)
@@ -1359,7 +1359,7 @@ public class RuneCraftoryEntities {
             0xffffff, 0x631123, true,
             new EntityProperties.Builder()
                     .putAttributes(Attributes.MAX_HEALTH, 300).putLevelGains(Attributes.MAX_HEALTH, 610)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 24).putLevelGains(Attributes.ATTACK_DAMAGE, 290)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 21).putLevelGains(Attributes.ATTACK_DAMAGE, 290)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 245)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 276)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 245)
@@ -1390,10 +1390,10 @@ public class RuneCraftoryEntities {
                     .passengerAttachments(new Vec3(0, 30.5 / 16d, 8 / 16d)).sized(1.7f, 2.1f).spawnDimensionsScale(2).clientTrackingRange(8), RuneCraftory.modRes("sano"),
             0xa18c4a, 0xa82626,
             new EntityProperties.Builder()
-                    .putAttributes(Attributes.MAX_HEALTH, 280).putLevelGains(Attributes.MAX_HEALTH, 650)
+                    .putAttributes(Attributes.MAX_HEALTH, 275).putLevelGains(Attributes.MAX_HEALTH, 650)
                     .putAttributes(Attributes.ATTACK_DAMAGE, 14).putLevelGains(Attributes.ATTACK_DAMAGE, 260)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 6).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 259)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 18).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 282)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 282)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 249)
                     .putAttributes(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder(), 50)
                     .putAttributes(RuneCraftoryAttributes.CRITICAL_RESISTANCE.asHolder(), 25)
@@ -1419,10 +1419,10 @@ public class RuneCraftoryEntities {
                     .passengerAttachments(new Vec3(0, 30.5 / 16d, 8 / 16d)).sized(1.7f, 2.1f).spawnDimensionsScale(2).clientTrackingRange(8), RuneCraftory.modRes("uno"),
             0xa18c4a, 0x1b7f9c,
             new EntityProperties.Builder()
-                    .putAttributes(Attributes.MAX_HEALTH, 280).putLevelGains(Attributes.MAX_HEALTH, 650)
+                    .putAttributes(Attributes.MAX_HEALTH, 275).putLevelGains(Attributes.MAX_HEALTH, 650)
                     .putAttributes(Attributes.ATTACK_DAMAGE, 14).putLevelGains(Attributes.ATTACK_DAMAGE, 260)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 5).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 259)
-                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 18).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 282)
+                    .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 282)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 249)
                     .putAttributes(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder(), 50)
                     .putAttributes(RuneCraftoryAttributes.CRITICAL_RESISTANCE.asHolder(), 25)
@@ -1449,8 +1449,8 @@ public class RuneCraftoryEntities {
                     .passengerAttachments(new Vec3(0, 29.5 / 16d, -8 / 16d)).sized(1.1f, 3.5f).clientTrackingRange(8), RuneCraftory.modRes("sarcophagus"),
             0x482f27, 0xf3d07f,
             new EntityProperties.Builder()
-                    .putAttributes(Attributes.MAX_HEALTH, 340).putLevelGains(Attributes.MAX_HEALTH, 633)
-                    .putAttributes(Attributes.ATTACK_DAMAGE, 16).putLevelGains(Attributes.ATTACK_DAMAGE, 276)
+                    .putAttributes(Attributes.MAX_HEALTH, 350).putLevelGains(Attributes.MAX_HEALTH, 633)
+                    .putAttributes(Attributes.ATTACK_DAMAGE, 17).putLevelGains(Attributes.ATTACK_DAMAGE, 276)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 6).putLevelGains(RuneCraftoryAttributes.DEFENCE.asHolder(), 243)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 20).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 280)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6).putLevelGains(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 243)

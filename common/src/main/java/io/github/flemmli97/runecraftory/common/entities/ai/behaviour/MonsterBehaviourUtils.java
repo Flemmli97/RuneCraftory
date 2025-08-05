@@ -98,7 +98,7 @@ public class MonsterBehaviourUtils {
 
     public static <E extends LivingEntity> ToIntBiFunction<E, LivingEntity> closeEnough(int dist) {
         return (entity, target) -> {
-            int close = dist;
+            int close = dist + Mth.ceil(entity.getBbWidth() * 0.5);
             if (target != null) {
                 close += Mth.ceil(target.getBbWidth() * 0.5);
             }

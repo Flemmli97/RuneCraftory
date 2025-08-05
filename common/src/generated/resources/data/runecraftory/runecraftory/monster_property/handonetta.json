@@ -1,6 +1,6 @@
 {
   "base_values": {
-    "minecraft:generic.attack_damage": 24.0,
+    "minecraft:generic.attack_damage": 21.0,
     "minecraft:generic.knockback_resistance": 1.0,
     "minecraft:generic.max_health": 300.0,
     "runecraftory:cold_resistance": 100.0,

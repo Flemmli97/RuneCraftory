@@ -97,7 +97,7 @@ public class GustRocksEntity extends BaseBeam {
 
     @Override
     public void onImpact(EntityHitResult result) {
-        Vec3 mot = this.getLookAngle().scale(0.35);
+        Vec3 mot = this.getLookAngle().scale(0.31);
         result.getEntity().push(mot.x(), mot.y(), mot.z());
         result.getEntity().hurtMarked = true;
     }

@@ -1,6 +1,6 @@
 {
   "base_values": {
-    "minecraft:generic.attack_damage": 14.0,
+    "minecraft:generic.attack_damage": 13.0,
     "minecraft:generic.knockback_resistance": 1.0,
     "minecraft:generic.max_health": 330.0,
     "runecraftory:cold_resistance": 100.0,
@@ -14,7 +14,7 @@
     "runecraftory:fire_resistance": 15.0,
     "runecraftory:light_resistance": -15.0,
     "runecraftory:love_resistance": -25.0,
-    "runecraftory:magic_attack": 17.0,
+    "runecraftory:magic_attack": 16.0,
     "runecraftory:magic_defence": 6.0,
     "runecraftory:paralysis_resistance": 97.0,
     "runecraftory:poison_resistance": 100.0,
