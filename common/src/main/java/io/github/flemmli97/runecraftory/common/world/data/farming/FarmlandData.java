@@ -353,7 +353,7 @@ public class FarmlandData {
 
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
-            if (crop.runecraftory$isAtMaxAge(cropState) && (!hasGiantVersion || this.size == 0 || (this.size < 0 && this.cropSize <= 0))) {
+            if (!crop.canGrow(level, cropPos, cropState) && (!hasGiantVersion || this.size == 0 || (this.size < 0 && this.cropSize <= 0))) {
                 break;
             }
             //Handle crop growth
@@ -365,7 +365,7 @@ public class FarmlandData {
                     if (crop.canGrow(level, cropPos, cropState)) {
                         run.add(() -> {
                             int maxAge = crop.runecraftory$getGrowableMaxAge();
-                            int stage = Mth.floor(this.cropAge * maxAge) / props.growth();
+                            int stage = Mth.floor(this.cropAge * maxAge / props.growth());
                             //Update the blockstate according to the growth age
                             BlockState newState = crop.runecraftory$getGrowableStateForAge(cropState, Math.min(stage, maxAge));
                             this.isGrowing = true;

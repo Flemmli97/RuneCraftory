@@ -120,7 +120,6 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
         }
         if (tree.getHealth() <= 0) {
             tree.onRemove(level, true);
-            serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, state));
             return level.setBlock(tree.getBlockPos(), fluid.createLegacyBlock(), Block.UPDATE_ALL);
         }
         tree.onBreak();
@@ -165,10 +164,7 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
 
     @Override
     public boolean canGrow(ServerLevel level, BlockPos pos, BlockState state) {
-        if (state.getValue(AGE) == 5)
-            return BlockPos.betweenClosedStream(pos.offset(-1, 0, -1), pos.offset(1, 2, 1))
-                    .allMatch(p -> p.equals(pos) || TreeBaseBlock.isAirOrReplaceable(level.getBlockState(p)));
-        return Growable.super.canGrow(level, pos, state);
+        return true;
     }
 
     @Override
@@ -179,7 +175,7 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
 
     @Override
     public boolean runecraftory$isAtMaxAge(BlockState state) {
-        return state.getValue(AGE) == 4;
+        return state.getValue(AGE) == 3;
     }
 
     @Override
