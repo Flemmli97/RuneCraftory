@@ -89,9 +89,8 @@ public class TreeBlockEntity extends BlockEntity {
         FarmlandHandler.get(serverLevel.getServer())
                 .getData(serverLevel, this.getBlockPos().below())
                 .ifPresent(d -> {
-                    int pre = d.getHealth();
                     d.modifyHealth(serverLevel, -5);
-                    if (pre <= 0) {
+                    if (d.getHealth() <= 0) {
                         this.onRemove(serverLevel, true);
                         serverLevel.destroyBlock(this.getBlockPos(), true);
                     }
