@@ -149,6 +149,8 @@ public class ClientCalls {
     }
 
     public static void renderScreenOverlays(GuiGraphics graphics, DeltaTracker tracker) {
+        if (Minecraft.getInstance().options.hideGui)
+            return;
         if (ClientHandlers.OVERLAY != null)
             ClientHandlers.OVERLAY.renderBar(graphics);
         if (ClientHandlers.SPELL_DISPLAY != null && ClientConfig.inventoryButton)
