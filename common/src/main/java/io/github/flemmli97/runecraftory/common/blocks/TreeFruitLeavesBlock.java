@@ -11,38 +11,36 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class FruitTreeLeafBlock extends LeavesBlock {
+public class TreeFruitLeavesBlock extends TreeLeavesBlock {
 
-    public static final MapCodec<FruitTreeLeafBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
+    public static final MapCodec<TreeFruitLeavesBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(propertiesCodec(),
                     LazyResolvedRegistryEntry.codec(Registries.ITEM).fieldOf("fruit").forGetter(d -> d.fruit)
-            ).apply(inst, FruitTreeLeafBlock::new));
+            ).apply(inst, TreeFruitLeavesBlock::new));
 
     public static final BooleanProperty HAS_FRUIT = BooleanProperty.create("has_fruit");
 
     private final LazyResolvedRegistryEntry<Item> fruit;
 
-    public FruitTreeLeafBlock(Properties properties, ResourceKey<Item> fruit) {
+    public TreeFruitLeavesBlock(Properties properties, ResourceKey<Item> fruit) {
         this(properties, new LazyResolvedRegistryEntry<>(fruit));
     }
 
-    private FruitTreeLeafBlock(Properties properties, LazyResolvedRegistryEntry<Item> fruit) {
+    private TreeFruitLeavesBlock(Properties properties, LazyResolvedRegistryEntry<Item> fruit) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(HAS_FRUIT, false));
         this.fruit = fruit;
     }
 
     @Override
-    public MapCodec<FruitTreeLeafBlock> codec() {
+    public MapCodec<TreeFruitLeavesBlock> codec() {
         return CODEC;
     }
 
@@ -50,11 +48,6 @@ public class FruitTreeLeafBlock extends LeavesBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(HAS_FRUIT);
-    }
-
-    @Override
-    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
-        return super.getDestroyProgress(state, player, level, pos);
     }
 
     @Override

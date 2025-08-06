@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.common.blocks.util.GrowableCrop;
 import io.github.flemmli97.runecraftory.common.blocks.util.LazyResolvedRegistryEntry;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import net.minecraft.core.BlockPos;
@@ -27,7 +28,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ExtendedCropBlock extends CropBlock {
+public class ExtendedCropBlock extends CropBlock implements GrowableCrop {
 
     public static final MapCodec<ExtendedCropBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(propertiesCodec(),
@@ -107,6 +108,7 @@ public class ExtendedCropBlock extends CropBlock {
         return this.crop.get(provider).value();
     }
 
+    @Override
     public void onWither(int amount, Level level, BlockState state, BlockPos pos) {
         if (amount > 1 || state.getValue(ExtendedCropBlock.WILTED)) {
             level.setBlock(pos, RuneCraftoryBlocks.WITHERED_GRASS.get().defaultBlockState(), Block.UPDATE_ALL);
@@ -115,6 +117,7 @@ public class ExtendedCropBlock extends CropBlock {
         }
     }
 
+    @Override
     public void onWater(Level level, BlockPos pos, BlockState state) {
         if (state.getValue(ExtendedCropBlock.WILTED))
             level.setBlock(pos, state.setValue(ExtendedCropBlock.WILTED, false), Block.UPDATE_ALL);

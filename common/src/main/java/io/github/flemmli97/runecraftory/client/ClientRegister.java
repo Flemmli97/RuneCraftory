@@ -105,6 +105,7 @@ import io.github.flemmli97.runecraftory.common.blocks.CraftingBlock;
 import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
 import io.github.flemmli97.runecraftory.common.blocks.HerbBlock;
 import io.github.flemmli97.runecraftory.common.blocks.MineralBlock;
+import io.github.flemmli97.runecraftory.common.blocks.TreeLeavesBlock;
 import io.github.flemmli97.runecraftory.common.blocks.TreeSaplingBlock;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.StoneEntity;
@@ -250,6 +251,8 @@ public class ClientRegister {
         RuneCraftoryBlocks.CROPS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
         RuneCraftoryBlocks.FLOWERS.forEach(reg -> cons.accept(CROP_COLOR, reg.get()));
         BlockColor leaves = (blockState, blockAndTintGetter, blockPos, i) -> {
+            if (blockState.hasProperty(TreeLeavesBlock.WILTED) && blockState.getValue(TreeLeavesBlock.WILTED))
+                return 0xdc680a;
             if (blockAndTintGetter == null || blockPos == null) {
                 return FoliageColor.getDefaultColor();
             }

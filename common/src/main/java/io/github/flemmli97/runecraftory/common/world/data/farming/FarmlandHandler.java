@@ -2,9 +2,8 @@ package io.github.flemmli97.runecraftory.common.world.data.farming;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
-import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
 import io.github.flemmli97.runecraftory.common.blocks.GiantCropBlock;
-import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
+import io.github.flemmli97.runecraftory.common.blocks.util.GrowableCrop;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
@@ -99,10 +98,8 @@ public class FarmlandHandler extends SavedData {
         level.playSound(null, pos, SoundEvents.BOAT_PADDLE_WATER, SoundSource.BLOCKS, 1.0f, 1.1f);
         BlockPos up = pos.above();
         BlockState crop = level.getBlockState(up);
-        if (crop.getBlock() instanceof ExtendedCropBlock blockCrop)
+        if (crop.getBlock() instanceof GrowableCrop blockCrop)
             blockCrop.onWater(level, up, crop);
-        if (crop.getBlock() instanceof TreeBaseBlock tree)
-            tree.onWater(level, up, crop);
     }
 
     public static boolean canRainingAt(Level level, BlockPos position) {

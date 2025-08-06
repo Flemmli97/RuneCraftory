@@ -3,8 +3,8 @@ package io.github.flemmli97.runecraftory.common.world.data.farming;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
 import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.util.GrowableCrop;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
@@ -381,13 +381,13 @@ public class FarmlandData {
                     }
                 }
                 if (!isWet) {
-                    float mod = (MAX_HEALTH - this.getHealth()) / (MAX_HEALTH - 25f);
+                    float mod = ((float) MAX_HEALTH - this.getHealth()) / MAX_HEALTH + 0.2f;
                     float chance = mod * GeneralConfig.witherChance;
                     if (level.random.nextFloat() < chance) {
                         wiltStage++;
                         // If crop cannot wilt we simply stop once we reach >= 2 (normally wilted)
                         // E.g. in case of vanilla crops etc.
-                        if (!cropState.hasProperty(ExtendedCropBlock.WILTED) && wiltStage > 1)
+                        if (!(cropState.getBlock() instanceof GrowableCrop) && wiltStage > 1)
                             break;
                     }
                 }
@@ -429,7 +429,7 @@ public class FarmlandData {
 
         // Finalize the tick run
         run.forEach(Runnable::run);
-        if (wiltStage > 0 && cropState.getBlock() instanceof ExtendedCropBlock blockCrop) {
+        if (wiltStage > 0 && cropState.getBlock() instanceof GrowableCrop blockCrop) {
             blockCrop.onWither(wiltStage, level, cropState, cropPos);
         }
         this.cropProgress = this.growthPercent(level, cropState);

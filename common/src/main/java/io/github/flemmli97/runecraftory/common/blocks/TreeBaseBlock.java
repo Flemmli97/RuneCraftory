@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
+import io.github.flemmli97.runecraftory.common.blocks.util.GrowableCrop;
 import io.github.flemmli97.runecraftory.common.blocks.util.LazyResolvedRegistryEntry;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
@@ -38,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Growable, ExtendedBlock {
+public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Growable, ExtendedBlock, GrowableCrop {
 
     public static final MapCodec<TreeBaseBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(propertiesCodec(),
@@ -91,6 +92,8 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
                 boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                         .getOrThrow(this.stage2).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
+                if (!result)
+                    tree.invalidateUpdate();
                 yield result;
             }
             case 1 -> {
@@ -99,6 +102,8 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
                 boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                         .getOrThrow(this.stage1).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
+                if (!result)
+                    tree.invalidateUpdate();
                 yield result;
             }
             case 0 -> level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
@@ -196,6 +201,20 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
         }
     }
 
-    public void onWater(ServerLevel level, BlockPos up, BlockState crop) {
+    @Override
+    public void onWater(Level level, BlockPos pos, BlockState crop) {
+        if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree)
+            tree.witherTree(level, false);
+    }
+
+    @Override
+    public void onWither(int amount, Level level, BlockState state, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
+            if (amount > 1 || tree.withered()) {
+                level.setBlock(pos, RuneCraftoryBlocks.WITHERED_GRASS.get().defaultBlockState(), Block.UPDATE_ALL);
+            } else {
+                tree.witherTree(level, true);
+            }
+        }
     }
 }

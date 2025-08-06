@@ -36,7 +36,7 @@ public class TreeLogBlock extends RotatedPillarBlock implements EntityBlock, Ext
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         TreeBlockEntity tree = this.resolveTreeForBreak(state, level, pos, null);
-        if (tree != null) {
+        if (tree != null && tree.isPartOf(pos)) {
             tree.onRemove(level, pos, true);
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
@@ -64,7 +64,7 @@ public class TreeLogBlock extends RotatedPillarBlock implements EntityBlock, Ext
     protected TreeBlockEntity resolveTreeForBreak(BlockState state, Level level, BlockPos pos, @Nullable Player player) {
         if ((player != null && player.isCreative()) || !state.getValue(IS_TREE_PART) || !(level.getBlockEntity(pos) instanceof TreeLogBlockEntity log))
             return null;
-        if (!(level.getBlockEntity(log.treeBase()) instanceof TreeBlockEntity tree) || !tree.isPartOf(log))
+        if (!(level.getBlockEntity(log.treeBase()) instanceof TreeBlockEntity tree) || !tree.isPartOf(log.getBlockPos()))
             return null;
         return tree;
     }
