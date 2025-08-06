@@ -20,6 +20,16 @@ ext {
     mod_meta.sbl_version = sbl_version
 }
 
+configurations {
+    datagenRuntime
+}
+
+afterEvaluate {
+    runData {
+        classpath += configurations.datagenRuntime
+    }
+}
+
 repositories {
     maven {
         name = "CurseMaven"
@@ -41,7 +51,9 @@ dependencies {
     modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge")
 
     implementation "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia}"
-    implementation "io.github.flemmli97:improvedmobs:1.21.1-1.14.2-neoforge"
+    compileOnly "io.github.flemmli97:improvedmobs:1.21.1-1.14.2-neoforge"
+    // Only want this for datagen
+    datagenRuntime "io.github.flemmli97:improvedmobs:1.21.1-1.14.2-neoforge"
 
     // Jar-Jar not added otherwise
     modRuntimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
