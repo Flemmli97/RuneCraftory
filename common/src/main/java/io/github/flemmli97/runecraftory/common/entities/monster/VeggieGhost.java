@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
@@ -11,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetSetClampedFloatingMoveTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -79,14 +77,14 @@ public class VeggieGhost extends BaseMonster {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(ATTACK).play(MonsterBehaviourUtils.requireInRangePlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(3))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(SPIN).play(MonsterBehaviourUtils.requireInRangePlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(3))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(CAST).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepareOptional(new SetWalkTargetWithinDist<BaseMonster>().min(3).max(9), new MoveToWalkTillClose<>())
+                .prepareOptional(new SetWalkTargetWithinDist<BaseMonster>().min(3).max(9), MonsterBehaviourUtils.moveTo())
                 .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(9)
@@ -96,7 +94,7 @@ public class VeggieGhost extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTillClose<>())
+                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
                 .add(5, new StrafeTarget<>()).build();
     }
 

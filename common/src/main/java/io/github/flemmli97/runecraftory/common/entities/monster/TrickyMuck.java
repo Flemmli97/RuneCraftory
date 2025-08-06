@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -31,13 +30,13 @@ public class TrickyMuck extends BigMuck {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(SLAP).play(MonsterBehaviourUtils.requireInRangePlay())
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(1)
                 .start(SPORE).play(MonsterBehaviourUtils.requireInRangePlay())
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(2)
                 .start(SPORE_BALL).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(4)
                 .build();
     }

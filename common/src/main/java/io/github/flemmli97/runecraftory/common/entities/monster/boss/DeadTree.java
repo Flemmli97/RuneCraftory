@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
@@ -12,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.spells.HealT1Spell;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -172,7 +170,7 @@ public class DeadTree extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(FALLING_APPLES)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged())
                 .prepare(new SetWalkTargetToAttackTarget<DeadTree>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4))
-                        .speedMod((e, t) -> 1.1f)).prepareOptional(new MoveToAttackTarget<>())
+                        .speedMod((e, t) -> 1.1f)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(APPLE_SHIELD)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.shieldCooldown <= 0)
@@ -182,12 +180,12 @@ public class DeadTree extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(BIG_FALLING_APPLES)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
                 .prepare(new SetWalkTargetToAttackTarget<DeadTree>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4))
-                        .speedMod((e, t) -> 1.1f)).prepareOptional(new MoveToAttackTarget<>())
+                        .speedMod((e, t) -> 1.1f)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(MORE_FALLING_APPLES)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
                 .prepare(new SetWalkTargetToAttackTarget<DeadTree>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(4))
-                        .speedMod((e, t) -> 1.1f)).prepareOptional(new MoveToAttackTarget<>())
+                        .speedMod((e, t) -> 1.1f)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(HEAL)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.healCooldown <= 0)
@@ -198,7 +196,7 @@ public class DeadTree extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
+                .add(1, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

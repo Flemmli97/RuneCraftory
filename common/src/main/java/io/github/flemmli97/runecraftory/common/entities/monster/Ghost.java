@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
@@ -14,7 +13,6 @@ import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetSetClampedFloatingMoveTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
@@ -99,14 +97,14 @@ public class Ghost extends ChargingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<ChargingMonster>create()
                 .start(DARKBALL).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(2)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(2)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(SWING).play(MonsterBehaviourUtils.requireInRangePlay())
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetToAttackTarget<ChargingMonster>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTillClose<>(), new SetChargeTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), MonsterBehaviourUtils.moveTo(), new SetChargeTarget<>())
                 .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(9)
@@ -116,7 +114,7 @@ public class Ghost extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTillClose<>())
+                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
                 .add(6, new Idle<>()).build();
     }
 

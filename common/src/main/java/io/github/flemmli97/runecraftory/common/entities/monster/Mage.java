@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEn
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -58,7 +57,7 @@ public class Mage extends BaseMonster implements HealingPredicateEntity {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(SWING).play(MonsterBehaviourUtils.requireInRangePlay())
                 .condition(MonsterBehaviourUtils.inAABBRange(SWING))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(3)
                 .start(CAST_1).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new StrafeTarget<BaseMonster>().strafeDistance(9).runFor(e -> e.getRandom().nextInt(15) + 10))

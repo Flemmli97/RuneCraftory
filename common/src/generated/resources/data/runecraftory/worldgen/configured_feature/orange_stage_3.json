@@ -17,7 +17,8 @@
               "distance": "7",
               "has_fruit": "false",
               "persistent": "false",
-              "waterlogged": "false"
+              "waterlogged": "false",
+              "wilted": "false"
             }
           }
         }
@@ -42,7 +43,8 @@
         "Properties": {
           "distance": "7",
           "persistent": "false",
-          "waterlogged": "false"
+          "waterlogged": "false",
+          "wilted": "false"
         }
       }
     },

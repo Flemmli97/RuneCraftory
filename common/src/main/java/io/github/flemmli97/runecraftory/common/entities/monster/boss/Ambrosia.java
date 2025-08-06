@@ -15,7 +15,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
@@ -142,7 +141,7 @@ public class Ambrosia extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<Ambrosia>create()
                 .start(MonsterBehaviourUtils.checkedAttack(BUTTERFLY)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<Ambrosia>().speedMod(1.1f).radius(8)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<Ambrosia>().speedMod(1.1f).radius(8)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Ambrosia>builder(KICK_1)
                         .start(KICK_2).chain(KICK_3).build())).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -158,7 +157,7 @@ public class Ambrosia extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(WAVE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Ambrosia>().speedMod((e, t) -> 1.2f)
                         .closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Ambrosia>builder(POLLEN)
                         .start(POLLEN_2).build())).play(MonsterBehaviourUtils.cooldownedPlay())

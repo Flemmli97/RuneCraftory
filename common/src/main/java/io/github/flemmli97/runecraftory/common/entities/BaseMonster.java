@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SinkIfTooHigh;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
@@ -583,7 +583,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public BrainActivityGroup<? extends BaseMonster> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
-                new MoveToWalkTillClose<>(),
+                MonsterBehaviourUtils.moveTo(),
                 new FirstApplicableBehaviour<>(
                         new TargetOrRetaliate<BaseMonster>(),
                         new SetMoveToRestriction<BaseMonster>(),
@@ -599,8 +599,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 new InvalidateAttackTarget<BaseMonster>(),
                 new FirstApplicableBehaviour<>(
                         (ExtendedBehaviour<BaseMonster>) this.getCooldownAI()
-                                .startCondition(e -> !e.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN))
-                                .stopIf(e -> e.getAnimationHandler().hasAnimation() || !BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN)),
+                                .startCondition(BaseMonster::runCooldownBehaviour)
+                                .stopIf(e -> !e.runCooldownBehaviour()),
                         (ExtendedBehaviour<BaseMonster>) this.getCombatAI()
                 ).startCondition(m -> m.getTarget() != null && m.isWithinRestriction(m.getTarget().blockPosition()))
         );
@@ -614,6 +614,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new Idle<>();
     }
 
+    protected boolean runCooldownBehaviour() {
+        return !this.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN);
+    }
+
     @Override
     public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
@@ -621,7 +625,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 .onlyStartWithMemoryStatus(RuneCraftoryMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
         map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
                 .priority(20).behaviours(
-                        new MoveToWalkTillClose<>(),
+                        MonsterBehaviourUtils.moveTo(),
                         new FirstApplicableBehaviour<>(
                                 new SetMoveToRestriction<>(),
                                 new TendCrops<>())

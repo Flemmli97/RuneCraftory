@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
@@ -13,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -86,14 +84,14 @@ public class Weagle extends BaseMonster {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(PECK).play(MonsterBehaviourUtils.requireInRangePlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(3))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(3)
                 .start(SWOOP).play(MonsterBehaviourUtils.requireInRangePlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(3))
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(2)
                 .start(GALE).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(2).radius(4)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(2).radius(4)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .build();
     }
@@ -109,7 +107,7 @@ public class Weagle extends BaseMonster {
                                 target = entity.getTarget();
                             }
                             return target != null && target.distanceToSqr(pos) <= 11 * 11 && Math.abs(target.getY() - pos.y()) < 6;
-                        }), new MoveToWalkTillClose<>()).build();
+                        }), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

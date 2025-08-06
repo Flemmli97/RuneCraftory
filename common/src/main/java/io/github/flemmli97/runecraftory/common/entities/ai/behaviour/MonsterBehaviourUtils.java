@@ -2,16 +2,22 @@ package io.github.flemmli97.runecraftory.common.entities.ai.behaviour;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
+import io.github.flemmli97.tenshilib.common.entity.AOEAttackEntity;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.PlayAnimation;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetAnimationToPlay;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.memory.MoreMemoryModules;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.function.Predicate;
@@ -97,13 +103,7 @@ public class MonsterBehaviourUtils {
     }
 
     public static <E extends LivingEntity> ToIntBiFunction<E, LivingEntity> closeEnough(int dist) {
-        return (entity, target) -> {
-            int close = dist + Mth.ceil(entity.getBbWidth() * 0.5);
-            if (target != null) {
-                close += Mth.ceil(target.getBbWidth() * 0.5);
-            }
-            return close;
-        };
+        return (entity, target) -> dist;
     }
 
     public static <E extends LivingEntity> Predicate<E> ifCloserThan(double dist) {
@@ -134,13 +134,50 @@ public class MonsterBehaviourUtils {
         };
     }
 
-    public static <E extends BaseMonster> MoveToAttackTarget<E> fastMovement() {
-        return fastMovement(40, 60);
+    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> fastMovement() {
+        return fastMovement(35, 60);
     }
 
-    public static <E extends BaseMonster> MoveToAttackTarget<E> fastMovement(int min, int max) {
-        MoveToAttackTarget<E> behaviour = new MoveToAttackTarget<>();
+    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> fastMovement(int min, int max) {
+        MoveToAttackTarget<E> behaviour = moveAttack();
         behaviour.runFor(e -> min + e.getRandom().nextInt(max - min));
+        return behaviour;
+    }
+
+    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> moveAttack() {
+        Predicate<E> reached = entity -> {
+            WalkTarget target = BrainUtils.getMemory(entity, MemoryModuleType.WALK_TARGET);
+            if (target != null && target.getTarget() instanceof EntityTracker entityTracker) {
+                double close = target.getCloseEnoughDist()
+                        + entity.getBbWidth() * 0.5
+                        + entityTracker.getEntity().getBbWidth() * 0.5;
+                return entity.distanceToSqr(entityTracker.getEntity()) <= close * close;
+            }
+            return false;
+        };
+        MoveToAttackTarget<E> behaviour = new MoveToAttackTarget<>();
+        behaviour.startCondition(entity -> !reached.test(entity));
+        behaviour.stopIf(reached);
+        return behaviour;
+    }
+
+    public static <E extends PathfinderMob> MoveToWalkTarget<E> moveTo() {
+        Predicate<E> reached = entity -> {
+            WalkTarget target = BrainUtils.getMemory(entity, MemoryModuleType.WALK_TARGET);
+            if (target != null && target.getTarget() instanceof EntityTracker entityTracker) {
+                Entity targetEntity = entityTracker.getEntity();
+                if (entity.getBoundingBox().inflate(0.5).intersects(targetEntity.getBoundingBox()))
+                    return true;
+                double close = target.getCloseEnoughDist()
+                        + entity.getBbWidth() * 0.5
+                        + targetEntity.getBbWidth() * 0.5;
+                return entity.distanceToSqr(targetEntity) <= close * close;
+            }
+            return false;
+        };
+        MoveToWalkTarget<E> behaviour = new MoveToWalkTarget<>();
+        behaviour.startCondition(entity -> !reached.test(entity));
+        behaviour.stopIf(reached);
         return behaviour;
     }
 }

@@ -23,7 +23,6 @@ import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -203,25 +202,25 @@ public class Handonetta extends BossMonster {
                 .prepareOptional(MonsterBehaviourUtils.fastMovement())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Handonetta>().min(4).max(12))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(PLATE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Handonetta>().min(3).max(14))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(GRAB)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
                 .prepare(new SetWalkTargetToAttackTarget<Handonetta>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(7)))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
                 .prepare(new SetWalkTargetWithinDist<Handonetta>().min(3).max(11))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .build();
     }

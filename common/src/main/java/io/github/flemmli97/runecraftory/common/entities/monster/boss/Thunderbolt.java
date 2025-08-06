@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
@@ -17,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -140,7 +138,7 @@ public class Thunderbolt extends BossMonster {
         BiConsumer<AnimationState, Thunderbolt> charge = (anim, entity) -> {
             if (entity.chargeMotion == null) {
                 entity.setChargeDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
-                        .scale(2));
+                        .scale(2.4));
             }
             if (anim.isAt("attack_start")) {
                 entity.setDeltaMovement(entity.chargeMotion.x(), 0.2, entity.chargeMotion.z());
@@ -211,7 +209,7 @@ public class Thunderbolt extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(LASER_X5)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.isEnraged() && !m.feintedDeath)
                 .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.feintedDeath && MonsterBehaviourUtils.ifCloserThan(5).test(m))
@@ -222,18 +220,18 @@ public class Thunderbolt extends BossMonster {
                         .start(BACK_KICK, m -> m.hornAttackSuccess).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.feintedDeath && MonsterBehaviourUtils.ifCloserThan(5).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(CHARGE)
                         .start(CHARGE_2, m -> !m.chargeAttackSuccess).build())
                 ).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> !m.feintedDeath)
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(LASER_AOE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath)
                 .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(LASER_KICK)
                         .start(LASER_KICK_2).build())).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -243,23 +241,23 @@ public class Thunderbolt extends BossMonster {
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath)
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(7)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BLADE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> m.isEnraged() && !m.feintedDeath && (m.getTarget() != null && m.getTarget().getY() - m.getY() > 4))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 // After feinting death only use those below
                 .start(MonsterBehaviourUtils.checkedAttack(LASER_AOE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Thunderbolt::afterFeint)
                 .prepare(new SetWalkTargetToAttackTarget<Thunderbolt>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)).speedMod((e, t) -> 1.2f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(CHARGE)
                         .start(CHARGE_2, m -> !m.chargeAttackSuccess).chain(CHARGE_3).build())
                 ).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(Thunderbolt::afterFeint)
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<Thunderbolt>builder(LASER_KICK)
                         .start(LASER_KICK_2).chain(LASER_KICK_3).build())).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -273,7 +271,7 @@ public class Thunderbolt extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(7, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTillClose<>())
+                .add(7, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), MonsterBehaviourUtils.moveTo())
                 .add(10, new StrafeTarget<BaseMonster>().strafeDistance(8)).build();
     }
 

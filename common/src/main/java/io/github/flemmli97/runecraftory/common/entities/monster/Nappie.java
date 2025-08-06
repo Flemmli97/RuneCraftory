@@ -3,13 +3,11 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -52,10 +50,10 @@ public class Nappie extends PommePomme implements HealingPredicateEntity {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<ChargingMonster>create()
                 .start(KICK).play(MonsterBehaviourUtils.requireInRangePlay())
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(4)
                 .start(HEAL).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(4)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(4)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(CHARGE_ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetChargeTarget<>())
@@ -70,8 +68,8 @@ public class Nappie extends PommePomme implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetWalkTargetAwayFromTarget<>(), new MoveToWalkTillClose<>())
-                .add(3, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
+                .add(2, new SetWalkTargetAwayFromTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

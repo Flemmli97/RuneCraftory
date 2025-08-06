@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -20,8 +19,9 @@ import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.LeapInDirection;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -39,11 +39,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.InvalidateMemory;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
+import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,31 +200,37 @@ public class Marionetta extends BossMonster {
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(CARD_ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new LeapInDirection<Marionetta>()
-                        .shouldLeap((entity, target) -> entity.distanceToSqr(target) < 9)
+                        .shouldLeap((entity, target) -> {
+                            if (entity.distanceToSqr(target) < 9) {
+                                entity.getAnimationHandler().setAnimation(LEAP);
+                                return true;
+                            }
+                            return false;
+                        })
                         .strength(1.2)
                         .horizontalDirection((entity, target) -> LeapInDirection.createBackwardsVec(entity.position(), target.position()))
                         .whenStarting(m -> m.getAnimationHandler().setAnimation(LEAP)))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(11)
                 .start(MonsterBehaviourUtils.checkedAttack(SPIN)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(16)).speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(14)).speedMod((e, t) -> 1.1f))
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(CHEST_ATTACK)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(16)).speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(14)).speedMod((e, t) -> 1.1f))
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(STUFFED_ANIMALS)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Marionetta>()
-                        .min(2).max(8).speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                        .min(2).max(6).speedMod((e, t) -> 1.1f))
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(DARK_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Marionetta>()
                         .closeEnoughDist(MonsterBehaviourUtils.closeEnough(12)).speedMod((e, t) -> 1.1f))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(6)
                 .start(MonsterBehaviourUtils.checkedAttack(FURNITURE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
@@ -231,18 +241,33 @@ public class Marionetta extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(7, new LeapInDirection<BaseMonster>()
+                .add(12,
+                        DummyBehaviour.opt(new InvalidateMemory<>(MemoryModuleType.WALK_TARGET)),
+                        DummyBehaviour.opt(new LeapInDirection<BaseMonster>()
+                                .shouldLeap((e, t) -> {
+                                    if (e.getRandom().nextFloat() < 4) {
+                                        e.getAnimationHandler().setAnimation(LEAP);
+                                        return true;
+                                    }
+                                    return false;
+                                })
                                 .horizontalDirection((entity, target) -> {
                                     if (entity.distanceToSqr(target) <= 5)
                                         return LeapInDirection.createBackwardsVec(entity.position(), target.position());
                                     return LeapInDirection.createSidewaysVec(entity.position(), target.position(), entity.getRandom().nextBoolean());
                                 })
                                 .strength(1.2)
-                                .whenStarting(m -> m.getAnimationHandler().setAnimation(LEAP))
-                                .cooldownFor(e -> 20),
-                        new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7), new MoveToWalkTillClose<>())
-                .add(6, new SetWalkTargetWithinDist<BaseMonster>().min(3).max(7), new MoveToWalkTillClose<>())
-                .add(10, new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), new MoveToWalkTillClose<>()).build();
+                                .cooldownFor(e -> 60)),
+                        new StrafeTarget<BaseMonster>().strafeDistance(10))
+                .add(4, new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(3).radius(6), MonsterBehaviourUtils.moveTo())
+                .add(6, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+    }
+
+    @Override
+    protected boolean runCooldownBehaviour() {
+        AnimationState anim = this.getAnimationHandler().getAnimation();
+        return (anim == null || anim.is(LEAP))
+                && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN);
     }
 
     @Override

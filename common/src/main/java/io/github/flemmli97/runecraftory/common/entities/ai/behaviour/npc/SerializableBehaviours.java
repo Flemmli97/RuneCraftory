@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.ThrowItemAt;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
@@ -43,20 +43,20 @@ public class SerializableBehaviours {
     public static final SerializableBehaviour<WalkToData> WALK_TO = new SerializableBehaviour<>(WalkToData.CODEC,
             data -> List.of(new SetWalkTargetToAttackTarget<NPCEntity>()
                             .speedMod((e, t) -> data.speed()).closeEnoughDist((e, t) -> data.closeEnough()),
-                    DummyBehaviour.opt(new MoveToWalkTillClose<>())));
+                    DummyBehaviour.opt(MonsterBehaviourUtils.moveTo())));
     public static final SerializableBehaviour<WalkAwayData> WALK_AWAY = new SerializableBehaviour<>(WalkAwayData.CODEC,
             data -> List.of(new SetWalkTargetAwayFromTarget<NPCEntity>()
                             .speedMod((e, t) -> data.speed()).minDist(data.minDistance()).radius(data.radius()),
-                    DummyBehaviour.opt(new MoveToWalkTillClose<>())));
+                    DummyBehaviour.opt(MonsterBehaviourUtils.moveTo())));
     public static final SerializableBehaviour<KeepDistanceData> KEEP_DISTANCE = new SerializableBehaviour<>(KeepDistanceData.CODEC,
             data -> List.of(new SetWalkTargetWithinDist<NPCEntity>()
                             .speedMod((e, t) -> data.speed())
                             .min(data.min()).max(data.max()),
-                    DummyBehaviour.opt(new MoveToWalkTillClose<>())));
+                    DummyBehaviour.opt(MonsterBehaviourUtils.moveTo())));
     public static final SerializableBehaviour<RandomWalkData> RANDOM_WALK = new SerializableBehaviour<>(RandomWalkData.CODEC,
             data -> List.of(new SetRandomWalkTarget<NPCEntity>()
                             .speedModifier((e, t) -> data.speed()).setRadius(data.radius()),
-                    DummyBehaviour.opt(new MoveToWalkTillClose<>())));
+                    DummyBehaviour.opt(MonsterBehaviourUtils.moveTo())));
     public static final SerializableBehaviour<WalkToData> WALK_TO_FOLLOW = new SerializableBehaviour<>(WalkToData.CODEC,
             data -> List.of(new CustomBehaviour<>(e -> {
                         LivingEntity target = e.followEntity();
@@ -65,7 +65,7 @@ public class SerializableBehaviours {
                             BrainUtils.setMemory(e, MemoryModuleType.WALK_TARGET, new WalkTarget(new EntityTracker(target, false), data.speed(), data.closeEnough()));
                         }
                     }),
-                    DummyBehaviour.opt(new MoveToWalkTillClose<>())));
+                    DummyBehaviour.opt(MonsterBehaviourUtils.moveTo())));
     public static final SerializableBehaviour<Unit> LOOK_AT_FOLLOW = new SerializableBehaviour<>(MapCodec.unit(Unit.INSTANCE),
             data -> List.of(new CustomBehaviour<>(e -> {
                 LivingEntity target = e.followEntity();

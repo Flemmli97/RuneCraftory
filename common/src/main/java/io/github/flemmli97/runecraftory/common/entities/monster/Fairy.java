@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
@@ -11,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -77,10 +75,10 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(WIND).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(9)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(9)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(LIGHT).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(12))).prepareOptional(new MoveToWalkTillClose<>())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(12))).prepareOptional(MonsterBehaviourUtils.moveTo())
                 .end(3)
                 .start(HEAL).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(2)
@@ -90,7 +88,7 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(5, new SetRandomWalkTarget<>(), new MoveToWalkTillClose<>())
+                .add(5, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(3, new Idle<>()).build();
     }
 

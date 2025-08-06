@@ -16,7 +16,8 @@ public interface MobAttackExt {
 
         public static TargetPosition of(LivingEntity target) {
             Vec3 pos = target.position();
-            return new TargetPosition(pos, pos.y(), pos.y() + target.getBbHeight());
+            double yRed = Math.min(0.15, target.getBbHeight() * 0.8);
+            return new TargetPosition(pos, pos.y() + yRed, pos.y() + target.getBbHeight() - yRed);
         }
 
         public static TargetPosition of(Vec3 target) {

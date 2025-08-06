@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -18,7 +17,6 @@ import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
@@ -176,23 +174,23 @@ public class Chimera extends BossMonster {
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(FIRE_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(10)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(FIRE_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(10)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WATER_TAIL_BUBBLE)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(10)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WATER_TAIL_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(10)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(BUBBLE_BEAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<Chimera>().speedMod((e, t) -> 1.1f)
-                        .min(4).max(11)).prepareOptional(new MoveToAttackTarget<>())
+                        .min(4).max(10)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(SLASH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetToAttackTarget<Chimera>().speedMod((e, t) -> 1.1f))
@@ -209,8 +207,8 @@ public class Chimera extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(10, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), new MoveToWalkTillClose<>())
-                .add(7, new SetWalkTargetAwayFromTarget<BaseMonster>().radius(4).speedMod((e, t) -> 1.1f), new MoveToWalkTillClose<>()).build();
+                .add(10, new SetWalkTargetToAttackTarget<BaseMonster>().speedMod((e, t) -> 1.1f), MonsterBehaviourUtils.moveTo())
+                .add(7, new SetWalkTargetAwayFromTarget<BaseMonster>().radius(4).speedMod((e, t) -> 1.1f), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

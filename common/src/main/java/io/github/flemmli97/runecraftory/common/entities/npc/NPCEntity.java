@@ -22,7 +22,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetFromMemory;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.AcquirePOITask;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.InvalidatePOITask;
@@ -433,7 +433,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     @Override
     public BrainActivityGroup<? extends NPCEntity> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
-                new MoveToWalkTillClose<>(),
+                MonsterBehaviourUtils.moveTo(),
                 new FirstApplicableBehaviour<>(
                         new SetRainShelterTarget<>(),
                         new TargetOrRetaliate<NPCEntity>(),
@@ -459,22 +459,22 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 .behaviours(new Idle<>()));
         map.put(Activity.REST, new BrainActivityGroup<NPCEntity>(Activity.REST).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT)
-                .behaviours(new SleepInBed<>(), new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, NPCEntity::releaseBedPoi), new MoveToWalkTillClose<>()));
+                .behaviours(new SleepInBed<>(), new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, NPCEntity::releaseBedPoi), MonsterBehaviourUtils.moveTo()));
         map.put(RuneCraftoryActivities.EARLY_IDLE.get(), new BrainActivityGroup<NPCEntity>(RuneCraftoryActivities.EARLY_IDLE.get()).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT)
                 .behaviours(new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, NPCEntity::releaseBedPoi)
-                        .closeEnough(10), new MoveToWalkTillClose<>(), new SetWalkAroundPoiTarget<>(MemoryModuleType.HOME, 10).startCondition(m -> m.getRandom().nextInt(120) == 0)));
+                        .closeEnough(10), MonsterBehaviourUtils.moveTo(), new SetWalkAroundPoiTarget<>(MemoryModuleType.HOME, 10).startCondition(m -> m.getRandom().nextInt(120) == 0)));
         map.put(Activity.WORK, new BrainActivityGroup<NPCEntity>(Activity.WORK).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT)
                 .behaviours(new SetWalkTargetFromMemory<>(MemoryModuleType.JOB_SITE, NPCEntity::releaseWorkplacePoi)
-                        .closeEnough(3), new MoveToWalkTillClose<>(), new SetWalkAroundPoiTarget<>(MemoryModuleType.JOB_SITE, 3).startCondition(m -> m.getRandom().nextInt(120) == 0)));
+                        .closeEnough(3), MonsterBehaviourUtils.moveTo(), new SetWalkAroundPoiTarget<>(MemoryModuleType.JOB_SITE, 3).startCondition(m -> m.getRandom().nextInt(120) == 0)));
         map.put(Activity.MEET, new BrainActivityGroup<NPCEntity>(Activity.MEET).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)
                 .behaviours(new SetRainShelterTarget<>(),
                         new AllApplicableBehaviours<>(new SetWalkTargetFromMemory<>(MemoryModuleType.MEETING_POINT, NPCEntity::releaseMeetingPoi).closeEnough(8),
                                 new SetWalkAroundPoiTarget<>(MemoryModuleType.MEETING_POINT, 8).startCondition(m -> m.getRandom().nextInt(60) == 0)
                         ).startCondition(e -> !e.level().isRaining()),
-                        new MoveToWalkTillClose<>()));
+                        MonsterBehaviourUtils.moveTo()));
         return map;
     }
 

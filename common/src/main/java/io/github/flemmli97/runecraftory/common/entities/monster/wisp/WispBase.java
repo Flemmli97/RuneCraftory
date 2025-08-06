@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster.wisp;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
@@ -11,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetSetClampedFloatingMoveTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
@@ -86,7 +84,7 @@ public abstract class WispBase extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(ATTACK_FAR).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(2)).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetAwayFromTarget<BaseMonster>().minDist(2)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(ATTACK_CLOSE).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(3)
@@ -97,7 +95,7 @@ public abstract class WispBase extends BaseMonster {
 
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
-        return SelectableBehaviourBuilder.<BaseMonster>builder().add(4, new SetSetClampedFloatingMoveTarget<>(2.), new MoveToWalkTillClose<>())
+        return SelectableBehaviourBuilder.<BaseMonster>builder().add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
                 .add(6, new Idle<>()).build();
     }
 

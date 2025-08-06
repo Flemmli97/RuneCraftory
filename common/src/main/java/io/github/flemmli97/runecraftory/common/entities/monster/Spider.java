@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBeha
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -71,7 +70,7 @@ public class Spider extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
-                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(4)
                 .start(WEBSHOT).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new StrafeTarget<BaseMonster>().strafeDistance(8))
@@ -82,8 +81,8 @@ public class Spider extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(5, new SetWalkTargetToAttackTarget<>(), new MoveToAttackTarget<>())
-                .add(3, new SetRandomWalkTarget<>(), new MoveToAttackTarget<>())
+                .add(5, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveAttack())
+                .add(3, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveAttack())
                 .add(3, new Idle<>()).build();
     }
 

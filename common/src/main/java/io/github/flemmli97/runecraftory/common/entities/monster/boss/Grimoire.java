@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MoveToWalkTillClose;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
@@ -21,7 +20,6 @@ import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -179,7 +177,12 @@ public class Grimoire extends BossMonster {
                 .condition(MonsterBehaviourUtils.ifCloserThan(5))
                 .prepare(new SetWalkTargetToAttackTarget<BossMonster>().speedMod((e, t) -> 1.1f))
                 .prepareOptional(MonsterBehaviourUtils.fastMovement())
-                .end(10)
+                .end(7)
+                .start(MonsterBehaviourUtils.checkedAttack(TAIL_SWIPE)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> !m.isEnraged() && MonsterBehaviourUtils.ifCloserThan(5).test(m))
+                .prepare(new SetWalkTargetToAttackTarget<BossMonster>().speedMod((e, t) -> 1.1f))
+                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(AnimationPlayHolder.<BossMonster>builder(BITE)
                         .start(TAIL_SWIPE, BossMonster::isEnraged).build())).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(4))
@@ -188,19 +191,19 @@ public class Grimoire extends BossMonster {
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(GUST)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetWalkTargetWithinDist<BossMonster>().min(4).max(13))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(WIND_BREATH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(3).max(11))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepare(new SetWalkTargetWithinDist<BossMonster>().min(3).max(12))
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(TORNADO)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(BossMonster::isEnraged)
                 .prepare(new SetWalkTargetWithinDist<BossMonster>().min(3).max(9))
-                .prepareOptional(new MoveToAttackTarget<>())
+                .prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(10)
                 .build();
     }
@@ -208,7 +211,7 @@ public class Grimoire extends BossMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetWalkTargetToAttackTarget<>(), new MoveToWalkTillClose<>()).build();
+                .add(1, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override
@@ -261,7 +264,7 @@ public class Grimoire extends BossMonster {
     @Override
     public OrientedBoundingBox calculateAttackAABB(AnimationState anim, Vec3 target, double grow) {
         if (anim.is(CHARGE_LAND))
-            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(1.2, 0.1, 1.2), this.getYRot(), 0, this.position());
+            return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this).inflate(1.4, 0.1, 1.4), this.getYRot(), 0, this.position());
         if (anim.is(CHARGE)) {
             double width = this.getBbWidth();
             double speed = Math.max(width, this.getDeltaMovement().length() - width);
