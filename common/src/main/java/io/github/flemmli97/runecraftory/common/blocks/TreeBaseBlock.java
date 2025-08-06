@@ -87,7 +87,7 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
         return switch (state.getValue(AGE)) {
             case 2 -> {
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-                tree.onRemove(level, false);
+                tree.onRemove(level, pos, false);
                 boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                         .getOrThrow(this.stage2).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
@@ -95,7 +95,7 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
             }
             case 1 -> {
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().takeSnapshot(null);
-                tree.onRemove(level, false);
+                tree.onRemove(level, pos, false);
                 boolean result = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE)
                         .getOrThrow(this.stage1).value().place(level, level.getChunkSource().getGenerator(), rand, pos);
                 ((LevelSnapshotHandler) level).runecraftory$getSnapshotHandler().popSnapshots(result);
@@ -114,15 +114,12 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         if (!(player instanceof ServerPlayer serverPlayer))
             return false;
-        if (player.isCreative() || player.isShiftKeyDown() || !(level.getBlockEntity(pos) instanceof TreeBlockEntity tree)) {
+        TreeBlockEntity tree = this.resolveTreeForBreak(state, level, pos, player);
+        if (tree == null || tree.getHealth() <= 0) {
             this.playerWillDestroy(level, pos, state, player);
             return level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
         }
-        if (tree.getHealth() <= 0) {
-            tree.onRemove(level, true);
-            return level.setBlock(tree.getBlockPos(), fluid.createLegacyBlock(), Block.UPDATE_ALL);
-        }
-        tree.onBreak();
+        tree.onBreak(10);
         dropResources(state, level, pos, null, player, player.getMainHandItem());
         serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, state));
         return false;
@@ -134,10 +131,18 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
             FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, pos.below())
                     .ifPresent(d -> d.onCropRemove(serverLevel, pos, newState));
             if (serverLevel.getBlockEntity(pos) instanceof TreeBlockEntity tree) {
-                tree.onRemove(level, true);
+                tree.onRemove(level, pos, true);
             }
         }
         super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    protected TreeBlockEntity resolveTreeForBreak(BlockState state, Level level, BlockPos pos, Player player) {
+        if (player.isCreative() || player.isShiftKeyDown())
+            return null;
+        if (!(level.getBlockEntity(pos) instanceof TreeBlockEntity tree))
+            return null;
+        return this.runecraftory$isAtMaxAge(state) ? tree : null;
     }
 
     @Override
@@ -189,5 +194,8 @@ public class TreeBaseBlock extends RotatedPillarBlock implements EntityBlock, Gr
                 level.setBlock(pos.below(), RuneCraftoryBlocks.TREE_SOIL.get().defaultBlockState(), Block.UPDATE_ALL);
             }
         }
+    }
+
+    public void onWater(ServerLevel level, BlockPos up, BlockState crop) {
     }
 }

@@ -26,8 +26,6 @@ import java.util.List;
 
 public class TreeBlockEntity extends BlockEntity {
 
-    private static final int MAX_HEALTH = 50;
-
     private List<BlockPos> logs = new ArrayList<>();
     private List<BlockPos> leaves = new ArrayList<>();
     private List<BlockPos> fruits = new ArrayList<>();
@@ -87,16 +85,15 @@ public class TreeBlockEntity extends BlockEntity {
                 .map(FarmlandData::getHealth).orElse(0);
     }
 
-    public void onBreak() {
+    public void onBreak(int cost) {
         if (!(this.getLevel() instanceof ServerLevel serverLevel))
             return;
         FarmlandHandler.get(serverLevel.getServer())
                 .getData(serverLevel, this.getBlockPos().below())
                 .ifPresent(d -> {
-                    d.modifyHealth(serverLevel, -5);
+                    d.modifyHealth(serverLevel, -cost);
                     if (d.getHealth() <= 0) {
-                        this.onRemove(serverLevel, true);
-                        serverLevel.destroyBlock(this.getBlockPos(), true);
+                        this.onRemove(serverLevel, this.getBlockPos(), true);
                     }
                 });
     }
@@ -112,17 +109,27 @@ public class TreeBlockEntity extends BlockEntity {
         this.setChanged();
     }
 
-    public void onRemove(Level level, boolean particle) {
-        this.logs.forEach(p -> this.removeBlock(level, p, particle));
-        this.leaves.forEach(p -> this.removeBlock(level, p, particle));
-        this.fruits.forEach(p -> this.removeBlock(level, p, particle));
+    public void onRemove(Level level, BlockPos source, boolean particle) {
+        this.logs.forEach(p -> this.removeBlock(level, p, p.equals(source) ? 2 : particle ? 1 : 0));
+        this.leaves.forEach(p -> this.removeBlock(level, p, p.equals(source) ? 2 : particle ? 1 : 0));
+        this.fruits.forEach(p -> this.removeBlock(level, p, p.equals(source) ? 2 : particle ? 1 : 0));
+        if (!this.getBlockPos().equals(source))
+            this.removeBlock(level, this.getBlockPos(), 2);
     }
 
-    private void removeBlock(Level level, BlockPos pos, boolean particle) {
-        BlockState blockState = level.getBlockState(pos);
-        if (particle)
-            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
-        level.setBlock(pos, blockState.getFluidState().createLegacyBlock(), Block.UPDATE_CLIENTS);
+    private void removeBlock(Level level, BlockPos pos, int removeFlag) {
+        switch (removeFlag) {
+            case 2 -> level.destroyBlock(pos, true);
+            case 1 -> {
+                BlockState blockState = level.getBlockState(pos);
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
+                level.setBlock(pos, blockState.getFluidState().createLegacyBlock(), Block.UPDATE_CLIENTS);
+            }
+            default -> {
+                BlockState blockState = level.getBlockState(pos);
+                level.setBlock(pos, blockState.getFluidState().createLegacyBlock(), Block.UPDATE_CLIENTS);
+            }
+        }
     }
 
     @Override

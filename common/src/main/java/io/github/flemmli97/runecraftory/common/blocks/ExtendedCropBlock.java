@@ -115,8 +115,9 @@ public class ExtendedCropBlock extends CropBlock {
         }
     }
 
-    public void onWiltedWatering(Level level, BlockPos pos, BlockState state) {
-        level.setBlock(pos, state.setValue(ExtendedCropBlock.WILTED, false), Block.UPDATE_ALL);
+    public void onWater(Level level, BlockPos pos, BlockState state) {
+        if (state.getValue(ExtendedCropBlock.WILTED))
+            level.setBlock(pos, state.setValue(ExtendedCropBlock.WILTED, false), Block.UPDATE_ALL);
     }
 
     public int getGiantAge() {

@@ -128,8 +128,8 @@ public class GiantCropBlock extends ExtendedCropBlock {
     }
 
     @Override
-    public void onWiltedWatering(Level level, BlockPos pos, BlockState state) {
-        super.onWiltedWatering(level, pos, state);
+    public void onWater(Level level, BlockPos pos, BlockState state) {
+        super.onWater(level, pos, state);
         BlockPos.MutableBlockPos mut = pos.mutable();
         BlockState blockAt;
         Direction dir = state.getValue(DIRECTION);
