@@ -350,11 +350,6 @@ public class Sarcophagus extends BossMonster {
 
     @Override
     public void handleAttack(AnimationState anim) {
-        LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.getNavigation().stop();
-            this.getLookControl().setLookAt(target, 60.0f, 30.0f);
-        }
         BiConsumer<AnimationState, Sarcophagus> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);

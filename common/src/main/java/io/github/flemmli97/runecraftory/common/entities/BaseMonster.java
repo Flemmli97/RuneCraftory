@@ -337,7 +337,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public void tick() {
         if (!this.initAnim) {
             this.getAnimationHandler().withChangeListener(anim -> {
-                if (anim != null)
+                if (anim != null && !this.level().isClientSide)
                     this.setupAttack(anim);
                 return false;
             });
@@ -350,8 +350,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             float[] clamp = this.targetLookClamp();
             this.setYRot(MathsHelper.rotlerp(this.getYRot(), yxRot[0], clamp[0]));
             this.setXRot(MathsHelper.rotlerp(this.getXRot(), yxRot[1], clamp[1]));
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.getYRot();
+            this.setYBodyRot(this.getYRot());
+            this.setYHeadRot(this.getYRot());
         }
         this.moveStateTracker.tick();
         if (!this.level().isClientSide) {
@@ -866,8 +866,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
             this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
         }
-        this.yBodyRot = this.getYRot();
-        this.yHeadRot = this.yBodyRot;
+        this.setYBodyRot(this.getYRot());
+        this.setYHeadRot(this.getYRot());
         // For info: Vanilla speed has a constant 0.98 modifier
         double attrSpeed = !this.onGround() && this.getAttributes().hasAttribute(Attributes.FLYING_SPEED) ? this.getAttributeValue(Attributes.FLYING_SPEED) : this.getAttributeValue(Attributes.MOVEMENT_SPEED);
         float speed = (float) (attrSpeed / 1.3 * this.ridingSpeedModifier());
@@ -940,7 +940,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     protected Vec3 directionToLookAt() {
-        return this.getAnimationHandler().hasAnimation() && this.targetPosition != null ? this.targetPosition
+        return this.getAnimationHandler().hasAnimation() && this.getTargetPosition() != null ? this.getTargetPosition()
                 .asVec(this.position()).subtract(this.position()) : null;
     }
 
@@ -1934,7 +1934,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        data.runIf(SyncableDatas.TARGET_POS, pos -> this.targetPosition = pos);
+        data.runIf(SyncableDatas.TARGET_POS, this::setTargetPosition);
     }
 
     @Override

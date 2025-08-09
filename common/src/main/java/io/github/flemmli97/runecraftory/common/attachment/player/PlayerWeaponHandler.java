@@ -109,7 +109,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
         if (this.currentAction != RuneCraftoryAttackActions.NONE.get()) {
             this.comboCount++;
         }
-        this.entity.yBodyRot = this.entity.yHeadRot;
+        this.entity.setYBodyRot(this.entity.yHeadRot);
         this.resetHitEntityTracker();
         this.currentAction.onStart(this.entity, this);
         if (!this.entity.level().isClientSide && packet) {

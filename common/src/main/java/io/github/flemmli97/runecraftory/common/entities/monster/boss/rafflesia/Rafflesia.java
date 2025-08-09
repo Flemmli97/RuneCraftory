@@ -15,7 +15,6 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -72,9 +71,6 @@ public class Rafflesia extends BossMonster {
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Rafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimationState, Rafflesia> cons = (anim, entity) -> {
-            if (entity.getTargetPosition() != null) {
-                entity.lookAt(EntityAnchorArgument.Anchor.EYES, entity.getTargetPosition().position());
-            }
             if (anim.isAt("attack")) {
                 entity.useAttack(anim);
             }
@@ -177,10 +173,6 @@ public class Rafflesia extends BossMonster {
     public void baseTick() {
         super.baseTick();
         if (!this.level().isClientSide) {
-            LivingEntity target = this.getTarget();
-            if (target != null && !this.getAnimationHandler().hasAnimation()) {
-                this.getLookControl().setLookAt(target, 30.0f, 30.0f);
-            }
             if (this.summonCooldown < 200 && this.getHorseTail() == null || this.getPitcher() == null || this.getFlower() == null) {
                 this.summonCooldown = this.random.nextInt(200) + 300;
             }
@@ -197,6 +189,20 @@ public class Rafflesia extends BossMonster {
                         });
             }
         }
+    }
+
+    @Override
+    protected Vec3 directionToLookAt() {
+        LivingEntity target = this.getTarget();
+        if (target != null && !this.getAnimationHandler().hasAnimation()) {
+            return target.getEyePosition().subtract(this.getEyePosition());
+        }
+        return super.directionToLookAt();
+    }
+
+    @Override
+    protected float[] targetLookClamp() {
+        return new float[]{30, 30};
     }
 
     @Override

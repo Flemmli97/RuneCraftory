@@ -43,8 +43,8 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
                 sano.restrictTo(this.blockPosition(), this.restrictRadius);
             sano.setXRot(0);
             sano.setYRot(this.rotation.rotate(135, 360));
-            sano.yHeadRot = sano.getYRot();
-            sano.yBodyRot = sano.getYRot();
+            sano.setYHeadRot(sano.getYRot());
+            sano.setYBodyRot(sano.getYRot());
             serverLevel.addFreshEntityWithPassengers(sano);
         }
         off = new BlockPos(-5, 0, 4);
@@ -58,8 +58,8 @@ public class SanoAndUnoDuo extends EnsembleMonsters {
                 uno.restrictTo(this.blockPosition(), this.restrictRadius);
             uno.setXRot(0);
             uno.setYRot(this.rotation.rotate(225, 360));
-            uno.yHeadRot = uno.getYRot();
-            uno.yBodyRot = uno.getYRot();
+            uno.setYHeadRot(uno.getYRot());
+            uno.setYBodyRot(uno.getYRot());
             serverLevel.addFreshEntityWithPassengers(uno);
         }
     }

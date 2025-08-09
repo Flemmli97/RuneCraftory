@@ -302,8 +302,8 @@ public class Mimic extends LeapingMonster {
 
         @Override
         public void tick() {
-            this.mob.yHeadRot = this.mob.getYRot();
-            this.mob.yBodyRot = this.mob.getYRot();
+            this.mob.setYHeadRot(this.mob.getYRot());
+            this.mob.setYBodyRot(this.mob.getYRot());
             if (this.operation != MoveControl.Operation.MOVE_TO) {
                 this.mob.setZza(0.0f);
                 return;

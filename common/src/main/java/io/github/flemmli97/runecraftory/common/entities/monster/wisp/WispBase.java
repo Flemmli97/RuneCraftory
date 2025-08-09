@@ -139,15 +139,11 @@ public abstract class WispBase extends BaseMonster {
         LivingEntity target = this.getTarget();
         if (anim.is(ATTACK_FAR)) {
             this.getNavigation().stop();
-            if (target != null)
-                this.getLookControl().setLookAt(target, 360, 90);
             if (anim.isAt("attack")) {
                 this.attackFar(target);
             }
         } else if (anim.is(ATTACK_CLOSE)) {
             this.getNavigation().stop();
-            if (target != null)
-                this.getLookControl().setLookAt(target, 360, 90);
             if (anim.isAt("attack")) {
                 this.attackClose(target);
             }

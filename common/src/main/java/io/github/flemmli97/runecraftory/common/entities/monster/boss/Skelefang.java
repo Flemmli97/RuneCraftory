@@ -632,7 +632,7 @@ public class Skelefang extends BossMonster {
             if (!anim.isPast("attack_start")) {
                 if (this.getTarget() == null)
                     return null;
-                return this.getTarget().position().subtract(this.position());
+                return this.getTarget().getEyePosition().subtract(this.getEyePosition());
             }
             return this.getDeltaMovement();
         }
