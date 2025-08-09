@@ -1,3 +1,38 @@
+RuneCraftory 2.1.0
+================
+- Update quest dependency
+- Update various datapack directories to have more sensible names
+- Add config to make hotspring water infinite like vanilla water
+- Add custom bossbars for all bosses
+- Add tag to exclude entities from marionetta trap and handonetta grab attacks
+- Trees have been rewritten:
+  - Tree blocks not unbreakable anymore 
+  - Attempting to break logs of non mature tree fells them
+  - Tree logs can be broken as long as tree has health
+  - Trees can wither now if not watered
+- Add hoe interaction for some items to regen farmland health (withered grass, corn, four leaf clover)
+- Regrowable crops will not regrow if health drops to 0
+- Move all creative tab contents to subtabs
+- Update bosses:
+  - Increased windup time for various attacks (a bit)
+  - Range increased for some attacks
+  - Bosses dont try to walk up to the target for too long now to do melee attacks
+  - Reduced cooldown for attacks
+  - Fix chained attacks not working correctly
+  - Dead tree apple rain now drops overtime
+  - Update raccoon jump to be more accurate
+  - Fix raccoon clone attack not shooting projectiles
+  - Skelefang health: 275 -> 225
+- Update visual of marionetta chest trap
+- Mobs now dont try to walk into their target constantly
+- Change riding mobs to client controlled
+- Fix wrong holder lookup instance for datapack
+- Fix death message missing attacker
+- Fix plushies rendering offset
+- Fix screen shake not working with too high entity tickcount
+- Fix upgrade container stackoverflow
+- Fix quest parent data wrong and thus not working
+
 RuneCraftory 2.0.1-beta
 ================
 - Update boss out of combat healing
