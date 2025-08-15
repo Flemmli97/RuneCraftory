@@ -91,18 +91,18 @@ public class RuneCraftorySounds {
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> SARCOPHAGUS_FIGHT = registerBgm("bgm.sarcophagus_fight", BGM10);
 
     private static RegistryEntrySupplier<SoundEvent, SoundEvent> register(String name) {
-        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(RuneCraftory.modRes(name)));
+        return SOUND_EVENTS.register(name, SoundEvent::createVariableRangeEvent);
     }
 
     private static RegistryEntrySupplier<SoundEvent, SoundEvent> register(String name, int variations) {
-        RegistryEntrySupplier<SoundEvent, SoundEvent> res = SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(RuneCraftory.modRes(name)));
+        RegistryEntrySupplier<SoundEvent, SoundEvent> res = SOUND_EVENTS.register(name, SoundEvent::createVariableRangeEvent);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             VARIATIONS.put(res.getID(), variations);
         return res;
     }
 
     private static RegistryEntrySupplier<SoundEvent, SoundEvent> registerBgm(String name, ResourceKey<SoundEvent> bgm) {
-        RegistryEntrySupplier<SoundEvent, SoundEvent> res = SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(RuneCraftory.modRes(name)));
+        RegistryEntrySupplier<SoundEvent, SoundEvent> res = SOUND_EVENTS.register(name, SoundEvent::createVariableRangeEvent);
         // For now not added
         //        if (BGM.stream().noneMatch(h -> h.bgm.equals(bgm))) {
         //            String music = bgm.getPath().replace("bgm/", "");

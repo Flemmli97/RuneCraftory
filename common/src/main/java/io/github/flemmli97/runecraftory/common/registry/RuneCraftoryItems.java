@@ -62,6 +62,7 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1695,7 +1696,7 @@ public class RuneCraftoryItems {
         return register(name, item, null);
     }
 
-    public static <T extends Item> RegistryEntrySupplier<Item, T> register(String name, Supplier<T> item, ResourceLocation tab) {
+    public static <T extends Item> RegistryEntrySupplier<Item, T> register(String name, Supplier<T> item, @Nullable ResourceLocation tab) {
         RegistryEntrySupplier<Item, T> res = ITEMS.register(name, item);
         if (tab != null) {
             RuneCraftoryCreativeTabs.appendTo(tab, res);

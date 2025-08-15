@@ -12,7 +12,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 
 import java.nio.file.Path;
@@ -33,7 +32,7 @@ public class MobPropertiesgen implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         return this.provider.thenCompose(provider -> {
-            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            DynamicOps<JsonElement> ops = provider.createSerializationContext(JsonOps.INSTANCE);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             Map<ResourceLocation, EntityProperties.Builder> props = new HashMap<>(RuneCraftoryEntities.getDefaultMobProperties());
             props.put(RuneCraftoryEntities.SANO_AND_UNO.getID(), new EntityProperties.Builder()

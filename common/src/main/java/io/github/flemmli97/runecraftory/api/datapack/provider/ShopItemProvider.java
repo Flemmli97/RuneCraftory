@@ -15,7 +15,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -55,7 +54,7 @@ public abstract class ShopItemProvider implements DataProvider {
             this.add(provider);
             return provider;
         }).thenCompose(provider -> {
-            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            DynamicOps<JsonElement> ops = provider.createSerializationContext(JsonOps.INSTANCE);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.props.forEach((res, builder) -> {
                 Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + ShopItemsManager.DIRECTORY + "/" + res.getPath() + ".json");

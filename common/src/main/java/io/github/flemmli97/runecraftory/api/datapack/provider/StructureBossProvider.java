@@ -9,7 +9,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
@@ -42,11 +41,11 @@ public abstract class StructureBossProvider implements DataProvider {
             this.add(provider);
             return provider;
         }).thenCompose(provider -> {
-            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            DynamicOps<JsonElement> ops = provider.createSerializationContext(JsonOps.INSTANCE);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, spawnData) -> {
                 Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + StructureBossManager.DIRECTORY + "/" + res.getPath() + ".json");
-                JsonElement obj = StructureBossManager.BossSpawnList.CODEC.encodeStart(JsonOps.INSTANCE, spawnData).getOrThrow();
+                JsonElement obj = StructureBossManager.BossSpawnList.CODEC.encodeStart(ops, spawnData).getOrThrow();
                 futures.add(DataProvider.saveStable(cache, obj, path));
             });
             return CompletableFuture.allOf(futures.build().toArray(CompletableFuture[]::new));

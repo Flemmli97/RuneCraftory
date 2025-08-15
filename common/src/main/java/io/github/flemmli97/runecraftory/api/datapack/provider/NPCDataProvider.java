@@ -19,7 +19,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
@@ -62,7 +61,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             this.add(provider);
             return provider;
         }).thenCompose(provider -> {
-            DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, provider);
+            DynamicOps<JsonElement> ops = provider.createSerializationContext(JsonOps.INSTANCE);
             ImmutableList.Builder<CompletableFuture<?>> futures = new ImmutableList.Builder<>();
             this.data.forEach((res, val) -> {
                 Path path = this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(res.getNamespace() + "/" + NPCDataManager.DIRECTORY + "/" + res.getPath() + ".json");

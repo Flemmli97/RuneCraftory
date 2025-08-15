@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world.data.family;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.DynamicOps;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.core.HolderLookup;
@@ -11,7 +12,6 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -345,7 +345,7 @@ public class FamilyEntry {
     }
 
     public CompoundTag save(HolderLookup.Provider provider) {
-        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
+        DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         CompoundTag tag = new CompoundTag();
         if (this.father != null)
             tag.putUUID("Father", this.father);
@@ -368,7 +368,7 @@ public class FamilyEntry {
     }
 
     public void load(CompoundTag tag, HolderLookup.Provider provider) {
-        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
+        DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         if (tag.hasUUID("Father"))
             this.father = tag.getUUID("Father");
         if (tag.hasUUID("Mother"))

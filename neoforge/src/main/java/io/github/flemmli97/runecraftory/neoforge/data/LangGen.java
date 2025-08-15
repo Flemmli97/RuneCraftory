@@ -56,7 +56,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
 import java.nio.file.Path;
@@ -65,7 +64,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -617,33 +615,13 @@ public class LangGen implements DataProvider {
         return "Languages: " + this.locale;
     }
 
-    public void addBlock(Supplier<? extends Block> key, String name) {
-        this.add(key.get(), name);
-    }
-
     public void add(Block key, String name) {
         if (!key.getDescriptionId().equals(key.asItem().getDescriptionId()))
             this.add(key.getDescriptionId(), name);
     }
 
-    public void addItem(Supplier<? extends Item> key, String name) {
-        this.add(key.get(), name);
-    }
-
     public void add(Item key, String name) {
         this.add(key.getDescriptionId(), name);
-    }
-
-    public void addItemStack(Supplier<ItemStack> key, String name) {
-        this.add(key.get(), name);
-    }
-
-    public void add(ItemStack key, String name) {
-        this.add(key.getDescriptionId(), name);
-    }
-
-    public void addEffect(Supplier<? extends MobEffect> key, String name) {
-        this.add(key.get(), name);
     }
 
     public void add(MobEffect key, String name) {
@@ -654,10 +632,6 @@ public class LangGen implements DataProvider {
         String path = key.getKey().location().getPath();
         path.substring(path.indexOf(".")).replace(".", "_");
         this.add(key.getKey().location().toString(), this.simpleTranslation(path.substring(path.indexOf(".")).replace(".", "_")));
-    }
-
-    public void addEntityType(Supplier<? extends EntityType<?>> key, String name) {
-        this.add(key.get(), name);
     }
 
     public void add(EntityType<?> key, String name) {

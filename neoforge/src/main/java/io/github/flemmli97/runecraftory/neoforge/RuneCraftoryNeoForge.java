@@ -94,41 +94,41 @@ public class RuneCraftoryNeoForge {
     }
 
     public static void registries(IEventBus modBus) {
-        RuneCraftoryBlocks.BLOCKS.registerContent(modBus);
-        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent(modBus);
-        RuneCraftoryItems.ITEMS.registerContent(modBus);
-        RuneCraftoryMenuTypes.CONTAINERS.registerContent(modBus);
-        RuneCraftoryEntities.ENTITIES.registerContent(modBus);
-        RuneCraftoryAttributes.ATTRIBUTES.registerContent(modBus);
-        RuneCraftoryEffects.EFFECTS.registerContent(modBus);
-        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent(modBus);
-        RuneCraftorySpells.SPELLS.register().registerContent(modBus);
-        RuneCraftoryParticles.PARTICLES.registerContent(modBus);
         RuneCraftoryActivities.ACTIVITIES.registerContent(modBus);
-        RuneCraftoryPoiTypes.POI.registerContent(modBus);
-        RuneCraftoryArmorMaterials.MATERIALS.registerContent(modBus);
-        RuneCraftoryMemoryTypes.MEMORYIES.registerContent(modBus);
-        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent(modBus);
-        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
-        RuneCraftorySounds.SOUND_EVENTS.registerContent(modBus);
         RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent(modBus);
-        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent(modBus);
-        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent(modBus);
-        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent(modBus);
-        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
-        RuneCraftoryCrafting.RECIPETYPE.registerContent(modBus);
-        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent(modBus);
+        RuneCraftoryArmorMaterials.MATERIALS.registerContent(modBus);
         RuneCraftoryAttachments.ATTACHMENT_TYPES.register(modBus);
-        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
-        RuneCraftoryCriteria.TRIGGERS.registerContent(modBus);
+        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
+        RuneCraftoryAttributes.ATTRIBUTES.registerContent(modBus);
+        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent(modBus);
+        RuneCraftoryBlocks.BLOCKS.registerContent(modBus);
+        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent(modBus);
+        RuneCraftoryCrafting.RECIPETYPE.registerContent(modBus);
         RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent(modBus);
-        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
-        RuneCraftoryStructures.STRUCTURES.registerContent(modBus);
+        RuneCraftoryCriteria.TRIGGERS.registerContent(modBus);
+        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
+        RuneCraftoryEffects.EFFECTS.registerContent(modBus);
+        RuneCraftoryEntities.ENTITIES.registerContent(modBus);
         RuneCraftoryFeatures.FEATURES.registerContent(modBus);
-        RuneCraftoryFeatures.TRUNK_PLACER.registerContent(modBus);
         RuneCraftoryFeatures.TREE_DECORATORS.registerContent(modBus);
+        RuneCraftoryFeatures.TRUNK_PLACER.registerContent(modBus);
         RuneCraftoryFluids.FLUIDS.registerContent(modBus);
         RuneCraftoryFluidTypes.FLUID_TYPES.register(modBus);
+        RuneCraftoryItems.ITEMS.registerContent(modBus);
+        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent(modBus);
+        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent(modBus);
+        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
+        RuneCraftoryMemoryTypes.MEMORYIES.registerContent(modBus);
+        RuneCraftoryMenuTypes.CONTAINERS.registerContent(modBus);
+        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent(modBus);
+        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent(modBus);
+        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent(modBus);
+        RuneCraftoryParticles.PARTICLES.registerContent(modBus);
+        RuneCraftoryPoiTypes.POI.registerContent(modBus);
+        RuneCraftorySounds.SOUND_EVENTS.registerContent(modBus);
+        RuneCraftorySpells.SPELLS.register().registerContent(modBus);
+        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
+        RuneCraftoryStructures.STRUCTURES.registerContent(modBus);
     }
 
     public void common(FMLCommonSetupEvent event) {

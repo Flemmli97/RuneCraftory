@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
@@ -17,9 +18,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class BlockTagGen extends IntrinsicHolderTagsProvider<Block> {
 
-    @SuppressWarnings("deprecation")
     public BlockTagGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
-        super(output, Registries.BLOCK, lookupProvider, block -> block.builtInRegistryHolder().key(), RuneCraftory.MODID, fileHelper);
+        super(output, Registries.BLOCK, lookupProvider, block -> BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow(), RuneCraftory.MODID, fileHelper);
     }
 
     @Override

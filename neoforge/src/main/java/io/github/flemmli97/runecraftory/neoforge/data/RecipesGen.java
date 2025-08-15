@@ -849,48 +849,4 @@ public class RecipesGen extends RecipeProvider {
         // Knife
 
     }
-
-//    private FinishedRecipe patchouliShapelessBook(ResourceLocation id, ResourceLocation book, Ingredient... ingredients) {
-//        return new FinishedRecipe() {
-//
-//            @Override
-//            public JsonObject serializeRecipe() {
-//                JsonObject jsonObject = new JsonObject();
-//                jsonObject.addProperty("type", "patchouli:shapeless_book_recipe");
-//                this.serializeRecipeData(jsonObject);
-//                return jsonObject;
-//            }
-//
-//            @Override
-//            public void serializeRecipeData(JsonObject json) {
-//                JsonArray arr = new JsonArray();
-//                for (Ingredient ing : ingredients)
-//                    arr.add(ing.toJson());
-//                json.add("ingredients", arr);
-//                json.addProperty("book", book.toString());
-//            }
-//
-//            @Override
-//            public ResourceLocation getId() {
-//                return id;
-//            }
-//
-//            @Override
-//            public RecipeSerializer<?> getType() {
-//                return null;
-//            }
-//
-//            @Nullable
-//            @Override
-//            public JsonObject serializeAdvancement() {
-//                return null;
-//            }
-//
-//            @Nullable
-//            @Override
-//            public ResourceLocation getAdvancementId() {
-//                return null;
-//            }
-//        };
-//    }
 }

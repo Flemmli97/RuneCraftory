@@ -1088,9 +1088,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             xRot = player.getXRot();
         } else if (target != null) {
             Vec3 dir = target.subtract(this.position()).normalize();
-            float[] xYRot = MathsHelper.YXRotFrom(dir);
-            yRot = xYRot[0];
-            xRot = -xYRot[1];
+            float[] yXRot = MathsHelper.YXRotFrom(dir);
+            yRot = yXRot[0];
+            xRot = -yXRot[1];
         }
         double off = this.getBbHeight() * 0.5;
         return new OrientedBoundingBox(this.attackBB(anim)

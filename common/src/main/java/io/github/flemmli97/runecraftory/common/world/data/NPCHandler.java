@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world.data;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DynamicOps;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
@@ -13,7 +14,6 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
@@ -86,7 +86,7 @@ public class NPCHandler {
     }
 
     public CompoundTag save(HolderLookup.Provider provider) {
-        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
+        DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         CompoundTag tag = new CompoundTag();
         CompoundTag npcs = new CompoundTag();
         this.npcs.forEach((uuid, comp) -> npcs.put(uuid.toString(), ComponentSerialization.CODEC.encodeStart(ops, comp).getOrThrow()));
@@ -109,7 +109,7 @@ public class NPCHandler {
     }
 
     public void load(CompoundTag tag, HolderLookup.Provider provider) {
-        RegistryOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
+        DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         CompoundTag npcs = tag.getCompound("NPCs");
         npcs.getAllKeys()
                 .forEach(key -> this.npcs.put(UUID.fromString(key), ComponentSerialization.CODEC.parse(ops, npcs.get(key)).getOrThrow()));

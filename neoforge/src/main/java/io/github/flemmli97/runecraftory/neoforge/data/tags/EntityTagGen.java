@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.tenshilib.TenshiLib;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
@@ -21,9 +22,8 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
 
     public static final TagKey<EntityType<?>> MINECOLONIES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("minecolonies", "mob_attack_blacklist"));
 
-    @SuppressWarnings("deprecation")
     public EntityTagGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
-        super(output, Registries.ENTITY_TYPE, lookupProvider, type -> type.builtInRegistryHolder().key(), RuneCraftory.MODID, fileHelper);
+        super(output, Registries.ENTITY_TYPE, lookupProvider, type -> BuiltInRegistries.ENTITY_TYPE.getResourceKey(type).orElseThrow(), RuneCraftory.MODID, fileHelper);
     }
 
     @Override
@@ -83,10 +83,5 @@ public class EntityTagGen extends IntrinsicHolderTagsProvider<EntityType<?>> {
 
         this.tag(TenshiLib.MULTIPART_ENTITY)
                 .add(RuneCraftoryEntities.MULTIPART.get());
-    }
-
-    @Override
-    public String getName() {
-        return "Entity Tags";
     }
 }

@@ -207,41 +207,39 @@ public class RuneCraftoryFabric implements ModInitializer {
     }
 
     public void initContent() {
-        RuneCraftoryEntities.ENTITIES.registerContent();
-        RuneCraftoryBlocks.BLOCKS.registerContent();
-        RuneCraftoryItems.ITEMS.registerContent();
-
-        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent();
-        RuneCraftoryMenuTypes.CONTAINERS.registerContent();
-        RuneCraftoryMemoryTypes.MEMORYIES.registerContent();
-        RuneCraftoryAttributes.ATTRIBUTES.registerContent();
-        RuneCraftoryEffects.EFFECTS.registerContent();
-        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent();
-        RuneCraftoryFeatures.FEATURES.registerContent();
-        RuneCraftoryFeatures.TRUNK_PLACER.registerContent();
-        RuneCraftoryFeatures.TREE_DECORATORS.registerContent();
-        RuneCraftorySpells.SPELLS.register().registerContent();
-        RuneCraftoryStructures.STRUCTURES.registerContent();
-        RuneCraftoryParticles.PARTICLES.registerContent();
         RuneCraftoryActivities.ACTIVITIES.registerContent();
-        RuneCraftoryPoiTypes.POI.registerContent();
-        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent();
-        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent();
         RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent();
-        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent();
-        RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent();
-        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent();
         RuneCraftoryArmorMaterials.MATERIALS.registerContent();
-
-        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent();
-        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent();
-        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent();
-        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent();
+        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent();
+        RuneCraftoryAttributes.ATTRIBUTES.registerContent();
+        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent();
+        RuneCraftoryBlocks.BLOCKS.registerContent();
+        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent();
         RuneCraftoryCrafting.RECIPETYPE.registerContent();
-        RuneCraftorySounds.SOUND_EVENTS.registerContent();
-        RuneCraftoryFluids.FLUIDS.registerContent();
-        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent();
+        RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent();
         RuneCraftoryCriteria.TRIGGERS.registerContent();
+        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent();
+        RuneCraftoryEffects.EFFECTS.registerContent();
+        RuneCraftoryEntities.ENTITIES.registerContent();
+        RuneCraftoryFeatures.FEATURES.registerContent();
+        RuneCraftoryFeatures.TREE_DECORATORS.registerContent();
+        RuneCraftoryFeatures.TRUNK_PLACER.registerContent();
+        RuneCraftoryFluids.FLUIDS.registerContent();
+        RuneCraftoryItems.ITEMS.registerContent();
+        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent();
+        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent();
+        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent();
+        RuneCraftoryMemoryTypes.MEMORYIES.registerContent();
+        RuneCraftoryMenuTypes.CONTAINERS.registerContent();
+        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent();
+        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent();
+        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent();
+        RuneCraftoryParticles.PARTICLES.registerContent();
+        RuneCraftoryPoiTypes.POI.registerContent();
+        RuneCraftorySounds.SOUND_EVENTS.registerContent();
+        RuneCraftorySpells.SPELLS.register().registerContent();
+        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent();
+        RuneCraftoryStructures.STRUCTURES.registerContent();
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {
