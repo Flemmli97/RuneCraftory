@@ -212,8 +212,7 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
         this.setOldPosAndRot();
         if (simple) {
             this.setPos(x, y, z);
-        }
-        else {
+        } else {
             this.setOnGround(true);
             double vy = y - old.y;
             if (vy >= 0 && vy < 1.5) {

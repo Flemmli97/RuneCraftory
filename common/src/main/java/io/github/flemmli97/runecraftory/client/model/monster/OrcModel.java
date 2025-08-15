@@ -71,16 +71,13 @@ public class OrcModel<T extends Orc> extends EntityModel<T> implements ExtendedM
 
     @Override
     public void transform(HumanoidArm humanoidArm, PoseStack poseStack) {
-        if (humanoidArm == HumanoidArm.LEFT) {
+        boolean leftSide = humanoidArm == HumanoidArm.LEFT;
+        if (leftSide) {
             this.handLeftDown.translateAndRotateWithParents(poseStack);
         } else {
             this.handRightDown.translateAndRotateWithParents(poseStack);
         }
-    }
-
-    @Override
-    public void postTransform(boolean leftSide, PoseStack stack) {
-        stack.translate((leftSide ? -2 : 2) / 16d, 8 / 16d, -4 / 16d);
+        poseStack.translate((leftSide ? -2 : 2) / 16d, 8 / 16d, -4 / 16d);
     }
 
     @Override

@@ -80,10 +80,6 @@ public class GoblinModel<T extends Goblin> extends EntityModel<T> implements Ext
     }
 
     @Override
-    public void postTransform(boolean leftSide, PoseStack stack) {
-    }
-
-    @Override
     public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
         this.ridingPosition.translateAndRotateWithParents(poseStack);
         ClientHandlers.translateRider(poseStack, entity, rider);
