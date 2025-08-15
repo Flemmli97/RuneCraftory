@@ -41,6 +41,13 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
 
     private MultipartPosition relativePosition = MultipartPosition.DEFAULT;
 
+    private int lerpSteps;
+    private double lerpX;
+    private double lerpY;
+    private double lerpZ;
+    private double lerpYRot;
+    private double lerpXRot;
+
     public MultiPartEntity(EntityType<MultiPartEntity> multipartType, Level level) {
         super(multipartType, level);
     }
@@ -154,7 +161,46 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
             Vec3 newPos = this.getOwner().position().add(this.relativePosition.getPosition(this.getOwner()));
             this.moveTo(newPos.x(), newPos.y(), newPos.z(), this.relativePosition.noPhysics());
         }
+        if (this.lerpSteps > 0) {
+            this.lerpPositionAndRotationStep(this.lerpSteps, this.lerpX, this.lerpY, this.lerpZ, this.lerpYRot, this.lerpXRot);
+            this.lerpSteps--;
+        }
         this.level().getProfiler().pop();
+    }
+
+    @Override
+    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+        this.lerpX = x;
+        this.lerpY = y;
+        this.lerpZ = z;
+        this.lerpYRot = yRot;
+        this.lerpXRot = xRot;
+        this.lerpSteps = steps;
+    }
+
+    @Override
+    public double lerpTargetX() {
+        return this.lerpSteps > 0 ? this.lerpX : this.getX();
+    }
+
+    @Override
+    public double lerpTargetY() {
+        return this.lerpSteps > 0 ? this.lerpY : this.getY();
+    }
+
+    @Override
+    public double lerpTargetZ() {
+        return this.lerpSteps > 0 ? this.lerpZ : this.getZ();
+    }
+
+    @Override
+    public float lerpTargetXRot() {
+        return this.lerpSteps > 0 ? (float) this.lerpXRot : this.getXRot();
+    }
+
+    @Override
+    public float lerpTargetYRot() {
+        return this.lerpSteps > 0 ? (float) this.lerpYRot : this.getYRot();
     }
 
     private void moveTo(double x, double y, double z, boolean simple) {
@@ -164,8 +210,9 @@ public class MultiPartEntity extends Entity implements OwnableEntity {
         }
         Vec3 old = this.position();
         this.setOldPosAndRot();
-        if (simple)
+        if (simple) {
             this.setPos(x, y, z);
+        }
         else {
             this.setOnGround(true);
             double vy = y - old.y;
