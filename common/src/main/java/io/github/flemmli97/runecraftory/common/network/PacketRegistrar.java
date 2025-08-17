@@ -59,7 +59,6 @@ public class PacketRegistrar {
         register.register(S2CBossbarInfoAdd.TYPE, S2CBossbarInfoAdd.STREAM_CODEC, S2CBossbarInfoAdd::handle);
         register.register(S2CBossbarInfoRemove.TYPE, S2CBossbarInfoRemove.STREAM_CODEC, S2CBossbarInfoRemove::handle);
         register.register(S2CBossbarMusicUpdate.TYPE, S2CBossbarMusicUpdate.STREAM_CODEC, S2CBossbarMusicUpdate::handle);
-        register.register(S2CMobUpdate.TYPE, S2CMobUpdate.STREAM_CODEC, S2CMobUpdate::handle);
         register.register(S2CSimpleToast.TYPE, S2CSimpleToast.STREAM_CODEC, S2CSimpleToast::handle);
     }
 

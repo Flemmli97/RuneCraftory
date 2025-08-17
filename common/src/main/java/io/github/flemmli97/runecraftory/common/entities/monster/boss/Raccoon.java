@@ -1,16 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.GroundShakeParticleSpawner;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -26,6 +24,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.nbt.CompoundTag;
@@ -67,6 +68,7 @@ public class Raccoon extends BossMonster {
             new Vec3(6, 0, 0),
             new Vec3(0, 0, 6)
     };
+    public static final TypedResource<Vec3> CLONE_POSITION = new TypedResource<>(RuneCraftory.modRes("clone_position"));
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String DOUBLE_PUNCH = BUILDER.add("double_punch", AnimationsBuilder.definition(0.88).marker("attack", 0.4, 0.68));
@@ -228,8 +230,7 @@ public class Raccoon extends BossMonster {
                 entity.entityData.set(CLONE_INDEX, id);
                 entity.teleportTo(center.x() + pos.x, center.y() + pos.y, center.z() + pos.z);
             }
-            if (entity.cloneCenter != null)
-                entity.lookAt(EntityAnchorArgument.Anchor.FEET, entity.cloneCenter);
+            entity.cloneCenter().ifPresent(pos -> entity.lookAt(EntityAnchorArgument.Anchor.FEET, pos));
         });
         b.put(UNTRANSFORM, (anim, entity) -> {
             if (entity.onGround() && anim.isPast("knockback_start") && !anim.isPast("knockback_end")) {
@@ -249,7 +250,6 @@ public class Raccoon extends BossMonster {
                 }
                 return false;
             });
-    private Vec3 cloneCenter;
 
     private int hit;
     private int hitCountdown = -1;
@@ -272,6 +272,12 @@ public class Raccoon extends BossMonster {
         super.defineSynchedData(builder);
         builder.define(BERSERK, false);
         builder.define(CLONE_INDEX, 0);
+    }
+
+    @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(CLONE_POSITION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -535,23 +541,16 @@ public class Raccoon extends BossMonster {
         }
     }
 
-    public void setClonePos(Vec3 pos) {
-        this.cloneCenter = pos;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.cloneCenter);
+    public Optional<Vec3> cloneCenter() {
+        return Optional.ofNullable(this.getDataContainer().get(CLONE_POSITION));
     }
 
-    public Optional<Vec3> cloneCenter() {
-        return Optional.ofNullable(this.cloneCenter);
+    public void setClonePos(Vec3 pos) {
+        this.getDataContainer().set(CLONE_POSITION, pos);
     }
 
     public int cloneIndex() {
         return this.entityData.get(CLONE_INDEX);
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, motion -> this.cloneCenter = motion);
     }
 
     @Override

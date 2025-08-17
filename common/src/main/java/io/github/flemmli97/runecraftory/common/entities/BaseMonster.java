@@ -16,9 +16,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBeha
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SinkIfTooHigh;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
-import io.github.flemmli97.runecraftory.common.entities.data.MobUpdateHandler;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
+import io.github.flemmli97.runecraftory.common.entities.data.RuneCraftorySyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.utils.CommonMonsterHandler;
 import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdater;
 import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
@@ -34,7 +32,6 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityLevelPkt;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
@@ -64,6 +61,9 @@ import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToR
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -171,7 +171,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, CommonMonsterHandler, ExtendedEntity, SleepingEntity, TargetableOpponent, AOEAttackEntity, MobUpdateHandler, MobAttackExt, SmartBrainOwner<BaseMonster> {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, CommonMonsterHandler, ExtendedEntity, SleepingEntity,
+        TargetableOpponent, AOEAttackEntity, MobAttackExt, SmartBrainOwner<BaseMonster>, SyncedMobDataHandler {
 
     public static final int MOVE_TICK_MAX = 5;
 
@@ -180,6 +181,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> FRIEND_POINTS_SYNC = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
+
+    public static final TypedResource<MobAttackExt.TargetPosition> TARGET_POSITION = new TypedResource<>(RuneCraftory.modRes("target_position"));
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -229,9 +232,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private final XpLevelHolder friendlyPoints = new XpLevelHolder();
     private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
 
+    private final SyncedDataContainer<BaseMonster> syncedDataContainer;
+
     protected int tamingTick = -1;
     protected int feedTimeOut;
-    private TargetPosition targetPosition;
     private BlockPos seedInventory, cropInventory;
     private int playDeathTick;
 
@@ -251,6 +255,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
+        SyncedDataContainer.Builder<BaseMonster> builder = SyncedDataContainer.builder(this);
+        this.definedAdditinoalSyncedData(builder);
+        this.syncedDataContainer = builder.build();
         this.moveControl = new MoveControllerPlus(this);
         // Client will get default value. This is intentional
         this.prop = DataPackHandler.INSTANCE.monsterPropertiesManager().getPropertiesFor(type);
@@ -297,6 +304,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         builder.define(FRIEND_POINTS_SYNC, 1);
     }
 
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        builder.define(TARGET_POSITION, RuneCraftorySyncableDatas.TARGET_POS, null);
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
@@ -313,6 +324,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     this.playDeathAnimation(true);
             }
         }
+    }
+
+    @Override
+    public SyncedDataContainer<?> getDataContainer() {
+        return this.syncedDataContainer;
     }
 
     @Override
@@ -1037,7 +1053,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public TargetPosition getTargetPosition() {
-        return this.targetPosition;
+        return this.getDataContainer().get(TARGET_POSITION);
     }
 
     public void setTargetPosition(LivingEntity target) {
@@ -1045,9 +1061,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void setTargetPosition(TargetPosition position) {
-        this.targetPosition = position;
-        if (!this.level().isClientSide)
-            S2CMobUpdate.send(this, SyncableDatas.TARGET_POS, this.targetPosition);
+        this.getDataContainer().set(TARGET_POSITION, position);
     }
 
     @Nullable
@@ -1930,11 +1944,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.entityData.set(OWNER_UUID, Optional.of(player.getUUID()));
         else
             this.entityData.set(OWNER_UUID, Optional.empty());
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        data.runIf(SyncableDatas.TARGET_POS, this::setTargetPosition);
     }
 
     @Override

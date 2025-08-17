@@ -1,13 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
@@ -21,7 +19,10 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -53,6 +54,8 @@ public class Thunderbolt extends BossMonster {
 
     private static final float RANGE_THRESHOLD = 0.7f;
     private static final float FEINT_THRESHOLD = 0.35f;
+
+    public static final TypedResource<Vec3> CHARGE_MOTION = new TypedResource<>(RuneCraftory.modRes("charge_motion"));
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String BACK_KICK = BUILDER.add("back_kick", AnimationsBuilder.definition(0.84).marker("attack", 0.56));
@@ -136,12 +139,13 @@ public class Thunderbolt extends BossMonster {
         b.put(LASER_KICK_2, bigLaser);
         b.put(LASER_KICK_3, bigLaser);
         BiConsumer<AnimationState, Thunderbolt> charge = (anim, entity) -> {
-            if (entity.chargeMotion == null) {
-                entity.setChargeDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
+            if (entity.getChargeMotion() == null) {
+                entity.setChargeMotion(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
                         .scale(2.4));
             }
             if (anim.isAt("attack_start")) {
-                entity.setDeltaMovement(entity.chargeMotion.x(), 0.2, entity.chargeMotion.z());
+                Vec3 dir = entity.getChargeMotion();
+                entity.setDeltaMovement(dir.x(), 0.2, dir.z());
             }
             if (anim.isPast("attack_start") && !anim.isPast("attack_end") && !entity.chargeAttackSuccess) {
                 entity.mobAttack(anim, null, e -> {
@@ -168,7 +172,7 @@ public class Thunderbolt extends BossMonster {
     private final AnimationHandler<Thunderbolt> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (!this.level().isClientSide) {
-                    this.setChargeDirection(null);
+                    this.setChargeMotion(null);
                     if (anim != null) {
                         if (anim.is(CHARGE, CHARGE_2, CHARGE_3))
                             this.chargeAttackSuccess = false;
@@ -179,7 +183,6 @@ public class Thunderbolt extends BossMonster {
                 return false;
             });
     protected boolean feintedDeath, hornAttackSuccess, chargeAttackSuccess;
-    private Vec3 chargeMotion;
 
     public Thunderbolt(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
@@ -189,6 +192,12 @@ public class Thunderbolt extends BossMonster {
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(RuneCraftoryEntities.THUNDERBOLT.getID(), this.getDisplayName(), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(RuneCraftorySounds.THUNDERBOLT_FIGHT.get());
+    }
+
+    @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -422,7 +431,7 @@ public class Thunderbolt extends BossMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_2, CHARGE_3)) {
-            return this.chargeMotion;
+            return this.getChargeMotion();
         }
         return super.directionToLookAt();
     }
@@ -524,15 +533,12 @@ public class Thunderbolt extends BossMonster {
     public void playAngrySound() {
     }
 
-    protected void setChargeDirection(Vec3 moveDirection) {
-        this.chargeMotion = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.chargeMotion);
+    public Vec3 getChargeMotion() {
+        return this.getDataContainer().get(CHARGE_MOTION);
     }
 
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, motion -> this.chargeMotion = motion);
+    public void setChargeMotion(Vec3 direction) {
+        this.getDataContainer().set(CHARGE_MOTION, direction);
     }
 
     @Override

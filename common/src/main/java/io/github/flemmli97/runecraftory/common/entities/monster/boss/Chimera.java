@@ -1,14 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetWithinDist;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
@@ -23,6 +21,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
@@ -45,6 +46,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class Chimera extends BossMonster {
+
+    public static final TypedResource<Vec3> CHARGE_MOTION = new TypedResource<>(RuneCraftory.modRes("charge_motion"));
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(1.68).marker("attack_start", 0.36).marker("attack_end", 1.44));
@@ -96,12 +99,13 @@ public class Chimera extends BossMonster {
                 if (entity.hitEntity == null)
                     entity.hitEntity = new ArrayList<>();
 
-                if (entity.chargeMotion == null) {
+                if (entity.getChargeMotion() == null) {
                     Vec3 dir = EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
                             .scale(0.5);
                     entity.setChargeMotion(new Vec3(dir.x, 0, dir.z));
                 }
-                entity.setDeltaMovement(entity.chargeMotion.x, entity.getDeltaMovement().y, entity.chargeMotion.z);
+                Vec3 dir = entity.getChargeMotion();
+                entity.setDeltaMovement(dir.x, entity.getDeltaMovement().y, dir.z);
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
                             new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.UP, 0.4f))) {
@@ -140,7 +144,6 @@ public class Chimera extends BossMonster {
             });
     protected boolean chargeAttackSuccess;
     protected List<LivingEntity> hitEntity;
-    private Vec3 chargeMotion;
 
     public Chimera(EntityType<? extends Chimera> type, Level level) {
         super(type, level);
@@ -153,10 +156,9 @@ public class Chimera extends BossMonster {
     }
 
     @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -164,6 +166,13 @@ public class Chimera extends BossMonster {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.31);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(Attributes.STEP_HEIGHT.value().getDefaultValue() + 1);
         super.applyAttributes();
+    }
+
+    @Override
+    public void setEnraged(boolean flag, boolean load) {
+        super.setEnraged(flag, load);
+        if (flag && !load)
+            this.getAnimationHandler().setAnimation(ANGRY);
     }
 
     @Override
@@ -241,7 +250,7 @@ public class Chimera extends BossMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(LEAP)) {
-            return this.chargeMotion;
+            return this.getChargeMotion();
         }
         return super.directionToLookAt();
     }
@@ -319,15 +328,12 @@ public class Chimera extends BossMonster {
         return RuneCraftorySounds.ENTITY_CHIMERA_AMBIENT.get();
     }
 
-    public void setChargeMotion(Vec3 charge) {
-        this.chargeMotion = charge;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.chargeMotion);
+    public Vec3 getChargeMotion() {
+        return this.getDataContainer().get(CHARGE_MOTION);
     }
 
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, motion -> this.chargeMotion = motion);
+    public void setChargeMotion(Vec3 direction) {
+        this.getDataContainer().set(CHARGE_MOTION, direction);
     }
 
     @Override

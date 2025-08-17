@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.resources.ResourceLocation;
@@ -28,9 +28,10 @@ public abstract class ChargingMonster extends BaseMonster {
     protected static final ResourceLocation CHARGING_STEP = RuneCraftory.modRes("charging_step");
 
     protected List<LivingEntity> hitEntity;
-    private Vec3 chargeMotion;
     private final Consumer<AnimationDefinition> chargingAnim;
     private boolean initAnim;
+
+    public static final TypedResource<Vec3> CHARGE_MOTION = new TypedResource<>(RuneCraftory.modRes("charge_motion"));
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, Level level) {
         super(type, level);
@@ -47,10 +48,16 @@ public abstract class ChargingMonster extends BaseMonster {
                 if (this.isChargingAnimation()) {
                     this.hitEntity = null;
                 } else {
-                    this.chargeMotion = null;
+                    this.setChargeMotion(null);
                 }
             }
         };
+    }
+
+    @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -68,7 +75,7 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.fixedYaw()) {
-            return this.chargeMotion;
+            return this.getChargeMotion();
         }
         return super.directionToLookAt();
     }
@@ -80,8 +87,8 @@ public abstract class ChargingMonster extends BaseMonster {
         double width = this.getBbWidth();
         double speed = Math.max(width, this.getDeltaMovement().length() - width);
         float yRot = 0;
-        if (this.chargeMotion != null) {
-            yRot = MathsHelper.YRotFrom(this.chargeMotion);
+        if (this.getChargeMotion() != null) {
+            yRot = MathsHelper.YRotFrom(this.getChargeMotion());
         }
         return new OrientedBoundingBox(OrientedBoundingBox.originAABB(this)
                 .inflate(0.2)
@@ -91,7 +98,7 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     public void handleAttack(AnimationState anim) {
         if (this.isChargingAnim(anim.getID())) {
-            if (this.chargeMotion == null) {
+            if (this.getChargeMotion() == null) {
                 this.setChargeMotion(this.getChargeTo(anim.getAnimation()));
             }
             this.getNavigation().stop();
@@ -128,7 +135,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     public Vec3 getChargeMotion() {
-        return this.chargeMotion;
+        return this.getDataContainer().get(CHARGE_MOTION);
     }
 
     public Vec3 getChargeTo(String anim) {
@@ -136,13 +143,18 @@ public abstract class ChargingMonster extends BaseMonster {
                 .scale(this.chargingSpeed());
     }
 
+    public void setChargeMotion(Vec3 chargeMotion) {
+        this.getDataContainer().set(CHARGE_MOTION, chargeMotion);
+    }
+
     public double chargingSpeed() {
         return 0.4;
     }
 
     public boolean handleChargeMovement(AnimationState anim) {
-        if (this.chargeMotion != null) {
-            this.setDeltaMovement(this.chargeMotion.x, this.getDeltaMovement().y, this.chargeMotion.z);
+        Vec3 charge = this.getChargeMotion();
+        if (charge != null) {
+            this.setDeltaMovement(charge.x, this.getDeltaMovement().y, charge.z);
             return true;
         }
         return false;
@@ -158,16 +170,5 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     public boolean adjustRotFromRider(LivingEntity rider) {
         return !this.isChargingAnimation();
-    }
-
-    public void setChargeMotion(Vec3 chargeMotion) {
-        this.chargeMotion = chargeMotion;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.chargeMotion);
-    }
-
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, charge -> this.chargeMotion = charge);
     }
 }

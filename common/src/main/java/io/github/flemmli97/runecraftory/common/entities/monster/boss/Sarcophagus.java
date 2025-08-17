@@ -1,14 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
@@ -20,6 +18,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -44,6 +45,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 public class Sarcophagus extends BossMonster {
+
+    public static final TypedResource<Vec3> CHARGE_MOTION = new TypedResource<>(RuneCraftory.modRes("charge_motion"));
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String TELEPORT = BUILDER.add("teleport", AnimationsBuilder.definition(2.64)
@@ -87,11 +90,12 @@ public class Sarcophagus extends BossMonster {
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 if (entity.hitEntity == null)
                     entity.hitEntity = new ArrayList<>();
-                if (entity.chargeMotion == null) {
+                if (entity.getChargeMotion() == null) {
                     entity.setChargeDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
                             .scale(0.3));
                 }
-                entity.setDeltaMovement(entity.chargeMotion.x(), entity.getDeltaMovement().y(), entity.chargeMotion.z());
+                Vec3 dir = entity.getChargeMotion();
+                entity.setDeltaMovement(dir.x(), entity.getDeltaMovement().y(), dir.z());
                 entity.mobAttack(anim, null, e -> {
                     if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
                             new DynamicDamage.Builder(entity).hurtResistant(5).knock(DynamicDamage.KnockBackType.BACK, 2))) {
@@ -195,7 +199,7 @@ public class Sarcophagus extends BossMonster {
             if (!anim.is(TELEPORT))
                 this.previousAttack = anim.id();
             if (anim.is(CHARGE)) {
-                this.chargeMotion = null;
+                this.setChargeDirection(null);
                 this.getAttribute(Attributes.STEP_HEIGHT)
                         .addTransientModifier(new AttributeModifier(LibConstants.STEP_UP_TEMP, 1, AttributeModifier.Operation.ADD_VALUE));
             }
@@ -214,7 +218,7 @@ public class Sarcophagus extends BossMonster {
         return false;
     });
     protected List<LivingEntity> hitEntity;
-    private Vec3 chargeMotion, starFallPre, starFallPos;
+    private Vec3 starFallPre, starFallPos;
     private boolean teleported, gravityPre;
     private String previousAttack = "", forceSetNextAttack;
     private int starfallCooldown;
@@ -227,6 +231,12 @@ public class Sarcophagus extends BossMonster {
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(RuneCraftoryEntities.SARCOPHAGUS.getID(), this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(RuneCraftorySounds.SARCOPHAGUS_FIGHT.get());
+    }
+
+    @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -323,7 +333,7 @@ public class Sarcophagus extends BossMonster {
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE)) {
             if (this.getAnimationHandler().getAnimation().isPast("attack_start"))
-                return this.chargeMotion;
+                return this.getChargeMotion();
             return null;
         }
         return super.directionToLookAt();
@@ -456,15 +466,12 @@ public class Sarcophagus extends BossMonster {
         return true;
     }
 
-    protected void setChargeDirection(Vec3 moveDirection) {
-        this.chargeMotion = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.chargeMotion);
+    public Vec3 getChargeMotion() {
+        return this.getDataContainer().get(CHARGE_MOTION);
     }
 
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, motion -> this.chargeMotion = motion);
+    protected void setChargeDirection(Vec3 moveDirection) {
+        this.getDataContainer().set(CHARGE_MOTION, moveDirection);
     }
 
     @Override

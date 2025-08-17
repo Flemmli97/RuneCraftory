@@ -1,14 +1,12 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
 import io.github.flemmli97.runecraftory.common.entities.misc.PollenEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
@@ -22,6 +20,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -42,6 +43,8 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAtt
 import java.util.function.BiConsumer;
 
 public class Ambrosia extends BossMonster {
+
+    public static final TypedResource<Vec3> MOVE_DIRECTION = new TypedResource<>(RuneCraftory.modRes("move_direction"));
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String KICK_1 = BUILDER.add("kick_1", AnimationsBuilder.definition(0.8)
@@ -96,11 +99,11 @@ public class Ambrosia extends BossMonster {
                 RuneCraftorySpells.WAVE.get().use(entity);
         });
         BiConsumer<AnimationState, Ambrosia> pollenHandler = (anim, entity) -> {
-            if (entity.moveDirection == null) {
+            if (entity.getMoveDirection() == null) {
                 entity.setMoveDirection(EntityUtils.getTargetDirection(entity, EntityAnchorArgument.Anchor.FEET, true)
                         .scale(0.35));
             }
-            entity.setDeltaMovement(entity.moveDirection);
+            entity.setDeltaMovement(entity.getMoveDirection());
             if (anim.isAt("attack") && !EntityUtils.sealed(entity)) {
                 entity.getNavigation().stop();
                 PollenEntity pollen = new PollenEntity(entity.level(), entity);
@@ -119,7 +122,6 @@ public class Ambrosia extends BossMonster {
         }
         return false;
     });
-    private Vec3 moveDirection;
 
     public Ambrosia(EntityType<? extends Ambrosia> type, Level level) {
         super(type, level);
@@ -129,6 +131,12 @@ public class Ambrosia extends BossMonster {
     public RunecraftoryBossbar createBossBar() {
         return new RunecraftoryBossbar(RuneCraftoryEntities.AMBROSIA.getID(), this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS)
                 .setMusic(RuneCraftorySounds.AMBROSIA_FIGHT.get());
+    }
+
+    @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(MOVE_DIRECTION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -200,7 +208,7 @@ public class Ambrosia extends BossMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(POLLEN, POLLEN_2)) {
-            return this.moveDirection;
+            return this.getMoveDirection();
         }
         return super.directionToLookAt();
     }
@@ -258,12 +266,6 @@ public class Ambrosia extends BossMonster {
     }
 
     @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, motion -> this.moveDirection = motion);
-    }
-
-    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
@@ -274,9 +276,12 @@ public class Ambrosia extends BossMonster {
         super.push(x, y, z);
     }
 
-    protected void setMoveDirection(Vec3 moveDirection) {
-        this.moveDirection = moveDirection;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.moveDirection);
+    public Vec3 getMoveDirection() {
+        return this.getDataContainer().get(MOVE_DIRECTION);
+    }
+
+    public void setMoveDirection(Vec3 direction) {
+        this.getDataContainer().set(MOVE_DIRECTION, direction);
     }
 
     @Override

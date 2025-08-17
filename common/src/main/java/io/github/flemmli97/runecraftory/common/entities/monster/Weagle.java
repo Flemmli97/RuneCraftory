@@ -1,12 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableDatas;
-import io.github.flemmli97.runecraftory.common.entities.data.SyncableEntityData;
-import io.github.flemmli97.runecraftory.common.network.S2CMobUpdate;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -17,6 +15,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -42,6 +43,8 @@ import java.util.List;
 
 public class Weagle extends BaseMonster {
 
+    public static final TypedResource<Vec3> SWOOP_MOTION = new TypedResource<>(RuneCraftory.modRes("swoop_motion"));
+
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
     public static final String GALE = BUILDER.add("gale", AnimationsBuilder.definition(0.96).marker("attack", 0.28));
     public static final String PECK = BUILDER.add("peck", AnimationsBuilder.definition(0.56).marker("attack", 0.2));
@@ -53,7 +56,6 @@ public class Weagle extends BaseMonster {
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     protected List<LivingEntity> hitEntity;
-    private Vec3 swoopMotion;
     private final AnimationHandler<Weagle> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 this.hitEntity = null;
@@ -70,6 +72,12 @@ public class Weagle extends BaseMonster {
     @Override
     protected PathNavigation createNavigation(Level level) {
         return new FloatingFlyNavigator(this, level);
+    }
+
+    @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(SWOOP_MOTION, SyncableDatas.VEC_3, null);
     }
 
     @Override
@@ -118,7 +126,7 @@ public class Weagle extends BaseMonster {
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(SWOOP)) {
-            return this.swoopMotion;
+            return this.getSwoopMotion();
         }
         return super.directionToLookAt();
     }
@@ -162,13 +170,13 @@ public class Weagle extends BaseMonster {
         } else if (anim.is(SWOOP)) {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
-            if (this.swoopMotion == null) {
+            if (this.getSwoopMotion() == null) {
                 this.setSwoopMotion(EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
                         .scale(0.2)
                         .add(0, -0.3, 0));
             }
             if (anim.isPast("swoop_start") && !anim.isPast("swoop_end")) {
-                this.setDeltaMovement(this.swoopMotion);
+                this.setDeltaMovement(this.getSwoopMotion());
                 this.mobAttack(anim, null, e -> {
                     if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
@@ -176,7 +184,7 @@ public class Weagle extends BaseMonster {
                     }
                 });
             } else {
-                this.setDeltaMovement(this.swoopMotion.multiply(-1, -0.7, -1));
+                this.setDeltaMovement(this.getSwoopMotion().multiply(-1, -0.7, -1));
             }
         } else
             super.handleAttack(anim);
@@ -204,15 +212,12 @@ public class Weagle extends BaseMonster {
     protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
     }
 
-    @Override
-    public void onUpdate(SyncableEntityData.SyncedContainer<?> data) {
-        super.onUpdate(data);
-        data.runIf(SyncableDatas.VEC_3, charge -> this.swoopMotion = charge);
+    public Vec3 getSwoopMotion() {
+        return this.getDataContainer().get(SWOOP_MOTION);
     }
 
     public void setSwoopMotion(Vec3 swoopMotion) {
-        this.swoopMotion = swoopMotion;
-        S2CMobUpdate.send(this, SyncableDatas.VEC_3, this.swoopMotion);
+        this.getDataContainer().set(SWOOP_MOTION, swoopMotion);
     }
 
     @Override
