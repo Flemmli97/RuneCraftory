@@ -6,11 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitLeaveDecorator;
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeSproutConfiguration;
 import io.github.flemmli97.runecraftory.common.world.features.trees.FruitTreeTrunkPlacer;
-import io.github.flemmli97.tenshilib.common.data.provider.CodecBasedProvider;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
@@ -22,36 +18,26 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePla
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
-public class ConfiguredFeatureGen extends CodecBasedProvider<ConfiguredFeature<?, ?>> {
+public class ConfiguredFeatureGen {
 
-    public ConfiguredFeatureGen(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> provider) {
-        super(output, PackOutput.Target.DATA_PACK, "Configured Features", modid, Registries.CONFIGURED_FEATURE.location().getPath(), ConfiguredFeature.DIRECT_CODEC, provider);
+    public static void bootStrap(BootstrapContext<ConfiguredFeature<?, ?>> ctx) {
+        ctx.register(RuneCraftoryFeatures.APPLE_1, fruitSprout(RuneCraftoryBlocks.APPLE_WOOD.get(), RuneCraftoryBlocks.APPLE_LEAVES.get()));
+        ctx.register(RuneCraftoryFeatures.APPLE_2, fruitTree(RuneCraftoryBlocks.APPLE_WOOD.get(), RuneCraftoryBlocks.APPLE_LEAVES.get(), RuneCraftoryBlocks.APPLE.get(), false));
+        ctx.register(RuneCraftoryFeatures.APPLE_3, fruitTree(RuneCraftoryBlocks.APPLE_WOOD.get(), RuneCraftoryBlocks.APPLE_LEAVES.get(), RuneCraftoryBlocks.APPLE.get(), true));
+        ctx.register(RuneCraftoryFeatures.ORANGE_1, fruitSprout(RuneCraftoryBlocks.ORANGE_WOOD.get(), RuneCraftoryBlocks.ORANGE_LEAVES.get()));
+        ctx.register(RuneCraftoryFeatures.ORANGE_2, fruitTree(RuneCraftoryBlocks.ORANGE_WOOD.get(), RuneCraftoryBlocks.ORANGE_LEAVES.get(), RuneCraftoryBlocks.ORANGE.get(), false));
+        ctx.register(RuneCraftoryFeatures.ORANGE_3, fruitTree(RuneCraftoryBlocks.ORANGE_WOOD.get(), RuneCraftoryBlocks.ORANGE_LEAVES.get(), RuneCraftoryBlocks.ORANGE.get(), true));
+        ctx.register(RuneCraftoryFeatures.GRAPE_1, fruitSprout(RuneCraftoryBlocks.GRAPE_WOOD.get(), RuneCraftoryBlocks.GRAPE_LEAVES.get()));
+        ctx.register(RuneCraftoryFeatures.GRAPE_2, fruitTree(RuneCraftoryBlocks.GRAPE_WOOD.get(), RuneCraftoryBlocks.GRAPE_LEAVES.get(), RuneCraftoryBlocks.GRAPE.get(), false));
+        ctx.register(RuneCraftoryFeatures.GRAPE_3, fruitTree(RuneCraftoryBlocks.GRAPE_WOOD.get(), RuneCraftoryBlocks.GRAPE_LEAVES.get(), RuneCraftoryBlocks.GRAPE.get(), true));
     }
 
-    @Override
-    protected void add(HolderLookup.Provider provider) {
-        this.add(RuneCraftoryFeatures.APPLE_1.location(), this.fruitSprout(RuneCraftoryBlocks.APPLE_WOOD.get(), RuneCraftoryBlocks.APPLE_LEAVES.get()));
-        this.add(RuneCraftoryFeatures.APPLE_2.location(), this.fruitTree(RuneCraftoryBlocks.APPLE_WOOD.get(), RuneCraftoryBlocks.APPLE_LEAVES.get(), RuneCraftoryBlocks.APPLE.get(), false));
-        this.add(RuneCraftoryFeatures.APPLE_3.location(), this.fruitTree(RuneCraftoryBlocks.APPLE_WOOD.get(), RuneCraftoryBlocks.APPLE_LEAVES.get(), RuneCraftoryBlocks.APPLE.get(), true));
-        this.add(RuneCraftoryFeatures.ORANGE_1.location(), this.fruitSprout(RuneCraftoryBlocks.ORANGE_WOOD.get(), RuneCraftoryBlocks.ORANGE_LEAVES.get()));
-        this.add(RuneCraftoryFeatures.ORANGE_2.location(), this.fruitTree(RuneCraftoryBlocks.ORANGE_WOOD.get(), RuneCraftoryBlocks.ORANGE_LEAVES.get(), RuneCraftoryBlocks.ORANGE.get(), false));
-        this.add(RuneCraftoryFeatures.ORANGE_3.location(), this.fruitTree(RuneCraftoryBlocks.ORANGE_WOOD.get(), RuneCraftoryBlocks.ORANGE_LEAVES.get(), RuneCraftoryBlocks.ORANGE.get(), true));
-        this.add(RuneCraftoryFeatures.GRAPE_1.location(), this.fruitSprout(RuneCraftoryBlocks.GRAPE_WOOD.get(), RuneCraftoryBlocks.GRAPE_LEAVES.get()));
-        this.add(RuneCraftoryFeatures.GRAPE_2.location(), this.fruitTree(RuneCraftoryBlocks.GRAPE_WOOD.get(), RuneCraftoryBlocks.GRAPE_LEAVES.get(), RuneCraftoryBlocks.GRAPE.get(), false));
-        this.add(RuneCraftoryFeatures.GRAPE_3.location(), this.fruitTree(RuneCraftoryBlocks.GRAPE_WOOD.get(), RuneCraftoryBlocks.GRAPE_LEAVES.get(), RuneCraftoryBlocks.GRAPE.get(), true));
-    }
-
-    public void add(ResourceLocation id, ConfiguredFeature<?, ?> feature) {
-        this.contents.put(id, feature);
-    }
-
-    private ConfiguredFeature<FruitTreeSproutConfiguration, ?> fruitSprout(Block log, Block leave) {
+    private static ConfiguredFeature<FruitTreeSproutConfiguration, ?> fruitSprout(Block log, Block leave) {
         return new ConfiguredFeature<>(RuneCraftoryFeatures.FRUIT_SPROUT.get(), new FruitTreeSproutConfiguration(BlockStateProvider.simple(log.defaultBlockState().setValue(TreeLogBlock.IS_TREE_PART, true)), BlockStateProvider.simple(leave)));
     }
 
-    private ConfiguredFeature<TreeConfiguration, ?> fruitTree(Block log, Block leave, Block fruit, boolean max) {
+    private static ConfiguredFeature<TreeConfiguration, ?> fruitTree(Block log, Block leave, Block fruit, boolean max) {
         return new ConfiguredFeature<>(Feature.TREE,
                 new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(log.defaultBlockState().setValue(TreeLogBlock.IS_TREE_PART, true)),
                         new FruitTreeTrunkPlacer(max ? 3 : 1, 1, max ? 2 : 1, max ? 3 : 1),

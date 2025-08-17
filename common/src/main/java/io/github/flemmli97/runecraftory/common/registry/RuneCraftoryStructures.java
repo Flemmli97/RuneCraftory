@@ -26,5 +26,5 @@ public class RuneCraftoryStructures {
     public static final RegistryEntrySupplier<StructureProcessorType<?>, StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURE_PROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);
 
     public static final ResourceKey<StructureTemplatePool> NPC_HOUSES = ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/houses"));
-    public static final ResourceKey<StructureTemplatePool> NPC_BIG_HOUSES = ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/houses"));
+    public static final ResourceKey<StructureTemplatePool> NPC_BIG_HOUSES = ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/big_houses"));
 }

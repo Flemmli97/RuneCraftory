@@ -15,6 +15,7 @@ import io.github.flemmli97.runecraftory.neoforge.data.tags.MobEffectTagGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.FeatureWorldGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -93,12 +94,17 @@ public class DataEvent {
         data.addProvider(true, new FarmlandHoeTileActionGen(packOutput, provider));
 
         data.addProvider(true, new StructureBossGen(packOutput, verifier, provider));
-        data.addProvider(true, new StructureWorldGen(packOutput, provider, verifier));
-        data.addProvider(true, new FeatureWorldGen(packOutput, provider));
+        RegistrySetBuilder builder = new RegistrySetBuilder();
+        PostProcessVerification dataVerifier = new PostProcessVerification(verifier);
+        StructureWorldGen.createWorldgenStructures(builder, dataVerifier);
+        FeatureWorldGen.createWorldgenFeatures(builder);
+        event.createDatapackRegistryObjects(builder);
 
         data.addProvider(true, new BookGen(provider, packOutput));
         data.addProvider(true, new BookContentGen(provider, packOutput));
         data.addProvider(true, new ImprovedMobsDataGen(packOutput, provider));
+
+        data.addProvider(true, dataVerifier);
     }
 
     protected static class IgnoreFileHelper extends ExistingFileHelper {

@@ -65,8 +65,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -167,7 +165,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         CommandRegistrationCallback.EVENT.register(((dispatcher, ctx, selection) -> RunecraftoryCommand.reg(dispatcher, ctx)));
         WorldRegistrationCalls.createFeatures(null, feat ->
                 BiomeModifications.addFeature(ctx -> ctx.getBiomeRegistryEntry().is(feat.tag()),
-                        feat.decoration(), ResourceKey.create(Registries.PLACED_FEATURE, feat.placedFeature())));
+                        feat.decoration(), feat.placedFeature()));
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.dimension() == Level.OVERWORLD) {
                 WorldCalls.tick(world);

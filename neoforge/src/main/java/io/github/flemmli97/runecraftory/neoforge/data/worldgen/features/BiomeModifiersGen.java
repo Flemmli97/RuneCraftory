@@ -6,6 +6,8 @@ import io.github.flemmli97.tenshilib.common.data.provider.CodecBasedProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
@@ -16,6 +18,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class BiomeModifiersGen extends CodecBasedProvider<BiomeModifier> {
+
+    public static void bootStrap(BootstrapContext<BiomeModifier> ctx) {
+        ctx.register(ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, RuneCraftory.modRes("gate_spawn")),
+                new BiomeModifiers.AddSpawnsBiomeModifier(new AnyHolderSet<>(null),
+                        List.of(WorldRegistrationCalls.gateSetting())));
+    }
 
     public BiomeModifiersGen(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> provider) {
         super(output, PackOutput.Target.DATA_PACK, "Biome Modifiers", modid,

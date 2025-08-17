@@ -1,82 +1,56 @@
 package io.github.flemmli97.runecraftory.neoforge.data.worldgen;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.features.BiomeModifiersGen;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.features.ConfiguredFeatureGen;
-import io.github.flemmli97.runecraftory.neoforge.data.worldgen.features.PlacedFeatureGen;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
+import java.util.Map;
 import java.util.function.Function;
 
-public class FeatureWorldGen implements DataProvider {
+public class FeatureWorldGen {
 
-    protected final CompletableFuture<HolderLookup.Provider> provider;
+    public static void createWorldgenFeatures(RegistrySetBuilder builder) {
+        Map<ResourceKey<ConfiguredFeature<?, ?>>, Function<WorldRegistrationCalls.HolderGetterLookup, ConfiguredFeature<?, ?>>> configured = new HashMap<>();
+        Map<ResourceKey<PlacedFeature>, Function<WorldRegistrationCalls.HolderGetterLookup, PlacedFeature>> placed = new HashMap<>();
+        List<WorldRegistrationCalls.FeatureBiomeModifier> features = new ArrayList<>();
 
-    private final List<DataProvider> subProviders = new ArrayList<>();
-    private final ConfiguredFeatureGen configuredFeatureGen;
-    private final PlacedFeatureGen placedFeatureGen;
-    private final BiomeModifiersGen biomeModifiersGen;
-
-    public FeatureWorldGen(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> provider) {
-        this.provider = provider;
-        this.subProviders.add(this.configuredFeatureGen = new ConfiguredFeatureGen(packOutput, RuneCraftory.MODID, provider));
-        this.subProviders.add(this.placedFeatureGen = new PlacedFeatureGen(packOutput, RuneCraftory.MODID, provider));
-        this.subProviders.add(this.biomeModifiersGen = new BiomeModifiersGen(packOutput, RuneCraftory.MODID, provider));
-    }
-
-    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<T> key) {
-        return Holder.Reference.createStandAlone(provider.lookupOrThrow(key.registryKey()),
-                key);
-    }
-
-    protected static <T> Holder<T> create(HolderLookup.Provider provider, ResourceKey<Registry<T>> key, ResourceLocation location) {
-        return Holder.Reference.createStandAlone(provider.lookupOrThrow(key),
-                ResourceKey.create(key, location));
-    }
-
-    @SuppressWarnings("deprecation")
-    protected void add(HolderLookup.Provider provider) {
         WorldRegistrationCalls.createFeatures(new WorldRegistrationCalls.FeatureRegister() {
             @Override
-            public void registerConfigured(ResourceLocation id, Function<HolderLookup.Provider, ConfiguredFeature<?, ?>> feature) {
-                FeatureWorldGen.this.configuredFeatureGen.add(id, feature.apply(provider));
+            public void registerConfigured(ResourceKey<ConfiguredFeature<?, ?>> id, Function<WorldRegistrationCalls.HolderGetterLookup, ConfiguredFeature<?, ?>> register) {
+                configured.put(id, register);
             }
 
             @Override
-            public void registerPlaced(ResourceLocation id, ResourceLocation configuredId, BiFunction<HolderLookup.Provider, Holder<ConfiguredFeature<?, ?>>, PlacedFeature> placed) {
-                FeatureWorldGen.this.placedFeatureGen.add(id, placed.apply(provider, create(provider, Registries.CONFIGURED_FEATURE, configuredId)));
+            public void registerPlaced(ResourceKey<PlacedFeature> id, Function<WorldRegistrationCalls.HolderGetterLookup, PlacedFeature> register) {
+                placed.put(id, register);
             }
-        }, feat -> this.biomeModifiersGen.add(feat.placedFeature(), new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.emptyNamed(provider.lookupOrThrow(Registries.BIOME), feat.tag()),
-                HolderSet.direct(create(provider, Registries.PLACED_FEATURE, feat.placedFeature())), feat.decoration())));
-    }
-
-    @Override
-    public CompletableFuture<?> run(CachedOutput cache) {
-        return this.provider.thenAccept(this::add)
-                .thenCompose(res -> CompletableFuture.allOf(this.subProviders.stream().map(p -> p.run(cache))
-                        .toArray(CompletableFuture[]::new)));
-    }
-
-    @Override
-    public String getName() {
-        return "Feature World Gen Data";
+        }, features::add);
+        builder.add(Registries.CONFIGURED_FEATURE, ctx -> {
+            configured.forEach((key, func) -> {
+                ctx.register(key, func.apply(ctx::lookup));
+            });
+            ConfiguredFeatureGen.bootStrap(ctx);
+        }).add(Registries.PLACED_FEATURE, ctx -> {
+            placed.forEach((key, func) -> {
+                ctx.register(key, func.apply(ctx::lookup));
+            });
+        }).add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ctx -> {
+            features.forEach(feat -> ctx.register(ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, feat.placedFeature().location()), new BiomeModifiers.AddFeaturesBiomeModifier(
+                    ctx.lookup(Registries.BIOME).getOrThrow(feat.tag()),
+                    HolderSet.direct(ctx.lookup(Registries.PLACED_FEATURE).getOrThrow(feat.placedFeature())),
+                    feat.decoration())));
+            BiomeModifiersGen.bootStrap(ctx);
+        });
     }
 }

@@ -1,0 +1,37 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "runecraftory:npc/bath_house",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "runecraftory:npc_processor",
+              "profession": "runecraftory:bathhouse_attendant"
+            }
+          ]
+        },
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "runecraftory:npc/restaurant",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "runecraftory:npc_processor",
+              "profession": "runecraftory:chef"
+            }
+          ]
+        },
+        "projection": "rigid"
+      },
+      "weight": 2
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

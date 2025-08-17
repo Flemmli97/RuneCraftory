@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.common.world.features.config.ChancedBloc
 import io.github.flemmli97.runecraftory.mixinhelper.StructureTemplateModifier;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -48,7 +48,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -89,31 +88,29 @@ public class WorldRegistrationCalls {
     @SuppressWarnings("deprecation")
     public static void createFeatures(@Nullable FeatureRegister register,
                                       Consumer<FeatureBiomeModifier> placedFeatureHandler) {
-        ResourceLocation herbs = RuneCraftoryFeatures.CONFIGRED_HERB_FEATURE.location();
         if (register != null) {
             List<HerbFeatureEntry> herbEntries = defaultHerbEntries();
-            herbEntries.forEach(entry -> register.registerConfigured(entry.getId(),
+            herbEntries.forEach(entry -> register.registerConfigured(entry.configuredId(),
                     provider -> new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(64, 8, 8,
                             Holder.direct(new PlacedFeature(Holder.direct(new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                                     new SimpleBlockConfiguration(BlockStateProvider.simple(entry.block().get()))
                             )), List.of(BlockPredicateFilter.forPredicate(BlockPredicate.matchesTag(BlockTags.AIR)))))))));
             // Group all together
-            register.registerConfigured(herbs,
+            register.registerConfigured(RuneCraftoryFeatures.CONFIGRED_HERB_FEATURE,
                     provider -> {
                         List<BiomeFilteredConfig.BiomeFilteredEntry> filtered = herbEntries.stream().map(entry ->
                                 new BiomeFilteredConfig.BiomeFilteredEntry(Holder.direct(
-                                        new PlacedFeature(Holder.Reference.createStandAlone(provider.lookupOrThrow(Registries.CONFIGURED_FEATURE),
-                                                ResourceKey.create(Registries.CONFIGURED_FEATURE, entry.getId())), List.of())),
+                                        new PlacedFeature(provider.get(entry.configuredId()), List.of())),
                                         RunecraftoryTags.Biomes.getBlockBasedGenerationTag(entry.block(), true),
                                         RunecraftoryTags.Biomes.getBlockBasedGenerationTag(entry.block(), false), entry.weight())).toList();
                         return new ConfiguredFeature<>(RuneCraftoryFeatures.BIOME_FILTERED_RANDOM_FEATURES.get(), new BiomeFilteredConfig(filtered));
                     });
-            register.registerPlaced(herbs,
-                    (provider, feat) -> new PlacedFeature(feat, List.of(RarityFilter.onAverageOnceEvery(4),
+            register.registerPlaced(RuneCraftoryFeatures.HERB_FEATURE,
+                    provider -> new PlacedFeature(provider.get(RuneCraftoryFeatures.CONFIGRED_HERB_FEATURE), List.of(RarityFilter.onAverageOnceEvery(4),
                             InSquarePlacement.spread(),
                             PlacementUtils.HEIGHTMAP)));
         }
-        placedFeatureHandler.accept(FeatureBiomeModifier.of(herbs));
+        placedFeatureHandler.accept(FeatureBiomeModifier.of(RuneCraftoryFeatures.HERB_FEATURE));
         List<FeatureBiomeModifier> placedFeatures = new ArrayList<>();
         placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_IRON, 15, 2, 5));
         placedFeatures.addAll(registerMineralFeatures(register, RuneCraftoryBlocks.MINERAL_TIN, 20, 2, 4));
@@ -131,24 +128,25 @@ public class WorldRegistrationCalls {
         placedFeatures.forEach(placedFeatureHandler);
 
         if (register != null) {
-            register.registerConfigured(RuneCraftoryFeatures.HOT_SPRING_LAKE.location(), p -> new ConfiguredFeature<>(Feature.LAKE,
+            register.registerConfigured(RuneCraftoryFeatures.HOT_SPRING_LAKE, p -> new ConfiguredFeature<>(Feature.LAKE,
                     new LakeFeature.Configuration(BlockStateProvider.simple(RuneCraftoryBlocks.HOT_SPRING_WATER.get()),
                             BlockStateProvider.simple(Blocks.STONE))));
-            register.registerPlaced(RuneCraftoryFeatures.HOT_SPRING_LAKE.location(),
-                    (provider, feat) -> new PlacedFeature(feat, List.of(
+            register.registerPlaced(RuneCraftoryFeatures.PLACED_HOT_SPRING_LAKE,
+                    provider -> new PlacedFeature(provider.get(RuneCraftoryFeatures.HOT_SPRING_LAKE), List.of(
                             RarityFilter.onAverageOnceEvery(4),
                             InSquarePlacement.spread(),
                             PlacementUtils.HEIGHTMAP_WORLD_SURFACE
                     )));
         }
-        placedFeatureHandler.accept(new FeatureBiomeModifier(RunecraftoryTags.Biomes.HAS_HOT_SPRINGS, GenerationStep.Decoration.LAKES, RuneCraftoryFeatures.HOT_SPRING_LAKE.location()));
+        placedFeatureHandler.accept(new FeatureBiomeModifier(RunecraftoryTags.Biomes.HAS_HOT_SPRINGS, GenerationStep.Decoration.LAKES, RuneCraftoryFeatures.PLACED_HOT_SPRING_LAKE));
     }
 
     @SuppressWarnings("deprecation")
     private static List<FeatureBiomeModifier> registerMineralFeatures(@Nullable FeatureRegister register, RegistryEntrySupplier<Block, ? extends MineralBlock> block,
                                                                       int chance, int min, int max) {
-        ResourceLocation id = RuneCraftory.modRes("mineral_" + block.getID().getPath().replace("ore_", ""));
-        ResourceLocation netherID = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + "_nether");
+        ResourceKey<ConfiguredFeature<?, ?>> id = ResourceKey.create(Registries.CONFIGURED_FEATURE, RuneCraftory.modRes("mineral_" + block.getID().getPath().replace("ore_", "")));
+        ResourceKey<PlacedFeature> idPlaced = ResourceKey.create(Registries.PLACED_FEATURE, id.location());
+        ResourceKey<PlacedFeature> netherIDPlaced = ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(id.location().getNamespace(), id.location().getPath() + "_nether"));
         if (register != null) {
             register.registerConfigured(id, provider -> {
                 MineralBlock mineral = block.get();
@@ -157,19 +155,19 @@ public class WorldRegistrationCalls {
                                 RunecraftoryTags.Biomes.getMineralGenTag(mineral.tier, true), RunecraftoryTags.Biomes.getMineralGenTag(mineral.tier, false),
                                 UniformInt.of(min, max), 4, 32));
             });
-            register.registerPlaced(id, (provider, feat) -> new PlacedFeature(feat, List.of(
+            register.registerPlaced(idPlaced, provider -> new PlacedFeature(provider.get(id), List.of(
                     RarityFilter.onAverageOnceEvery(chance),
                     InSquarePlacement.spread(),
                     PlacementUtils.RANGE_4_4
             )));
-            register.registerPlaced(netherID, id, (provider, feat) -> new PlacedFeature(feat, List.of(
+            register.registerPlaced(netherIDPlaced, provider -> new PlacedFeature(provider.get(id), List.of(
                     CountOnEveryLayerPlacement.of(5),
                     RarityFilter.onAverageOnceEvery(chance),
                     InSquarePlacement.spread()
             )));
         }
-        return List.of(FeatureBiomeModifier.of(id),
-                new FeatureBiomeModifier(BiomeTags.IS_NETHER, GenerationStep.Decoration.VEGETAL_DECORATION, netherID));
+        return List.of(FeatureBiomeModifier.of(idPlaced),
+                new FeatureBiomeModifier(BiomeTags.IS_NETHER, GenerationStep.Decoration.VEGETAL_DECORATION, netherIDPlaced));
     }
 
     public static MobSpawnSettings.SpawnerData gateSetting() {
@@ -202,27 +200,36 @@ public class WorldRegistrationCalls {
 
     public interface FeatureRegister {
 
-        void registerConfigured(ResourceLocation id, Function<HolderLookup.Provider, ConfiguredFeature<?, ?>> feature);
+        void registerConfigured(ResourceKey<ConfiguredFeature<?, ?>> id, Function<HolderGetterLookup, ConfiguredFeature<?, ?>> register);
 
-        default void registerPlaced(ResourceLocation id, BiFunction<HolderLookup.Provider, Holder<ConfiguredFeature<?, ?>>, PlacedFeature> placed) {
-            this.registerPlaced(id, id, placed);
-        }
-
-        void registerPlaced(ResourceLocation id, ResourceLocation configuredID, BiFunction<HolderLookup.Provider, Holder<ConfiguredFeature<?, ?>>, PlacedFeature> placed);
+        void registerPlaced(ResourceKey<PlacedFeature> id, Function<HolderGetterLookup, PlacedFeature> register);
     }
 
     public record FeatureBiomeModifier(TagKey<Biome> tag, GenerationStep.Decoration decoration,
-                                       ResourceLocation placedFeature) {
+                                       ResourceKey<PlacedFeature> placedFeature) {
 
-        public static FeatureBiomeModifier of(ResourceLocation id) {
+        public static FeatureBiomeModifier of(ResourceKey<PlacedFeature> id) {
             return new FeatureBiomeModifier(RunecraftoryTags.Biomes.VANILLA_DIMENSIONS, GenerationStep.Decoration.VEGETAL_DECORATION, id);
         }
     }
 
+    public interface HolderGetterLookup {
+        default <S> Holder<S> get(ResourceKey<S> key) {
+            return this.lookup(key.registryKey())
+                    .getOrThrow(key);
+        }
+
+        <S> HolderGetter<S> lookup(ResourceKey<? extends Registry<? extends S>> key);
+    }
+
     public record HerbFeatureEntry(RegistryEntrySupplier<Block, ?> block, int weight) {
 
-        public ResourceLocation getId() {
-            return RuneCraftory.modRes(this.block.getID().getPath());
+        public ResourceKey<ConfiguredFeature<?, ?>> configuredId() {
+            return ResourceKey.create(Registries.CONFIGURED_FEATURE, RuneCraftory.modRes(this.block.getID().getPath()));
+        }
+
+        public ResourceKey<PlacedFeature> placedId() {
+            return ResourceKey.create(Registries.PLACED_FEATURE, RuneCraftory.modRes(this.block.getID().getPath()));
         }
     }
 }

@@ -9,11 +9,9 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessio
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.NPCDataProcessor;
 import io.github.flemmli97.runecraftory.neoforge.data.worldgen.StructureWorldGen;
-import io.github.flemmli97.tenshilib.common.data.provider.CodecBasedProvider;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.data.worldgen.ProcessorLists;
 import net.minecraft.resources.ResourceKey;
@@ -23,39 +21,37 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
-public class TemplatePoolGen extends CodecBasedProvider<StructureTemplatePool> {
+public class TemplatePoolGen {
 
-    public TemplatePoolGen(PackOutput output, String modid, CompletableFuture<HolderLookup.Provider> provider) {
-        super(output, PackOutput.Target.DATA_PACK, "Template Pools", modid, Registries.TEMPLATE_POOL.location().getPath(), StructureTemplatePool.DIRECT_CODEC, provider);
-    }
-
-    @Override
-    protected void add(HolderLookup.Provider provider) {
-        this.add(RuneCraftory.modRes("npc/bath_house_under"), new StructureTemplatePool(
-                StructureWorldGen.create(provider, Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/bath_house_under")),
+    public static void bootStrap(BootstrapContext<StructureTemplatePool> ctx) {
+        ctx.register(ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/bath_house_under")), new StructureTemplatePool(
+                StructureWorldGen.create(ctx, Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/bath_house_under")),
                 ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house_under").apply(StructureTemplatePool.Projection.RIGID), 1))));
 
-        this.add(RuneCraftoryStructures.NPC_BIG_HOUSES.location(), new StructureTemplatePool(
-                StructureWorldGen.create(provider, Pools.EMPTY),
-                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house", this.npcProcessor(RuneCraftoryNPCProfessions.BATHHOUSE_ATTENDANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/restaurant", this.npcProcessor(RuneCraftoryNPCProfessions.CHEF.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
+        ctx.register(RuneCraftoryStructures.NPC_BIG_HOUSES, new StructureTemplatePool(
+                empty(ctx),
+                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house", npcProcessor(RuneCraftoryNPCProfessions.BATHHOUSE_ATTENDANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/restaurant", npcProcessor(RuneCraftoryNPCProfessions.CHEF.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
 
-        this.add(RuneCraftoryStructures.NPC_HOUSES.location(), new StructureTemplatePool(
-                StructureWorldGen.create(provider, Pools.EMPTY),
-                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", this.npcProcessor(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", this.npcProcessor(RuneCraftoryNPCProfessions.FLORIST.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", this.npcProcessor(RuneCraftoryNPCProfessions.BLACKSMITH.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", this.npcProcessor(RuneCraftoryNPCProfessions.DOCTOR.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", this.npcProcessor(RuneCraftoryNPCProfessions.SPELL_MERCHANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
-                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", this.npcProcessor(RuneCraftoryNPCProfessions.RUNE_ABILITIES_MERCHANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
+        ctx.register(RuneCraftoryStructures.NPC_HOUSES, new StructureTemplatePool(
+                empty(ctx),
+                ImmutableList.of(Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", npcProcessor(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", npcProcessor(RuneCraftoryNPCProfessions.FLORIST.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", npcProcessor(RuneCraftoryNPCProfessions.BLACKSMITH.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", npcProcessor(RuneCraftoryNPCProfessions.DOCTOR.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", npcProcessor(RuneCraftoryNPCProfessions.SPELL_MERCHANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2),
+                        Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", npcProcessor(RuneCraftoryNPCProfessions.RUNE_ABILITIES_MERCHANT.asHolder())).apply(StructureTemplatePool.Projection.RIGID), 2))));
 
         for (String s : WorldRegistrationCalls.VANILLA_VILLAGES) {
-            this.add(RuneCraftory.modRes("npc/streets/big_street_" + s), new StructureTemplatePool(
-                    StructureWorldGen.create(provider, Pools.EMPTY),
-                    ImmutableList.of(Pair.of(StructurePoolElement.legacy(RuneCraftory.MODID + ":npc/streets/big_street_" + s, StructureWorldGen.create(provider, fromVillage(s))).apply(StructureTemplatePool.Projection.TERRAIN_MATCHING), 2))));
+            ctx.register(ResourceKey.create(Registries.TEMPLATE_POOL, RuneCraftory.modRes("npc/streets/big_street_" + s)), new StructureTemplatePool(
+                    empty(ctx),
+                    ImmutableList.of(Pair.of(StructurePoolElement.legacy(RuneCraftory.MODID + ":npc/streets/big_street_" + s, StructureWorldGen.create(ctx, fromVillage(s))).apply(StructureTemplatePool.Projection.TERRAIN_MATCHING), 2))));
         }
+    }
+
+    private static Holder<StructureTemplatePool> empty(BootstrapContext<?> ctx) {
+        return ctx.lookup(Registries.TEMPLATE_POOL).getOrThrow(Pools.EMPTY);
     }
 
     private static ResourceKey<StructureProcessorList> fromVillage(String villageType) {
@@ -67,11 +63,7 @@ public class TemplatePoolGen extends CodecBasedProvider<StructureTemplatePool> {
         };
     }
 
-    public void add(ResourceLocation id, StructureTemplatePool pool) {
-        this.contents.put(id, pool);
-    }
-
-    private Holder<StructureProcessorList> npcProcessor(Holder<NPCProfession> shop) {
+    private static Holder<StructureProcessorList> npcProcessor(Holder<NPCProfession> shop) {
         return Holder.direct(new StructureProcessorList(List.of(
                 new NPCDataProcessor(shop.unwrapKey().orElseThrow().location())
         )));
