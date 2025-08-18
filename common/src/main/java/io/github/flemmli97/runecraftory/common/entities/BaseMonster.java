@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBeha
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SinkIfTooHigh;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
-import io.github.flemmli97.runecraftory.common.entities.data.RuneCraftorySyncableDatas;
 import io.github.flemmli97.runecraftory.common.entities.utils.CommonMonsterHandler;
 import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdater;
 import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
@@ -57,10 +56,12 @@ import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.AOEAttackEntity;
 import io.github.flemmli97.tenshilib.common.entity.ai.MoveControllerPlus;
+import io.github.flemmli97.tenshilib.common.entity.ai.TargetPosition;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToRestriction;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
@@ -182,7 +183,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> FRIEND_POINTS_SYNC = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
 
-    public static final TypedResource<MobAttackExt.TargetPosition> TARGET_POSITION = new TypedResource<>(RuneCraftory.modRes("target_position"));
+    public static final TypedResource<TargetPosition> TARGET_POSITION = new TypedResource<>(RuneCraftory.modRes("target_position"));
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -221,6 +222,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 riderTarget = controller instanceof Mob mob && e == mob.getTarget();
             }
             return riderTarget || e == this.getTarget() || EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, e instanceof Player, this.targetPred) || e instanceof Player;
+        }
+        return false;
+    };
+    public final Predicate<LivingEntity> defendPred = (e) -> {
+        if (e != this) {
+            if (this.getControllingPassenger() instanceof Player)
+                return false;
+            if (this.isTamed())
+                return !e.getUUID().equals(this.getOwnerUUID()) && !this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
+            return true;
         }
         return false;
     };
@@ -305,7 +316,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
-        builder.define(TARGET_POSITION, RuneCraftorySyncableDatas.TARGET_POS, null);
+        builder.define(TARGET_POSITION, SyncableDatas.TARGET_POS, null);
     }
 
     @Override
@@ -563,7 +574,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 new NearbyLivingEntitySensor<BaseMonster>()
                         .setPredicate((target, entity) -> entity.targetPred.test(target))
                         .setScanRate(e -> 10),
-                new HurtBySensor<>());
+                new HurtBySensor<BaseMonster>().setPredicate((source, entity) -> {
+                    if (source.getEntity() instanceof LivingEntity attacker)
+                        return entity.defendPred.test(attacker);
+                    return true;
+                }));
     }
 
     @Override
@@ -593,7 +608,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         new SetPlayerLookTarget<>()
                 ).startCondition(m -> m.getRandom().nextFloat() < 0.1 && !BrainUtils.hasMemory(m, MemoryModuleType.WALK_TARGET))
         ).startCondition(e -> !BrainUtils.hasMemory(e, MemoryModuleType.ATTACK_TARGET)
-                && !e.isSleeping() && !e.playDeath());
+                && !e.isSleeping() && !e.playDeath() && !e.getAnimationHandler().hasAnimation());
     }
 
     @Override
@@ -634,6 +649,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return !this.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<Activity, BrainActivityGroup<? extends BaseMonster>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends BaseMonster>> map = new HashMap<>();
@@ -1006,20 +1022,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return BrainUtils.getTargetOfEntity(this);
     }
 
-    public LivingEntity getGoalTarget() {
-        return super.getTarget();
-    }
-
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         super.setTarget(target);
         // In case setTarget is called without BrainUtils
         // Sync to memory
         // If BrainUtils is used it will override the brain target anyway
-        if (this.getGoalTarget() == null) {
+        if (super.getTarget() == null) {
             BrainUtils.clearMemory(this, MemoryModuleType.ATTACK_TARGET);
         } else {
-            BrainUtils.setMemory(this, MemoryModuleType.ATTACK_TARGET, this.getGoalTarget());
+            BrainUtils.setMemory(this, MemoryModuleType.ATTACK_TARGET, super.getTarget());
         }
     }
 

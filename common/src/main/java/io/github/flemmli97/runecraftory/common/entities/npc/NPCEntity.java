@@ -75,11 +75,16 @@ import io.github.flemmli97.runecraftory.common.world.data.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
+import io.github.flemmli97.tenshilib.common.entity.ai.TargetPosition;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToRestriction;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -198,13 +203,15 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt, SmartBrainOwner<NPCEntity> {
+public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt, SmartBrainOwner<NPCEntity>, SyncedMobDataHandler {
 
     public static final float PATH_FIND_LENGTH = 100;
 
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.INT);
+
+    public static final TypedResource<TargetPosition> TARGET_POSITION = new TypedResource<>(RuneCraftory.modRes("target_position"));
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -231,13 +238,23 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         }
         return false;
     };
-    private final AnimationHandler<NPCEntity> animationHandler = new AnimationHandler<>(this, PlayerModelAnimations.ANIMS).withChangeListener(anim -> {
-        if (this.getTarget() != null) {
-            this.lookAt(this.getTarget(), 360, 90);
-            this.targetPosition = TargetPosition.of(this.getTarget());
-        }
-        return false;
-    });
+    private final AnimationHandler<NPCEntity> animationHandler = new AnimationHandler<>(this, PlayerModelAnimations.ANIMS)
+            .withChangeListener(anim -> {
+                if (!this.level().isClientSide) {
+                    if (anim != null) {
+                        if (this.getTarget() != null) {
+                            this.lookAt(this.getTarget(), 360, 90);
+                            this.setTargetPosition(TargetPosition.of(this.getTarget()));
+                        }
+                    } else {
+                        this.setTargetPosition(null);
+                    }
+                }
+                return false;
+            });
+
+    private final SyncedDataContainer<NPCEntity> syncedDataContainer = SyncedDataContainer.builder(this)
+            .define(TARGET_POSITION, SyncableDatas.TARGET_POS, null).build();
 
     private final XpLevelHolder levelPair = new XpLevelHolder();
 
@@ -272,7 +289,6 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
     public final AttackActionHandler weaponHandler = new EntityWeaponHandler<>(this);
-    private TargetPosition targetPosition;
 
     public NPCEntity(EntityType<? extends NPCEntity> type, Level level) {
         super(type, level);
@@ -372,6 +388,11 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 }
             }
         }
+    }
+
+    @Override
+    public SyncedDataContainer<?> getDataContainer() {
+        return this.syncedDataContainer;
     }
 
     @Override
@@ -691,8 +712,6 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
         }
-        if (this.getAnimationHandler().getAnimation() == null)
-            this.targetPosition = null;
     }
 
     @Override
@@ -1132,9 +1151,13 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         return this.hitPred;
     }
 
+    public void setTargetPosition(TargetPosition target) {
+        this.syncedDataContainer.set(TARGET_POSITION, target);
+    }
+
     @Override
     public TargetPosition getTargetPosition() {
-        return this.targetPosition;
+        return this.syncedDataContainer.get(TARGET_POSITION);
     }
 
     @Override

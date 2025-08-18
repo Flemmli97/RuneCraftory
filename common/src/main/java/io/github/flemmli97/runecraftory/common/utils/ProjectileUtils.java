@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
+import io.github.flemmli97.tenshilib.common.entity.ai.TargetPosition;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
@@ -18,7 +19,7 @@ public class ProjectileUtils {
     }
 
     public static void shoot(LivingEntity shooter, BeamEntity beam, float inaccuracy) {
-        MobAttackExt.TargetPosition target;
+        TargetPosition target;
         if (shooter instanceof MobAttackExt ext && (target = ext.getTargetPosition()) != null) {
             Vec3 v = target.asVec(beam.position());
             beam.setRotationTo(v.x(), v.y(), v.z(), inaccuracy);
@@ -44,7 +45,7 @@ public class ProjectileUtils {
     }
 
     public static Vec3 getAimTarget(LivingEntity shooter, double offset) {
-        MobAttackExt.TargetPosition target;
+        TargetPosition target;
         if (shooter instanceof MobAttackExt ext && (target = ext.getTargetPosition()) != null) {
             return target.asVec(shooter.position().add(0, offset, 0));
         } else if (shooter instanceof Mob mob && mob.getTarget() != null) {

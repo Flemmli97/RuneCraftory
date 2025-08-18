@@ -98,7 +98,7 @@ public class MonsterBehaviourUtils {
                 .startCondition(entity -> {
                     AnimationPlayHolder<?> anim = BrainUtils.getMemory(entity, MoreMemoryModules.ANIMATION_TO_PLAY.get());
                     Entity target = BrainUtils.getTargetOfEntity(entity);
-                    return target == null || entity.isInAttackBox(target, anim.animation());
+                    return target != null && entity.isInAttackBox(target, anim.animation());
                 });
     }
 
