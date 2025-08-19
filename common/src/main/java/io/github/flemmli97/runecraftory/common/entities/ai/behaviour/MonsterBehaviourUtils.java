@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.tenshilib.common.entity.AOEAttackEntity;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToAttackTarget;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToWalkTargetWithSight;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.PlayAnimation;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetAnimationToPlay;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
@@ -17,7 +18,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.function.Predicate;
@@ -161,7 +161,7 @@ public class MonsterBehaviourUtils {
         return behaviour;
     }
 
-    public static <E extends PathfinderMob> MoveToWalkTarget<E> moveTo() {
+    public static <E extends PathfinderMob> MoveToWalkTargetWithSight<E> moveTo() {
         Predicate<E> reached = entity -> {
             WalkTarget target = BrainUtils.getMemory(entity, MemoryModuleType.WALK_TARGET);
             if (target != null && target.getTarget() instanceof EntityTracker entityTracker) {
@@ -175,7 +175,7 @@ public class MonsterBehaviourUtils {
             }
             return false;
         };
-        MoveToWalkTarget<E> behaviour = new MoveToWalkTarget<>();
+        MoveToWalkTargetWithSight<E> behaviour = new MoveToWalkTargetWithSight<>();
         behaviour.startCondition(entity -> !reached.test(entity));
         behaviour.stopIf(reached);
         return behaviour;

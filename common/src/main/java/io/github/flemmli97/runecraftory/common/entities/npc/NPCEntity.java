@@ -472,6 +472,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         );
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<Activity, BrainActivityGroup<? extends NPCEntity>> getAdditionalTasks() {
         Map<Activity, BrainActivityGroup<? extends NPCEntity>> map = new HashMap<>();

@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetTargetFromRider;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SinkIfTooHigh;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.TendCrops;
@@ -151,6 +150,7 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtAttackTarget
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
@@ -614,7 +614,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     @Override
     public BrainActivityGroup<? extends BaseMonster> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
-                MonsterBehaviourUtils.moveTo(),
+                new MoveToWalkTarget<>(),
                 new FirstApplicableBehaviour<>(
                         new TargetOrRetaliate<BaseMonster>(),
                         new SetMoveToRestriction<BaseMonster>(),
@@ -657,7 +657,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 .onlyStartWithMemoryStatus(RuneCraftoryMemoryTypes.STAYING.get(), MemoryStatus.VALUE_PRESENT));
         map.put(Activity.WORK, new BrainActivityGroup<BaseMonster>(Activity.WORK)
                 .priority(20).behaviours(
-                        MonsterBehaviourUtils.moveTo(),
+                        new MoveToWalkTarget<>(),
                         new FirstApplicableBehaviour<>(
                                 new SetMoveToRestriction<>(),
                                 new TendCrops<>())
