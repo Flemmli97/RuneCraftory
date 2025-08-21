@@ -35,6 +35,8 @@ public class ClientConfig {
     public static int bossMusicFadeDelay = 80;
     public static boolean customBossbars = true;
 
+    public static float screenShakeIntensity = 1;
+
     public enum HealthRPRenderType {
         NONE,
         BOTH,

@@ -32,6 +32,7 @@ public class ClientConfigSpec {
     public final ModConfigSpec.BooleanValue bossMusic;
     public final ModConfigSpec.IntValue bossMusicFadeDelay;
     public final ModConfigSpec.BooleanValue customBossbars;
+    public final ModConfigSpec.DoubleValue screenShakeIntensity;
 
     private ClientConfigSpec(ModConfigSpec.Builder builder) {
         this.healthBarWidgetX = builder.comment("X Position of health bar").defineInRange("Health X", ClientConfig.healthBarWidgetX, Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -58,5 +59,6 @@ public class ClientConfigSpec {
         this.bossMusic = builder.comment("Bosses play a battle music during fight").define("Boss Music", ClientConfig.bossMusic);
         this.bossMusicFadeDelay = builder.comment("Time in ticks for boss music to fade away if the player runs away from the boss").defineInRange("Boss Music Fade", ClientConfig.bossMusicFadeDelay, 0, Integer.MAX_VALUE);
         this.customBossbars = builder.comment("Whether to use custom boss bars or not").define("Custom Bossbar", ClientConfig.customBossbars);
+        this.screenShakeIntensity = builder.comment("Intensity for screen shaking").defineInRange("Screen Shake Intensity", ClientConfig.screenShakeIntensity, 0, 1);
     }
 }

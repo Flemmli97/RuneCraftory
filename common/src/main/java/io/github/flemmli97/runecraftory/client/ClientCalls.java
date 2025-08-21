@@ -321,8 +321,8 @@ public class ClientCalls {
         int t = ShakeHandler.shakeTick;
         if (t <= 0)
             return;
-        float strengthPitch = ShakeHandler.shakeStrength;
-        float strengthRoll = ShakeHandler.shakeStrength;
+        float strengthPitch = ShakeHandler.shakeStrength * ClientConfig.screenShakeIntensity;
+        float strengthRoll = ShakeHandler.shakeStrength * ClientConfig.screenShakeIntensity;
         float pT = (t - partialTicks) * 24;
         setPitch.accept(pitch + Mth.sin(pT * 2) * strengthPitch);
         setRoll.accept(roll + Mth.sin(pT) * strengthRoll);
