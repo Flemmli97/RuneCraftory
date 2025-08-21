@@ -7,17 +7,21 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.object.MemoryTest;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.List;
 
 public class SetTargetFromRider<E extends LivingEntity> extends ExtendedBehaviour<E> {
 
+    private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORIES = MemoryTest.builder(1)
+            .usesMemories(MemoryModuleType.ATTACK_TARGET);
+
     private LivingEntity target;
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of();
+        return MEMORIES;
     }
 
     @Override

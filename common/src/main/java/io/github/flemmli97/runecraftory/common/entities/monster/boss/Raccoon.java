@@ -131,12 +131,12 @@ public class Raccoon extends BossMonster {
                 if (entity.getTarget() != null) {
                     dir = entity.getTarget().position().subtract(entity.position());
                     dir = new Vec3(dir.x(), 0, dir.z());
-                    if (dir.lengthSqr() > 20)
+                    if (dir.lengthSqr() > 20 * 20)
                         dir = dir.normalize().scale(20 * 0.14);
                     else
                         dir = dir.scale(0.14);
                 } else {
-                    dir = EntityUtils.horizontalLookAngle(entity).scale(0.5);
+                    dir = EntityUtils.horizontalLookAngle(entity).scale(0.75);
                 }
                 entity.setDeltaMovement(dir.x(), 2.2, dir.z());
             }
