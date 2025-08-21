@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
@@ -41,6 +42,12 @@ public class DamageTypeTagGen extends TagsProvider<DamageType> {
                 DamageTypeTags.BYPASSES_ENCHANTMENTS, DamageTypeTags.BYPASSES_SHIELD, DamageTypeTags.NO_KNOCKBACK);
         this.tag(RuneCraftoryDamageType.EXHAUST, DamageTypeTags.BYPASSES_ARMOR, DamageTypeTags.BYPASSES_EFFECTS,
                 DamageTypeTags.BYPASSES_ENCHANTMENTS, DamageTypeTags.BYPASSES_SHIELD, DamageTypeTags.NO_KNOCKBACK);
+
+        this.tag(Tags.DamageTypes.IS_POISON)
+                .add(RuneCraftoryDamageType.STRONG_POISON);
+
+        this.tag(Tags.DamageTypes.IS_MAGIC)
+                .addTag(RunecraftoryTags.DamageTypes.IS_MAGIC);
     }
 
     @SafeVarargs
