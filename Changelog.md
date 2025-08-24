@@ -1,3 +1,11 @@
+RuneCraftory 2.1.1
+================
+- Fix using wrong ops during resource loading
+- Add smooth movement for multipart entity (affects skelefang)
+- Update lib
+- Fix some worldgen things missing
+- Add screen shake intensity config
+
 RuneCraftory 2.1.0
 ================
 - Update quest dependency
