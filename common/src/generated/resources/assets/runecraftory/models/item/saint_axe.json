@@ -1,14 +1,24 @@
 {
-  "parent": "minecraft:item/handheld",
-  "overrides": [
-    {
-      "model": "runecraftory:item/saint_axe_held",
-      "predicate": {
-        "runecraftory:held": 1.0
+  "base": {
+    "parent": "runecraftory:item/handheld_32x32",
+    "textures": {
+      "layer0": "runecraftory:item/saint_axe_held"
+    }
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
+  "perspectives": {
+    "fixed": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "runecraftory:item/saint_axe"
+      }
+    },
+    "gui": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "runecraftory:item/saint_axe"
       }
     }
-  ],
-  "textures": {
-    "layer0": "runecraftory:item/saint_axe"
   }
 }

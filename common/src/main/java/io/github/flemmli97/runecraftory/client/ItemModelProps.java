@@ -13,21 +13,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemModelProps {
 
-    public static final ResourceLocation HELD_ID = RuneCraftory.modRes("held");
-    public static final ResourceLocation GLOVE_HELD_ID = RuneCraftory.modRes("glove_held");
+    public static final ResourceLocation SLIM_PLAYER_ID = RuneCraftory.modRes("slim_player");
     public static final ResourceLocation FISHING_ROD_ID = RuneCraftory.modRes("fishing");
     public static final ResourceLocation BABY_GENDER = RuneCraftory.modRes("baby_gender");
 
-    public static int HELD_TYPE;
-
-    public static final ClampedItemPropertyFunction HELD_MAIN_PROP = (stack, world, entity, i) -> HELD_TYPE;
-
-    public static final ClampedItemPropertyFunction HELD_MAIN_GLOVE = (stack, world, entity, i) -> {
+    public static final ClampedItemPropertyFunction SLIM_PLAYER_PROPERTY = (stack, world, entity, i) -> {
         if (entity != null) {
-            if (HELD_TYPE == 0)
-                return 0;
-            int skin = entity instanceof AbstractClientPlayer player && player.getSkin().model() == PlayerSkin.Model.SLIM ? 1 : 0;
-            return (HELD_TYPE + skin * 2) * 0.25f;
+            return entity instanceof AbstractClientPlayer player && player.getSkin().model() == PlayerSkin.Model.SLIM ? 1 : 0;
         }
         return 0;
     };

@@ -110,9 +110,7 @@ import io.github.flemmli97.runecraftory.common.blocks.TreeSaplingBlock;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.StoneEntity;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
-import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -234,10 +232,8 @@ public class ClientRegister {
 
     public static void registerItemProps(ItemModelPropsRegister register) {
         RuneCraftoryItems.ITEMS.getEntries().forEach(reg -> {
-            if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof BigWeapon)
-                register.register(reg.get(), ItemModelProps.HELD_ID, ItemModelProps.HELD_MAIN_PROP);
-            else if (reg.get() instanceof ItemGloveBase)
-                register.register(reg.get(), ItemModelProps.GLOVE_HELD_ID, ItemModelProps.HELD_MAIN_GLOVE);
+            if (reg.get() instanceof ItemGloveBase)
+                register.register(reg.get(), ItemModelProps.SLIM_PLAYER_ID, ItemModelProps.SLIM_PLAYER_PROPERTY);
             else if (reg.get() instanceof ItemToolFishingRod)
                 register.register(reg.get(), ItemModelProps.FISHING_ROD_ID, ItemModelProps.FISHING_RODS);
             else if (reg == RuneCraftoryItems.NPC_BABY)

@@ -1,14 +1,24 @@
 {
-  "parent": "minecraft:item/handheld",
-  "overrides": [
-    {
-      "model": "runecraftory:item/gorgeous_lx_single",
-      "predicate": {
-        "runecraftory:held": 1.0
-      }
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "runecraftory:item/gorgeous_lx"
     }
-  ],
-  "textures": {
-    "layer0": "runecraftory:item/gorgeous_lx"
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
+  "perspectives": {
+    "firstperson_lefthand": {
+      "parent": "runecraftory:item/gorgeous_lx_single"
+    },
+    "firstperson_righthand": {
+      "parent": "runecraftory:item/gorgeous_lx_single"
+    },
+    "thirdperson_lefthand": {
+      "parent": "runecraftory:item/gorgeous_lx_single"
+    },
+    "thirdperson_righthand": {
+      "parent": "runecraftory:item/gorgeous_lx_single"
+    }
   }
 }

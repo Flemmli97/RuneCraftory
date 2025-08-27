@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/handheld_big",
-  "textures": {
-    "layer0": "runecraftory:item/great_axe_held"
-  }
-}

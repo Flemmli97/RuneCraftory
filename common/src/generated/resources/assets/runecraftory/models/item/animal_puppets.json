@@ -1,32 +1,44 @@
 {
-  "parent": "minecraft:item/handheld",
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "runecraftory:item/animal_puppets"
+    }
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
   "overrides": [
     {
-      "model": "runecraftory:item/animal_puppets_held",
+      "model": "runecraftory:item/animal_puppets_slim",
       "predicate": {
-        "runecraftory:glove_held": 0.25
-      }
-    },
-    {
-      "model": "runecraftory:item/animal_puppets_held_left",
-      "predicate": {
-        "runecraftory:glove_held": 0.5
-      }
-    },
-    {
-      "model": "runecraftory:item/animal_puppets_held_s",
-      "predicate": {
-        "runecraftory:glove_held": 0.75
-      }
-    },
-    {
-      "model": "runecraftory:item/animal_puppets_held_s_left",
-      "predicate": {
-        "runecraftory:glove_held": 1.0
+        "runecraftory:slim_player": 1.0
       }
     }
   ],
-  "textures": {
-    "layer0": "runecraftory:item/animal_puppets"
+  "perspectives": {
+    "firstperson_lefthand": {
+      "parent": "runecraftory:item/fist_left",
+      "textures": {
+        "layer0": "runecraftory:item/animal_puppets_held"
+      }
+    },
+    "firstperson_righthand": {
+      "parent": "runecraftory:item/fist",
+      "textures": {
+        "layer0": "runecraftory:item/animal_puppets_held"
+      }
+    },
+    "thirdperson_lefthand": {
+      "parent": "runecraftory:item/fist_left",
+      "textures": {
+        "layer0": "runecraftory:item/animal_puppets_held"
+      }
+    },
+    "thirdperson_righthand": {
+      "parent": "runecraftory:item/fist",
+      "textures": {
+        "layer0": "runecraftory:item/animal_puppets_held"
+      }
+    }
   }
 }

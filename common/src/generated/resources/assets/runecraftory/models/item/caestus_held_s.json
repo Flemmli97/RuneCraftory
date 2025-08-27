@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/fist_s",
-  "textures": {
-    "layer0": "runecraftory:item/caestus_held"
-  }
-}

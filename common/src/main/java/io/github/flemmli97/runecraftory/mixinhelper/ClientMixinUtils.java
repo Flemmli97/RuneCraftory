@@ -5,14 +5,10 @@ import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
-import io.github.flemmli97.runecraftory.common.items.BigWeapon;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
@@ -162,26 +158,6 @@ public class ClientMixinUtils {
                 }
             }
         }
-    }
-
-    public static void adjustForHeldModel(ItemStack itemStack, ItemDisplayContext transformType) {
-        if (itemStack.getItem() instanceof ItemGloveBase || itemStack.getItem() instanceof BigWeapon) {
-            ItemModelProps.HELD_TYPE = switch (transformType) {
-                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> 1;
-                case FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND -> 2;
-                default -> 0;
-            };
-        } else if (itemStack.getItem() instanceof ItemDualBladeBase) {
-            ItemModelProps.HELD_TYPE = switch (transformType) {
-                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND ->
-                        1;
-                default -> 0;
-            };
-        }
-    }
-
-    public static void resetHeldModel() {
-        ItemModelProps.HELD_TYPE = 0;
     }
 
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, MultiBufferSource buffer, int combinedLight) {

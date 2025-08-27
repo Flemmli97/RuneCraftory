@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +31,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.loaders.SeparateTransformsModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.List;
@@ -40,20 +43,46 @@ import java.util.Set;
 public class ItemModels extends ItemModelProvider {
 
     private final Map<RegistryEntrySupplier<Item, ?>, ResourceLocation> dualItemMapping = this.getDualItemMapping();
-    private final Set<RegistryEntrySupplier<Item, ?>> existingSameGloveItems = this.generateSameGloveItemMapping();
+    private final Set<RegistryEntrySupplier<Item, ?>> customGloveModel = this.customGloveModels();
+    private final Set<RegistryEntrySupplier<Item, ?>> sameLeftGloveModel = this.sameLeftGloveModels();
 
     public ItemModels(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, RuneCraftory.MODID, existingFileHelper);
     }
 
+    private Map<RegistryEntrySupplier<Item, ?>, ResourceLocation> getDualItemMapping() {
+        ImmutableMap.Builder<RegistryEntrySupplier<Item, ?>, ResourceLocation> map = new ImmutableMap.Builder<>();
+        map.put(RuneCraftoryItems.SHORT_DAGGER, RuneCraftoryItems.BROAD_SWORD.getID());
+        map.put(RuneCraftoryItems.STEEL_EDGE, RuneCraftoryItems.STEEL_SWORD.getID());
+        map.put(RuneCraftoryItems.IRON_EDGE, RuneCraftoryItems.STEEL_SWORD_PLUS.getID());
+        map.put(RuneCraftoryItems.FROST_EDGE, RuneCraftoryItems.AQUA_SWORD.getID());
+        return map.build();
+    }
+
+    private Set<RegistryEntrySupplier<Item, ?>> customGloveModels() {
+        ImmutableSet.Builder<RegistryEntrySupplier<Item, ?>> builder = new ImmutableSet.Builder<>();
+        builder.add(RuneCraftoryItems.BRASS_KNUCKLES);
+        builder.add(RuneCraftoryItems.BEAR_CLAWS);
+        builder.add(RuneCraftoryItems.DRAGON_CLAWS);
+        return builder.build();
+    }
+
+    private Set<RegistryEntrySupplier<Item, ?>> sameLeftGloveModels() {
+        ImmutableSet.Builder<RegistryEntrySupplier<Item, ?>> builder = new ImmutableSet.Builder<>();
+        builder.add(RuneCraftoryItems.BRASS_KNUCKLES);
+        builder.add(RuneCraftoryItems.BEAR_CLAWS);
+        builder.add(RuneCraftoryItems.DRAGON_CLAWS);
+        return builder.build();
+    }
+
     @Override
     protected void registerModels() {
-        this.withExistingParent("fist_s", this.modLoc("fist")).transforms()
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
-        this.withExistingParent("fist_s_left", this.modLoc("fist_left")).transforms()
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+        this.withExistingParent("fist_slim", this.modLoc("fist")).transforms()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+        this.withExistingParent("fist_slim_left", this.modLoc("fist_left")).transforms()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
         List<RegistryEntrySupplier<Item, ?>> ribbons = RuneCraftoryItems.ribbons();
         List<RegistryEntrySupplier<Item, ?>> hats = RuneCraftoryItems.hatItems();
 
@@ -93,14 +122,16 @@ public class ItemModels extends ItemModelProvider {
             else if (sup == RuneCraftoryItems.TAME)
                 this.withExistingParent(sup.getID().getPath(), this.mcLoc(this.folder + "/template_spawn_egg"));
             else if (sup.get() instanceof ItemDualBladeBase) {
-                if (this.dualItemMapping.containsKey(sup))
-                    this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/handheld"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()))
-                            .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(this.dualItemMapping.get(sup)));
-                else {
-                    this.singleTexture(sup.getID().getPath() + "_single", this.mcLoc(this.folder + "/handheld"),
+                if (this.dualItemMapping.containsKey(sup)) {
+                    this.createDualBladeModel(sup, this.nested().parent(this.getExistingFile(this.mcLoc(this.folder + "/handheld")))
+                                    .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath())),
+                            this.nested().parent(this.getExistingFile(this.dualItemMapping.get(sup))));
+                } else {
+                    ItemModelBuilder single = this.singleTexture(sup.getID().getPath() + "_single", this.mcLoc(this.folder + "/handheld"),
                             "layer0", this.modLoc(this.folder + "/" + sup.getID().getPath() + "_single"));
-                    this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/handheld"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()))
-                            .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(ResourceLocation.fromNamespaceAndPath(sup.getID().getNamespace(), sup.getID().getPath() + "_single")));
+                    this.createDualBladeModel(sup, this.nested().parent(this.getExistingFile(this.mcLoc(this.folder + "/handheld")))
+                                    .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath())),
+                            this.nested().parent(single));
                 }
             } else if (sup.get() instanceof ItemGloveBase)
                 this.createGloveModels(sup);
@@ -122,12 +153,9 @@ public class ItemModels extends ItemModelProvider {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/generated"), "layer0", this.mcLoc(this.folder + "/bread"));
             else if (sup.get() instanceof SpawnEgg)
                 this.withExistingParent(sup.getID().getPath(), ModelLocationUtils.decorateItemModelLocation("template_spawn_egg"));
-            else if (sup.get() instanceof ItemLongSwordBase)
-                this.createBigWeaponModel(sup, this.modLoc(this.folder + "/handheld_long_sword"));
-            else if (sup.get() instanceof ItemAxeBase || sup.get() instanceof ItemHammerBase)
-                this.createBigWeaponModel(sup, this.modLoc(this.folder + "/handheld_big"));
-            else if (sup.get() instanceof ItemSpearBase)
-                this.createBigWeaponModel(sup, this.modLoc(this.folder + "/handheld_big"));
+            else if (sup.get() instanceof ItemLongSwordBase || sup.get() instanceof ItemAxeBase
+                    || sup.get() instanceof ItemHammerBase || sup.get() instanceof ItemSpearBase)
+                this.withInventoryVariant(sup, "handheld_32x32");
             else if (sup.get() instanceof TieredItem || sup.get() instanceof ItemStaffBase)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/handheld"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()));
             else if (sup.get() instanceof BlockItem && (sup.getID().getPath().startsWith("ore_") || sup == RuneCraftoryItems.SHIPPING_BIN
@@ -146,56 +174,91 @@ public class ItemModels extends ItemModelProvider {
         }
     }
 
-    private void createBigWeaponModel(RegistryEntrySupplier<Item, ?> sup, ResourceLocation heldModel) {
-        this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/handheld"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()))
-                .override()
-                .predicate(ItemModelProps.HELD_ID, 1)
-                .model(this.singleTexture(sup.getID().getPath() + "_held", heldModel, "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held")))
+    private ItemModelBuilder withInventoryVariant(RegistryEntrySupplier<Item, ?> reg, String parent) {
+        return this.getBuilder(reg.getID().getPath()).guiLight(BlockModel.GuiLight.FRONT)
+                .customLoader(SeparateTransformsModelBuilder::begin)
+                .base(this.nested().parent(this.getExistingFile(RuneCraftory.modRes(this.folder + "/" + parent)))
+                        .texture("layer0", reg.getID().withPath(s -> this.folder + "/" + s + "_held")))
+                .perspective(ItemDisplayContext.GUI, this.nested().parent(this.getExistingFile(this.mcLoc(this.folder + "/handheld")))
+                        .texture("layer0", reg.getID().withPath(s -> this.folder + "/" + s)))
+                .perspective(ItemDisplayContext.FIXED, this.nested().parent(this.getExistingFile(this.mcLoc(this.folder + "/handheld")))
+                        .texture("layer0", reg.getID().withPath(s -> this.folder + "/" + s)))
                 .end();
     }
 
-    private Map<RegistryEntrySupplier<Item, ?>, ResourceLocation> getDualItemMapping() {
-        ImmutableMap.Builder<RegistryEntrySupplier<Item, ?>, ResourceLocation> map = new ImmutableMap.Builder<>();
-        map.put(RuneCraftoryItems.SHORT_DAGGER, RuneCraftoryItems.BROAD_SWORD.getID());
-        map.put(RuneCraftoryItems.STEEL_EDGE, RuneCraftoryItems.STEEL_SWORD.getID());
-        map.put(RuneCraftoryItems.IRON_EDGE, RuneCraftoryItems.STEEL_SWORD_PLUS.getID());
-        map.put(RuneCraftoryItems.FROST_EDGE, RuneCraftoryItems.AQUA_SWORD.getID());
-        return map.build();
-    }
-
-    private Set<RegistryEntrySupplier<Item, ?>> generateSameGloveItemMapping() {
-        ImmutableSet.Builder<RegistryEntrySupplier<Item, ?>> builder = new ImmutableSet.Builder<>();
-        builder.add(RuneCraftoryItems.BRASS_KNUCKLES);
-        builder.add(RuneCraftoryItems.BEAR_CLAWS);
-        builder.add(RuneCraftoryItems.DRAGON_CLAWS);
-        return builder.build();
+    private void createDualBladeModel(RegistryEntrySupplier<Item, ?> sup, ItemModelBuilder base, ItemModelBuilder inHand) {
+        this.getBuilder(sup.getID().getPath())
+                .guiLight(BlockModel.GuiLight.FRONT)
+                .customLoader(SeparateTransformsModelBuilder::begin)
+                .base(base)
+                .perspective(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, inHand)
+                .perspective(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, inHand)
+                .perspective(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, inHand)
+                .perspective(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, inHand);
     }
 
     private void createGloveModels(RegistryEntrySupplier<Item, ?> sup) {
-        if (this.existingSameGloveItems.contains(sup)) {
-            ResourceLocation modelFile = this.modLoc(this.folder + "/" + sup.getID().getPath() + "_held");
-            this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/handheld"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()))
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.25f)
-                    .model(this.getExistingFile(modelFile)).end()
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.5f)
-                    .model(this.withExistingParent(sup.getID().getPath() + "_held_left", modelFile)).end()
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.75f)
-                    .model(this.withExistingParent(sup.getID().getPath() + "_held_s", modelFile).transforms()
-                            .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end()
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 1)
-                    .model(this.withExistingParent(sup.getID().getPath() + "_held_s_left", modelFile).transforms()
-                            .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end();
-        } else
-            this.singleTexture(sup.getID().getPath(), this.mcLoc(this.folder + "/handheld"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()))
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.25f)
-                    .model(this.singleTexture(sup.getID().getPath() + "_held", this.modLoc(this.folder + "/fist"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"))).end()
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.5f)
-                    .model(this.singleTexture(sup.getID().getPath() + "_held_left", this.modLoc(this.folder + "/fist_left"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"))).end()
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.75f)
-                    .model(this.singleTexture(sup.getID().getPath() + "_held_s", this.modLoc(this.folder + "/fist_s"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"))).end()
-                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 1)
-                    .model(this.singleTexture(sup.getID().getPath() + "_held_s_left", this.modLoc(this.folder + "/fist_s_left"), "layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"))).end();
+        ItemModelBuilder base = this.nested().parent(this.getExistingFile(this.mcLoc(this.folder + "/handheld")))
+                .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath()));
+        ItemModelBuilder slim = this.getBuilder(sup.getID().getPath() + "_slim")
+                .guiLight(BlockModel.GuiLight.FRONT)
+                .customLoader(SeparateTransformsModelBuilder::begin)
+                .base(base)
+                .perspective(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, this.slimSubModel(sup, ItemDisplayContext.FIRST_PERSON_LEFT_HAND))
+                .perspective(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, this.slimSubModel(sup, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND))
+                .perspective(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, this.slimSubModel(sup, ItemDisplayContext.THIRD_PERSON_LEFT_HAND))
+                .perspective(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, this.slimSubModel(sup, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND))
+                .end();
+        ItemModelBuilder heldLeft = this.gloveSubModel(sup, true);
+        ItemModelBuilder heldRight = this.gloveSubModel(sup, false);
+        this.getBuilder(sup.getID().getPath())
+                .guiLight(BlockModel.GuiLight.FRONT)
+                .customLoader(SeparateTransformsModelBuilder::begin)
+                .base(base)
+                .perspective(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, heldLeft)
+                .perspective(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, heldRight)
+                .perspective(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, heldLeft)
+                .perspective(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, heldRight)
+                .end()
+                .override().predicate(ItemModelProps.SLIM_PLAYER_ID, 1)
+                .model(slim)
+                .end();
+    }
+
+    private ItemModelBuilder slimSubModel(RegistryEntrySupplier<Item, ?> sup, ItemDisplayContext context) {
+        return switch (context) {
+            case FIRST_PERSON_LEFT_HAND -> this.gloveSubModel(sup, true)
+                    .transforms()
+                    .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(45, 0, 0).translation(0.5f, 3, 3).scale(0.25f, 0.3f, 0.3f).end()
+                    .end();
+            case FIRST_PERSON_RIGHT_HAND -> this.gloveSubModel(sup, false)
+                    .transforms()
+                    .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(45, 0, 0).translation(0.5f, 3, 3).scale(0.25f, 0.3f, 0.3f).end()
+                    .end();
+            case THIRD_PERSON_LEFT_HAND -> this.gloveSubModel(sup, true)
+                    .transforms()
+                    .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).translation(0, -2, 1.6f).scale(0.25f, 0.3f, 0.3f).end()
+                    .end();
+            case THIRD_PERSON_RIGHT_HAND -> this.gloveSubModel(sup, false)
+                    .transforms()
+                    .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).translation(0, -2, 1.6f).scale(0.25f, 0.3f, 0.3f).end()
+                    .end();
+            default -> throw new IllegalStateException("Unsupported context");
+        };
+    }
+
+    private ItemModelBuilder gloveSubModel(RegistryEntrySupplier<Item, ?> sup, boolean left) {
+        if (this.customGloveModel.contains(sup)) {
+            if (left && !this.sameLeftGloveModel.contains(sup))
+                return this.nested().parent(this.getExistingFile(this.modLoc(this.folder + "/" + sup.getID().getPath() + "_held_left")))
+                        .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"));
+            return this.nested().parent(this.getExistingFile(this.modLoc(this.folder + "/" + sup.getID().getPath() + "_held")))
+                    .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"));
+        }
+        if (left)
+            return this.nested().parent(this.getExistingFile(this.modLoc(this.folder + "/fist_left")))
+                    .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"));
+        return this.nested().parent(this.getExistingFile(this.modLoc(this.folder + "/fist")))
+                .texture("layer0", RuneCraftory.modRes(this.folder + "/" + sup.getID().getPath() + "_held"));
     }
 }

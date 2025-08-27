@@ -1,14 +1,24 @@
 {
-  "parent": "minecraft:item/handheld",
-  "overrides": [
-    {
-      "model": "runecraftory:item/chaos_edge_single",
-      "predicate": {
-        "runecraftory:held": 1.0
-      }
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "runecraftory:item/chaos_edge"
     }
-  ],
-  "textures": {
-    "layer0": "runecraftory:item/chaos_edge"
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
+  "perspectives": {
+    "firstperson_lefthand": {
+      "parent": "runecraftory:item/chaos_edge_single"
+    },
+    "firstperson_righthand": {
+      "parent": "runecraftory:item/chaos_edge_single"
+    },
+    "thirdperson_lefthand": {
+      "parent": "runecraftory:item/chaos_edge_single"
+    },
+    "thirdperson_righthand": {
+      "parent": "runecraftory:item/chaos_edge_single"
+    }
   }
 }

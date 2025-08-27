@@ -1,14 +1,24 @@
 {
-  "parent": "minecraft:item/handheld",
-  "overrides": [
-    {
-      "model": "runecraftory:item/steel_sword",
-      "predicate": {
-        "runecraftory:held": 1.0
-      }
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "runecraftory:item/steel_edge"
     }
-  ],
-  "textures": {
-    "layer0": "runecraftory:item/steel_edge"
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
+  "perspectives": {
+    "firstperson_lefthand": {
+      "parent": "runecraftory:item/steel_sword"
+    },
+    "firstperson_righthand": {
+      "parent": "runecraftory:item/steel_sword"
+    },
+    "thirdperson_lefthand": {
+      "parent": "runecraftory:item/steel_sword"
+    },
+    "thirdperson_righthand": {
+      "parent": "runecraftory:item/steel_sword"
+    }
   }
 }

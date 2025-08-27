@@ -1,14 +1,24 @@
 {
-  "parent": "minecraft:item/handheld",
-  "overrides": [
-    {
-      "model": "runecraftory:item/broad_sword",
-      "predicate": {
-        "runecraftory:held": 1.0
-      }
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "runecraftory:item/short_dagger"
     }
-  ],
-  "textures": {
-    "layer0": "runecraftory:item/short_dagger"
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
+  "perspectives": {
+    "firstperson_lefthand": {
+      "parent": "runecraftory:item/broad_sword"
+    },
+    "firstperson_righthand": {
+      "parent": "runecraftory:item/broad_sword"
+    },
+    "thirdperson_lefthand": {
+      "parent": "runecraftory:item/broad_sword"
+    },
+    "thirdperson_righthand": {
+      "parent": "runecraftory:item/broad_sword"
+    }
   }
 }

@@ -1,32 +1,44 @@
 {
-  "parent": "minecraft:item/handheld",
+  "base": {
+    "parent": "minecraft:item/handheld",
+    "textures": {
+      "layer0": "runecraftory:item/dragon_claws"
+    }
+  },
+  "gui_light": "front",
+  "loader": "neoforge:separate_transforms",
   "overrides": [
     {
-      "model": "runecraftory:item/dragon_claws_held",
+      "model": "runecraftory:item/dragon_claws_slim",
       "predicate": {
-        "runecraftory:glove_held": 0.25
-      }
-    },
-    {
-      "model": "runecraftory:item/dragon_claws_held_left",
-      "predicate": {
-        "runecraftory:glove_held": 0.5
-      }
-    },
-    {
-      "model": "runecraftory:item/dragon_claws_held_s",
-      "predicate": {
-        "runecraftory:glove_held": 0.75
-      }
-    },
-    {
-      "model": "runecraftory:item/dragon_claws_held_s_left",
-      "predicate": {
-        "runecraftory:glove_held": 1.0
+        "runecraftory:slim_player": 1.0
       }
     }
   ],
-  "textures": {
-    "layer0": "runecraftory:item/dragon_claws"
+  "perspectives": {
+    "firstperson_lefthand": {
+      "parent": "runecraftory:item/dragon_claws_held",
+      "textures": {
+        "layer0": "runecraftory:item/dragon_claws_held"
+      }
+    },
+    "firstperson_righthand": {
+      "parent": "runecraftory:item/dragon_claws_held",
+      "textures": {
+        "layer0": "runecraftory:item/dragon_claws_held"
+      }
+    },
+    "thirdperson_lefthand": {
+      "parent": "runecraftory:item/dragon_claws_held",
+      "textures": {
+        "layer0": "runecraftory:item/dragon_claws_held"
+      }
+    },
+    "thirdperson_righthand": {
+      "parent": "runecraftory:item/dragon_claws_held",
+      "textures": {
+        "layer0": "runecraftory:item/dragon_claws_held"
+      }
+    }
   }
 }
