@@ -43,7 +43,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
-import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.fabric.loader.events.CommonSetupEvent;
 import io.github.flemmli97.tenshilib.fabric.loader.events.EntityAttributeModifierEvent;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -76,8 +75,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -197,8 +194,7 @@ public class RuneCraftoryFabric implements ModInitializer {
             MobSpawnSettings.SpawnerData gateSetting = WorldRegistrationCalls.gateSetting();
             BiomeModifications.addSpawn(t -> true, gateSetting.type.getCategory(), gateSetting.type, gateSetting.getWeight().asInt(), gateSetting.minCount, gateSetting.maxCount);
             SpawnPlacements.register(RuneCraftoryEntities.GATE.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
-            this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
-            this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
+            RuneCraftory.updateAttributeLimits();
         }));
 
         QuestHandler.register();
@@ -238,11 +234,5 @@ public class RuneCraftoryFabric implements ModInitializer {
         RuneCraftorySpells.SPELLS.register().registerContent();
         RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent();
         RuneCraftoryStructures.STRUCTURES.registerContent();
-    }
-
-    private void tweakVanillaAttribute(Attribute attribute, double value) {
-        if (attribute instanceof RangedAttribute) {
-            ((AttributeAccessor) attribute).setMaxValue(value);
-        }
     }
 }

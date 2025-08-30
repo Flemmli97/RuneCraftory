@@ -31,7 +31,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
-import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.runecraftory.neoforge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
@@ -44,8 +43,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -132,8 +129,7 @@ public class RuneCraftoryNeoForge {
     }
 
     public void common(FMLCommonSetupEvent event) {
-        this.tweakVanillaAttribute(Attributes.MAX_HEALTH.value(), Double.MAX_VALUE);
-        this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE.value(), Double.MAX_VALUE);
+        RuneCraftory.updateAttributeLimits();
     }
 
     public void spawnPlacement(RegisterSpawnPlacementsEvent event) {
@@ -174,11 +170,5 @@ public class RuneCraftoryNeoForge {
             ext.insertRegistryAccess(event.getServerResources().getRegistryLookup());
             event.addListener(ext);
         });
-    }
-
-    private void tweakVanillaAttribute(Attribute attribute, double value) {
-        if (attribute instanceof RangedAttribute) {
-            ((AttributeAccessor) attribute).setMaxValue(value);
-        }
     }
 }

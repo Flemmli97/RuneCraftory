@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory;
 
+import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -29,5 +31,10 @@ public class RuneCraftory {
                 .withParameter(LootContextParams.ORIGIN, entity.position())
                 .create(LootContextParamSets.ADVANCEMENT_ENTITY))
                 .create(Optional.empty());
+    }
+
+    public static void updateAttributeLimits() {
+        ((AttributeAccessor) Attributes.MAX_HEALTH.value()).setMaxValue(Double.MAX_VALUE);
+        ((AttributeAccessor) Attributes.ATTACK_DAMAGE.value()).setMaxValue(Double.MAX_VALUE);
     }
 }
