@@ -429,7 +429,7 @@ public class RuneCraftoryEntities {
                     .passengerAttachments(new Vec3(0, 9.5 / 16d, -5 / 16d)).sized(0.65f, 0.95f).clientTrackingRange(8), RuneCraftory.modRes("mineral_squeek"),
             0xfa5a74, 0xf9ffbb,
             new EntityProperties.Builder()
-                    .putAttributes(Attributes.MAX_HEALTH, 10)
+                    .putAttributes(Attributes.MAX_HEALTH, 4)
                     .putAttributes(Attributes.ATTACK_DAMAGE, 13).putLevelGains(Attributes.ATTACK_DAMAGE, 250)
                     .putAttributes(RuneCraftoryAttributes.DEFENCE.asHolder(), 0)
                     .putAttributes(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 9).putLevelGains(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 200)

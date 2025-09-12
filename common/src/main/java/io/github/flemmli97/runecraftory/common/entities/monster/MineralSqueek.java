@@ -6,7 +6,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -19,6 +23,29 @@ public class MineralSqueek extends Chipsqueek {
 
     public MineralSqueek(EntityType<? extends Chipsqueek> type, Level level) {
         super(type, level);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof Player player) {
+            ItemStack main = player.getMainHandItem();
+            if (!this.canBeDamagedBy(main))
+                return false;
+        }
+        return super.hurt(source, amount);
+    }
+
+    @SuppressWarnings("deprecation")
+    protected boolean canBeDamagedBy(ItemStack stack) {
+        if (stack.isEmpty())
+            return false;
+        double[] val = {0};
+        stack.forEachModifier(EquipmentSlot.MAINHAND, (att, mod) -> {
+            if (att.is(Attributes.ATTACK_DAMAGE) && mod.operation() == AttributeModifier.Operation.ADD_VALUE) {
+                val[0] += mod.amount();
+            }
+        });
+        return val[0] > 1;
     }
 
     @Override

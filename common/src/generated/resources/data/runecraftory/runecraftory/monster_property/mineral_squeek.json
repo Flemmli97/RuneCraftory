@@ -1,7 +1,7 @@
 {
   "base_values": {
     "minecraft:generic.attack_damage": 13.0,
-    "minecraft:generic.max_health": 10.0,
+    "minecraft:generic.max_health": 4.0,
     "runecraftory:critical": 1.0,
     "runecraftory:critical_resistance": 5.0,
     "runecraftory:defence": 0.0,
