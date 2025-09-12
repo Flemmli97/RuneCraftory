@@ -9,8 +9,8 @@
     "CreativeTabMixin", "CropBlockAccessor", "CropBlockMixin", "EntityMixin", "FarmBlockMixin",
     "FishingRodHookTriggerMixin", "HoeItemMixin", "ItemEntityMixin", "ItemStackMixin", "LevelMixin",
     "LivingEntityAccessor", "LivingEntityMixin", "LootContextBuilderMixin", "LootContextParamSetsAccessor",
-    "MobAccessor", "MobMixin", "PacketDecoderMixin", "PlayerMixin", "RandomizableCBEMixin", "ServerLevelMixin",
-    "ServerPlayerMixin", "ShapelessRecipeAccessor", "SinglePoolElementMixin", "SnowLayerBlockMixin",
+    "MobAccessor", "MobEffectInstanceAccessor", "MobMixin", "PacketDecoderMixin", "PlayerMixin", "RandomizableCBEMixin",
+    "ServerLevelMixin", "ServerPlayerMixin", "ShapelessRecipeAccessor", "SinglePoolElementMixin", "SnowLayerBlockMixin",
     "StructureTemplatePoolMixin", "TargetingConditionsMixin", "TreeFeatureMixin", "WalkNodeEvaluatorMixin",
     "compat.CompatJei"
   ],

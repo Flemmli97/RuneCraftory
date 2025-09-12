@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponen
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
+import io.github.flemmli97.runecraftory.mixin.MobEffectInstanceAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
@@ -460,17 +461,21 @@ public class CombatUtils {
             switch (element) {
                 case WATER -> {
                     if (living.fireImmune() || living.isSensitiveToWater())
-                        dmg *= 1.2;
+                        dmg *= 1.2f;
                 }
                 case FIRE -> {
                     if (living.fireImmune())
-                        dmg *= 0.8;
+                        dmg *= 0.8f;
                     if (target.getType().is(EntityTypeTags.AQUATIC))
-                        dmg *= 1.2;
+                        dmg *= 1.2f;
                 }
                 case LIGHT -> {
                     if (target.getType().is(EntityTypeTags.UNDEAD))
-                        dmg *= 1.2;
+                        dmg *= 1.2f;
+                }
+                case LOVE -> {
+                    if (target.getType().is(EntityTypeTags.ILLAGER))
+                        dmg *= 1.2f;
                 }
             }
         }
@@ -481,17 +486,27 @@ public class CombatUtils {
         if (!target.getType().is(RunecraftoryTags.EntityTypes.ELEMENTAL_SECONDARY_UNAFFECTED) && target instanceof LivingEntity living) {
             switch (element) {
                 case FIRE -> target.igniteForSeconds(4);
-                case DARK -> living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
+                case WATER -> living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
                 case WIND -> {
                     if (attacker != null)
                         living.knockback(1.5, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
                 }
-                case WATER -> living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
-                case EARTH -> {
-                    if (living.getInBlockState().getCollisionShape(living.level(), living.blockPosition()).isEmpty()) {
-                        living.setPos(living.getX(), living.getY() - 0.5, living.getZ());
+                case EARTH -> Platform.INSTANCE.getEntityData(living).applyEarthDebuff();
+                case DARK -> living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
+                case LIGHT -> {
+                    if (target.getRandom().nextFloat() < 0.5) {
+                        List<MobEffectInstance> effects = living.getActiveEffects().stream().filter(eff -> eff.getEffect().value().isBeneficial()).toList();
+                        if (!effects.isEmpty()) {
+                            MobEffectInstance inst = effects.get(attacker.getRandom().nextInt(effects.size()));
+                            if (inst.getAmplifier() == 0) {
+                                living.removeEffect(inst.getEffect());
+                            } else {
+                                ((MobEffectInstanceAccessor) inst).setAmplifier(inst.getAmplifier() - 1);
+                            }
+                        }
                     }
                 }
+                case LOVE -> living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 1));
             }
         }
     }

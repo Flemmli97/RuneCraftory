@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.misc.CustomFishingHookEntity;
@@ -8,13 +9,19 @@ import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashSet;
 
 public class EntityData {
+
+    public static final ResourceLocation EARTH_DEBUFF = RuneCraftory.modRes("earth_debuff");
 
     private final LivingEntity entity;
 
@@ -29,6 +36,8 @@ public class EntityData {
 
     private int invisible;
     private boolean invisibleFlag;
+
+    private int earthDebuff;
 
     private final HashSet<Holder<ArmorEffect>> armorFlags = new HashSet<>();
 
@@ -161,6 +170,16 @@ public class EntityData {
         this.enteredBath = enteredBath;
     }
 
+    public void applyEarthDebuff() {
+        if (!this.entity.level().isClientSide()) {
+            AttributeInstance inst = this.entity.getAttribute(Attributes.ARMOR);
+            if (inst != null && !inst.hasModifier(EARTH_DEBUFF)) {
+                inst.addTransientModifier(new AttributeModifier(EARTH_DEBUFF, -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            }
+            this.earthDebuff = 200;
+        }
+    }
+
     private void updateAiState(boolean increase) {
         int pre = this.disabledState;
         if (increase)
@@ -192,6 +211,14 @@ public class EntityData {
             this.invisibleFlag = this.invisible > 0;
             if (this.invisibleFlag != pre && !this.entity.level().isClientSide) {
                 LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityDataSync(this.entity.getId(), S2CEntityDataSync.DataType.INVIS, this.invisibleFlag), this.entity);
+            }
+        }
+        if (!this.entity.level().isClientSide()) {
+            if (--this.earthDebuff == 0) {
+                AttributeInstance inst = this.entity.getAttribute(Attributes.ARMOR);
+                if (inst != null && inst.hasModifier(EARTH_DEBUFF)) {
+                    inst.removeModifier(EARTH_DEBUFF);
+                }
             }
         }
     }
