@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
@@ -46,7 +45,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class ItemAxeBase extends AxeItem implements ExtendedWeapon, BigWeapon {
+public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
 
     private static final Vec3[] PARTICLE_DIRECTION = generateParticleDir(2);
 

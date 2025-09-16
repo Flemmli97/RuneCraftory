@@ -72,7 +72,7 @@ public class ClientHandlers {
     }
 
     public static float getPartialTicks() {
-        return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
+        return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
     }
 
     public static void updateClientCalendar(Calendar.Date date, Weather weather) {

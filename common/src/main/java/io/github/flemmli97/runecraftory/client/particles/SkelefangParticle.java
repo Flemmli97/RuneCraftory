@@ -36,9 +36,6 @@ public class SkelefangParticle extends Particle {
     private final float initialRotX, initialRotY, pitchSpin, yawSpin;
     private int groundTick;
 
-    private float cameraLastPitch, cameraLastYaw;
-    private boolean first = true;
-
     public SkelefangParticle(ClientLevel level, double x, double y, double z, double dirX, double dirY, double dirZ, SkelefangParticleData data) {
         super(level, x, y, z);
         this.setParticleSpeed(dirX, dirY, dirZ);
@@ -104,11 +101,6 @@ public class SkelefangParticle extends Particle {
 
     @Override
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-        if (this.first) {
-            this.cameraLastPitch = renderInfo.getXRot();
-            this.cameraLastYaw = renderInfo.getYRot() - 180;
-            this.first = false;
-        }
         Vec3 vec3 = renderInfo.getPosition();
         float x = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
         float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());

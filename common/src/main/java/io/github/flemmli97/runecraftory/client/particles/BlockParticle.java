@@ -27,9 +27,6 @@ public class BlockParticle extends Particle {
     private final BlockState state;
     private final float yaw, pitch;
 
-    private float cameraLastPitch, cameraLastYaw;
-    private boolean first = true;
-
     public BlockParticle(ClientLevel level, double x, double y, double z, double motionX, double motionY, double motionZ, BlockState state, float yaw, float pitch, int duration) {
         super(level, x, y, z);
         this.xd = motionX;
@@ -46,11 +43,6 @@ public class BlockParticle extends Particle {
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         if (this.state.getRenderShape() != RenderShape.MODEL)
             return;
-        if (this.first) {
-            this.cameraLastPitch = renderInfo.getXRot();
-            this.cameraLastYaw = renderInfo.getYRot() - 180;
-            this.first = false;
-        }
         Vec3 vec3 = renderInfo.getPosition();
         float x = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
         float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());

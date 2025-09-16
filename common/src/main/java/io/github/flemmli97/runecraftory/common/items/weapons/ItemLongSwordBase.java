@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -28,7 +27,7 @@ import net.minecraft.world.level.Level;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon, BigWeapon {
+public class ItemLongSwordBase extends SwordItem implements ExtendedWeapon {
 
     public ItemLongSwordBase(Item.Properties props) {
         super(ItemTiers.TIER, props);

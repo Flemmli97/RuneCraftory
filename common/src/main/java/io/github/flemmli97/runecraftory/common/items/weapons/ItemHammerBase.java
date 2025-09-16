@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -23,7 +22,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon, BigWeapon {
+public class ItemHammerBase extends PickaxeItem implements ExtendedWeapon {
 
     public ItemHammerBase(Item.Properties props) {
         super(ItemTiers.TIER, props);

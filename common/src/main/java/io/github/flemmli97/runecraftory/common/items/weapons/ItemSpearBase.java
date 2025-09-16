@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -27,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Collection;
 
-public class ItemSpearBase extends Item implements ExtendedWeapon, BigWeapon {
+public class ItemSpearBase extends Item implements ExtendedWeapon {
 
     public ItemSpearBase(Item.Properties props) {
         super(props);
