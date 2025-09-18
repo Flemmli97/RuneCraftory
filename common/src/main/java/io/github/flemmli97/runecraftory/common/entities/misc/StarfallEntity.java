@@ -7,7 +7,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -45,10 +49,14 @@ public class StarfallEntity extends BaseProjectile {
         super.tick();
         this.setDeltaMovement(this.getDeltaMovement().add(0, 0.01, 0));
         if (this.level().isClientSide) {
-            float width = this.getBbWidth() / 2;
-            for (int i = 0; i < 6; i++)
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 0.7f, 1),
-                        this.getX() + this.random.nextGaussian() * width, this.getY() + this.random.nextGaussian() * width, this.getZ() + this.random.nextGaussian() * width, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+            for (int i = 0; i < 2; i++) {
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(49 / 255f, 103 / 255f, 189 / 255f, 0.8f))
+                        .addData(new ScaleData(0.25f))
+                        .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
+                        .addData(new ParticleMetaData(20, true, 0.2f))
+                        .build().add(this.level(), this.getRandomX(1), this.getRandomY(), this.getRandomZ(1));
+            }
         }
     }
 

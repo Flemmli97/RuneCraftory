@@ -6,7 +6,10 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
@@ -28,7 +31,13 @@ public class PoisonHealSpell extends Spell {
         ServerLevel serverLevel = (ServerLevel) entity.level();
         serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
         for (int i = 0; i < 16; i++) {
-            serverLevel.sendParticles(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 57 / 255F, 112 / 255F, 179 / 255F, 0.5f, 2f), entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
+            AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                    .addData(new ColorData(57 / 255F, 112 / 255F, 179 / 255F, 1))
+                    .addData(new MotionData(entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03))
+                    .addData(new ParticleMetaData(20, false, 0))
+                    .build().add(entity.level(), entity.getRandomX(1.2),
+                            entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3,
+                            entity.getRandomZ(1.2));
         }
     }
 

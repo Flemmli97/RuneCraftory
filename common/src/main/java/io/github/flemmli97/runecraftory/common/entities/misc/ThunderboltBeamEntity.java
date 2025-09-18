@@ -6,7 +6,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -51,8 +55,14 @@ public class ThunderboltBeamEntity extends BaseBeam {
             Vec3 dir = this.hitVec.subtract(pos);
             for (double d = 0; d < 1; d += 0.025) {
                 Vec3 scaleD = dir.scale(d).add(pos);
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.STATIC_LIGHT.get(), 34 / 255F, 34 / 255F, 180 / 255F, 0.6f, 0.2f), scaleD.x(), scaleD.y(), scaleD.z(), 0, 0, 0);
-                this.level().addParticle(RuneCraftoryParticles.LIGHTNING.get(), scaleD.x() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.y() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.z() + (this.random.nextDouble() - 0.5) * 0.1, 0.02, 0.02, 0.02);
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(34 / 255F, 34 / 255F, 180 / 255F, 0.6f))
+                        .addData(new ScaleData(0.2f))
+                        .addData(new ParticleMetaData(10, false, 0))
+                        .build().add(this.level(), scaleD.x(), scaleD.y(), scaleD.z());
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHTNING.get())
+                        .addData(new MotionData(this.getRandom().nextGaussian() * 0.03, this.getRandom().nextGaussian() * 0.03, this.getRandom().nextGaussian() * 0.03))
+                        .build().add(this.level(), scaleD.x() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.y() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.z() + (this.random.nextDouble() - 0.5) * 0.1);
             }
         }
     }

@@ -1,14 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.particles.DurationalParticleData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -101,16 +105,20 @@ public class StatusBallEntity extends BaseDamageCloud {
         if (this.level().isClientSide) {
             switch (this.type) {
                 case SLEEP, PARALYSIS, MUSHROOM_POISON -> {
-                    for (int i = 0; i < 2; i++) {
-                        Vector3f color = this.type.particleColor;
-                        this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), color.x(), color.y(), color.z(), 1, 2), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
-                    }
+                    Vector3f color = this.type.particleColor;
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                            .addData(new ColorData(color.x(), color.y(), color.z(), 0.6f))
+                            .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
+                            .addData(new ScaleData(0.4f))
+                            .addData(new ParticleMetaData(10, false, 0))
+                            .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
                 }
                 case RAFFLESIA_SLEEP, RAFFLESIA_PARALYSIS, RAFFLESIA_POISON, RAFFLESIA_ALL -> {
-                    for (int i = 0; i < 2; i++) {
-                        Vector3f color = this.type.particleColor;
-                        this.level().addParticle(new DurationalParticleData(color.x(), color.y(), color.z(), 0.8f, 2.5f, 3), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, 0, 0, 0);
-                    }
+                    Vector3f color = this.type.particleColor;
+                    AdvancedParticleContainer.make(new DustParticleOptions(color, 1))
+                            .addData(new ScaleData(0.2f))
+                            .addData(new ParticleMetaData(10, false, 0))
+                            .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
                 }
             }
         }

@@ -2,9 +2,13 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
@@ -71,12 +75,17 @@ public class GustRocksEntity extends BaseBeam {
         }
         Vec3 pos = this.position();
         if (this.level().isClientSide) {
+            Vec3 look = this.getLookAngle().scale(6);
             for (int i = 0; i < 20; i++) {
-                double randX = (this.random.nextDouble() * 2 - 1) * this.radius();
-                double randY = (this.random.nextDouble() * 2 - 1) * this.radius();
-                double randZ = (this.random.nextDouble() * 2 - 1) * this.radius();
+                double randX = (this.random.nextDouble() * 2 - 1) * this.radius() - look.x();
+                double randY = (this.random.nextDouble() * 2 - 1) * this.radius() - look.y();
+                double randZ = (this.random.nextDouble() * 2 - 1) * this.radius() - look.z();
                 Vec3 pos2 = pos.add(randX, randY, randZ);
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), pos2.x(), pos2.y(), pos2.z(), this.getLookAngle().x(), this.getLookAngle().y(), this.getLookAngle().z());
+                AdvancedParticleContainer.make(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xffffffff))
+                        .addData(new MotionData(this.getLookAngle().x(), this.getLookAngle().y(), this.getLookAngle().z()))
+                        .addData(new ScaleData(0.3f))
+                        .addData(new ParticleMetaData(30, false, 0))
+                        .build().add(this.level(), pos2.x(), pos2.y(), pos2.z());
             }
         } else {
             for (int i = 0; i < 2; i++) {

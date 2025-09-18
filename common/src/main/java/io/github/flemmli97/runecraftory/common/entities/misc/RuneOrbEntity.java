@@ -5,7 +5,11 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,7 +37,14 @@ public class RuneOrbEntity extends Entity {
             if (this.ticksExisted > 6000)
                 this.discard();
         } else {
-            this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 120 / 255F, 120 / 255F, 170 / 255F, 0.2f, 2f), this.getX() + this.random.nextGaussian() * 0.1, this.getY() + 0.1 + this.random.nextGaussian() * 0.02, this.getZ() + this.random.nextGaussian() * 0.1, this.random.nextGaussian() * 0.005, Math.abs(this.random.nextGaussian() * 0.01), this.random.nextGaussian() * 0.005);
+            AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                    .addData(new ColorData(120 / 255F, 120 / 255F, 170 / 255F, 0.4f))
+                    .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.02), this.random.nextGaussian() * 0.01))
+                    .addData(new ScaleData(0.25f))
+                    .addData(new ParticleMetaData(10, false, 0))
+                    .build().add(this.level(), this.getX(),
+                            this.getY() + this.getBbHeight() * 0.2,
+                            this.getZ());
         }
     }
 

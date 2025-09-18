@@ -6,7 +6,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -42,11 +46,18 @@ public class ThiccLightningBoltEntity extends BaseProjectile {
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
-            for (int i = 0; i < 6; i++) {
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 38 / 255F, 133 / 255F, 222 / 255F, 0.2f, 3f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+            for (int i = 0; i < 3; i++) {
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(38 / 255F, 133 / 255F, 222 / 255F, 0.8f))
+                        .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
+                        .addData(new ScaleData(0.25f))
+                        .addData(new ParticleMetaData(20, false, 0))
+                        .build().add(this.level(), this.getRandomX(0.5), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(0.5));
             }
             for (int i = 0; i < 8; i++) {
-                this.level().addParticle(RuneCraftoryParticles.LIGHTNING.get(), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, 0.05, 0.05, 0.05);
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHTNING.get())
+                        .addData(new MotionData(this.getRandom().nextGaussian() * 0.03, Math.abs(this.getRandom().nextGaussian() * 0.05), this.getRandom().nextGaussian() * 0.03))
+                        .build().add(this.level(), this.getRandomX(0.5), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(0.5));
             }
         } else if (this.livingTicks % 13 == 0) {
             this.checkedEntities.clear();

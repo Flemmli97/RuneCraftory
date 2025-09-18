@@ -4,7 +4,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -42,9 +46,14 @@ public class PowerWaveEntity extends BaseProjectile {
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
-            for (int i = 0; i < 4; i++)
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 207 / 255F, 194 / 255F, 60 / 255F, 0.8f, (float) (3.5 + this.random.nextGaussian() * 0.5)),
-                        this.getX() + this.random.nextGaussian() * 0.15, this.getY(), this.getZ() + this.random.nextGaussian() * 0.15, 0, 0.15 + this.random.nextGaussian() * 0.03, 0);
+            for (int i = 0; i < 4; i++) {
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(207 / 255F, 194 / 255F, 60 / 255F, 0.5f))
+                        .addData(new MotionData(0, 0.15 + this.random.nextGaussian() * 0.03, 0))
+                        .addData(new ScaleData((float) (0.4 + this.random.nextGaussian() * 0.2)))
+                        .addData(new ParticleMetaData(20, false, 0))
+                        .build().add(this.level(), this.getX() + this.random.nextGaussian() * 0.15, this.getY(), this.getZ() + this.random.nextGaussian() * 0.15);
+            }
         } else {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5).expandTowards(0, 1.5, 0), this::canHit);
             for (LivingEntity living : targets) {

@@ -1,13 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.CirclingData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
+import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,16 +72,15 @@ public class TornadoEntity extends BaseDamageCloud {
                 }
             }
         } else {
-            Vec3 delta = this.getDeltaMovement().normalize().scale(0.5);
             for (int i = 0; i < 8; i++) {
-                this.level().addParticle(new ColoredParticleData4f.Builder((49 + this.random.nextInt(25)) / 255F, (150 + this.random.nextInt(40)) / 255F, (18 + this.random.nextInt(25)) / 255F, 1)
-                                .withScale(0.2f).circle(0, 10).expandCircle(0.015f)
-                                .withOffset(this.random.nextInt(360))
-                                .withSpeed(0.2f).build(RuneCraftoryParticles.TORNADO.get()),
-                        this.position().x() + delta.x() + this.random.nextDouble() * 0.6 - 0.3,
-                        this.position().y() - 0.1,
-                        this.position().z() + delta.z() + this.random.nextDouble() * 0.6 - 0.3,
-                        0, 0, 0);
+                AdvancedParticleContainer.make(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, (49 + this.random.nextInt(25)) / 255F, (150 + this.random.nextInt(40)) / 255F, (18 + this.random.nextInt(25)) / 255F))
+                        .addData(new ScaleData(0.17f + this.getRandom().nextFloat() * 0.05f))
+                        .addData(new MotionData(this.getDeltaMovement().x(), 0.35, this.getDeltaMovement().z()))
+                        .addData(new CirclingData(0, 0.07f, this.random.nextInt(360), 10 + this.getRandom().nextInt(5), MathUtils.NORMAL_Y))
+                        .addData(new ParticleMetaData(17 + this.getRandom().nextInt(8), false, 0))
+                        .build().add(this.level(), this.getRandomX(0.15),
+                                this.getY(),
+                                this.getRandomZ(0.15));
             }
         }
         Vec3 motion = this.getDeltaMovement();

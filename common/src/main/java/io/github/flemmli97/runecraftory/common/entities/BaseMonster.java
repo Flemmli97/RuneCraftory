@@ -60,9 +60,9 @@ import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToR
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
-import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -316,7 +316,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
-        builder.define(TARGET_POSITION, SyncableDatas.TARGET_POS, null);
+        builder.define(TARGET_POSITION, TenshilibSyncableEntityDatas.TARGET_POS.get(), null);
     }
 
     @Override

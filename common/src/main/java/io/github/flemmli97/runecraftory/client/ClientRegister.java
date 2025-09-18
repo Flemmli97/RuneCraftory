@@ -45,13 +45,8 @@ import io.github.flemmli97.runecraftory.client.model.monster.TrollModel;
 import io.github.flemmli97.runecraftory.client.model.monster.WeagleModel;
 import io.github.flemmli97.runecraftory.client.model.monster.WolfModel;
 import io.github.flemmli97.runecraftory.client.particles.BlockParticle;
-import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
-import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
-import io.github.flemmli97.runecraftory.client.particles.MoveToGoalParticle;
 import io.github.flemmli97.runecraftory.client.particles.RuneyParticle;
-import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
 import io.github.flemmli97.runecraftory.client.particles.SkelefangParticle;
-import io.github.flemmli97.runecraftory.client.particles.TornadoParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.RenderRuney;
@@ -119,7 +114,8 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
+import io.github.flemmli97.tenshilib.client.particles.SpritedParticle;
+import io.github.flemmli97.tenshilib.client.particles.TranslucentAddParticle;
 import io.github.flemmli97.tenshilib.client.render.ItemProjectileRenderer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -468,26 +464,17 @@ public class ClientRegister {
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {
-        consumer.register(RuneCraftoryParticles.SINKING_DUST.get(), SinkingParticle.Factory::new);
-        consumer.register(RuneCraftoryParticles.LIGHT.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(RuneCraftoryParticles.SHORT_LIGHT.get(), ParticleFactories.ShortLightParticleFactory::new);
-        consumer.register(RuneCraftoryParticles.CROSS.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(RuneCraftoryParticles.BLINK.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(RuneCraftoryParticles.SMOKE.get(), ColoredParticle.LightParticleFactory::new);
-        consumer.register(RuneCraftoryParticles.STATIC_LIGHT.get(), ColoredParticle.NoGravityParticleFactory::new);
-        consumer.register(RuneCraftoryParticles.CIRCLING_LIGHT.get(), CirclingParticle.CirclingFactoryBase::new);
-        consumer.register(RuneCraftoryParticles.WIND.get(), ColoredParticle.NoGravityParticleFactory::new);
+        consumer.register(RuneCraftoryParticles.LIGHT.get(), TranslucentAddParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.CROSS.get(), TranslucentAddParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.BLINK.get(), TranslucentAddParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.SMOKE.get(), TranslucentAddParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.LIGHTNING.get(), SpritedParticle.Translucent::new);
+        consumer.register(RuneCraftoryParticles.BLOCK.get(), BlockParticle.Factory::new);
+        consumer.register(RuneCraftoryParticles.RUNEY.get(), RuneyParticle.Provider::new);
+        consumer.register(RuneCraftoryParticles.SKELEFANG_BONES.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
         consumer.register(RuneCraftoryParticles.SLEEP.get(), HeartParticle.Provider::new);
         consumer.register(RuneCraftoryParticles.POISON.get(), HeartParticle.Provider::new);
-        consumer.register(RuneCraftoryParticles.PARALYSIS.get(), LightningParticle.Factory::new);
-        consumer.register(RuneCraftoryParticles.LIGHTNING.get(), LightningParticle.Factory::new);
-        consumer.register(RuneCraftoryParticles.TORNADO.get(), TornadoParticle.TornadoFactoryBase::new);
-        consumer.register(RuneCraftoryParticles.BLOCK.get(), BlockParticle.Factory::new);
-
-        consumer.register(RuneCraftoryParticles.RUNEY.get(), RuneyParticle.Provider::new);
-
-        consumer.register(RuneCraftoryParticles.SKELEFANG_BONES.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
-        consumer.register(RuneCraftoryParticles.DURATIONAL_PARTICLE.get(), MoveToGoalParticle.ParticleFactoryBase::new);
+        consumer.register(RuneCraftoryParticles.PARALYSIS.get(), SpritedParticle.Translucent::new);
     }
 
     public static <T extends TooltipComponent> void registerTooltipComponentFactories(ToolTipComponentRegister register) {

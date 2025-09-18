@@ -80,10 +80,10 @@ import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToR
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
-import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -254,7 +254,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             });
 
     private final SyncedDataContainer<NPCEntity> syncedDataContainer = SyncedDataContainer.builder(this)
-            .define(TARGET_POSITION, SyncableDatas.TARGET_POS, null).build();
+            .define(TARGET_POSITION, TenshilibSyncableEntityDatas.TARGET_POS.get(), null).build();
 
     private final XpLevelHolder levelPair = new XpLevelHolder();
 

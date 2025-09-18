@@ -7,7 +7,10 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -44,8 +47,16 @@ public class ExplosionSpellEntity extends BaseProjectile {
         super.tick();
         if (this.level().isClientSide) {
             Vec3 dir = this.getDeltaMovement().scale(0.5);
-            this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z(), 0, 0, 0);
-            this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                    .addData(new ColorData(246 / 255F, 52 / 255F, 52 / 255F, 0.5f))
+                    .addData(new ScaleData(0.5f))
+                    .addData(new ParticleMetaData(8, false, 0))
+                    .build().add(this.level(), this.getX(), this.getY(), this.getZ());
+            AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                    .addData(new ColorData(246 / 255F, 52 / 255F, 52 / 255F, 0.5f))
+                    .addData(new ScaleData(0.5f))
+                    .addData(new ParticleMetaData(8, false, 0))
+                    .build().add(this.level(), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z());
         }
     }
 

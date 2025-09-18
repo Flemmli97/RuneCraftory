@@ -3,11 +3,14 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -65,8 +68,13 @@ public class SporeEntity extends BaseDamageCloud {
     public void handleEntityEvent(byte id) {
         if (id == 64) {
             for (Vector3f dir : PARTICLE_CIRCLE) {
-                for (int i = 0; i < 3; i++)
-                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.SINKING_DUST.get(), 168 / 255F, 227 / 255F, 86 / 255F, 1), this.getX(), this.getY() + this.getBbHeight() * 0.3, this.getZ(), dir.x(), dir.y(), dir.z());
+                for (int i = 0; i < 3; i++) {
+                    AdvancedParticleContainer.make(new DustParticleOptions(new Vector3f(168 / 255F, 227 / 255F, 86 / 255F), 1))
+                            .addData(new ScaleData(0.25f))
+                            .addData(new MotionData(dir.x() * 3, dir.y(), dir.z() * 3))
+                            .addData(new ParticleMetaData(15, true, 0.2f))
+                            .build().add(this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.3, this.getZ());
+                }
             }
         } else
             super.handleEntityEvent(id);

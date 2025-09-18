@@ -3,11 +3,14 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -86,8 +89,13 @@ public class PollenEntity extends BaseDamageCloud {
         if (id == 64) {
             for (Vector3f base : POLLEN_BASE) {
                 for (Vector3f dir : POLLEN_IND) {
-                    for (int i = 0; i < 3; i++)
-                        this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.SINKING_DUST.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.x(), this.getY() + 0.05, this.getZ() + base.z(), dir.x() + base.x() * 0.02, dir.y(), dir.z() + base.z() * 0.02);
+                    for (int i = 0; i < 3; i++) {
+                        AdvancedParticleContainer.make(new DustParticleOptions(new Vector3f(10 / 255F, 138 / 255F, 12 / 255F), 1))
+                                .addData(new ScaleData(0.25f))
+                                .addData(new MotionData(dir.x() + base.x() * 0.07, dir.y(), dir.z() + base.z() * 0.07))
+                                .addData(new ParticleMetaData(15, true, 0.2f))
+                                .build().add(this.level(), this.getX() + base.x(), this.getY() + 0.1, this.getZ() + base.z());
+                    }
                 }
             }
         } else

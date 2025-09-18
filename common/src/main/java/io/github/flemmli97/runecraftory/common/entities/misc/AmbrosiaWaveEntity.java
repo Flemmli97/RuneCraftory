@@ -7,7 +7,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -77,7 +81,12 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
         if (this.level().isClientSide) {
             if (this.livingTicks < (this.entityData.get(MAX_TICK) - 8) && this.livingTicks % 5 == 1) {
                 for (Vector3f vec : CIRCLE_PARTICLE_MOTION) {
-                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.STATIC_LIGHT.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                            .addData(new ColorData(200 / 255F, 133 / 255F, 36 / 255F, 1))
+                            .addData(new MotionData(new Vec3(vec.x(), vec.y(), vec.z()), true, false))
+                            .addData(new ScaleData(0.4f))
+                            .addData(new ParticleMetaData(20, false, 0))
+                            .build().add(this.level(), this.getX(), this.getY() + 0.2, this.getZ());
                 }
             }
         } else {

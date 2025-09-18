@@ -7,7 +7,10 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -100,8 +103,11 @@ public class LightBallEntity extends BaseDamageCloud {
         if (this.getOwner() == null)
             this.discard();
         if (this.level().isClientSide) {
-            for (int i = 0; i < 2; i++)
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.SHORT_LIGHT.get(), 246 / 255F, 252 / 255F, 197 / 255F, 0.5f, 3f), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(), 0, 0, 0);
+            AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                    .addData(new ColorData(246 / 255F, 252 / 255F, 197 / 255F, 0.7f))
+                    .addData(new ScaleData(0.4f))
+                    .addData(new ParticleMetaData(1, false, 0))
+                    .build().add(this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ());
         } else {
             if (this.getOwner() != null) {
                 Entity owner = this.getOwner();

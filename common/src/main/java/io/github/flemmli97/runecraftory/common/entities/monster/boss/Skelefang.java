@@ -10,10 +10,10 @@ import io.github.flemmli97.runecraftory.common.entities.monster.MultiPartContain
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
-import io.github.flemmli97.runecraftory.common.particles.DurationalParticleData;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -24,6 +24,11 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MoveToData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.core.BlockPos;
@@ -566,15 +571,17 @@ public class Skelefang extends BossMonster {
             case CHARGE_BEAM -> {
                 Vec3 center = this.position().add(0, this.getBbHeight() * 0.5, 0);
                 List<Vector3f> locations = new ArrayList<>();
-                double speed = (this.getBbWidth() + 2) / 40;
-                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2).toVector3f(), MathUtils.NORMAL_Z.toVector3f(), -180, 180, 10));
-                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() + 2).toVector3f(), MathUtils.NORMAL_Y.toVector3f(), -180, 180, 10));
-                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() + 2).toVector3f(), MathUtils.NORMAL_X.toVector3f(), -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() * 1.5).toVector3f(), MathUtils.NORMAL_Z.toVector3f(), -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_X.scale(this.getBbWidth() * 1.5).toVector3f(), MathUtils.NORMAL_Y.toVector3f(), -180, 180, 10));
+                locations.addAll(MathUtils.rotatedVecs(MathUtils.NORMAL_Y.scale(this.getBbWidth() * 1.5).toVector3f(), MathUtils.NORMAL_X.toVector3f(), -180, 180, 10));
                 for (Vector3f vec : locations) {
                     Vec3 pos = center.add(vec.x(), vec.y(), vec.z());
-                    Vec3 dir = new Vec3(vec.x(), vec.y(), vec.z()).normalize().scale(speed);
-                    this.level().addAlwaysVisibleParticle(new DurationalParticleData(217 / 255f, 248 / 255f, 252 / 255f, 0.4f, 2.3f, 40, this.getId()),
-                            pos.x(), pos.y(), pos.z(), -dir.x(), -dir.y(), -dir.z());
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                            .addData(new ColorData(217 / 255f, 248 / 255f, 252 / 255f, 0.4f))
+                            .addData(new MoveToData(center, 40))
+                            .addData(new ScaleData(0.3f))
+                            .addData(new ParticleMetaData(40, false, 0))
+                            .build().add(this.level(), pos.x(), pos.y(), pos.z());
                 }
             }
             default -> super.handleEntityEvent(id);
@@ -595,6 +602,11 @@ public class Skelefang extends BossMonster {
             if (this.isAlive() && !this.getAnimationHandler().hasAnimation() && !this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged())
                 this.setEnraged(true, false);
         }
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(BEAM);
     }
 
     private void updateParts() {

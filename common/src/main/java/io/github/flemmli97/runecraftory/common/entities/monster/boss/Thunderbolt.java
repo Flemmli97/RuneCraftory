@@ -19,9 +19,12 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -197,7 +200,7 @@ public class Thunderbolt extends BossMonster {
     @Override
     protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
         super.definedAdditinoalSyncedData(builder);
-        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
+        builder.define(CHARGE_MOTION, TenshilibSyncableEntityDatas.VEC_3.get(), null);
     }
 
     @Override
@@ -353,33 +356,39 @@ public class Thunderbolt extends BossMonster {
             if (this.getAnimationHandler().getAnimation().is(DEFEAT)) {
                 int tick = (int) this.getAnimationHandler().getAnimation().getTick(1);
                 if (tick < 40) {
-                    if (tick % 10 == 0)
-                        this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
-                                this.getY() + this.random.nextDouble() * (this.getBbHeight()),
-                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D);
+                    if (tick % 10 == 0) {
+                        AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
+                                .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
+                                .addData(new MotionData(this.random.nextGaussian() * 0.02D,
+                                        this.random.nextGaussian() * 0.02D,
+                                        this.random.nextGaussian() * 0.02D))
+                                .addData(new ParticleMetaData(20, false, 0))
+                                .build().add(this.level(), this.getRandomX(2),
+                                        this.getY(this.getRandom().nextDouble()),
+                                        this.getRandomZ(2));
+                    }
                 } else if (tick < 80) {
-                    if (tick % 2 == 0)
-                        this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
-                                this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
-                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D);
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
+                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
+                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D))
+                            .addData(new ParticleMetaData(20, false, 0))
+                            .build().add(this.level(), this.getRandomX(2),
+                                    this.getY(this.getRandom().nextDouble()),
+                                    this.getRandomZ(2));
                 } else {
                     int amount = (tick - 80) / 10;
                     for (int i = 0; i < amount; i++) {
-                        this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
-                                this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
-                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D);
+                        AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
+                                .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
+                                .addData(new MotionData(this.random.nextGaussian() * 0.02D,
+                                        this.random.nextGaussian() * 0.02D,
+                                        this.random.nextGaussian() * 0.02D))
+                                .addData(new ParticleMetaData(20, false, 0))
+                                .build().add(this.level(), this.getRandomX(2),
+                                        this.getY(this.getRandom().nextDouble()),
+                                        this.getRandomZ(2));
                     }
                 }
             }

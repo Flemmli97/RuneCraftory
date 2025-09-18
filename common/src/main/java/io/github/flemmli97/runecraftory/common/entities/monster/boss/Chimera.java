@@ -21,8 +21,8 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -158,7 +158,7 @@ public class Chimera extends BossMonster {
     @Override
     protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
         super.definedAdditinoalSyncedData(builder);
-        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
+        builder.define(CHARGE_MOTION, TenshilibSyncableEntityDatas.VEC_3.get(), null);
     }
 
     @Override

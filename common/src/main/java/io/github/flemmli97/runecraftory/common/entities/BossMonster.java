@@ -9,7 +9,10 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.tenshilib.common.entity.OverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -180,33 +183,41 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
             this.updateBossBar();
         if (this.level().isClientSide && this.deathTime > 1) {
             if (this.deathTime < 40) {
-                if (this.deathTime % 10 == 0)
-                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                            this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
-                            this.getY() + this.random.nextDouble() * (this.getBbHeight()),
-                            this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
-                            this.random.nextGaussian() * 0.02D,
-                            this.random.nextGaussian() * 0.02D,
-                            this.random.nextGaussian() * 0.02D);
+                if (this.deathTime % 10 == 0) {
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
+                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
+                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D))
+                            .addData(new ParticleMetaData(20, false, 0))
+                            .build().add(this.level(), this.getRandomX(2),
+                                    this.getY(this.getRandom().nextDouble()),
+                                    this.getRandomZ(2));
+                }
             } else if (this.deathTime < 80) {
-                if (this.deathTime % 2 == 0)
-                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                            this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
-                            this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
-                            this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
-                            this.random.nextGaussian() * 0.02D,
-                            this.random.nextGaussian() * 0.02D,
-                            this.random.nextGaussian() * 0.02D);
+                if (this.deathTime % 2 == 0) {
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
+                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
+                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D))
+                            .addData(new ParticleMetaData(20, false, 0))
+                            .build().add(this.level(), this.getRandomX(2),
+                                    this.getY(this.getRandom().nextDouble()),
+                                    this.getRandomZ(2));
+                }
             } else {
                 int amount = (this.deathTime - 80) / 10;
                 for (int i = 0; i < amount; i++) {
-                    this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.BLINK.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                            this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
-                            this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
-                            this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
-                            this.random.nextGaussian() * 0.02D,
-                            this.random.nextGaussian() * 0.02D,
-                            this.random.nextGaussian() * 0.02D);
+                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
+                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
+                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D,
+                                    this.random.nextGaussian() * 0.02D))
+                            .addData(new ParticleMetaData(20, false, 0))
+                            .build().add(this.level(), this.getRandomX(2),
+                                    this.getY(this.getRandom().nextDouble()),
+                                    this.getRandomZ(2));
                 }
             }
         }

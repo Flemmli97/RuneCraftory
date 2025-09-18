@@ -8,8 +8,8 @@ import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.MoveToWalk
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.PlayAnimation;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetAnimationToPlay;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.data.AnimationPlayHolder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.memory.MoreMemoryModules;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibMemoryModules;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -96,7 +96,7 @@ public class MonsterBehaviourUtils {
                 .withCallback(cooldownHandler())
                 .withCallback(cooldownHandlerCont())
                 .startCondition(entity -> {
-                    AnimationPlayHolder<?> anim = BrainUtils.getMemory(entity, MoreMemoryModules.ANIMATION_TO_PLAY.get());
+                    AnimationPlayHolder<?> anim = BrainUtils.getMemory(entity, TenshilibMemoryModules.ANIMATION_TO_PLAY.get());
                     Entity target = BrainUtils.getTargetOfEntity(entity);
                     return target != null && entity.isInAttackBox(target, anim.animation());
                 });

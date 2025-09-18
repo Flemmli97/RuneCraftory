@@ -5,8 +5,11 @@ import io.github.flemmli97.runecraftory.common.entities.misc.ProjectileSummonHel
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import net.minecraft.server.level.ServerLevel;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +32,12 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
         super.tick();
         if (!this.level().isClientSide && this.ticksExisted == 5) {
             Vec3 dir = new Vec3(this.targetX, this.targetY, this.targetZ).subtract(this.position()).normalize().scale(1.8);
-            ((ServerLevel) this.level()).sendParticles(new ColoredParticleData(RuneCraftoryParticles.STATIC_LIGHT.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 1), this.getX(), this.getY(), this.getZ(), 0, dir.x(), dir.y(), dir.z(), 1);
+            AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                    .addData(new ColorData(255 / 255F, 255 / 255F, 255 / 255F, 1))
+                    .addData(new ScaleData(0.5f))
+                    .addData(new MotionData(dir.x(), dir.y(), dir.z()))
+                    .addData(new ParticleMetaData(20, false, 0))
+                    .build().add(this.level(), this.getX(), this.getY(), this.getZ());
         }
     }
 

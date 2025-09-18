@@ -7,7 +7,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -88,10 +92,21 @@ public class DarkBallEntity extends BaseDamageCloud {
         this.setPos(newX, newY, newZ);
         if (this.level().isClientSide) {
             for (int i = 0; i < 5; i++) {
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.SHORT_LIGHT.get(), 65 / 255F, 2 / 255F, 105 / 255F, 0.2f, 5.5f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(65 / 255F, 2 / 255F, 105 / 255F, 0.2f))
+                        .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
+                        .addData(new ScaleData(0.6f))
+                        .addData(new ParticleMetaData(10, false, 0))
+                        .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
             }
-            for (int i = 0; i < 3; i++)
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.SHORT_LIGHT.get(), 170 / 255F, 93 / 255F, 212 / 255F, 0.2f, 5.5f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+            for (int i = 0; i < 3; i++) {
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(170 / 255F, 93 / 255F, 212 / 255F, 0.2f))
+                        .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
+                        .addData(new ScaleData(0.6f))
+                        .addData(new ParticleMetaData(10, false, 0))
+                        .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
+            }
         } else {
             if (this.type == Type.SNAKE && this.dir != null && this.side != null) {
                 int t = this.livingTicks % 16;

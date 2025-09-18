@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossba
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -23,9 +22,8 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
-import io.github.flemmli97.tenshilib.common.entity.data.SyncableDatas;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
@@ -169,7 +167,7 @@ public class Grimoire extends BossMonster {
     @Override
     protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
         super.definedAdditinoalSyncedData(builder);
-        builder.define(CHARGE_MOTION, SyncableDatas.VEC_3, null);
+        builder.define(CHARGE_MOTION, TenshilibSyncableEntityDatas.VEC_3.get(), null);
     }
 
     @Override
@@ -234,7 +232,7 @@ public class Grimoire extends BossMonster {
         super.handleEntityEvent(id);
         if (id == 66) {
             for (Vector3d vec : CIRCLE_PARTICLE_MOTION) {
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+//                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
             }
         }
     }

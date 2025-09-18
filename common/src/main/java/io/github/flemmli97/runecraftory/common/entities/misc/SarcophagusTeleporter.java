@@ -2,7 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -45,7 +49,14 @@ public class SarcophagusTeleporter extends Entity {
         super.tick();
         if (this.level().isClientSide) {
             if (this.random.nextInt(3) == 0) {
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.LIGHT.get(), 49 / 255f, 103 / 255f, 189 / 255f, 1, 2.2f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(49 / 255f, 103 / 255f, 189 / 255f))
+                        .addData(new MotionData(this.random.nextGaussian() * 0.02, Math.abs(this.random.nextGaussian() * 0.02), this.random.nextGaussian() * 0.02))
+                        .addData(new ScaleData(0.4f))
+                        .addData(new ParticleMetaData(10, false, 0))
+                        .build().add(this.level(), this.getX(),
+                                this.getY() + this.getBbHeight() * 0.5,
+                                this.getZ());
             }
         } else {
             int day = WorldUtils.day(this.level());

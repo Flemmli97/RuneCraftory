@@ -81,9 +81,12 @@ public class SkelefangModel<T extends Skelefang> extends EntityModel<T> implemen
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         if (this.restoreProgress != -1) {
             this.renderWithParentTranslation(poseStack, this.heart, buffer, packedLight, packedOverlay, color);
-            int newAlpha = FastColor.ARGB32.color((int) (Math.min(1, this.restoreProgress) * 255), color);
-            this.renderWithParentTranslation(poseStack, this.spineBack, buffer, packedLight, packedOverlay, newAlpha);
-            this.renderWithParentTranslation(poseStack, this.spineFront, buffer, packedLight, packedOverlay, newAlpha);
+            int alpha = (int) (Math.min(1, this.restoreProgress) * 255);
+            int newAlpha = FastColor.ARGB32.color(alpha, color);
+            if (alpha > 10) {
+                this.renderWithParentTranslation(poseStack, this.spineBack, buffer, packedLight, packedOverlay, newAlpha);
+                this.renderWithParentTranslation(poseStack, this.spineFront, buffer, packedLight, packedOverlay, newAlpha);
+            }
         } else {
             this.body.render(poseStack, buffer, packedLight, packedOverlay, color);
         }

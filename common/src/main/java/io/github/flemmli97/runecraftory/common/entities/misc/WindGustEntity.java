@@ -1,10 +1,15 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.tenshilib.common.entity.BeamEntity;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +44,7 @@ public class WindGustEntity extends BeamEntity {
 
     @Override
     public float radius() {
-        return 2.5f;
+        return 3;
     }
 
     @Override
@@ -58,6 +63,13 @@ public class WindGustEntity extends BeamEntity {
     }
 
     @Override
+    public void updateHitDetectBox() {
+        super.updateHitDetectBox();
+        if (!this.level().isClientSide)
+            S2CAttackDebug.sendDebugPacket(this.hitObb, S2CAttackDebug.EnumAABBType.ATTACK, this);
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
@@ -66,7 +78,11 @@ public class WindGustEntity extends BeamEntity {
                 double upScale = this.random.nextDouble() * 2 - 1;
                 double sideScale = this.random.nextDouble() * 2 - 1;
                 Vec3 ppos = pos.add(this.up.scale(upScale)).add(this.side.scale(sideScale));
-                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.WIND.get(), 255 / 255F, 255 / 255F, 255 / 255F, 1, 0.15f), ppos.x(), ppos.y(), ppos.z(), this.pMotion.x(), this.pMotion.y(), this.pMotion.z());
+                AdvancedParticleContainer.make(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xffffffff))
+                        .addData(new MotionData(this.pMotion.x(), this.pMotion.y(), this.pMotion.z()))
+                        .addData(new ScaleData(0.2f))
+                        .addData(new ParticleMetaData(20, false, 0))
+                        .build().add(this.level(), ppos.x(), ppos.y(), ppos.z());
             }
         }
     }
@@ -77,7 +93,7 @@ public class WindGustEntity extends BeamEntity {
         Vec3 dir = res.getLocation().subtract(this.getEyePosition()).normalize();
         this.up = this.calculateViewVector(this.getXRot() - 90, this.getYRot()).scale(this.radius());
         this.side = dir.cross(this.up).normalize().scale(this.radius());
-        this.pMotion = dir.scale(0.5);
+        this.pMotion = dir.scale(0.3);
         return res;
     }
 
