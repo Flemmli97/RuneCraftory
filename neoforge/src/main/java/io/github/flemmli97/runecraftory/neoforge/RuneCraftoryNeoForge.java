@@ -5,32 +5,9 @@ import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorMaterials;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeTabs;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryPoiTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryRegistries;
 import io.github.flemmli97.runecraftory.neoforge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
@@ -75,7 +52,7 @@ public class RuneCraftoryNeoForge {
         modBus.addListener(TOP::enqueueIMC);
         if (FMLEnvironment.dist == Dist.CLIENT)
             ClientEvents.register(modBus);
-
+        RuneCraftoryRegistries.register();
         registries(modBus);
 
         IEventBus forgeBus = NeoForge.EVENT_BUS;
@@ -91,41 +68,8 @@ public class RuneCraftoryNeoForge {
     }
 
     public static void registries(IEventBus modBus) {
-        RuneCraftoryActivities.ACTIVITIES.registerContent(modBus);
-        RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent(modBus);
-        RuneCraftoryArmorMaterials.MATERIALS.registerContent(modBus);
         RuneCraftoryAttachments.ATTACHMENT_TYPES.register(modBus);
-        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent(modBus);
-        RuneCraftoryAttributes.ATTRIBUTES.registerContent(modBus);
-        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent(modBus);
-        RuneCraftoryBlocks.BLOCKS.registerContent(modBus);
-        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent(modBus);
-        RuneCraftoryCrafting.RECIPETYPE.registerContent(modBus);
-        RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent(modBus);
-        RuneCraftoryCriteria.TRIGGERS.registerContent(modBus);
-        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent(modBus);
-        RuneCraftoryEffects.EFFECTS.registerContent(modBus);
-        RuneCraftoryEntities.ENTITIES.registerContent(modBus);
-        RuneCraftoryFeatures.FEATURES.registerContent(modBus);
-        RuneCraftoryFeatures.TREE_DECORATORS.registerContent(modBus);
-        RuneCraftoryFeatures.TRUNK_PLACER.registerContent(modBus);
-        RuneCraftoryFluids.FLUIDS.registerContent(modBus);
         RuneCraftoryFluidTypes.FLUID_TYPES.register(modBus);
-        RuneCraftoryItems.ITEMS.registerContent(modBus);
-        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent(modBus);
-        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent(modBus);
-        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent(modBus);
-        RuneCraftoryMemoryTypes.MEMORYIES.registerContent(modBus);
-        RuneCraftoryMenuTypes.CONTAINERS.registerContent(modBus);
-        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent(modBus);
-        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent(modBus);
-        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent(modBus);
-        RuneCraftoryParticles.PARTICLES.registerContent(modBus);
-        RuneCraftoryPoiTypes.POI.registerContent(modBus);
-        RuneCraftorySounds.SOUND_EVENTS.registerContent(modBus);
-        RuneCraftorySpells.SPELLS.register().registerContent(modBus);
-        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent(modBus);
-        RuneCraftoryStructures.STRUCTURES.registerContent(modBus);
     }
 
     public void common(FMLCommonSetupEvent event) {

@@ -14,35 +14,13 @@ import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorMaterials;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCreativeTabs;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFeatures;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryFluids;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCBehaviour;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryPoiTypes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryRegistries;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
+import io.github.flemmli97.tenshilib.fabric.events.EntityStartTrackEvent;
 import io.github.flemmli97.tenshilib.fabric.loader.events.CommonSetupEvent;
 import io.github.flemmli97.tenshilib.fabric.loader.events.EntityAttributeModifierEvent;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
@@ -59,7 +37,6 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -99,7 +76,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        this.initContent();
+        RuneCraftoryRegistries.register();
         NeoForgeModConfigEvents.loading(RuneCraftory.MODID).register(config -> {
             ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(config.getSpec());
             if (holder != null)
@@ -139,7 +116,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         }));
 
         //PlayerCalls
-        EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> EntityCalls.trackEntity(player, trackedEntity));
+        EntityStartTrackEvent.START_TRACKING.register((trackedEntity, player) -> EntityCalls.trackEntity(player, trackedEntity));
         EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
         ServerPlayerEvents.COPY_FROM.register((old, newPlayer, keepEverything) -> EntityCalls.clone(old, newPlayer, !keepEverything));
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
@@ -198,41 +175,5 @@ public class RuneCraftoryFabric implements ModInitializer {
         }));
 
         QuestHandler.register();
-    }
-
-    public void initContent() {
-        RuneCraftoryActivities.ACTIVITIES.registerContent();
-        RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent();
-        RuneCraftoryArmorMaterials.MATERIALS.registerContent();
-        RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent();
-        RuneCraftoryAttributes.ATTRIBUTES.registerContent();
-        RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent();
-        RuneCraftoryBlocks.BLOCKS.registerContent();
-        RuneCraftoryCrafting.RECIPESERIALIZER.registerContent();
-        RuneCraftoryCrafting.RECIPETYPE.registerContent();
-        RuneCraftoryCreativeTabs.CREATIVE_MODE_TABS.registerContent();
-        RuneCraftoryCriteria.TRIGGERS.registerContent();
-        RuneCraftoryDataComponentTypes.DATA_COMPONENTS.registerContent();
-        RuneCraftoryEffects.EFFECTS.registerContent();
-        RuneCraftoryEntities.ENTITIES.registerContent();
-        RuneCraftoryFeatures.FEATURES.registerContent();
-        RuneCraftoryFeatures.TREE_DECORATORS.registerContent();
-        RuneCraftoryFeatures.TRUNK_PLACER.registerContent();
-        RuneCraftoryFluids.FLUIDS.registerContent();
-        RuneCraftoryItems.ITEMS.registerContent();
-        RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent();
-        RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent();
-        RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent();
-        RuneCraftoryMemoryTypes.MEMORYIES.registerContent();
-        RuneCraftoryMenuTypes.CONTAINERS.registerContent();
-        RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent();
-        RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent();
-        RuneCraftoryNPCProfessions.PROFESSIONS.register().registerContent();
-        RuneCraftoryParticles.PARTICLES.registerContent();
-        RuneCraftoryPoiTypes.POI.registerContent();
-        RuneCraftorySounds.SOUND_EVENTS.registerContent();
-        RuneCraftorySpells.SPELLS.register().registerContent();
-        RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent();
-        RuneCraftoryStructures.STRUCTURES.registerContent();
     }
 }
