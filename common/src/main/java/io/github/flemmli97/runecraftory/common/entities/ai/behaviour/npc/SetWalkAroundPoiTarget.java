@@ -11,6 +11,8 @@ public class SetWalkAroundPoiTarget<E extends PathfinderMob> extends SetRandomWa
 
     public SetWalkAroundPoiTarget(MemoryModuleType<GlobalPos> memory, double maxDistance) {
         this.walkTargetPredicate((entity, target) -> {
+            if (target == null)
+                return false;
             GlobalPos pos = BrainUtils.getMemory(entity, memory);
             return pos != null && entity.level().dimension() == pos.dimension() && pos.pos().closerToCenterThan(target, maxDistance);
         });
