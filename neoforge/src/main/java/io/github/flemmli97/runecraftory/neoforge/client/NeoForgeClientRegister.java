@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
-import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryFluidTypes;
@@ -16,7 +15,6 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -38,13 +36,11 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-import java.io.IOException;
 import java.util.function.Function;
 
 public class NeoForgeClientRegister {
@@ -169,11 +165,5 @@ public class NeoForgeClientRegister {
                 event.registerSpriteSet(type, provider::apply);
             }
         });
-    }
-
-    @SubscribeEvent
-    public static void registerShader(RegisterShadersEvent event) throws IOException {
-        RunecraftoryShaders.registerShader(((id, vertexFormat, onLoad) ->
-                event.registerShader(new ShaderInstance(event.getResourceProvider(), id, vertexFormat), onLoad)));
     }
 }

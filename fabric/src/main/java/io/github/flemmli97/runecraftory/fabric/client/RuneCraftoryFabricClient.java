@@ -20,7 +20,6 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorResolverRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -83,7 +82,7 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
             }
         });
         ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
-        CoreShaderRegistrationCallback.EVENT.register(reg -> RunecraftoryShaders.registerShader(reg::register));
+        RunecraftoryShaders.registerShader();
         BossBarTracker.register();
 
         FluidRenderHandlerRegistry.INSTANCE.register(RuneCraftoryFluids.HOT_SPRING_WATER.get(), RuneCraftoryFluids.FLOWING_HOT_SPRING_WATER.get(), new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL, SimpleFluidRenderHandler.WATER_FLOWING, SimpleFluidRenderHandler.WATER_OVERLAY, ClientRegister.HOT_SPRING_BASE) {

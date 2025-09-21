@@ -2,7 +2,7 @@
   "vertex": "runecraftory:gate",
   "fragment": "runecraftory:gate",
   "attributes": [
-    "Position", "Color", "Color2", "UV0", "UV1", "Offset"
+    "Position", "Color", "Color2", "UV0", "UV1", "Time"
   ],
   "samplers": [
     {
@@ -20,11 +20,6 @@
       "type": "matrix4x4",
       "count": 16,
       "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
-    }, {
-      "name": "GameTime",
-      "type": "float",
-      "count": 1,
-      "values": [1.0]
     }
   ]
 }

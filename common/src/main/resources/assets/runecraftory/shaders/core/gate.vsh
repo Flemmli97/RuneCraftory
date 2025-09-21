@@ -10,7 +10,7 @@ in vec4 Color;
 in vec4 Color2;
 in vec2 UV0;
 in ivec2 UV1;
-in ivec2 Offset;
+in float Time;
 
 out vec4 vertexColor;
 out vec4 vertexColor2;
@@ -25,5 +25,5 @@ void main() {
     vertexColor2 = Color2;
     overlayColor = texelFetch(Sampler1, UV1, 0);
     texCoord0 = UV0;
-    tickTime = GameTime + Offset.x;
+    tickTime = Time;
 }

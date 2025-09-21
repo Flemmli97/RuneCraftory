@@ -88,6 +88,8 @@ public class GateEntity extends Mob implements IBaseMob {
     private int maxNearby;
     private int spawnDelay;
 
+    public final int renderRand = this.random.nextInt(1000);
+
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
         if (level.isClientSide) {

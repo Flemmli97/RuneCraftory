@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import io.github.flemmli97.runecraftory.client.BossBarTracker;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
+import io.github.flemmli97.runecraftory.client.render.RunecraftoryShaders;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraft.network.chat.FormattedText;
@@ -33,6 +34,7 @@ public class ClientEvents {
         modBus.register(NeoForgeClientRegister.class);
         NeoForge.EVENT_BUS.register(ClientEvents.class);
         BossBarTracker.register();
+        RunecraftoryShaders.registerShader();
     }
 
     @SubscribeEvent(receiveCanceled = true)
