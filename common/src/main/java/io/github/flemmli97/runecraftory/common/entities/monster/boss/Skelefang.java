@@ -585,7 +585,7 @@ public class Skelefang extends BossMonster {
                             .addData(new EntityFollowData(this, true))
                             .addData(new ScaleData(0.3f))
                             .addData(new ParticleMetaData(40, false, 0))
-                            .build().add(this.level(), pos.x(), pos.y(), pos.z());
+                            .add(this.level(), pos.x(), pos.y(), pos.z());
                 }
             }
             default -> super.handleEntityEvent(id);

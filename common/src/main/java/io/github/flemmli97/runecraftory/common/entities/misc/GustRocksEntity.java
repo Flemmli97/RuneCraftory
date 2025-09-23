@@ -85,7 +85,7 @@ public class GustRocksEntity extends BaseBeam {
                         .addData(new MotionData(this.getLookAngle().x(), this.getLookAngle().y(), this.getLookAngle().z()))
                         .addData(new ScaleData(0.3f))
                         .addData(new ParticleMetaData(30, false, 0))
-                        .build().add(this.level(), pos2.x(), pos2.y(), pos2.z());
+                        .add(this.level(), pos2.x(), pos2.y(), pos2.z());
             }
         } else {
             for (int i = 0; i < 2; i++) {

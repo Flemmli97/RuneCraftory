@@ -37,7 +37,7 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
                     .addData(new ScaleData(0.5f))
                     .addData(new MotionData(dir.x(), dir.y(), dir.z()))
                     .addData(new ParticleMetaData(20, false, 0))
-                    .build().add(this.level(), this.getX(), this.getY(), this.getZ());
+                    .add(this.level(), this.getX(), this.getY(), this.getZ());
         }
     }
 

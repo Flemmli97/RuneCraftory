@@ -82,7 +82,7 @@ public class WindGustEntity extends BeamEntity {
                         .addData(new MotionData(this.pMotion.x(), this.pMotion.y(), this.pMotion.z()))
                         .addData(new ScaleData(0.2f))
                         .addData(new ParticleMetaData(20, false, 0))
-                        .build().add(this.level(), ppos.x(), ppos.y(), ppos.z());
+                        .add(this.level(), ppos.x(), ppos.y(), ppos.z());
             }
         }
     }

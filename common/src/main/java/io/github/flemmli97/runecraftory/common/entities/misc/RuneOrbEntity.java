@@ -42,7 +42,7 @@ public class RuneOrbEntity extends Entity {
                     .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.02), this.random.nextGaussian() * 0.01))
                     .addData(new ScaleData(0.25f))
                     .addData(new ParticleMetaData(10, false, 0))
-                    .build().add(this.level(), this.getX(),
+                    .add(this.level(), this.getX(),
                             this.getY() + this.getBbHeight() * 0.2,
                             this.getZ());
         }

@@ -59,10 +59,10 @@ public class ThunderboltBeamEntity extends BaseBeam {
                         .addData(new ColorData(34 / 255F, 34 / 255F, 180 / 255F, 0.6f))
                         .addData(new ScaleData(0.2f))
                         .addData(new ParticleMetaData(10, false, 0))
-                        .build().add(this.level(), scaleD.x(), scaleD.y(), scaleD.z());
+                        .add(this.level(), scaleD.x(), scaleD.y(), scaleD.z());
                 AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHTNING.get())
                         .addData(new MotionData(this.getRandom().nextGaussian() * 0.03, this.getRandom().nextGaussian() * 0.03, this.getRandom().nextGaussian() * 0.03))
-                        .build().add(this.level(), scaleD.x() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.y() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.z() + (this.random.nextDouble() - 0.5) * 0.1);
+                        .add(this.level(), scaleD.x() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.y() + (this.random.nextDouble() - 0.5) * 0.1, scaleD.z() + (this.random.nextDouble() - 0.5) * 0.1);
             }
         }
     }

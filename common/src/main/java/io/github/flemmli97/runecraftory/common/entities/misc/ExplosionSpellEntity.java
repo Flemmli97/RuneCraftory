@@ -51,12 +51,12 @@ public class ExplosionSpellEntity extends BaseProjectile {
                     .addData(new ColorData(246 / 255F, 52 / 255F, 52 / 255F, 0.5f))
                     .addData(new ScaleData(0.5f))
                     .addData(new ParticleMetaData(8, false, 0))
-                    .build().add(this.level(), this.getX(), this.getY(), this.getZ());
+                    .add(this.level(), this.getX(), this.getY(), this.getZ());
             AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
                     .addData(new ColorData(246 / 255F, 52 / 255F, 52 / 255F, 0.5f))
                     .addData(new ScaleData(0.5f))
                     .addData(new ParticleMetaData(8, false, 0))
-                    .build().add(this.level(), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z());
+                    .add(this.level(), this.getX() + dir.x(), this.getY() + dir.y(), this.getZ() + dir.z());
         }
     }
 

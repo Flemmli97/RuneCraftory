@@ -55,7 +55,7 @@ public class StarfallEntity extends BaseProjectile {
                         .addData(new ScaleData(0.25f))
                         .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                         .addData(new ParticleMetaData(20, true, 0.2f))
-                        .build().add(this.level(), this.getRandomX(1), this.getRandomY(), this.getRandomZ(1));
+                        .add(this.level(), this.getRandomX(1), this.getRandomY(), this.getRandomZ(1));
             }
         }
     }

@@ -52,12 +52,12 @@ public class ThiccLightningBoltEntity extends BaseProjectile {
                         .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                         .addData(new ScaleData(0.25f))
                         .addData(new ParticleMetaData(20, false, 0))
-                        .build().add(this.level(), this.getRandomX(0.5), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(0.5));
+                        .add(this.level(), this.getRandomX(0.5), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(0.5));
             }
             for (int i = 0; i < 8; i++) {
                 AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHTNING.get())
                         .addData(new MotionData(this.getRandom().nextGaussian() * 0.03, Math.abs(this.getRandom().nextGaussian() * 0.05), this.getRandom().nextGaussian() * 0.03))
-                        .build().add(this.level(), this.getRandomX(0.5), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(0.5));
+                        .add(this.level(), this.getRandomX(0.5), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(0.5));
             }
         } else if (this.livingTicks % 13 == 0) {
             this.checkedEntities.clear();

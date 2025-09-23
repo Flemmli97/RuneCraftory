@@ -107,7 +107,7 @@ public class LightBallEntity extends BaseDamageCloud {
                     .addData(new ColorData(246 / 255F, 252 / 255F, 197 / 255F, 0.7f))
                     .addData(new ScaleData(0.4f))
                     .addData(new ParticleMetaData(1, false, 0))
-                    .build().add(this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ());
+                    .add(this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ());
         } else {
             if (this.getOwner() != null) {
                 Entity owner = this.getOwner();

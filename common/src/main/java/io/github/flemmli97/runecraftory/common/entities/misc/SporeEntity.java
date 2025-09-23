@@ -73,7 +73,7 @@ public class SporeEntity extends BaseDamageCloud {
                             .addData(new ScaleData(0.25f))
                             .addData(new MotionData(dir.x() * 3, dir.y(), dir.z() * 3))
                             .addData(new ParticleMetaData(15, true, 0.2f))
-                            .build().add(this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.3, this.getZ());
+                            .add(this.level(), this.getX(), this.getY() + this.getBbHeight() * 0.3, this.getZ());
                 }
             }
         } else

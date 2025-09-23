@@ -54,7 +54,7 @@ public class SarcophagusTeleporter extends Entity {
                         .addData(new MotionData(this.random.nextGaussian() * 0.02, Math.abs(this.random.nextGaussian() * 0.02), this.random.nextGaussian() * 0.02))
                         .addData(new ScaleData(0.4f))
                         .addData(new ParticleMetaData(10, false, 0))
-                        .build().add(this.level(), this.getX(),
+                        .add(this.level(), this.getX(),
                                 this.getY() + this.getBbHeight() * 0.5,
                                 this.getZ());
             }

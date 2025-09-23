@@ -39,7 +39,7 @@ public class Spirit extends WispBase {
                             .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                             .addData(new ScaleData(0.3f))
                             .addData(new ParticleMetaData(20, false, 0))
-                            .build().add(this.level(), this.getX() + off[0] + this.random.nextGaussian() * 0.2,
+                            .add(this.level(), this.getX() + off[0] + this.random.nextGaussian() * 0.2,
                                     this.getY() + this.getBbHeight() * 0.4,
                                     this.getZ() + off[1] + this.random.nextGaussian() * 0.2);
                     AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
@@ -47,7 +47,7 @@ public class Spirit extends WispBase {
                             .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                             .addData(new ScaleData(0.3f))
                             .addData(new ParticleMetaData(20, false, 0))
-                            .build().add(this.level(), this.getX() + off[0] + this.random.nextGaussian() * 0.2,
+                            .add(this.level(), this.getX() + off[0] + this.random.nextGaussian() * 0.2,
                                     this.getY() + this.getBbHeight() * 0.4,
                                     this.getZ() + off[1] + this.random.nextGaussian() * 0.2);
                 }

@@ -190,7 +190,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                                     this.random.nextGaussian() * 0.02D,
                                     this.random.nextGaussian() * 0.02D))
                             .addData(new ParticleMetaData(20, false, 0))
-                            .build().add(this.level(), this.getRandomX(2),
+                            .add(this.level(), this.getRandomX(2),
                                     this.getY(this.getRandom().nextDouble()),
                                     this.getRandomZ(2));
                 }
@@ -202,7 +202,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                                     this.random.nextGaussian() * 0.02D,
                                     this.random.nextGaussian() * 0.02D))
                             .addData(new ParticleMetaData(20, false, 0))
-                            .build().add(this.level(), this.getRandomX(2),
+                            .add(this.level(), this.getRandomX(2),
                                     this.getY(this.getRandom().nextDouble()),
                                     this.getRandomZ(2));
                 }
@@ -215,7 +215,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                                     this.random.nextGaussian() * 0.02D,
                                     this.random.nextGaussian() * 0.02D))
                             .addData(new ParticleMetaData(20, false, 0))
-                            .build().add(this.level(), this.getRandomX(2),
+                            .add(this.level(), this.getRandomX(2),
                                     this.getY(this.getRandom().nextDouble()),
                                     this.getRandomZ(2));
                 }

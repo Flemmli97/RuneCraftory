@@ -35,7 +35,7 @@ public class PoisonHealSpell extends Spell {
                     .addData(new ColorData(57 / 255F, 112 / 255F, 179 / 255F, 1))
                     .addData(new MotionData(entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03))
                     .addData(new ParticleMetaData(20, false, 0))
-                    .build().add(entity.level(), entity.getRandomX(1.2),
+                    .add(entity.level(), entity.getRandomX(1.2),
                             entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3,
                             entity.getRandomZ(1.2));
         }

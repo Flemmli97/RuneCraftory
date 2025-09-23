@@ -94,7 +94,7 @@ public class PollenEntity extends BaseDamageCloud {
                                 .addData(new ScaleData(0.25f))
                                 .addData(new MotionData(dir.x() + base.x() * 0.07, dir.y(), dir.z() + base.z() * 0.07))
                                 .addData(new ParticleMetaData(15, true, 0.2f))
-                                .build().add(this.level(), this.getX() + base.x(), this.getY() + 0.1, this.getZ() + base.z());
+                                .add(this.level(), this.getX() + base.x(), this.getY() + 0.1, this.getZ() + base.z());
                     }
                 }
             }

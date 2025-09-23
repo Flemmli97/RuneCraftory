@@ -52,7 +52,7 @@ public class PowerWaveEntity extends BaseProjectile {
                         .addData(new MotionData(0, 0.15 + this.random.nextGaussian() * 0.03, 0))
                         .addData(new ScaleData((float) (0.4 + this.random.nextGaussian() * 0.2)))
                         .addData(new ParticleMetaData(20, false, 0))
-                        .build().add(this.level(), this.getX() + this.random.nextGaussian() * 0.15, this.getY(), this.getZ() + this.random.nextGaussian() * 0.15);
+                        .add(this.level(), this.getX() + this.random.nextGaussian() * 0.15, this.getY(), this.getZ() + this.random.nextGaussian() * 0.15);
             }
         } else {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5).expandTowards(0, 1.5, 0), this::canHit);

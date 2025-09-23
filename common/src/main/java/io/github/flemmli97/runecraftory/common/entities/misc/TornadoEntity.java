@@ -78,7 +78,7 @@ public class TornadoEntity extends BaseDamageCloud {
                         .addData(new MotionData(this.getDeltaMovement().x(), 0.35, this.getDeltaMovement().z()))
                         .addData(new CirclingData(0, 0.07f, this.random.nextInt(360), 10 + this.getRandom().nextInt(5), MathUtils.NORMAL_Y))
                         .addData(new ParticleMetaData(17 + this.getRandom().nextInt(8), false, 0))
-                        .build().add(this.level(), this.getRandomX(0.15),
+                        .add(this.level(), this.getRandomX(0.15),
                                 this.getY(),
                                 this.getRandomZ(0.15));
             }

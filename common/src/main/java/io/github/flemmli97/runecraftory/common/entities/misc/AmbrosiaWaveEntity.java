@@ -86,7 +86,7 @@ public class AmbrosiaWaveEntity extends BaseDamageCloud {
                             .addData(new MotionData(new Vec3(vec.x(), vec.y(), vec.z()), true, false))
                             .addData(new ScaleData(0.4f))
                             .addData(new ParticleMetaData(20, false, 0))
-                            .build().add(this.level(), this.getX(), this.getY() + 0.2, this.getZ());
+                            .add(this.level(), this.getX(), this.getY() + 0.2, this.getZ());
                 }
             }
         } else {

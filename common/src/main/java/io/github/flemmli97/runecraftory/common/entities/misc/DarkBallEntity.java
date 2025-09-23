@@ -97,7 +97,7 @@ public class DarkBallEntity extends BaseDamageCloud {
                         .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                         .addData(new ScaleData(0.6f))
                         .addData(new ParticleMetaData(10, false, 0))
-                        .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
+                        .add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
             }
             for (int i = 0; i < 3; i++) {
                 AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
@@ -105,7 +105,7 @@ public class DarkBallEntity extends BaseDamageCloud {
                         .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                         .addData(new ScaleData(0.6f))
                         .addData(new ParticleMetaData(10, false, 0))
-                        .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
+                        .add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
             }
         } else {
             if (this.type == Type.SNAKE && this.dir != null && this.side != null) {

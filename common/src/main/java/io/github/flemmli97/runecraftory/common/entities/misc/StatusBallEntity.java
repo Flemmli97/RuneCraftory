@@ -111,14 +111,14 @@ public class StatusBallEntity extends BaseDamageCloud {
                             .addData(new MotionData(this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01))
                             .addData(new ScaleData(0.4f))
                             .addData(new ParticleMetaData(10, false, 0))
-                            .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
+                            .add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
                 }
                 case RAFFLESIA_SLEEP, RAFFLESIA_PARALYSIS, RAFFLESIA_POISON, RAFFLESIA_ALL -> {
                     Vector3f color = this.type.particleColor;
                     AdvancedParticleContainer.make(new DustParticleOptions(color, 1))
                             .addData(new ScaleData(0.2f))
                             .addData(new ParticleMetaData(10, false, 0))
-                            .build().add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
+                            .add(this.level(), this.getRandomX(1), this.getY(this.getRandom().nextDouble() * 0.5) + this.getBbHeight() * 0.4, this.getRandomZ(1));
                 }
             }
         }
