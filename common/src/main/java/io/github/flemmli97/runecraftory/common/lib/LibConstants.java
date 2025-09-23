@@ -26,6 +26,10 @@ public class LibConstants {
 
     public static final ResourceLocation STEP_UP_TEMP = RuneCraftory.modRes("step_up_temp");
 
+    public static final ResourceLocation STEEL_HEART_MODIFIER = RuneCraftory.modRes("steel_heart_modifier");
+    public static final ResourceLocation BLITZ_EFFECT_MODIFIER = RuneCraftory.modRes("blitz_effect_modifier");
+    public static final ResourceLocation EARTH_DEBUFF_MODIFIER = RuneCraftory.modRes("earth_debuff_modifier");
+
     public static final Map<EquipmentSlot, ResourceLocation> EQUIPMENT_MODIFIERS = Map.of(
             EquipmentSlot.MAINHAND, RuneCraftory.modRes("equipment_mainhand_modifier"),
             EquipmentSlot.OFFHAND, RuneCraftory.modRes("equipment_offhand_modifier"),

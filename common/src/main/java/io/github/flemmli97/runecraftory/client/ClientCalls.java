@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.client.gui.widgets.InfoButton;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -50,6 +49,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -69,10 +69,14 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ClientCalls {
+
+    public static final Set<EntityType<?>> SLEEP_ROTATED_TYPES = new HashSet<>();
 
     public static void clientTick() {
         BossBarTracker.tickSounds();
@@ -273,19 +277,17 @@ public class ClientCalls {
     }
 
     public static void tick(LivingEntity entity) {
-        EntityData data = Platform.INSTANCE.getEntityData(entity);
         int mod = entity.tickCount % 20;
-        if (mod == 0 && data.isSleeping()) {
-            entity.level().addParticle(RuneCraftoryParticles.SLEEP.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0);
+        if (mod == 0 && entity.hasEffect(RuneCraftoryEffects.SLEEP.asHolder())) {
+            double y = entity.getY();
+            if (SLEEP_ROTATED_TYPES.contains(entity.getType()))
+                y += entity.getBbHeight() * 0.6;
+            else
+                y += +entity.getBbHeight() + 0.5;
+            entity.level().addParticle(RuneCraftoryParticles.SLEEP.get(), entity.getX(), y, entity.getZ(), 0, 0, 0);
         }
-        if (mod == 5 && data.isPoisoned()) {
+        if (mod == 5 && entity.hasEffect(RuneCraftoryEffects.POISON.asHolder())) {
             entity.level().addParticle(RuneCraftoryParticles.POISON.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
-        }
-        if (data.isParalysed()) {
-            boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
-            if (bl2) {
-                entity.level().addParticle(RuneCraftoryParticles.PARALYSIS.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
-            }
         }
         if (entity == Minecraft.getInstance().player) {
             ShakeHandler.shakeTick--;
@@ -329,7 +331,7 @@ public class ClientCalls {
     }
 
     public static void renderEntityShake(LivingEntity entity, PoseStack stack, float partialTicks) {
-        boolean stunned = Platform.INSTANCE.getEntityData(entity).isStunned();
+        boolean stunned = entity.hasEffect(RuneCraftoryEffects.STUNNED.asHolder());
         if (!stunned)
             return;
         float yRot = Mth.lerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);

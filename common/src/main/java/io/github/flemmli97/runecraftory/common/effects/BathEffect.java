@@ -5,8 +5,8 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.ExtendedEffect;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.effect.ExtendedMobEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
-public class BathEffect extends MobEffect implements ExtendedEffect {
+public class BathEffect extends MobEffect implements ExtendedMobEffect {
 
     public BathEffect() {
         super(MobEffectCategory.BENEFICIAL, 0xff40b5e1);
@@ -73,8 +73,12 @@ public class BathEffect extends MobEffect implements ExtendedEffect {
     }
 
     @Override
+    public boolean shouldSync() {
+        return false;
+    }
+
+    @Override
     public void onEffectRemoved(LivingEntity entity, MobEffectInstance instance) {
-        ExtendedEffect.super.onEffectRemoved(entity, instance);
         Platform.INSTANCE.getEntityData(entity).setEnteredBath(false);
     }
 }

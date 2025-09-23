@@ -22,7 +22,6 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
-import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CSyncConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
@@ -127,11 +126,6 @@ public class EntityCalls {
         PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
         toRemove.forEach(data.party::removePartyMember);
         toRemove.clear();
-    }
-
-    public static void trackEntity(Player player, Entity target) {
-        if (player instanceof ServerPlayer serverPlayer && target instanceof LivingEntity living)
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CEntityDataSyncAll(living), serverPlayer);
     }
 
     public static boolean handleItemJoinLevel(ItemEntity entity) {
@@ -397,7 +391,7 @@ public class EntityCalls {
             return false;
         }
         // Block all ticking if stunned
-        if (Platform.INSTANCE.getEntityData(entity).isStunned()) {
+        if (entity.hasEffect(RuneCraftoryEffects.STUNNED.asHolder())) {
             ((LivingEntityAccessor) entity).tickEffectsManually();
             --entity.invulnerableTime;
             return true;

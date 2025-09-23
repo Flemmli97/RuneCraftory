@@ -29,7 +29,6 @@ import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -91,17 +90,8 @@ public class ClientHandlers {
         }
     }
 
-    public static void grabMouse(LivingEntity entity, boolean sleeping) {
-        if (entity == Minecraft.getInstance().player && Minecraft.getInstance().screen == null) {
-            Minecraft.getInstance().mouseHandler.grabMouse();
-            if (sleeping)
-                KeyMapping.releaseAll();
-        }
-    }
-
     public static boolean disableMouseMove() {
         Minecraft mc = Minecraft.getInstance();
-
         return mc.player != null && (EntityUtils.isDisabled(mc.player)
                 || Platform.INSTANCE.getPlayerData(mc.player).getWeaponHandler().get(DataKey.FIXED_LOOK)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }

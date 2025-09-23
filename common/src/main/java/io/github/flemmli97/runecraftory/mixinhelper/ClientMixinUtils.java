@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
+import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -104,7 +105,14 @@ public class ClientMixinUtils {
 
     public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float flipDegrees) {
         if (EntityData.getSleepStateFrom(entity) == EntityData.SleepState.VANILLA && flipDegrees != 0) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(flipDegrees));
+            ClientCalls.SLEEP_ROTATED_TYPES.add(entity.getType());
+            poseStack.translate(0, entity.getBbWidth() * 0.15, 0);
+            if (entity.getPose() == Pose.SLEEPING) {
+                poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getYHeadRot() + 90));
+            } else {
+                poseStack.mulPose(Axis.YP.rotationDegrees(entity.yBodyRot - entity.getYHeadRot()));
+                poseStack.mulPose(Axis.XP.rotationDegrees(flipDegrees));
+            }
             float standOffset = entity.getEyeHeight(Pose.STANDING) * 0.6f;
             poseStack.translate(0, -standOffset, 0);
         }

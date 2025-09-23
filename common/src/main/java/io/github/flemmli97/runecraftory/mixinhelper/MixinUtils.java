@@ -25,11 +25,6 @@ import net.minecraft.world.phys.HitResult;
 public class MixinUtils {
 
     public static boolean playerPose(Player player) {
-        if (Platform.INSTANCE.getEntityData(player).isSleeping()) {
-            if (player.getPose() != Pose.SLEEPING)
-                player.setPose(Pose.SLEEPING);
-            return true;
-        }
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         Pose pose = data.getWeaponHandler().getCurrentAction().getPose(player, data.getWeaponHandler());
         if (pose != null) {

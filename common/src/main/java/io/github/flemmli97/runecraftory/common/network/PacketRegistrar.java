@@ -32,7 +32,6 @@ public class PacketRegistrar {
         register.register(S2CCapSync.TYPE, S2CCapSync.STREAM_CODEC, S2CCapSync::handle);
         register.register(S2CDataPackSync.TYPE, S2CDataPackSync.STREAM_CODEC, S2CDataPackSync::handle);
         register.register(S2CEntityDataSync.TYPE, S2CEntityDataSync.STREAM_CODEC, S2CEntityDataSync::handle);
-        register.register(S2CEntityDataSyncAll.TYPE, S2CEntityDataSyncAll.STREAM_CODEC, S2CEntityDataSyncAll::handle);
         register.register(S2CFoodPkt.TYPE, S2CFoodPkt.STREAM_CODEC, S2CFoodPkt::handle);
         register.register(S2CLevelPkt.TYPE, S2CLevelPkt.STREAM_CODEC, S2CLevelPkt::handle);
         register.register(S2CMoney.TYPE, S2CMoney.STREAM_CODEC, S2CMoney::handle);

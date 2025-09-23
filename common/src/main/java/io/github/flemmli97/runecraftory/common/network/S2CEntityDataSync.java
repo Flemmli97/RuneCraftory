@@ -35,13 +35,8 @@ public record S2CEntityDataSync(int entityID,
         if (e instanceof LivingEntity living) {
             EntityData data = Platform.INSTANCE.getEntityData(living);
             switch (pkt.dataType) {
-                case POISON -> data.setPoison(living, pkt.flag);
-                case SLEEP -> data.setSleeping(pkt.flag);
-                case PARALYSIS -> data.setParalysis(pkt.flag);
-                case COLD -> data.setCold(pkt.flag);
                 case INVIS -> data.setInvis(pkt.flag ? 1 : 0);
                 case ORTHOVIEW -> data.setThirdPersonView(pkt.flag);
-                case STUN -> data.setStunned(pkt.flag);
             }
         }
     }
@@ -53,13 +48,6 @@ public record S2CEntityDataSync(int entityID,
 
     public enum DataType {
 
-        POISON,
-        SLEEP,
-        PARALYSIS,
-        STUN,
-        COLD,
-        FATIGUE,
-        SEAL,
         INVIS,
         ORTHOVIEW
     }

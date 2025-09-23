@@ -1,15 +1,16 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
-import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PoisonEffect extends UncurableEffect {
 
     public PoisonEffect() {
-        super(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.DataType.POISON);
+        super(MobEffectCategory.HARMFUL, 0x154a08, eff -> ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0));
     }
 
     @Override

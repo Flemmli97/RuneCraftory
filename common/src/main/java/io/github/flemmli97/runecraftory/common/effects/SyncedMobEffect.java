@@ -1,42 +1,28 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
-import io.github.flemmli97.runecraftory.platform.ExtendedEffect;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.effect.ExtendedMobEffect;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
 
-public class SyncedMobEffect extends MobEffect implements ExtendedEffect {
+import java.util.function.Function;
 
-    private final S2CEntityDataSync.DataType packetType;
+public class SyncedMobEffect extends MobEffect implements ExtendedMobEffect {
 
-    public SyncedMobEffect(MobEffectCategory type, int color, S2CEntityDataSync.DataType packetType) {
-        super(type, color);
-        this.packetType = packetType;
+    private final Function<MobEffectInstance, ParticleOptions> factory;
+
+    public SyncedMobEffect(MobEffectCategory type, int color) {
+        this(type, color, null);
     }
 
-    private static void sendPacket(LivingEntity entity, S2CEntityDataSync.DataType type, boolean flag) {
-        EntityData data = Platform.INSTANCE.getEntityData(entity);
-        switch (type) {
-            case POISON -> data.setPoison(entity, flag);
-            case SLEEP -> data.setSleeping(flag);
-            case PARALYSIS -> data.setParalysis(flag);
-            case STUN -> data.setStunned(flag);
-            case COLD -> data.setCold(flag);
-            case ORTHOVIEW -> data.setThirdPersonView(flag);
-        }
+    public SyncedMobEffect(MobEffectCategory category, int color, Function<MobEffectInstance, ParticleOptions> factory) {
+        super(category, color);
+        this.factory = factory;
     }
 
     @Override
-    public void onEffectAdded(LivingEntity entity, MobEffectInstance instance) {
-        sendPacket(entity, this.packetType, true);
-    }
-
-    @Override
-    public void onEffectRemoved(LivingEntity entity, MobEffectInstance instance) {
-        sendPacket(entity, this.packetType, false);
+    public ParticleOptions createParticleOptions(MobEffectInstance effect) {
+        return this.factory != null ? this.factory.apply(effect) : super.createParticleOptions(effect);
     }
 }

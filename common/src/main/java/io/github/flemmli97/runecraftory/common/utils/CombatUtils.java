@@ -491,7 +491,8 @@ public class CombatUtils {
                     if (attacker != null)
                         living.knockback(1.5, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
                 }
-                case EARTH -> Platform.INSTANCE.getEntityData(living).applyEarthDebuff();
+                case EARTH ->
+                        living.addEffect(new MobEffectInstance(RuneCraftoryEffects.EARTH_ELEMENT_DEBUFF.asHolder(), 200));
                 case DARK -> living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
                 case LIGHT -> {
                     if (target.getRandom().nextFloat() < 0.5) {

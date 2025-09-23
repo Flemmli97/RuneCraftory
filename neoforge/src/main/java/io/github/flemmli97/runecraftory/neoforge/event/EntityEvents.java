@@ -32,11 +32,6 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void trackEntity(PlayerEvent.StartTracking event) {
-        EntityCalls.trackEntity(event.getEntity(), event.getTarget());
-    }
-
-    @SubscribeEvent
     public void playerAttack(AttackEntityEvent event) {
         if (EntityCalls.playerAttack(event.getEntity(), event.getTarget()))
             event.setCanceled(true);
