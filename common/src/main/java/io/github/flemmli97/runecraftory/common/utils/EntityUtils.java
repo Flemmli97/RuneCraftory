@@ -195,7 +195,7 @@ public class EntityUtils {
     }
 
     public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {
-        AABB aabb = target.getBoundingBox().inflate(target.getBbHeight() * 0.1);
+        AABB aabb = target.getBoundingBox().inflate(-target.getBbHeight() * 0.1);
         return getStraightProjectileTarget(from, target.position(), aabb.minY, aabb.maxY);
     }
 

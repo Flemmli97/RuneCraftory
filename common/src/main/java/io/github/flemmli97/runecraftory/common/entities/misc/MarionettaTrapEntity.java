@@ -16,6 +16,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -47,7 +48,6 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
     private static final AnimationDefinitionContainer ANIMS = new AnimationDefinitionContainer(Map.of());
 
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
-    private boolean dirty = true;
     private final AnimationHandler<MarionettaTrapEntity> animationHandler = new AnimationHandler<>(this, ANIMS);
     private int tickLeft = DURATION;
     private LivingEntity shooter;
@@ -85,11 +85,24 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
 
     public void addCaughtEntity(LivingEntity entity) {
         this.caughtEntities.add(entity);
-        this.dirty = true;
+        this.entityData.set(CAUGHT_ENTITIES, this.writeCaughtEntities());
     }
 
     public void setDamageMultiplier(float damageMultiplier) {
         this.damageMultiplier = damageMultiplier;
+    }
+
+    public void throwIn(Vec3 dir) {
+        this.setMotionWithRotation(dir);
+    }
+
+    private void setMotionWithRotation(Vec3 motion) {
+        this.setDeltaMovement(motion);
+        double f = Math.sqrt(horizontalMag(motion));
+        this.setYRot((float) (Mth.atan2(motion.x, motion.z) * (180F / (float) Math.PI)));
+        this.setXRot((float) (Mth.atan2(motion.y, f) * (180F / (float) Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     @Override
@@ -129,22 +142,21 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
         this.caughtEntities.forEach(entity -> {
             if (entity.isAlive()) {
                 Platform.INSTANCE.getEntityData(entity).setInvis(10);
-                entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
+                if (entity instanceof ServerPlayer player) {
+                    player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
+                } else {
+                    entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
+                }
                 EntityData data = Platform.INSTANCE.getEntityData(entity);
                 if (!data.thirdPersonView())
                     data.setThirdPersonView(true);
             }
         });
         if (!this.level().isClientSide) {
-            if (this.dirty) {
-                this.entityData.set(CAUGHT_ENTITIES, this.writeCaughtEntities());
-                this.dirty = false;
-            }
-            if (this.getOwner() != null && this.canAttack()) {
+            if (this.getOwner() != null && this.canAttack(0)) {
                 boolean[] success = new boolean[]{false};
                 this.caughtEntities.forEach(e -> {
-                    if (CombatUtils.mobAttack(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner())
-                                    .hurtResistant(this.tickLeft == 9 ? 10 : 0),
+                    if (CombatUtils.mobAttack(this.getOwner(), e, new DynamicDamage.Builder(this, this.getOwner()).hurtResistant(0),
                             CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier) && !success[0]) {
                         success[0] = true;
                     }
@@ -162,15 +174,15 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
             }
         } else {
             --this.shakeTicks;
-            if (this.canAttack() && !this.caughtEntities.isEmpty()) {
+            if (this.canAttack(1) && !this.caughtEntities.isEmpty()) {
                 this.shakeTicks = 2;
             }
         }
     }
 
-    protected boolean canAttack() {
+    protected boolean canAttack(int offset) {
         for (int i : ATTACK_TIMES) {
-            if (this.tickLeft == i)
+            if ((this.tickLeft + offset) == i)
                 return true;
         }
         return false;
@@ -201,7 +213,7 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
     }
 
     public float getAttackProgress(int idx, float partialTicks) {
-        int time = ATTACK_TIMES[idx] + 2;
+        int time = ATTACK_TIMES[idx] - 1;
         return 1 - Mth.clamp(((this.getTickLeft() - time) - partialTicks) / 6, 0, 1);
     }
 

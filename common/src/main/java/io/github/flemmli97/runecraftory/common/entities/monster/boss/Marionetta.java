@@ -6,6 +6,8 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.MarionettaTrapEntity;
+import io.github.flemmli97.runecraftory.common.entities.utils.BoundEntityListHandler;
+import io.github.flemmli97.runecraftory.common.entities.utils.BoundEntityListListener;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -50,11 +52,9 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 
-public class Marionetta extends BossMonster {
+public class Marionetta extends BossMonster implements BoundEntityListListener {
 
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(Marionetta.class, EntityDataSerializers.BOOLEAN);
 
@@ -121,7 +121,7 @@ public class Marionetta extends BossMonster {
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 entity.setDeltaMovement(entity.getMoveDirection());
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.MARIONETTA_TRAP_IGNORE) && !entity.caughtEntities.contains(e)) {
+                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.MARIONETTA_TRAP_IGNORE) && !entity.caughtEntities.has(e)) {
                         entity.catchEntity(e);
                     }
                 });
@@ -133,8 +133,8 @@ public class Marionetta extends BossMonster {
                 Vec3 throwVec = EntityUtils.horizontalLookAngle(entity).scale(1.7).add(0, 0.85, 0);
                 MarionettaTrapEntity trap = new MarionettaTrapEntity(entity.level(), entity);
                 trap.setDamageMultiplier(0.8f);
+                trap.throwIn(throwVec);
                 entity.caughtEntities.forEach(trap::addCaughtEntity);
-                trap.setDeltaMovement(throwVec);
                 entity.level().addFreshEntity(trap);
                 entity.caughtEntities.clear();
             }
@@ -168,7 +168,8 @@ public class Marionetta extends BossMonster {
                 }
                 return false;
             });
-    private final List<LivingEntity> caughtEntities = new ArrayList<>();
+
+    private final BoundEntityListHandler<Marionetta> caughtEntities = new BoundEntityListHandler<>(this);
 
     public Marionetta(EntityType<? extends Marionetta> type, Level level) {
         super(type, level);
@@ -283,12 +284,10 @@ public class Marionetta extends BossMonster {
         super.baseTick();
         this.caughtEntities.forEach(entity -> {
             if (entity.isAlive()) {
+                entity.setDeltaMovement(Vec3.ZERO);
                 if (entity instanceof ServerPlayer player) {
-                    Vec3 dir = this.position().add(0, this.getBbHeight() + 0.2, 0).subtract(player.position());
-                    player.setDeltaMovement(dir);
                     player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
                 } else {
-                    entity.setDeltaMovement(Vec3.ZERO);
                     entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
                 }
                 entity.hurtMarked = true;
@@ -305,7 +304,7 @@ public class Marionetta extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.caughtEntities.contains(source.getEntity()))
+        if (source.getEntity() instanceof LivingEntity living && this.caughtEntities.has(living))
             return false;
         return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(CHEST_THROW, ANGRY))) && super.hurt(source, amount);
     }
@@ -427,5 +426,10 @@ public class Marionetta extends BossMonster {
     @Override
     public String getDeathAnimation() {
         return DEFEAT;
+    }
+
+    @Override
+    public BoundEntityListHandler<?> getList() {
+        return this.caughtEntities;
     }
 }

@@ -7,6 +7,8 @@ import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.control.FreeMoveControl;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
+import io.github.flemmli97.runecraftory.common.entities.utils.BoundEntityListHandler;
+import io.github.flemmli97.runecraftory.common.entities.utils.BoundEntityListListener;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
@@ -48,11 +50,9 @@ import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 
-public class Handonetta extends BossMonster {
+public class Handonetta extends BossMonster implements BoundEntityListListener {
 
     public static final TypedResource<Vec3> MOVE_DIRECTION = new TypedResource<>(RuneCraftory.modRes("move_direction"));
 
@@ -99,7 +99,7 @@ public class Handonetta extends BossMonster {
             entity.setDeltaMovement(entity.getMoveDirection());
             if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.caughtEntities.contains(e) && CombatUtils.mobAttack(entity, e, new DynamicDamage.Builder(entity).hurtResistant(8))) {
+                    if (!entity.caughtEntities.has(e) && CombatUtils.mobAttack(entity, e, new DynamicDamage.Builder(entity).hurtResistant(8))) {
                         entity.caughtEntities.add(e);
                         S2CScreenShake.sendAround(entity, 32, 4, 2);
                     }
@@ -135,7 +135,7 @@ public class Handonetta extends BossMonster {
                     entity.getAnimationHandler().setAnimation(GRAB_CAUGHT);
             } else if (anim.isPast("attack") && !anim.isPast("grab_done")) {
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.HANDONETTA_GRAP_IGNORE) && !entity.caughtEntities.contains(e)) {
+                    if (!entity.getType().is(RunecraftoryTags.EntityTypes.HANDONETTA_GRAP_IGNORE) && !entity.caughtEntities.has(e)) {
                         entity.catchEntity(e);
                     }
                 });
@@ -163,7 +163,7 @@ public class Handonetta extends BossMonster {
                 }
                 return false;
             });
-    private final List<LivingEntity> caughtEntities = new ArrayList<>();
+    private final BoundEntityListHandler<Handonetta> caughtEntities = new BoundEntityListHandler<>(this);
 
     public Handonetta(EntityType<? extends Handonetta> type, Level level) {
         super(type, level);
@@ -270,13 +270,11 @@ public class Handonetta extends BossMonster {
             boolean invis = this.getAnimationHandler().isCurrent(GRAB) ? this.getAnimationHandler().getAnimation().isPast("invis_start") : this.getAnimationHandler().isCurrent(GRAB_CAUGHT);
             this.caughtEntities.forEach(entity -> {
                 if (entity.isAlive()) {
+                    entity.setDeltaMovement(Vec3.ZERO);
                     if (entity instanceof ServerPlayer player) {
-                        Vec3 dir = this.position().subtract(player.position());
-                        player.setDeltaMovement(dir);
-                        player.moveTo(this.getX(), this.getY(), this.getZ());
+                        player.moveTo(this.getX(), this.getY(0.5), this.getZ());
                     } else {
-                        entity.setDeltaMovement(Vec3.ZERO);
-                        entity.setPos(this.getX(), this.getY(), this.getZ());
+                        entity.setPos(this.getX(), this.getY(0.5), this.getZ());
                     }
                     if (invis)
                         Platform.INSTANCE.getEntityData(entity).setInvis(10);
@@ -288,7 +286,7 @@ public class Handonetta extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if ((this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) && this.caughtEntities.contains(source.getEntity()))
+        if ((this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) && source.getEntity() instanceof LivingEntity living && this.caughtEntities.has(living))
             return false;
         return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(ANGRY))) && super.hurt(source, amount);
     }
@@ -404,6 +402,11 @@ public class Handonetta extends BossMonster {
     @Override
     public String getDeathAnimation() {
         return DEFEAT;
+    }
+
+    @Override
+    public BoundEntityListHandler<?> getList() {
+        return this.caughtEntities;
     }
 
     static class HandonettaMoveController extends FreeMoveControl {
