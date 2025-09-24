@@ -76,13 +76,18 @@ public class PalmCat extends LeapingMonster {
 
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
-        return AttackBehaviourBuilder.<BaseMonster>create()
+        return AttackBehaviourBuilder.<PalmCat>create()
                 .start(MELEE).play(MonsterBehaviourUtils.requireInRangePlay())
+                .condition(entity -> !entity.consecutive)
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(4)
                 .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(5)).prepareOptional(MonsterBehaviourUtils.moveAttack())
+                .condition(entity -> !entity.consecutive)
+                .prepare(new SetWalkTargetWithinDist<PalmCat>().min(2).max(5)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(3)
+                .start(MELEE, LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(entity -> entity.consecutive)
+                .end(1)
                 .build();
     }
 

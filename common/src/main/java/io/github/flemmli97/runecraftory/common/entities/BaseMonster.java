@@ -1003,17 +1003,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public int animationCooldown(@Nullable String anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
-            return this.getRandom().nextInt(20) + 25 + diffAdd;
-        return this.getRandom().nextInt(20) + 15 + diffAdd;
+            return this.getRandom().nextInt(20) + 30 + diffAdd;
+        return this.getRandom().nextInt(20) + 20 + diffAdd;
     }
 
     public int difficultyCooldown() {
-        int diffAdd = 12;
+        int diffAdd = 20;
         Difficulty diff = this.level().getDifficulty();
         if (this.level().getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
         else if (diff == Difficulty.NORMAL)
-            diffAdd = 7;
+            diffAdd = 10;
         return diffAdd;
     }
 

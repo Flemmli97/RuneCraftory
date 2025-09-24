@@ -296,8 +296,7 @@ public class Rafflesia extends BossMonster {
 
     @Override
     public int animationCooldown(String anim) {
-        int diffAdd = this.difficultyCooldown();
-        return (this.isEnraged() ? 25 + this.getRandom().nextInt(20) : 30 + this.getRandom().nextInt(30)) + diffAdd;
+        return super.animationCooldown(anim) + 5;
     }
 
     @Override

@@ -15,9 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.function.Predicate;
@@ -145,39 +143,10 @@ public class MonsterBehaviourUtils {
     }
 
     public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> moveAttack() {
-        Predicate<E> reached = entity -> {
-            WalkTarget target = BrainUtils.getMemory(entity, MemoryModuleType.WALK_TARGET);
-            if (target != null && target.getTarget() instanceof EntityTracker entityTracker) {
-                double close = target.getCloseEnoughDist()
-                        + entity.getBbWidth() * 0.5
-                        + entityTracker.getEntity().getBbWidth() * 0.5;
-                return entity.distanceToSqr(entityTracker.getEntity()) <= close * close;
-            }
-            return false;
-        };
-        MoveToAttackTarget<E> behaviour = new MoveToAttackTarget<>();
-        behaviour.startCondition(entity -> !reached.test(entity));
-        behaviour.stopIf(reached);
-        return behaviour;
+        return new MoveToAttackTarget<>();
     }
 
     public static <E extends PathfinderMob> MoveToWalkTargetWithSight<E> moveTo() {
-        Predicate<E> reached = entity -> {
-            WalkTarget target = BrainUtils.getMemory(entity, MemoryModuleType.WALK_TARGET);
-            if (target != null && target.getTarget() instanceof EntityTracker entityTracker) {
-                Entity targetEntity = entityTracker.getEntity();
-                if (entity.getBoundingBox().inflate(0.5).intersects(targetEntity.getBoundingBox()))
-                    return true;
-                double close = target.getCloseEnoughDist()
-                        + entity.getBbWidth() * 0.5
-                        + targetEntity.getBbWidth() * 0.5;
-                return entity.distanceToSqr(targetEntity) <= close * close;
-            }
-            return false;
-        };
-        MoveToWalkTargetWithSight<E> behaviour = new MoveToWalkTargetWithSight<>();
-        behaviour.startCondition(entity -> !reached.test(entity));
-        behaviour.stopIf(reached);
-        return behaviour;
+        return new MoveToWalkTargetWithSight<>();
     }
 }

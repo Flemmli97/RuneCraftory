@@ -653,7 +653,7 @@ public class Skelefang extends BossMonster {
     @Override
     public int animationCooldown(String anim) {
         int diffAdd = this.difficultyCooldown();
-        return (this.isEnraged() ? 27 + this.getRandom().nextInt(20) : 35 + this.getRandom().nextInt(25)) + diffAdd;
+        return (this.isEnraged() ? 25 + this.getRandom().nextInt(20) : 35 + this.getRandom().nextInt(30)) + diffAdd;
     }
 
     @Override

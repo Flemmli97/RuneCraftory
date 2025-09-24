@@ -371,7 +371,7 @@ public class Marionetta extends BossMonster {
     public int animationCooldown(String anim) {
         int cooldown = super.animationCooldown(anim);
         if (anim.equals(CHEST_ATTACK)) {
-            cooldown += this.getAnimationHandler().get(CHEST_THROW).length();
+            cooldown += Mth.ceil(this.getAnimationHandler().get(CHEST_THROW).length());
         }
         return cooldown;
     }
