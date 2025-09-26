@@ -64,7 +64,7 @@ public class ClientHandlers {
 
     private static final AnimatedPlayerModel<?> ANIMATED_PLAYER_MODEL = new AnimatedPlayerModel<>();
 
-    private static CameraType pastType = CameraType.FIRST_PERSON;
+    private static CameraType pastType = null;
 
     public static Player getPlayer() {
         return Minecraft.getInstance().player;
@@ -134,8 +134,12 @@ public class ClientHandlers {
     }
 
     public static void setToThirdPerson(boolean reset) {
-        if (reset)
+        if (reset == (pastType == null))
+            return;
+        if (reset) {
             Minecraft.getInstance().options.setCameraType(pastType);
+            pastType = null;
+        }
         else {
             pastType = Minecraft.getInstance().options.getCameraType();
             Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
