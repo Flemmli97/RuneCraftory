@@ -139,8 +139,7 @@ public class ClientHandlers {
         if (reset) {
             Minecraft.getInstance().options.setCameraType(pastType);
             pastType = null;
-        }
-        else {
+        } else {
             pastType = Minecraft.getInstance().options.getCameraType();
             Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
         }

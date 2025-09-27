@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.api.datapack.EntityRideActionCosts;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.AmbrosiaWaveEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.AppleProjectileEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.BigPlateEntity;
@@ -142,6 +141,7 @@ import io.github.flemmli97.runecraftory.common.items.creative.RuneCraftoryEggIte
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.tenshilib.common.entity.MultiPartEntity;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.TenshiLibCrossPlat;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
@@ -157,13 +157,16 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class RuneCraftoryEntities {
 
@@ -1593,13 +1596,19 @@ public class RuneCraftoryEntities {
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regEnsemble(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties()), RuneCraftoryCreativeTabs.MONSTERS);
+        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new EnsembleEggItem(reg, primary, secondary, new Item.Properties().rarity(Rarity.RARE)), RuneCraftoryCreativeTabs.MONSTERS);
         return reg;
     }
 
-    public static <V extends Mob> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regWithEgg(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
+    public static <V extends Mob> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regWithEgg(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, @Nullable Consumer<Item.Properties> props) {
         RegistryEntrySupplier<EntityType<?>, EntityType<V>> reg = reg(v, name);
-        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> new RuneCraftoryEggItem(reg, primary, secondary, new Item.Properties()), RuneCraftoryCreativeTabs.MONSTERS);
+        RuneCraftoryItems.register(name.getPath() + "_spawn_egg", () -> {
+            Item.Properties properties = new Item.Properties();
+            if (props != null) {
+                props.accept(properties);
+            }
+            return new RuneCraftoryEggItem(reg, primary, secondary, properties);
+        }, RuneCraftoryCreativeTabs.MONSTERS);
         return reg;
     }
 
@@ -1621,15 +1630,15 @@ public class RuneCraftoryEntities {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regBoss(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {
-        RegistryEntrySupplier<EntityType<?>, EntityType<V>> sup = regMonster(v, name, primary, secondary, flying, props);
+        RegistryEntrySupplier<EntityType<?>, EntityType<V>> sup = regMonster(v, name, primary, secondary, flying, props, prop -> prop.rarity(Rarity.RARE));
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             BOSSES.add((RegistryEntrySupplier) sup);
         return sup;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {
-        RegistryEntrySupplier<EntityType<?>, EntityType<V>> sup = regWithEgg(v, name, primary, secondary);
+    public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props, @Nullable Consumer<Item.Properties> itemProps) {
+        RegistryEntrySupplier<EntityType<?>, EntityType<V>> sup = regWithEgg(v, name, primary, secondary, itemProps);
         MONSTERS.add((RegistryEntrySupplier) sup);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DEFAULT_MOB_PROPERTIES.put(name, props);
@@ -1645,6 +1654,6 @@ public class RuneCraftoryEntities {
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<?>, EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props, GateSpawnData.Builder builder) {
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             DEFAULT_SPAWN_DATA.put(name, builder.build(name));
-        return regMonster(v, name, primary, secondary, flying, props);
+        return regMonster(v, name, primary, secondary, flying, props, (Consumer<Item.Properties>) null);
     }
 }

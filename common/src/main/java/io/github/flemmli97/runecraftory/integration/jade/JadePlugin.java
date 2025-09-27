@@ -8,13 +8,14 @@ import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
+import io.github.flemmli97.tenshilib.common.entity.MultiPartEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -173,7 +174,7 @@ public class JadePlugin implements IWailaPlugin {
         }, TreeBaseBlock.class);
         registration.addRayTraceCallback((hitResult, accessor, origin) -> {
             if (accessor instanceof EntityAccessor entityAccessor) {
-                if (entityAccessor.getEntity() instanceof MultiPartEntity entity) {
+                if (entityAccessor.getEntity() instanceof MultiPartEntity entity && BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace().equals(RuneCraftory.MODID)) {
                     accessor = registration.entityAccessor().from(entityAccessor).entity(entity.getOwner()).build();
                     return accessor;
                 }
