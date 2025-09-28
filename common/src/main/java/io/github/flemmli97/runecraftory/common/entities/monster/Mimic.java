@@ -107,7 +107,7 @@ public class Mimic extends LeapingMonster {
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(4)
                 .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(MonsterBehaviourUtils.ifFurtherThan(4))
+                .condition(MonsterBehaviourUtils.ifFurtherThan(5))
                 .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(7)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(THROW).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -125,7 +125,7 @@ public class Mimic extends LeapingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(6, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(3, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

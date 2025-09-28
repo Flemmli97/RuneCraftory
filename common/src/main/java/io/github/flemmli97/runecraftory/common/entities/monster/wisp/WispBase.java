@@ -95,8 +95,9 @@ public abstract class WispBase extends BaseMonster {
 
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
-        return SelectableBehaviourBuilder.<BaseMonster>builder().add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
-                .add(6, new Idle<>()).build();
+        return SelectableBehaviourBuilder.<BaseMonster>builder()
+                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
+                .add(6, MonsterBehaviourUtils.ifCloserThan(12), new Idle<>()).build();
     }
 
     @Override

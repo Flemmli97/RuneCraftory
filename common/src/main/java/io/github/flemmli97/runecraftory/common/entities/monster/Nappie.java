@@ -68,7 +68,7 @@ public class Nappie extends PommePomme implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetWalkTargetAwayFromTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetWalkTargetAwayFromTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 

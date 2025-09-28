@@ -62,6 +62,7 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibMemoryModules;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
@@ -278,7 +279,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23)
-                .add(Attributes.FOLLOW_RANGE, 24.0)
+                .add(Attributes.FOLLOW_RANGE, 32.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
         for (RegistryEntrySupplier<Attribute, ?> att : RuneCraftoryAttributes.ENTITY_ATTRIBUTES)
             map.add(att.asHolder());
@@ -623,17 +624,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         );
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public BrainActivityGroup<? extends BaseMonster> getFightTasks() {
         return BrainActivityGroup.fightTasks(
                 new InvalidateAttackTarget<BaseMonster>(),
-                new FirstApplicableBehaviour<>(
-                        (ExtendedBehaviour<BaseMonster>) this.getCooldownAI()
-                                .startCondition(BaseMonster::runCooldownBehaviour)
-                                .stopIf(e -> !e.runCooldownBehaviour()),
-                        (ExtendedBehaviour<BaseMonster>) this.getCombatAI()
-                ).startCondition(m -> m.getTarget() != null && m.isWithinRestriction(m.getTarget().blockPosition()))
+                this.getCooldownAI().startCondition(BaseMonster::runCooldownBehaviour)
+                        .stopIf(e -> !e.runCooldownBehaviour()),
+                this.getCombatAI().startCondition(BaseMonster::runCombatBehaviour)
         );
     }
 
@@ -646,7 +643,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     protected boolean runCooldownBehaviour() {
-        return !this.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN);
+        return !this.getAnimationHandler().hasAnimation()
+                && (BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN) || !BrainUtils.hasMemory(this, TenshilibMemoryModules.ANIMATION_TO_PLAY.get()));
+    }
+
+    protected boolean runCombatBehaviour() {
+        return !this.getAnimationHandler().hasAnimation() && !BrainUtils.hasMemory(this, MemoryModuleType.ATTACK_COOLING_DOWN);
     }
 
     @SuppressWarnings("unchecked")
@@ -1015,6 +1017,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         else if (diff == Difficulty.NORMAL)
             diffAdd = 10;
         return diffAdd;
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return super.canAttack(target) && this.isWithinRestriction(target.blockPosition());
     }
 
     @Override

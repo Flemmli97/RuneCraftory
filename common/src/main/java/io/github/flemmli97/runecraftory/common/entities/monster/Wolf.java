@@ -75,7 +75,7 @@ public class Wolf extends LeapingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(6, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class Wolf extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
-        return super.getLeapVec(target).scale(1.1);
+        return super.getLeapVec(target).scale(1.4);
     }
 
     @Override

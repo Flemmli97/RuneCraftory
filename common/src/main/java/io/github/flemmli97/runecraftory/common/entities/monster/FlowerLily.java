@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
@@ -13,6 +14,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionC
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
+import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -36,7 +40,14 @@ public class FlowerLily extends BaseMonster {
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
-    private final AnimationHandler<FlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS);
+    public static final TypedResource<Vec3> LEAP_MOTION = new TypedResource<>(RuneCraftory.modRes("leap_motion"));
+
+    private final AnimationHandler<FlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
+        if (!this.level().isClientSide) {
+            this.setLeapMotion(null);
+        }
+        return false;
+    });
 
     public FlowerLily(EntityType<? extends FlowerLily> type, Level level) {
         super(type, level);
@@ -49,10 +60,17 @@ public class FlowerLily extends BaseMonster {
     }
 
     @Override
+    protected void definedAdditinoalSyncedData(SyncedDataContainer.Builder<BaseMonster> builder) {
+        super.definedAdditinoalSyncedData(builder);
+        builder.define(LEAP_MOTION, TenshilibSyncableEntityDatas.VEC_3.get(), null);
+    }
+
+
+    @Override
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(ATTACK).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(2).max(13)).prepareOptional(MonsterBehaviourUtils.moveAttack())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(3).max(15)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(2)
                 .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(MonsterBehaviourUtils.ifCloserThan(3))
@@ -63,16 +81,14 @@ public class FlowerLily extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new StrafeTarget<BaseMonster>().strafeDistance(11))
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(4, new StrafeTarget<BaseMonster>().strafeDistance(15))
+                .add(2, MonsterBehaviourUtils.ifCloserThan(12), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(LEAP)) {
-            if (this.getDeltaMovement().lengthSqr() > 0.01)
-                return this.getDeltaMovement();
-            return null;
+            return this.getLeapMotion();
         }
         return super.directionToLookAt();
     }
@@ -105,8 +121,9 @@ public class FlowerLily extends BaseMonster {
             this.getNavigation().stop();
             if (anim.isAt("leap")) {
                 Vec3 vec32 = EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET, true)
-                        .scale(-1.8);
+                        .scale(-2);
                 this.setDeltaMovement(vec32.x, 0.15, vec32.z);
+                this.setLeapMotion(this.getDeltaMovement());
             }
         } else if (anim.is(ATTACK)) {
             this.getNavigation().stop();
@@ -120,6 +137,15 @@ public class FlowerLily extends BaseMonster {
     public AnimationHandler<FlowerLily> getAnimationHandler() {
         return this.animationHandler;
     }
+
+    public Vec3 getLeapMotion() {
+        return this.getDataContainer().get(LEAP_MOTION);
+    }
+
+    public void setLeapMotion(Vec3 chargeMotion) {
+        this.getDataContainer().set(LEAP_MOTION, chargeMotion);
+    }
+
 
     @Override
     public void handleRidingCommand(int command) {

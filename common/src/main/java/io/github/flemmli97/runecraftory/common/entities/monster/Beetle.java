@@ -53,8 +53,8 @@ public class Beetle extends ChargingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(4, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, new Idle<>()).build();
+                .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Beetle extends ChargingMonster {
 
     @Override
     public double chargingSpeed() {
-        return 0.3;
+        return 0.35;
     }
 
     @Override

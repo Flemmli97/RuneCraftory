@@ -35,6 +35,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
@@ -99,8 +100,8 @@ public class Wooly extends LeapingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(2, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(5, new Idle<>()).build();
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(5, MonsterBehaviourUtils.ifCloserThan(5), new Idle<>()).build();
     }
 
     @Override
@@ -159,6 +160,11 @@ public class Wooly extends LeapingMonster {
     @Override
     protected boolean isLeapingAnim(String anim) {
         return anim.equals(KICK);
+    }
+
+    @Override
+    public Vec3 getLeapVec(@Nullable Vec3 target) {
+        return super.getLeapVec(target).scale(1.2);
     }
 
     @Override

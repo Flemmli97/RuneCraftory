@@ -3,10 +3,9 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
-import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.misc.SlashResidueEntity;
-import io.github.flemmli97.runecraftory.common.entities.monster.MultiPartContainer;
+import io.github.flemmli97.runecraftory.common.entities.utils.MultiPartContainer;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
@@ -18,6 +17,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
+import io.github.flemmli97.tenshilib.common.entity.MultiPartEntity;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
@@ -242,13 +242,13 @@ public class Skelefang extends BossMonster {
 
     public Skelefang(EntityType<? extends Skelefang> type, Level level) {
         super(type, level);
-        this.head = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.3f)
+        this.head = new MultiPartContainer(() -> new MultiPartEntity(RuneCraftoryEntities.MULTIPART.get(), this, 1.6f, 1.3f)
                 .updatePosition(new Vec3(0, 2.15, 2.9)));
-        this.back = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 1.5f)
+        this.back = new MultiPartContainer(() -> new MultiPartEntity(RuneCraftoryEntities.MULTIPART.get(), this, 1.6f, 1.5f)
                 .updatePosition(new Vec3(0, 1, -1.5)));
-        this.leftLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 2.5f)
+        this.leftLeg = new MultiPartContainer(() -> new MultiPartEntity(RuneCraftoryEntities.MULTIPART.get(), this, 1.6f, 2.5f)
                 .updatePosition(new Vec3(1.2, 0, 0)));
-        this.rightLeg = new MultiPartContainer(() -> new MultiPartEntity(this, 1.6f, 2.5f)
+        this.rightLeg = new MultiPartContainer(() -> new MultiPartEntity(RuneCraftoryEntities.MULTIPART.get(), this, 1.6f, 2.5f)
                 .updatePosition(new Vec3(-1.2, 0, 0)));
     }
 
@@ -289,23 +289,25 @@ public class Skelefang extends BossMonster {
                 .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAM)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .condition(m -> (m.isEnraged() || m.remainingTailBones() > 10) && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(12)
                 .start(MonsterBehaviourUtils.checkedAttack(TAIL_SLAP)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> (m.isEnraged() || m.remainingTailBones() > 10) && MonsterBehaviourUtils.ifCloserThan(6).test(m))
+                .condition(m -> (m.isEnraged() || m.remainingTailBones() > 10) && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)))
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(9)
                 .start(MonsterBehaviourUtils.checkedAttack(NEEDLE_THROW)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(MonsterBehaviourUtils.ifCloserThan(20))
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(13)))
-                .prepareOptional(MonsterBehaviourUtils.moveAttack())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(10)
                 .start(MonsterBehaviourUtils.checkedAttack(SLASH)).play(MonsterBehaviourUtils.cooldownedPlay())
+                .condition(m -> (m.remainingLeftLegBones() > 0 || m.remainingRightLegBones() > 0) && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Skelefang>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(2)))
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(8)
                 .start(MonsterBehaviourUtils.checkedAttack(CHARGE)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepareOptional(MonsterBehaviourUtils.moveAttack())
+                .condition(MonsterBehaviourUtils.ifCloserThan(15))
                 .end(11)
                 .build();
     }

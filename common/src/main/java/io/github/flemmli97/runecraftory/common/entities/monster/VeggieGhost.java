@@ -76,11 +76,11 @@ public class VeggieGhost extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(ATTACK).play(MonsterBehaviourUtils.requireInRangePlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(SPIN).play(MonsterBehaviourUtils.requireInRangePlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(CAST).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -94,7 +94,7 @@ public class VeggieGhost extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
+                .add(4, MonsterBehaviourUtils.ifCloserThan(10), new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
                 .add(5, new StrafeTarget<>()).build();
     }
 

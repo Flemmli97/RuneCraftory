@@ -97,14 +97,14 @@ public class Ghost extends ChargingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<ChargingMonster>create()
                 .start(DARKBALL).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(2)).prepareOptional(MonsterBehaviourUtils.moveAttack())
+                .prepare(new SetWalkTargetAwayFromTarget<ChargingMonster>().minDist(3)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(SWING).play(MonsterBehaviourUtils.requireInRangePlay())
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepareOptional(new SetWalkTargetToAttackTarget<ChargingMonster>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), MonsterBehaviourUtils.moveTo(), new SetChargeTarget<>())
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(8)), MonsterBehaviourUtils.moveTo(), new SetChargeTarget<>())
                 .end(4)
                 .start(MonsterBehaviourUtils.checkedAttack(VANISH)).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(9)
@@ -114,8 +114,10 @@ public class Ghost extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
-                .add(6, new Idle<>()).build();
+                .add(2, new SetWalkTargetToAttackTarget<BaseMonster>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(5)), MonsterBehaviourUtils.moveTo())
+                .add(4, MonsterBehaviourUtils.ifCloserThan(10), new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
+                .add(6, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
     }
 
     @Override
@@ -231,6 +233,11 @@ public class Ghost extends ChargingMonster {
     public Vec3 getChargeTo(String animation) {
         return EntityUtils.getTargetDirection(this, EntityAnchorArgument.Anchor.FEET)
                 .scale(this.chargingSpeed());
+    }
+
+    @Override
+    public double chargingSpeed() {
+        return 0.5;
     }
 
     @Override

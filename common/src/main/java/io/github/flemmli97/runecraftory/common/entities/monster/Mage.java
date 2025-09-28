@@ -74,7 +74,7 @@ public class Mage extends BaseMonster implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(12))
+                .add(4, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(15))
                 .add(4, new StrafeTarget<>()).build();
     }
 

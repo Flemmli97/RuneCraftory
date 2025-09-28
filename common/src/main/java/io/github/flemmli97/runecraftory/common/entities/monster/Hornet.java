@@ -68,8 +68,8 @@ public class Hornet extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(4, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(12))
-                .add(2, new SetRandomHoverTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(4, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(15))
+                .add(2, MonsterBehaviourUtils.ifCloserThan(10), new SetRandomHoverTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.StrafeTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
@@ -79,7 +80,8 @@ public class Demon extends BaseMonster implements HealingPredicateEntity, Elemen
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(4, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(2, new StrafeTarget<BaseMonster>().strafeDistance(12))
+                .add(3, MonsterBehaviourUtils.ifCloserThan(10), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

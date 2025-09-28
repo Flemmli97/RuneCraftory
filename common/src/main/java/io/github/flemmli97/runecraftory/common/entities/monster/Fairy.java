@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import org.jetbrains.annotations.Nullable;
@@ -75,10 +74,10 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(WIND).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(4).max(9)).prepareOptional(MonsterBehaviourUtils.moveAttack())
+                .prepare(new SetWalkTargetWithinDist<BaseMonster>().min(5).max(15)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(8)
                 .start(LIGHT).play(MonsterBehaviourUtils.cooldownedPlay())
-                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(12))).prepareOptional(MonsterBehaviourUtils.moveTo())
+                .prepare(new SetWalkTargetToAttackTarget<BaseMonster>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(15))).prepareOptional(MonsterBehaviourUtils.moveTo())
                 .end(3)
                 .start(HEAL).play(MonsterBehaviourUtils.cooldownedPlay())
                 .end(2)
@@ -88,8 +87,9 @@ public class Fairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(5, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, new Idle<>()).build();
+                .add(2, new SetWalkTargetToAttackTarget<BaseMonster>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(12)), MonsterBehaviourUtils.moveTo())
+                .add(5, MonsterBehaviourUtils.ifCloserThan(12), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

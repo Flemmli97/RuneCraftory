@@ -78,7 +78,7 @@ public class Minotaur extends ChargingMonster {
                 .prepare(new SetChargeTarget<>())
                 .end(3)
                 .start(CHARGE).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(MonsterBehaviourUtils.ifFurtherThan(4))
+                .condition(MonsterBehaviourUtils.ifFurtherThan(5))
                 .prepare(new SetChargeTarget<>())
                 .end(8)
                 .build();
@@ -88,7 +88,7 @@ public class Minotaur extends ChargingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(6, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override
@@ -165,7 +165,7 @@ public class Minotaur extends ChargingMonster {
 
     @Override
     public double chargingSpeed() {
-        return 0.45f;
+        return 0.5f;
     }
 
     @Override

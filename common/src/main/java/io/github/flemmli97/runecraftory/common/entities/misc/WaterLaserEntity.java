@@ -87,7 +87,7 @@ public class WaterLaserEntity extends BaseBeam {
         builder.define(MAX_LIVING_TICK, 20);
         builder.define(YAW_OFFSET, 0f);
         builder.define(OFFSET, new Vector3f());
-        builder.define(RANGE, 9f);
+        builder.define(RANGE, 10f);
         builder.define(ROTATION_FROM_OFFSET, false);
     }
 

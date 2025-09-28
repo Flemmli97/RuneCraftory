@@ -75,9 +75,10 @@ public class GoblinArcher extends Goblin {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(3, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(15))
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, new Idle<>()).build();
+                .add(2, new StayWithinDistanceOfAttackTarget<BaseMonster>().maxDistance(15))
+                .add(3, new StrafeTarget<>())
+                .add(1, MonsterBehaviourUtils.ifCloserThan(10), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(2, MonsterBehaviourUtils.ifFurtherThan(7), new Idle<>()).build();
     }
 
     @Override

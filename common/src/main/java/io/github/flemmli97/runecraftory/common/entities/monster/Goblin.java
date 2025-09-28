@@ -77,7 +77,7 @@ public class Goblin extends LeapingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(2, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Goblin extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
-        return super.getLeapVec(target).scale(1.25);
+        return super.getLeapVec(target).scale(1.5);
     }
 
     @Override

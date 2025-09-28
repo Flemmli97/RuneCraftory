@@ -65,8 +65,8 @@ public class Orc extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, new Idle<>()).build();
+                .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
     }
 
     @Override

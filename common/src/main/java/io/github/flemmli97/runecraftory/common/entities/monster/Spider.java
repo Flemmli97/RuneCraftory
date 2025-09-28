@@ -81,9 +81,10 @@ public class Spider extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(5, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveAttack())
-                .add(3, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveAttack())
-                .add(3, new Idle<>()).build();
+                .add(5, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, MonsterBehaviourUtils.ifCloserThan(10), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, MonsterBehaviourUtils.ifFurtherThan(7), new Idle<>())
+                .build();
     }
 
     @Override

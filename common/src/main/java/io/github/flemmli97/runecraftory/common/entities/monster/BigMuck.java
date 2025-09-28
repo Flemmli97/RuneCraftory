@@ -56,7 +56,7 @@ public class BigMuck extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(1, MonsterBehaviourUtils.ifCloserThan(10), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

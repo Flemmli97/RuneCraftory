@@ -66,8 +66,10 @@ public class Buffamoo extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, new Idle<>()).build();
+                .add(2, new SetWalkTargetToAttackTarget<BaseMonster>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(5)), MonsterBehaviourUtils.moveTo())
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
     }
 
     @Override
@@ -99,7 +101,7 @@ public class Buffamoo extends ChargingMonster {
 
     @Override
     public double chargingSpeed() {
-        return 0.28f;
+        return 0.35;
     }
 
     @Override

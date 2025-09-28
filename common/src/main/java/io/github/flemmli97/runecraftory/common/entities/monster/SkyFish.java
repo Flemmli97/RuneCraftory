@@ -82,7 +82,9 @@ public class SkyFish extends BaseMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(2, new SetRandomFlyingTarget<BaseMonster>()
+                .add(1, new SetWalkTargetToAttackTarget<BaseMonster>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(7)), MonsterBehaviourUtils.moveTo())
+                .add(2, MonsterBehaviourUtils.ifCloserThan(10), new SetRandomFlyingTarget<BaseMonster>()
                         .flightTargetPredicate((entity, pos) -> {
                             LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
                             if (target == null) {
@@ -90,7 +92,7 @@ public class SkyFish extends BaseMonster {
                             }
                             return target != null && target.distanceToSqr(pos) <= 11 * 11 && Math.abs(target.getY() - pos.y()) < 6;
                         }), MonsterBehaviourUtils.moveTo())
-                .add(4, new Idle<>()).build();
+                .add(4, MonsterBehaviourUtils.ifFurtherThan(7), new Idle<>()).build();
     }
 
     @Override

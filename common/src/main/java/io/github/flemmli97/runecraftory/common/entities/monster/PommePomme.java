@@ -52,8 +52,8 @@ public class PommePomme extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override

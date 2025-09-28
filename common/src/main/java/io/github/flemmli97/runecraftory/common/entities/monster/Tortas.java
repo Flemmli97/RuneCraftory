@@ -67,12 +67,12 @@ public class Tortas extends ChargingMonster {
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(2)
                 .start(BITE).play(MonsterBehaviourUtils.requireInRangePlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(5)
                 .start(SPIN).play(MonsterBehaviourUtils.cooldownedPlay())
                 .prepare(new SetChargeTarget<>())
-                .end(3)
+                .end(5)
                 .build();
     }
 
@@ -80,8 +80,8 @@ public class Tortas extends ChargingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(2, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(1, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(4, new Idle<>()).build();
+                .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(4, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
     }
 
     @Override

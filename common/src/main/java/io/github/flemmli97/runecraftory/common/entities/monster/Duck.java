@@ -63,8 +63,9 @@ public class Duck extends ChargingMonster {
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
-                .add(3, new Idle<>())
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(2, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
     }
 
     @Override
@@ -102,7 +103,7 @@ public class Duck extends ChargingMonster {
                 }
             } else {
                 Vec3 delta = this.getDeltaMovement();
-                this.setDeltaMovement(delta.x, 0.1f, delta.z);
+                this.setDeltaMovement(delta.x, 0.17f, delta.z);
                 if (this.getTarget() != null) {
                     this.lookAt(this.getTarget(), 20, 30);
                 }

@@ -91,11 +91,11 @@ public class Weagle extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<BaseMonster>create()
                 .start(PECK).play(MonsterBehaviourUtils.requireInRangePlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(3)
                 .start(SWOOP).play(MonsterBehaviourUtils.requireInRangePlay())
-                .condition(MonsterBehaviourUtils.ifCloserThan(3))
+                .condition(MonsterBehaviourUtils.ifCloserThan(4))
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(2)
                 .start(GALE).play(MonsterBehaviourUtils.cooldownedPlay())
@@ -108,7 +108,7 @@ public class Weagle extends BaseMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(2, new StrafeTarget<BaseMonster>().strafeDistance(7))
-                .add(5, new SetRandomFlyingTarget<BaseMonster>()
+                .add(5, MonsterBehaviourUtils.ifCloserThan(15), new SetRandomFlyingTarget<BaseMonster>()
                         .flightTargetPredicate((entity, pos) -> {
                             LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
                             if (target == null) {

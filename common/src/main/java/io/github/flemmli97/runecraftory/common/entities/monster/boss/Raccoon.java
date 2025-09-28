@@ -18,7 +18,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
-import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.DummyBehaviour;
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetAwayFromTarget;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
@@ -50,8 +50,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.SequentialBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.Optional;
@@ -298,59 +296,60 @@ public class Raccoon extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCombatAI() {
         return AttackBehaviourBuilder.<Raccoon>create()
                 .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> !m.isBerserk())
+                .condition(m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> !m.isBerserk())
+                .condition(m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Raccoon>().speedMod((e, t) -> 1.2f))
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(17)
                 .start(MonsterBehaviourUtils.checkedAttack(PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(raccoon -> raccoon.isBerserk() && MonsterBehaviourUtils.ifCloserThan(6).test(raccoon))
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(7)))
                 .prepare(new SetWalkTargetToAttackTarget<>())
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(JUMP)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(Raccoon::isBerserk)
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(24)))
                 .prepare(new SetWalkTargetToAttackTarget<Raccoon>().closeEnoughDist(MonsterBehaviourUtils.closeEnough(16))).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(STOMP)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(raccoon -> raccoon.isBerserk() && MonsterBehaviourUtils.ifCloserThan(8).test(raccoon))
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(7)))
                 .prepare(new SetWalkTargetToAttackTarget<>())
-                .prepareOptional(MonsterBehaviourUtils.fastMovement())
+                .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(LEAF_SHOOT)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(Raccoon::isBerserk)
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(20)))
                 .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod(1.1f).minDist(4).radius(9)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(17)
                 .start(MonsterBehaviourUtils.checkedAttack(LEAF_BOOMERANG)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(Raccoon::isBerserk)
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(20)))
                 .prepare(new SetWalkTargetAwayFromTarget<Raccoon>().speedMod(1.1f).minDist(4).radius(6)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(18)
                 .start(MonsterBehaviourUtils.checkedAttack(ROAR)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(Raccoon::isBerserk)
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(12)))
                 .end(3)
                 .start(MonsterBehaviourUtils.checkedAttack(BARRAGE)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(Raccoon::isBerserk)
+                .condition(MonsterBehaviourUtils.and(Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(7)))
                 .prepare(new SetWalkTargetToAttackTarget<Raccoon>()
                         .closeEnoughDist(MonsterBehaviourUtils.closeEnough(9))).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(1)
                 .start(MonsterBehaviourUtils.checkedAttack(CLONE)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> m.isEnraged() && m.isBerserk())
+                .condition(MonsterBehaviourUtils.and(Raccoon::isEnraged, Raccoon::isBerserk, MonsterBehaviourUtils.ifCloserThan(32)))
                 .end(7)
                 .build();
     }
 
     @Override
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
-        return new OneRandomBehaviour<>(
-                DummyBehaviour.opt(new SequentialBehaviour<Raccoon>(new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()))
-                        .startCondition(Raccoon::isBerserk),
-                DummyBehaviour.opt(new SequentialBehaviour<Raccoon>(new SetWalkTargetAwayFromTarget<>()
-                        .minDist(4).radius(6).speedMod(1.1f), MonsterBehaviourUtils.moveTo())).startCondition(m -> !m.isBerserk())
-        );
+        return SelectableBehaviourBuilder.<Raccoon>builder()
+                .add(3, Raccoon::isBerserk, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
+                .add(3, m -> !m.isBerserk(), new SetWalkTargetToAttackTarget<Raccoon>()
+                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(7)), MonsterBehaviourUtils.moveTo())
+                .add(3, m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(16).test(m), new SetWalkTargetAwayFromTarget<Raccoon>()
+                        .minDist(4).radius(6).speedMod(1.1f), MonsterBehaviourUtils.moveTo())
+                .build();
     }
 
     @Override

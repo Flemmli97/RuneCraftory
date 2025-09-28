@@ -16,8 +16,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToIntBiFunction;
@@ -53,8 +55,24 @@ public class MonsterBehaviourUtils {
     }
 
     public static <E extends BaseMonster> PlayAnimation<E> cooldownedPlay() {
-        return new PlayAnimation<E>().withCallback(cooldownHandler())
+        return cooldownedPlay(null);
+    }
+
+    public static <E extends BaseMonster> PlayAnimation<E> requireInRangePlay() {
+        return cooldownedPlay(entity -> {
+            AnimationPlayHolder<?> anim = BrainUtils.getMemory(entity, TenshilibMemoryModules.ANIMATION_TO_PLAY.get());
+            Entity target = BrainUtils.getTargetOfEntity(entity);
+            return target != null && entity.isInAttackBox(target, anim.animation());
+        });
+    }
+
+    public static <E extends BaseMonster> PlayAnimation<E> cooldownedPlay(Predicate<E> condition) {
+        PlayAnimation<E> behaviour = new PlayAnimation<E>().withCallback(cooldownHandler())
                 .withCallback(cooldownHandlerCont());
+        if (condition != null) {
+            behaviour.startCondition(condition);
+        }
+        return behaviour;
     }
 
     public static <E extends BaseMonster> PlayAnimation.OnStart<E> cooldownHandler() {
@@ -89,64 +107,66 @@ public class MonsterBehaviourUtils {
         };
     }
 
-    public static <E extends BaseMonster> PlayAnimation<E> requireInRangePlay() {
-        return (PlayAnimation<E>) new PlayAnimation<E>()
-                .withCallback(cooldownHandler())
-                .withCallback(cooldownHandlerCont())
-                .startCondition(entity -> {
-                    AnimationPlayHolder<?> anim = BrainUtils.getMemory(entity, TenshilibMemoryModules.ANIMATION_TO_PLAY.get());
-                    Entity target = BrainUtils.getTargetOfEntity(entity);
-                    return target != null && entity.isInAttackBox(target, anim.animation());
-                });
-    }
-
     public static <E extends LivingEntity> ToIntBiFunction<E, LivingEntity> closeEnough(int dist) {
         return (entity, target) -> dist;
     }
 
-    public static <E extends LivingEntity> Predicate<E> ifCloserThan(double dist) {
+    public static <E extends Mob> Predicate<E> ifCloserThan(double dist) {
         return entity -> {
-            double distance = dist + entity.getBbWidth() * 0.5;
-            LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
-            if (target == null && entity instanceof Mob mob) {
-                target = mob.getTarget();
-            }
+            LivingEntity target = entity.getTarget();
             if (target == null)
                 return false;
-            distance += target.getBbWidth() * 0.5;
+            double distance = dist + entity.getBbWidth() * 0.5 + target.getBbWidth() * 0.5;
             return entity.distanceToSqr(target) <= distance * distance;
         };
     }
 
-    public static <E extends LivingEntity> Predicate<E> ifFurtherThan(double dist) {
+    public static <E extends Mob> Predicate<E> ifFurtherThan(double dist) {
         return entity -> {
-            double distance = dist + entity.getBbWidth() * 0.5;
-            LivingEntity target = BrainUtils.hasMemory(entity, MemoryModuleType.ATTACK_TARGET) ? BrainUtils.getTargetOfEntity(entity) : null;
-            if (target == null && entity instanceof Mob mob) {
-                target = mob.getTarget();
-            }
+            LivingEntity target = entity.getTarget();
             if (target == null)
                 return false;
-            distance += target.getBbWidth() * 0.5;
+            double distance = dist + entity.getBbWidth() * 0.5 + target.getBbWidth() * 0.5;
             return entity.distanceToSqr(target) >= distance * distance;
         };
     }
 
-    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> fastMovement() {
-        return fastMovement(35, 60);
+    public static <E extends Mob> Consumer<ExtendedBehaviour<E>> requireCloseWithin(double dist) {
+        return behaviour -> {
+            Predicate<E> test = ifCloserThan(dist);
+            behaviour.startCondition(test);
+            behaviour.stopIf(e -> !test.test(e));
+        };
     }
 
-    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> fastMovement(int min, int max) {
+    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> timedMovement() {
+        return timedMovement(30, 45);
+    }
+
+    public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> timedMovement(int min, int max) {
         MoveToAttackTarget<E> behaviour = moveAttack();
         behaviour.runFor(e -> min + e.getRandom().nextInt(max - min));
         return behaviour;
     }
 
     public static <E extends PathfinderMob & AOEAttackEntity & AnimatedEntity> MoveToAttackTarget<E> moveAttack() {
-        return new MoveToAttackTarget<>();
+        MoveToAttackTarget<E> behaviour = new MoveToAttackTarget<>();
+        behaviour.runFor(e -> 100);
+        return behaviour;
     }
 
     public static <E extends PathfinderMob> MoveToWalkTargetWithSight<E> moveTo() {
         return new MoveToWalkTargetWithSight<>();
+    }
+
+    @SafeVarargs
+    public static <T> Predicate<T> and(Predicate<T>... and) {
+        return t -> {
+            for (Predicate<T> pred : and) {
+                if (!pred.test(t))
+                    return false;
+            }
+            return true;
+        };
     }
 }

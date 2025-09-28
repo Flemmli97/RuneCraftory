@@ -81,7 +81,7 @@ public class PalmCat extends LeapingMonster {
                 .condition(entity -> !entity.consecutive)
                 .prepare(new SetWalkTargetToAttackTarget<>()).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(4)
-                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay())
+                .start(LEAP).play(MonsterBehaviourUtils.cooldownedPlay(MonsterBehaviourUtils.ifCloserThan(5)))
                 .condition(entity -> !entity.consecutive)
                 .prepare(new SetWalkTargetWithinDist<PalmCat>().min(2).max(5)).prepareOptional(MonsterBehaviourUtils.moveAttack())
                 .end(3)
@@ -95,7 +95,7 @@ public class PalmCat extends LeapingMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(6, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo()).build();
     }
 
     @Override
@@ -133,13 +133,7 @@ public class PalmCat extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable Vec3 target) {
-        if (target != null) {
-            Vec3 leap = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ());
-            if (leap.lengthSqr() > 7)
-                return leap.normalize();
-            return leap.scale(0.9);
-        }
-        return super.getLeapVec(null);
+        return super.getLeapVec(target).scale(1.3);
     }
 
     @Override
