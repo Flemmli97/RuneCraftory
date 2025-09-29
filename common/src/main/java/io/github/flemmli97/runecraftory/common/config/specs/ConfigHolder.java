@@ -123,6 +123,7 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         ClientConfig.customBossbars = spec.customBossbars.get();
 
         ClientConfig.screenShakeIntensity = spec.screenShakeIntensity.get().floatValue();
+        ClientConfig.renderHand = spec.renderHand.get();
     }
 
     public static void loadMobs(MobConfigSpec spec) {

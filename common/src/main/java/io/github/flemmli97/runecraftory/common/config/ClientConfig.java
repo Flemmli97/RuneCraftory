@@ -36,6 +36,7 @@ public class ClientConfig {
     public static boolean customBossbars = true;
 
     public static float screenShakeIntensity = 1;
+    public static boolean renderHand = true;
 
     public enum HealthRPRenderType {
         NONE,

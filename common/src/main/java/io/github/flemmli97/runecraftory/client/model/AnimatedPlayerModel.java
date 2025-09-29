@@ -67,10 +67,12 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
-    public boolean setUpModel(LivingEntity entity, HumanoidModel<?> model, @Nullable AttackActionHandler handler, float partialTicks) {
-        HumanoidMainHand hands = (HumanoidMainHand) model;
-        hands.runecraftory$getLeftHandItem().resetAll();
-        hands.runecraftory$getRightHandItem().resetAll();
+    public boolean setUpModel(LivingEntity entity, @Nullable HumanoidModel<?> model, @Nullable AttackActionHandler handler, float partialTicks) {
+        if (model != null) {
+            HumanoidMainHand hands = (HumanoidMainHand) model;
+            hands.runecraftory$getLeftHandItem().resetAll();
+            hands.runecraftory$getRightHandItem().resetAll();
+        }
         if (entity instanceof AnimatedEntity animated) {
             this.setup(model);
             return this.anim.get().doAnimation(this, animated.getAnimationHandler(), partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
@@ -81,7 +83,11 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
         return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
-    private void setup(HumanoidModel<?> model) {
+    private void setup(@Nullable HumanoidModel<?> model) {
+        if (model == null) {
+            this.body.resetAll();
+            return;
+        }
         PartPose body = model.body.storePose();
         this.getModel().resetPoses();
         this.body.loadPose(body);

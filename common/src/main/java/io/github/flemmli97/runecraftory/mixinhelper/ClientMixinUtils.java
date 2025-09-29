@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
+import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
@@ -24,7 +25,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +38,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,7 @@ public class ClientMixinUtils {
     private static final Map<SeasonedTint, Integer> LEAVE_TINTS = new ConcurrentHashMap<>();
     private static final Map<SeasonedTint, Integer> GRASS_TINTS = new ConcurrentHashMap<>();
 
-    private static boolean ItemRenderContext;
+    private static boolean AnimatedItemHandRendering;
 
     public static int modifyColoredTint(BlockAndTintGetter getter, int old) {
         Calendar calendar = ClientCalendarHolder.CLIENT_CALENDAR;
@@ -145,15 +147,6 @@ public class ClientMixinUtils {
         boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
         if (result) {
             ClientHandlers.getAnimatedPlayerModel().copyTo(model);
-            if (ItemRenderContext) {
-                model.setAllVisible(false);
-                model.leftArm.visible = true;
-                model.rightArm.visible = true;
-                if (model instanceof PlayerModel<?> playerModel) {
-                    playerModel.leftSleeve.copyFrom(model.leftArm);
-                    playerModel.rightSleeve.copyFrom(model.rightArm);
-                }
-            }
         }
     }
 
@@ -170,38 +163,53 @@ public class ClientMixinUtils {
 
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
+            if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT) && AnimatedItemHandRendering)
+                return true;
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             if (data != null) {
-                PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
+                PlayerRenderer renderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
                 float partialTicks = ClientHandlers.getPartialTicks();
-                boolean animated = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, playerRenderer.getModel(), data.getWeaponHandler(), partialTicks);
-                if (!animated)
+                AnimatedItemHandRendering = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, null, data.getWeaponHandler(), partialTicks);
+                if (!AnimatedItemHandRendering) {
                     return false;
-                if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT))
-                    return true;
+                }
                 player.resetAttackStrengthTicker();
                 PoseStack poseStack = new PoseStack();
                 poseStack.pushPose();
-                Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-                double camX = camPos.x();
-                double camY = camPos.y();
-                double camZ = camPos.z();
-                Vec3 vec3 = playerRenderer.getRenderOffset(player, partialTicks);
-                double x = Mth.lerp(partialTicks, player.xOld, player.getX());
-                double y = Mth.lerp(partialTicks, player.yOld, player.getY());
-                double z = Mth.lerp(partialTicks, player.zOld, player.getZ());
-                x += vec3.x() - camX;
-                y += vec3.y() - camY;
-                z += vec3.z() - camZ;
-                poseStack.translate(x, y, z);
-                poseStack.translate(0, 0.1, 0.1);
-                ItemRenderContext = true;
-                playerRenderer.render(player, 0, partialTicks, poseStack, buffer, combinedLight);
-                ItemRenderContext = false;
+                poseStack.scale(-0.5f, -0.5f, 0.5f);
+                poseStack.translate(0, 0.1, 0);
+                poseStack.mulPose(Axis.YP.rotationDegrees(Minecraft.getInstance().gameRenderer.getMainCamera().getYRot() - 180));
+                ClientHandlers.getAnimatedPlayerModel().copyTo(renderer.getModel());
+                if (ClientConfig.renderHand) {
+                    renderer.getModel().leftArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
+                    renderer.getModel().leftSleeve.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
+                    renderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
+                    renderer.getModel().rightSleeve.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
+                }
+                if (!stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get())) {
+                    poseStack.pushPose();
+                    renderer.getModel().translateToHand(leftHand ? HumanoidArm.LEFT : HumanoidArm.RIGHT, poseStack);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90.0f));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
+                    poseStack.translate((float) 1 / 16.0f, 0.125, -0.625);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, stack, transformType, leftHand, poseStack, buffer, livingEntity.level(), combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    poseStack.popPose();
+                }
+                stack = player.getOffhandItem();
+                if (!stack.isEmpty() && !stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get())) {
+                    poseStack.pushPose();
+                    renderer.getModel().translateToHand(leftHand ? HumanoidArm.RIGHT : HumanoidArm.LEFT, poseStack);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90.0f));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
+                    poseStack.translate((float) -1 / 16.0f, 0.125, -0.625);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, stack, transformType, leftHand, poseStack, buffer, livingEntity.level(), combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    poseStack.popPose();
+                }
                 poseStack.popPose();
                 return true;
             }
         }
+        AnimatedItemHandRendering = false;
         return stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get());
     }
 
