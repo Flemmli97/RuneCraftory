@@ -189,7 +189,12 @@ public class LangGen implements DataProvider {
             this.add(reg.get(), this.simpleTranslation(reg.getID()));
         }
         for (RegistryEntrySupplier<SoundEvent, ? extends SoundEvent> reg : RuneCraftorySounds.SOUND_EVENTS.getEntries()) {
-            this.add(reg.asHolder());
+            RuneCraftorySounds.SoundHolder data = RuneCraftorySounds.SOUND_DATA.get(reg.getID());
+            if (data != null && data.defaultTranslation() != null) {
+                this.add(reg.getID().toString(), data.defaultTranslation());
+            } else {
+                this.add(reg.asHolder());
+            }
         }
 
         for (DayOfWeek day : DayOfWeek.values()) {

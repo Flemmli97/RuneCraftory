@@ -107,25 +107,144 @@
     ],
     "subtitle": "runecraftory:bgm.thunderbolt_fight"
   },
+  "entity.ambrosia.angry": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.ambrosia.angry"
+  },
+  "entity.ambrosia.spawn": {
+    "sounds": [
+      "runecraftory:entity/ambrosia/spawn"
+    ],
+    "subtitle": "runecraftory:entity.ambrosia.spawn"
+  },
   "entity.ambrosia.wave": {
     "sounds": [
       "runecraftory:entity/ambrosia/wave"
     ],
     "subtitle": "runecraftory:entity.ambrosia.wave"
   },
+  "entity.big_plate.land": {
+    "sounds": [
+      "random/anvil_land"
+    ],
+    "subtitle": "runecraftory:entity.big_plate.land"
+  },
+  "entity.buffamoo.death": {
+    "sounds": [
+      {
+        "name": "mob/cow/hurt1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/cow/hurt2",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/cow/hurt3",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.buffamoo.death"
+  },
+  "entity.buffamoo.hurt": {
+    "sounds": [
+      {
+        "name": "mob/cow/hurt1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/cow/hurt2",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/cow/hurt3",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.buffamoo.hurt"
+  },
+  "entity.buffamoo.step": {
+    "sounds": [
+      {
+        "name": "mob/cow/step1",
+        "pitch": 0.2
+      },
+      {
+        "name": "mob/cow/step2",
+        "pitch": 0.2
+      },
+      {
+        "name": "mob/cow/step3",
+        "pitch": 0.2
+      },
+      {
+        "name": "mob/cow/step4",
+        "pitch": 0.2
+      }
+    ],
+    "subtitle": "runecraftory:entity.buffamoo.step"
+  },
   "entity.chimera.ambient": {
     "sounds": [
-      "runecraftory:entity/chimera/ambient_1",
-      "runecraftory:entity/chimera/ambient_2"
+      "runecraftory:entity/chimera/ambient1",
+      "runecraftory:entity/chimera/ambient2"
     ],
     "subtitle": "runecraftory:entity.chimera.ambient"
   },
+  "entity.chimera.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.chimera.roar"
+  },
   "entity.chipsqueek.hurt": {
     "sounds": [
-      "runecraftory:entity/chipsqueek/hurt_1",
-      "runecraftory:entity/chipsqueek/hurt_2"
+      "runecraftory:entity/chipsqueek/hurt1",
+      "runecraftory:entity/chipsqueek/hurt2"
     ],
     "subtitle": "runecraftory:entity.chipsqueek.hurt"
+  },
+  "entity.cluckadoodle.death": {
+    "sounds": [
+      {
+        "name": "mob/chicken/hurt1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/chicken/hurt2",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.cluckadoodle.death"
+  },
+  "entity.cluckadoodle.hurt": {
+    "sounds": [
+      {
+        "name": "mob/chicken/hurt1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/chicken/hurt2",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.cluckadoodle.hurt"
   },
   "entity.dead_tree.death": {
     "sounds": [
@@ -133,18 +252,83 @@
     ],
     "subtitle": "runecraftory:entity.dead_tree.death"
   },
+  "entity.dead_tree.hurt": {
+    "sounds": [
+      "mob/zombie/wood1",
+      "mob/zombie/wood2",
+      "mob/zombie/wood3",
+      "mob/zombie/wood4"
+    ],
+    "subtitle": "runecraftory:entity.dead_tree.hurt"
+  },
+  "entity.dead_tree.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.dead_tree.roar"
+  },
+  "entity.earth_spike.attack": {
+    "sounds": [
+      "random/eat1",
+      "random/eat2",
+      "random/eat3"
+    ],
+    "subtitle": "runecraftory:entity.earth_spike.attack"
+  },
+  "entity.elemental_trail.earth.ambient": {
+    "sounds": [
+      "block/rooted_dirt/break1",
+      "block/rooted_dirt/break2",
+      "block/rooted_dirt/break3",
+      "block/rooted_dirt/break4"
+    ],
+    "subtitle": "runecraftory:entity.elemental_trail.earth.ambient"
+  },
+  "entity.elemental_trail.water.ambient": {
+    "sounds": [
+      "random/glass1",
+      "random/glass2",
+      "random/glass3"
+    ],
+    "subtitle": "runecraftory:entity.elemental_trail.water.ambient"
+  },
+  "entity.energy_orb.ambient": {
+    "sounds": [
+      "mob/guardian/attack_loop"
+    ],
+    "subtitle": "runecraftory:entity.energy_orb.ambient"
+  },
   "entity.fairy.ambient": {
     "sounds": [
       "runecraftory:entity/fairy/ambient"
     ],
     "subtitle": "runecraftory:entity.fairy.ambient"
   },
+  "entity.fire_wall.spawn": {
+    "sounds": [
+      "mob/ghast/fireball4"
+    ],
+    "subtitle": "runecraftory:entity.fire_wall.spawn"
+  },
   "entity.flower_lily.step": {
     "sounds": [
-      "runecraftory:entity/flower_lily/step_1",
-      "runecraftory:entity/flower_lily/step_2"
+      "runecraftory:entity/flower_lily/step1",
+      "runecraftory:entity/flower_lily/step2"
     ],
     "subtitle": "runecraftory:entity.flower_lily.step"
+  },
+  "entity.generic.attack_blocked": {
+    "sounds": [
+      "random/anvil_land"
+    ],
+    "subtitle": "runecraftory:entity.generic.attack_blocked"
   },
   "entity.generic.heavy_charge": {
     "sounds": [
@@ -154,17 +338,17 @@
   },
   "entity.ghost.ambient": {
     "sounds": [
-      "runecraftory:entity/ghost/ambient_1",
-      "runecraftory:entity/ghost/ambient_2",
-      "runecraftory:entity/ghost/ambient_3"
+      "runecraftory:entity/ghost/ambient1",
+      "runecraftory:entity/ghost/ambient2",
+      "runecraftory:entity/ghost/ambient3"
     ],
     "subtitle": "runecraftory:entity.ghost.ambient"
   },
   "entity.goblin.ambient": {
     "sounds": [
-      "runecraftory:entity/goblin/ambient_1",
-      "runecraftory:entity/goblin/ambient_2",
-      "runecraftory:entity/goblin/ambient_3"
+      "runecraftory:entity/goblin/ambient1",
+      "runecraftory:entity/goblin/ambient2",
+      "runecraftory:entity/goblin/ambient3"
     ],
     "subtitle": "runecraftory:entity.goblin.ambient"
   },
@@ -180,11 +364,117 @@
     ],
     "subtitle": "runecraftory:entity.goblin.hurt"
   },
+  "entity.grimoire.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.grimoire.roar"
+  },
+  "entity.handonetta.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.handonetta.roar"
+  },
+  "entity.hornet.buzz": {
+    "sounds": [
+      "runecraftory:entity/hornet/buzz1",
+      "runecraftory:entity/hornet/buzz2",
+      "runecraftory:entity/hornet/buzz3"
+    ],
+    "subtitle": "runecraftory:entity.hornet.buzz"
+  },
+  "entity.hornet.death": {
+    "sounds": [
+      {
+        "name": "mob/bee/death1",
+        "pitch": 0.7
+      },
+      {
+        "name": "mob/bee/death2",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "runecraftory:entity.hornet.death"
+  },
+  "entity.hornet.hurt": {
+    "sounds": [
+      {
+        "name": "mob/bee/hurt1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/bee/hurt2",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/bee/hurt3",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.hornet.hurt"
+  },
+  "entity.marionetta.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.marionetta.roar"
+  },
+  "entity.orc.ambient": {
+    "sounds": [
+      "mob/piglin_brute/idle1",
+      "mob/piglin_brute/idle2",
+      "mob/piglin_brute/idle3",
+      "mob/piglin_brute/idle4",
+      "mob/piglin_brute/idle5",
+      "mob/piglin_brute/idle6",
+      "mob/piglin_brute/idle7"
+    ],
+    "subtitle": "runecraftory:entity.orc.ambient"
+  },
   "entity.orc.bonk": {
     "sounds": [
       "runecraftory:entity/orc/bonk"
     ],
     "subtitle": "runecraftory:entity.orc.bonk"
+  },
+  "entity.orc.death": {
+    "sounds": [
+      "mob/piglin_brute/death1",
+      "mob/piglin_brute/death2",
+      "mob/piglin_brute/death3"
+    ],
+    "subtitle": "runecraftory:entity.orc.death"
+  },
+  "entity.orc.hurt": {
+    "sounds": [
+      "mob/piglin_brute/hurt1",
+      "mob/piglin_brute/hurt2",
+      "mob/piglin_brute/hurt3",
+      "mob/piglin_brute/hurt4"
+    ],
+    "subtitle": "runecraftory:entity.orc.hurt"
   },
   "entity.panther.ambient": {
     "sounds": [
@@ -198,6 +488,19 @@
     ],
     "subtitle": "runecraftory:entity.panther.hurt"
   },
+  "entity.raccoon.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.raccoon.roar"
+  },
   "entity.rafflesia.angry": {
     "sounds": [
       "runecraftory:entity/rafflesia/angry"
@@ -209,6 +512,57 @@
       "runecraftory:entity/rafflesia/death"
     ],
     "subtitle": "runecraftory:entity.rafflesia.death"
+  },
+  "entity.runey.collect": {
+    "sounds": [
+      "random/glass1",
+      "random/glass2",
+      "random/glass3"
+    ],
+    "subtitle": "runecraftory:entity.runey.collect"
+  },
+  "entity.sarcophagus.roar": {
+    "sounds": [
+      {
+        "name": "mob/enderdragon/growl1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/enderdragon/growl2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.sarcophagus.roar"
+  },
+  "entity.scorpion.death": {
+    "sounds": [
+      {
+        "name": "mob/spider/death",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.scorpion.death"
+  },
+  "entity.scorpion.hurt": {
+    "sounds": [
+      {
+        "name": "mob/spider/say1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/spider/say2",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/spider/say3",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/spider/say4",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.scorpion.hurt"
   },
   "entity.scorpion.step": {
     "sounds": [
@@ -222,19 +576,79 @@
     ],
     "subtitle": "runecraftory:entity.skelefang.roar"
   },
+  "entity.skelefang.sweep": {
+    "sounds": [
+      {
+        "name": "entity/player/attack/sweep1",
+        "pitch": 0.7
+      },
+      {
+        "name": "entity/player/attack/sweep2",
+        "pitch": 0.7
+      },
+      {
+        "name": "entity/player/attack/sweep3",
+        "pitch": 0.7
+      },
+      {
+        "name": "entity/player/attack/sweep4",
+        "pitch": 0.7
+      },
+      {
+        "name": "entity/player/attack/sweep5",
+        "pitch": 0.7
+      },
+      {
+        "name": "entity/player/attack/sweep6",
+        "pitch": 0.7
+      },
+      {
+        "name": "entity/player/attack/sweep7",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "runecraftory:entity.skelefang.sweep"
+  },
+  "entity.thunderbolt.ambient": {
+    "sounds": [
+      {
+        "name": "mob/horse/idle1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/horse/idle2",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/horse/idle3",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.thunderbolt.ambient"
+  },
+  "entity.thunderbolt.death": {
+    "sounds": [
+      {
+        "name": "mob/horse/death",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.thunderbolt.death"
+  },
+  "entity.thunderbolt.gallop": {
+    "sounds": [
+      "mob/horse/gallop1",
+      "mob/horse/gallop2",
+      "mob/horse/gallop3",
+      "mob/horse/gallop4"
+    ],
+    "subtitle": "runecraftory:entity.thunderbolt.gallop"
+  },
   "entity.thunderbolt.neigh": {
     "sounds": [
       "runecraftory:entity/thunderbolt/neigh"
     ],
     "subtitle": "runecraftory:entity.thunderbolt.neigh"
-  },
-  "entity.wasp.buzz": {
-    "sounds": [
-      "runecraftory:entity/wasp/buzz_1",
-      "runecraftory:entity/wasp/buzz_2",
-      "runecraftory:entity/wasp/buzz_3"
-    ],
-    "subtitle": "runecraftory:entity.wasp.buzz"
   },
   "entity.weagle.flap": {
     "sounds": [
@@ -248,21 +662,63 @@
     ],
     "subtitle": "runecraftory:entity.wisp.ambient"
   },
+  "generic.deny": {
+    "sounds": [
+      "mob/villager/no1",
+      "mob/villager/no2",
+      "mob/villager/no3"
+    ],
+    "subtitle": "runecraftory:generic.deny"
+  },
+  "generic.farmland.water": {
+    "sounds": [
+      "entity/boat/paddle_water1",
+      "entity/boat/paddle_water2",
+      "entity/boat/paddle_water3",
+      "entity/boat/paddle_water4",
+      "entity/boat/paddle_water5",
+      "entity/boat/paddle_water6",
+      "entity/boat/paddle_water7",
+      "entity/boat/paddle_water8"
+    ],
+    "subtitle": "runecraftory:generic.farmland.water"
+  },
+  "generic.item_stat.consume": {
+    "sounds": [
+      "block/brewing_stand/brew1",
+      "block/brewing_stand/brew2"
+    ],
+    "subtitle": "runecraftory:generic.item_stat.consume"
+  },
+  "generic.success": {
+    "sounds": [
+      "mob/villager/yes1",
+      "mob/villager/yes2",
+      "mob/villager/yes3"
+    ],
+    "subtitle": "runecraftory:generic.success"
+  },
+  "generic.teleport": {
+    "sounds": [
+      "mob/endermen/portal"
+    ],
+    "subtitle": "runecraftory:generic.teleport"
+  },
   "player.armor.piyo_chirp": {
     "sounds": [
-      "runecraftory:player/armor/piyo_chirp_1",
-      "runecraftory:player/armor/piyo_chirp_2",
-      "runecraftory:player/armor/piyo_chirp_3",
-      "runecraftory:player/armor/piyo_chirp_4"
+      "runecraftory:player/armor/piyo_chirp1",
+      "runecraftory:player/armor/piyo_chirp2",
+      "runecraftory:player/armor/piyo_chirp3",
+      "runecraftory:player/armor/piyo_chirp4"
     ],
     "subtitle": "runecraftory:player.armor.piyo_chirp"
   },
   "player.attack.swoosh": {
     "sounds": [
-      "runecraftory:player/attack/swoosh_1",
-      "runecraftory:player/attack/swoosh_2",
-      "runecraftory:player/attack/swoosh_3",
-      "runecraftory:player/attack/swoosh_4"
+      "runecraftory:player/attack/swoosh1",
+      "runecraftory:player/attack/swoosh2",
+      "runecraftory:player/attack/swoosh3",
+      "runecraftory:player/attack/swoosh4"
     ],
     "subtitle": "runecraftory:player.attack.swoosh"
   },
@@ -274,11 +730,17 @@
   },
   "player.attack.swoosh_light": {
     "sounds": [
-      "runecraftory:player/attack/swoosh_light_1",
-      "runecraftory:player/attack/swoosh_light_2",
-      "runecraftory:player/attack/swoosh_light_3"
+      "runecraftory:player/attack/swoosh_light1",
+      "runecraftory:player/attack/swoosh_light2",
+      "runecraftory:player/attack/swoosh_light3"
     ],
     "subtitle": "runecraftory:player.attack.swoosh_light"
+  },
+  "player.brush": {
+    "sounds": [
+      "mob/horse/leather"
+    ],
+    "subtitle": "runecraftory:player.brush"
   },
   "spell.apple_rain": {
     "sounds": [
@@ -312,9 +774,9 @@
   },
   "spell.generic.heal": {
     "sounds": [
-      "runecraftory:spell/generic/heal_1",
-      "runecraftory:spell/generic/heal_2",
-      "runecraftory:spell/generic/heal_3"
+      "runecraftory:spell/generic/heal1",
+      "runecraftory:spell/generic/heal2",
+      "runecraftory:spell/generic/heal3"
     ],
     "subtitle": "runecraftory:spell.generic.heal"
   },

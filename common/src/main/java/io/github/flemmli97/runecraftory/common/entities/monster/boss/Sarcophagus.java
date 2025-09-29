@@ -72,7 +72,7 @@ public class Sarcophagus extends BossMonster {
             .marker("attack_start", 0.24).marker("attack_end", 7.96)
             .marker("teleport_start", 0.2).marker("teleport_end", 8.0));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 1.4));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.2));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.1));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -82,7 +82,7 @@ public class Sarcophagus extends BossMonster {
             if (anim.isAt("teleport_start_1") || anim.isAt("teleport_end_1")
                     || anim.isAt("teleport_start_2") || anim.isAt("teleport_end_2")
                     || anim.isAt("teleport_start_3") || anim.isAt("teleport_end_3")) {
-                entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                entity.playSound(RuneCraftorySounds.GENERIC_TELEPORT.get(), 1.0F, 1.0F);
             }
             if (anim.isAt("teleport"))
                 entity.teleportAround(8, 10);
@@ -197,7 +197,7 @@ public class Sarcophagus extends BossMonster {
         });
         b.put(ANGRY, (anim, entity) -> {
             if (anim.isAt("sound")) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_SARCOPHAGUS_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
             }
         });
     });

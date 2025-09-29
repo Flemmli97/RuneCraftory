@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
@@ -90,7 +91,7 @@ public class QuestData implements PlayerQuestData {
             return false;
         }
         this.currentQuests.add(new QuestProgress(quest, this, 0));
-        EntityUtils.playSoundForPlayer(this.player, SoundEvents.VILLAGER_YES, 1, 1.2f);
+        EntityUtils.playSoundForPlayer(this.player, RuneCraftorySounds.GENERIC_SUCCESS.get(), 1, 1.2f);
         return true;
     }
 
@@ -127,12 +128,12 @@ public class QuestData implements PlayerQuestData {
                 }
                 case PARTIAL_COMPLETE -> completion.put(prog.getQuest().id, QuestState.PARTIAL_COMPLETE);
                 case PARTIAL -> {
-                    EntityUtils.playSoundForPlayer(this.player, SoundEvents.VILLAGER_YES, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                    EntityUtils.playSoundForPlayer(this.player, RuneCraftorySounds.GENERIC_SUCCESS.get(), this.player.getSoundSource(), 2 * 0.75f, 1.0f);
                     tasks.forEach(t -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.getName(this.player).withStyle(ChatFormatting.DARK_PURPLE),
                             t.translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
                 }
                 case NOTHING -> {
-                    EntityUtils.playSoundForPlayer(this.player, SoundEvents.VILLAGER_NO, this.player.getSoundSource(), 2 * 0.75f, 1.0f);
+                    EntityUtils.playSoundForPlayer(this.player, RuneCraftorySounds.GENERIC_DENY.get(), this.player.getSoundSource(), 2 * 0.75f, 1.0f);
                 }
             }
         }

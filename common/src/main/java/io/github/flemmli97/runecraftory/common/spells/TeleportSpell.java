@@ -3,12 +3,12 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -83,7 +83,7 @@ public class TeleportSpell extends Spell {
         while (!entity.level().noCollision(entity) && entity.getY() < entity.level().getMaxBuildHeight()) {
             entity.setPos(entity.getX(), entity.getY() + 1.0, entity.getZ());
         }
-        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), RuneCraftorySounds.GENERIC_TELEPORT.get(), SoundSource.MASTER, 1, 1);
         if (entity.level() instanceof ServerLevel serverLevel)
             for (int i = 0; i < 32; ++i) {
                 serverLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + serverLevel.random.nextDouble() * 2.0, entity.getZ(), 0, serverLevel.random.nextGaussian(), 0.0, serverLevel.random.nextGaussian(), 1);
@@ -119,7 +119,7 @@ public class TeleportSpell extends Spell {
         while (!newLevel.noCollision(entity) && entity.getY() < newLevel.getMaxBuildHeight()) {
             entity.setPos(entity.getX(), entity.getY() + 1.0, entity.getZ());
         }
-        newLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
+        newLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), RuneCraftorySounds.GENERIC_TELEPORT.get(), SoundSource.MASTER, 1, 1);
         for (int i = 0; i < 32; ++i) {
             newLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + newLevel.random.nextDouble() * 2.0, entity.getZ(), 0, newLevel.random.nextGaussian(), 0.0, newLevel.random.nextGaussian(), 1);
         }

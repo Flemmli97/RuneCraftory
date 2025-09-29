@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
@@ -13,8 +14,6 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -107,7 +106,7 @@ public class Buffamoo extends ChargingMonster {
     @Override
     public void doWhileCharge() {
         if (this.tickCount % 3 == 0)
-            this.level().playSound(null, this.blockPosition(), SoundEvents.COW_STEP, this.getSoundSource(), 1, this.getRandom().nextFloat() * 0.2F);
+            this.level().playSound(null, this.blockPosition(), RuneCraftorySounds.ENTITY_BUFFAMOO_STEP.get(), this.getSoundSource(), 1, 0.9f + this.getRandom().nextFloat() * 0.2f);
     }
 
     @Override
@@ -123,23 +122,18 @@ public class Buffamoo extends ChargingMonster {
     }
 
     @Override
-    public SoundSource getSoundSource() {
-        return SoundSource.HOSTILE;
-    }
-
-    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.COW_HURT;
+        return RuneCraftorySounds.ENTITY_BUFFAMOO_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.COW_DEATH;
+        return RuneCraftorySounds.ENTITY_BUFFAMOO_DEATH.get();
     }
 
     @Override
     public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.7f;
+        return 1 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f;
     }
 
     @Override

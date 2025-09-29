@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +44,7 @@ public class TeleportUtils {
             newLevel.addDuringTeleport(entity);
         } else
             return;
-        newLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
+        newLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), RuneCraftorySounds.GENERIC_TELEPORT.get(), SoundSource.MASTER, 1, 1);
         for (int i = 0; i < 32; ++i) {
             newLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + newLevel.random.nextDouble() * 2.0, entity.getZ(), 0, newLevel.random.nextGaussian(), 0.0, newLevel.random.nextGaussian(), 1);
         }

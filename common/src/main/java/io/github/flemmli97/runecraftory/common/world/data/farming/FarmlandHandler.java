@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandRemovePacket;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandUpdatePacket;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -28,7 +29,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -95,7 +95,7 @@ public class FarmlandHandler extends SavedData {
     public static void waterLand(ServerLevel level, BlockPos pos, BlockState state) {
         level.sendParticles(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 0.1D);
         level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 3);
-        level.playSound(null, pos, SoundEvents.BOAT_PADDLE_WATER, SoundSource.BLOCKS, 1.0f, 1.1f);
+        level.playSound(null, pos, RuneCraftorySounds.GENERIC_FARM_LAND_WATER.get(), SoundSource.BLOCKS, 1.0f, 1.1f);
         BlockPos up = pos.above();
         BlockState crop = level.getBlockState(up);
         if (crop.getBlock() instanceof GrowableCrop blockCrop)

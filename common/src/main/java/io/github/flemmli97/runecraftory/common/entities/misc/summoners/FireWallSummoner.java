@@ -5,12 +5,12 @@ import io.github.flemmli97.runecraftory.common.entities.misc.ProjectileSummonHel
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
 import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
 import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -48,7 +48,7 @@ public class FireWallSummoner extends ProjectileSummonHelperEntity {
             Vec3 dir = new Vec3(this.targetX, this.targetY, this.targetZ).subtract(this.position()).normalize();
             ElementalTrailEntity fire = new ElementalTrailEntity(this.level(), owner, ItemElement.FIRE);
             fire.setPos(this.position().add(dir.scale((this.ticksExisted - 10) / 2f * 1)));
-            this.playSound(SoundEvents.BLAZE_SHOOT, 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+            this.playSound(RuneCraftorySounds.ENTITY_FIREWALL_SPAWN.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
             this.level().addFreshEntity(fire);
         }
     }

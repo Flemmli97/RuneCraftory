@@ -31,7 +31,6 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -76,9 +75,9 @@ public class Thunderbolt extends BossMonster {
     public static final String LASER_KICK_2 = BUILDER.add("laser_kick_2", LASER_KICK);
     public static final String LASER_KICK_3 = BUILDER.add("laser_kick_3", LASER_KICK);
     public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
-    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.52).marker("neigh", 6.52));
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.52));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.52));
+    public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.52).marker("neigh", 6.2));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.44));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.44));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -516,17 +515,17 @@ public class Thunderbolt extends BossMonster {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.HORSE_AMBIENT;
+        return RuneCraftorySounds.ENTITY_THUNDERBOLT_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.HORSE_HURT;
+        return RuneCraftorySounds.ENTITY_THUNDERBOLT_HURT.get();
     }
 
     @Override
     public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.8f;
+        return 1 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f;
     }
 
     @Override
@@ -537,7 +536,7 @@ public class Thunderbolt extends BossMonster {
             if (blockstate.is(Blocks.SNOW)) {
                 soundtype = Platform.INSTANCE.getSoundType(blockstate, this.level(), pos, this);
             }
-            this.playSound(SoundEvents.HORSE_GALLOP, soundtype.getVolume() * 0.15F, soundtype.getPitch());
+            this.playSound(RuneCraftorySounds.ENTITY_THUNDERBOLT_GALLOP.get(), soundtype.getVolume() * 0.15F, soundtype.getPitch());
         }
     }
 

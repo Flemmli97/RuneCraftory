@@ -11,7 +11,6 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -102,22 +101,22 @@ public class Orc extends BaseMonster {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.PIGLIN_BRUTE_AMBIENT;
+        return RuneCraftorySounds.ENTITY_ORC_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.PIGLIN_BRUTE_HURT;
+        return RuneCraftorySounds.ENTITY_ORC_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PIGLIN_BRUTE_DEATH;
+        return RuneCraftorySounds.ENTITY_ORC_DEATH.get();
     }
 
     @Override
     public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.9f;
+        return 1 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f;
     }
 
     @Override

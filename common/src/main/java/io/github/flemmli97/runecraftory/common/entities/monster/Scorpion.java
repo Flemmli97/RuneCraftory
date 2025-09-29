@@ -11,7 +11,6 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -81,17 +80,17 @@ public class Scorpion extends BaseMonster {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.SPIDER_HURT;
+        return RuneCraftorySounds.ENTITY_SCORPION_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SPIDER_DEATH;
+        return RuneCraftorySounds.ENTITY_SCORPION_DEATH.get();
     }
 
     @Override
     public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.5f;
+        return 1 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f;
     }
 
     @Override

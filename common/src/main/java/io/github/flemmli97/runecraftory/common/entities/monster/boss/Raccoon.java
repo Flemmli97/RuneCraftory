@@ -94,7 +94,7 @@ public class Raccoon extends BossMonster {
     public static final String UNTRANSFORM = BUILDER.add("untransform", AnimationsBuilder.definition(2.2)
             .marker("knockback_start", 1).marker("knockback_end", 1.5));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("smoke", 0.72));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.56));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.28));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -221,12 +221,12 @@ public class Raccoon extends BossMonster {
         b.put(ROAR, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt("roar"))
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_RACCOON_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
         });
         b.put(CLONE, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt(0.1)) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_RACCOON_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
                 Vec3 center = entity.getTarget() == null ? entity.position() : (entity.distanceToSqr(entity.getTarget()) < 144 ? entity.getTarget().position()
                         : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));
                 entity.setClonePos(center);
@@ -249,7 +249,7 @@ public class Raccoon extends BossMonster {
         });
         b.put(ANGRY, (anim, entity) -> {
             if (anim.isAt("sound")) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_RACCOON_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
             }
         });
     });

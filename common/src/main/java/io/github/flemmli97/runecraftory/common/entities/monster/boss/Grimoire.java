@@ -71,8 +71,8 @@ public class Grimoire extends BossMonster {
     public static final String WIND_BREATH = BUILDER.add("wind_breath", AnimationsBuilder.definition(1.44).marker("attack", 0.52));
     public static final String TORNADO = BUILDER.add("tornado", AnimationsBuilder.definition(1.4).marker("attack", 0.52));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.6));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.6));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.36));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.36));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -143,7 +143,7 @@ public class Grimoire extends BossMonster {
         });
         BiConsumer<AnimationState, Grimoire> trigger = (anim, entity) -> {
             if (anim.isAt("sound")) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_GRIMOIRE_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
             }
         };
         b.put(SPAWN, trigger);

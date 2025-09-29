@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -11,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -140,9 +140,9 @@ public class ElementalTrailEntity extends BaseDamageCloud {
         } else {
             if (this.livingTicks % 4 == 0) {
                 if (this.element == ItemElement.WATER)
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 0.9f, 0.8f, false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ELEMENTAL_TRAIL_WATER.get(), this.getSoundSource(), 0.9f, 0.8f, false);
                 if (this.element == ItemElement.EARTH)
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.ROOTED_DIRT_BREAK, this.getSoundSource(), 2, 0.8f, false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ELEMENTAL_TRAIL_EARTH.get(), this.getSoundSource(), 2, 0.8f, false);
             }
         }
     }

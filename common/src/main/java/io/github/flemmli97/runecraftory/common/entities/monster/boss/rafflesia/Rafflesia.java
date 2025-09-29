@@ -65,8 +65,8 @@ public class Rafflesia extends BossMonster {
     public static final String WIND_BLADE_X16 = BUILDER.add("wind_blade_x16", WIND_BLADE_X8);
     public static final String RESUMMON = BUILDER.add("resummon", WIND_BLADE_X8);
     public static final String STATUS_CIRCLE = BUILDER.add("status_circle", WIND_BLADE_X8);
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.64));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.64));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.32));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.32));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 

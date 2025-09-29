@@ -21,11 +21,12 @@ public class SoundGen extends SoundDefinitionsProvider {
         for (RegistryEntrySupplier<SoundEvent, ?> sup : RuneCraftorySounds.SOUND_EVENTS.getEntries()) {
             if (RuneCraftorySounds.BGM.stream().anyMatch(h -> h.sound().equals(sup)))
                 continue;
-            int num = RuneCraftorySounds.VARIATIONS.getInt(sup.getID());
-            if (num > 0)
-                this.add(sup.get(), num);
-            else
+            RuneCraftorySounds.SoundHolder data = RuneCraftorySounds.SOUND_DATA.get(sup.getID());
+            if (data != null) {
+                this.add(sup.get(), data.location(), data.amount(), data.pitch());
+            } else {
                 this.add(sup.get());
+            }
         }
         for (RuneCraftorySounds.BGMHolder bgm : RuneCraftorySounds.BGM) {
             this.addBgmWith(bgm.sound().get(), bgm.bgm().location());
@@ -33,13 +34,20 @@ public class SoundGen extends SoundDefinitionsProvider {
     }
 
     private void add(SoundEvent event) {
-        this.add(event, definition().subtitle(event.getLocation().toString()).with(SoundDefinition.Sound.sound(ResourceLocation.fromNamespaceAndPath(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/")), SoundDefinition.SoundType.SOUND)));
+        this.add(event, event.getLocation(), 1, 1);
     }
 
-    private void add(SoundEvent event, int num) {
+    private void add(SoundEvent event, ResourceLocation path, int num, float pitch) {
         SoundDefinition def = definition().subtitle(event.getLocation().toString());
-        for (int i = 0; i < num; i++)
-            def.with(SoundDefinition.Sound.sound(ResourceLocation.fromNamespaceAndPath(event.getLocation().getNamespace(), event.getLocation().getPath().replace(".", "/") + "_" + (i + 1)), SoundDefinition.SoundType.SOUND));
+        if (num <= 1) {
+            def.with(SoundDefinition.Sound.sound(ResourceLocation.fromNamespaceAndPath(path.getNamespace(), path.getPath().replace(".", "/")), SoundDefinition.SoundType.SOUND)
+                    .pitch(pitch));
+        } else {
+            for (int i = 0; i < num; i++) {
+                def.with(SoundDefinition.Sound.sound(ResourceLocation.fromNamespaceAndPath(path.getNamespace(), path.getPath().replace(".", "/") + (i + 1)), SoundDefinition.SoundType.SOUND)
+                        .pitch(pitch));
+            }
+        }
         this.add(event, def);
     }
 

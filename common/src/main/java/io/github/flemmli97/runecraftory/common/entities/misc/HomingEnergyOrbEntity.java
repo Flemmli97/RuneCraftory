@@ -3,13 +3,13 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -85,7 +85,7 @@ public class HomingEnergyOrbEntity extends BaseDamageCloud implements PowerableM
             }
         } else {
             if (this.random.nextBoolean())
-                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GUARDIAN_ATTACK, this.getSoundSource(), 2, 0.8f, false);
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ENERGY_ORB_AMBIENT.get(), this.getSoundSource(), 2, 0.8f, false);
         }
     }
 

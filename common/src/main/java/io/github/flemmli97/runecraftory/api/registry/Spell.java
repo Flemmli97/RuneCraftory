@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -15,7 +16,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -37,7 +37,7 @@ public abstract class Spell {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         if (!LevelCalc.useRP(data, spell.properties().rpCost() * costMultiplier, hurt, spell.properties().percentageCost(), true, spell.costReductionSkills())) {
             if (!hurt)
-                EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
+                EntityUtils.playSoundForPlayer(player, RuneCraftorySounds.GENERIC_DENY.get(), 1, 1);
             return false;
         }
         return true;
@@ -82,7 +82,7 @@ public abstract class Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
         if (!ignoreSeal && EntityUtils.sealed(entity)) {
             if (entity instanceof ServerPlayer player) {
-                EntityUtils.playSoundForPlayer(player, SoundEvents.VILLAGER_NO, 1, 1);
+                EntityUtils.playSoundForPlayer(player, RuneCraftorySounds.GENERIC_DENY.get(), 1, 1);
             }
             return false;
         }

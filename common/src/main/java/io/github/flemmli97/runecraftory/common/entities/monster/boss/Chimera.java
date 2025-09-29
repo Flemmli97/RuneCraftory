@@ -27,7 +27,6 @@ import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.EntityType;
@@ -61,8 +60,8 @@ public class Chimera extends BossMonster {
     public static final String BITE = BUILDER.add("bite_attack", AnimationsBuilder.definition(1.04)
             .marker("attack_1", 0.4).marker("attack_2", 0.76));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.64));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.64));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.32));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.32));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -131,7 +130,7 @@ public class Chimera extends BossMonster {
         });
         BiConsumer<AnimationState, Chimera> trigger = (anim, entity) -> {
             if (anim.isAt("sound")) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_CHIMERA_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
             }
         };
         b.put(SPAWN, trigger);

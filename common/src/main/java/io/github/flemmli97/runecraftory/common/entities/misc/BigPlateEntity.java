@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -57,7 +57,7 @@ public class BigPlateEntity extends BaseProjectile {
     protected boolean entityRayTraceHit(EntityHitResult result) {
         boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new DynamicDamage.Builder(this, this.getOwner()).noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         if (!this.hitSomething) {
-            this.level().playSound(null, result.getEntity().blockPosition(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
+            this.level().playSound(null, result.getEntity().blockPosition(), RuneCraftorySounds.ENTITY_BIG_PLATE_LAND.get(), this.getSoundSource(), 1.0f, 0.5f);
             this.hitSomething = true;
         }
         return att;
@@ -66,7 +66,7 @@ public class BigPlateEntity extends BaseProjectile {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         if (!this.hitSomething) {
-            this.level().playSound(null, blockHitResult.getBlockPos(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
+            this.level().playSound(null, blockHitResult.getBlockPos(), RuneCraftorySounds.ENTITY_BIG_PLATE_LAND.get(), this.getSoundSource(), 1.0f, 0.5f);
         }
         this.discard();
     }

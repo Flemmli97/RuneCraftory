@@ -34,7 +34,6 @@ import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -71,8 +70,8 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
             .marker("attack", 0.12, 0.6, 1.04, 1.48).marker("attack_end", 1.8));
     public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(1.2)
             .marker("attack_start", 0.28).marker("attack_end", 1.04));
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.8));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.8));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.6));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.6));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -157,7 +156,7 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
         });
         BiConsumer<AnimationState, Handonetta> trigger = (anim, entity) -> {
             if (anim.isAt("sound")) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_HANDONETTA_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
             }
         };
         b.put(SPAWN, trigger);

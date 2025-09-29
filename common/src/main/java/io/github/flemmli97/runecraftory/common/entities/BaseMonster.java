@@ -38,6 +38,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -1184,7 +1185,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             return true;
         boolean result = this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
         if (!result) {
-            this.level().playSound(null, this, SoundEvents.ANVIL_PLACE, this.getSoundSource(), 0.7f, 0.9f);
+            this.level().playSound(null, this, RuneCraftorySounds.ENTITY_ATTACK_BLOCKED.get(), this.getSoundSource(), 0.7f, 0.9f);
             if (this.level() instanceof ServerLevel serverLevel) {
                 for (int i = 0; i < 6; i++)
                     serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getRandomX(1.2), this.getRandomY(), this.getRandomZ(1.2), 0, 0, 0, 0, 0);
@@ -1556,7 +1557,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             if (player.isShiftKeyDown()) {
                 if (stack.getItem() == Items.STICK) {
                     if (player instanceof ServerPlayer serverPlayer) {
-                        EntityUtils.playSoundForPlayer(serverPlayer, SoundEvents.VILLAGER_NO, 1, 1);
+                        EntityUtils.playSoundForPlayer(serverPlayer, RuneCraftorySounds.GENERIC_DENY.get(), 1, 1);
                         this.untameEntity();
                     }
                     return InteractionResult.sidedSuccess(clientSide);
@@ -1573,7 +1574,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     int day = WorldUtils.day(this.level());
                     if (this.updater.getLastUpdateBrush() == day)
                         return InteractionResult.PASS;
-                    EntityUtils.playSoundForPlayer(serverPlayer, SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, 0.7f, 1);
+                    EntityUtils.playSoundForPlayer(serverPlayer, RuneCraftorySounds.PLAYER_BRUSH.get(), SoundSource.NEUTRAL, 0.7f, 1);
                     this.updater.setLastUpdateBrush(day);
                     this.onBrushing();
                     this.increaseFriendPoints(15);
@@ -1602,7 +1603,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     if (player instanceof ServerPlayer serverPlayer) {
                         if (this.tamingTick == -1)
                             return InteractionResult.PASS;
-                        EntityUtils.playSoundForPlayer(serverPlayer, SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, 0.7f, 1);
+                        EntityUtils.playSoundForPlayer(serverPlayer, RuneCraftorySounds.PLAYER_BRUSH.get(), SoundSource.NEUTRAL, 0.7f, 1);
                         this.brushCount = Math.min(10, this.brushCount + 1);
                         this.tamingTick = 40;
                         this.level().broadcastEntityEvent(this, (byte) 64);
@@ -2009,6 +2010,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public String getSleepAnimation() {
         return null;
+    }
+
+    @Override
+    public SoundSource getSoundSource() {
+        return SoundSource.HOSTILE;
     }
 
     public enum Behaviour {

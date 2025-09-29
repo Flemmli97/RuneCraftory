@@ -6,10 +6,10 @@ import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResult;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -63,14 +63,14 @@ public class ItemUtils {
 
     public static ShopResult buyItem(Player player, NPCEntity npc, ItemStack stack) {
         if (sizeInv(player.getInventory(), stack) < stack.getCount()) {
-            player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
+            player.playSound(RuneCraftorySounds.GENERIC_DENY.get(), 1.0f, 1.0f);
             return ShopResult.NOSPACE;
         }
         int price = getBuyPrice(stack) * stack.getCount();
         if (Platform.INSTANCE.getPlayerData(player).useMoney(price)) {
             if (player instanceof ServerPlayer serverPlayer)
                 RuneCraftoryCriteria.SHOP_TRIGGER.get().trigger(serverPlayer, npc, stack);
-            player.playSound(SoundEvents.VILLAGER_YES, 1.0f, 1.0f);
+            player.playSound(RuneCraftorySounds.GENERIC_SUCCESS.get(), 1.0f, 1.0f);
             while (stack.getCount() > 0) {
                 ItemStack copy = stack.copy();
                 int count = Math.min(stack.getCount(), stack.getMaxStackSize());
@@ -80,7 +80,7 @@ public class ItemUtils {
             }
             return ShopResult.SUCCESS;
         }
-        player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
+        player.playSound(RuneCraftorySounds.GENERIC_DENY.get(), 1.0f, 1.0f);
         return ShopResult.NOMONEY;
     }
 

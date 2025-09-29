@@ -2,12 +2,12 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -50,7 +50,7 @@ public class RuneyEntity extends Entity {
         PlayerData data = Platform.INSTANCE.getPlayerData(player);
         data.increaseStatBonus(stat);
         data.regenRunePoints(150);
-        player.level().playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 1, 0.5f);
+        player.level().playSound(null, player.blockPosition(), RuneCraftorySounds.ENTITY_RUNEY_COLLECT.get(), this.getSoundSource(), 1, 0.5f);
     }
 
     @Override

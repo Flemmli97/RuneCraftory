@@ -37,7 +37,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
@@ -101,8 +100,8 @@ public class Skelefang extends BossMonster {
             .marker("restore_start", 11).marker("restore_end", 12)
             .marker("restore", 11.5));
     public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.28));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.28));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.24));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.24));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -111,7 +110,7 @@ public class Skelefang extends BossMonster {
             if (entity.remainingTailBones() > 10 || entity.isEnraged()) {
                 if (anim.isAt("attack_1") || anim.isAt("attack_2") || anim.isAt("attack_3")) {
                     entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
-                    entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 2, 0.7f);
+                    entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), RuneCraftorySounds.ENTITY_SKELEFANG_SWEEP.get(), entity.getSoundSource(), 2, 1);
                 }
             }
         });
@@ -202,7 +201,7 @@ public class Skelefang extends BossMonster {
                 entity.restoreDragon();
         });
         BiConsumer<AnimationState, Skelefang> trigger = (anim, entity) -> {
-            if (anim.isAt("sound")) {
+            if (anim.isAt(0.24)) {
                 entity.playRandomizedSound(RuneCraftorySounds.ENTITY_SKELEFANG_ROAR.get());
                 S2CScreenShake.sendAround(entity, 32, 40, 2);
             }

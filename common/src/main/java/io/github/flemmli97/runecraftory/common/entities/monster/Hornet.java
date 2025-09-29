@@ -15,7 +15,6 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -120,7 +119,7 @@ public class Hornet extends BaseMonster {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return RuneCraftorySounds.ENTITY_WASP_BUZZ.get();
+        return RuneCraftorySounds.ENTITY_HORNET_BUZZ.get();
     }
 
     @Override
@@ -129,17 +128,17 @@ public class Hornet extends BaseMonster {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.BEE_HURT;
+        return RuneCraftorySounds.ENTITY_HORNET_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.BEE_DEATH;
+        return RuneCraftorySounds.ENTITY_HORNET_DEATH.get();
     }
 
     @Override
     public float getVoicePitch() {
-        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.9f;
+        return 1 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f;
     }
 
     @Override

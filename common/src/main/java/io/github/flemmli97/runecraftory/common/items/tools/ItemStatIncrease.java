@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +36,7 @@ public class ItemStatIncrease extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
         boolean shrink = true;
         if (entityLiving instanceof ServerPlayer serverPlayer) {
-            level.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), SoundEvents.BREWING_STAND_BREW, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+            level.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), RuneCraftorySounds.GENERIC_ITEM_STAT_CONSUME.get(), SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
             this.increaseStat(serverPlayer);
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);

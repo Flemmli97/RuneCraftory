@@ -23,7 +23,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -55,8 +54,8 @@ public class DeadTree extends BossMonster {
     public static final String BIG_FALLING_APPLES = BUILDER.add("big_falling_apples", FALLING_APPLES);
     public static final String MORE_FALLING_APPLES = BUILDER.add("more_falling_apples", FALLING_APPLES);
     public static final String HEAL = BUILDER.add("heal", FALLING_APPLES);
-    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.76));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.76));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.68));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.68));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -104,7 +103,7 @@ public class DeadTree extends BossMonster {
         });
         BiConsumer<AnimationState, DeadTree> trigger = (anim, entity) -> {
             if (anim.isAt("sound")) {
-                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+                entity.playSound(RuneCraftorySounds.ENTITY_DEAD_TREE_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
             }
         };
         b.put(SPAWN, trigger);
@@ -276,7 +275,7 @@ public class DeadTree extends BossMonster {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR;
+        return RuneCraftorySounds.ENTITY_DEAD_TREE_HURT.get();
     }
 
     @Override
