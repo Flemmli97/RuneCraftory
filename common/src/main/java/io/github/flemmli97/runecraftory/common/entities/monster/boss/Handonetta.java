@@ -34,6 +34,7 @@ import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -70,8 +71,9 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
             .marker("attack", 0.12, 0.6, 1.04, 1.48).marker("attack_end", 1.8));
     public static final String PUNCH = BUILDER.add("punch", AnimationsBuilder.definition(1.2)
             .marker("attack_start", 0.28).marker("attack_end", 1.04));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.8));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.8));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.56));
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Handonetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -153,6 +155,13 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
                 entity.caughtEntities.clear();
             }
         });
+        BiConsumer<AnimationState, Handonetta> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<Handonetta> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -242,11 +251,6 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
     }
 
     @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
-    }
-
-    @Override
     public void travel(Vec3 vec) {
         this.handleFreeTravel(vec);
     }
@@ -290,7 +294,7 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
     public boolean hurt(DamageSource source, float amount) {
         if ((this.getAnimationHandler().isCurrent(GRAB, GRAB_CAUGHT)) && source.getEntity() instanceof LivingEntity living && this.caughtEntities.has(living))
             return false;
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(ANGRY))) && super.hurt(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
@@ -399,6 +403,16 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
     @Override
     public String getInteractAnimation() {
         return INTERACT;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
     }
 
     @Override

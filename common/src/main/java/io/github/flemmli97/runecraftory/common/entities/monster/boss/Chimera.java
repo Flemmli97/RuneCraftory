@@ -27,9 +27,9 @@ import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -61,7 +61,8 @@ public class Chimera extends BossMonster {
     public static final String BITE = BUILDER.add("bite_attack", AnimationsBuilder.definition(1.04)
             .marker("attack_1", 0.4).marker("attack_2", 0.76));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.4));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.64));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.64));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -128,6 +129,13 @@ public class Chimera extends BossMonster {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
+        BiConsumer<AnimationState, Chimera> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<Chimera> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -166,13 +174,6 @@ public class Chimera extends BossMonster {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.31);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(Attributes.STEP_HEIGHT.value().getDefaultValue() + 1);
         super.applyAttributes();
-    }
-
-    @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
     }
 
     @Override
@@ -243,18 +244,8 @@ public class Chimera extends BossMonster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(DEFEAT, ANGRY))) && super.hurt(source, amount);
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
-    }
-
-    @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT, LEAP))
+        if (this.getAnimationHandler().isCurrent(LEAP))
             return;
         super.push(x, y, z);
     }
@@ -354,12 +345,22 @@ public class Chimera extends BossMonster {
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
+    public String getSleepAnimation() {
+        return SLEEP;
     }
 
     @Override
-    public String getSleepAnimation() {
-        return SLEEP;
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
+    }
+
+    @Override
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

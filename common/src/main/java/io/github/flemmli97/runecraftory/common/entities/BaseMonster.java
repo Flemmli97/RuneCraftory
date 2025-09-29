@@ -982,11 +982,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new float[]{60, 30};
     }
 
-    @Override
-    public Vec3 getLookAngle() {
-        return this.calculateViewVector(this.getXRot(), Mth.wrapDegrees(this.getYHeadRot()));
-    }
-
     // "Disable" this as we don't use it and it will mess with the AI check
     @Override
     protected AABB getAttackBoundingBox() {
@@ -1177,6 +1172,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 && !player.isShiftKeyDown()) {
             return false;
         }
+        if (this.getSpawnAnimation() != null && this.getAnimationHandler().isCurrent(this.getSpawnAnimation()))
+            return false;
         if (this.playDeath() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))
             return false;
         return (source.getEntity() == null || this.canAttackFrom(source.getEntity().position())) && super.hurt(source, amount);
@@ -1764,7 +1761,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         this.populateDefaultEquipmentSlots(this.getRandom(), difficulty);
         this.setXPLevel(Mth.clamp(this.xpLevel().getLevel(), this.prop.minLevel, LibConstants.MAX_MONSTER_LEVEL));
+        if (this.getSpawnAnimation() != null) {
+            if (reason != MobSpawnType.COMMAND && reason != MobSpawnType.DISPENSER) {
+                this.getAnimationHandler().setAnimation(this.getSpawnAnimation());
+            }
+        }
         return spawnData;
+    }
+
+    public String getSpawnAnimation() {
+        return null;
     }
 
     @Override

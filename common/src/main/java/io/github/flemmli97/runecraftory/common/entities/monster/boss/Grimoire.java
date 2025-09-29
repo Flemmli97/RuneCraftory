@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossba
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -23,6 +24,11 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.MathUtils;
@@ -65,9 +71,12 @@ public class Grimoire extends BossMonster {
     public static final String WIND_BREATH = BUILDER.add("wind_breath", AnimationsBuilder.definition(1.44).marker("attack", 0.52));
     public static final String TORNADO = BUILDER.add("tornado", AnimationsBuilder.definition(1.4).marker("attack", 0.52));
     public static final String SLEEP = BUILDER.add("sleep", AnimationsBuilder.definition(0).infinite());
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.64));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.6));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.6));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
+
+    public static final byte CHARGE_LAND_EVENT = 66;
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Grimoire>> ATTACK_HANDLER = createAnimationHandler(b -> {
         BiConsumer<AnimationState, Grimoire> melee = (anim, entity) -> {
@@ -129,9 +138,16 @@ public class Grimoire extends BossMonster {
                 entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source));
                 S2CScreenShake.sendAround(entity, 24, 4, 3);
                 entity.level().playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), entity.getSoundSource(), 1.0f, 0.9f);
-                entity.level().broadcastEntityEvent(entity, (byte) 66);
+                entity.level().broadcastEntityEvent(entity, CHARGE_LAND_EVENT);
             }
         });
+        BiConsumer<AnimationState, Grimoire> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<Grimoire> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
@@ -233,26 +249,21 @@ public class Grimoire extends BossMonster {
     @Override
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
-        if (id == 66) {
+        if (id == CHARGE_LAND_EVENT) {
             for (Vector3d vec : CIRCLE_PARTICLE_MOTION) {
-//                this.level().addParticle(new ColoredParticleData(RuneCraftoryParticles.WIND.get(), 67 / 255F, 163 / 255F, 65 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
+                AdvancedParticleContainer.make(RuneCraftoryParticles.LIGHT.get())
+                        .addData(new ColorData(67 / 255F, 163 / 255F, 65 / 255F, 1))
+                        .addData(new ScaleData(0.4f))
+                        .addData(new MotionData(vec.x(), vec.y(), vec.z()))
+                        .addData(new ParticleMetaData(20, false, 0))
+                        .add(this.level(), this.getX(), this.getY() + 0.2, this.getZ());
             }
         }
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().isCurrent(ANGRY)) && super.hurt(source, amount);
-    }
-
-    @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         return false;
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
@@ -351,12 +362,22 @@ public class Grimoire extends BossMonster {
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEFEAT;
+    public String getSleepAnimation() {
+        return SLEEP;
     }
 
     @Override
-    public String getSleepAnimation() {
-        return SLEEP;
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
+    }
+
+    @Override
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

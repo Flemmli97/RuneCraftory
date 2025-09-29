@@ -25,10 +25,14 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -84,14 +88,17 @@ public class Raccoon extends BossMonster {
             .animationId("shoot").marker("attack", 0.56, 0.76));
     public static final String BARRAGE = BUILDER.add("punch_barrage", AnimationsBuilder.definition(3.4)
             .marker("attack", 0.6, 0.92, 1.36).marker("vulnerable_start", 1.64).marker("vulnerable_end", 3.08));
-    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(1.28).marker("roar", 0.16));
-    public static final String ANGRY = BUILDER.add("angry", ROAR);
+    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(1.28).marker("roar", 0.28));
     public static final String CLONE = BUILDER.add("clone", ROAR);
     public static final String TRANSFORM = BUILDER.add("transform", AnimationsBuilder.definition(1.5));
     public static final String UNTRANSFORM = BUILDER.add("untransform", AnimationsBuilder.definition(2.2)
             .marker("knockback_start", 1).marker("knockback_end", 1.5));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("smoke", 0.72));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.56));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
+
+    public static final byte SPAWN_SMOKE_EVENT = 66;
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Raccoon>> ATTACK_HANDLER = createAnimationHandler(b -> {
         b.put(DOUBLE_PUNCH, (anim, entity) -> {
@@ -214,12 +221,12 @@ public class Raccoon extends BossMonster {
         b.put(ROAR, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt("roar"))
-                entity.playAngrySound();
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
         });
         b.put(CLONE, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt(0.1)) {
-                entity.playAngrySound();
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
                 Vec3 center = entity.getTarget() == null ? entity.position() : (entity.distanceToSqr(entity.getTarget()) < 144 ? entity.getTarget().position()
                         : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));
                 entity.setClonePos(center);
@@ -235,11 +242,26 @@ public class Raccoon extends BossMonster {
                 entity.push(0, 0.4, 0);
             }
         });
+        b.put(SPAWN, (anim, entity) -> {
+            if (anim.isAt("smoke")) {
+                entity.level().broadcastEntityEvent(entity, SPAWN_SMOKE_EVENT);
+            }
+        });
+        b.put(ANGRY, (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        });
     });
 
     private final AnimationHandler<Raccoon> animationHandler = new AnimationHandler<>(this, ANIMS)
             .withChangeListener(anim -> {
                 if (!this.level().isClientSide) {
+                    if (anim == null && this.isBerserk() && this.getAnimationHandler().isCurrent(TRANSFORM) && this.pendingAngry) {
+                        this.pendingAngry = false;
+                        this.getAnimationHandler().setAnimation(ANGRY);
+                        return true;
+                    }
                     this.setClonePos(null);
                     if (anim == null && this.getAnimationHandler().isCurrent(CLONE)) {
                         this.getAnimationHandler().setAnimation(this.getRandom().nextBoolean() ? LEAF_SHOT_CLONE : LEAF_BOOMERANG);
@@ -254,6 +276,7 @@ public class Raccoon extends BossMonster {
 
     private final EntityDimensions berserkDimensions = EntityDimensions.scalable(1.4f, 2.5f)
             .withAttachments(EntityAttachments.builder().attach(EntityAttachment.PASSENGER, new Vec3(0, 30 / 16d, -7 / 16d)));
+    private boolean pendingAngry;
 
     public Raccoon(EntityType<? extends Raccoon> type, Level level) {
         super(type, level);
@@ -367,8 +390,13 @@ public class Raccoon extends BossMonster {
     @Override
     public void setEnraged(boolean flag, boolean load) {
         super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
+        if (flag && !load) {
+            if (!this.isBerserk()) {
+                this.pendingAngry = true;
+            } else {
+                this.getAnimationHandler().setAnimation(ANGRY);
+            }
+        }
     }
 
     public boolean isBerserk() {
@@ -414,7 +442,7 @@ public class Raccoon extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrent(JUMP, LAND, DEFEAT, TRANSFORM, UNTRANSFORM, ANGRY))
+        if (this.getAnimationHandler().isCurrent(JUMP, LAND, DEFEAT, TRANSFORM, UNTRANSFORM, ANGRY, SPAWN))
             return false;
         return super.hurt(source, amount);
     }
@@ -431,6 +459,19 @@ public class Raccoon extends BossMonster {
                 this.setBerserk(false, false);
                 this.getAnimationHandler().setAnimation(UNTRANSFORM);
                 this.push(0, 0.6, 0);
+            }
+        }
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        super.handleEntityEvent(id);
+        if (id == SPAWN_SMOKE_EVENT) {
+            for (int i = 0; i < 32; i++) {
+                AdvancedParticleContainer.make(ParticleTypes.SMOKE)
+                        .addData(new ColorData(1, 1, 1))
+                        .addData(new MotionData(this.getRandom().nextGaussian() * 0.02, this.getRandom().nextGaussian() * 0.02, this.getRandom().nextGaussian() * 0.02))
+                        .add(this.level(), this.getRandomX(1.2), this.getY(this.getRandom().nextDouble() * 1.2), this.getRandomZ(1.2));
             }
         }
     }
@@ -462,7 +503,7 @@ public class Raccoon extends BossMonster {
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(CLONE, TRANSFORM, UNTRANSFORM, ANGRY, ROAR, DEFEAT);
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(CLONE, TRANSFORM, UNTRANSFORM, ROAR);
     }
 
     @Override
@@ -555,6 +596,11 @@ public class Raccoon extends BossMonster {
     @Override
     public String getInteractAnimation() {
         return this.isBerserk() ? INTERACT_BERSERK : INTERACT;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
     }
 
     @Override

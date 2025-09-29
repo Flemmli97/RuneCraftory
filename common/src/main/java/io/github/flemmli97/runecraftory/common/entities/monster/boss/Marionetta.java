@@ -35,6 +35,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -73,7 +74,8 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
     public static final String DARK_BEAM = BUILDER.add("dark_beam", AnimationsBuilder.definition(0.88).marker("attack", 0.48));
     public static final String FURNITURE = BUILDER.add("furniture", AnimationsBuilder.definition(1.12).marker("attack", 0.52));
     public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.6));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.32));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.84));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.84));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -154,6 +156,13 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
             if (anim.isAt("attack") && !EntityUtils.sealed(entity))
                 RuneCraftorySpells.FURNITURE.get().use(entity);
         });
+        BiConsumer<AnimationState, Marionetta> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<Marionetta> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -311,12 +320,7 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof LivingEntity living && this.caughtEntities.has(living))
             return false;
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(CHEST_THROW, ANGRY))) && super.hurt(source, amount);
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
+        return !this.getAnimationHandler().isCurrent(CHEST_THROW) && super.hurt(source, amount);
     }
 
     @Override
@@ -426,6 +430,16 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
     @Override
     public String getInteractAnimation() {
         return INTERACT;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
     }
 
     @Override

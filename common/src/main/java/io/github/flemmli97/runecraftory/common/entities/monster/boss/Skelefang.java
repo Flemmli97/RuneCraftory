@@ -101,7 +101,9 @@ public class Skelefang extends BossMonster {
             .marker("restore_start", 11).marker("restore_end", 12)
             .marker("restore", 11.5));
     public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
-    public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(2).marker("roar", 0.28));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.28));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.28));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Skelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -199,12 +201,14 @@ public class Skelefang extends BossMonster {
             if (anim.isAt("restore"))
                 entity.restoreDragon();
         });
-        b.put(ROAR, (anim, entity) -> {
-            if (anim.isAt("roar")) {
-                entity.playSound(RuneCraftorySounds.ENTITY_SKELEFANG_ROAR.get(), 1, (entity.random.nextFloat() - entity.random.nextFloat()) * 0.2f + 1.0f);
+        BiConsumer<AnimationState, Skelefang> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(RuneCraftorySounds.ENTITY_SKELEFANG_ROAR.get());
                 S2CScreenShake.sendAround(entity, 32, 40, 2);
             }
-        });
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<Skelefang> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -342,7 +346,7 @@ public class Skelefang extends BossMonster {
     public void setEnraged(boolean flag, boolean load) {
         super.setEnraged(flag, load);
         if (flag && !load)
-            this.getAnimationHandler().setAnimation(ROAR);
+            this.getAnimationHandler().setAnimation(ANGRY);
     }
 
     @Override
@@ -634,11 +638,6 @@ public class Skelefang extends BossMonster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !(this.getAnimationHandler().isCurrent(ROAR)) && super.hurt(source, amount);
-    }
-
-    @Override
     protected Vec3 directionToLookAt() {
         if (this.getAnimationHandler().isCurrent(CHARGE)) {
             AnimationState anim = this.getAnimationHandler().getAnimation();
@@ -763,10 +762,6 @@ public class Skelefang extends BossMonster {
     }
 
     @Override
-    public void playAngrySound() {
-    }
-
-    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
@@ -778,6 +773,16 @@ public class Skelefang extends BossMonster {
     @Override
     public String getDeathAnimation() {
         return DEATH;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
     }
 
     @Override

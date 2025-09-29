@@ -25,7 +25,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -66,8 +65,9 @@ public class Rafflesia extends BossMonster {
     public static final String WIND_BLADE_X16 = BUILDER.add("wind_blade_x16", WIND_BLADE_X8);
     public static final String RESUMMON = BUILDER.add("resummon", WIND_BLADE_X8);
     public static final String STATUS_CIRCLE = BUILDER.add("status_circle", WIND_BLADE_X8);
-    public static final String ANGRY = BUILDER.add("roar", WIND_BLADE_X8);
-    public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.64));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.64));
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Rafflesia>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -86,6 +86,13 @@ public class Rafflesia extends BossMonster {
         b.put(WIND_BLADE_X16, cons);
         b.put(RESUMMON, cons);
         b.put(STATUS_CIRCLE, cons);
+        BiConsumer<AnimationState, Rafflesia> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(RuneCraftorySounds.ENTITY_RAFFLESIA_ANGRY.get());
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private boolean mirrorAttack;
@@ -240,20 +247,10 @@ public class Rafflesia extends BossMonster {
     }
 
     @Override
-    public void playAngrySound() {
-        this.playSound(RuneCraftorySounds.ENTITY_RAFFLESIA_ANGRY.get(), 1, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-    }
-
-    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         this.entityData.set(SPAWN_DIRECTION, this.getDirection());
         this.respawnParts();
         return super.finalizeSpawn(level, difficulty, reason, spawnData);
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return !(this.getAnimationHandler().isCurrent(ANGRY)) && super.hurt(source, amount);
     }
 
     private boolean noPartsLeft() {
@@ -422,12 +419,22 @@ public class Rafflesia extends BossMonster {
     }
 
     @Override
-    public String getDeathAnimation() {
-        return DEATH;
+    public String getSleepAnimation() {
+        return DEFEAT;
     }
 
     @Override
-    public String getSleepAnimation() {
-        return DEATH;
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
+    }
+
+    @Override
+    public String getDeathAnimation() {
+        return DEFEAT;
     }
 }

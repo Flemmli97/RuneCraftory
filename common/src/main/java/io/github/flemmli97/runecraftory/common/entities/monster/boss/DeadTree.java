@@ -55,7 +55,8 @@ public class DeadTree extends BossMonster {
     public static final String BIG_FALLING_APPLES = BUILDER.add("big_falling_apples", FALLING_APPLES);
     public static final String MORE_FALLING_APPLES = BUILDER.add("more_falling_apples", FALLING_APPLES);
     public static final String HEAL = BUILDER.add("heal", FALLING_APPLES);
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.56));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.76));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.76));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -101,6 +102,13 @@ public class DeadTree extends BossMonster {
                 HealT1Spell.spawnHealParticles(entity);
             }
         });
+        BiConsumer<AnimationState, DeadTree> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<DeadTree> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -201,24 +209,12 @@ public class DeadTree extends BossMonster {
     }
 
     @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (!this.level().isClientSide) {
             --this.shieldCooldown;
             --this.healCooldown;
         }
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(ANGRY))) && super.hurt(source, amount);
     }
 
     @Override
@@ -265,15 +261,6 @@ public class DeadTree extends BossMonster {
         }
     }
 
-    public byte summonAnimationType() {
-        return this.entityData.get(SUMMON_ANIMATION);
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
-    }
-
     public boolean canMove() {
         return this.isTamed() || this.isEnraged();
     }
@@ -307,12 +294,22 @@ public class DeadTree extends BossMonster {
     }
 
     @Override
-    public String getDeathAnimation() {
+    public String getSleepAnimation() {
         return DEFEAT;
     }
 
     @Override
-    public String getSleepAnimation() {
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
+    }
+
+    @Override
+    public String getDeathAnimation() {
         return DEFEAT;
     }
 }

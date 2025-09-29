@@ -77,7 +77,8 @@ public class Thunderbolt extends BossMonster {
     public static final String LASER_KICK_3 = BUILDER.add("laser_kick_3", LASER_KICK);
     public static final String WIND_BLADE = BUILDER.add("wind_blade", AnimationsBuilder.definition(0.8).marker("attack", 0.44));
     public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.52).marker("neigh", 6.52));
-    public static final String NEIGH = BUILDER.add("neigh", AnimationsBuilder.definition(1.48).marker("neigh", 0.52));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.52));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.52));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -162,14 +163,17 @@ public class Thunderbolt extends BossMonster {
         b.put(CHARGE, charge);
         b.put(CHARGE_2, charge);
         b.put(CHARGE_3, charge);
-        b.put(NEIGH, (anim, entity) -> {
-            if (anim.isAt("neigh"))
-                entity.playSound(RuneCraftorySounds.ENTITY_THUNDERBOLT_NEIGH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
-        });
         b.put(FEINT, (anim, entity) -> {
             if (anim.isAt("neigh"))
                 entity.playSound(RuneCraftorySounds.ENTITY_THUNDERBOLT_NEIGH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         });
+        BiConsumer<AnimationState, Thunderbolt> trigger = (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playSound(RuneCraftorySounds.ENTITY_THUNDERBOLT_NEIGH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            }
+        };
+        b.put(SPAWN, trigger);
+        b.put(ANGRY, trigger);
     });
 
     private final AnimationHandler<Thunderbolt> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -307,7 +311,7 @@ public class Thunderbolt extends BossMonster {
     public void setEnraged(boolean flag, boolean load) {
         if (flag && !load) {
             if (!this.isEnraged()) {
-                this.getAnimationHandler().setAnimation(NEIGH);
+                this.getAnimationHandler().setAnimation(ANGRY);
                 this.getNavigation().stop();
             } else {
                 this.getAnimationHandler().setAnimation(FEINT);
@@ -401,12 +405,12 @@ public class Thunderbolt extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(FEINT, DEFEAT, NEIGH))) && super.hurt(source, amount);
+        return !this.getAnimationHandler().isCurrent(FEINT) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(FEINT, DEFEAT);
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(FEINT);
     }
 
     @Override
@@ -537,10 +541,6 @@ public class Thunderbolt extends BossMonster {
         }
     }
 
-    @Override
-    public void playAngrySound() {
-    }
-
     public Vec3 getChargeMotion() {
         return this.getDataContainer().get(CHARGE_MOTION);
     }
@@ -552,6 +552,11 @@ public class Thunderbolt extends BossMonster {
     @Override
     public String getInteractAnimation() {
         return INTERACT;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
     }
 
     @Override

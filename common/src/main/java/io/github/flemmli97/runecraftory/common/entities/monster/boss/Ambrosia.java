@@ -27,6 +27,7 @@ import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -60,7 +61,8 @@ public class Ambrosia extends BossMonster {
     public static final String POLLEN = BUILDER.add("pollen", AnimationsBuilder.definition(0.96).marker("attack", 0.52));
     public static final String POLLEN_2 = BUILDER.add("pollen_2", AnimationsBuilder.definition(0.8).marker("attack", 0.4));
     public static final String INTERACT = BUILDER.add("interact", KICK_1);
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2.72));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -115,6 +117,16 @@ public class Ambrosia extends BossMonster {
         };
         b.put(POLLEN, pollenHandler);
         b.put(POLLEN_2, pollenHandler);
+        b.put(SPAWN, (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        });
+        b.put(ANGRY, (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
+            }
+        });
     });
 
     private final AnimationHandler<Ambrosia> animationHandler = new AnimationHandler<>(this, ANIMS).withChangeListener(anim -> {
@@ -189,20 +201,8 @@ public class Ambrosia extends BossMonster {
     }
 
     @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(ANGRY);
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(WAVE, ANGRY))) && super.hurt(source, amount);
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
+        return !this.getAnimationHandler().isCurrent(WAVE) && super.hurt(source, amount);
     }
 
     @Override
@@ -292,6 +292,16 @@ public class Ambrosia extends BossMonster {
     @Override
     public String getInteractAnimation() {
         return INTERACT;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
     }
 
     @Override

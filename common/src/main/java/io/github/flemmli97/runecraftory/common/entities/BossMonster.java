@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -134,6 +134,21 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     public void clearRestriction() {
         super.clearRestriction();
         this.restrictDimension = null;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return !this.transitionalAnimations() && super.hurt(source, amount);
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.transitionalAnimations();
+    }
+
+    protected boolean transitionalAnimations() {
+        return (this.getSpawnAnimation() != null && this.getAnimationHandler().isCurrent(this.getSpawnAnimation()))
+                || (this.getDeathAnimation() != null && this.getAnimationHandler().isCurrent(this.getDeathAnimation()));
     }
 
     @Override
@@ -257,8 +272,11 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                 STAT_INCREASE.forEach(att -> this.getAttribute(att.get()).removeModifier(STAT_INCREASE_ID));
             }
         }
-        if (flag && !load && this.isAlive())
-            this.playAngrySound();
+        if (flag && !load && this.isAlive()) {
+            if (this.getAngryAnimation() != null) {
+                this.getAnimationHandler().setAnimation(this.getAngryAnimation());
+            }
+        }
     }
 
     @Override
@@ -353,8 +371,8 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         return this.isEnraged() ? 0 : orig;
     }
 
-    public void playAngrySound() {
-        this.playSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON, 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
+    public void playRandomizedSound(SoundEvent event) {
+        this.playSound(event, 1, (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f + 0.8f);
     }
 
     @Override
@@ -362,5 +380,9 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         if (prev == null)
             return super.allowAnimation(null, other);
         return !prev.equals(other);
+    }
+
+    public String getAngryAnimation() {
+        return null;
     }
 }

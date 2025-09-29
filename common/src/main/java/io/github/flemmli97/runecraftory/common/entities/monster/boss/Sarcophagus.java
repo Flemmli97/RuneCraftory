@@ -71,7 +71,8 @@ public class Sarcophagus extends BossMonster {
     public static final String STARFALL = BUILDER.add("starfall", AnimationsBuilder.definition(8.2).marker("attack", 0.8)
             .marker("attack_start", 0.24).marker("attack_end", 7.96)
             .marker("teleport_start", 0.2).marker("teleport_end", 8.0));
-    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(1.04));
+    public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 1.4));
+    public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.2));
     public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
@@ -186,6 +187,17 @@ public class Sarcophagus extends BossMonster {
                 entity.starFallPre = null;
                 entity.starFallPos = null;
                 entity.teleportAround(6, 12);
+            }
+        });
+        b.put(SPAWN, (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.LIGHTNING_BOLT_THUNDER);
+                entity.playRandomizedSound(SoundEvents.LIGHTNING_BOLT_IMPACT);
+            }
+        });
+        b.put(ANGRY, (anim, entity) -> {
+            if (anim.isAt("sound")) {
+                entity.playRandomizedSound(SoundEvents.PARROT_IMITATE_ENDER_DRAGON);
             }
         });
     });
@@ -316,17 +328,12 @@ public class Sarcophagus extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || (!this.getAnimationHandler().isCurrent(DEFEAT, ANGRY) && !this.isTeleporting())) && super.hurt(source, amount);
+        return !this.isTeleporting() && super.hurt(source, amount);
     }
 
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         return false;
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
@@ -477,6 +484,16 @@ public class Sarcophagus extends BossMonster {
     @Override
     public String getInteractAnimation() {
         return INTERACT;
+    }
+
+    @Override
+    public String getSpawnAnimation() {
+        return SPAWN;
+    }
+
+    @Override
+    public String getAngryAnimation() {
+        return ANGRY;
     }
 
     @Override
