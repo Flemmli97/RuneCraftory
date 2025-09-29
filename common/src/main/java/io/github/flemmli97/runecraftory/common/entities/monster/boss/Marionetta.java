@@ -131,7 +131,7 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
         b.put(CHEST_THROW, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.isAt("attack")) {
-                Vec3 throwVec = EntityUtils.horizontalLookAngle(entity).scale(1.7).add(0, 0.85, 0);
+                Vec3 throwVec = EntityUtils.horizontalLookAngle(entity).scale(1.8).add(0, 1, 0);
                 MarionettaTrapEntity trap = new MarionettaTrapEntity(entity.level(), entity);
                 trap.setDamageMultiplier(0.8f);
                 trap.throwIn(throwVec);

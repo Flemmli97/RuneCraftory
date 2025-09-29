@@ -37,7 +37,7 @@ public class MarionettaTrapRender extends EntityRenderer<MarionettaTrapEntity> {
     @Override
     public void render(MarionettaTrapEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
-        stack.scale(1.5f, 1.5f, 1.5f);
+        stack.scale(1.25f, 1.25f, 1.25f);
         float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
         float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
         float partialLivingTicks = (float) entity.tickCount + partialTicks;
