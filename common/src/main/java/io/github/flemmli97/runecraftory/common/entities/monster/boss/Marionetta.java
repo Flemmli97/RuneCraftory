@@ -75,7 +75,7 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
     public static final String LEAP = BUILDER.add("leap", AnimationsBuilder.definition(0.6));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.52));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.52));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Marionetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -424,6 +424,11 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
 
     public void setMoveDirection(Vec3 direction) {
         this.getDataContainer().set(MOVE_DIRECTION, direction);
+    }
+
+    @Override
+    public double deathRayOffset() {
+        return this.getBbHeight() * 0.1;
     }
 
     @Override

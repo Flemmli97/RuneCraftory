@@ -140,14 +140,22 @@ public abstract class SanoUno extends BossMonster {
                 other.entityData.set(CAN_BE_REMOVED, true);
         }
         if (this.deathTime == this.maxDeathTime() - 1) {
-            if (this.level().isClientSide)
+            if (this.level().isClientSide) {
+                this.deathRays = 0;
                 return;
+            }
             SanoUno other = this.getLinked();
             // Keep this one in the world while the other is still alive
-            if (!this.entityData.get(CAN_BE_REMOVED) && other != null && !other.isRemoved())
+            if (!this.entityData.get(CAN_BE_REMOVED) && other != null && !other.isRemoved()) {
                 return;
+            }
         }
         super.tickDeath();
+    }
+
+    @Override
+    public double deathRayOffset() {
+        return this.getBbHeight() * 0.5;
     }
 
     @Override

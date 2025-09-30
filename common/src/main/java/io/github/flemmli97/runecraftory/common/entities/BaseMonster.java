@@ -63,6 +63,8 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinition;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibMemoryModules;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
@@ -1256,13 +1258,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             }
         }
         if (this.deathTime >= this.maxDeathTime()) {
-            if (!this.level().isClientSide)
-                this.remove(RemovalReason.KILLED);
             for (int i = 0; i < 20; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                this.level().addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+                AdvancedParticleContainer.make(ParticleTypes.POOF)
+                        .addData(new MotionData(this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D))
+                        .add(this.level(), this.getRandomX(1), this.getRandomY(), this.getRandomZ(1));
+            }
+            if (!this.level().isClientSide) {
+                this.remove(RemovalReason.KILLED);
             }
         }
     }
@@ -1290,6 +1292,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public String getDeathAnimation() {
         return null;
+    }
+
+    public int deathRays() {
+        return 0;
+    }
+
+    public double deathRayOffset() {
+        return this.getBbHeight() * 0.15;
     }
 
     public boolean playDeath() {

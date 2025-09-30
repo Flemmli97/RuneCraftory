@@ -31,7 +31,7 @@ public class Sano extends SanoUno {
             .marker("triple", 0.8).marker("quad", 1.2, 3.4));
     public static final String EXPLOSION = BUILDER.add("explosion", AnimationsBuilder.definition(1.5).marker("attack", 0.8));
     public static final String FIRE_BREATH = BUILDER.add("fire_breath", AnimationsBuilder.definition(2).marker("attack", 0.8, 1.2));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Sano>> ATTACK_HANDLER = createAnimationHandler(b -> {

@@ -72,7 +72,7 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
             .marker("attack_start", 0.28).marker("attack_end", 1.04));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.6));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.6));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Handonetta>> ATTACK_HANDLER = createAnimationHandler(b -> {

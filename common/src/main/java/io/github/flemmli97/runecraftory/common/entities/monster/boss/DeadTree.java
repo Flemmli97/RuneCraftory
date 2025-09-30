@@ -56,7 +56,7 @@ public class DeadTree extends BossMonster {
     public static final String HEAL = BUILDER.add("heal", FALLING_APPLES);
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.68));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.68));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, DeadTree>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -208,8 +208,8 @@ public class DeadTree extends BossMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void baseTick() {
+        super.baseTick();
         if (!this.level().isClientSide) {
             --this.shieldCooldown;
             --this.healCooldown;
@@ -271,6 +271,11 @@ public class DeadTree extends BossMonster {
         if (!this.canMove())
             return;
         super.push(x, y, z);
+    }
+
+    @Override
+    public double deathRayOffset() {
+        return this.getEyeHeight();
     }
 
     @Override

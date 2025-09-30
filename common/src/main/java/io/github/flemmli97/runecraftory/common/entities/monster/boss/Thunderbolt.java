@@ -6,8 +6,8 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -20,10 +20,6 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
-import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
-import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
-import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
-import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
@@ -31,6 +27,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -78,7 +75,7 @@ public class Thunderbolt extends BossMonster {
     public static final String FEINT = BUILDER.add("feint", AnimationsBuilder.definition(7.52).marker("neigh", 6.2));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.44));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.44));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Thunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -350,49 +347,26 @@ public class Thunderbolt extends BossMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void baseTick() {
+        super.baseTick();
         if (this.getAnimationHandler().isCurrent(FEINT) && !this.isTamed()) {
             Vec3 delta = this.getDeltaMovement();
+            int tick = (int) this.getAnimationHandler().getAnimation().getTick(1);
             this.setDeltaMovement(0, delta.y, 0);
-            if (this.getAnimationHandler().getAnimation().is(DEFEAT)) {
-                int tick = (int) this.getAnimationHandler().getAnimation().getTick(1);
-                if (tick < 40) {
-                    if (tick % 10 == 0) {
-                        AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
-                                .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
-                                .addData(new MotionData(this.random.nextGaussian() * 0.02D,
-                                        this.random.nextGaussian() * 0.02D,
-                                        this.random.nextGaussian() * 0.02D))
-                                .addData(new ParticleMetaData(20, false, 0))
-                                .add(this.level(), this.getRandomX(2),
-                                        this.getY(this.getRandom().nextDouble()),
-                                        this.getRandomZ(2));
-                    }
-                } else if (tick < 80) {
-                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
-                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
-                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D))
-                            .addData(new ParticleMetaData(20, false, 0))
-                            .add(this.level(), this.getRandomX(2),
-                                    this.getY(this.getRandom().nextDouble()),
-                                    this.getRandomZ(2));
-                } else {
-                    int amount = (tick - 80) / 10;
-                    for (int i = 0; i < amount; i++) {
-                        AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
-                                .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
-                                .addData(new MotionData(this.random.nextGaussian() * 0.02D,
-                                        this.random.nextGaussian() * 0.02D,
-                                        this.random.nextGaussian() * 0.02D))
-                                .addData(new ParticleMetaData(20, false, 0))
-                                .add(this.level(), this.getRandomX(2),
-                                        this.getY(this.getRandom().nextDouble()),
-                                        this.getRandomZ(2));
-                    }
+            if (tick < 50) {
+                if (tick % 10 == 0) {
+                    this.deathRays++;
+                    S2CScreenShake.sendAround(this, 24, 4, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
                 }
+            } else if (tick < 65) {
+                if (tick % 5 == 0) {
+                    this.deathRays++;
+                    S2CScreenShake.sendAround(this, 24, 4, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                }
+            } else if (tick > 100) {
+                this.deathRays = 0;
             }
         }
     }
@@ -511,6 +485,11 @@ public class Thunderbolt extends BossMonster {
         if (this.feintedDeath)
             return true;
         return super.allowAnimation(prev, other);
+    }
+
+    @Override
+    public double deathRayOffset() {
+        return this.getBbHeight() * 0.25;
     }
 
     @Override

@@ -4,15 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
+import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.tenshilib.common.entity.OverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
-import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
-import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
-import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
-import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -26,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -50,6 +48,7 @@ import java.util.function.Supplier;
 
 public abstract class BossMonster extends BaseMonster implements OverlayEntityRender {
 
+    public static int DEATH_DURATION = 140;
     protected static final List<Supplier<Holder<Attribute>>> STAT_INCREASE = List.of(
             () -> Attributes.ATTACK_DAMAGE,
             RuneCraftoryAttributes.DEFENCE::asHolder,
@@ -64,6 +63,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     private int combatTick, noPlayerRegenTick, fullHealDelay;
 
     private ResourceKey<Level> restrictDimension;
+    protected int deathRays;
 
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
@@ -121,6 +121,10 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
             if (--this.fullHealDelay == 1) {
                 this.fullyHeal();
             }
+        }
+        if (this.isAlive()) {
+            this.deathTime = 0;
+            this.deathRays = 0;
         }
     }
 
@@ -196,51 +200,47 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         super.tickDeath();
         if (!this.level().isClientSide && this.deathTime == 1)
             this.updateBossBar();
-        if (this.level().isClientSide && this.deathTime > 1) {
-            if (this.deathTime < 40) {
+        if (this.level().isClientSide) {
+            if (this.deathTime < 50) {
                 if (this.deathTime % 10 == 0) {
-                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
-                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
-                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D))
-                            .addData(new ParticleMetaData(20, false, 0))
-                            .add(this.level(), this.getRandomX(2),
-                                    this.getY(this.getRandom().nextDouble()),
-                                    this.getRandomZ(2));
+                    this.deathRays++;
+                    S2CScreenShake.sendAround(this, 24, 4, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
                 }
-            } else if (this.deathTime < 80) {
+            } else if (this.deathTime < 75) {
+                if (this.deathTime % 5 == 0) {
+                    this.deathRays++;
+                    S2CScreenShake.sendAround(this, 24, 4, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                }
+            } else if (this.deathTime < 95) {
+                if (this.deathTime % 3 == 0) {
+                    this.deathRays++;
+                    S2CScreenShake.sendAround(this, 24, 4, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                }
+            } else if (this.deathTime < 120) {
                 if (this.deathTime % 2 == 0) {
-                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
-                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
-                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D))
-                            .addData(new ParticleMetaData(20, false, 0))
-                            .add(this.level(), this.getRandomX(2),
-                                    this.getY(this.getRandom().nextDouble()),
-                                    this.getRandomZ(2));
-                }
-            } else {
-                int amount = (this.deathTime - 80) / 10;
-                for (int i = 0; i < amount; i++) {
-                    AdvancedParticleContainer.make(RuneCraftoryParticles.BLINK.get())
-                            .addData(new ColorData(71 / 255F, 237 / 255F, 255 / 255F, 1))
-                            .addData(new MotionData(this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D,
-                                    this.random.nextGaussian() * 0.02D))
-                            .addData(new ParticleMetaData(20, false, 0))
-                            .add(this.level(), this.getRandomX(2),
-                                    this.getY(this.getRandom().nextDouble()),
-                                    this.getRandomZ(2));
+                    this.deathRays++;
+                    S2CScreenShake.sendAround(this, 24, 4, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
                 }
             }
+        }
+        if (!this.level().isClientSide && this.deathTime >= this.maxDeathTime()) {
+            S2CScreenShake.sendAround(this, 24, 4, 3);
+            this.playSound(this.getBossDeathSound());
         }
     }
 
     @Override
     public int maxDeathTime() {
-        return 200;
+        return DEATH_DURATION;
+    }
+
+    @Override
+    public int deathRays() {
+        return this.deathRays;
     }
 
     @Override
@@ -376,6 +376,10 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
         if (this.getSpawnAnimation() != null && this.getAnimationHandler().isCurrent(this.getSpawnAnimation()))
             return;
         super.playAmbientSound();
+    }
+
+    protected SoundEvent getBossDeathSound() {
+        return RuneCraftorySounds.ENTITY_BOSS_DEFEAT.get();
     }
 
     public void playRandomizedSound(SoundEvent event) {

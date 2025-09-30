@@ -4,17 +4,25 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
+import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import io.github.flemmli97.tenshilib.client.render.layer.RiderEntityLayer;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import java.util.Random;
+
 public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> extends MobRenderer<T, M> {
 
     private final ResourceLocation tex;
+
+    private final Random random = new Random();
+
+    private final RenderUtils.BeamBuilder builder = create();
 
     public RenderMonster(EntityRendererProvider.Context ctx, M model, ResourceLocation texture, float shadow) {
         this(ctx, model, texture, shadow, true);
@@ -25,6 +33,29 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
         this.tex = texture;
         if (withDefaultRiderLayer)
             this.layers.add(new RiderEntityLayer<>(this));
+    }
+
+    private static RenderUtils.BeamBuilder create() {
+        RenderUtils.BeamBuilder beam = new RenderUtils.BeamBuilder();
+        beam.setEndColor(0x50c5f0);
+        return beam;
+    }
+
+    @Override
+    public void render(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+        if (entity.deathRays() > 0) {
+            poseStack.pushPose();
+            poseStack.translate(0, entity.deathRayOffset(), 0);
+            this.random.setSeed(entity.getUUID().getLeastSignificantBits());
+            for (int i = 0; i < entity.deathRays(); i++) {
+                poseStack.mulPose(Axis.XP.rotationDegrees(this.random.nextFloat() * 360.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(this.random.nextFloat() * 360.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(this.random.nextFloat() * 360.0F));
+                RenderUtils.renderGradientBeam3d(poseStack, buffer, entity.getBbWidth() + 3, 1, this.builder);
+            }
+            poseStack.popPose();
+        }
     }
 
     @Override

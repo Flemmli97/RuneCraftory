@@ -89,7 +89,7 @@ public class Spider extends BaseMonster {
 
     @Override
     public void tick() {
-        super.tick();
+        super.baseTick();
         if (!this.level().isClientSide) {
             this.setClimbing(this.horizontalCollision);
         }

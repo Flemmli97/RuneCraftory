@@ -73,7 +73,7 @@ public class Sarcophagus extends BossMonster {
             .marker("teleport_start", 0.2).marker("teleport_end", 8.0));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 1.4));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.1));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Sarcophagus>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -314,8 +314,8 @@ public class Sarcophagus extends BossMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void baseTick() {
+        super.baseTick();
         if (!this.level().isClientSide) {
             --this.starfallCooldown;
         }

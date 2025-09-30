@@ -138,6 +138,12 @@
     ],
     "subtitle": "runecraftory:entity.big_plate.land"
   },
+  "entity.boss.defeat": {
+    "sounds": [
+      "mob/wither/death"
+    ],
+    "subtitle": "runecraftory:entity.boss.defeat"
+  },
   "entity.buffamoo.death": {
     "sounds": [
       {
@@ -626,15 +632,6 @@
     ],
     "subtitle": "runecraftory:entity.thunderbolt.ambient"
   },
-  "entity.thunderbolt.death": {
-    "sounds": [
-      {
-        "name": "mob/horse/death",
-        "pitch": 0.8
-      }
-    ],
-    "subtitle": "runecraftory:entity.thunderbolt.death"
-  },
   "entity.thunderbolt.gallop": {
     "sounds": [
       "mob/horse/gallop1",
@@ -643,6 +640,27 @@
       "mob/horse/gallop4"
     ],
     "subtitle": "runecraftory:entity.thunderbolt.gallop"
+  },
+  "entity.thunderbolt.hurt": {
+    "sounds": [
+      {
+        "name": "mob/horse/hit1",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/horse/hit2",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/horse/hit3",
+        "pitch": 0.8
+      },
+      {
+        "name": "mob/horse/hit4",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "runecraftory:entity.thunderbolt.hurt"
   },
   "entity.thunderbolt.neigh": {
     "sounds": [

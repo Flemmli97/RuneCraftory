@@ -95,7 +95,7 @@ public class Raccoon extends BossMonster {
             .marker("knockback_start", 1).marker("knockback_end", 1.5));
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("smoke", 0.72));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.28));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     public static final byte SPAWN_SMOKE_EVENT = 66;

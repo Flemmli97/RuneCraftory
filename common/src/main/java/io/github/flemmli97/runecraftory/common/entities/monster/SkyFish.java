@@ -112,7 +112,7 @@ public class SkyFish extends BaseMonster {
 
     @Override
     public void tick() {
-        super.tick();
+        super.baseTick();
         if (!this.level().isClientSide && this.getTarget() == null && !this.isInWater() && this.belowSoldid()) {
             Vec3 mot = this.getDeltaMovement();
             double newY = Math.max(0, mot.y);

@@ -27,7 +27,7 @@ public class Uno extends SanoUno {
             .marker("attack_1", 0.8).marker("attack_2", 1.6));
     public static final String ICEBALLS_5 = BUILDER.add("iceballs", AnimationsBuilder.definition(3).marker("attack", 0.8, 1.2, 1.6, 2, 2.4));
     public static final String HOMING_WATER_WAVE = BUILDER.add("water_wave", AnimationsBuilder.definition(2).marker("attack", 0.8));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Uno>> ATTACK_HANDLER = createAnimationHandler(b -> {

@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public record S2CScreenShake(int shakeDuration, float strength) implements CustomPacketPayload {
@@ -37,12 +36,13 @@ public record S2CScreenShake(int shakeDuration, float strength) implements Custo
 
     public static void sendAround(Level level, Vec3 pos, double range, int duration, float strength) {
         if (level instanceof ServerLevel serverLevel) {
-            AABB area = new AABB(pos.x() - 0.5, pos.y() - 0.5, pos.z() + 0.5, pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5).inflate(range);
             for (ServerPlayer player : serverLevel.players()) {
-                if (!area.contains(player.getX(), player.getY(), player.getZ()))
+                if (player.distanceToSqr(pos) > range * range)
                     continue;
                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CScreenShake(duration, strength), player);
             }
+        } else {
+            ShakeHandler.shakeScreen(pos, range, duration, strength);
         }
     }
 

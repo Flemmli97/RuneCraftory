@@ -1906,6 +1906,7 @@
   "runecraftory:entity.ambrosia.spawn": "Ambrosia Spawn",
   "runecraftory:entity.ambrosia.wave": "Ambrosia humming",
   "runecraftory:entity.big_plate.land": "Big Plate Land",
+  "runecraftory:entity.boss.defeat": "Boss Defeat",
   "runecraftory:entity.buffamoo.death": "Buffamoo Death",
   "runecraftory:entity.buffamoo.hurt": "Buffamoo Hurt",
   "runecraftory:entity.buffamoo.step": "Buffamoo Step",

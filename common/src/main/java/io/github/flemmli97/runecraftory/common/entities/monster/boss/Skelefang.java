@@ -102,7 +102,7 @@ public class Skelefang extends BossMonster {
     public static final String DEATH = BUILDER.add("death", AnimationsBuilder.definition(10).infinite());
     public static final String SPAWN = BUILDER.add("spawn", AnimationsBuilder.definition(2).marker("sound", 0.24));
     public static final String ANGRY = BUILDER.add("angry", AnimationsBuilder.definition(2).marker("sound", 0.24));
-    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(10).infinite());
+    public static final String DEFEAT = BUILDER.add("defeat", AnimationsBuilder.definition(DEATH_DURATION, false).infinite());
     public static final AnimationDefinitionContainer ANIMS = BUILDER.build();
 
     private static final ImmutableMap<String, BiConsumer<AnimationState, Skelefang>> ATTACK_HANDLER = createAnimationHandler(b -> {
@@ -601,8 +601,8 @@ public class Skelefang extends BossMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void baseTick() {
+        super.baseTick();
         if (!this.level().isClientSide) {
             --this.hurtResist;
             this.updateParts();
@@ -762,6 +762,11 @@ public class Skelefang extends BossMonster {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    }
+
+    @Override
+    public double deathRayOffset() {
+        return this.getBbHeight() * 0.3;
     }
 
     @Override

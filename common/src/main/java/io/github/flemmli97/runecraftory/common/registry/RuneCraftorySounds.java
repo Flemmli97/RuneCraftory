@@ -68,10 +68,11 @@ public class RuneCraftorySounds {
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_SKELEFANG_SWEEP = register("entity.skelefang.sweep", null, ResourceLocation.withDefaultNamespace("entity/player/attack/sweep"), 7, 0.7f);
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_THUNDERBOLT_AMBIENT = register("entity.thunderbolt.ambient", "Thunderbolt neighs", ResourceLocation.withDefaultNamespace("mob/horse/idle"), 3, 0.8f);
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_THUNDERBOLT_GALLOP = register("entity.thunderbolt.gallop", null, ResourceLocation.withDefaultNamespace("mob/horse/gallop"), 4);
-    public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_THUNDERBOLT_HURT = register("entity.thunderbolt.hurt", null, ResourceLocation.withDefaultNamespace("mob/horse/hit"), 1, 0.8f);
+    public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_THUNDERBOLT_HURT = register("entity.thunderbolt.hurt", null, ResourceLocation.withDefaultNamespace("mob/horse/hit"), 4, 0.8f);
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_THUNDERBOLT_NEIGH = register("entity.thunderbolt.neigh", null);
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_WEAGLE_FLAP = register("entity.weagle.flap");
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_WISP_AMBIENT = register("entity.wisp.ambient");
+    public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_BOSS_DEFEAT = register("entity.boss.defeat", null, ResourceLocation.withDefaultNamespace("mob/wither/death"));
 
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_ATTACK_BLOCKED = register("entity.generic.attack_blocked", "Attack blocked", ResourceLocation.withDefaultNamespace("random/anvil_land"));
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_BIG_PLATE_LAND = register("entity.big_plate.land", null, ResourceLocation.withDefaultNamespace("random/anvil_land"));
