@@ -54,6 +54,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 
 import java.util.Optional;
@@ -311,7 +312,7 @@ public class Raccoon extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.24);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
         super.applyAttributes();
     }
 
@@ -324,7 +325,7 @@ public class Raccoon extends BossMonster {
                 .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(7).test(m))
+                .condition(m -> !m.isBerserk())
                 .prepare(new SetWalkTargetToAttackTarget<Raccoon>().speedMod((e, t) -> 1.2f))
                 .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(17)
@@ -368,10 +369,12 @@ public class Raccoon extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<Raccoon>builder()
                 .add(3, Raccoon::isBerserk, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, m -> !m.isBerserk(), new SetWalkTargetToAttackTarget<Raccoon>()
-                        .closeEnoughDist(MonsterBehaviourUtils.closeEnough(7)), MonsterBehaviourUtils.moveTo())
+                .add(2, m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(6).test(m), new SetRandomWalkTarget<Raccoon>()
+                        .speedModifier(1.1f), MonsterBehaviourUtils.moveTo())
+                .add(4, m -> !m.isBerserk(), new SetWalkTargetToAttackTarget<Raccoon>()
+                        .speedMod((e, t) -> 1.1f).closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), MonsterBehaviourUtils.moveTo())
                 .add(3, m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(16).test(m), new SetWalkTargetAwayFromTarget<Raccoon>()
-                        .minDist(4).radius(6).speedMod(1.1f), MonsterBehaviourUtils.moveTo())
+                        .speedMod(1.1f).minDist(4).radius(6).speedMod(1.1f), MonsterBehaviourUtils.moveTo())
                 .build();
     }
 
