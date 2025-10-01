@@ -81,7 +81,7 @@ public class Tortas extends ChargingMonster {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(2, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(4, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
+                .add(4, MonsterBehaviourUtils.withCondition(MonsterBehaviourUtils.ifCloserThan(9)), new Idle<>()).build();
     }
 
     @Override

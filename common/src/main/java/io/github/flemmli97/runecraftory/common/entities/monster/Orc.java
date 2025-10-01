@@ -65,7 +65,7 @@ public class Orc extends BaseMonster {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(3, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
+                .add(2, MonsterBehaviourUtils.withCondition(MonsterBehaviourUtils.ifCloserThan(9)), new Idle<>()).build();
     }
 
     @Override

@@ -54,7 +54,7 @@ public class Beetle extends ChargingMonster {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(4, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(3, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
+                .add(3, MonsterBehaviourUtils.withCondition(MonsterBehaviourUtils.ifCloserThan(9)), new Idle<>()).build();
     }
 
     @Override

@@ -117,7 +117,7 @@ public class Ghost extends ChargingMonster {
                 .add(2, new SetWalkTargetToAttackTarget<BaseMonster>()
                         .closeEnoughDist(MonsterBehaviourUtils.closeEnough(5)), MonsterBehaviourUtils.moveTo())
                 .add(4, MonsterBehaviourUtils.ifCloserThan(10), new SetSetClampedFloatingMoveTarget<>(2.), MonsterBehaviourUtils.moveTo())
-                .add(6, MonsterBehaviourUtils.ifCloserThan(7), new Idle<>()).build();
+                .add(6, MonsterBehaviourUtils.withCondition(MonsterBehaviourUtils.ifCloserThan(9)), new Idle<>()).build();
     }
 
     @Override

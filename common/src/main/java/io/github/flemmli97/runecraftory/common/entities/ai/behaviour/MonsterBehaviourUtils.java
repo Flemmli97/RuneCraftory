@@ -131,9 +131,8 @@ public class MonsterBehaviourUtils {
         };
     }
 
-    public static <E extends Mob> Consumer<ExtendedBehaviour<E>> requireCloseWithin(double dist) {
+    public static <E extends LivingEntity> Consumer<ExtendedBehaviour<E>> withCondition(Predicate<E> test) {
         return behaviour -> {
-            Predicate<E> test = ifCloserThan(dist);
             behaviour.startCondition(test);
             behaviour.stopIf(e -> !test.test(e));
         };

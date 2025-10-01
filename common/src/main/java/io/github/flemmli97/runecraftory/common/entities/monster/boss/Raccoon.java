@@ -325,7 +325,7 @@ public class Raccoon extends BossMonster {
                 .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(20)
                 .start(MonsterBehaviourUtils.checkedAttack(DOUBLE_PUNCH)).play(MonsterBehaviourUtils.cooldownedPlay())
-                .condition(m -> !m.isBerserk())
+                .condition(m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(7).test(m))
                 .prepare(new SetWalkTargetToAttackTarget<Raccoon>().speedMod((e, t) -> 1.2f))
                 .prepareOptional(MonsterBehaviourUtils.timedMovement())
                 .end(17)
@@ -369,11 +369,11 @@ public class Raccoon extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<Raccoon>builder()
                 .add(3, Raccoon::isBerserk, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
-                .add(2, m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(6).test(m), new SetRandomWalkTarget<Raccoon>()
+                .add(2, MonsterBehaviourUtils.withCondition(m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(6).test(m)), new SetRandomWalkTarget<Raccoon>()
                         .speedModifier(1.1f), MonsterBehaviourUtils.moveTo())
-                .add(4, m -> !m.isBerserk(), new SetWalkTargetToAttackTarget<Raccoon>()
+                .add(4, m -> !m.isBerserk() && MonsterBehaviourUtils.ifFurtherThan(4).test(m), new SetWalkTargetToAttackTarget<Raccoon>()
                         .speedMod((e, t) -> 1.1f).closeEnoughDist(MonsterBehaviourUtils.closeEnough(3)), MonsterBehaviourUtils.moveTo())
-                .add(3, m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(16).test(m), new SetWalkTargetAwayFromTarget<Raccoon>()
+                .add(3, MonsterBehaviourUtils.withCondition(m -> !m.isBerserk() && MonsterBehaviourUtils.ifCloserThan(5).test(m)), new SetWalkTargetAwayFromTarget<Raccoon>()
                         .speedMod(1.1f).minDist(4).radius(6).speedMod(1.1f), MonsterBehaviourUtils.moveTo())
                 .build();
     }
