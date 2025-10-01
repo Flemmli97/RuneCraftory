@@ -1,3 +1,21 @@
+RuneCraftory 2.1.2
+================
+- Update seconday effects for elements
+- Mineral squeek health: 10 -> 4
+  - Now immune to player attacks unless player holds a weapon
+- Updated various effect things
+- Sleep effect now longer puts mob into sleep pose (as that has very small hitboxes)
+- Shaders should work now even with active iris shader
+- Fix a nullpointer with npc ai poi
+- Updated various mob effect handling
+- Fixed attack cooldown for monsters ignored sometimes
+- Increased boss attack cooldown a bit
+- Update various mob attack ai
+  - Adds some range constraint to boss attacks
+- Add distinction to boss spawneggs
+- Move some sound instances to their own one instead of using vanillas
+- Change animated hand rendering to not render armor and other stuff anymore cause it clutters the screen
+
 RuneCraftory 2.1.1
 ================
 - Fix using wrong ops during resource loading
