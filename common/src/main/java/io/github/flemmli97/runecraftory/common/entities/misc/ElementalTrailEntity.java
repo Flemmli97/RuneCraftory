@@ -138,11 +138,11 @@ public class ElementalTrailEntity extends BaseDamageCloud {
                 }
             }
         } else {
-            if (this.livingTicks % 4 == 0) {
+            if (this.livingTicks % 2 == 0) {
                 if (this.element == ItemElement.WATER)
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ELEMENTAL_TRAIL_WATER.get(), this.getSoundSource(), 0.9f, 0.8f, false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ELEMENTAL_TRAIL_WATER.get(), this.getSoundSource(), 0.7f, 0.8f, false);
                 if (this.element == ItemElement.EARTH)
-                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ELEMENTAL_TRAIL_EARTH.get(), this.getSoundSource(), 2, 0.8f, false);
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), RuneCraftorySounds.ENTITY_ELEMENTAL_TRAIL_EARTH.get(), this.getSoundSource(), 1, 0.8f, false);
             }
         }
     }

@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
@@ -51,6 +52,8 @@ public class SwipingWaterLaserEntity extends BaseBeam {
         super.setRotationToDir(dirX, dirY, dirZ, acc);
         this.setYRot(this.getYRot() + yawOffset);
         this.updateYawPitch();
+        this.xRotO = this.getXRot();
+        this.yRotO = this.getYRot();
     }
 
     @Override
@@ -62,7 +65,7 @@ public class SwipingWaterLaserEntity extends BaseBeam {
 
     @Override
     public float getRange() {
-        return 9;
+        return 12;
     }
 
     @Override
@@ -81,14 +84,25 @@ public class SwipingWaterLaserEntity extends BaseBeam {
     }
 
     @Override
+    public void updateHitDetectBox() {
+        double dist = this.hitVec != null ? this.hitVec.subtract(this.position()).length() : 0;
+        double diff = Mth.sin((this.getYRot() - this.yRotO) * Mth.DEG_TO_RAD) * this.getRange();
+        double width = this.radius() * 2;
+        double height = 1;
+        this.hitObb = new OrientedBoundingBox(new AABB(-width * 0.5 + diff, -width * 0.5, 0, width * 0.5, height * 0.5, dist + 0.5),
+                this.getYRot(), -this.getXRot(), this.position());
+    }
+
+    @Override
     public void tick() {
-        this.yRotO = this.getYRot();
-        if (this.entityData.get(TOTAL_ROTATION) != 0) {
-            float amount = this.entityData.get(TOTAL_ROTATION) / this.livingTickMax();
-            this.setYRot(Mth.wrapDegrees(this.getYRot() + amount));
+        float amount = this.entityData.get(TOTAL_ROTATION) / this.livingTickMax();
+        if (amount != 0) {
             this.hit = null;
         }
         super.tick();
+        if (amount != 0) {
+            this.setYRot(Mth.wrapDegrees(this.getYRot() + amount));
+        }
         if (this.getOwner() instanceof ServerPlayer player) {
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             AnimationState action = data.getWeaponHandler().getAnimation();
@@ -97,6 +111,11 @@ public class SwipingWaterLaserEntity extends BaseBeam {
                 this.entityData.set(MAX_LIVING_TICK, this.tickCount + 5);
             }
         }
+    }
+
+    // Disable rotation update from packet as client already rotates it
+    @Override
+    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
     }
 
     @Override

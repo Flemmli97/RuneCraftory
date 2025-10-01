@@ -357,13 +357,13 @@ public class Thunderbolt extends BossMonster {
                 if (tick % 10 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);
-                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
             } else if (tick < 65) {
                 if (tick % 5 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);
-                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
             } else if (tick > 100) {
                 this.deathRays = 0;

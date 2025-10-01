@@ -39,14 +39,17 @@ public class DoubleWaterLaserSpell extends Spell {
         UUID other = null;
         for (int i = 0; i < 2; i++) {
             WaterLaserEntity laser = new WaterLaserEntity(level, entity, new Vector3f(i == 0 ? 0.5f : -0.5f, 0, 0.5f));
-            if (i == 0)
+            if (i == 0) {
                 other = laser.getUUID();
-            else laser.setTwinId(other);
+            } else {
+                laser.setTwinId(other);
+            }
             laser.setRange(this.range);
             laser.setMaxTicks(entity instanceof Player ? Mth.ceil(PlayerModelAnimations.ANIMS.get(PlayerModelAnimations.WATER_LASER_TWO).length()) : 15);
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             Vec3 target = laser.position().add(dir);
             laser.setRotationTo(target.x(), target.y(), target.z(), 0);
+            laser.setupRotationAndPosition(entity, laser);
             level.addFreshEntity(laser);
         }
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WATER.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

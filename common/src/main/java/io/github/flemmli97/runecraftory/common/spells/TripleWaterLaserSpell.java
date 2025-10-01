@@ -27,6 +27,7 @@ public class TripleWaterLaserSpell extends Spell {
             laser.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
             laser.setYawOffset(i * 130);
             laser.setRotationFromOffset();
+            laser.setupRotationAndPosition(entity, laser);
             level.addFreshEntity(laser);
         }
         playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WATER.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

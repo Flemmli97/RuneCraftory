@@ -205,31 +205,31 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                 if (this.deathTime % 10 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);
-                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
             } else if (this.deathTime < 75) {
                 if (this.deathTime % 5 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);
-                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
             } else if (this.deathTime < 95) {
                 if (this.deathTime % 3 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);
-                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
             } else if (this.deathTime < 120) {
                 if (this.deathTime % 2 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);
-                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 1, 1);
+                    this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
             }
         }
         if (!this.level().isClientSide && this.deathTime >= this.maxDeathTime()) {
             S2CScreenShake.sendAround(this, 24, 4, 3);
-            this.playSound(this.getBossDeathSound());
+            this.playSound(this.getBossDeathSound(), 2, 1);
         }
     }
 

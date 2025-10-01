@@ -113,34 +113,31 @@ public class WaterLaserEntity extends BaseBeam {
 
     @Override
     public void updateYawPitch() {
-        if ((this.getHitVecFromShooter() || this.firstTick) && this.getOwner() != null) {
-            Entity e = this.getOwner();
-            float yRot = this.getYRot();
-            float xRot = this.getXRot();
-            float[] yxRot;
-            Vector3f offset = this.entityData.get(OFFSET)
-                    .rotateY(-(e.getYRot() + this.entityData.get(YAW_OFFSET)) * Mth.DEG_TO_RAD, new Vector3f());
-            if (this.entityData.get(ROTATION_FROM_OFFSET)) {
-                float pitch = e.getXRot();
-                Vec3 look = Vec3.directionFromRotation(pitch, e.getYRot()).scale(offset.length());
-                Vec3 up = Vec3.directionFromRotation(pitch - 90, e.getYRot());
-                offset = new Vector3f((float) look.x(), (float) look.y(), (float) look.z())
-                        .rotateAxis(this.entityData.get(YAW_OFFSET) * Mth.DEG_TO_RAD, (float) up.x(), (float) up.y(), (float) up.z(), new Vector3f());
-                yxRot = MathsHelper.YXRotFrom(offset.x(), offset.y(), offset.z());
-            } else {
-                yxRot = new float[]{e.getYRot() + this.entityData.get(YAW_OFFSET), e.getXRot()};
-            }
-            this.xRotO = this.getXRot();
-            this.yRotO = this.getYRot();
-            this.setXRot(yxRot[1]);
-            this.setYRot(yxRot[0]);
-            if (this.firstTick) {
-                this.xRotO = this.getXRot();
-                this.yRotO = this.getYRot();
-            }
-            this.setPos(e.getX() + offset.x(), e.getY() + e.getEyeHeight() - 0.1 + offset.y(), e.getZ() + offset.z());
-            this.accumulatedRot += Math.abs(this.getYRot() - yRot) + Math.abs(this.getXRot() - xRot);
+        if (this.getHitVecFromShooter() && this.getOwner() != null) {
+            this.setupRotationAndPosition(this.getOwner(), this.getOwner());
         }
+    }
+
+    public void setupRotationAndPosition(Entity positionEntity, Entity from) {
+        float yRot = this.getYRot();
+        float xRot = this.getXRot();
+        float[] yxRot;
+        Vector3f offset = this.entityData.get(OFFSET)
+                .rotateY(-(from.getYRot() + this.entityData.get(YAW_OFFSET)) * Mth.DEG_TO_RAD, new Vector3f());
+        if (this.entityData.get(ROTATION_FROM_OFFSET)) {
+            float pitch = from.getXRot();
+            Vec3 look = Vec3.directionFromRotation(pitch, from.getYRot()).scale(offset.length());
+            Vec3 up = Vec3.directionFromRotation(pitch - 90, from.getYRot());
+            offset = new Vector3f((float) look.x(), (float) look.y(), (float) look.z())
+                    .rotateAxis(this.entityData.get(YAW_OFFSET) * Mth.DEG_TO_RAD, (float) up.x(), (float) up.y(), (float) up.z(), new Vector3f());
+            yxRot = MathsHelper.YXRotFrom(offset.x(), offset.y(), offset.z());
+        } else {
+            yxRot = new float[]{from.getYRot() + this.entityData.get(YAW_OFFSET), from.getXRot()};
+        }
+        this.setXRot(yxRot[1]);
+        this.setYRot(yxRot[0]);
+        this.setPos(positionEntity.getX() + offset.x(), positionEntity.getY() + positionEntity.getEyeHeight() - 0.1 + offset.y(), positionEntity.getZ() + offset.z());
+        this.accumulatedRot += Math.abs(this.getYRot() - yRot) + Math.abs(this.getXRot() - xRot);
     }
 
     @Override
