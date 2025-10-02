@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
@@ -163,8 +164,10 @@ public class ClientMixinUtils {
 
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
-            if (leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT) && AnimatedItemHandRendering)
-                return true;
+            leftHand = leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT);
+            if (leftHand) {
+                return AnimatedItemHandRendering;
+            }
             PlayerData data = Platform.INSTANCE.getPlayerData(player);
             if (data != null) {
                 PlayerRenderer renderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
@@ -179,30 +182,39 @@ public class ClientMixinUtils {
                 poseStack.scale(-0.5f, -0.5f, 0.5f);
                 poseStack.translate(0, 0.1, 0);
                 poseStack.mulPose(Axis.YP.rotationDegrees(Minecraft.getInstance().gameRenderer.getMainCamera().getYRot() - 180));
-                ClientHandlers.getAnimatedPlayerModel().copyTo(renderer.getModel());
+                PlayerModel<?> model = renderer.getModel();
+                ClientHandlers.getAnimatedPlayerModel().copyTo(model);
                 if (ClientConfig.renderHand) {
-                    renderer.getModel().leftArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
-                    renderer.getModel().leftSleeve.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
-                    renderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
-                    renderer.getModel().rightSleeve.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkin().texture())), combinedLight, OverlayTexture.NO_OVERLAY);
+                    model.leftSleeve.visible = true;
+                    model.leftSleeve.copyFrom(model.leftArm);
+                    model.rightSleeve.visible = true;
+                    model.rightSleeve.copyFrom(model.rightArm);
+                    VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(player.getSkin().texture()));
+                    model.leftArm.render(poseStack, consumer, combinedLight, OverlayTexture.NO_OVERLAY);
+                    model.leftSleeve.render(poseStack, consumer, combinedLight, OverlayTexture.NO_OVERLAY);
+                    model.rightArm.render(poseStack, consumer, combinedLight, OverlayTexture.NO_OVERLAY);
+                    model.rightSleeve.render(poseStack, consumer, combinedLight, OverlayTexture.NO_OVERLAY);
                 }
-                if (!stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get())) {
+                ItemStack rightStack = player.getMainArm() == HumanoidArm.RIGHT ? stack : player.getOffhandItem();
+                if (!rightStack.isEmpty() && !rightStack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get())) {
                     poseStack.pushPose();
-                    renderer.getModel().translateToHand(leftHand ? HumanoidArm.LEFT : HumanoidArm.RIGHT, poseStack);
+                    model.translateToHand(HumanoidArm.RIGHT, poseStack);
                     poseStack.mulPose(Axis.XP.rotationDegrees(-90.0f));
                     poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
-                    poseStack.translate((float) 1 / 16.0f, 0.125, -0.625);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, stack, transformType, leftHand, poseStack, buffer, livingEntity.level(), combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    poseStack.translate(1 / 16.0, 0.125, -0.625);
+                    transformType = ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, rightStack, transformType, false, poseStack, buffer, livingEntity.level(), combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
                     poseStack.popPose();
                 }
-                stack = player.getOffhandItem();
-                if (!stack.isEmpty() && !stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get())) {
+                ItemStack leftStack = player.getMainArm() == HumanoidArm.RIGHT ? player.getOffhandItem() : stack;
+                if (!leftStack.isEmpty() && !stack.has(RuneCraftoryDataComponentTypes.INVISIBLE.get())) {
                     poseStack.pushPose();
-                    renderer.getModel().translateToHand(leftHand ? HumanoidArm.RIGHT : HumanoidArm.LEFT, poseStack);
+                    model.translateToHand(HumanoidArm.LEFT, poseStack);
                     poseStack.mulPose(Axis.XP.rotationDegrees(-90.0f));
                     poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
-                    poseStack.translate((float) -1 / 16.0f, 0.125, -0.625);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, stack, transformType, leftHand, poseStack, buffer, livingEntity.level(), combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    poseStack.translate(-1 / 16.0, 0.125, -0.625);
+                    transformType = ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, leftStack, transformType, true, poseStack, buffer, livingEntity.level(), combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
                     poseStack.popPose();
                 }
                 poseStack.popPose();
