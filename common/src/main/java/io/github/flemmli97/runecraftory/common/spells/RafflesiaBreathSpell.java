@@ -27,7 +27,7 @@ public class RafflesiaBreathSpell extends Spell {
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.5, 0);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {
-            target = position.add(entity.getLookAngle().scale(5));
+            target = position.add(entity.getViewVector(1).scale(5));
         }
         summoner.setPos(position.x, position.y, position.z);
         summoner.setTarget(target.x, target.y, target.z);

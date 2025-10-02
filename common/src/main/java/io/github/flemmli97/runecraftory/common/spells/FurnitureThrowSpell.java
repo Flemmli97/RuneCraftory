@@ -27,7 +27,7 @@ public class FurnitureThrowSpell extends Spell {
             furniture.setPos(xRand, yRand, zRand);
             Vec3 target = ProjectileUtils.getAimTarget(entity);
             if (target == null) {
-                target = furniture.position().add(entity.getLookAngle().scale(5));
+                target = furniture.position().add(entity.getViewVector(1).scale(5));
             }
             furniture.shootAtPosition(target.x(), target.y(), target.z(), 0.1f, 30f);
             level.addFreshEntity(furniture);

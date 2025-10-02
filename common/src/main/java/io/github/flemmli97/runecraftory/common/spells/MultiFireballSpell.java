@@ -32,7 +32,7 @@ public class MultiFireballSpell extends Spell {
         if (target != null) {
             dir = target.subtract(pos);
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         Vec3 up = new Vec3(0, 1, 0);
         float angle = -this.angle;

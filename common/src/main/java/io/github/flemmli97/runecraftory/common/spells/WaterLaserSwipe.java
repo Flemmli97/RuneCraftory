@@ -33,7 +33,7 @@ public class WaterLaserSwipe extends Spell {
         if (target != null) {
             dir = target.subtract(laser.position());
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         float offset = entity instanceof MobAttackExt ext && ext.reversed() ? -this.angle : this.angle;
         laser.setRotationToDirWithOffset(dir.x(), dir.y(), dir.z(), 0, offset);

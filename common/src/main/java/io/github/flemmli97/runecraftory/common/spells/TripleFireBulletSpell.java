@@ -25,7 +25,7 @@ public class TripleFireBulletSpell extends Spell {
         if (target != null) {
             dir = target.subtract(projectile.position());
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         projectile.setElement(ItemElement.FIRE);
         projectile.setStraight();

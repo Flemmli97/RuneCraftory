@@ -25,7 +25,7 @@ public class SlashSpell extends Spell {
         if (target != null) {
             dir = target.subtract(pos).normalize().scale(1 + entity.getBbWidth() * 0.5);
         } else {
-            dir = entity.getLookAngle().scale(1 + entity.getBbWidth() * 0.5);
+            dir = entity.getViewVector(1).scale(1 + entity.getBbWidth() * 0.5);
         }
         slash.setPos(pos.x + dir.x, pos.y + Mth.clamp(dir.y, -0.3, 0.8), pos.z + dir.z);
         slash.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));

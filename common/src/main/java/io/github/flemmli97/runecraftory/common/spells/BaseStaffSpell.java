@@ -30,7 +30,7 @@ public class BaseStaffSpell extends Spell {
                 return false;
             if (staff.amount == 1) {
                 ElementalBallEntity ball = new ElementalBallEntity(level, entity, element);
-                Vec3 look = entity.getLookAngle();
+                Vec3 look = entity.getViewVector(1);
                 ball.shoot(look.x, look.y, look.z, 1, 0);
                 entity.level().addFreshEntity(ball);
             } else if (staff.amount == 2) {
@@ -38,7 +38,7 @@ public class BaseStaffSpell extends Spell {
                     Vec3 side = MathUtils.NORMAL_X.yRot(-entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
                     ElementalBallEntity ball = new ElementalBallEntity(level, entity, element);
-                    Vec3 look = entity.getLookAngle();
+                    Vec3 look = entity.getViewVector(1);
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);
                     entity.level().addFreshEntity(ball);
@@ -48,7 +48,7 @@ public class BaseStaffSpell extends Spell {
                     Vec3 side = MathUtils.NORMAL_X.yRot(-entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
                     ElementalBallEntity ball = new ElementalBallEntity(level, entity, element);
-                    Vec3 look = entity.getLookAngle();
+                    Vec3 look = entity.getViewVector(1);
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);
                     entity.level().addFreshEntity(ball);

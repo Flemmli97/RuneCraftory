@@ -311,7 +311,7 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
             if (target != null)
                 dir = target.subtract(this.position());
             else
-                dir = this.getLookAngle();
+                dir = this.getViewVector(1);
         }
         if (anim.is(PUNCH)) {
             float[] rots = MathsHelper.YXRotFrom(dir);

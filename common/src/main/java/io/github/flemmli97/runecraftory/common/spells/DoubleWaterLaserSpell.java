@@ -30,7 +30,7 @@ public class DoubleWaterLaserSpell extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
-        Vec3 dir = entity.getLookAngle();
+        Vec3 dir = entity.getViewVector(1);
         Vec3 pos = entity.position().add(0, entity.getEyeHeight() - 0.1, 0);
         Vec3 targetPos = ProjectileUtils.getAimTarget(entity);
         if (targetPos != null) {

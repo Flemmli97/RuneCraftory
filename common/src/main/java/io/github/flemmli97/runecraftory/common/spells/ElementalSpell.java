@@ -35,7 +35,7 @@ public class ElementalSpell extends Spell {
         } else {
             Vec3 eye = entity.getEyePosition();
             Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().getEyePosition().subtract(eye).normalize().scale(1.4)
-                    : entity.getLookAngle().scale(1.4);
+                    : entity.getViewVector(1).scale(1.4);
             trail.setPos(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
         }
         level.addFreshEntity(trail);

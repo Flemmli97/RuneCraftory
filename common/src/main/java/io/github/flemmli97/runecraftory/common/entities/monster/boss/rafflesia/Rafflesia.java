@@ -263,7 +263,7 @@ public class Rafflesia extends BossMonster {
         if (target != null) {
             this.setTargetPosition(target);
         } else {
-            this.setTargetPosition(TargetPosition.of(this.position().add(this.getLookAngle().scale(5))));
+            this.setTargetPosition(TargetPosition.of(this.position().add(this.getViewVector(1).scale(5))));
         }
     }
 

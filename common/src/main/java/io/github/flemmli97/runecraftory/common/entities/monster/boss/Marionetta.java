@@ -351,7 +351,7 @@ public class Marionetta extends BossMonster implements BoundEntityListListener {
             if (target != null)
                 dir = target.subtract(this.position());
             else
-                dir = this.getLookAngle();
+                dir = this.getViewVector(1);
         }
         if (anim.is(SPIN)) {
             float rotY = -Mth.wrapDegrees((float) (Mth.atan2(dir.x(), dir.z()) * Mth.RAD_TO_DEG));

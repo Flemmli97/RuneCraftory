@@ -43,7 +43,7 @@ public class SimpleVanillaProjectileSpell extends Spell {
         if (target != null) {
             dir = target.subtract(entity.getEyePosition());
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         Entity proj = this.factory.create(level, entity, dir);
         proj.setPos(entity.getX(), entity.getEyeY(), entity.getZ());

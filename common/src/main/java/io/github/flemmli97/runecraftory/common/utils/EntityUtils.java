@@ -190,7 +190,7 @@ public class EntityUtils {
     }
 
     public static Vec3 horizontalLookAngle(Entity entity) {
-        Vec3 look = entity.getLookAngle();
+        Vec3 look = entity.getViewVector(1);
         return new Vec3(look.x(), 0, look.z()).normalize();
     }
 
@@ -211,12 +211,12 @@ public class EntityUtils {
         Vec3 pos = anchor.apply(mob);
         Vec3 dir;
         if (mob.getControllingPassenger() != null) {
-            dir = mob.getControllingPassenger().getLookAngle();
+            dir = mob.getControllingPassenger().getViewVector(1);
         } else if (mob.getTarget() != null) {
             LivingEntity target = mob.getTarget();
             dir = anchor.apply(target).subtract(pos);
         } else {
-            dir = mob.getLookAngle();
+            dir = mob.getViewVector(1);
         }
         if (horizontalOnly) {
             dir = new Vec3(dir.x(), 0, dir.z());

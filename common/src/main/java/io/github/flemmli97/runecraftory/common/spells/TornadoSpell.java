@@ -20,7 +20,7 @@ public class TornadoSpell extends Spell {
         Vec3 pos = entity.position();
         Vec3 target = ProjectileUtils.getAimTarget(entity);
         if (target == null) {
-            target = pos.add(entity.getLookAngle().scale(10));
+            target = pos.add(entity.getViewVector(1).scale(10));
         }
         tornado.setPos(pos.x, pos.y, pos.z);
         Vec3 dir = target.subtract(pos);

@@ -69,20 +69,21 @@ public class GustRocksEntity extends BaseBeam {
     @Override
     public void tick() {
         super.tick();
+        Vec3 dir = this.getLookAngle();
         if (this.up == null) {
             this.up = this.calculateViewVector(this.getXRot() - 90, this.getYRot()).scale(this.radius());
-            this.side = this.getLookAngle().cross(this.up).normalize().scale(this.radius());
+            this.side = dir.cross(this.up).normalize().scale(this.radius());
         }
         Vec3 pos = this.position();
         if (this.level().isClientSide) {
-            Vec3 look = this.getLookAngle().scale(6);
+            Vec3 look = dir.scale(6);
             for (int i = 0; i < 20; i++) {
                 double randX = (this.random.nextDouble() * 2 - 1) * this.radius() - look.x();
                 double randY = (this.random.nextDouble() * 2 - 1) * this.radius() - look.y();
                 double randZ = (this.random.nextDouble() * 2 - 1) * this.radius() - look.z();
                 Vec3 pos2 = pos.add(randX, randY, randZ);
                 AdvancedParticleContainer.make(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0xffffffff))
-                        .addData(new MotionData(this.getLookAngle().x(), this.getLookAngle().y(), this.getLookAngle().z()))
+                        .addData(new MotionData(dir.x(), dir.y(), dir.z()))
                         .addData(new ScaleData(0.3f))
                         .addData(new ParticleMetaData(30, false, 0))
                         .add(this.level(), pos2.x(), pos2.y(), pos2.z());
@@ -95,9 +96,9 @@ public class GustRocksEntity extends BaseBeam {
                     spellBall.setDamageMultiplier(this.damageMultiplier);
                     double upScale = this.random.nextDouble() * 1.5 - 0.5;
                     double sideScale = this.random.nextDouble() * 2 - 1;
-                    Vec3 pos2 = pos.add(this.getLookAngle().scale(-8)).add(this.up.scale(upScale)).add(this.side.scale(sideScale));
+                    Vec3 pos2 = pos.add(dir.scale(-8)).add(this.up.scale(upScale)).add(this.side.scale(sideScale));
                     spellBall.setPos(pos2.x(), pos2.y(), pos2.z());
-                    spellBall.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 0.9f, 0);
+                    spellBall.shoot(dir.x(), dir.y(), dir.z(), 0.9f, 0);
                     this.level().addFreshEntity(spellBall);
                 }
             }

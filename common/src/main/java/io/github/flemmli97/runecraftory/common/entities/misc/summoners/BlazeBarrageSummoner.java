@@ -31,7 +31,7 @@ public class BlazeBarrageSummoner extends ProjectileSummonHelperEntity {
             if (owner instanceof Mob mob && mob.getTarget() != null)
                 look = new Vec3(mob.getTarget().getX() - owner.getX(), mob.getTarget().getY() - owner.getY(), mob.getTarget().getZ() - owner.getZ()).normalize();
             else
-                look = owner.getLookAngle();
+                look = owner.getViewVector(1);
             float inaccuracy = 5;
             Vec3 vec3 = look.normalize().add(this.random.nextGaussian() * 0.0075 * inaccuracy,
                     this.random.nextGaussian() * 0.0075 * inaccuracy, this.random.nextGaussian() * 0.0075 * inaccuracy).scale(2);

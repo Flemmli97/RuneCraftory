@@ -24,7 +24,7 @@ public class LaserAOESpell extends Spell {
         if (target != null) {
             dir = target.subtract(entity.getEyePosition());
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         Vec3 up = MathsHelper.getUp(dir);
         for (Vector3d vec : MathUtils.rotatedVecs(new Vector3d(dir.x(), dir.y(), dir.z()), new Vector3d(up.x(), up.y(), up.z()), -180, 150, 30)) {

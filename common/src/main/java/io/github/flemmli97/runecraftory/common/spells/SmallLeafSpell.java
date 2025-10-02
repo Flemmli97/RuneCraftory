@@ -31,7 +31,7 @@ public class SmallLeafSpell extends Spell {
         if (target != null) {
             dir = target.subtract(pos);
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         float degs = this.amount < 5 ? 25 : 35;
         Vec3 up = MathsHelper.getUp(dir);

@@ -40,7 +40,7 @@ public class MultiArrowSpell extends Spell {
             Vec3 targetPos = EntityUtils.getStraightProjectileTarget(pos, mob.getTarget());
             dir = new Vec3(targetPos.x() - pos.x(), targetPos.y() - pos.y(), targetPos.z() - pos.z());
         } else {
-            dir = entity.getLookAngle();
+            dir = entity.getViewVector(1);
         }
         Vec3 up = new Vec3(0, 1, 0);
         Vector3d dir3d = new Vector3d(dir.x(), dir.y(), dir.z());

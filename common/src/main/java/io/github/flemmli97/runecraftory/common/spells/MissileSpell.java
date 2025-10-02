@@ -27,7 +27,8 @@ public class MissileSpell extends Spell {
         if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         int left = this.amount / 2;
-        Vec3 side = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).yRot(90).normalize();
+        Vec3 dir = entity.getViewVector(1);
+        Vec3 side = new Vec3(dir.x, 0, dir.z).yRot(90).normalize();
         for (int i = 0; i < left; i++) {
             MissileEntity missile = new MissileEntity(level, entity);
             missile.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
