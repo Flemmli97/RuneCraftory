@@ -59,7 +59,7 @@ public class GeneralConfig {
     public static int goldWateringCanWater = 150;
     public static int platinumWateringCanWater = 250;
 
-    public static final ServerValue<Double> MOVE_SPEED_ATTACK = new ServerValue.SyncedDouble(0, "config.move.attack");
+    public static final ServerValue<Double> MOVE_SPEED_ATTACK = new ServerValue.SyncedDouble(0.2, "config.move.attack");
 
     public static float xpMultiplier = 1;
     public static float skillXpMultiplier = 1;
