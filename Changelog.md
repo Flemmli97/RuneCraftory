@@ -15,6 +15,8 @@ RuneCraftory 2.1.2
 - Add distinction to boss spawneggs
 - Move some sound instances to their own one instead of using vanillas
 - Change animated hand rendering to not render armor and other stuff anymore cause it clutters the screen
+- Update boss defeat animation
+- Fix water laser attacks
 
 RuneCraftory 2.1.1
 ================
