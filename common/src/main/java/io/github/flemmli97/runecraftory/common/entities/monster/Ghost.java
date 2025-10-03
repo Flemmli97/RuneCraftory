@@ -251,7 +251,7 @@ public class Ghost extends ChargingMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return this.random.nextFloat() < 0.2f || !prev.equals(VANISH) && this.vanishNext;
+        return this.random.nextFloat() < 0.2f || !VANISH.equals(prev) && this.vanishNext;
     }
 
     private void teleport(double x, double y, double z) {

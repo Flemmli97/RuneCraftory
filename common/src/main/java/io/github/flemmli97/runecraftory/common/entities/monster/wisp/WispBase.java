@@ -193,7 +193,7 @@ public abstract class WispBase extends BaseMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return !prev.equals(VANISH) && this.vanishNext;
+        return !VANISH.equals(prev) && this.vanishNext;
     }
 
     public abstract void attackFar(LivingEntity target);
