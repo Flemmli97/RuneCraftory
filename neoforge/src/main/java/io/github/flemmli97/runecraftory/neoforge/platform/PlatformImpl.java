@@ -145,11 +145,6 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public boolean entityTickPre(LivingEntity entity) {
-        return EventHooks.fireEntityTickPre(entity).isCanceled();
-    }
-
-    @Override
     public boolean checkSpawnPosition(Mob entity, ServerLevel level, MobSpawnType spawnType) {
         return EventHooks.checkSpawnPosition(entity, level, spawnType);
     }

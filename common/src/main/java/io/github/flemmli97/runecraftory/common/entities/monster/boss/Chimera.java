@@ -238,11 +238,6 @@ public class Chimera extends BossMonster {
     }
 
     @Override
-    public double sprintSpeedThreshold() {
-        return 0.9;
-    }
-
-    @Override
     public void push(double x, double y, double z) {
         if (this.getAnimationHandler().isCurrent(LEAP))
             return;

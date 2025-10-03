@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetChargeTarget;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
@@ -55,6 +56,13 @@ public class Beetle extends ChargingMonster {
                 .add(4, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(1, MonsterBehaviourUtils.ifCloserThan(7), new SetRandomWalkTarget<>(), MonsterBehaviourUtils.moveTo())
                 .add(3, MonsterBehaviourUtils.withCondition(MonsterBehaviourUtils.ifCloserThan(9)), new Idle<>()).build();
+    }
+
+    @Override
+    public MoveType calculateMoveType() {
+        if (!this.isImmobile() && !this.onGround())
+            return MoveType.FLY;
+        return super.calculateMoveType();
     }
 
     @Override

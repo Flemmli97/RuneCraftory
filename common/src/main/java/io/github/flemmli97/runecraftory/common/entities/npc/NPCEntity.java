@@ -693,26 +693,6 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             }
         }
         super.tick();
-        if (this.playDeath()) {
-            this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level().isClientSide && this.getHealth() > 0.02) {
-                this.setPlayDeath(false);
-            }
-        } else {
-            this.playDeathTick = Math.max(0, --this.playDeathTick);
-        }
-        if (!this.level().isClientSide) {
-            if (this.tickCount % 10 == 0) {
-                this.interactingPlayers.removeIf(p -> p.distanceToSqr(this) > 100);
-            }
-            --this.interactionMoveCooldown;
-            this.updater.tick();
-            this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
-            if (this.foodBuffTick == 0) {
-                this.removeFoodEffect();
-            }
-            this.getAnimationHandler().runIfNotNull(this::handleAttack);
-        }
     }
 
     @Override
@@ -752,6 +732,16 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                     this.procreationEntity = null;
                 }
             }
+            if (this.tickCount % 10 == 0) {
+                this.interactingPlayers.removeIf(p -> p.distanceToSqr(this) > 100);
+            }
+            --this.interactionMoveCooldown;
+            this.updater.tick();
+            this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
+            if (this.foodBuffTick == 0) {
+                this.removeFoodEffect();
+            }
+            this.getAnimationHandler().runIfNotNull(this::handleAttack);
         }
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);

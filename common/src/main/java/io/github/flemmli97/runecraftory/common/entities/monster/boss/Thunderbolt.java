@@ -372,11 +372,6 @@ public class Thunderbolt extends BossMonster {
     }
 
     @Override
-    public double sprintSpeedThreshold() {
-        return 0.9;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         return !this.getAnimationHandler().isCurrent(FEINT) && super.hurt(source, amount);
     }

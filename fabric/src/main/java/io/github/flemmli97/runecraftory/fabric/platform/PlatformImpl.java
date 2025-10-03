@@ -177,11 +177,6 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public boolean entityTickPre(LivingEntity entity) {
-        return false;
-    }
-
-    @Override
     public boolean checkSpawnPosition(Mob entity, ServerLevel level, MobSpawnType spawnReason) {
         return true;
     }

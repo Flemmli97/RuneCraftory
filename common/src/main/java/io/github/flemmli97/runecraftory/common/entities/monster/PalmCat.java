@@ -154,11 +154,6 @@ public class PalmCat extends LeapingMonster {
     }
 
     @Override
-    public double sprintSpeedThreshold() {
-        return 0.9;
-    }
-
-    @Override
     public String getInteractAnimation() {
         return INTERACT;
     }

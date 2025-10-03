@@ -166,7 +166,6 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public void tick() {
-        if (Platform.INSTANCE.entityTickPre(this)) return;
         if (!this.level().isClientSide) {
             if (this.removeCauseEmptyList) {
                 this.discard();

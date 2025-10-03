@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossbar;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
@@ -237,6 +238,13 @@ public class Grimoire extends BossMonster {
     public ExtendedBehaviour<? extends BaseMonster> getCooldownAI() {
         return SelectableBehaviourBuilder.<BaseMonster>builder()
                 .add(1, new SetWalkTargetToAttackTarget<>(), MonsterBehaviourUtils.moveTo()).build();
+    }
+
+    @Override
+    public MoveType calculateMoveType() {
+        if (!this.isImmobile() && !this.onGround())
+            return MoveType.FLY;
+        return super.calculateMoveType();
     }
 
     @Override

@@ -78,7 +78,5 @@ public interface Platform {
 
     void destroyItem(Player player, ItemStack stack, InteractionHand hand);
 
-    boolean entityTickPre(LivingEntity entity);
-
     boolean checkSpawnPosition(Mob entity, ServerLevel level, MobSpawnType spawnReason);
 }

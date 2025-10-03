@@ -184,7 +184,6 @@ public abstract class SanoUno extends BossMonster {
 
         @Override
         public void tick() {
-            boolean b = false;
         }
     }
 }

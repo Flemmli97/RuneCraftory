@@ -52,8 +52,7 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void aiStep() {
         if (!this.initAnim) {
             this.getAnimationHandler().withChangeListener(anim -> {
                 this.chargingAnim.accept(anim);
@@ -61,6 +60,7 @@ public abstract class LeapingMonster extends BaseMonster {
             });
             this.initAnim = true;
         }
+        super.aiStep();
     }
 
     @Override

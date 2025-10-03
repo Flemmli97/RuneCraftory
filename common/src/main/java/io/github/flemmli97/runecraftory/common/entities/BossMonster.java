@@ -207,7 +207,7 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
                     S2CScreenShake.sendAround(this, 24, 4, 1);
                     this.level().playLocalSound(this, SoundEvents.GENERIC_EXPLODE.value(), this.getSoundSource(), 2, 0.8f);
                 }
-            } else if (this.deathTime < 75) {
+            } else if (this.deathTime < 74) {
                 if (this.deathTime % 5 == 0) {
                     this.deathRays++;
                     S2CScreenShake.sendAround(this, 24, 4, 1);

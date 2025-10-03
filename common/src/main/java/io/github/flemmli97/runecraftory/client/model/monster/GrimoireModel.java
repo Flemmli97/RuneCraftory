@@ -51,12 +51,8 @@ public class GrimoireModel<T extends Grimoire> extends EntityModel<T> implements
         float partialTicks = ClientHandlers.getPartialTicks();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            if (!entity.onGround())
-                this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks);
-            else {
-                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-                this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
-            }
+            this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+            this.anim.get().doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.FLY, partialTicks));
         }
         this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
     }

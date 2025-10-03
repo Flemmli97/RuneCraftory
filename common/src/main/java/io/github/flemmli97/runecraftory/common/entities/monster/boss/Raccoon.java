@@ -510,10 +510,10 @@ public class Raccoon extends BossMonster {
     }
 
     @Override
-    public MoveType getMoveFlag() {
+    public MoveType calculateMoveType() {
         if (this.getAnimationHandler().isCurrent(TRANSFORM, UNTRANSFORM))
             return MoveType.NONE;
-        return super.getMoveFlag();
+        return super.calculateMoveType();
     }
 
     @Override

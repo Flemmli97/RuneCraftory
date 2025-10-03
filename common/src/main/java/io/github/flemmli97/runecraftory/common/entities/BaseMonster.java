@@ -122,7 +122,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -265,7 +264,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     private BarnData assignedBarn;
     private Pair<String, Runnable> scheduledAnimationHandling;
 
-    private final MoveStateTracker moveStateTracker = new MoveStateTracker(MOVE_TICK_MAX, this::getMoveFlag);
+    private final MoveStateTracker moveStateTracker = new MoveStateTracker(this, MOVE_TICK_MAX, MOVE_FLAGS, this::calculateMoveType);
     private boolean initAnim;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
@@ -366,14 +365,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public void tick() {
-        if (!this.initAnim) {
-            this.getAnimationHandler().withChangeListener(anim -> {
-                if (anim != null && !this.level().isClientSide)
-                    this.setupAttack(anim);
-                return false;
-            });
-            this.initAnim = true;
-        }
         super.tick();
         Vec3 lookDir = this.directionToLookAt();
         if (lookDir != null) {
@@ -383,6 +374,50 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             this.setXRot(MathsHelper.rotlerp(this.getXRot(), yxRot[1], clamp[1]));
             this.setYBodyRot(this.getYRot());
             this.setYHeadRot(this.getYRot());
+        }
+    }
+
+    @Override
+    public void aiStep() {
+        if (!this.initAnim) {
+            this.getAnimationHandler().withChangeListener(anim -> {
+                if (anim != null && !this.level().isClientSide)
+                    this.setupAttack(anim);
+                return false;
+            });
+            this.initAnim = true;
+        }
+        super.aiStep();
+        this.getAnimationHandler().tick();
+
+        boolean teleported = false;
+        if (this.level() instanceof ServerLevel serverLevel) {
+            if (this.behaviourState().following && --this.tpCooldown <= 0) {
+                Player owner = this.getOwner();
+                if (owner != null) {
+                    serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
+                    if (owner.level().dimension() != this.level().dimension()) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level(), owner.blockPosition());
+                        teleported = true;
+                        this.tpCooldown = 20;
+                    } else if (owner.distanceToSqr(this) > 450) {
+                        TeleportUtils.tryTeleportAround(this, owner);
+                        teleported = true;
+                        this.tpCooldown = 20;
+                    }
+                }
+            }
+        }
+        if (this.playDeath()) {
+            this.playDeathTick = Math.min(15, ++this.playDeathTick);
+            if (!this.level().isClientSide) {
+                if (teleported)
+                    this.heal(1);
+                if (this.getHealth() > 0.02)
+                    this.setPlayDeath(false);
+            }
+        } else {
+            this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
         this.moveStateTracker.tick();
         if (!this.level().isClientSide) {
@@ -433,42 +468,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     @Override
-    public void aiStep() {
-        super.aiStep();
-        this.getAnimationHandler().tick();
-
-        boolean teleported = false;
-        if (this.level() instanceof ServerLevel serverLevel) {
-            if (this.behaviourState().following && --this.tpCooldown <= 0) {
-                Player owner = this.getOwner();
-                if (owner != null) {
-                    serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
-                    if (owner.level().dimension() != this.level().dimension()) {
-                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level(), owner.blockPosition());
-                        teleported = true;
-                        this.tpCooldown = 20;
-                    } else if (owner.distanceToSqr(this) > 450) {
-                        TeleportUtils.tryTeleportAround(this, owner);
-                        teleported = true;
-                        this.tpCooldown = 20;
-                    }
-                }
-            }
-        }
-        if (this.playDeath()) {
-            this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level().isClientSide) {
-                if (teleported)
-                    this.heal(1);
-                if (this.getHealth() > 0.02)
-                    this.setPlayDeath(false);
-            }
-        } else {
-            this.playDeathTick = Math.max(0, --this.playDeathTick);
-        }
-    }
-
-    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
         this.tickBrain(this);
@@ -479,33 +478,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 BrainUtils.clearMemory(this, RuneCraftoryMemoryTypes.STAYING.get());
             }
         }
-        if (!(this.getControllingPassenger() instanceof Player) && this.getMoveControl().operation != MoveControl.Operation.WAIT
-                && this.getDeltaMovement().lengthSqr() > 0.0005) {
-            double d0 = this.getMoveControl().getSpeedModifier();
-            MoveType move;
-            if (d0 > this.sprintSpeedThreshold()) {
-                move = MoveType.RUN;
-            } else if (d0 <= this.crouchSpeedThreshold()) {
-                move = MoveType.SNEAK;
-            } else {
-                move = MoveType.WALK;
-            }
-            if (this.isImmobile())
-                move = MoveType.NONE;
-            this.setMovingFlag(move);
-        } else {
-            this.setMovingFlag(MoveType.NONE);
-            this.setShiftKeyDown(false);
-            this.setSprinting(false);
-        }
-    }
-
-    public double crouchSpeedThreshold() {
-        return 0.6;
-    }
-
-    public double sprintSpeedThreshold() {
-        return 1;
     }
 
     @Override
@@ -709,6 +681,24 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.entityData.set(MOVE_FLAGS, (byte) type.ordinal());
     }
 
+    public MoveType calculateMoveType() {
+        if (this.getControllingPassenger() instanceof Player || !this.walkAnimation.isMoving()) {
+            return MoveType.NONE;
+        }
+        if (this.isImmobile())
+            return MoveType.NONE;
+        double d0 = this.getMoveControl().getSpeedModifier();
+        MoveType move;
+        if (d0 > 1 || this.getTarget() != null) {
+            move = MoveType.RUN;
+        } else if (d0 <= 0.6) {
+            move = MoveType.SNEAK;
+        } else {
+            move = MoveType.WALK;
+        }
+        return move;
+    }
+
     public Behaviour behaviourState() {
         return this.behaviour;
     }
@@ -844,6 +834,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public void travel(Vec3 vec) {
+        this.handleLandTravel(vec);
+    }
+
+    public void handleLandTravel(Vec3 vec) {
         if (this.shouldFreezeTravel()) {
             this.xxa = 0;
             this.yya = 0;
@@ -851,10 +845,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             return;
         }
         if (this.getControllingPassenger() instanceof Player player) {
-            this.handlePlayerInput(player, this.isNoGravity(), this::handleLandTravel);
+            this.handlePlayerInput(player, this.isNoGravity(), this::landTravel);
         } else {
-            this.handleLandTravel(vec);
+            this.landTravel(vec);
         }
+    }
+
+    private void landTravel(Vec3 vec) {
+        if (!this.isAlive() || this.playDeath()) {
+            vec = Vec3.ZERO;
+        }
+        super.travel(vec);
     }
 
     public void handleFreeTravel(Vec3 vec) {
@@ -881,6 +882,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.setDeltaMovement(this.getDeltaMovement().scale(0.91));
         this.noPhysics = currentNophysics;
+        this.calculateEntityAnimation(true);
     }
 
     public boolean shouldFreezeTravel() {
@@ -945,13 +947,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         this.setSprinting(type == MoveType.RUN);
         this.setDoJumping(false);
         cons.accept(new Vec3(strafing, vertical, forward));
-    }
-
-    public void handleLandTravel(Vec3 vec) {
-        if (!this.isAlive() || this.playDeath()) {
-            vec = Vec3.ZERO;
-        }
-        super.travel(vec);
     }
 
     public void setDoJumping(boolean jump) {

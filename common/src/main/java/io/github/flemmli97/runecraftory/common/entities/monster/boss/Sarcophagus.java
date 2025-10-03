@@ -322,11 +322,6 @@ public class Sarcophagus extends BossMonster {
     }
 
     @Override
-    public double sprintSpeedThreshold() {
-        return 0.9;
-    }
-
-    @Override
     public boolean hurt(DamageSource source, float amount) {
         return !this.isTeleporting() && super.hurt(source, amount);
     }

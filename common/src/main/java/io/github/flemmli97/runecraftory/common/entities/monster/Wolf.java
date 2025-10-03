@@ -134,11 +134,6 @@ public class Wolf extends LeapingMonster {
     }
 
     @Override
-    public double sprintSpeedThreshold() {
-        return 0.9;
-    }
-
-    @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.WOLF_GROWL;
     }
