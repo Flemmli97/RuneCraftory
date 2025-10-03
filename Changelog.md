@@ -1,3 +1,10 @@
+RuneCraftory 2.1.3
+================
+- Change default attack move speed to 0.2
+- Fix arm overlay first person not updated correctly
+- Update move state tracker which fixes entity having move animation not actual moving sometimes
+- Fix nullpointer with ghost vanish check
+
 RuneCraftory 2.1.2
 ================
 - Update seconday effects for elements
