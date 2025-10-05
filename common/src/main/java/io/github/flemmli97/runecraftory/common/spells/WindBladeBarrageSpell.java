@@ -21,8 +21,9 @@ public class WindBladeBarrageSpell extends Spell {
         look = new Vec3(look.x, 0, look.z).normalize().scale(entity.getBbWidth() * 0.8);
         Vec3 pos = entity.position().add(look.x, entity.getBbHeight() * 0.7, look.z);
         Vec3 target = ProjectileUtils.getAimTarget(entity);
-        if (target == null)
+        if (target == null) {
             target = Vec3.directionFromRotation(entity.getXRot(), entity.getYRot()).scale(10);
+        }
         summoner.setPos(pos.x, pos.y, pos.z);
         summoner.setTarget(target.x, target.y, target.z);
         level.addFreshEntity(summoner);

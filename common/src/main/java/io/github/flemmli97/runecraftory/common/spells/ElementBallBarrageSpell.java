@@ -26,8 +26,9 @@ public class ElementBallBarrageSpell extends Spell {
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 eye = entity.getEyePosition();
         Vec3 target = ProjectileUtils.getAimTarget(entity);
-        if (target == null)
+        if (target == null) {
             target = eye.add(entity.getViewVector(1).scale(5));
+        }
         summoner.setPos(eye.x, eye.y, eye.z);
         summoner.setTarget(target.x, target.y, target.z);
         level.addFreshEntity(summoner);

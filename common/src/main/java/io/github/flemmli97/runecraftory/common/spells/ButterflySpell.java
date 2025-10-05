@@ -19,8 +19,9 @@ public class ButterflySpell extends Spell {
         ButterflySummonerEntity summoner = new ButterflySummonerEntity(level, entity);
         summoner.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         Vec3 target = ProjectileUtils.getAimTarget(entity);
-        if (target == null)
+        if (target == null) {
             target = entity.getEyePosition().add(Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(5));
+        }
         summoner.setTarget(target.x(), target.y(), target.z());
         level.addFreshEntity(summoner);
         return true;

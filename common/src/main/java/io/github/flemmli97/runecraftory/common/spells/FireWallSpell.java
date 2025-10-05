@@ -20,8 +20,9 @@ public class FireWallSpell extends Spell {
         FireWallSummoner wall = new FireWallSummoner(level, entity);
         wall.setPos(offset(entity));
         Vec3 target = ProjectileUtils.getAimTarget(entity);
-        if (target == null)
+        if (target == null) {
             target = entity.position().add(entity.getViewVector(1).scale(10));
+        }
         wall.setTarget(target.x, target.y, target.z);
         wall.setDamageMultiplier(CombatUtils.getAbilityDamageBonus(lvl, this));
         level.addFreshEntity(wall);
