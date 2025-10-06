@@ -1478,7 +1478,8 @@ public class RuneCraftoryEntities {
                     .setMinLevel(70)
                     .withSpawnerPredicate(LibAdvancements.playerAdvancementCheck(LibAdvancements.MARIONETTA)));
 
-    public static final RegistryEntrySupplier<EntityType<?>, EntityType<NPCEntity>> NPC = npc(EntityType.Builder.of(NPCEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), RuneCraftory.modRes("npc"));
+    public static final RegistryEntrySupplier<EntityType<?>, EntityType<NPCEntity>> NPC = npc(EntityType.Builder.of(NPCEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8)
+            .vehicleAttachment(new Vec3(0, 10 / 16d, 0)), RuneCraftory.modRes("npc"));
 
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<TreasureChestEntity>> TREASURE_CHEST = treasureChest(EntityType.Builder.of(TreasureChestEntity::new, MobCategory.MISC).sized(1, 1).clientTrackingRange(4), RuneCraftory.modRes("treasure_chest"));
     public static final RegistryEntrySupplier<EntityType<?>, EntityType<MobArrowEntity>> ARROW = reg(EntityType.Builder.<MobArrowEntity>of(MobArrowEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20), RuneCraftory.modRes("arrow"));

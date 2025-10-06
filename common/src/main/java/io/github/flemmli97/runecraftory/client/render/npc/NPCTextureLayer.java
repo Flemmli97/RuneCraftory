@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
@@ -11,28 +11,22 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColo
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.Nullable;
 
-public class NPCTextureLayer<T extends NPCEntity, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends RenderLayer<T, M> {
+public class NPCTextureLayer<T extends NPCEntity> extends RenderLayer<T, HumanoidBasedModel<T>> {
 
-    private final A model;
-    private final A slimModel;
+    private final NPCRender<T> renderer;
     protected LayerType layer;
 
-    public NPCTextureLayer(RenderLayerParent<T, M> renderer, A model, A slimModel, LayerType layer) {
+    public NPCTextureLayer(NPCRender<T> renderer, LayerType layer) {
         super(renderer);
-        this.model = model;
-        this.slimModel = slimModel;
+        this.renderer = renderer;
         this.layer = layer;
     }
 
@@ -84,26 +78,23 @@ public class NPCTextureLayer<T extends NPCEntity, M extends HumanoidModel<T>, A 
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T npc, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        A layerModel = this.getModel(npc);
+        HumanoidBasedModel<T> layerModel = this.getModel();
         this.setup(layerModel);
+        poseStack.pushPose();
         this.actualRender(poseStack, buffer, packedLight, npc, layerModel);
+        poseStack.popPose();
     }
 
-    protected A getModel(T npc) {
-        return NPCRender.isSlim(npc) ? this.slimModel : this.model;
+    protected HumanoidBasedModel<T> getModel() {
+        return this.renderer.getCurrent().get(this.layer.modelType);
     }
 
-    protected void setup(A layerModel) {
+    protected void setup(HumanoidBasedModel<T> layerModel) {
         this.getParentModel().copyPropertiesTo(layerModel);
-        layerModel.leftPants.copyFrom(this.getParentModel().leftLeg);
-        layerModel.rightPants.copyFrom(this.getParentModel().rightLeg);
-        layerModel.leftSleeve.copyFrom(this.getParentModel().leftArm);
-        layerModel.rightSleeve.copyFrom(this.getParentModel().rightArm);
-        layerModel.jacket.copyFrom(this.getParentModel().body);
         this.setPartVisibility(layerModel);
     }
 
-    protected void actualRender(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T npc, A layerModel) {
+    protected void actualRender(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T npc, HumanoidBasedModel<T> layerModel) {
         Minecraft mc = Minecraft.getInstance();
         boolean bl = !npc.isInvisible();
         boolean bl2 = !bl && !npc.isInvisibleTo(mc.player);
@@ -123,7 +114,7 @@ public class NPCTextureLayer<T extends NPCEntity, M extends HumanoidModel<T>, A 
     }
 
     @Nullable
-    protected RenderType getRenderType(T entity, A model, boolean bodyVisible, boolean translucent, boolean glowing) {
+    protected RenderType getRenderType(T entity, HumanoidBasedModel<T> model, boolean bodyVisible, boolean translucent, boolean glowing) {
         if (entity.getPlayDeathTick() > 0 && !entity.playDeath()) {
             if (entity.getPlayDeathTick() > 8) {
                 if (entity.getPlayDeathTick() % 2 == 0)
@@ -155,42 +146,52 @@ public class NPCTextureLayer<T extends NPCEntity, M extends HumanoidModel<T>, A 
         return NPCRender.getTextureFromLook(entity, this.layer, null);
     }
 
-    protected void setPartVisibility(A model) {
+    protected void setPartVisibility(HumanoidBasedModel<T> model) {
+        // Visibility is set from main renderer for skin layer
+        if (this.layer == LayerType.SKIN_LAYER)
+            return;
         model.setAllVisible(false);
-        model.head.visible = true;
-        model.hat.visible = true;
+        model.head.visible = this.renderer.getModel().head.visible;
         switch (this.layer) {
-            case SKIN_LAYER, OUTFIT_LAYER: {
-                model.setAllVisible(true);
-            }
-            case HAIR_LAYER: {
-                model.body.visible = true;
-                model.jacket.visible = true;
-                model.rightArm.visible = true;
-                model.rightSleeve.visible = true;
-                model.leftArm.visible = true;
-                model.leftSleeve.visible = true;
+            case OUTFIT_LAYER -> model.copyVisibilityFrom(this.renderer.getModel());
+            case HAIR_LAYER -> {
+                model.body.visible = this.renderer.getModel().body.visible;
+                model.rightArm.visible = this.renderer.getModel().rightArm.visible;
+                model.leftArm.visible = this.renderer.getModel().leftArm.visible;
             }
         }
     }
 
     public enum LayerType {
 
-        SKIN_LAYER("skin", 0),
-        OUTFIT_LAYER("outft", 0.005f),
-        IRIS_LAYER("eyes", 0.006f),
-        SCLERA_LAYER(null, 0.007f),
-        EYEBROWS_LAYER(null, 0.008f),
-        BLUSH_LAYER("blush", 0.009f),
-        HAIR_LAYER("hair", 0.5f),
-        HAT_LAYER("hats", 0.8f);
+        SKIN_LAYER(ModelType.SKIN_LAYER),
+        OUTFIT_LAYER(ModelType.OUTFIT_LAYER),
+        IRIS_LAYER(ModelType.FACE_LAYER),
+        SCLERA_LAYER(null),
+        EYEBROWS_LAYER(null),
+        BLUSH_LAYER(ModelType.BLUSH_LAYER),
+        HAIR_LAYER(ModelType.HAIR_LAYER),
+        HAT_LAYER(ModelType.HAT_LAYER);
 
-        public final ModelLayerLocation location, slimLocation;
+        public final ModelType modelType;
+
+        LayerType(ModelType modelType) {
+            this.modelType = modelType;
+        }
+    }
+
+    public enum ModelType {
+
+        SKIN_LAYER(0),
+        OUTFIT_LAYER(0.005f),
+        FACE_LAYER(0.006f),
+        BLUSH_LAYER(0.009f),
+        HAIR_LAYER(0.5f),
+        HAT_LAYER(0.8f);
+
         public final float expand;
 
-        LayerType(String name, float expand) {
-            this.location = name == null ? null : new ModelLayerLocation(RuneCraftory.modRes("npc_" + name), "main");
-            this.slimLocation = name == null ? null : new ModelLayerLocation(RuneCraftory.modRes("npc_slim_" + name), "main");
+        ModelType(float expand) {
             this.expand = expand;
         }
     }

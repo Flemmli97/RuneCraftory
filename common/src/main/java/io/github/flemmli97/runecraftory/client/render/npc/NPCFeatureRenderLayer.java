@@ -2,12 +2,12 @@ package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
+import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 
-public class NPCFeatureRenderLayer<T extends NPCEntity> extends RenderLayer<T, PlayerModel<T>> {
+public class NPCFeatureRenderLayer<T extends NPCEntity> extends RenderLayer<T, HumanoidBasedModel<T>> {
 
     private final NPCRender<T> render;
 

@@ -135,17 +135,11 @@ public class ClientMixinUtils {
             model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
         float partialTicks = ClientHandlers.getPartialTicks();
-        if (entity instanceof AnimatedEntity) {
-            boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, null, partialTicks);
-            if (result)
-                ClientHandlers.getAnimatedPlayerModel().copyTo(model);
+        if (!(entity instanceof Player player))
             return;
-        }
-        PlayerWeaponHandler weaponHandler = entity instanceof Player player ? Platform.INSTANCE.getPlayerData(player).getWeaponHandler() : null;
-        if (weaponHandler == null)
-            return;
+        PlayerWeaponHandler weaponHandler = Platform.INSTANCE.getPlayerData(player).getWeaponHandler();
         boolean ignoreRiding = weaponHandler.getCurrentAction() == RuneCraftoryAttackActions.DUAL_USE.get();
-        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, model, weaponHandler, partialTicks);
+        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, model, weaponHandler, partialTicks);
         if (result) {
             ClientHandlers.getAnimatedPlayerModel().copyTo(model);
         }

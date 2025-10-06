@@ -8,6 +8,7 @@ import com.mojang.math.Axis;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
+import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
@@ -17,16 +18,16 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureC
 import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SimpleHatFeatureType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
+import io.github.flemmli97.tenshilib.client.render.layer.ItemLayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
@@ -46,29 +47,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T>> {
+public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBasedModel<T>> {
 
     private static final Map<String, PlayerSkinData> PLAYER_SKIN_TEXTURE_LOCATIONS = new HashMap<>();
     private static final Map<String, ResourceLocation> TEXTURE_LAYERS_LOCATIONS = new HashMap<>();
     public static final ResourceLocation EMPTY = RuneCraftory.modRes("textures/entity/npc/empty.png");
 
-    public final NPCArmorLayer<T, PlayerModel<T>, HumanoidModel<T>> armorLayer, armorLayerSlim;
-    public final List<NPCTextureLayer<T, PlayerModel<T>, PlayerModel<T>>> textureLayers = new ArrayList<>();
+    public final NPCArmorLayer<T> armorLayer;
+    public final List<NPCTextureLayer<T>> textureLayers = new ArrayList<>();
+
+    private final HumanoidModel<T> internalHumanoid;
+    private final Map<Pair<ResourceLocation, ResourceLocation>, NPCModelHolder> models = new HashMap<>();
+    private NPCModelHolder current;
 
     public NPCRender(EntityRendererProvider.Context ctx) {
-        super(ctx, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
-        this.addLayer(this.armorLayer = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
-        this.addLayer(this.armorLayerSlim = new NPCArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_INNER_ARMOR)), new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM_OUTER_ARMOR)), ctx.getModelManager()));
-        this.addLayer(new ItemInHandLayer<>(this, ctx.getItemInHandRenderer()));
+        super(ctx, new HumanoidBasedModel<>(), 0.5f);
+        this.internalHumanoid = new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER));
+        this.addLayer(this.armorLayer = new NPCArmorLayer<>(this, new RenderLayerParent<>() {
+            @Override
+            public HumanoidModel<T> getModel() {
+                return NPCRender.this.internalHumanoid;
+            }
+
+            @Override
+            public ResourceLocation getTextureLocation(T entity) {
+                return NPCRender.this.getTextureLocation(entity);
+            }
+        }, ctx));
+        this.addLayer(new ItemLayer<>(this, ctx.getItemInHandRenderer()));
+        this.current = this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION, null);
+        this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION_SLIM, null);
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
-            if (layerType.location == null)
+            if (layerType.modelType == null)
                 continue;
-            if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER)
-                this.textureLayers.add(new NPCTextureLayer<>(this, this.model, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER_SLIM), true), layerType));
-            else if (layerType == NPCTextureLayer.LayerType.IRIS_LAYER)
-                this.textureLayers.add(new NPCFaceLayer<>(this, new PlayerModel<>(ctx.bakeLayer(layerType.location), false), new PlayerModel<>(ctx.bakeLayer(layerType.slimLocation), true)));
+            if (layerType == NPCTextureLayer.LayerType.IRIS_LAYER)
+                this.textureLayers.add(new NPCFaceLayer<>(this));
             else
-                this.textureLayers.add(new NPCTextureLayer<>(this, new PlayerModel<>(ctx.bakeLayer(layerType.location), false), new PlayerModel<>(ctx.bakeLayer(layerType.slimLocation), true), layerType));
+                this.textureLayers.add(new NPCTextureLayer<>(this, layerType));
         }
         this.textureLayers.forEach(this::addLayer);
         this.addLayer(new NPCFeatureRenderLayer<>(this));
@@ -117,7 +132,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
                 if (feat != null)
                     num = feat.index();
                 String location = String.format("textures/entity/npc/skin/%s%s.png", slim ? "slim_" : "", num);
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case IRIS_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
@@ -130,7 +145,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
                 }
                 String location = String.format("textures/entity/npc/eye/iris_%s%s.png", num,
                         subType != null ? "_" + subType : "");
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case SCLERA_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
@@ -143,7 +158,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
                 }
                 String location = String.format("textures/entity/npc/eye/sclera_%s%s.png", num,
                         subType != null ? "_" + subType : "");
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case EYEBROWS_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
@@ -156,42 +171,38 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
                 }
                 String location = String.format("textures/entity/npc/eye/eyebrows_%s%s.png", num,
                         subType != null ? "_" + subType : "");
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case BLUSH_LAYER -> {
                 BlushFeatureType.BlushFeature feat = features.getFeature(RuneCraftoryNPCLooks.BLUSH.get());
                 if (feat == null || !feat.blush())
                     yield null;
                 String location = "textures/entity/npc/misc/blush.png";
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case OUTFIT_LAYER -> {
                 OutfitFeatureType.OutfitFeature feat = features.getFeature(RuneCraftoryNPCLooks.OUTFIT.get());
                 String location = String.format("textures/entity/npc/outfit/generic%s_0.png", slim ? "_slim" : "");
                 if (feat != null)
                     location = String.format("textures/entity/npc/outfit/%s%s_%s.png", feat.outfit(), slim ? "_slim" : "", feat.index());
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case HAIR_LAYER -> {
                 HairFeatureType.HairFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAIR.get());
                 if (feat == null)
                     yield null;
                 String location = String.format("textures/entity/npc/hair/%s_%s.png", feat.hair(), feat.index());
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case HAT_LAYER -> {
                 SimpleHatFeatureType.SimpleHatFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAT.get());
                 if (feat == null || feat.hat().isEmpty())
                     yield null;
                 String location = String.format("textures/entity/npc/misc/%s.png", feat.hat());
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, NPCRender::modLoc);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
         };
         return texture == null ? EMPTY : texture;
-    }
-
-    private static ResourceLocation modLoc(String s) {
-        return RuneCraftory.modRes(s);
     }
 
     public static boolean renderForTooltip(GuiGraphics graphics, int x, int y, @Nullable String skin, List<Pair<Integer, ResourceLocation>> textures) {
@@ -231,27 +242,52 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, PlayerModel<T
     @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         boolean slim = isSlim(entity);
-        this.armorLayer.setRender(!slim);
-        this.armorLayerSlim.setRender(slim);
+        this.updateModelFromEntity(entity, slim);
+        this.getModel().setDelegate(this.internalHumanoid);
+        this.armorLayer.setSlim(slim);
+        this.setModelProperties(entity);
         for (NPCFeature feature : entity.lookFeatures.view.values()) {
             NPCFeatureRenderers.get(feature).onSetup(feature, this, entity, stack);
         }
-        this.setModelProperties(entity);
         super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
     }
 
+    protected void updateModelFromEntity(T entity, boolean slim) {
+        this.current = this.getModelHolder(this.getModelLocation(entity, slim));
+        this.model = this.current.get(NPCTextureLayer.ModelType.SKIN_LAYER);
+    }
+
+    protected Pair<ResourceLocation, ResourceLocation> getModelLocation(T entity, boolean slim) {
+        return Pair.of(slim ? HumanoidBasedModel.DEFAULT_LOCATION_SLIM : HumanoidBasedModel.DEFAULT_LOCATION, null);
+    }
+
+    protected NPCModelHolder getModelHolder(ResourceLocation model, ResourceLocation animation) {
+        return this.getModelHolder(Pair.of(model, animation));
+    }
+
+    protected NPCModelHolder getModelHolder(Pair<ResourceLocation, ResourceLocation> location) {
+        return this.models.computeIfAbsent(location, key -> new NPCModelHolder(location));
+    }
+
+    protected NPCModelHolder getCurrent() {
+        return this.current;
+    }
+
     private void setModelProperties(NPCEntity npc) {
-        PlayerModel<T> playerModel = this.getModel();
-        playerModel.setAllVisible(true);
-        playerModel.crouching = npc.isCrouching();
+        HumanoidBasedModel<T> currentModel = this.getModel();
+        currentModel.setAllVisible(true);
+        currentModel.crouching = npc.isCrouching();
         HumanoidModel.ArmPose main = getArmPose(npc, InteractionHand.MAIN_HAND);
         HumanoidModel.ArmPose off = getArmPose(npc, InteractionHand.OFF_HAND);
+        if (main.isTwoHanded()) {
+            off = npc.getOffhandItem().isEmpty() ? HumanoidModel.ArmPose.EMPTY : HumanoidModel.ArmPose.ITEM;
+        }
         if (npc.getMainArm() == HumanoidArm.RIGHT) {
-            playerModel.rightArmPose = main;
-            playerModel.leftArmPose = off;
+            currentModel.rightArmPose = main;
+            currentModel.leftArmPose = off;
         } else {
-            playerModel.rightArmPose = off;
-            playerModel.leftArmPose = main;
+            currentModel.rightArmPose = off;
+            currentModel.leftArmPose = main;
         }
     }
 

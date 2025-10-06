@@ -791,8 +791,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!(player instanceof ServerPlayer serverPlayer))
-            return InteractionResult.CONSUME;
+        if (!(player instanceof ServerPlayer serverPlayer) || player.getItemInHand(hand).is(RuneCraftoryItems.DEBUG.get()))
+            return InteractionResult.PASS;
         if (this.isSleeping())
             return InteractionResult.CONSUME;
         if (this.getEntityToFollowUUID() != null && this.getEntityToFollowUUID().equals(serverPlayer.getUUID())) {

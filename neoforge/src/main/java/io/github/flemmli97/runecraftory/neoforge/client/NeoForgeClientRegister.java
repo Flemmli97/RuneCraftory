@@ -153,11 +153,6 @@ public class NeoForgeClientRegister {
     }
 
     @SubscribeEvent
-    public static void layerModels(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        ClientRegister.layerRegister(event::registerLayerDefinition);
-    }
-
-    @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         ClientRegister.registerParticles(new ClientRegister.PartileRegister() {
             @Override

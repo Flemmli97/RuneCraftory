@@ -20,7 +20,6 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorResolverRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -62,7 +61,6 @@ public class RuneCraftoryFabricClient implements ClientSetupModInitializer {
             }
         });
         ClientRegister.registerRenderers(EntityRendererRegistry::register);
-        ClientRegister.layerRegister((loc, sup) -> EntityModelLayerRegistry.registerModelLayer(loc, sup::get));
 
         ClientRegister.registerParticles(new ClientRegister.PartileRegister() {
             @Override

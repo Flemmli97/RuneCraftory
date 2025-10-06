@@ -1,101 +1,35 @@
 package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
-import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
-import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
-import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
-import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
-import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
-import io.github.flemmli97.tenshilib.client.model.PoseExtended;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extends EntityModel<T> implements ExtendedModel {
-
-    public static final ResourceLocation LOCATION = RuneCraftory.modRes("player");
-
-    protected final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> anim;
-
-    protected ModelPartsContainer.ModelPartExtended head;
-    protected ModelPartsContainer.ModelPartExtended body;
-    protected ModelPartsContainer.ModelPartExtended rightArm;
-    protected ModelPartsContainer.ModelPartExtended rightArmItem;
-    protected ModelPartsContainer.ModelPartExtended leftArm;
-    protected ModelPartsContainer.ModelPartExtended leftArmItem;
-    protected ModelPartsContainer.ModelPartExtended rightLeg;
-    protected ModelPartsContainer.ModelPartExtended leftLeg;
+public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extends HumanoidBasedModel<T> {
 
     public AnimatedPlayerModel() {
         super();
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
-            this.head = model.getPart("Head");
-            this.body = model.getPart("Body");
-            this.rightArm = model.getPart("RightArm");
-            this.rightArmItem = model.getPart("RightItemRoot");
-            this.leftArm = model.getPart("LeftArm");
-            this.leftArmItem = model.getPart("LeftItemRoot");
-            this.rightLeg = model.getPart("RightLeg");
-            this.leftLeg = model.getPart("LeftLeg");
-        });
-        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.leftArmItem.visible = false;
-        this.rightArmItem.visible = false;
-        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
-    }
-
-    @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-    }
-
-    public boolean setUpModel(LivingEntity entity, @Nullable HumanoidModel<?> model, @Nullable AttackActionHandler handler, float partialTicks) {
+    public boolean setUpModel(Player entity, @Nullable HumanoidModel<?> model, @Nullable AttackActionHandler handler, float partialTicks) {
         if (model != null) {
             HumanoidMainHand hands = (HumanoidMainHand) model;
             hands.runecraftory$getLeftHandItem().resetAll();
             hands.runecraftory$getRightHandItem().resetAll();
         }
-        if (entity instanceof AnimatedEntity animated) {
-            this.setup(model);
-            return this.anim.get().doAnimation(this, animated.getAnimationHandler(), partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
-        }
         if (handler == null)
             return false;
-        this.setup(model);
+        this.copyFrom(model);
         return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
-    }
-
-    private void setup(@Nullable HumanoidModel<?> model) {
-        if (model == null) {
-            this.body.resetAll();
-            return;
-        }
-        PartPose body = model.body.storePose();
-        this.getModel().resetPoses();
-        this.body.loadPose(body);
-        this.leftArm.loadPose(TransformationHelper.withoutParent(body, model.leftArm.storePose()));
-        this.rightArm.loadPose(TransformationHelper.withoutParent(body, model.rightArm.storePose()));
-        this.leftLeg.loadPose(TransformationHelper.withoutParent(body, model.leftLeg.storePose()));
-        this.rightLeg.loadPose(TransformationHelper.withoutParent(body, model.rightLeg.storePose()));
-        this.head.loadPose(TransformationHelper.withoutParent(body, model.head.storePose()));
     }
 
     private boolean doAnimation(AttackActionHandler handler, float partialTicks, boolean mirror) {
@@ -105,51 +39,36 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extend
         float interpolation = handler.getCurrentTransitionProgress(partialTicks);
         boolean changed = false;
         if (last != null && interpolationLast > 0) {
-            changed = this.anim.get().doAnimation(this, last.getAnimation(), last.getTick(partialTicks), interpolationLast, mirror, false);
+            changed = this.attackAnimations.get().doAnimation(this, last.getAnimation(), last.getTick(partialTicks), interpolationLast, mirror, false);
         }
         if (current != null) {
-            if (this.anim.get().doAnimation(this, current.getAnimation(), current.getTick(partialTicks), interpolation, mirror, false) && !changed) {
+            if (this.attackAnimations.get().doAnimation(this, current.getAnimation(), current.getTick(partialTicks), interpolation, mirror, false) && !changed) {
                 changed = true;
             }
         }
-        return changed;
-    }
-
-    public void copyTo(HumanoidModel<?> model) {
-        HumanoidMainHand hands = (HumanoidMainHand) model;
-        if (model.riding) {
+        // Move the body so it stays at the same place
+        if (changed && this.riding) {
             this.body.x = this.body.getDefaultPose().x;
             this.body.y = this.body.getDefaultPose().y;
             this.body.z = this.body.getDefaultPose().z;
             PoseStack stack = new PoseStack();
             this.body.translateAndRotate(stack);
-            float bodyLength = -12;
-            Vector3f v = new Vector3f(0, bodyLength, 0);
+            Vector3f v = this.bodyVehicleOffset != null ? new Vector3f(this.bodyVehicleOffset) : new Vector3f();
             v.mulTranspose(stack.last().normal());
-            this.body.x += v.x();
-            this.body.y += v.y() - bodyLength;
-            this.body.z += v.z();
+            this.body.x -= v.x() - this.bodyVehicleOffset.x;
+            this.body.y -= v.y() - this.bodyVehicleOffset.y;
+            this.body.z -= v.z() - this.bodyVehicleOffset.z;
         }
-        PoseExtended body = this.body.extendedPose();
-        model.body.loadPose(body.asPartPose());
-        this.apply(model.head, body, this.head);
-        this.apply(model.leftArm, body, this.leftArm);
-        hands.runecraftory$getLeftHandItem().loadPose(this.leftArmItem.storePose());
-        this.apply(model.rightArm, body, this.rightArm);
-        hands.runecraftory$getRightHandItem().loadPose(this.rightArmItem.storePose());
-        if (!model.riding) {
-            this.apply(model.leftLeg, body, this.leftLeg);
-            this.apply(model.rightLeg, body, this.rightLeg);
-        }
-        model.hat.copyFrom(model.head);
+        return changed;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void copyTo(HumanoidModel<?> model) {
+        this.copyPropertiesTo((EntityModel<T>) model);
     }
 
     @Override
     public ModelPartsContainer getModel() {
         return this.model.get();
-    }
-
-    private void apply(ModelPart model, PoseExtended body, ModelPartsContainer.ModelPartExtended first) {
-        model.loadPose(TransformationHelper.withParent(body, first.storePose()));
     }
 }

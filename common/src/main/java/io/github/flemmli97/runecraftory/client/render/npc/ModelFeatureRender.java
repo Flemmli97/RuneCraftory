@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.CustomModelFeatureType;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -12,6 +12,7 @@ import net.minecraft.util.CommonColors;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ModelFeatureRender extends NPCFeatureRenderer<CustomModelFeatureType.ModelFeature> {
 
@@ -26,6 +27,7 @@ public class ModelFeatureRender extends NPCFeatureRenderer<CustomModelFeatureTyp
 
     @Override
     public <E extends NPCEntity> void onSetup(CustomModelFeatureType.ModelFeature feature, NPCRender<E> renderer, E entity, PoseStack stack) {
+        feature.hidden().ifPresent(hidden -> this.setupVisibility(renderer.getModel(), hidden));
     }
 
     @Override
@@ -42,14 +44,43 @@ public class ModelFeatureRender extends NPCFeatureRenderer<CustomModelFeatureTyp
         poseStack.popPose();
     }
 
-    private <E extends NPCEntity> void translateToPart(PlayerModel<E> model, CustomModelFeatureType.Location location, PoseStack poseStack) {
+    private <E extends NPCEntity> void setupVisibility(HumanoidBasedModel<E> model, Set<CustomModelFeatureType.Location> hidden) {
+        for (CustomModelFeatureType.Location location : hidden) {
+            switch (location) {
+                case HEAD -> model.head.visible = false;
+                case BODY -> model.body.visible = false;
+                case LEFT_ARM -> model.leftArm.visible = false;
+                case RIGHT_ARM -> model.rightArm.visible = false;
+                case LEGS -> {
+                    model.leftLeg.visible = false;
+                    model.rightLeg.visible = false;
+                }
+                case LEFT_LEG -> model.leftLeg.visible = false;
+                case RIGHT_LEG -> model.rightLeg.visible = false;
+            }
+        }
+    }
+
+    private <E extends NPCEntity> void translateToPart(HumanoidBasedModel<E> model, CustomModelFeatureType.Location location, PoseStack poseStack) {
         switch (location) {
             case HEAD -> model.head.translateAndRotate(poseStack);
             case BODY -> model.body.translateAndRotate(poseStack);
-            case LEFT_ARM -> model.leftArm.translateAndRotate(poseStack);
-            case RIGHT_ARM -> model.rightArm.translateAndRotate(poseStack);
-            case LEFT_LEG -> model.leftLeg.translateAndRotate(poseStack);
-            case RIGHT_LEG -> model.rightLeg.translateAndRotate(poseStack);
+            case LEFT_ARM -> {
+                if (model.leftArm != null)
+                    model.leftArm.translateAndRotate(poseStack);
+            }
+            case RIGHT_ARM -> {
+                if (model.rightArm != null)
+                    model.rightArm.translateAndRotate(poseStack);
+            }
+            case LEFT_LEG -> {
+                if (model.leftLeg != null)
+                    model.leftLeg.translateAndRotate(poseStack);
+            }
+            case RIGHT_LEG -> {
+                if (model.rightLeg != null)
+                    model.rightLeg.translateAndRotate(poseStack);
+            }
         }
     }
 }

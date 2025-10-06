@@ -65,7 +65,6 @@ import io.github.flemmli97.runecraftory.client.render.monster.WispRender;
 import io.github.flemmli97.runecraftory.client.render.monster.WoolyRender;
 import io.github.flemmli97.runecraftory.client.render.npc.NPCFeatureRenderers;
 import io.github.flemmli97.runecraftory.client.render.npc.NPCRender;
-import io.github.flemmli97.runecraftory.client.render.npc.NPCTextureLayer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.AppleProjectileRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.BigRaccoonLeafRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.BoneNeedleRender;
@@ -124,10 +123,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.HeartParticle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -452,15 +447,6 @@ public class ClientRegister {
 
     public static ResourceLocation mobTexture(EntityType<?> reg, String append) {
         return RuneCraftory.modRes("textures/entity/monsters/" + BuiltInRegistries.ENTITY_TYPE.getKey(reg).getPath() + append + ".png");
-    }
-
-    public static void layerRegister(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {
-        for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
-            if (layerType == NPCTextureLayer.LayerType.SKIN_LAYER || layerType.location == null)
-                continue;
-            consumer.accept(layerType.location, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), false), 64, 64));
-            consumer.accept(layerType.slimLocation, () -> LayerDefinition.create(PlayerModel.createMesh(new CubeDeformation(layerType.expand), true), 64, 64));
-        }
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {

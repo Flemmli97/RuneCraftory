@@ -1,40 +1,39 @@
 package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 
-public class NPCFaceLayer<T extends NPCEntity, M extends HumanoidModel<T>, A extends PlayerModel<T>> extends NPCTextureLayer<T, M, A> {
+public class NPCFaceLayer<T extends NPCEntity> extends NPCTextureLayer<T> {
 
     private String textureType;
 
-    public NPCFaceLayer(RenderLayerParent<T, M> renderer, A model, A slimModel) {
-        super(renderer, model, slimModel, LayerType.IRIS_LAYER);
+    public NPCFaceLayer(NPCRender<T> renderer) {
+        super(renderer, LayerType.IRIS_LAYER);
     }
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        A layerModel = this.getModel(entity);
+        this.layer = LayerType.IRIS_LAYER;
+        HumanoidBasedModel<T> layerModel = this.getModel();
         this.setup(layerModel);
         this.textureType = null;
+        poseStack.pushPose();
         if (entity.tickCount % 70 <= 2 || entity.isSleeping() || entity.isDeadOrDying() || entity.playDeath())
             this.textureType = "eyes_closed";
-        this.layer = LayerType.IRIS_LAYER;
         this.actualRender(poseStack, buffer, packedLight, entity, layerModel);
         this.layer = LayerType.SCLERA_LAYER;
-        float scale = 1 + this.layer.expand;
+        float scale = 1 + 0.001f;
         poseStack.scale(scale, scale, scale);
         this.actualRender(poseStack, buffer, packedLight, entity, layerModel);
         this.layer = LayerType.EYEBROWS_LAYER;
-        scale = 1 + this.layer.expand;
         poseStack.scale(scale, scale, scale);
         this.actualRender(poseStack, buffer, packedLight, entity, layerModel);
+        poseStack.popPose();
     }
 
     @Override
