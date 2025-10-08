@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
@@ -20,23 +20,25 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int weight,
-                      Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> additionalFeatures) {
+                      Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> additionalFeatures,
+                      List<ConditionalFeatures> conditionalFeatures) {
 
     public static final ReloadableHolder<NPCLook> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_look"),
-            new NPCLook(NPCData.Gender.MALE, null, 0, Map.of()));
+            new NPCLook(NPCData.Gender.MALE, null, 0, Map.of(), List.of()));
 
     public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
-            inst.group(Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
-                    CodecUtils.stringEnumCodec(NPCData.Gender.class, NPCData.Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
-                    NPCFeature.CODEC.listOf().fieldOf("additional_features").forGetter(d -> List.copyOf(d.additionalFeatures.values()))
-            ).apply(inst, (skin, gender, weight, features) -> new NPCLook(gender, skin.orElse(null), weight, features
+            inst.group(Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin())),
+                    CodecUtils.stringEnumCodec(NPCData.Gender.class, NPCData.Gender.UNDEFINED).fieldOf("gender").forGetter(NPCLook::gender),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(NPCLook::weight),
+                    NPCFeature.CODEC.listOf().fieldOf("additional_features").forGetter(d -> List.copyOf(d.additionalFeatures.values())),
+                    ConditionalFeatures.CODEC.listOf().fieldOf("conditional_features").forGetter(NPCLook::conditionalFeatures)
+            ).apply(inst, (skin, gender, weight, features, conditionals) -> new NPCLook(gender, skin.orElse(null), weight, features
                     .stream().collect(Collectors.toMap(
                             NPCFeature.NPCFeatureHolder::getType,
                             h -> h,
                             (e1, e2) -> e1,
                             HashMap::new
-                    )))));
+                    )), conditionals)));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, NPCLook> STREAM_CODEC = new StreamCodec<>() {
         @Override
@@ -44,7 +46,7 @@ public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int we
             String skin = null;
             if (buf.readBoolean())
                 skin = buf.readUtf();
-            return new NPCLook(buf.readEnum(NPCData.Gender.class), skin, buf.readInt(), Map.of());
+            return new NPCLook(buf.readEnum(NPCData.Gender.class), skin, buf.readInt(), Map.of(), List.of());
         }
 
         @Override
@@ -57,18 +59,16 @@ public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int we
         }
     };
 
-    public static NPCLook fromBuffer(FriendlyByteBuf buf) {
-        String skin = null;
-        if (buf.readBoolean())
-            skin = buf.readUtf();
-        return new NPCLook(buf.readEnum(NPCData.Gender.class), skin, buf.readInt(), Map.of());
+    public NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int weight, Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> additionalFeatures) {
+        this(gender, playerSkin, weight, additionalFeatures, List.of());
     }
 
-    public void writeToBuffer(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.playerSkin != null);
-        if (this.playerSkin != null)
-            buf.writeUtf(this.playerSkin);
-        buf.writeEnum(this.gender());
-        buf.writeInt(this.weight());
+    public record ConditionalFeatures(NPCFeature.NPCFeatureHolder<?> feature, EntityPredicate predicate) {
+
+        public static final Codec<ConditionalFeatures> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(NPCFeature.CODEC.fieldOf("feature").forGetter(ConditionalFeatures::feature),
+                        EntityPredicate.CODEC.fieldOf("predicate").forGetter(ConditionalFeatures::predicate)
+                ).apply(inst, ConditionalFeatures::new));
+
     }
 }

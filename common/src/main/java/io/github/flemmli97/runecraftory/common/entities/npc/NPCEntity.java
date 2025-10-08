@@ -670,7 +670,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         try {
             this.lookFeatures.read(tag.get("LookFeatures"), this.registryAccess());
         } catch (Exception e) {
-            this.lookFeatures.buildFromLooks(this, this.look.value().additionalFeatures().values());
+            this.lookFeatures.buildFromLooks(this, this.look.value());
         }
         CompoundTag gifts = tag.getCompound("GiftData");
         ImmutableMap.Builder<String, ReloadableHolder<GiftData>> b = ImmutableMap.builder();
@@ -761,6 +761,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public void customServerAiStep() {
         super.customServerAiStep();
         this.tickBrain(this);
+        if (this.lookFeatures.updateLooks(this, this.getLook().value())) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
+        }
         if (this.tickCount % 10 == 0) {
             if (this.isStaying()) {
                 BrainUtils.setMemory(this, RuneCraftoryMemoryTypes.STAYING.get(), Unit.INSTANCE);
@@ -1824,7 +1827,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 this.schedule.load(new NPCSchedule(this, this.random).save());
             else
                 this.schedule.with(data.schedule());
-            this.lookFeatures.buildFromLooks(this, this.look.value().additionalFeatures().values());
+            this.lookFeatures.buildFromLooks(this, this.look.value());
             this.gifts = null;
             this.calcGifts();
         } else {

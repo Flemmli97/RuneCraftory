@@ -18,7 +18,7 @@ public class NPCFeatureRenderLayer<T extends NPCEntity> extends RenderLayer<T, H
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        for (NPCFeature feature : entity.lookFeatures.view.values()) {
+        for (NPCFeature feature : entity.lookFeatures) {
             NPCFeatureRenderers.get(feature).render(feature, this.render, entity, poseStack, buffer, packedLight, partialTick,
                     limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         }

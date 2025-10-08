@@ -61,7 +61,7 @@ public class QuestGui extends Screen {
             List<Pair<Integer, ResourceLocation>> textures = new ArrayList<>();
             if (display.features() != null) {
                 for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
-                    ResourceLocation text = NPCRender.getTextureFromLook(display.features(), display.features().view.containsKey(RuneCraftoryNPCLooks.SLIM.get()), layerType, null);
+                    ResourceLocation text = NPCRender.getTextureFromLook(display.features(), display.features().contains(RuneCraftoryNPCLooks.SLIM.get()), layerType, null);
                     if (!text.equals(NPCRender.EMPTY)) {
                         textures.add(Pair.of(NPCTextureLayer.setColor(display.features(), layerType), text));
                     }

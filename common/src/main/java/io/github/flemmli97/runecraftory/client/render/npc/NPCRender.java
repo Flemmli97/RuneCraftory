@@ -101,7 +101,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             PlayerSkin.Model skinMeta = PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getSkinMeta();
             return skinMeta == PlayerSkin.Model.SLIM;
         }
-        return npc.lookFeatures.view.containsKey(RuneCraftoryNPCLooks.SLIM.get());
+        return npc.lookFeatures.contains(RuneCraftoryNPCLooks.SLIM.get());
     }
 
     public static ResourceLocation getTextureFromLook(NPCEntity npc, NPCTextureLayer.LayerType type, @Nullable String subType) {
@@ -270,7 +270,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         this.getModel().setDelegate(this.internalHumanoid);
         this.armorLayer.setSlim(slim);
         this.setModelProperties(entity);
-        for (NPCFeature feature : entity.lookFeatures.view.values()) {
+        for (NPCFeature feature : entity.lookFeatures) {
             NPCFeatureRenderers.get(feature).onSetup(feature, this, entity, stack);
         }
         super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
@@ -372,7 +372,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             stack.translate(0, f * 0.1, -f * entity.getBbHeight() * 0.5);
             stack.mulPose(Axis.XP.rotationDegrees(f * this.getFlipDegrees(entity)));
         }
-        for (NPCFeature feature : entity.lookFeatures.view.values()) {
+        for (NPCFeature feature : entity.lookFeatures) {
             NPCFeatureRenderers.get(feature).transformStack(feature, this, entity, stack, partialTick);
         }
     }
