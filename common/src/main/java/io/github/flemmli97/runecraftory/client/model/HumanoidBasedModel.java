@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
@@ -49,6 +48,8 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity> extends
     public ModelPartsContainer.ModelPartExtended rightItem;
     public ModelPartsContainer.ModelPartExtended leftArm;
     public ModelPartsContainer.ModelPartExtended leftItem;
+    @Nullable
+    public ModelPartsContainer.ModelPartExtended legBase;
     public ModelPartsContainer.ModelPartExtended rightLeg;
     public ModelPartsContainer.ModelPartExtended leftLeg;
 
@@ -61,6 +62,8 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity> extends
     public HumanoidModel.ArmPose leftArmPose = HumanoidModel.ArmPose.EMPTY;
     public HumanoidModel.ArmPose rightArmPose = HumanoidModel.ArmPose.EMPTY;
     public boolean crouching;
+    public float swimAmount;
+    private float partialTicks;
 
     protected HumanoidModel<T> delegate;
 
@@ -79,6 +82,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity> extends
                     this.leftItem = model.getPart("LeftItemRoot");
                     this.rightArm = model.getPart("RightArm");
                     this.leftArm = model.getPart("LeftArm");
+                    this.legBase = model.getOptionalPart("LegsBase").orElse(null);
                     this.rightLeg = model.getPart("RightLeg");
                     this.leftLeg = model.getPart("LeftLeg");
 
@@ -135,6 +139,8 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity> extends
     @Override
     public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
         super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
+        this.swimAmount = entity.getSwimAmount(partialTick);
+        this.partialTicks = partialTick;
         if (this.delegate != null) {
             this.delegate.attackTime = this.attackTime;
             this.delegate.riding = this.riding;
@@ -148,15 +154,14 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity> extends
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        float partialTicks = ClientHandlers.getPartialTicks();
-        this.preAnimSetup(entity, limbSwing, limbSwingAmount, netHeadYaw, ageInTicks, headPitch, partialTicks);
+        this.preAnimSetup(entity, limbSwing, limbSwingAmount, netHeadYaw, ageInTicks, headPitch, this.partialTicks);
         PoseExtended ext = null;
         PoseExtended ext2 = null;
         if (this.riding) {
             ext = this.leftLeg.extendedPose();
             ext2 = this.rightLeg.extendedPose();
         }
-        GeoAnimationManager.getInstance().getAnimation(DEFAULT_PLAYER_LOCATION).get().doAnimation(this, entity.getAnimationHandler(), partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
+        this.attackAnimations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
         if (this.delegate != null)
             this.copyPropertiesTo(this.delegate);
 
@@ -183,21 +188,35 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity> extends
             this.copyFrom(this.delegate);
         }
         BedrockAnimations animation = this.attackAnimations.get();
-        this.setupAnimationValues(animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
+        setupAnimationValues(this, animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
         BedrockAnimations miscAnimation = this.attackAnimations.get();
-        this.setupAnimationValues(animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
+        setupAnimationValues(this, animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
+
+        miscAnimation.doAnimation(this, "idle", entity.tickCount, partialTicks, 1);
+        if (this.swimAmount == 0) {
+            miscAnimation.doAnimation(this, "walk", entity.tickCount, partialTicks, 1, false, true);
+        } else {
+            miscAnimation.doAnimation(this, "swim", entity.tickCount, partialTicks, 1, false, true);
+        }
+        if (this.crouching) {
+            miscAnimation.doAnimation(this, "crouching", entity.tickCount, partialTicks, 1, false, true);
+        }
+        if (this.riding) {
+            miscAnimation.doAnimation(this, "riding", entity.tickCount, partialTicks, 1, false, true);
+        }
     }
 
-    protected void setupAnimationValues(BedrockAnimations animation, float limbSwing, float limbSwingAmount, float netHeadYaw, float headPitch) {
+    public static void setupAnimationValues(HumanoidBasedModel<?> model, BedrockAnimations animation, float limbSwing, float limbSwingAmount, float netHeadYaw, float headPitch) {
         animation.setVariable("query.head_x_rotation", () -> headPitch);
         animation.setVariable("query.head_y_rotation", () -> netHeadYaw);
-        animation.setVariable("left_held", () -> this.leftArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
-        animation.setVariable("left_arm_x_rot", () -> this.leftArm != null ? this.leftArm.xRot * Mth.RAD_TO_DEG : 0);
-        animation.setVariable("right_held", () -> this.rightArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
-        animation.setVariable("right_arm_x_rot", () -> this.rightArm != null ? this.rightArm.xRot * Mth.RAD_TO_DEG : 0);
+        animation.setVariable("left_held", () -> model.leftArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
+        animation.setVariable("left_arm_x_rot", () -> model.leftArm != null ? model.leftArm.xRot * Mth.RAD_TO_DEG : 0);
+        animation.setVariable("right_held", () -> model.rightArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
+        animation.setVariable("right_arm_x_rot", () -> model.rightArm != null ? model.rightArm.xRot * Mth.RAD_TO_DEG : 0);
         animation.setVariable("limb_swing", () -> limbSwing * Mth.RAD_TO_DEG);
         animation.setVariable("limb_swing_amount", () -> limbSwingAmount * Mth.RAD_TO_DEG);
-        animation.setVariable("crouching", () -> this.crouching ? 1 : 0);
+        animation.setVariable("crouching", () -> model.crouching ? 1 : 0);
+        animation.setVariable("riding", () -> model.riding ? 1 : 0);
     }
 
     @Override

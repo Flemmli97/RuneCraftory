@@ -3,10 +3,11 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
-import io.github.flemmli97.runecraftory.common.entities.npc.features.CustomModelFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelAttachmentsType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SimpleHatFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
@@ -25,13 +26,16 @@ public class RuneCraftoryNPCLooks {
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<SlimLookFeatureType.SlimLookFeature>> SLIM = NPC_FEATURES.register().register("slim_feature", () -> new NPCFeatureType<>(SlimLookFeatureType.TYPE_CODEC, SlimLookFeatureType.CODEC, SlimLookFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<SizeFeatureType.SizeFeature>> SIZE = NPC_FEATURES.register().register("size_feature", () -> new NPCFeatureType<>(SizeFeatureType.TYPE_CODEC, SizeFeatureType.CODEC, SizeFeatureType.STREAM_CODEC));
 
+    public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<ModelFeatureType.ModelFeature>> MODEL = NPC_FEATURES.register().register("model_feature", () -> new NPCFeatureType<>(ModelFeatureType.TYPE_CODEC, ModelFeatureType.CODEC, ModelFeatureType.STREAM_CODEC));
+    // Layers
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<IndexedColorSettingType.IndexedColorFeature>> SKIN = NPC_FEATURES.register().register("skin_feature", RuneCraftoryNPCLooks::skin);
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<FaceFeaturesType.FaceFeatures>> FACE = NPC_FEATURES.register().register("face_feature", () -> new NPCFeatureType<>(FaceFeaturesType.TYPE_CODEC, FaceFeaturesType.CODEC, FaceFeaturesType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<BlushFeatureType.BlushFeature>> BLUSH = NPC_FEATURES.register().register("blush_feature", () -> new NPCFeatureType<>(BlushFeatureType.TYPE_CODEC, BlushFeatureType.CODEC, BlushFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<HairFeatureType.HairFeature>> HAIR = NPC_FEATURES.register().register("hair_feature", () -> new NPCFeatureType<>(HairFeatureType.TYPE_CODEC, HairFeatureType.CODEC, HairFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<OutfitFeatureType.OutfitFeature>> OUTFIT = NPC_FEATURES.register().register("outfit_feature", () -> new NPCFeatureType<>(OutfitFeatureType.TYPE_CODEC, OutfitFeatureType.CODEC, OutfitFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<SimpleHatFeatureType.SimpleHatFeature>> HAT = NPC_FEATURES.register().register("simple_hat_feature", () -> new NPCFeatureType<>(SimpleHatFeatureType.TYPE_CODEC, SimpleHatFeatureType.CODEC, SimpleHatFeatureType.STREAM_CODEC));
-    public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<CustomModelFeatureType.ModelFeature>> MODEL = NPC_FEATURES.register().register("model_feature", () -> new NPCFeatureType<>(CustomModelFeatureType.TYPE_CODEC, CustomModelFeatureType.CODEC, CustomModelFeatureType.STREAM_CODEC));
+    // Others
+    public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<ModelAttachmentsType.ModelAttachmentsFeature>> MODEL_ATTACHMENT = NPC_FEATURES.register().register("model_attachment_feature", () -> new NPCFeatureType<>(ModelAttachmentsType.TYPE_CODEC, ModelAttachmentsType.CODEC, ModelAttachmentsType.STREAM_CODEC));
 
     private static NPCFeatureType<IndexedColorSettingType.IndexedColorFeature> skin() {
         return IndexedColorSettingType.createSimple(SKIN);

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client.render.npc;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
-import io.github.flemmli97.runecraftory.common.entities.npc.features.CustomModelFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelAttachmentsType;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ModelFeatureRender extends NPCFeatureRenderer<CustomModelFeatureType.ModelFeature> {
+public class ModelFeatureRender extends NPCFeatureRenderer<ModelAttachmentsType.ModelAttachmentsFeature> {
 
     private static final Map<ResourceLocation, FeatureModel<NPCEntity>> MODELS_CACHE = new HashMap<>();
     private static final Map<ResourceLocation, ResourceLocation> TEXTURE_CACHE = new HashMap<>();
@@ -26,26 +26,37 @@ public class ModelFeatureRender extends NPCFeatureRenderer<CustomModelFeatureTyp
     }
 
     @Override
-    public <E extends NPCEntity> void onSetup(CustomModelFeatureType.ModelFeature feature, NPCRender<E> renderer, E entity, PoseStack stack) {
-        feature.hidden().ifPresent(hidden -> this.setupVisibility(renderer.getModel(), hidden));
+    public <E extends NPCEntity> void onSetup(ModelAttachmentsType.ModelAttachmentsFeature feature, NPCRender<E> renderer, E entity, PoseStack stack) {
+        this.setupVisibility(renderer.getModel(), feature.hidden());
     }
 
     @Override
-    public <E extends NPCEntity> void render(CustomModelFeatureType.ModelFeature feature, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
+    public <E extends NPCEntity> void render(ModelAttachmentsType.ModelAttachmentsFeature feature, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
                                              int packedLight, float partialTicks,
                                              float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        FeatureModel<NPCEntity> model = MODELS_CACHE.computeIfAbsent(feature.model(), k -> new FeatureModel<>(feature.model(), feature.model()));
-        model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        for (ModelAttachmentsType.ModelAttachment attachment : feature.attachments()) {
+            this.renderModel(attachment, renderer, entity, poseStack, buffer, packedLight, partialTicks, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        }
+    }
+
+    private <E extends NPCEntity> void renderModel(ModelAttachmentsType.ModelAttachment attachment, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
+                                                   int packedLight, float partialTicks,
+                                                   float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        FeatureModel<NPCEntity> model = MODELS_CACHE.computeIfAbsent(attachment.model(), k -> new FeatureModel<>(attachment.model(), attachment.model()));
         poseStack.pushPose();
         poseStack.translate(0, -1.5, 0);
-        CustomModelFeatureType.Location location = feature.location();
+        model.setMain(renderer.getModel());
+        model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+        model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        model.setMain(null);
+        ModelAttachmentsType.Location location = attachment.location();
         this.translateToPart(renderer.getModel(), location, poseStack);
-        model.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityCutout(textureFrom(feature.texture()))), packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0), CommonColors.WHITE);
+        model.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityCutout(textureFrom(attachment.texture()))), packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0), CommonColors.WHITE);
         poseStack.popPose();
     }
 
-    private <E extends NPCEntity> void setupVisibility(HumanoidBasedModel<E> model, Set<CustomModelFeatureType.Location> hidden) {
-        for (CustomModelFeatureType.Location location : hidden) {
+    private <E extends NPCEntity> void setupVisibility(HumanoidBasedModel<E> model, Set<ModelAttachmentsType.Location> hidden) {
+        for (ModelAttachmentsType.Location location : hidden) {
             switch (location) {
                 case HEAD -> model.head.visible = false;
                 case BODY -> model.body.visible = false;
@@ -61,26 +72,25 @@ public class ModelFeatureRender extends NPCFeatureRenderer<CustomModelFeatureTyp
         }
     }
 
-    private <E extends NPCEntity> void translateToPart(HumanoidBasedModel<E> model, CustomModelFeatureType.Location location, PoseStack poseStack) {
+    private <E extends NPCEntity> void translateToPart(HumanoidBasedModel<E> model, ModelAttachmentsType.Location location, PoseStack poseStack) {
         switch (location) {
             case HEAD -> model.head.translateAndRotate(poseStack);
             case BODY -> model.body.translateAndRotate(poseStack);
-            case LEFT_ARM -> {
-                if (model.leftArm != null)
-                    model.leftArm.translateAndRotate(poseStack);
-            }
-            case RIGHT_ARM -> {
-                if (model.rightArm != null)
-                    model.rightArm.translateAndRotate(poseStack);
-            }
-            case LEFT_LEG -> {
-                if (model.leftLeg != null)
-                    model.leftLeg.translateAndRotate(poseStack);
-            }
-            case RIGHT_LEG -> {
-                if (model.rightLeg != null)
+            case LEFT_ARM -> model.leftArm.translateAndRotate(poseStack);
+            case RIGHT_ARM -> model.rightArm.translateAndRotate(poseStack);
+            case LEGS -> {
+                if (model.legBase != null) {
+                    model.legBase.translateAndRotate(poseStack);
+                } else {
+                    double dx = model.leftLeg.x - model.rightLeg.x;
+                    double dy = model.leftLeg.y - model.rightLeg.y;
+                    double dz = model.leftLeg.z - model.rightLeg.z;
+                    poseStack.translate(dx, dy, dz);
                     model.rightLeg.translateAndRotate(poseStack);
+                }
             }
+            case LEFT_LEG -> model.leftLeg.translateAndRotate(poseStack);
+            case RIGHT_LEG -> model.rightLeg.translateAndRotate(poseStack);
         }
     }
 }

@@ -12,6 +12,7 @@ public class NPCFeatureRenderers {
     private static final Map<NPCFeatureType<?>, NPCFeatureRenderer<?>> RENDERERS = new HashMap<>();
 
     public static void init() {
+        empty(RuneCraftoryNPCLooks.MODEL.get());
         empty(RuneCraftoryNPCLooks.SLIM.get());
         empty(RuneCraftoryNPCLooks.SIZE.get());
         empty(RuneCraftoryNPCLooks.SKIN.get());
@@ -20,7 +21,7 @@ public class NPCFeatureRenderers {
         empty(RuneCraftoryNPCLooks.HAIR.get());
         empty(RuneCraftoryNPCLooks.OUTFIT.get());
         empty(RuneCraftoryNPCLooks.HAT.get());
-        register(RuneCraftoryNPCLooks.MODEL.get(), new ModelFeatureRender());
+        register(RuneCraftoryNPCLooks.MODEL_ATTACHMENT.get(), new ModelFeatureRender());
     }
 
     public static synchronized <F extends NPCFeature> void empty(NPCFeatureType<F> type) {

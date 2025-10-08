@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatur
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SimpleHatFeatureType;
@@ -75,8 +76,8 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             }
         }, ctx));
         this.addLayer(new ItemLayer<>(this, ctx.getItemInHandRenderer()));
-        this.current = this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION, null);
-        this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION_SLIM, null);
+        this.current = this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION);
+        this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION_SLIM);
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
             if (layerType.modelType == null)
                 continue;
@@ -105,6 +106,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
 
     public static ResourceLocation getTextureFromLook(NPCEntity npc, NPCTextureLayer.LayerType type, @Nullable String subType) {
         NPCLook look = npc.getLook().value();
+        ModelFeatureType.ModelFeature modelFeature = npc.lookFeatures.getFeature(RuneCraftoryNPCLooks.MODEL.get());
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
             if (look == NPCLook.DEFAULT.value()) {
                 return DefaultPlayerSkin.get(npc.getUUID())
@@ -114,7 +116,8 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             if (skin != null) {
                 return PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getLocation();
             }
-        } else if (look.playerSkin() != null || look == NPCLook.DEFAULT.value()) {
+        } else if (look.playerSkin() != null || look == NPCLook.DEFAULT.value()
+                || (modelFeature != null && modelFeature.model().map(d -> !d.hasLayers()).orElse(false))) {
             // Ignore other layers if using a player skin
             return EMPTY;
         }
@@ -125,13 +128,18 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
     }
 
     public static ResourceLocation getTextureFromLook(NPCFeatureContainer features, boolean slim, NPCTextureLayer.LayerType type, @Nullable String subType) {
+        ModelFeatureType.ModelFeature modelFeature = features.getFeature(RuneCraftoryNPCLooks.MODEL.get());
+        String prefix = null;
+        if (modelFeature != null) {
+            prefix = modelFeature.model().map(ModelFeatureType.ModelData::layerPrefix).orElse(null);
+        }
         ResourceLocation texture = switch (type) {
             case SKIN_LAYER -> {
                 IndexedColorSettingType.IndexedColorFeature feat = features.getFeature(RuneCraftoryNPCLooks.SKIN.get());
                 int num = 0;
                 if (feat != null)
                     num = feat.index();
-                String location = String.format("textures/entity/npc/skin/%s%s.png", slim ? "slim_" : "", num);
+                String location = formatTextureTemplate("textures/entity/npc/skin/", prefix, slim ? "slim" : "", num);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case IRIS_LAYER -> {
@@ -143,8 +151,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
                         subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.IRIS);
                     }
                 }
-                String location = String.format("textures/entity/npc/eye/iris_%s%s.png", num,
-                        subType != null ? "_" + subType : "");
+                String location = formatTextureTemplate("textures/entity/npc/eye/iris_", prefix, num, subType);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case SCLERA_LAYER -> {
@@ -156,8 +163,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
                         subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.SCLERA);
                     }
                 }
-                String location = String.format("textures/entity/npc/eye/sclera_%s%s.png", num,
-                        subType != null ? "_" + subType : "");
+                String location = formatTextureTemplate("textures/entity/npc/eye/sclera_", prefix, num, subType);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case EYEBROWS_LAYER -> {
@@ -169,40 +175,58 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
                         subType = feat.expressionTexture(features, subType, FaceFeaturesType.ExpressionType.EYEBROWS);
                     }
                 }
-                String location = String.format("textures/entity/npc/eye/eyebrows_%s%s.png", num,
-                        subType != null ? "_" + subType : "");
+                String location = formatTextureTemplate("textures/entity/npc/eye/eyebrows_", prefix, num, subType);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case BLUSH_LAYER -> {
                 BlushFeatureType.BlushFeature feat = features.getFeature(RuneCraftoryNPCLooks.BLUSH.get());
                 if (feat == null || !feat.blush())
                     yield null;
-                String location = "textures/entity/npc/misc/blush.png";
+                String location = formatTextureTemplate("textures/entity/npc/misc/blush", prefix);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case OUTFIT_LAYER -> {
                 OutfitFeatureType.OutfitFeature feat = features.getFeature(RuneCraftoryNPCLooks.OUTFIT.get());
                 String location = String.format("textures/entity/npc/outfit/generic%s_0.png", slim ? "_slim" : "");
                 if (feat != null)
-                    location = String.format("textures/entity/npc/outfit/%s%s_%s.png", feat.outfit(), slim ? "_slim" : "", feat.index());
+                    location = formatTextureTemplate("textures/entity/npc/outfit/", feat.outfit(), slim ? "slim" : "", feat.index());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case HAIR_LAYER -> {
                 HairFeatureType.HairFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAIR.get());
                 if (feat == null)
                     yield null;
-                String location = String.format("textures/entity/npc/hair/%s_%s.png", feat.hair(), feat.index());
+                String location = formatTextureTemplate("textures/entity/npc/hair/", prefix, feat.hair(), feat.index());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case HAT_LAYER -> {
                 SimpleHatFeatureType.SimpleHatFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAT.get());
                 if (feat == null || feat.hat().isEmpty())
                     yield null;
-                String location = String.format("textures/entity/npc/misc/%s.png", feat.hat());
+                String location = formatTextureTemplate("textures/entity/npc/misc/", feat.hat());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
         };
         return texture == null ? EMPTY : texture;
+    }
+
+    private static String formatTextureTemplate(String format, Object... args) {
+        StringBuilder formatBuilder = new StringBuilder(format);
+        List<Object> formatArgs = new ArrayList<>();
+        int idx = 0;
+        for (Object arg : args) {
+            if (arg == null) {
+                continue;
+            }
+            String argRep = arg.toString();
+            if (argRep.isEmpty()) {
+                continue;
+            }
+            formatBuilder.append("%s");
+            formatArgs.add((idx != 0 ? "_" : "") + argRep);
+            idx++;
+        }
+        return String.format(formatBuilder.append(".png").toString(), formatArgs.toArray());
     }
 
     public static boolean renderForTooltip(GuiGraphics graphics, int x, int y, @Nullable String skin, List<Pair<Integer, ResourceLocation>> textures) {
@@ -258,11 +282,23 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
     }
 
     protected Pair<ResourceLocation, ResourceLocation> getModelLocation(T entity, boolean slim) {
-        return Pair.of(slim ? HumanoidBasedModel.DEFAULT_LOCATION_SLIM : HumanoidBasedModel.DEFAULT_LOCATION, null);
+        ModelFeatureType.ModelFeature modelFeature = entity.lookFeatures.getFeature(RuneCraftoryNPCLooks.MODEL.get());
+        ResourceLocation model = slim ? HumanoidBasedModel.DEFAULT_LOCATION_SLIM : HumanoidBasedModel.DEFAULT_LOCATION;
+        ResourceLocation animation = null;
+        if (modelFeature != null) {
+            ModelFeatureType.ModelData modelData = modelFeature.model().orElse(null);
+            if (modelData != null) {
+                model = modelData.model();
+            }
+            if (modelFeature.animation().isPresent()) {
+                animation = modelFeature.animation().get();
+            }
+        }
+        return Pair.of(model, animation);
     }
 
-    protected NPCModelHolder getModelHolder(ResourceLocation model, ResourceLocation animation) {
-        return this.getModelHolder(Pair.of(model, animation));
+    private NPCModelHolder getModelHolder(ResourceLocation model) {
+        return this.getModelHolder(Pair.of(model, null));
     }
 
     protected NPCModelHolder getModelHolder(Pair<ResourceLocation, ResourceLocation> location) {
