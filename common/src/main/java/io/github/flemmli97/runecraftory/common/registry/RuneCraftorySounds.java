@@ -113,6 +113,8 @@ public class RuneCraftorySounds {
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> GENERIC_FARM_LAND_WATER = register("generic.farmland.water", "Watering Farmland", SoundEvents.BOAT_PADDLE_WATER.getLocation(), 8);
     public static final RegistryEntrySupplier<SoundEvent, SoundEvent> GENERIC_ITEM_STAT_CONSUME = register("generic.item_stat.consume", "Drinking", SoundEvents.BREWING_STAND_BREW.getLocation(), 2);
 
+    public static final RegistryEntrySupplier<SoundEvent, SoundEvent> ENTITY_NPC_CHANGE = register("entity.npc.change", null, SPELL_GENERIC_WATERBUBBLE.getID(), 1, 1.5f);
+
     public static final ResourceKey<SoundEvent> BGM1 = bgmKey("kesshi-no-tatakai-ni-idomu-monotachi");
     public static final ResourceKey<SoundEvent> BGM2 = bgmKey("dragon");
     public static final ResourceKey<SoundEvent> BGM3 = bgmKey("battle-determination");

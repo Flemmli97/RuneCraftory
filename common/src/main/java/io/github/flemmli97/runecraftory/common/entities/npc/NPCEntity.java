@@ -60,6 +60,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -83,6 +84,9 @@ import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.entity.data.SyncedMobDataHandler;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
+import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
+import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -459,7 +463,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                         new SetRainShelterTarget<>(),
                         new TargetOrRetaliate<NPCEntity>(),
                         new SetMoveToRestriction<NPCEntity>(),
-                        new SetRandomWalkTarget<>().startCondition(m -> !m.level().isRaining() && m.getRandom().nextInt(120) == 0)
+                        new SetRandomWalkTarget<>().startCondition(m -> m.getRandom().nextInt(120) == 0)
                 )
         );
     }
@@ -763,6 +767,13 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         this.tickBrain(this);
         if (this.lookFeatures.updateLooks(this, this.getLook().value())) {
             LoaderNetwork.INSTANCE.sendToTracking(new S2CNPCLook(this.getId(), this.look, this.lookFeatures), this);
+            for (int i = 0; i < 20; ++i) {
+                AdvancedParticleContainer.make(ParticleTypes.POOF)
+                        .addData(new ScaleData(0.15f))
+                        .addData(new MotionData(this.random.nextGaussian() * 0.01, this.random.nextGaussian() * 0.01, this.random.nextGaussian() * 0.01))
+                        .add(this.level(), this.getRandomX(0.9), this.getRandomY(), this.getRandomZ(0.9));
+            }
+            this.playSound(RuneCraftorySounds.ENTITY_NPC_CHANGE.get());
         }
         if (this.tickCount % 10 == 0) {
             if (this.isStaying()) {

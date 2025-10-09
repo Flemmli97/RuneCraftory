@@ -44,7 +44,10 @@ public class SetRainShelterTarget<E extends PathfinderMob> extends ExtendedBehav
     protected ToDoubleFunction<E> range = e -> 10;
     protected ToIntFunction<E> wanderChance = e -> e.getRandom().nextInt(80);
 
+    private WalkTarget target;
+
     public SetRainShelterTarget() {
+        this.cooldownFor(e -> 20);
     }
 
     @Override
@@ -54,11 +57,20 @@ public class SetRainShelterTarget<E extends PathfinderMob> extends ExtendedBehav
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, E entity) {
-        return level.isRaining();
+        if (!level.isRaining())
+            return false;
+        this.target = this.findWalkTarget(entity);
+        return this.target != null;
     }
 
     @Override
     protected void start(E entity) {
+        if (this.target != null) {
+            BrainUtils.setMemory(entity, MemoryModuleType.WALK_TARGET, this.target);
+        }
+    }
+
+    protected WalkTarget findWalkTarget(E entity) {
         GlobalPos hide = BrainUtils.getMemory(entity, MemoryModuleType.HIDING_PLACE);
         if (hide == null || hide.dimension() != entity.level().dimension()) {
             hide = this.findHidingPlace(entity);
@@ -77,8 +89,9 @@ public class SetRainShelterTarget<E extends PathfinderMob> extends ExtendedBehav
                 target = this.getWanderPos(entity, hide.pos(), (int) range);
             }
             if (target != null)
-                BrainUtils.setMemory(entity, MemoryModuleType.WALK_TARGET, new WalkTarget(target, spd, acc));
+                return new WalkTarget(target, spd, acc);
         }
+        return null;
     }
 
     protected GlobalPos findHidingPlace(E entity) {
