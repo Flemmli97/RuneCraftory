@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
+import io.github.flemmli97.runecraftory.client.model.HumanoidModelLocations;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
@@ -76,8 +77,8 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             }
         }, ctx));
         this.addLayer(new ItemLayer<>(this, ctx.getItemInHandRenderer()));
-        this.current = this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION);
-        this.getModelHolder(HumanoidBasedModel.DEFAULT_LOCATION_SLIM);
+        this.current = this.getModelHolder(HumanoidModelLocations.DEFAULT_LOCATION);
+        this.getModelHolder(HumanoidModelLocations.DEFAULT_LOCATION_SLIM);
         for (NPCTextureLayer.LayerType layerType : NPCTextureLayer.LayerType.values()) {
             if (layerType.modelType == null)
                 continue;
@@ -106,7 +107,6 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
 
     public static ResourceLocation getTextureFromLook(NPCEntity npc, NPCTextureLayer.LayerType type, @Nullable String subType) {
         NPCLook look = npc.getLook().value();
-        ModelFeatureType.ModelFeature modelFeature = npc.lookFeatures.getFeature(RuneCraftoryNPCLooks.MODEL.get());
         if (type == NPCTextureLayer.LayerType.SKIN_LAYER) {
             if (look == NPCLook.DEFAULT.value()) {
                 return DefaultPlayerSkin.get(npc.getUUID())
@@ -116,8 +116,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             if (skin != null) {
                 return PLAYER_SKIN_TEXTURE_LOCATIONS.computeIfAbsent(skin, s -> new PlayerSkinData(skin)).getLocation();
             }
-        } else if (look.playerSkin() != null || look == NPCLook.DEFAULT.value()
-                || (modelFeature != null && modelFeature.model().map(d -> !d.hasLayers()).orElse(false))) {
+        } else if (look.playerSkin() != null || look == NPCLook.DEFAULT.value()) {
             // Ignore other layers if using a player skin
             return EMPTY;
         }
@@ -132,6 +131,13 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         String prefix = null;
         if (modelFeature != null) {
             prefix = modelFeature.model().map(ModelFeatureType.ModelData::layerPrefix).orElse(null);
+            ResourceLocation texture = modelFeature.model().flatMap(ModelFeatureType.ModelData::texture).orElse(null);
+            if (texture != null) {
+                if (type != NPCTextureLayer.LayerType.SKIN_LAYER) {
+                    return EMPTY;
+                }
+                return TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(texture.toString(), res -> texture.withPath(s -> "textures/" + s + ".png"));
+            }
         }
         ResourceLocation texture = switch (type) {
             case SKIN_LAYER -> {
@@ -283,7 +289,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
 
     protected Pair<ResourceLocation, ResourceLocation> getModelLocation(T entity, boolean slim) {
         ModelFeatureType.ModelFeature modelFeature = entity.lookFeatures.getFeature(RuneCraftoryNPCLooks.MODEL.get());
-        ResourceLocation model = slim ? HumanoidBasedModel.DEFAULT_LOCATION_SLIM : HumanoidBasedModel.DEFAULT_LOCATION;
+        ResourceLocation model = slim ? HumanoidModelLocations.DEFAULT_LOCATION_SLIM : HumanoidModelLocations.DEFAULT_LOCATION;
         ResourceLocation animation = null;
         if (modelFeature != null) {
             ModelFeatureType.ModelData modelData = modelFeature.model().orElse(null);

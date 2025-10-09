@@ -447,6 +447,15 @@
     ],
     "subtitle": "runecraftory:entity.marionetta.roar"
   },
+  "entity.npc.change": {
+    "sounds": [
+      {
+        "name": "runecraftory:spell/generic/water_bubble",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "runecraftory:entity.npc.change"
+  },
   "entity.orc.ambient": {
     "sounds": [
       "mob/piglin_brute/idle1",

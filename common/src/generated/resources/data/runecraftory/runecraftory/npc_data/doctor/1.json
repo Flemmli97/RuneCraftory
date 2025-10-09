@@ -37,7 +37,7 @@
     },
     {
       "gender": "FEMALE",
-      "look": "runecraftory:doctor/female_1"
+      "look": "runecraftory:doctor/female_2"
     }
   ],
   "neutral_gift_response": "npc.doctor.2.gift.default",

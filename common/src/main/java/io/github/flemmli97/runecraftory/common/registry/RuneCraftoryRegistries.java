@@ -39,5 +39,6 @@ public class RuneCraftoryRegistries {
         RuneCraftorySpells.SPELLS.register().registerContent();
         RuneCraftoryStructures.STRUCTURE_PROCESSORS.registerContent();
         RuneCraftoryStructures.STRUCTURES.registerContent();
+        RuneCraftorySubPredicates.SUB_PREDICATES.registerContent();
     }
 }

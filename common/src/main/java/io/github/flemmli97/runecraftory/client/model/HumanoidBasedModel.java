@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
@@ -35,11 +34,6 @@ import java.util.HashMap;
 
 public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveStateHolder> extends EntityModel<T> implements ItemHolderModel, HeadedModel, ExtendedModel {
 
-    public static final ResourceLocation DEFAULT_PLAYER_LOCATION = RuneCraftory.modRes("player");
-    public static final ResourceLocation DEFAULT_LOCATION = RuneCraftory.modRes("npc/default");
-    public static final ResourceLocation DEFAULT_LOCATION_SLIM = RuneCraftory.modRes("npc/default_slim");
-    public static final ResourceLocation DEFAULT_NPC_ANIMATION = RuneCraftory.modRes("npc/default");
-
     protected final ReloadableCache<ModelPartsContainer> model;
     protected final ReloadableCache<BedrockAnimations> attackAnimations;
     protected final ReloadableCache<BedrockAnimations> miscAnimations;
@@ -69,7 +63,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     protected HumanoidModel<T> delegate;
 
     public HumanoidBasedModel() {
-        this(DEFAULT_PLAYER_LOCATION, DEFAULT_NPC_ANIMATION, 0);
+        this(HumanoidModelLocations.DEFAULT_PLAYER_LOCATION, HumanoidModelLocations.DEFAULT_NPC_ANIMATION, 0);
     }
 
     public HumanoidBasedModel(ResourceLocation modelLocation, ResourceLocation animationLocation, float inflate) {
@@ -95,7 +89,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
                         this.bodyVehicleOffset = new Vector3f(attachmentPose.x - bodyPose.x, attachmentPose.y - bodyPose.y, attachmentPose.z - bodyPose.z);
                     }
                 });
-        this.attackAnimations = GeoAnimationManager.getInstance().getAnimation(DEFAULT_PLAYER_LOCATION);
+        this.attackAnimations = GeoAnimationManager.getInstance().getAnimation(HumanoidModelLocations.DEFAULT_PLAYER_LOCATION);
         this.miscAnimations = GeoAnimationManager.getInstance().getOptionalAnimation(animationLocation);
     }
 

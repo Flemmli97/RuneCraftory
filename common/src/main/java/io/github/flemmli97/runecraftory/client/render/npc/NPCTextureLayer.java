@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatur
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import net.minecraft.client.Minecraft;
@@ -28,6 +29,19 @@ public class NPCTextureLayer<T extends NPCEntity> extends RenderLayer<T, Humanoi
         super(renderer);
         this.renderer = renderer;
         this.layer = layer;
+    }
+
+    public static int setColor(NPCEntity entity, LayerType layer) {
+        if (layer == LayerType.SKIN_LAYER) {
+            if (entity.getLook().value().playerSkin() != null) {
+                return 0xffffffff;
+            } else {
+                ModelFeatureType.ModelFeature modelFeature = entity.lookFeatures.getFeature(RuneCraftoryNPCLooks.MODEL.get());
+                if (modelFeature != null && modelFeature.model().flatMap(ModelFeatureType.ModelData::texture).orElse(null) != null)
+                    return 0xffffffff;
+            }
+        }
+        return setColor(entity.lookFeatures, layer);
     }
 
     public static int setColor(NPCFeatureContainer features, LayerType layer) {
@@ -139,7 +153,7 @@ public class NPCTextureLayer<T extends NPCEntity> extends RenderLayer<T, Humanoi
     }
 
     protected int setColor(T entity) {
-        return setColor(entity.lookFeatures, this.layer);
+        return setColor(entity, this.layer);
     }
 
     protected ResourceLocation getTexture(T entity) {

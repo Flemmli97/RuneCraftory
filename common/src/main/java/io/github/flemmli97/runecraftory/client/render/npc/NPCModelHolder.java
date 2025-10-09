@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
+import io.github.flemmli97.runecraftory.client.model.HumanoidModelLocations;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import net.minecraft.resources.ResourceLocation;
 
@@ -16,7 +17,7 @@ public class NPCModelHolder {
         this.location = location;
         for (NPCTextureLayer.ModelType modelType : NPCTextureLayer.ModelType.values()) {
             this.models.put(modelType, new HumanoidBasedModel<>(location.getFirst(),
-                    location.getSecond() == null ? HumanoidBasedModel.DEFAULT_NPC_ANIMATION : location.getSecond(), modelType.expand));
+                    location.getSecond() == null ? HumanoidModelLocations.DEFAULT_NPC_ANIMATION : location.getSecond(), modelType.expand));
         }
     }
 

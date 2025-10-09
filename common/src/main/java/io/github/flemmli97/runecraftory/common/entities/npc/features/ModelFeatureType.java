@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
+import io.github.flemmli97.runecraftory.client.model.HumanoidModelLocations;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
@@ -14,11 +15,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
-public record ModelFeatureType(Optional<ModelDataType> model,
+public record ModelFeatureType(Optional<ModelData> model,
                                Optional<ResourceLocation> animation) implements NPCFeature.NPCFeatureHolder<ModelFeatureType.ModelFeature> {
 
     public static MapCodec<ModelFeatureType> TYPE_CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(ModelDataType.CODEC.optionalFieldOf("model").forGetter(ModelFeatureType::model),
+            inst.group(ModelData.CODEC.optionalFieldOf("model").forGetter(ModelFeatureType::model),
                     ResourceLocation.CODEC.optionalFieldOf("animation").forGetter(ModelFeatureType::animation)
             ).apply(inst, ModelFeatureType::new));
     public static MapCodec<ModelFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->
@@ -30,8 +31,7 @@ public record ModelFeatureType(Optional<ModelDataType> model,
 
     @Override
     public ModelFeature create(NPCEntity npc) {
-        return new ModelFeature(this.model().map(data -> new ModelData(data.model(), data.layerPrefix(), data.hasLayers())),
-                this.animation());
+        return new ModelFeature(this.model(), this.animation());
     }
 
     @Override
@@ -47,24 +47,21 @@ public record ModelFeatureType(Optional<ModelDataType> model,
         }
     }
 
-    public record ModelDataType(ResourceLocation model, String layerPrefix, boolean hasLayers) {
-        public static Codec<ModelDataType> CODEC = RecordCodecBuilder.create(inst ->
-                inst.group(ResourceLocation.CODEC.fieldOf("model").forGetter(ModelDataType::model),
-                        Codec.STRING.fieldOf("layerPrefix").forGetter(ModelDataType::layerPrefix),
-                        Codec.BOOL.fieldOf("hasLayers").forGetter(ModelDataType::hasLayers)
-                ).apply(inst, ModelDataType::new));
-    }
+    public record ModelData(ResourceLocation model, String layerPrefix, Optional<ResourceLocation> texture) {
 
-    public record ModelData(ResourceLocation model, String layerPrefix, boolean hasLayers) {
         public static Codec<ModelData> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(ResourceLocation.CODEC.fieldOf("model").forGetter(ModelData::model),
                         Codec.STRING.fieldOf("layerPrefix").forGetter(ModelData::layerPrefix),
-                        Codec.BOOL.fieldOf("hasLayers").forGetter(ModelData::hasLayers)
+                        ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(ModelData::texture)
                 ).apply(inst, ModelData::new));
 
         public static final StreamCodec<ByteBuf, ModelData> STREAM_CODEC = StreamCodec.composite(
                 ResourceLocation.STREAM_CODEC, ModelData::model, ByteBufCodecs.STRING_UTF8, ModelData::layerPrefix,
-                ByteBufCodecs.BOOL, ModelData::hasLayers, ModelData::new);
+                ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), ModelData::texture, ModelData::new);
 
+        public static ModelData textured(boolean slim, ResourceLocation texture) {
+            return new ModelData(slim ? HumanoidModelLocations.DEFAULT_LOCATION_SLIM : HumanoidModelLocations.DEFAULT_LOCATION, "",
+                    Optional.of(texture));
+        }
     }
 }
