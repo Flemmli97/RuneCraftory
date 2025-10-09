@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelAttachmentsType;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.CommonColors;
@@ -44,14 +43,14 @@ public class ModelFeatureRender extends NPCFeatureRenderer<ModelAttachmentsType.
                                                    float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         FeatureModel<NPCEntity> model = MODELS_CACHE.computeIfAbsent(attachment.model(), k -> new FeatureModel<>(attachment.model(), attachment.model()));
         poseStack.pushPose();
-        poseStack.translate(0, -1.5, 0);
         model.setMain(renderer.getModel());
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
         model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.setMain(null);
         ModelAttachmentsType.Location location = attachment.location();
         this.translateToPart(renderer.getModel(), location, poseStack);
-        model.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityCutout(textureFrom(attachment.texture()))), packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0), CommonColors.WHITE);
+        poseStack.translate(0, -1.5, 0);
+        model.renderToBuffer(poseStack, buffer.getBuffer(model.renderType(textureFrom(attachment.texture()))), packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0), CommonColors.WHITE);
         poseStack.popPose();
     }
 
@@ -74,23 +73,23 @@ public class ModelFeatureRender extends NPCFeatureRenderer<ModelAttachmentsType.
 
     private <E extends NPCEntity> void translateToPart(HumanoidBasedModel<E> model, ModelAttachmentsType.Location location, PoseStack poseStack) {
         switch (location) {
-            case HEAD -> model.head.translateAndRotate(poseStack);
-            case BODY -> model.body.translateAndRotate(poseStack);
-            case LEFT_ARM -> model.leftArm.translateAndRotate(poseStack);
-            case RIGHT_ARM -> model.rightArm.translateAndRotate(poseStack);
+            case HEAD -> model.head.translateAndRotateWithParents(poseStack);
+            case BODY -> model.body.translateAndRotateWithParents(poseStack);
+            case LEFT_ARM -> model.leftArm.translateAndRotateWithParents(poseStack);
+            case RIGHT_ARM -> model.rightArm.translateAndRotateWithParents(poseStack);
             case LEGS -> {
                 if (model.legBase != null) {
-                    model.legBase.translateAndRotate(poseStack);
+                    model.legBase.translateAndRotateWithParents(poseStack);
                 } else {
                     double dx = model.leftLeg.x - model.rightLeg.x;
                     double dy = model.leftLeg.y - model.rightLeg.y;
                     double dz = model.leftLeg.z - model.rightLeg.z;
                     poseStack.translate(dx, dy, dz);
-                    model.rightLeg.translateAndRotate(poseStack);
+                    model.rightLeg.translateAndRotateWithParents(poseStack);
                 }
             }
-            case LEFT_LEG -> model.leftLeg.translateAndRotate(poseStack);
-            case RIGHT_LEG -> model.rightLeg.translateAndRotate(poseStack);
+            case LEFT_LEG -> model.leftLeg.translateAndRotateWithParents(poseStack);
+            case RIGHT_LEG -> model.rightLeg.translateAndRotateWithParents(poseStack);
         }
     }
 }

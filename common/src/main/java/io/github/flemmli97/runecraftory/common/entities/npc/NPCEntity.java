@@ -38,6 +38,9 @@ import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateTracker;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.TargetableOpponent;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
@@ -207,13 +210,15 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt, SmartBrainOwner<NPCEntity>, SyncedMobDataHandler {
+public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt,
+        SmartBrainOwner<NPCEntity>, SyncedMobDataHandler, MoveStateHolder {
 
     public static final float PATH_FIND_LENGTH = 100;
 
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.BYTE);
 
     public static final TypedResource<TargetPosition> TARGET_POSITION = new TypedResource<>(RuneCraftory.modRes("target_position"));
 
@@ -293,6 +298,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
     public final AttackActionHandler weaponHandler = new EntityWeaponHandler<>(this);
+
+    private final MoveStateTracker moveStateTracker = new MoveStateTracker(this, 5, MOVE_FLAGS, this::calculateMoveType);
 
     public NPCEntity(EntityType<? extends NPCEntity> type, Level level) {
         super(type, level);
@@ -379,6 +386,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         builder.define(PLAY_DEATH_STATE, false);
         builder.define(MALE, false);
         builder.define(BEHAVIOUR_DATA, 0);
+        builder.define(MOVE_FLAGS, (byte) 0);
     }
 
     @Override
@@ -533,6 +541,34 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     @Override
     protected Brain.Provider<?> brainProvider() {
         return new SmartBrainProvider<>(this, true);
+    }
+
+    @Override
+    public float interpolatedMoveTick(float partialTicks) {
+        return this.moveStateTracker.interpolatedMoveTick(partialTicks);
+    }
+
+    @Override
+    public float interpolatedMoveTickOf(MoveType moveType, float partialTicks) {
+        return this.moveStateTracker.interpolatedMoveTickOf(moveType, partialTicks);
+    }
+
+    public MoveType calculateMoveType() {
+        if (this.getControllingPassenger() instanceof Player || !this.walkAnimation.isMoving()) {
+            return MoveType.NONE;
+        }
+        if (this.isImmobile())
+            return MoveType.NONE;
+        double d0 = this.getMoveControl().getSpeedModifier();
+        MoveType move;
+        if (d0 > 1 || this.getTarget() != null) {
+            move = MoveType.RUN;
+        } else if (d0 <= 0.6) {
+            move = MoveType.SNEAK;
+        } else {
+            move = MoveType.WALK;
+        }
+        return move;
     }
 
     public void setBehaviour(Behaviour behaviour) {
@@ -747,6 +783,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
         }
+        this.moveStateTracker.tick();
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
             if (!this.level().isClientSide) {

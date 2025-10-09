@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity> extends HumanoidBasedModel<T> {
+public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity & MoveStateHolder> extends HumanoidBasedModel<T> {
 
     public AnimatedPlayerModel() {
         super();

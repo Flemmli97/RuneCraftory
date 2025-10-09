@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.entities.utils.CommonMonsterHandl
 import io.github.flemmli97.runecraftory.common.entities.utils.DailyMonsterUpdater;
 import io.github.flemmli97.runecraftory.common.entities.utils.ExtendedEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
+import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateTracker;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
@@ -176,7 +177,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public abstract class BaseMonster extends PathfinderMob implements Enemy, AnimatedEntity, CommonMonsterHandler, ExtendedEntity, SleepingEntity,
-        TargetableOpponent, AOEAttackEntity, MobAttackExt, SmartBrainOwner<BaseMonster>, SyncedMobDataHandler {
+        TargetableOpponent, AOEAttackEntity, MobAttackExt, SmartBrainOwner<BaseMonster>, SyncedMobDataHandler, MoveStateHolder {
 
     public static final int MOVE_TICK_MAX = 5;
 
@@ -407,20 +408,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     }
                 }
             }
-        }
-        if (this.playDeath()) {
-            this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level().isClientSide) {
-                if (teleported)
-                    this.heal(1);
-                if (this.getHealth() > 0.02)
-                    this.setPlayDeath(false);
-            }
-        } else {
-            this.playDeathTick = Math.max(0, --this.playDeathTick);
-        }
-        this.moveStateTracker.tick();
-        if (!this.level().isClientSide) {
             this.updater.tick();
             if (this.tamingTick > 0 || this.isNoAi()) {
                 if (this.getMoveFlag() != MoveType.NONE) {
@@ -457,6 +444,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         } else {
             if (!this.playDeath() && TendCrops.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level().addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+        }
+        this.moveStateTracker.tick();
+        if (this.playDeath()) {
+            this.playDeathTick = Math.min(15, ++this.playDeathTick);
+            if (!this.level().isClientSide) {
+                if (teleported)
+                    this.heal(1);
+                if (this.getHealth() > 0.02)
+                    this.setPlayDeath(false);
+            }
+        } else {
+            this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
         AnimationState animation = this.getAnimationHandler().getAnimation();
         if (animation == null && this.getTargetPosition() != null) {
@@ -665,10 +664,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return new SmartBrainProvider<>(this);
     }
 
+    @Override
     public float interpolatedMoveTick(float partialTicks) {
         return this.moveStateTracker.interpolatedMoveTick(partialTicks);
     }
 
+    @Override
     public float interpolatedMoveTickOf(MoveType moveType, float partialTicks) {
         return this.moveStateTracker.interpolatedMoveTickOf(moveType, partialTicks);
     }
