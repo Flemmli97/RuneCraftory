@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
@@ -26,11 +27,10 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 public class BlockStatesGen extends BlockStateProvider {
 
     private static final ResourceLocation CROP_TINTED = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/crop_tinted");
-    private static final ResourceLocation CROP_BIG = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/big_crop");
-    private static final ResourceLocation CROP_GIANT_1 = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_crop_1");
-    private static final ResourceLocation CROP_GIANT_2 = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_crop_2");
-    private static final ResourceLocation FLOWER_BIG = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/big_flower");
-    private static final ResourceLocation FLOWER_GIANT = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_flower");
+    private static final ResourceLocation CROP_GIANT_BOTTOM = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_crop_bottom");
+    private static final ResourceLocation CROP_GIANT_TOP = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_crop_top");
+    private static final ResourceLocation FLOWER_GIANT_BOTTOM = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_flower_bottom");
+    private static final ResourceLocation FLOWER_GIANT_TOP = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/giant_flower_top");
     private static final ResourceLocation CROSS_TINTED = RuneCraftory.modRes(ModelProvider.BLOCK_FOLDER + "/cross_tinted");
 
     public BlockStatesGen(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -64,13 +64,15 @@ public class BlockStatesGen extends BlockStateProvider {
                 }, ExtendedCropBlock.WILTED);
                 continue;
             }
-            if (block instanceof GiantCropBlock giant)
+            if (block instanceof GiantCropBlock giant) {
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     ResourceLocation texture = this.itemTexture(giant.getCrop(BuiltInRegistries.ITEM.asLookup()));
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(reg.getID().toString(), FLOWER_GIANT, "0", texture))
+                    ResourceLocation parent = state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? FLOWER_GIANT_BOTTOM : FLOWER_GIANT_TOP;
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(reg.getID().toString()
+                                    + (state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? "" : "_top"), parent, "layer0", texture))
                             .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
                 }, ExtendedCropBlock.WILTED, GiantCropBlock.AGE);
-            else if (block instanceof ExtendedCropBlock)
+            } else if (block instanceof ExtendedCropBlock)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(ExtendedCropBlock.AGE);
                     boolean defaultFlowerState = stage == 0 && reg != RuneCraftoryBlocks.EMERY_FLOWER && reg != RuneCraftoryBlocks.IRONLEAF
@@ -78,52 +80,35 @@ public class BlockStatesGen extends BlockStateProvider {
                     String name = defaultFlowerState ? "runecraftory:flower_stage_0" : reg.getID().toString() + "_" + stage;
                     ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
                             : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, reg.getID().getPath() + "_" + stage);
-                    ResourceLocation parent = CROSS_TINTED;
                     if (stage == 4) {
-                        parent = FLOWER_BIG;
                         RegistryEntrySupplier<Block, ?> giant = RuneCraftoryBlocks.GIANT_CROP_MAP.get(reg);
                         if (giant != null && giant.get() instanceof GiantCropBlock giantCrop)
                             texture = this.itemTexture(giantCrop.getCrop(BuiltInRegistries.ITEM.asLookup()));
                     }
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "cross", texture)).build();
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, CROSS_TINTED, "cross", texture)).build();
                 }, ExtendedCropBlock.WILTED);
         }
         RuneCraftoryBlocks.CROPS.forEach(reg -> {
             Block block = reg.get();
-            if (block instanceof GiantCropBlock)
+            if (block instanceof GiantCropBlock) {
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, reg.getID().getPath());
-                    ResourceLocation parent = CROP_GIANT_1;
-                    int rot = 0;
-                    String file = reg.getID().toString();
-                    switch (state.getValue(GiantCropBlock.DIRECTION)) {
-                        case EAST -> {
-                            parent = CROP_GIANT_2;
-                            file += "_2";
-                        }
-                        case SOUTH -> rot = 180;
-                        case WEST -> {
-                            parent = CROP_GIANT_2;
-                            file += "_2";
-                            rot = 180;
-                        }
-                    }
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(file, parent, "crop", texture))
-                            .rotationY(rot).build();
+                    ResourceLocation parent = state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? CROP_GIANT_BOTTOM : CROP_GIANT_TOP;
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(reg.getID().toString()
+                                    + (state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? "" : "_top"), parent, "layer0", texture))
+                            .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
                 }, ExtendedCropBlock.WILTED, GiantCropBlock.AGE);
-            else if (block instanceof ExtendedCropBlock)
+            } else if (block instanceof ExtendedCropBlock)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(ExtendedCropBlock.AGE);
                     String name = reg.getID().toString() + "_" + stage;
                     ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, reg.getID().getPath() + "_" + stage);
-                    ResourceLocation parent = CROP_TINTED;
                     if (stage == 4) {
-                        parent = CROP_BIG;
                         RegistryEntrySupplier<Block, ?> giant = RuneCraftoryBlocks.GIANT_CROP_MAP.get(reg);
                         if (giant != null)
                             texture = this.blockTexture(giant.get());
                     }
-                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, parent, "crop", texture)).build();
+                    return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, CROP_TINTED, "crop", texture)).build();
                 }, ExtendedCropBlock.WILTED);
         });
         RuneCraftoryBlocks.MINERAL_MAP.values().forEach(reg -> {

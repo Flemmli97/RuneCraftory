@@ -1,6 +1,6 @@
 {
-  "parent": "runecraftory:block/big_crop",
+  "parent": "runecraftory:block/crop_tinted",
   "textures": {
-    "crop": "runecraftory:block/golden_pumpkin_4"
+    "crop": "runecraftory:block/golden_doom_pumpkin"
   }
 }

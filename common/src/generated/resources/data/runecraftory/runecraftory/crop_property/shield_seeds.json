@@ -1,8 +1,12 @@
 {
   "bad_season": [],
   "best_season": [],
+  "crop": {
+    "crop": [],
+    "crop_block": "runecraftory:shield_flower",
+    "seed": "runecraftory:shield_seeds"
+  },
   "growth": 15,
-  "item": "runecraftory:shield_seeds",
   "max_drops": 1,
   "regrowable": false
 }

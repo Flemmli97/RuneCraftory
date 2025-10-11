@@ -552,7 +552,9 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(RuneCraftoryItems.FORMULAR_A.get(), RuneCraftoryItems.FORMULAR_B.get(), RuneCraftoryItems.FORMULAR_C.get(), RuneCraftoryItems.MINIMIZER.get(),
                         RuneCraftoryItems.GIANTIZER.get(), RuneCraftoryItems.GREENIFIER.get(), RuneCraftoryItems.GREENIFIER_PLUS.get(), RuneCraftoryItems.WETTABLE_POWDER.get())
                 .add(RuneCraftoryItems.WATERING_CAN_SCRAP.get(), RuneCraftoryItems.WATERING_CAN_IRON.get(),
-                        RuneCraftoryItems.WATERING_CAN_SILVER.get(), RuneCraftoryItems.WATERING_CAN_GOLD.get(), RuneCraftoryItems.WATERING_CAN_PLATINUM.get());
+                        RuneCraftoryItems.WATERING_CAN_SILVER.get(), RuneCraftoryItems.WATERING_CAN_GOLD.get(), RuneCraftoryItems.WATERING_CAN_PLATINUM.get())
+                .add(RuneCraftoryItems.SICKLE_SCRAP.get(), RuneCraftoryItems.SICKLE_IRON.get(),
+                        RuneCraftoryItems.SICKLE_SILVER.get(), RuneCraftoryItems.SICKLE_GOLD.get(), RuneCraftoryItems.SICKLE_PLATINUM.get());
     }
 
     protected static TagKey<Item> tempKey(String path) {

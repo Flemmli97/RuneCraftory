@@ -1,13 +1,20 @@
 {
   "bad_season": [
-    "SUMMER"
-  ],
-  "best_season": [
     "WINTER"
   ],
-  "giant_crop": "runecraftory:golden_king_cabbage",
+  "best_season": [
+    "SUMMER"
+  ],
+  "crop": {
+    "crop": "runecraftory:golden_cabbage",
+    "crop_block": "runecraftory:golden_cabbage",
+    "giant_crop": {
+      "block": "runecraftory:golden_king_cabbage",
+      "item": "runecraftory:golden_king_cabbage"
+    },
+    "seed": "runecraftory:golden_cabbage_seeds"
+  },
   "growth": 75,
-  "item": "runecraftory:golden_cabbage_seeds",
   "max_drops": 3,
   "regrowable": false
 }

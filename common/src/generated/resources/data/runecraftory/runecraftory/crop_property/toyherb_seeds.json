@@ -1,13 +1,20 @@
 {
   "bad_season": [
-    "WINTER"
-  ],
-  "best_season": [
     "SPRING"
   ],
-  "giant_crop": "runecraftory:ultra_toyherb",
+  "best_season": [
+    "WINTER"
+  ],
+  "crop": {
+    "crop": "runecraftory:toyherb",
+    "crop_block": "runecraftory:toyherb",
+    "giant_crop": {
+      "block": "runecraftory:ultra_toyherb",
+      "item": "runecraftory:ultra_toyherb"
+    },
+    "seed": "runecraftory:toyherb_seeds"
+  },
   "growth": 4,
-  "item": "runecraftory:toyherb_seeds",
   "max_drops": 2,
   "regrowable": false
 }

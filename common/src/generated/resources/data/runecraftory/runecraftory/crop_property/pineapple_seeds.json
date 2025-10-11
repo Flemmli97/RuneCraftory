@@ -1,15 +1,22 @@
 {
   "bad_season": [
+    "SUMMER"
+  ],
+  "best_season": [
     "SPRING",
     "AUTUMN",
     "WINTER"
   ],
-  "best_season": [
-    "SUMMER"
-  ],
-  "giant_crop": "runecraftory:king_pineapple",
+  "crop": {
+    "crop": "runecraftory:pineapple",
+    "crop_block": "runecraftory:pineapple",
+    "giant_crop": {
+      "block": "runecraftory:king_pineapple",
+      "item": "runecraftory:king_pineapple"
+    },
+    "seed": "runecraftory:pineapple_seeds"
+  },
   "growth": 30,
-  "item": "runecraftory:pineapple_seeds",
   "max_drops": 2,
   "regrowable": true
 }

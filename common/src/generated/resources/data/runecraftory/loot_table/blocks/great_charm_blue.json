@@ -11,7 +11,9 @@
               "block": "runecraftory:great_charm_blue",
               "condition": "minecraft:block_state_property",
               "properties": {
-                "facing": "north"
+                "age": "1",
+                "facing": "north",
+                "half": "bottom"
               }
             }
           ],

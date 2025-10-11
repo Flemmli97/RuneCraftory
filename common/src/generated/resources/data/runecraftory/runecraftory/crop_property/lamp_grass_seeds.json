@@ -1,11 +1,18 @@
 {
-  "bad_season": [],
-  "best_season": [
+  "bad_season": [
     "WINTER"
   ],
-  "giant_crop": "runecraftory:kaiser_lamp_grass",
+  "best_season": [],
+  "crop": {
+    "crop": "runecraftory:lamp_grass",
+    "crop_block": "runecraftory:lamp_grass",
+    "giant_crop": {
+      "block": "runecraftory:lamp_grass",
+      "item": "runecraftory:kaiser_lamp_grass"
+    },
+    "seed": "runecraftory:lamp_grass_seeds"
+  },
   "growth": 16,
-  "item": "runecraftory:lamp_grass_seeds",
   "max_drops": 3,
   "regrowable": false
 }

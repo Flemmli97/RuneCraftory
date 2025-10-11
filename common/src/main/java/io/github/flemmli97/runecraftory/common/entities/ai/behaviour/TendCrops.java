@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.ai.behaviour;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
@@ -149,7 +150,7 @@ public class TendCrops<E extends BaseMonster> extends ExtendedBehaviour<E> {
                     breakBlock(entity, selected, entity.getCropInventory() != null ?
                             s -> Platform.INSTANCE.insertInto(entity.level().getBlockEntity(entity.getCropInventory()), s) : null);
                 } else if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
-                    CropUtils.harvestCropRightClick(state, entity.level(), selected, entity, ItemStack.EMPTY, CropUtils.getPropertiesFor(crop), InteractionHand.MAIN_HAND, entity.getCropInventory() != null ?
+                    CropUtils.harvestCropRightClick(state, entity.level(), selected, entity, ItemStack.EMPTY, DataPackHandler.INSTANCE.cropManager().get(crop), InteractionHand.MAIN_HAND, entity.getCropInventory() != null ?
                             s -> Platform.INSTANCE.insertInto(entity.level().getBlockEntity(entity.getCropInventory()), s) : null);
                     entity.level().getEntities(EntityTypeTest.forClass(ItemEntity.class), entity.getBoundingBox().inflate(0.2), e -> true);
                     success = true;

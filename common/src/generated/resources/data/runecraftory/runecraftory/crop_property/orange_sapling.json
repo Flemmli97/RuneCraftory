@@ -1,8 +1,15 @@
 {
   "bad_season": [],
   "best_season": [],
+  "crop": {
+    "crop": [],
+    "crop_block": [
+      "runecraftory:orange_sapling",
+      "runecraftory:orange_tree"
+    ],
+    "seed": "runecraftory:orange_sapling"
+  },
   "growth": 20,
-  "item": "runecraftory:orange_sapling",
   "max_drops": 1,
   "regrowable": false
 }

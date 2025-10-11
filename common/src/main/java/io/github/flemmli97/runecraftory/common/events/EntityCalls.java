@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
 import io.github.flemmli97.runecraftory.common.blocks.MineralBlock;
-import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -313,7 +312,7 @@ public class EntityCalls {
                 return;
             }
             if (crop.isMaxAge(state)) {
-                CropProperties props = CropUtils.getPropertiesFor(crop);
+                CropProperties props = DataPackHandler.INSTANCE.cropManager().get(crop);
                 CropUtils.harvestCropRightClick(state, player.level(), pos, player, player.getMainHandItem(),
                         props, hand, null);
             }
@@ -324,13 +323,10 @@ public class EntityCalls {
         if (level instanceof ServerLevel serverLevel) {
             BlockPos targetPos = null;
             boolean swing = false;
-            if (state.getBlock() instanceof Growable) {
-                CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
-                if (props != null) {
-                    BlockPos below = pos.below();
-                    if (FarmlandHandler.isFarmBlock(level.getBlockState(below)))
-                        targetPos = below;
-                }
+            if (DataPackHandler.INSTANCE.cropManager().get(state.getBlock()) != null) {
+                BlockPos below = pos.below();
+                if (FarmlandHandler.isFarmBlock(level.getBlockState(below)))
+                    targetPos = below;
                 swing = !(state.getBlock() instanceof BonemealableBlock);
             } else if (FarmlandHandler.isFarmBlock(state)) {
                 targetPos = pos;

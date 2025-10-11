@@ -1,10 +1,14 @@
 {
-  "bad_season": [],
-  "best_season": [
+  "bad_season": [
     "AUTUMN"
   ],
+  "best_season": [],
+  "crop": {
+    "crop": "minecraft:wheat",
+    "crop_block": "minecraft:wheat",
+    "seed": "minecraft:wheat_seeds"
+  },
   "growth": 5,
-  "item": "minecraft:wheat_seeds",
   "max_drops": 3,
   "regrowable": true
 }

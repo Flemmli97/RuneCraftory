@@ -44,6 +44,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
@@ -123,7 +124,8 @@ public class RuneCraftoryFabric implements ModInitializer {
             return InteractionResult.PASS;
         });
         UseBlockCallback.EVENT.register(((player, world, hand, hitResult) -> {
-            EntityCalls.cropRightClickHarvest(player, world.getBlockState(hitResult.getBlockPos()), hitResult.getBlockPos(), hand);
+            if (hand == InteractionHand.MAIN_HAND)
+                EntityCalls.cropRightClickHarvest(player, world.getBlockState(hitResult.getBlockPos()), hitResult.getBlockPos(), hand);
             return InteractionResult.PASS;
         }));
         UseItemCallback.EVENT.register((player, world, hand) -> {

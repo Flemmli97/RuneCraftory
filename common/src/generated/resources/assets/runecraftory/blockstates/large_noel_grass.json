@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,half=bottom": {
       "model": "runecraftory:block/large_noel_grass",
       "y": 90
     },
-    "facing=north": {
+    "facing=east,half=top": {
+      "model": "runecraftory:block/large_noel_grass_top",
+      "y": 90
+    },
+    "facing=north,half=bottom": {
       "model": "runecraftory:block/large_noel_grass"
     },
-    "facing=south": {
+    "facing=north,half=top": {
+      "model": "runecraftory:block/large_noel_grass_top"
+    },
+    "facing=south,half=bottom": {
       "model": "runecraftory:block/large_noel_grass",
       "y": 180
     },
-    "facing=west": {
+    "facing=south,half=top": {
+      "model": "runecraftory:block/large_noel_grass_top",
+      "y": 180
+    },
+    "facing=west,half=bottom": {
       "model": "runecraftory:block/large_noel_grass",
+      "y": 270
+    },
+    "facing=west,half=top": {
+      "model": "runecraftory:block/large_noel_grass_top",
       "y": 270
     }
   }

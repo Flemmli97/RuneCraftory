@@ -145,7 +145,7 @@ public class FarmlandData {
     private int growthPercent(ServerLevel level, BlockState crop) {
         if (!(crop.getBlock() instanceof Growable))
             return 0;
-        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(crop.getBlock().getCloneItemStack(level, this.pos, crop).getItem());
+        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(crop.getBlock());
         if (props != null) {
             return Math.min((int) (this.cropAge / props.growth() * 100), 100);
         }
@@ -186,7 +186,7 @@ public class FarmlandData {
             this.resetCrop();
             return;
         }
-        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock().getCloneItemStack(level, pos, state).getItem());
+        CropProperties props = DataPackHandler.INSTANCE.cropManager().get(state.getBlock());
         if (props == null || !props.regrowable() || this.getHealth() <= 0) {
             this.resetCrop();
             return;
@@ -328,7 +328,7 @@ public class FarmlandData {
 
         boolean growHerb = false;
         boolean cropRecalc = false;
-        CropProperties props = cropState.getBlock() instanceof Growable ? DataPackHandler.INSTANCE.cropManager().get(cropState.getBlock().getCloneItemStack(level, this.pos, cropState).getItem()) : null;
+        CropProperties props = cropState.getBlock() instanceof Growable ? DataPackHandler.INSTANCE.cropManager().get(cropState.getBlock()) : null;
 
         int wiltStage = 0;
         for (ExternalModifiers modifiers : this.scheduledData) {
@@ -351,7 +351,7 @@ public class FarmlandData {
             }
             boolean hasGiantVersion = props != null && props.getGiantVersion().map(g -> !cropState.is(g)).orElse(false);
 
-            //Dont do stuff if crop is fully grown.
+            //Don't do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
             if (!crop.canGrow(level, cropPos, cropState) && (!hasGiantVersion || this.size == 0 || (this.size < 0 && this.cropSize <= 0))) {
                 break;
@@ -397,17 +397,18 @@ public class FarmlandData {
                 if (!isWet)
                     speed *= 0.5f;
                 this.cropAge += Math.min(props.growth(), speed);
-                this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5 + 0.5);
+                this.cropLevel += this.quality * (level.getRandom().nextFloat() * 0.5f + 0.5f);
                 if (crop.runecraftory$isAtMaxAge(cropState) && hasGiantVersion) {
                     if (this.size != 0) {
-                        this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2 + 0.1);
+                        this.cropSize += this.size * (level.getRandom().nextFloat() * 0.2f + 0.1f);
                         didCropGrow = this.size > 0 ? this.cropSize < 1 : this.cropSize > 0;
                     }
                 } else {
                     didCropGrow = true;
                 }
-                if (!didCropGrow)
+                if (!didCropGrow) {
                     maxAgeStop = true;
+                }
             }
             if (!ignoreWater && canRainAt)
                 isWet = this.scheduledWatering > 0;

@@ -1,13 +1,20 @@
 {
   "bad_season": [
-    "SUMMER"
-  ],
-  "best_season": [
     "WINTER"
   ],
-  "giant_crop": "runecraftory:giant_hot_hot_fruit",
+  "best_season": [
+    "SUMMER"
+  ],
+  "crop": {
+    "crop": "runecraftory:hot_hot_fruit",
+    "crop_block": "runecraftory:hot_hot_fruit",
+    "giant_crop": {
+      "block": "runecraftory:giant_hot_hot_fruit",
+      "item": "runecraftory:giant_hot_hot_fruit"
+    },
+    "seed": "runecraftory:hot_hot_fruit_seeds"
+  },
   "growth": 31,
-  "item": "runecraftory:hot_hot_fruit_seeds",
   "max_drops": 5,
   "regrowable": false
 }

@@ -1,11 +1,18 @@
 {
-  "bad_season": [],
-  "best_season": [
+  "bad_season": [
     "SUMMER"
   ],
-  "giant_crop": "runecraftory:potato",
+  "best_season": [],
+  "crop": {
+    "crop": "minecraft:potato",
+    "crop_block": "minecraft:potatoes",
+    "giant_crop": {
+      "block": "runecraftory:princely_potato",
+      "item": "runecraftory:princely_potato"
+    },
+    "seed": "minecraft:potato"
+  },
   "growth": 4,
-  "item": "minecraft:potato",
   "max_drops": 4,
   "regrowable": false
 }

@@ -1,14 +1,21 @@
 {
   "bad_season": [
-    "WINTER"
-  ],
-  "best_season": [
     "SUMMER",
     "AUTUMN"
   ],
-  "giant_crop": "runecraftory:lorldy_yam",
+  "best_season": [
+    "WINTER"
+  ],
+  "crop": {
+    "crop": "runecraftory:yam",
+    "crop_block": "runecraftory:yam",
+    "giant_crop": {
+      "block": "runecraftory:lorldy_yam",
+      "item": "runecraftory:lordly_yam"
+    },
+    "seed": "runecraftory:yam_seeds"
+  },
   "growth": 9,
-  "item": "runecraftory:yam_seeds",
   "max_drops": 5,
   "regrowable": false
 }

@@ -849,11 +849,11 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> TURNIP_PINK_SEEDS = seed("turnip_pink", () -> RuneCraftoryBlocks.TURNIP_PINK);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> CABBAGE_SEEDS = seed("cabbage", () -> RuneCraftoryBlocks.CABBAGE);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> PINK_MELON_SEEDS = seed("pink_melon", () -> RuneCraftoryBlocks.PINK_MELON);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> HOT_HOT_SEEDS = seed("hot_hot_fruit", () -> RuneCraftoryBlocks.HOT_HOT_FRUIT);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLD_TURNIP_SEEDS = seed("golden_turnip", () -> RuneCraftoryBlocks.GOLDEN_TURNIP);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLD_POTATO_SEEDS = seed("golden_potato", () -> RuneCraftoryBlocks.GOLDEN_POTATO);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLD_PUMPKIN_SEEDS = seed("golden_pumpkin", () -> RuneCraftoryBlocks.GOLDEN_PUMPKIN);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLD_CABBAGE_SEEDS = seed("golden_cabbage", () -> RuneCraftoryBlocks.GOLDEN_CABBAGE);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> HOT_HOT_FRUIT_SEEDS = seed("hot_hot_fruit", () -> RuneCraftoryBlocks.HOT_HOT_FRUIT);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_TURNIP_SEEDS = seed("golden_turnip", () -> RuneCraftoryBlocks.GOLDEN_TURNIP);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_POTATO_SEEDS = seed("golden_potato", () -> RuneCraftoryBlocks.GOLDEN_POTATO);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_PUMPKIN_SEEDS = seed("golden_pumpkin", () -> RuneCraftoryBlocks.GOLDEN_PUMPKIN);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_CABBAGE_SEEDS = seed("golden_cabbage", () -> RuneCraftoryBlocks.GOLDEN_CABBAGE);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> BOK_CHOY_SEEDS = seed("bok_choy", () -> RuneCraftoryBlocks.BOK_CHOY);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> LEEK_SEEDS = seed("leek", () -> RuneCraftoryBlocks.LEEK);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> RADISH_SEEDS = seed("radish", () -> RuneCraftoryBlocks.RADISH);
@@ -1257,6 +1257,7 @@ public class RuneCraftoryItems {
 
     private static RegistryEntrySupplier<Item, ItemToolWateringCan> wateringCan(ToolItemTier tier) {
         RegistryEntrySupplier<Item, ItemToolWateringCan> sup = register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(new Item.Properties()
+                .stacksTo(1)
                 .component(DataComponents.RARITY, tier == ToolItemTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON)
                 .component(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), tier)
                 .component(RuneCraftoryDataComponentTypes.MAX_WATER.get(), GeneralConfig.getWaterFrom(tier))), RuneCraftoryCreativeTabs.WEAPON_TOOL_TAB);

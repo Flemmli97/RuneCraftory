@@ -5,8 +5,35 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "runecraftory:charm_blue"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:charm_blue",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ],
+              "name": "runecraftory:charm_blue"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:charm_blue",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "runecraftory:charm_blue"
+            }
+          ]
         }
       ],
       "rolls": 1.0

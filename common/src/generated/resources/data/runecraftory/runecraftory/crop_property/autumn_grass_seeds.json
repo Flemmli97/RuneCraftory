@@ -1,13 +1,20 @@
 {
   "bad_season": [
-    "WINTER"
-  ],
-  "best_season": [
     "AUTUMN"
   ],
-  "giant_crop": "runecraftory:big_autumn_grass",
+  "best_season": [
+    "WINTER"
+  ],
+  "crop": {
+    "crop": "runecraftory:autumn_grass",
+    "crop_block": "runecraftory:autumn_grass",
+    "giant_crop": {
+      "block": "runecraftory:big_autumn_grass",
+      "item": "runecraftory:big_autumn_grass"
+    },
+    "seed": "runecraftory:autumn_grass_seeds"
+  },
   "growth": 29,
-  "item": "runecraftory:autumn_grass_seeds",
   "max_drops": 3,
   "regrowable": false
 }

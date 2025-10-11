@@ -44,6 +44,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -690,11 +691,19 @@ public class Loottables extends LootTableProvider {
 
         protected static LootPool.Builder cropLoot(HolderLookup.Provider provider, ExtendedCropBlock block) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
-            if (block instanceof GiantCropBlock)
+            if (block instanceof GiantCropBlock) {
                 build.add(LootItem.lootTableItem(block.getCrop(provider)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(GiantCropBlock.DIRECTION, Direction.NORTH))));
-            else
-                build.add(LootItem.lootTableItem(block.getCrop(provider)));
+                        .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(GiantCropBlock.DIRECTION, Direction.NORTH)
+                                .hasProperty(GiantCropBlock.HALF, Half.BOTTOM)
+                                .hasProperty(GiantCropBlock.AGE, block.getMaxAge()))));
+            } else {
+                build.add(LootItem.lootTableItem(block.getCrop(provider)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                .setProperties(StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(GiantCropBlock.AGE, block.getMaxAge())))
+                        .otherwise(LootItem.lootTableItem(block.getCrop(provider)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                .setProperties(StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(GiantCropBlock.AGE, block.getGiantAge())))));
+            }
             return build;
         }
 

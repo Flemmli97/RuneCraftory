@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class WorldCalls {
@@ -21,10 +20,7 @@ public class WorldCalls {
     }
 
     public static boolean disableVanillaCrop(LevelAccessor level, BlockState state, BlockPos pos) {
-        if (state.getBlock() instanceof CropBlock crop) {
-            CropProperties prop = DataPackHandler.INSTANCE.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
-            return prop != null;
-        }
-        return false;
+        CropProperties prop = DataPackHandler.INSTANCE.cropManager().get(state.getBlock());
+        return prop != null;
     }
 }

@@ -5,8 +5,35 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "runecraftory:cucumber"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:cucumber",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ],
+              "name": "runecraftory:cucumber"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:cucumber",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "runecraftory:cucumber"
+            }
+          ]
         }
       ],
       "rolls": 1.0

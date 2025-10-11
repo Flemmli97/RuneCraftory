@@ -5,8 +5,35 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "runecraftory:toyherb"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:toyherb",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ],
+              "name": "runecraftory:toyherb"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:toyherb",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "runecraftory:toyherb"
+            }
+          ]
         }
       ],
       "rolls": 1.0

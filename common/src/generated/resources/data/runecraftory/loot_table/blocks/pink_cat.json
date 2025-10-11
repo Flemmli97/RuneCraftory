@@ -5,8 +5,35 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "runecraftory:pink_cat"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:pink_cat",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ],
+              "name": "runecraftory:pink_cat"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:pink_cat",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "runecraftory:pink_cat"
+            }
+          ]
         }
       ],
       "rolls": 1.0

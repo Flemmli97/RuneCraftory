@@ -5,8 +5,35 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "runecraftory:corn"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:corn",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ],
+              "name": "runecraftory:corn"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "runecraftory:corn",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "runecraftory:corn"
+            }
+          ]
         }
       ],
       "rolls": 1.0

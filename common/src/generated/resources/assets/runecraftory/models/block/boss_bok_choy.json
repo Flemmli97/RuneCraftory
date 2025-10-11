@@ -1,6 +1,6 @@
 {
-  "parent": "runecraftory:block/giant_crop_1",
+  "parent": "runecraftory:block/giant_crop_bottom",
   "textures": {
-    "crop": "runecraftory:block/boss_bok_choy"
+    "layer0": "runecraftory:block/boss_bok_choy"
   }
 }

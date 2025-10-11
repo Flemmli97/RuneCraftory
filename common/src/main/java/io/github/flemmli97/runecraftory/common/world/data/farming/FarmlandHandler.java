@@ -41,6 +41,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
@@ -94,7 +95,7 @@ public class FarmlandHandler extends SavedData {
 
     public static void waterLand(ServerLevel level, BlockPos pos, BlockState state) {
         level.sendParticles(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 0.1D);
-        level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 3);
+        level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), Block.UPDATE_ALL);
         level.playSound(null, pos, RuneCraftorySounds.GENERIC_FARM_LAND_WATER.get(), SoundSource.BLOCKS, 1.0f, 1.1f);
         BlockPos up = pos.above();
         BlockState crop = level.getBlockState(up);
@@ -512,28 +513,50 @@ public class FarmlandHandler extends SavedData {
             int maxX = Mth.floor(this.inner.maxX - 1);
             int maxZ = Mth.floor(this.inner.maxZ - 1);
             for (int z = minZ; z <= maxZ; z++) {
+                next:
                 for (int x = minX; x <= maxX; x++) {
                     BlockState s = this.crops.get(BlockPos.asLong(x, y, z));
                     if (s != null) {
                         BlockPos p = new BlockPos(x, y, z);
+                        int required = 4;
                         List<Pair<BlockPos, BlockState>> list = new ArrayList<>();
-                        if (s.getBlock() instanceof GiantCropBlock)
-                            s = s.setValue(GiantCropBlock.DIRECTION, Direction.SOUTH);
+                        if (s.getBlock() instanceof GiantCropBlock g) {
+                            required = 8;
+                            s = s.setValue(GiantCropBlock.DIRECTION, Direction.SOUTH)
+                                    .setValue(GiantCropBlock.HALF, Half.BOTTOM)
+                                    .setValue(GiantCropBlock.AGE, g.getMaxAge());
+                            BlockPos above = p.above();
+                            if (level.getBlockState(above).isAir()) {
+                                list.add(Pair.of(above, s.setValue(GiantCropBlock.HALF, Half.TOP)));
+                            } else {
+                                continue;
+                            }
+                        }
+                        list.add(Pair.of(p, s));
                         for (PositionDirection offset : OFFSETS) {
                             BlockPos newPos = p.offset(offset.pos());
                             BlockState s2 = this.crops.get(newPos.asLong());
                             if (s2 != null && s2.is(s.getBlock())) {
-                                if (s2.getBlock() instanceof GiantCropBlock)
-                                    s2 = s2.setValue(GiantCropBlock.DIRECTION, offset.direction());
+                                if (s2.getBlock() instanceof GiantCropBlock g) {
+                                    s2 = s2.setValue(GiantCropBlock.DIRECTION, offset.direction())
+                                            .setValue(GiantCropBlock.HALF, Half.BOTTOM)
+                                            .setValue(GiantCropBlock.AGE, g.getMaxAge());
+                                    BlockPos above = newPos.above();
+                                    if (level.getBlockState(above).isAir()) {
+                                        list.add(Pair.of(above, s2.setValue(GiantCropBlock.HALF, Half.TOP)));
+                                    } else {
+                                        continue next;
+                                    }
+                                }
                                 list.add(Pair.of(newPos, s2));
                             }
                         }
-                        list.add(Pair.of(p, s));
-                        if (list.size() == 4)
+                        if (list.size() == required) {
                             for (Pair<BlockPos, BlockState> pair : list) {
                                 this.crops.remove(pair.getFirst().asLong());
                                 level.setBlock(pair.getFirst(), pair.getSecond(), Block.UPDATE_ALL);
                             }
+                        }
                     }
                 }
             }

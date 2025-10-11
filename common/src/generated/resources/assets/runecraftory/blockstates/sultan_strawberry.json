@@ -1,18 +1,34 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "runecraftory:block/sultan_strawberry_2"
+    "facing=east,half=bottom": {
+      "model": "runecraftory:block/sultan_strawberry",
+      "y": 90
     },
-    "facing=north": {
+    "facing=east,half=top": {
+      "model": "runecraftory:block/sultan_strawberry_top",
+      "y": 90
+    },
+    "facing=north,half=bottom": {
       "model": "runecraftory:block/sultan_strawberry"
     },
-    "facing=south": {
+    "facing=north,half=top": {
+      "model": "runecraftory:block/sultan_strawberry_top"
+    },
+    "facing=south,half=bottom": {
       "model": "runecraftory:block/sultan_strawberry",
       "y": 180
     },
-    "facing=west": {
-      "model": "runecraftory:block/sultan_strawberry_2",
+    "facing=south,half=top": {
+      "model": "runecraftory:block/sultan_strawberry_top",
       "y": 180
+    },
+    "facing=west,half=bottom": {
+      "model": "runecraftory:block/sultan_strawberry",
+      "y": 270
+    },
+    "facing=west,half=top": {
+      "model": "runecraftory:block/sultan_strawberry_top",
+      "y": 270
     }
   }
 }

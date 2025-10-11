@@ -1,6 +1,6 @@
 {
-  "parent": "runecraftory:block/giant_crop_1",
+  "parent": "runecraftory:block/giant_crop_bottom",
   "textures": {
-    "crop": "runecraftory:block/king_pineapple"
+    "layer0": "runecraftory:block/king_pineapple"
   }
 }

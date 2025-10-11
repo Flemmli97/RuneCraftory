@@ -1,14 +1,21 @@
 {
   "bad_season": [
-    "WINTER"
-  ],
-  "best_season": [
     "SPRING",
     "SUMMER"
   ],
-  "giant_crop": "runecraftory:gigant_corn",
+  "best_season": [
+    "WINTER"
+  ],
+  "crop": {
+    "crop": "runecraftory:corn",
+    "crop_block": "runecraftory:corn",
+    "giant_crop": {
+      "block": "runecraftory:gigant_corn",
+      "item": "runecraftory:gigant_corn"
+    },
+    "seed": "runecraftory:corn_seeds"
+  },
   "growth": 5,
-  "item": "runecraftory:corn_seeds",
   "max_drops": 1,
   "regrowable": false
 }

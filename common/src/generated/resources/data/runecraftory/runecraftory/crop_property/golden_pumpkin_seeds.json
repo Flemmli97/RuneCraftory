@@ -1,13 +1,20 @@
 {
   "bad_season": [
-    "SUMMER"
-  ],
-  "best_season": [
     "WINTER"
   ],
-  "giant_crop": "runecraftory:doom_pumpkin",
+  "best_season": [
+    "SUMMER"
+  ],
+  "crop": {
+    "crop": "runecraftory:golden_pumpkin",
+    "crop_block": "runecraftory:golden_pumpkin",
+    "giant_crop": {
+      "block": "runecraftory:golden_doom_pumpkin",
+      "item": "runecraftory:golden_doom_pumpkin"
+    },
+    "seed": "runecraftory:golden_pumpkin_seeds"
+  },
   "growth": 75,
-  "item": "runecraftory:golden_pumpkin_seeds",
   "max_drops": 3,
   "regrowable": true
 }

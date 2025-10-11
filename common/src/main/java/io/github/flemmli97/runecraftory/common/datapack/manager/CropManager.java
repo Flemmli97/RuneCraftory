@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -11,8 +11,8 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.datapack.SyncableListener;
-import io.github.flemmli97.runecraftory.common.utils.HolderUtils;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -20,17 +20,16 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 
 public class CropManager extends SimpleJsonResourceReloadListener implements SyncableListener<Map<Item, ReloadableHolder<CropProperties>>> {
 
@@ -59,9 +58,10 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
         }
     };
 
-    private Map<Item, ReloadableHolder<CropProperties>> crops = ImmutableMap.of();
+    private Map<Item, ReloadableHolder<CropProperties>> itemLookup = ImmutableMap.of();
+    private Map<Block, ReloadableHolder<CropProperties>> blockLookup = ImmutableMap.of();
     private boolean resolved;
-    private Map<TagKey<Item>, ReloadableHolder<CropProperties>> tagCrops = ImmutableMap.of();
+    private Set<ReloadableHolder<CropProperties>> unresolved = ImmutableSet.of();
 
     private HolderLookup.Provider provider;
 
@@ -80,50 +80,75 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
         if (GeneralConfig.disableCropSystem)
             return null;
         this.resolveTags(false);
-        return this.crops.get(item);
+        return this.itemLookup.get(item);
+    }
+
+    @Nullable
+    public CropProperties get(Block block) {
+        ReloadableHolder<CropProperties> value = this.getWithId(block);
+        return value != null ? value.value() : null;
+    }
+
+    @Nullable
+    public ReloadableHolder<CropProperties> getWithId(Block block) {
+        if (GeneralConfig.disableCropSystem)
+            return null;
+        this.resolveTags(false);
+        return this.blockLookup.get(block);
     }
 
     public void resolveTags(boolean forced) {
         if (!this.resolved || forced) {
             this.resolved = true;
-            HashMap<Item, ReloadableHolder<CropProperties>> itemEntries = new HashMap<>(this.crops);
-            this.tagCrops.entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().location()))
-                    .forEach(entry -> HolderUtils.expandTag(this.provider, Registries.ITEM, entry.getKey()).forEach(item -> {
-                        if (!itemEntries.containsKey(item))
-                            itemEntries.put(item, entry.getValue());
-                    }));
-            this.crops = ImmutableMap.copyOf(itemEntries);
+            HashMap<Item, ReloadableHolder<CropProperties>> tagEntries = new HashMap<>();
+            HashMap<Item, ReloadableHolder<CropProperties>> itemEntries = new HashMap<>();
+            HashMap<Block, ReloadableHolder<CropProperties>> tagEntriesBlocks = new HashMap<>();
+            HashMap<Block, ReloadableHolder<CropProperties>> itemEntriesBlocks = new HashMap<>();
+            // Tags have lower priorities
+            this.unresolved.stream().sorted(Comparator.comparing(ReloadableHolder::id)).forEach(entry -> {
+                CropProperties.CropMappingInfo info = entry.value().getInfo();
+                if (info.seed() instanceof HolderSet.Named<Item>) {
+                    info.seed().forEach(h -> tagEntries.put(h.value(), entry));
+                } else {
+                    info.seed().forEach(h -> itemEntries.put(h.value(), entry));
+                }
+                if (info.crop() instanceof HolderSet.Named<Item>) {
+                    info.crop().forEach(h -> tagEntries.put(h.value(), entry));
+                } else {
+                    info.crop().forEach(h -> itemEntries.put(h.value(), entry));
+                }
+                if (info.cropBlock() instanceof HolderSet.Named<Block>) {
+                    info.cropBlock().forEach(h -> tagEntriesBlocks.put(h.value(), entry));
+                } else {
+                    info.cropBlock().forEach(h -> itemEntriesBlocks.put(h.value(), entry));
+                }
+                info.giant().ifPresent(giant -> {
+                    itemEntries.put(giant.getFirst(), entry);
+                    itemEntriesBlocks.put(giant.getSecond(), entry);
+                });
+            });
+            tagEntries.putAll(itemEntries);
+            this.itemLookup = ImmutableMap.copyOf(tagEntries);
+            tagEntriesBlocks.putAll(itemEntriesBlocks);
+            this.blockLookup = ImmutableMap.copyOf(tagEntriesBlocks);
         }
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
         this.resolved = false;
-        ImmutableMap.Builder<Item, ReloadableHolder<CropProperties>> itemEntries = ImmutableMap.builder();
-        ImmutableMap.Builder<TagKey<Item>, ReloadableHolder<CropProperties>> tagEntries = ImmutableMap.builder();
+        ImmutableSet.Builder<ReloadableHolder<CropProperties>> toResolve = ImmutableSet.builder();
         DynamicOps<JsonElement> ops = this.provider.createSerializationContext(JsonOps.INSTANCE);
         data.forEach((fres, el) -> {
             try {
-                JsonObject obj = el.getAsJsonObject();
-                String key = GsonHelper.getAsString(obj, "item");
-                if (key.startsWith("#")) {
-                    TagKey<Item> tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(key.substring(1)));
-                    CropProperties props = CropProperties.CODEC.parse(ops, el).getOrThrow();
-                    tagEntries.put(tag, new ReloadableHolder<>(fres, props));
-                } else {
-                    Optional<Item> item = HolderUtils.get(this.provider, Registries.ITEM, ResourceLocation.parse(key));
-                    item.ifPresent(i -> {
-                        CropProperties props = CropProperties.CODEC.parse(ops, el).getOrThrow();
-                        itemEntries.put(i, new ReloadableHolder<>(fres, props));
-                    });
-                }
+                CropProperties props = CropProperties.CODEC.parse(ops, el).getOrThrow();
+                toResolve.add(new ReloadableHolder<>(fres, props));
             } catch (Exception ex) {
                 RuneCraftory.LOGGER.error("Couldn't parse crop properties json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });
-        this.crops = itemEntries.build();
-        this.tagCrops = tagEntries.build();
+        this.unresolved = toResolve.build();
     }
 
     @Override
@@ -144,12 +169,12 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
     @Override
     public Map<Item, ReloadableHolder<CropProperties>> toSync() {
         this.resolveTags(false);
-        return Collections.unmodifiableMap(this.crops);
+        return Collections.unmodifiableMap(this.itemLookup);
     }
 
     @Override
     public void update(HolderLookup.Provider provider, Map<Item, ReloadableHolder<CropProperties>> value) {
         this.insertRegistryAccess(provider);
-        this.crops = value;
+        this.itemLookup = value;
     }
 }

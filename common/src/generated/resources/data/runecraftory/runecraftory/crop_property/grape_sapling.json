@@ -1,8 +1,15 @@
 {
   "bad_season": [],
   "best_season": [],
+  "crop": {
+    "crop": [],
+    "crop_block": [
+      "runecraftory:grape_sapling",
+      "runecraftory:grape_tree"
+    ],
+    "seed": "runecraftory:grape_sapling"
+  },
   "growth": 20,
-  "item": "runecraftory:grape_sapling",
   "max_drops": 1,
   "regrowable": false
 }

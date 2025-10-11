@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.common.blocks.ExtendedCropBlock;
 import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,6 +35,8 @@ public class CropUtils {
     public static void attemptGiantize(ServerLevel level, BlockPos cropPos, Growable crop, BlockState state, float progress, CropProperties props) {
         if (crop.runecraftory$isAtMaxAge(state) && props.getGiantVersion().isPresent() && progress >= 0.5) {
             if (state.is(props.getGiantVersion().get()))
+                return;
+            if (!level.getBlockState(cropPos.above()).isAir())
                 return;
             if (state.getBlock() instanceof ExtendedCropBlock blockCrop) {
                 int age = state.getValue(blockCrop.getAgeProperty());
@@ -53,28 +53,15 @@ public class CropUtils {
         }
     }
 
-    public static CropProperties getPropertiesFor(net.minecraft.world.level.block.CropBlock crop) {
-        return DataPackHandler.INSTANCE.cropManager().get(((CropBlockAccessor) crop).getSeedItem().asItem());
-    }
-
     public static void modifyCropDrops(BlockState state, LootParams.Builder builder, net.minecraft.world.level.block.CropBlock block, List<ItemStack> list) {
-        CropProperties prop = getPropertiesFor(block);
+        CropProperties prop = DataPackHandler.INSTANCE.cropManager().get(block);
         if (prop != null) {
             Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
             int itemLevel = pos != null ? getCropLevel(builder.getLevel(), BlockPos.containing(pos)) : 1;
             if (block.isMaxAge(state)) {
-                List<ItemStack> remove = new ArrayList<>();
-                boolean removedSeed = list.size() < 2;
-                for (ItemStack stack : list) {
-                    if (!removedSeed && stack.is(((CropBlockAccessor) block).getSeedItem().asItem())) {
-                        remove.add(stack);
-                        removedSeed = true;
-                    }
-                }
-                list.removeIf(remove::contains);
+                list.removeIf(item -> prop.getInfo().seed().contains(item.getItemHolder()));
                 list.forEach(s -> modifyStack(prop, s, itemLevel));
-            } else if (block instanceof ExtendedCropBlock)
-                list.clear();
+            }
         }
     }
 
@@ -84,38 +71,30 @@ public class CropUtils {
     }
 
     private static void modifyStack(CropProperties props, ItemStack stack, int level) {
-        if (stack.is(RunecraftoryTags.Items.CROPS)) {
+        if (props.getInfo().crop().contains(stack.getItemHolder()) || props.getInfo().giant().map(p -> stack.is(p.getFirst())).orElse(false)) {
             stack.setCount(props.maxDrops());
             ItemComponentUtils.getLeveledItem(stack, level);
         }
     }
 
     public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, InteractionHand hand, Function<ItemStack, ItemStack> stackConsumer) {
-        if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock cropBlock))
+        if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock cropBlock) || !cropBlock.isMaxAge(state))
             return;
-        if (stackConsumer != null) {
-            Block.getDrops(state, serverLevel, pos, null, entity, stack)
-                    .forEach(s -> {
-                        ItemStack rest = stackConsumer.apply(s);
-                        if (!rest.isEmpty())
-                            Block.popResource(level, pos, rest);
-                    });
-            state.spawnAfterBreak(serverLevel, pos, ItemStack.EMPTY, true);
-        } else
-            Block.dropResources(state, level, pos, null, entity, stack);
+        Growable growable = (Growable) cropBlock;
+        growable.onQuickHarvest(state, serverLevel, pos, entity, stack, stackConsumer);
         level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
-        if (props != null && props.regrowable() && FarmlandHandler.get(serverLevel.getServer())
-                .getData(serverLevel, pos.below()).map(d -> d.getHealth() > 0).orElse(false)) {
-            //Actually handled at block state change detection
+        if (props != null && props.regrowable() && FarmlandHandler.get(level.getServer())
+                .getData(serverLevel, growable.getFarmlandPosition(pos, state))
+                .map(d -> d.getHealth() > 0).orElse(false)) {
+            // Actually handled at block state change detection
             level.setBlock(pos, state.setValue(((CropBlockAccessor) cropBlock).cropAgeProperty(), 0), Block.UPDATE_ALL);
-        } else
+        } else {
             level.removeBlock(pos, false);
+        }
         if (entity instanceof ServerPlayer player) {
             RuneCraftoryCriteria.HARVEST_CROP.get().trigger(player, state);
-            if (cropBlock.isMaxAge(state)) {
-                spawnRuney(player, pos);
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FARMING, 2f);
-            }
+            spawnRuney(player, pos);
+            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FARMING, 2f);
         }
         if (entity instanceof LivingEntity living)
             living.swing(hand, true);

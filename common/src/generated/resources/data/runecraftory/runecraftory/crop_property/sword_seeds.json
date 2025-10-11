@@ -1,8 +1,12 @@
 {
   "bad_season": [],
   "best_season": [],
+  "crop": {
+    "crop": [],
+    "crop_block": "runecraftory:sword_flower",
+    "seed": "runecraftory:sword_seeds"
+  },
   "growth": 15,
-  "item": "runecraftory:sword_seeds",
   "max_drops": 1,
   "regrowable": false
 }

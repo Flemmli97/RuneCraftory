@@ -1,18 +1,34 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "runecraftory:block/ultra_onion_2"
+    "facing=east,half=bottom": {
+      "model": "runecraftory:block/ultra_onion",
+      "y": 90
     },
-    "facing=north": {
+    "facing=east,half=top": {
+      "model": "runecraftory:block/ultra_onion_top",
+      "y": 90
+    },
+    "facing=north,half=bottom": {
       "model": "runecraftory:block/ultra_onion"
     },
-    "facing=south": {
+    "facing=north,half=top": {
+      "model": "runecraftory:block/ultra_onion_top"
+    },
+    "facing=south,half=bottom": {
       "model": "runecraftory:block/ultra_onion",
       "y": 180
     },
-    "facing=west": {
-      "model": "runecraftory:block/ultra_onion_2",
+    "facing=south,half=top": {
+      "model": "runecraftory:block/ultra_onion_top",
       "y": 180
+    },
+    "facing=west,half=bottom": {
+      "model": "runecraftory:block/ultra_onion",
+      "y": 270
+    },
+    "facing=west,half=top": {
+      "model": "runecraftory:block/ultra_onion_top",
+      "y": 270
     }
   }
 }

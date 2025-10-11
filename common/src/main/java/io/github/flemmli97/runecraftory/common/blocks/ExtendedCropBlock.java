@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.blocks.util.GrowableCrop;
 import io.github.flemmli97.runecraftory.common.blocks.util.LazyResolvedRegistryEntry;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
@@ -28,7 +29,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ExtendedCropBlock extends CropBlock implements GrowableCrop {
+public class ExtendedCropBlock extends CropBlock implements GrowableCrop, Growable {
 
     public static final MapCodec<ExtendedCropBlock> CODEC = RecordCodecBuilder.mapCodec(inst ->
             inst.group(propertiesCodec(),
@@ -38,7 +39,7 @@ public class ExtendedCropBlock extends CropBlock implements GrowableCrop {
 
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
-    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)};
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)};
     protected final LazyResolvedRegistryEntry<Item> crop;
     protected final LazyResolvedRegistryEntry<Item> seed;
 
@@ -125,5 +126,20 @@ public class ExtendedCropBlock extends CropBlock implements GrowableCrop {
 
     public int getGiantAge() {
         return 4;
+    }
+
+    @Override
+    public int runecraftory$getGrowableMaxAge() {
+        return this.getMaxAge();
+    }
+
+    @Override
+    public BlockState runecraftory$getGrowableStateForAge(BlockState current, int age) {
+        return this.getStateForAge(age);
+    }
+
+    @Override
+    public boolean runecraftory$isAtMaxAge(BlockState state) {
+        return this.isMaxAge(state);
     }
 }

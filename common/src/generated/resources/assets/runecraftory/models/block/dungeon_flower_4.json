@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:block/big_flower",
+  "parent": "runecraftory:block/cross_tinted",
   "textures": {
     "cross": "runecraftory:block/dungeon_flower_4"
   }

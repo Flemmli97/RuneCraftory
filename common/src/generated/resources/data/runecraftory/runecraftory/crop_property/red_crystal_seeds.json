@@ -1,15 +1,22 @@
 {
   "bad_season": [
+    "AUTUMN"
+  ],
+  "best_season": [
     "SPRING",
     "SUMMER",
     "WINTER"
   ],
-  "best_season": [
-    "AUTUMN"
-  ],
-  "giant_crop": "runecraftory:big_red_crystal",
+  "crop": {
+    "crop": "runecraftory:red_crystal",
+    "crop_block": "runecraftory:red_crystal",
+    "giant_crop": {
+      "block": "runecraftory:big_red_crystal",
+      "item": "runecraftory:big_red_crystal"
+    },
+    "seed": "runecraftory:red_crystal_seeds"
+  },
   "growth": 80,
-  "item": "runecraftory:red_crystal_seeds",
   "max_drops": 3,
   "regrowable": false
 }

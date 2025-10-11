@@ -11,7 +11,9 @@
               "block": "runecraftory:green_pepper_rex",
               "condition": "minecraft:block_state_property",
               "properties": {
-                "facing": "north"
+                "age": "1",
+                "facing": "north",
+                "half": "bottom"
               }
             }
           ],

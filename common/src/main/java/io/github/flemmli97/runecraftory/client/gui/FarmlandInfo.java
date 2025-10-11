@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
-import io.github.flemmli97.runecraftory.common.blocks.TreeBaseBlock;
 import io.github.flemmli97.runecraftory.common.blocks.util.Growable;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
@@ -52,14 +51,13 @@ public class FarmlandInfo {
         boolean cropBlock = false;
         FarmlandDataContainer data = null;
 
-        if (blockState.getBlock() instanceof BushBlock) {
+        if (blockState.getBlock() instanceof Growable growable) {
+            pos = growable.getFarmlandPosition(pos, blockState);
+            cropBlock = true;
+            blockState = this.mc.level.getBlockState(pos);
+        } else if (blockState.getBlock() instanceof BushBlock) {
             pos = pos.below();
             cropBlock = blockState.getBlock() instanceof Growable;
-            blockState = this.mc.level.getBlockState(pos);
-        }
-        if (blockState.getBlock() instanceof TreeBaseBlock) {
-            pos = pos.below();
-            cropBlock = true;
             blockState = this.mc.level.getBlockState(pos);
         }
         if (FarmlandHandler.isFarmBlock(blockState))

@@ -1,14 +1,21 @@
 {
   "bad_season": [
-    "SUMMER"
-  ],
-  "best_season": [
     "SPRING",
     "AUTUMN"
   ],
-  "giant_crop": "runecraftory:great_four_leaf_clover",
+  "best_season": [
+    "SUMMER"
+  ],
+  "crop": {
+    "crop": "runecraftory:four_leaf_clover",
+    "crop_block": "runecraftory:four_leaf_clover",
+    "giant_crop": {
+      "block": "runecraftory:great_four_leaf_clover",
+      "item": "runecraftory:great_four_leaf_clover"
+    },
+    "seed": "runecraftory:four_leaf_clover_seeds"
+  },
   "growth": 28,
-  "item": "runecraftory:four_leaf_clover_seeds",
   "max_drops": 3,
   "regrowable": false
 }

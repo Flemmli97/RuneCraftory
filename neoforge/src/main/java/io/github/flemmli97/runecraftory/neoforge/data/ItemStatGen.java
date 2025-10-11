@@ -2286,11 +2286,11 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.TURNIP_PINK_SEEDS.get(), new ItemStat.Builder(140, 14, 0));
         this.addStat(RuneCraftoryItems.CABBAGE_SEEDS.get(), new ItemStat.Builder(500, 50, 0));
         this.addStat(RuneCraftoryItems.PINK_MELON_SEEDS.get(), new ItemStat.Builder(1000, 100, 0));
-        this.addStat(RuneCraftoryItems.HOT_HOT_SEEDS.get(), new ItemStat.Builder(750, 75, 0));
-        this.addStat(RuneCraftoryItems.GOLD_TURNIP_SEEDS.get(), new ItemStat.Builder(5000, 500, 0));
-        this.addStat(RuneCraftoryItems.GOLD_POTATO_SEEDS.get(), new ItemStat.Builder(3000, 300, 0));
-        this.addStat(RuneCraftoryItems.GOLD_PUMPKIN_SEEDS.get(), new ItemStat.Builder(3500, 3500, 0));
-        this.addStat(RuneCraftoryItems.GOLD_CABBAGE_SEEDS.get(), new ItemStat.Builder(2500, 250, 0));
+        this.addStat(RuneCraftoryItems.HOT_HOT_FRUIT_SEEDS.get(), new ItemStat.Builder(750, 75, 0));
+        this.addStat(RuneCraftoryItems.GOLDEN_TURNIP_SEEDS.get(), new ItemStat.Builder(5000, 500, 0));
+        this.addStat(RuneCraftoryItems.GOLDEN_POTATO_SEEDS.get(), new ItemStat.Builder(3000, 300, 0));
+        this.addStat(RuneCraftoryItems.GOLDEN_PUMPKIN_SEEDS.get(), new ItemStat.Builder(3500, 3500, 0));
+        this.addStat(RuneCraftoryItems.GOLDEN_CABBAGE_SEEDS.get(), new ItemStat.Builder(2500, 250, 0));
         this.addStat(RuneCraftoryItems.BOK_CHOY_SEEDS.get(), new ItemStat.Builder(600, 60, 0));
         this.addStat(RuneCraftoryItems.LEEK_SEEDS.get(), new ItemStat.Builder(450, 45, 0));
         this.addStat(RuneCraftoryItems.RADISH_SEEDS.get(), new ItemStat.Builder(660, 66, 0));

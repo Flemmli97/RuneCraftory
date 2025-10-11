@@ -1,11 +1,13 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.tenshilib.common.item.AnimationDebugger;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -67,6 +69,13 @@ public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
                     .ifPresent(d -> context.getPlayer().displayClientMessage(Component.literal(d.toStringFull()), false));
             /*int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
             context.getPlayer().sendMessage(Component.literal("Free POITickets" + f), Util.NIL_UUID);*/
+            FarmlandHandler.PendingGiantCrops c = new FarmlandHandler.PendingGiantCrops();
+            BlockPos pos = context.getClickedPos().above();
+            c.add(pos, RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
+            c.add(pos.north(), RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
+            c.add(pos.west(), RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
+            c.add(pos.north().west(), RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
+            c.tryMerge(serverLevel);
             return InteractionResult.CONSUME;
         }
         return super.useOn(context);

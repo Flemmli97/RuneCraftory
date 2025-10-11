@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -107,7 +108,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void cropHarvest(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getUseBlock() != TriState.FALSE)
+        if (event.getUseBlock() != TriState.FALSE && event.getHand() == InteractionHand.MAIN_HAND)
             EntityCalls.cropRightClickHarvest(event.getEntity(), event.getEntity().level().getBlockState(event.getHitVec().getBlockPos()), event.getHitVec().getBlockPos(), event.getHand());
     }
 

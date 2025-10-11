@@ -1,18 +1,34 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "runecraftory:block/tyrant_turnip_2"
+    "facing=east,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip",
+      "y": 90
     },
-    "facing=north": {
+    "facing=east,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_top",
+      "y": 90
+    },
+    "facing=north,half=bottom": {
       "model": "runecraftory:block/tyrant_turnip"
     },
-    "facing=south": {
+    "facing=north,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_top"
+    },
+    "facing=south,half=bottom": {
       "model": "runecraftory:block/tyrant_turnip",
       "y": 180
     },
-    "facing=west": {
-      "model": "runecraftory:block/tyrant_turnip_2",
+    "facing=south,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_top",
       "y": 180
+    },
+    "facing=west,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip",
+      "y": 270
+    },
+    "facing=west,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_top",
+      "y": 270
     }
   }
 }

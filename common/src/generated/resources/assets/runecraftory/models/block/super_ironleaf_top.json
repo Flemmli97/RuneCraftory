@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/giant_flower_top",
+  "textures": {
+    "layer0": "runecraftory:item/super_ironleaf"
+  }
+}

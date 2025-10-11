@@ -1,18 +1,34 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "runecraftory:block/lorldy_yam_2"
+    "facing=east,half=bottom": {
+      "model": "runecraftory:block/lorldy_yam",
+      "y": 90
     },
-    "facing=north": {
+    "facing=east,half=top": {
+      "model": "runecraftory:block/lorldy_yam_top",
+      "y": 90
+    },
+    "facing=north,half=bottom": {
       "model": "runecraftory:block/lorldy_yam"
     },
-    "facing=south": {
+    "facing=north,half=top": {
+      "model": "runecraftory:block/lorldy_yam_top"
+    },
+    "facing=south,half=bottom": {
       "model": "runecraftory:block/lorldy_yam",
       "y": 180
     },
-    "facing=west": {
-      "model": "runecraftory:block/lorldy_yam_2",
+    "facing=south,half=top": {
+      "model": "runecraftory:block/lorldy_yam_top",
       "y": 180
+    },
+    "facing=west,half=bottom": {
+      "model": "runecraftory:block/lorldy_yam",
+      "y": 270
+    },
+    "facing=west,half=top": {
+      "model": "runecraftory:block/lorldy_yam_top",
+      "y": 270
     }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "runecraftory:block/giant_crop_1",
+  "parent": "runecraftory:block/giant_crop_bottom",
   "textures": {
-    "crop": "runecraftory:block/green_pepper_rex"
+    "layer0": "runecraftory:block/green_pepper_rex"
   }
 }

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.blocks.GiantCropBlock;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
@@ -91,7 +92,10 @@ public class MixinUtils {
         } else {
             //Handling crop blockState changes
             if (blockState.getBlock() instanceof CropBlock pre) {
-                //Crop got broken
+                if (newState.getBlock() instanceof GiantCropBlock giant && giant.isGiantOf(blockState, newState)) {
+                    return;
+                }
+                // Crop got broken
                 if (!(newState.getBlock() instanceof CropBlock post)) {
                     FarmlandHandler.get(level.getServer()).getData(level, pos.below())
                             .ifPresent(d -> d.onCropRemove(level, pos, newState));

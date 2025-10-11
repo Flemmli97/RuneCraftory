@@ -1,13 +1,20 @@
 {
   "bad_season": [
-    "WINTER"
-  ],
-  "best_season": [
     "AUTUMN"
   ],
-  "giant_crop": "runecraftory:king_pom_pom_grass",
+  "best_season": [
+    "WINTER"
+  ],
+  "crop": {
+    "crop": "runecraftory:pom_pom_grass",
+    "crop_block": "runecraftory:pom_pom_grass",
+    "giant_crop": {
+      "block": "runecraftory:king_pom_pom_grass",
+      "item": "runecraftory:king_pom_pom_grass"
+    },
+    "seed": "runecraftory:pom_pom_grass_seeds"
+  },
   "growth": 14,
-  "item": "runecraftory:pom_pom_grass_seeds",
   "max_drops": 3,
   "regrowable": false
 }

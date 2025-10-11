@@ -12,6 +12,11 @@
     "runecraftory:watering_can_iron",
     "runecraftory:watering_can_silver",
     "runecraftory:watering_can_gold",
-    "runecraftory:watering_can_platinum"
+    "runecraftory:watering_can_platinum",
+    "runecraftory:sickle_scrap",
+    "runecraftory:sickle_iron",
+    "runecraftory:sickle_silver",
+    "runecraftory:sickle_gold",
+    "runecraftory:sickle_platinum"
   ]
 }

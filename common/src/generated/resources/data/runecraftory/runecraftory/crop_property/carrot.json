@@ -1,11 +1,18 @@
 {
-  "bad_season": [],
-  "best_season": [
+  "bad_season": [
     "AUTUMN"
   ],
-  "giant_crop": "runecraftory:carrot",
+  "best_season": [],
+  "crop": {
+    "crop": "minecraft:carrot",
+    "crop_block": "minecraft:carrots",
+    "giant_crop": {
+      "block": "runecraftory:royal_carrot",
+      "item": "runecraftory:royal_carrot"
+    },
+    "seed": "minecraft:carrot"
+  },
   "growth": 4,
-  "item": "minecraft:carrot",
   "max_drops": 4,
   "regrowable": false
 }

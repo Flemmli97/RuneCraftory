@@ -1,8 +1,12 @@
 {
   "bad_season": [],
   "best_season": [],
+  "crop": {
+    "crop": [],
+    "crop_block": "runecraftory:dungeon_flower",
+    "seed": "runecraftory:dungeon_seeds"
+  },
   "growth": 25,
-  "item": "runecraftory:dungeon_seeds",
   "max_drops": 1,
   "regrowable": false
 }

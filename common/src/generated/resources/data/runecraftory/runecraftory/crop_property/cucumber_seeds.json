@@ -1,14 +1,21 @@
 {
   "bad_season": [
-    "WINTER"
-  ],
-  "best_season": [
     "SPRING",
     "SUMMER"
   ],
-  "giant_crop": "runecraftory:kaiser_cucumber",
+  "best_season": [
+    "WINTER"
+  ],
+  "crop": {
+    "crop": "runecraftory:cucumber",
+    "crop_block": "runecraftory:cucumber",
+    "giant_crop": {
+      "block": "runecraftory:kaiser_cucumber",
+      "item": "runecraftory:kaiser_cucumber"
+    },
+    "seed": "runecraftory:cucumber_seeds"
+  },
   "growth": 5,
-  "item": "runecraftory:cucumber_seeds",
   "max_drops": 5,
   "regrowable": true
 }
