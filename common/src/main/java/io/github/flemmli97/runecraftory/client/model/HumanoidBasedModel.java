@@ -253,7 +253,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
             other.leftArm.visible = this.leftArm.visible;
             this.apply(other.leftArm, body, this.leftArm);
             HumanoidMainHand hands = (HumanoidMainHand) model;
-            hands.runecraftory$getLeftHandItem().loadPose(this.leftArm.storePose());
+            hands.runecraftory$getLeftHandItem().loadPose(this.leftItem.storePose());
             other.rightArm.visible = this.rightArm.visible;
             this.apply(other.rightArm, body, this.rightArm);
             hands.runecraftory$getRightHandItem().loadPose(this.rightItem.storePose());
