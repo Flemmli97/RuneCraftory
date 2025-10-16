@@ -12,8 +12,9 @@ public class DailyMonsterUpdater extends DailyEntityUpdater<BaseMonster> {
     }
 
     @Override
-    protected void onUpdate() {
-        this.entity.onDailyUpdate();
+    protected void onUpdate(int daysPassed) {
+        super.onUpdate(daysPassed);
+        this.entity.onDailyUpdate(daysPassed);
     }
 
     public void setLastUpdateDay(int lastUpdateDay) {

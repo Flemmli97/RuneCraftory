@@ -238,8 +238,8 @@ public class Wooly extends LeapingMonster {
     }
 
     @Override
-    public void onDailyUpdate() {
-        super.onDailyUpdate();
+    public void onDailyUpdate(int daysPassed) {
+        super.onDailyUpdate(daysPassed);
         if (!this.entityData.get(SPAWNSHEARED) || this.isTamed())
             this.setSheared(false);
     }

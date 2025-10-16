@@ -22,8 +22,8 @@ public class DailyNPCUpdater extends DailyEntityUpdater<NPCEntity> {
     }
 
     @Override
-    protected void onUpdate() {
-        super.onUpdate();
+    protected void onUpdate(int daysPassed) {
+        super.onUpdate(daysPassed);
         this.bread = this.entity.getRandom().nextInt(4) + 1;
         this.acceptedRandomQuest.clear();
     }

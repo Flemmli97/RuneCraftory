@@ -55,6 +55,10 @@ public class TendCrops<E extends BaseMonster> extends ExtendedBehaviour<E> {
         return Mth.floor(monster.getHealth()) <= Math.max(1, monster.getMaxHealth() * 0.05);
     }
 
+    public static void setHealthTo(BaseMonster monster, float health) {
+        monster.setHealth(Math.max(health, monster.getMaxHealth() * 0.05f));
+    }
+
     private final List<BlockPos> toTend = new ArrayList<>();
     private BlockPos selected;
     private int cooldown;
@@ -176,7 +180,6 @@ public class TendCrops<E extends BaseMonster> extends ExtendedBehaviour<E> {
                     }
                 }
                 if (success) {
-                    entity.setHealth(entity.getHealth() - 1);
                     entity.addXp(5 + entity.getRandom().nextInt(5));
                 }
             };

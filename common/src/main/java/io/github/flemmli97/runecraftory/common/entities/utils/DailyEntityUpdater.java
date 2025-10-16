@@ -27,11 +27,11 @@ public class DailyEntityUpdater<T extends LivingEntity> {
         if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
             this.dailyRandomSeed = this.entity.getRandom().nextInt();
-            this.onUpdate();
+            this.onUpdate(Math.abs(day - this.lastUpdateDay));
         }
     }
 
-    protected void onUpdate() {
+    protected void onUpdate(int daysPassed) {
     }
 
     public int getDailyRandomSeed() {

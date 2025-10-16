@@ -1734,10 +1734,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         return this.prop.flying;
     }
 
-    public void onDailyUpdate() {
-        if (this.level() instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
-            ResourceKey<LootTable> resourceLocation = this.dailyDropTable();
-            this.dropAsDailyDrop(resourceLocation);
+    public void onDailyUpdate(int daysPassed) {
+        if (this.level() instanceof ServerLevel) {
+            if (this.isTamed() && !this.playDeath()) {
+                if (!MobConfig.monsterNeedBarn || this.assignBarn()) {
+                    ResourceKey<LootTable> resourceLocation = this.dailyDropTable();
+                    this.dropAsDailyDrop(resourceLocation);
+                }
+                if (this.behaviourState() == Behaviour.FARM) {
+                    float cost = 0.2f * (this.friendPoints(this.getOwnerUUID()));
+                    cost -= 0.1f * Mth.clamp(this.friendPoints(this.getOwnerUUID()) / 10f, 0, 1);
+                    cost *= daysPassed;
+                    TendCrops.setHealthTo(this, this.getHealth() - this.getMaxHealth() * cost);
+                }
+            }
         }
     }
 
