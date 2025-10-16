@@ -59,36 +59,6 @@
     "age=1,facing=west,half=top": {
       "model": "runecraftory:block/ultra_toyherb_1_top",
       "y": 270
-    },
-    "age=2,facing=east,half=bottom": {
-      "model": "runecraftory:block/ultra_toyherb_2",
-      "y": 90
-    },
-    "age=2,facing=east,half=top": {
-      "model": "runecraftory:block/ultra_toyherb_2_top",
-      "y": 90
-    },
-    "age=2,facing=north,half=bottom": {
-      "model": "runecraftory:block/ultra_toyherb_2"
-    },
-    "age=2,facing=north,half=top": {
-      "model": "runecraftory:block/ultra_toyherb_2_top"
-    },
-    "age=2,facing=south,half=bottom": {
-      "model": "runecraftory:block/ultra_toyherb_2",
-      "y": 180
-    },
-    "age=2,facing=south,half=top": {
-      "model": "runecraftory:block/ultra_toyherb_2_top",
-      "y": 180
-    },
-    "age=2,facing=west,half=bottom": {
-      "model": "runecraftory:block/ultra_toyherb_2",
-      "y": 270
-    },
-    "age=2,facing=west,half=top": {
-      "model": "runecraftory:block/ultra_toyherb_2_top",
-      "y": 270
     }
   }
 }

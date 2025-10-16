@@ -1,7 +1,7 @@
 {
   "buy_price": 1000,
   "element": "NONE",
-  "item": "runecraftory:fur_m",
+  "item": "runecraftory:fur_medium",
   "item_stats": {
     "runecraftory:defence": 5.0,
     "runecraftory:dizzy_resistance": 10.0,

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:item/fur_m"
+    "layer0": "runecraftory:item/fur_large"
   }
 }

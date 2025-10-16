@@ -34,7 +34,7 @@
                   }
                 }
               ],
-              "name": "runecraftory:fur_l"
+              "name": "runecraftory:fur_large"
             },
             {
               "type": "minecraft:item",
@@ -63,7 +63,7 @@
                   }
                 }
               ],
-              "name": "runecraftory:fur_m"
+              "name": "runecraftory:fur_medium"
             },
             {
               "type": "minecraft:item",
@@ -92,7 +92,7 @@
                   }
                 }
               ],
-              "name": "runecraftory:fur_s"
+              "name": "runecraftory:fur_small"
             }
           ]
         }

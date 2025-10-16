@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:block/giant_flower_bottom",
-  "textures": {
-    "layer0": "runecraftory:item/king_pom_pom_grass"
-  }
-}

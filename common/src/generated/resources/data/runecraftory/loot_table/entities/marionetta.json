@@ -50,7 +50,7 @@
               "luck_bonus": 0.05
             }
           ],
-          "name": "runecraftory:fur_s"
+          "name": "runecraftory:fur_small"
         }
       ],
       "rolls": 1.0
@@ -70,7 +70,7 @@
               "luck_bonus": 0.01
             }
           ],
-          "name": "runecraftory:fur_m"
+          "name": "runecraftory:fur_medium"
         }
       ],
       "rolls": 1.0

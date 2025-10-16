@@ -665,9 +665,9 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, Item> ROCK_SHARD_RIGHT = mat("right_rock_shard", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> MTGU_PLATE = mat("mtgu_plate", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item, Item> BROKEN_ICE_WALL = mat("broken_ice_wall", Rarity.RARE, Texture.N);
-    public static final RegistryEntrySupplier<Item, Item> FUR_SMALL = mat("fur_s", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> FUR_MEDIUM = mat("fur_m", Texture.Y);
-    public static final RegistryEntrySupplier<Item, Item> FUR_LARGE = mat("fur_l", Texture.Y);
+    public static final RegistryEntrySupplier<Item, Item> FUR_SMALL = mat("fur_small", Texture.Y);
+    public static final RegistryEntrySupplier<Item, Item> FUR_MEDIUM = mat("fur_medium", Texture.Y);
+    public static final RegistryEntrySupplier<Item, Item> FUR_LARGE = mat("fur_large", Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> FUR = mat("fur", Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> FURBALL = mat("wooly_furball", Texture.N);
     public static final RegistryEntrySupplier<Item, Item> DOWN_YELLOW = mat("yellow_down", Texture.Y);

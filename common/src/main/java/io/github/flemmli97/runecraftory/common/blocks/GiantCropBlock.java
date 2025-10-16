@@ -48,7 +48,7 @@ public class GiantCropBlock extends ExtendedCropBlock {
                     Codec.BOOL.fieldOf("small").forGetter(d -> d.small)
             ).apply(inst, GiantCropBlock::new));
 
-    public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_1;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final EnumProperty<Direction> DIRECTION = BlockStateProperties.HORIZONTAL_FACING;
 

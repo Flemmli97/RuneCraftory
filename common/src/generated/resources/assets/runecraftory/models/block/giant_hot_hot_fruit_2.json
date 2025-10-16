@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:block/giant_crop_bottom",
-  "textures": {
-    "layer0": "runecraftory:block/giant_hot_hot_fruit_2"
-  }
-}
