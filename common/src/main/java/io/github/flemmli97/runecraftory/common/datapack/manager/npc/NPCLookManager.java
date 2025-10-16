@@ -63,8 +63,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener implements 
                     JsonObject obj = el.getAsJsonObject();
                     builder.put(fres, new ReloadableHolder<>(fres, NPCLook.CODEC.parse(ops, obj).getOrThrow()));
                 } catch (Exception ex) {
-                    RuneCraftory.LOGGER.error("Couldn't parse npc look json {} {}", fres, ex);
-                    ex.fillInStackTrace();
+                    RuneCraftory.LOGGER.error("Couldn't parse npc look json {} {}", fres, ex, ex.fillInStackTrace());
                 }
             }
         });

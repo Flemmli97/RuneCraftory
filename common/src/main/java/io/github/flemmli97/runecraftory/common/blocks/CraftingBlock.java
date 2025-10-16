@@ -119,7 +119,7 @@ public abstract class CraftingBlock extends HorizontalDirectionalBlock implement
         BlockPos blockPos = this.getOtherPos(pos, state);
         BlockState other;
         if (!level.isClientSide && player.isCreative() && state.getValue(PART) == EnumPart.RIGHT && (other = level.getBlockState(blockPos)).is(this) && other.getValue(PART) == EnumPart.LEFT) {
-            level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
             level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(other));
         }
         return super.playerWillDestroy(level, pos, state, player);

@@ -131,7 +131,7 @@ public class RuneCraftoryBlocks {
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> GOLDEN_PUMPKIN = crop("golden_pumpkin", RuneCraftoryItems.GOLDEN_PUMPKIN::getKey, RuneCraftoryItems.GOLDEN_PUMPKIN_SEEDS::getKey);
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> GOLDEN_CABBAGE = crop("golden_cabbage", RuneCraftoryItems.GOLDEN_CABBAGE::getKey, RuneCraftoryItems.GOLDEN_CABBAGE_SEEDS::getKey);
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> HOT_HOT_FRUIT = crop("hot_hot_fruit", RuneCraftoryItems.HOT_HOT_FRUIT::getKey, RuneCraftoryItems.HOT_HOT_FRUIT_SEEDS::getKey);
-    public static final RegistryEntrySupplier<Block, ExtendedCropBlock> BOK_CHOY = crop("bok_choy", RuneCraftoryItems.BOK_CHOY::getKey, RuneCraftoryItems.BOK_CHOY_SEEDS::getKey);
+    public static final RegistryEntrySupplier<Block, ExtendedCropBlock> NAPA_CABBAGE = crop("napa_cabbage", RuneCraftoryItems.NAPA_CABBAGE::getKey, RuneCraftoryItems.NAPA_CABBAGE_SEEDS::getKey);
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> LEEK = crop("leek", RuneCraftoryItems.LEEK::getKey, RuneCraftoryItems.LEEK_SEEDS::getKey);
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> RADISH = crop("radish", RuneCraftoryItems.RADISH::getKey, RuneCraftoryItems.RADISH_SEEDS::getKey);
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> SPINACH = crop("spinach", RuneCraftoryItems.SPINACH::getKey, RuneCraftoryItems.SPINACH_SEEDS::getKey);
@@ -154,7 +154,7 @@ public class RuneCraftoryBlocks {
     public static final RegistryEntrySupplier<Block, GiantCropBlock> GOLDEN_PUMPKIN_GIANT = giantCrop("golden_doom_pumpkin", RuneCraftoryItems.GOLDEN_PUMPKIN_GIANT::getKey, RuneCraftoryItems.GOLDEN_PUMPKIN_SEEDS::getKey, GOLDEN_PUMPKIN);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> GOLDEN_CABBAGE_GIANT = giantCrop("golden_king_cabbage", RuneCraftoryItems.GOLDEN_CABBAGE_GIANT::getKey, RuneCraftoryItems.GOLDEN_CABBAGE_SEEDS::getKey, GOLDEN_CABBAGE);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> HOT_HOT_FRUIT_GIANT = giantCrop("giant_hot_hot_fruit", RuneCraftoryItems.HOT_HOT_FRUIT_GIANT::getKey, RuneCraftoryItems.HOT_HOT_FRUIT_SEEDS::getKey, HOT_HOT_FRUIT);
-    public static final RegistryEntrySupplier<Block, GiantCropBlock> BOK_CHOY_GIANT = giantCrop("boss_bok_choy", RuneCraftoryItems.BOK_CHOY_GIANT::getKey, RuneCraftoryItems.BOK_CHOY_SEEDS::getKey, BOK_CHOY);
+    public static final RegistryEntrySupplier<Block, GiantCropBlock> NAPA_CABBAGE_GIANT = giantCrop("napa_cabbage_chief", RuneCraftoryItems.NAPA_CABBAGE_GIANT::getKey, RuneCraftoryItems.NAPA_CABBAGE_SEEDS::getKey, NAPA_CABBAGE);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> LEEK_GIANT = giantCrop("legendary_leek", RuneCraftoryItems.LEEK_GIANT::getKey, RuneCraftoryItems.LEEK_SEEDS::getKey, LEEK);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> RADISH_GIANT = giantCrop("noble_radish", RuneCraftoryItems.RADISH_GIANT::getKey, RuneCraftoryItems.RADISH_SEEDS::getKey, RADISH);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> SPINACH_GIANT = giantCrop("sovereign_spinach", RuneCraftoryItems.SPINACH_GIANT::getKey, RuneCraftoryItems.SPINACH_SEEDS::getKey, SPINACH);
@@ -166,10 +166,9 @@ public class RuneCraftoryBlocks {
     public static final RegistryEntrySupplier<Block, GiantCropBlock> CUCUMBER_GIANT = giantCrop("kaiser_cucumber", RuneCraftoryItems.CUCUMBER_GIANT::getKey, RuneCraftoryItems.CUCUMBER_SEEDS::getKey, CUCUMBER);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> PUMPKIN_GIANT = giantCrop("doom_pumpkin", RuneCraftoryItems.PUMPKIN_GIANT::getKey, RuneCraftoryItems.PUMPKIN_SEEDS::getKey, PUMPKIN);
     public static final RegistryEntrySupplier<Block, GiantCropBlock> ONION_GIANT = giantCrop("ultra_onion", RuneCraftoryItems.ONION_GIANT::getKey, RuneCraftoryItems.ONION_SEEDS::getKey, ONION);
-    public static final RegistryEntrySupplier<Block, ExtendedCropBlock> FODDER = crop("fodder", RuneCraftoryItems.FODDER::getKey, RuneCraftoryItems.FODDER_SEEDS::getKey);
 
-    public static final RegistryEntrySupplier<Block, ExtendedCropBlock> POTATO_GIANT = crop("princely_potato", () -> ofVanilla(Items.POTATO), () -> ofVanilla(Items.POTATO));
-    public static final RegistryEntrySupplier<Block, ExtendedCropBlock> CARROT_GIANT = crop("royal_carrot", () -> ofVanilla(Items.CARROT), () -> ofVanilla(Items.CARROT));
+    public static final RegistryEntrySupplier<Block, GiantCropBlock> POTATO_GIANT = giantCrop("princely_potato", RuneCraftoryItems.POTATO_GIANT::getKey, () -> ofVanilla(Items.POTATO));
+    public static final RegistryEntrySupplier<Block, GiantCropBlock> CARROT_GIANT = giantCrop("royal_carrot", RuneCraftoryItems.CARROT_GIANT::getKey, () -> ofVanilla(Items.CARROT));
 
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> TOYHERB = flower("toyherb", RuneCraftoryItems.TOYHERB::getKey, RuneCraftoryItems.TOYHERB_SEEDS::getKey);
     public static final RegistryEntrySupplier<Block, ExtendedCropBlock> MOONDROP_FLOWER = flower("moondrop_flower", RuneCraftoryItems.MOONDROP_FLOWER::getKey, RuneCraftoryItems.MOONDROP_SEEDS::getKey);
@@ -281,11 +280,18 @@ public class RuneCraftoryBlocks {
         return reg;
     }
 
+    public static RegistryEntrySupplier<Block, GiantCropBlock> giantCrop(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed) {
+        RegistryEntrySupplier<Block, GiantCropBlock> reg = BLOCKS.register(name, () -> new GiantCropBlock(cropProps(), giant.get(), seed.get()));
+        CROPS.add(reg);
+        return reg;
+    }
+
     public static RegistryEntrySupplier<Block, GiantCropBlock> giantCrop(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed, RegistryEntrySupplier<Block, ?> crop) {
         RegistryEntrySupplier<Block, GiantCropBlock> reg = BLOCKS.register(name, () -> new GiantCropBlock(cropProps(), giant.get(), seed.get()));
         CROPS.add(reg);
-        if (TenshiLibCrossPlat.INSTANCE.isDatagen())
+        if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
             GIANT_CROP_MAP.put(crop, reg);
+        }
         return reg;
     }
 
@@ -296,7 +302,7 @@ public class RuneCraftoryBlocks {
     }
 
     public static RegistryEntrySupplier<Block, GiantCropBlock> giantFlower(String name, Supplier<ResourceKey<Item>> giant, Supplier<ResourceKey<Item>> seed, RegistryEntrySupplier<Block, ?> flower) {
-        RegistryEntrySupplier<Block, GiantCropBlock> reg = BLOCKS.register(name, () -> new GiantCropBlock(cropProps(), giant.get(), seed.get()));
+        RegistryEntrySupplier<Block, GiantCropBlock> reg = BLOCKS.register(name, () -> new GiantCropBlock(cropProps(), giant.get(), seed.get(), true));
         FLOWERS.add(reg);
         if (TenshiLibCrossPlat.INSTANCE.isDatagen())
             GIANT_CROP_MAP.put(flower, reg);

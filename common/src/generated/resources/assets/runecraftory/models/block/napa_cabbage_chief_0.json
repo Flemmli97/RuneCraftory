@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/giant_crop_bottom",
+  "textures": {
+    "layer0": "runecraftory:block/napa_cabbage_chief_0"
+  }
+}

@@ -11,7 +11,7 @@
     "runecraftory:golden_pumpkin",
     "runecraftory:golden_cabbage",
     "runecraftory:hot_hot_fruit",
-    "runecraftory:bok_choy",
+    "runecraftory:napa_cabbage",
     "runecraftory:leek",
     "runecraftory:radish",
     "runecraftory:spinach",
@@ -34,7 +34,7 @@
     "runecraftory:golden_doom_pumpkin",
     "runecraftory:golden_king_cabbage",
     "runecraftory:giant_hot_hot_fruit",
-    "runecraftory:boss_bok_choy",
+    "runecraftory:napa_cabbage_chief",
     "runecraftory:legendary_leek",
     "runecraftory:noble_radish",
     "runecraftory:sovereign_spinach",
@@ -46,7 +46,6 @@
     "runecraftory:kaiser_cucumber",
     "runecraftory:doom_pumpkin",
     "runecraftory:ultra_onion",
-    "runecraftory:fodder",
     "runecraftory:princely_potato",
     "runecraftory:royal_carrot"
   ]

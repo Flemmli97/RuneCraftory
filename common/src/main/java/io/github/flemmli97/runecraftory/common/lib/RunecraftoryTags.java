@@ -65,6 +65,8 @@ public class RunecraftoryTags {
         public static final TagKey<Item> CROPS = tagCommon("crops");
         public static final TagKey<Item> TURNIP = tagCommon("crops/turnip");
 
+        public static final TagKey<Item> MONSTER_FEEDS = tag("monster_feeds");
+
         public static final TagKey<Item> ORICHALCUM = tagCommon("orichalcum");
         public static final TagKey<Item> DRAGONIC = tagCommon("dragonic");
 

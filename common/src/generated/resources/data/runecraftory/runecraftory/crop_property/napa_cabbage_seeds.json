@@ -1,0 +1,20 @@
+{
+  "bad_season": [
+    "AUTUMN"
+  ],
+  "best_season": [
+    "SUMMER"
+  ],
+  "crop": {
+    "crop": "runecraftory:napa_cabbage",
+    "crop_block": "runecraftory:napa_cabbage",
+    "giant_crop": {
+      "block": "runecraftory:napa_cabbage_chief",
+      "item": "runecraftory:napa_cabbage_chief"
+    },
+    "seed": "runecraftory:napa_cabbage_seeds"
+  },
+  "growth": 5,
+  "max_drops": 4,
+  "regrowable": false
+}

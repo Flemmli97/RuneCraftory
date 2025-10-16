@@ -127,8 +127,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener implemen
                     });
                 }, () -> RuneCraftory.LOGGER.error("No such entity {} for spawn data {}", spawnData.entity(), fres));
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse spawn data json {} {}", fres, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse spawn data json {} {}", fres, ex, ex.fillInStackTrace());
             }
         });
         this.biomeSpawns = ImmutableMap.copyOf(biomeSpawns);

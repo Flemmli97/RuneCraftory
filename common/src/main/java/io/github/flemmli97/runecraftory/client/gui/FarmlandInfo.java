@@ -52,7 +52,7 @@ public class FarmlandInfo {
         FarmlandDataContainer data = null;
 
         if (blockState.getBlock() instanceof Growable growable) {
-            pos = growable.getFarmlandPosition(pos, blockState);
+            pos = growable.getFarmlandPosition(this.mc.level, pos, blockState);
             cropBlock = true;
             blockState = this.mc.level.getBlockState(pos);
         } else if (blockState.getBlock() instanceof BushBlock) {

@@ -43,8 +43,7 @@ public class NPCConversationManager extends SimpleJsonResourceReloadListener imp
                 JsonObject obj = el.getAsJsonObject();
                 builder.put(fres, ConversationSet.CODEC.parse(ops, obj).getOrThrow());
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse npc data json {} {}", fres, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse npc data json {} {}", fres, ex, ex.fillInStackTrace());
             }
         });
         this.data = builder.build();

@@ -133,8 +133,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener implements
                     });
                 }
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse item stat json {} {}", fres, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse item stat json {} {}", fres, ex, ex.fillInStackTrace());
             }
         });
         this.itemstats = itemEntries.build();

@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.datapack.SyncableListener;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -59,6 +60,7 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
     };
 
     private Map<Item, ReloadableHolder<CropProperties>> itemLookup = ImmutableMap.of();
+    private Map<Item, ReloadableHolder<CropProperties>> seedLookup = ImmutableMap.of();
     private Map<Block, ReloadableHolder<CropProperties>> blockLookup = ImmutableMap.of();
     private boolean resolved;
     private Set<ReloadableHolder<CropProperties>> unresolved = ImmutableSet.of();
@@ -97,6 +99,14 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
         return this.blockLookup.get(block);
     }
 
+    @Nullable
+    public ReloadableHolder<CropProperties> getSeedWithId(Item item) {
+        if (GeneralConfig.disableCropSystem)
+            return null;
+        this.resolveTags(false);
+        return this.seedLookup.get(item);
+    }
+
     public void resolveTags(boolean forced) {
         if (!this.resolved || forced) {
             this.resolved = true;
@@ -129,6 +139,14 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
             });
             tagEntries.putAll(itemEntries);
             this.itemLookup = ImmutableMap.copyOf(tagEntries);
+            // For client syncing. Client only needs to know seeds for tooltip displays
+            HashMap<Item, ReloadableHolder<CropProperties>> seedEntries = new HashMap<>();
+            this.itemLookup.forEach((item, prop) -> {
+                if (prop.value().getInfo().seed().contains(BuiltInRegistries.ITEM.wrapAsHolder(item))) {
+                    seedEntries.put(item, prop);
+                }
+            });
+            this.seedLookup = ImmutableMap.copyOf(seedEntries);
             tagEntriesBlocks.putAll(itemEntriesBlocks);
             this.blockLookup = ImmutableMap.copyOf(tagEntriesBlocks);
         }
@@ -144,8 +162,7 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
                 CropProperties props = CropProperties.CODEC.parse(ops, el).getOrThrow();
                 toResolve.add(new ReloadableHolder<>(fres, props));
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse crop properties json {} {}", fres, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse crop properties json {} {}", fres, ex, ex.fillInStackTrace());
             }
         });
         this.unresolved = toResolve.build();
@@ -169,12 +186,12 @@ public class CropManager extends SimpleJsonResourceReloadListener implements Syn
     @Override
     public Map<Item, ReloadableHolder<CropProperties>> toSync() {
         this.resolveTags(false);
-        return Collections.unmodifiableMap(this.itemLookup);
+        return Collections.unmodifiableMap(this.seedLookup);
     }
 
     @Override
     public void update(HolderLookup.Provider provider, Map<Item, ReloadableHolder<CropProperties>> value) {
         this.insertRegistryAccess(provider);
-        this.itemLookup = value;
+        this.seedLookup = value;
     }
 }

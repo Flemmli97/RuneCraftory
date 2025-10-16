@@ -55,7 +55,7 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.GOLDEN_PUMPKIN.get());
         this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.GOLDEN_CABBAGE.get());
         this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.HOT_HOT_FRUIT.get());
-        this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.BOK_CHOY.get());
+        this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.NAPA_CABBAGE.get());
         this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.LEEK.get());
         this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.RADISH.get());
         this.addItem(RuneCraftoryNPCProfessions.GENERAL_STORE.asHolder(), RuneCraftoryItems.SPINACH.get());

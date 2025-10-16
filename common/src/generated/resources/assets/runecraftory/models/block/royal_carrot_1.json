@@ -1,6 +1,6 @@
 {
-  "parent": "runecraftory:block/crop_tinted",
+  "parent": "runecraftory:block/giant_crop_bottom",
   "textures": {
-    "crop": "runecraftory:block/royal_carrot_1"
+    "layer0": "runecraftory:block/royal_carrot_1"
   }
 }

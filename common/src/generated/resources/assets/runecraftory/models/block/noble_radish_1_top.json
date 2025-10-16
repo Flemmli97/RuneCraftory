@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/giant_crop_top",
+  "textures": {
+    "layer0": "runecraftory:block/noble_radish_1"
+  }
+}

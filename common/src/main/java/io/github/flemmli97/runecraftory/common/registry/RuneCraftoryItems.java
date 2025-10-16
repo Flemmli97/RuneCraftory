@@ -716,7 +716,7 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, Item> DANGEROUS_SCISSORS = mat("dangerous_scissors", Texture.N);
     public static final RegistryEntrySupplier<Item, Item> PROPELLOR_CHEAP = mat("cheap_propeller", Texture.N);
     public static final RegistryEntrySupplier<Item, Item> PROPELLOR_QUALITY = mat("quality_propeller", Texture.N);
-    public static final RegistryEntrySupplier<Item, Item> FANG_DRAGON = mat("dragon_fang", Texture.N);
+    public static final RegistryEntrySupplier<Item, Item> FANG_DRAGON = mat("dragon_fang", Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> JAW_QUEEN = mat("queens_jaw", Texture.Y);
     public static final RegistryEntrySupplier<Item, Item> WIND_DRAGON_TOOTH = mat("wind_dragon_tooth", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item, Item> GIANTS_NAIL_BIG = mat("big_giants_nail", Texture.N);
@@ -854,7 +854,7 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_POTATO_SEEDS = seed("golden_potato", () -> RuneCraftoryBlocks.GOLDEN_POTATO);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_PUMPKIN_SEEDS = seed("golden_pumpkin", () -> RuneCraftoryBlocks.GOLDEN_PUMPKIN);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GOLDEN_CABBAGE_SEEDS = seed("golden_cabbage", () -> RuneCraftoryBlocks.GOLDEN_CABBAGE);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> BOK_CHOY_SEEDS = seed("bok_choy", () -> RuneCraftoryBlocks.BOK_CHOY);
+    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> NAPA_CABBAGE_SEEDS = seed("napa_cabbage", () -> RuneCraftoryBlocks.NAPA_CABBAGE);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> LEEK_SEEDS = seed("leek", () -> RuneCraftoryBlocks.LEEK);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> RADISH_SEEDS = seed("radish", () -> RuneCraftoryBlocks.RADISH);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> GREEN_PEPPER_SEEDS = seed("green_pepper", () -> RuneCraftoryBlocks.GREEN_PEPPER);
@@ -868,59 +868,56 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> TOMATO_SEEDS = seed("tomato", () -> RuneCraftoryBlocks.TOMATO);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> STRAWBERRY_SEEDS = seed("strawberry", () -> RuneCraftoryBlocks.STRAWBERRY);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> CUCUMBER_SEEDS = seed("cucumber", () -> RuneCraftoryBlocks.CUCUMBER);
-    public static final RegistryEntrySupplier<Item, ItemNameBlockItem> FODDER_SEEDS = seed("fodder", () -> RuneCraftoryBlocks.FODDER);
 
-    public static final RegistryEntrySupplier<Item, Item> FODDER = mat("fodder", Texture.N);
+    public static final RegistryEntrySupplier<Item, Item> TURNIP = crop("turnip", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> TURNIP_GIANT = crop("tyrant_turnip", TURNIP, 0);
+    public static final RegistryEntrySupplier<Item, Item> TURNIP_PINK = crop("turnip_pink", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> TURNIP_PINK_GIANT = crop("colossal_pink", TURNIP_PINK, 0);
+    public static final RegistryEntrySupplier<Item, Item> CABBAGE = crop("cabbage", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> CABBAGE_GIANT = crop("king_cabbage", CABBAGE, 0);
+    public static final RegistryEntrySupplier<Item, Item> PINK_MELON = crop("pink_melon", null, 1);
+    public static final RegistryEntrySupplier<Item, Item> PINK_MELON_GIANT = crop("conqueror_melon", PINK_MELON, 1);
+    public static final RegistryEntrySupplier<Item, Item> PINEAPPLE = crop("pineapple", null, 1);
+    public static final RegistryEntrySupplier<Item, Item> PINEAPPLE_GIANT = crop("king_pineapple", PINEAPPLE, 1);
+    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY = crop("strawberry", null, 1);
+    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY_GIANT = crop("sultan_strawberry", STRAWBERRY, 1);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_TURNIP = crop("golden_turnip", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_TURNIP_GIANT = crop("golden_tyrant_turnip", GOLDEN_TURNIP, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_POTATO = crop("golden_potato", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_POTATO_GIANT = crop("golden_prince_potato", GOLDEN_POTATO, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_PUMPKIN = crop("golden_pumpkin", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_PUMPKIN_GIANT = crop("golden_doom_pumpkin", GOLDEN_PUMPKIN, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_CABBAGE = crop("golden_cabbage", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> GOLDEN_CABBAGE_GIANT = crop("golden_king_cabbage", GOLDEN_CABBAGE, 0);
+    public static final RegistryEntrySupplier<Item, Item> HOT_HOT_FRUIT = crop("hot_hot_fruit", null, 1);
+    public static final RegistryEntrySupplier<Item, Item> HOT_HOT_FRUIT_GIANT = crop("giant_hot_hot_fruit", HOT_HOT_FRUIT, 1);
+    public static final RegistryEntrySupplier<Item, Item> NAPA_CABBAGE = crop("napa_cabbage", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> NAPA_CABBAGE_GIANT = crop("napa_cabbage_chief", NAPA_CABBAGE, 0);
+    public static final RegistryEntrySupplier<Item, Item> LEEK = crop("leek", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> LEEK_GIANT = crop("legendary_leek", LEEK, 0);
+    public static final RegistryEntrySupplier<Item, Item> RADISH = crop("radish", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> RADISH_GIANT = crop("noble_radish", RADISH, 0);
+    public static final RegistryEntrySupplier<Item, Item> SPINACH = crop("spinach", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> SPINACH_GIANT = crop("sovereign_spinach", SPINACH, 0);
+    public static final RegistryEntrySupplier<Item, Item> GREEN_PEPPER = crop("green_pepper", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> GREEN_PEPPER_GIANT = crop("green_pepper_rex", GREEN_PEPPER, 0);
+    public static final RegistryEntrySupplier<Item, Item> YAM = crop("yam", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> YAM_GIANT = crop("lordly_yam", YAM, 0);
+    public static final RegistryEntrySupplier<Item, Item> EGGPLANT = crop("eggplant", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> EGGPLANT_GIANT = crop("emperor_eggplant", EGGPLANT, 0);
+    public static final RegistryEntrySupplier<Item, Item> TOMATO = crop("tomato", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> TOMATO_GIANT = crop("titan_tomato", TOMATO, 0);
+    public static final RegistryEntrySupplier<Item, Item> CORN = crop("corn", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> CORN_GIANT = crop("gigant_corn", CORN, 0);
+    public static final RegistryEntrySupplier<Item, Item> CUCUMBER = crop("cucumber", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> CUCUMBER_GIANT = crop("kaiser_cucumber", CUCUMBER, 0);
+    public static final RegistryEntrySupplier<Item, Item> PUMPKIN = crop("pumpkin", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> PUMPKIN_GIANT = crop("doom_pumpkin", PUMPKIN, 0);
+    public static final RegistryEntrySupplier<Item, Item> ONION = crop("onion", null, 0);
+    public static final RegistryEntrySupplier<Item, Item> ONION_GIANT = crop("ultra_onion", ONION, 0);
 
-    public static final RegistryEntrySupplier<Item, Item> TURNIP = crop("turnip", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> TURNIP_GIANT = crop("tyrant_turnip", TURNIP, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> TURNIP_PINK = crop("turnip_pink", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> TURNIP_PINK_GIANT = crop("colossal_pink", TURNIP_PINK, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> CABBAGE = crop("cabbage", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> CABBAGE_GIANT = crop("king_cabbage", CABBAGE, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> PINK_MELON = crop("pink_melon", null, Texture.Y, 1);
-    public static final RegistryEntrySupplier<Item, Item> PINK_MELON_GIANT = crop("conqueror_melon", PINK_MELON, Texture.Y, 1);
-    public static final RegistryEntrySupplier<Item, Item> PINEAPPLE = crop("pineapple", null, Texture.Y, 1);
-    public static final RegistryEntrySupplier<Item, Item> PINEAPPLE_GIANT = crop("king_pineapple", PINEAPPLE, Texture.Y, 1);
-    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY = crop("strawberry", null, Texture.N, 1);
-    public static final RegistryEntrySupplier<Item, Item> STRAWBERRY_GIANT = crop("sultan_strawberry", STRAWBERRY, Texture.N, 1);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_TURNIP = crop("golden_turnip", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_TURNIP_GIANT = crop("golden_tyrant_turnip", GOLDEN_TURNIP, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_POTATO = crop("golden_potato", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_POTATO_GIANT = crop("golden_prince_potato", GOLDEN_POTATO, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_PUMPKIN = crop("golden_pumpkin", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_PUMPKIN_GIANT = crop("golden_doom_pumpkin", GOLDEN_PUMPKIN, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_CABBAGE = crop("golden_cabbage", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> GOLDEN_CABBAGE_GIANT = crop("golden_king_cabbage", GOLDEN_CABBAGE, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> HOT_HOT_FRUIT = crop("hot_hot_fruit", null, Texture.N, 1);
-    public static final RegistryEntrySupplier<Item, Item> HOT_HOT_FRUIT_GIANT = crop("giant_hot_hot_fruit", HOT_HOT_FRUIT, Texture.N, 1);
-    public static final RegistryEntrySupplier<Item, Item> BOK_CHOY = crop("bok_choy", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> BOK_CHOY_GIANT = crop("boss_bok_choy", BOK_CHOY, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> LEEK = crop("leek", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> LEEK_GIANT = crop("legendary_leek", LEEK, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> RADISH = crop("radish", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> RADISH_GIANT = crop("noble_radish", RADISH, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> SPINACH = crop("spinach", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> SPINACH_GIANT = crop("sovereign_spinach", SPINACH, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> GREEN_PEPPER = crop("green_pepper", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> GREEN_PEPPER_GIANT = crop("green_pepper_rex", GREEN_PEPPER, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> YAM = crop("yam", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> YAM_GIANT = crop("lordly_yam", YAM, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> EGGPLANT = crop("eggplant", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> EGGPLANT_GIANT = crop("emperor_eggplant", EGGPLANT, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> TOMATO = crop("tomato", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> TOMATO_GIANT = crop("titan_tomato", TOMATO, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> CORN = crop("corn", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> CORN_GIANT = crop("gigant_corn", CORN, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> CUCUMBER = crop("cucumber", null, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> CUCUMBER_GIANT = crop("kaiser_cucumber", CUCUMBER, Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> PUMPKIN = crop("pumpkin", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> PUMPKIN_GIANT = crop("doom_pumpkin", PUMPKIN, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> ONION = crop("onion", null, Texture.N, 0);
-    public static final RegistryEntrySupplier<Item, Item> ONION_GIANT = crop("ultra_onion", ONION, Texture.N, 0);
-
-    public static final RegistryEntrySupplier<Item, Item> POTATO_GIANT = cropWith("princely_potato", ResourceLocation.withDefaultNamespace("potato"), Texture.Y, 0);
-    public static final RegistryEntrySupplier<Item, Item> CARROT_GIANT = cropWith("royal_carrot", ResourceLocation.withDefaultNamespace("carrot"), Texture.Y, 0);
+    public static final RegistryEntrySupplier<Item, Item> POTATO_GIANT = cropWith("princely_potato", ResourceLocation.withDefaultNamespace("potato"), 0);
+    public static final RegistryEntrySupplier<Item, Item> CARROT_GIANT = cropWith("royal_carrot", ResourceLocation.withDefaultNamespace("carrot"), 0);
 
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> TOYHERB_SEEDS = seed("toyherb", () -> RuneCraftoryBlocks.TOYHERB);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> MOONDROP_SEEDS = seed("moondrop_flower", () -> RuneCraftoryBlocks.MOONDROP_FLOWER);
@@ -940,40 +937,40 @@ public class RuneCraftoryItems {
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> BLUE_CRYSTAL_SEEDS = seed("blue_crystal", () -> RuneCraftoryBlocks.BLUE_CRYSTAL);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> EMERY_FLOWER_SEEDS = seed("emery_flower", () -> RuneCraftoryBlocks.EMERY_FLOWER);
 
-    public static final RegistryEntrySupplier<Item, Item> TOYHERB = crop("toyherb", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> TOYHERB_GIANT = crop("ultra_toyherb", TOYHERB, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> MOONDROP_FLOWER = crop("moondrop_flower", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> MOONDROP_FLOWER_GIANT = crop("ultra_moondrop_flower", MOONDROP_FLOWER, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> PINK_CAT = crop("pink_cat", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> PINK_CAT_GIANT = crop("king_pink_cat", PINK_CAT, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> CHARM_BLUE = crop("charm_blue", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> CHARM_BLUE_GIANT = crop("great_charm_blue", CHARM_BLUE, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> LAMP_GRASS = crop("lamp_grass", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> LAMP_GRASS_GIANT = crop("kaiser_lamp_grass", LAMP_GRASS, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> CHERRY_GRASS = crop("cherry_grass", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> CHERRY_GRASS_GIANT = crop("king_cherry_grass", CHERRY_GRASS, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> POM_POM_GRASS = crop("pom_pom_grass", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> POM_POM_GRASS_GIANT = crop("king_pom_pom_grass", POM_POM_GRASS, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> AUTUMN_GRASS = crop("autumn_grass", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> AUTUMN_GRASS_GIANT = crop("big_autumn_grass", AUTUMN_GRASS, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> NOEL_GRASS = crop("noel_grass", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> NOEL_GRASS_GIANT = crop("large_noel_grass", NOEL_GRASS, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> FIREFLOWER = crop("fireflower", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> FIREFLOWER_GIANT = crop("big_fireflower", FIREFLOWER, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> FOUR_LEAF_CLOVER = crop("four_leaf_clover", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> FOUR_LEAF_CLOVER_GIANT = crop("great_four_leaf_clover", FOUR_LEAF_CLOVER, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> IRONLEAF = crop("ironleaf", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> IRONLEAF_GIANT = crop("super_ironleaf", IRONLEAF, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> WHITE_CRYSTAL = crop("white_crystal", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> WHITE_CRYSTAL_GIANT = crop("big_white_crystal", WHITE_CRYSTAL, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> RED_CRYSTAL = crop("red_crystal", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> RED_CRYSTAL_GIANT = crop("big_red_crystal", RED_CRYSTAL, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> GREEN_CRYSTAL = crop("green_crystal", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> GREEN_CRYSTAL_GIANT = crop("big_green_crystal", GREEN_CRYSTAL, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> BLUE_CRYSTAL = crop("blue_crystal", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> BLUE_CRYSTAL_GIANT = crop("big_blue_crystal", BLUE_CRYSTAL, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> EMERY_FLOWER = crop("emery_flower", null, Texture.Y, 2);
-    public static final RegistryEntrySupplier<Item, Item> EMERY_FLOWER_GIANT = crop("great_emery_flower", EMERY_FLOWER, Texture.Y, 2);
+    public static final RegistryEntrySupplier<Item, Item> TOYHERB = crop("toyherb", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> TOYHERB_GIANT = crop("ultra_toyherb", TOYHERB, 2);
+    public static final RegistryEntrySupplier<Item, Item> MOONDROP_FLOWER = crop("moondrop_flower", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> MOONDROP_FLOWER_GIANT = crop("ultra_moondrop_flower", MOONDROP_FLOWER, 2);
+    public static final RegistryEntrySupplier<Item, Item> PINK_CAT = crop("pink_cat", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> PINK_CAT_GIANT = crop("king_pink_cat", PINK_CAT, 2);
+    public static final RegistryEntrySupplier<Item, Item> CHARM_BLUE = crop("charm_blue", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> CHARM_BLUE_GIANT = crop("great_charm_blue", CHARM_BLUE, 2);
+    public static final RegistryEntrySupplier<Item, Item> LAMP_GRASS = crop("lamp_grass", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> LAMP_GRASS_GIANT = crop("kaiser_lamp_grass", LAMP_GRASS, 2);
+    public static final RegistryEntrySupplier<Item, Item> CHERRY_GRASS = crop("cherry_grass", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> CHERRY_GRASS_GIANT = crop("king_cherry_grass", CHERRY_GRASS, 2);
+    public static final RegistryEntrySupplier<Item, Item> POM_POM_GRASS = crop("pom_pom_grass", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> POM_POM_GRASS_GIANT = crop("king_pom_pom_grass", POM_POM_GRASS, 2);
+    public static final RegistryEntrySupplier<Item, Item> AUTUMN_GRASS = crop("autumn_grass", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> AUTUMN_GRASS_GIANT = crop("big_autumn_grass", AUTUMN_GRASS, 2);
+    public static final RegistryEntrySupplier<Item, Item> NOEL_GRASS = crop("noel_grass", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> NOEL_GRASS_GIANT = crop("large_noel_grass", NOEL_GRASS, 2);
+    public static final RegistryEntrySupplier<Item, Item> FIREFLOWER = crop("fireflower", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> FIREFLOWER_GIANT = crop("big_fireflower", FIREFLOWER, 2);
+    public static final RegistryEntrySupplier<Item, Item> FOUR_LEAF_CLOVER = crop("four_leaf_clover", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> FOUR_LEAF_CLOVER_GIANT = crop("great_four_leaf_clover", FOUR_LEAF_CLOVER, 2);
+    public static final RegistryEntrySupplier<Item, Item> IRONLEAF = crop("ironleaf", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> IRONLEAF_GIANT = crop("super_ironleaf", IRONLEAF, 2);
+    public static final RegistryEntrySupplier<Item, Item> WHITE_CRYSTAL = crop("white_crystal", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> WHITE_CRYSTAL_GIANT = crop("big_white_crystal", WHITE_CRYSTAL, 2);
+    public static final RegistryEntrySupplier<Item, Item> RED_CRYSTAL = crop("red_crystal", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> RED_CRYSTAL_GIANT = crop("big_red_crystal", RED_CRYSTAL, 2);
+    public static final RegistryEntrySupplier<Item, Item> GREEN_CRYSTAL = crop("green_crystal", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> GREEN_CRYSTAL_GIANT = crop("big_green_crystal", GREEN_CRYSTAL, 2);
+    public static final RegistryEntrySupplier<Item, Item> BLUE_CRYSTAL = crop("blue_crystal", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> BLUE_CRYSTAL_GIANT = crop("big_blue_crystal", BLUE_CRYSTAL, 2);
+    public static final RegistryEntrySupplier<Item, Item> EMERY_FLOWER = crop("emery_flower", null, 2);
+    public static final RegistryEntrySupplier<Item, Item> EMERY_FLOWER_GIANT = crop("great_emery_flower", EMERY_FLOWER, 2);
 
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> SHIELD_SEEDS = seed("shield", () -> RuneCraftoryBlocks.SHIELD_CROP);
     public static final RegistryEntrySupplier<Item, ItemNameBlockItem> SWORD_SEEDS = seed("sword", () -> RuneCraftoryBlocks.SWORD_CROP);
@@ -1503,7 +1500,7 @@ public class RuneCraftoryItems {
     }
 
     private static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<? extends Block>> block) {
-        return register(name, () -> new BlockItem(block.get().get(), new Item.Properties()), RuneCraftoryCreativeTabs.BLOCKS);
+        return blockItem(name, block, RuneCraftoryCreativeTabs.BLOCKS);
     }
 
     private static RegistryEntrySupplier<Item, BlockItem> blockItem(String name, Supplier<Supplier<? extends Block>> block, ResourceLocation group) {
@@ -1595,27 +1592,14 @@ public class RuneCraftoryItems {
         return sup;
     }
 
-    private static RegistryEntrySupplier<Item, Item> crop(String name, RegistryEntrySupplier<Item, ?> small, Texture texture, int type) {
-        return cropWith(name, small != null ? small.getID() : null, texture, type);
+    private static RegistryEntrySupplier<Item, Item> crop(String name, RegistryEntrySupplier<Item, ?> small, int type) {
+        return cropWith(name, small != null ? small.getID() : null, type);
     }
 
     /**
      * @param type 0 for veggetables, 1 for fruits, 2 for flowers
      */
-    private static RegistryEntrySupplier<Item, Item> cropWith(String name, ResourceLocation small, Texture texture, int type) {
-        if (texture == Texture.N) {
-            RegistryEntrySupplier<Item, Item> sup;
-            if (small != null)
-                sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)));
-            else
-                sup = register(name, () -> new Item(new Item.Properties().food(FOOD_PROP)));
-            NOTEX.add(sup);
-            if (TenshiLibCrossPlat.INSTANCE.isDatagen()) {
-                if (small != null)
-                    GIANT_CROPS.add(sup);
-            }
-            return sup;
-        }
+    private static RegistryEntrySupplier<Item, Item> cropWith(String name, ResourceLocation small, int type) {
         RegistryEntrySupplier<Item, Item> sup;
         if (small != null)
             sup = register(name, () -> new Item(new Item.Properties().food(GIANT_CROP_FOOD_PROP)), RuneCraftoryCreativeTabs.FARMING);

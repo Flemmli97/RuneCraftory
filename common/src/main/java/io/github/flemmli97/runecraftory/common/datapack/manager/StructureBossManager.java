@@ -53,8 +53,7 @@ public class StructureBossManager extends SimpleJsonResourceReloadListener imple
                 BossSpawnList list = BossSpawnList.CODEC.parse(ops, el).getOrThrow();
                 builder.put(key, list);
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse boss spawn list json {} {}", key, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse boss spawn list json {} {}", key, ex, ex.fillInStackTrace());
             }
         });
         this.spawnList = builder.build();

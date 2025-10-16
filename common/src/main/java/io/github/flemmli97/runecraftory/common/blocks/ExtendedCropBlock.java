@@ -58,7 +58,7 @@ public class ExtendedCropBlock extends CropBlock implements GrowableCrop, Growab
     }
 
     @Override
-    public MapCodec<ExtendedCropBlock> codec() {
+    public MapCodec<? extends ExtendedCropBlock> codec() {
         return CODEC;
     }
 

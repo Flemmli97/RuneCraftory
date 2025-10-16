@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "runecraftory:napa_cabbage_chief",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "1",
+                "facing": "north",
+                "half": "bottom"
+              }
+            }
+          ],
+          "name": "runecraftory:napa_cabbage_chief"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "runecraftory:blocks/napa_cabbage_chief"
+}

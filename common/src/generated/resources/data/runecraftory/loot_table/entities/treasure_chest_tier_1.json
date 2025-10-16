@@ -366,6 +366,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:dragon_fang"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:queens_jaw"
         },
         {
@@ -466,6 +470,14 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:strawberry"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sultan_strawberry"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:golden_turnip"
         },
         {
@@ -482,11 +494,43 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:golden_pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:golden_doom_pumpkin"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:golden_cabbage"
         },
         {
           "type": "minecraft:item",
           "name": "runecraftory:golden_king_cabbage"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:hot_hot_fruit"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:giant_hot_hot_fruit"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:napa_cabbage"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:napa_cabbage_chief"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:leek"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:legendary_leek"
         },
         {
           "type": "minecraft:item",
@@ -498,11 +542,35 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:spinach"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:sovereign_spinach"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:green_pepper"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:green_pepper_rex"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:yam"
         },
         {
           "type": "minecraft:item",
           "name": "runecraftory:lordly_yam"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:eggplant"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:emperor_eggplant"
         },
         {
           "type": "minecraft:item",
@@ -514,11 +582,35 @@
         },
         {
           "type": "minecraft:item",
+          "name": "runecraftory:corn"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:gigant_corn"
+        },
+        {
+          "type": "minecraft:item",
           "name": "runecraftory:cucumber"
         },
         {
           "type": "minecraft:item",
           "name": "runecraftory:kaiser_cucumber"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:doom_pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:onion"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "runecraftory:ultra_onion"
         },
         {
           "type": "minecraft:item",

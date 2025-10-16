@@ -114,8 +114,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener implements Syn
                     item.ifPresent(i -> itemEntries.put(i, new ReloadableHolder<>(fres, FoodProperties.CODEC.parse(ops, el).getOrThrow())));
                 }
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse food stat json {} {}", fres, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse food stat json {} {}", fres, ex, ex.fillInStackTrace());
             }
         });
         this.food = itemEntries.build();

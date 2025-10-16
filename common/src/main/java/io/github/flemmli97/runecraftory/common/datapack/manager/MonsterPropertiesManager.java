@@ -49,8 +49,7 @@ public class MonsterPropertiesManager extends SimpleJsonResourceReloadListener i
                 EntityProperties props = EntityProperties.CODEC.parse(ops, el).getOrThrow();
                 propertiesBuilder.put(type, props);
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse entity properties json {} {}", key, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse entity properties json {} {}", key, ex, ex.fillInStackTrace());
             }
         });
         this.propertiesMap = propertiesBuilder.build();

@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -63,19 +64,10 @@ public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel() instanceof ServerLevel serverLevel) {
-            int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()), LevelCalc.playersAround(serverLevel, Vec3.atCenterOf(context.getClickedPos()), 256));
-            context.getPlayer().displayClientMessage(Component.literal("GateLevel at pos: " + lvl), false);
-            FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, context.getClickedPos())
-                    .ifPresent(d -> context.getPlayer().displayClientMessage(Component.literal(d.toStringFull()), false));
-            /*int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
-            context.getPlayer().sendMessage(Component.literal("Free POITickets" + f), Util.NIL_UUID);*/
-            FarmlandHandler.PendingGiantCrops c = new FarmlandHandler.PendingGiantCrops();
-            BlockPos pos = context.getClickedPos().above();
-            c.add(pos, RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
-            c.add(pos.north(), RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
-            c.add(pos.west(), RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
-            c.add(pos.north().west(), RuneCraftoryBlocks.TOMATO_GIANT.get().defaultBlockState());
-            c.tryMerge(serverLevel);
+//            printLevelAt(serverLevel, context.getClickedPos(), context.getPlayer());
+//            printFarmAt(serverLevel, context.getClickedPos(), context.getPlayer());
+//            printPOIAt(serverLevel, context.getClickedPos(), context.getPlayer());
+            setGiantCrop(serverLevel, context.getClickedPos().above(), RuneCraftoryBlocks.GOLDEN_PUMPKIN_GIANT.get().defaultBlockState());
             return InteractionResult.CONSUME;
         }
         return super.useOn(context);
@@ -114,6 +106,30 @@ public class ItemDebug extends AnimationDebugger implements ExtendedWeapon {
 
     private Mode getCurrentMode(ItemStack stack) {
         return stack.getOrDefault(RuneCraftoryDataComponentTypes.DEBUG_ITEM_MODE.get(), Mode.DEFAULT);
+    }
+
+    private static void printLevelAt(ServerLevel serverLevel, BlockPos pos, Player player) {
+        int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(pos), LevelCalc.playersAround(serverLevel, Vec3.atCenterOf(pos), 256));
+        player.displayClientMessage(Component.literal("GateLevel at pos: " + lvl), false);
+    }
+
+    private static void printFarmAt(ServerLevel serverLevel, BlockPos pos, Player player) {
+        FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, pos)
+                .ifPresent(d -> player.displayClientMessage(Component.literal(d.toStringFull()), false));
+    }
+
+    private static void printPOIAt(ServerLevel serverLevel, BlockPos pos, Player player) {
+        int f = serverLevel.getPoiManager().getFreeTickets(pos);
+        player.displayClientMessage(Component.literal("Free POITickets" + f), false);
+    }
+
+    private static void setGiantCrop(ServerLevel serverLevel, BlockPos pos, BlockState state) {
+        FarmlandHandler.PendingGiantCrops c = new FarmlandHandler.PendingGiantCrops();
+        c.add(pos, state);
+        c.add(pos.north(), state);
+        c.add(pos.west(), state);
+        c.add(pos.north().west(), state);
+        c.tryMerge(serverLevel);
     }
 
     public enum Mode {

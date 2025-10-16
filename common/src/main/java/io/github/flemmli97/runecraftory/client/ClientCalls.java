@@ -182,7 +182,7 @@ public class ClientCalls {
             if (flag.isAdvanced())
                 debug.add(Component.translatable("runecraftory.tooltip.debug.stat", stat.id().toString()).withStyle(ChatFormatting.GRAY));
         });
-        ReloadableHolder<CropProperties> props = DataPackHandler.INSTANCE.cropManager().getWithId(stack.getItem());
+        ReloadableHolder<CropProperties> props = DataPackHandler.INSTANCE.cropManager().getSeedWithId(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.value().texts());
             if (flag.isAdvanced())

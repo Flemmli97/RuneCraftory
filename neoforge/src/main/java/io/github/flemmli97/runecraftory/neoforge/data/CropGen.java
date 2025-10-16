@@ -149,9 +149,9 @@ public class CropGen extends CropProvider {
                 RuneCraftoryItems.GOLDEN_CABBAGE.asHolder(), RuneCraftoryBlocks.GOLDEN_CABBAGE.asHolder(),
                 Pair.of(RuneCraftoryItems.GOLDEN_CABBAGE_GIANT.get(), RuneCraftoryBlocks.GOLDEN_CABBAGE_GIANT.get()), 75, 3, false)
                 .addGoodSeason(Season.WINTER).addBadSeason(Season.SUMMER));
-        this.addStat(new CropProperties.Builder(RuneCraftoryItems.BOK_CHOY_SEEDS.asHolder(),
-                RuneCraftoryItems.BOK_CHOY.asHolder(), RuneCraftoryBlocks.BOK_CHOY.asHolder(),
-                Pair.of(RuneCraftoryItems.BOK_CHOY_GIANT.get(), RuneCraftoryBlocks.BOK_CHOY_GIANT.get()), 5, 4, false)
+        this.addStat(new CropProperties.Builder(RuneCraftoryItems.NAPA_CABBAGE_SEEDS.asHolder(),
+                RuneCraftoryItems.NAPA_CABBAGE.asHolder(), RuneCraftoryBlocks.NAPA_CABBAGE.asHolder(),
+                Pair.of(RuneCraftoryItems.NAPA_CABBAGE_GIANT.get(), RuneCraftoryBlocks.NAPA_CABBAGE_GIANT.get()), 5, 4, false)
                 .addGoodSeason(Season.AUTUMN).addBadSeason(Season.SUMMER));
         this.addStat(new CropProperties.Builder(RuneCraftoryItems.LEEK_SEEDS.asHolder(),
                 RuneCraftoryItems.LEEK.asHolder(), RuneCraftoryBlocks.LEEK.asHolder(),
@@ -201,8 +201,6 @@ public class CropGen extends CropProvider {
                 RuneCraftoryItems.CUCUMBER.asHolder(), RuneCraftoryBlocks.CUCUMBER.asHolder(),
                 Pair.of(RuneCraftoryItems.CUCUMBER_GIANT.get(), RuneCraftoryBlocks.CUCUMBER_GIANT.get()), 5, 5, true)
                 .addGoodSeason(Season.SPRING).addGoodSeason(Season.SUMMER).addBadSeason(Season.WINTER));
-        this.addStat(new CropProperties.Builder(RuneCraftoryItems.FODDER_SEEDS.asHolder(),
-                RuneCraftoryItems.FODDER.asHolder(), RuneCraftoryBlocks.FODDER.asHolder(), 5, 1, true));
 
         this.addStat(new CropProperties.Builder(HolderSet.direct(RuneCraftoryItems.SHIELD_SEEDS.asHolder()),
                 HolderSet.empty(), HolderSet.direct(RuneCraftoryBlocks.SHIELD_CROP.asHolder()), 15, 1, false));

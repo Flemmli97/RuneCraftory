@@ -2291,7 +2291,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.GOLDEN_POTATO_SEEDS.get(), new ItemStat.Builder(3000, 300, 0));
         this.addStat(RuneCraftoryItems.GOLDEN_PUMPKIN_SEEDS.get(), new ItemStat.Builder(3500, 3500, 0));
         this.addStat(RuneCraftoryItems.GOLDEN_CABBAGE_SEEDS.get(), new ItemStat.Builder(2500, 250, 0));
-        this.addStat(RuneCraftoryItems.BOK_CHOY_SEEDS.get(), new ItemStat.Builder(600, 60, 0));
+        this.addStat(RuneCraftoryItems.NAPA_CABBAGE_SEEDS.get(), new ItemStat.Builder(600, 60, 0));
         this.addStat(RuneCraftoryItems.LEEK_SEEDS.get(), new ItemStat.Builder(450, 45, 0));
         this.addStat(RuneCraftoryItems.RADISH_SEEDS.get(), new ItemStat.Builder(660, 66, 0));
         this.addStat(RuneCraftoryItems.GREEN_PEPPER_SEEDS.get(), new ItemStat.Builder(400, 40, 0));
@@ -2305,11 +2305,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.TOMATO_SEEDS.get(), new ItemStat.Builder(990, 99, 0));
         this.addStat(RuneCraftoryItems.STRAWBERRY_SEEDS.get(), new ItemStat.Builder(330, 33, 0));
         this.addStat(RuneCraftoryItems.CUCUMBER_SEEDS.get(), new ItemStat.Builder(230, 23, 0));
-        this.addStat(RuneCraftoryItems.FODDER_SEEDS.get(), new ItemStat.Builder(50, 5, 0));
         this.addStat(RuneCraftoryItems.SWORD_SEEDS.get(), new ItemStat.Builder(1500, 500, 0));
         this.addStat(RuneCraftoryItems.SHIELD_SEEDS.get(), new ItemStat.Builder(1500, 500, 0));
-
-        this.addStat(RuneCraftoryItems.FODDER.get(), new ItemStat.Builder(250, 35, 0));
 
         this.addStat(RuneCraftoryItems.TURNIP.get(), new ItemStat.Builder(230, 60, 1));
         this.addStat(RuneCraftoryItems.TURNIP_GIANT.get(), new ItemStat.Builder(0, 250, 20));
@@ -2333,8 +2330,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.GOLDEN_CABBAGE_GIANT.get(), new ItemStat.Builder(0, 20000, 89));
         this.addStat(RuneCraftoryItems.HOT_HOT_FRUIT.get(), new ItemStat.Builder(6000, 1000, 67));
         this.addStat(RuneCraftoryItems.HOT_HOT_FRUIT_GIANT.get(), new ItemStat.Builder(0, 2500, 79));
-        this.addStat(RuneCraftoryItems.BOK_CHOY.get(), new ItemStat.Builder(1300, 440, 34));
-        this.addStat(RuneCraftoryItems.BOK_CHOY_GIANT.get(), new ItemStat.Builder(0, 1100, 50));
+        this.addStat(RuneCraftoryItems.NAPA_CABBAGE.get(), new ItemStat.Builder(1300, 440, 34));
+        this.addStat(RuneCraftoryItems.NAPA_CABBAGE_GIANT.get(), new ItemStat.Builder(0, 1100, 50));
         this.addStat(RuneCraftoryItems.LEEK.get(), new ItemStat.Builder(2300, 800, 23));
         this.addStat(RuneCraftoryItems.LEEK_GIANT.get(), new ItemStat.Builder(0, 1950, 37));
         this.addStat(RuneCraftoryItems.RADISH.get(), new ItemStat.Builder(3500, 1550, 40));

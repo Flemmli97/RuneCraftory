@@ -47,8 +47,7 @@ public class FarmlandHoeTileActionManager extends SimpleJsonResourceReloadListen
                 Data val = Data.CODEC.parse(ops, el).getOrThrow();
                 entries.put(val.item(), val);
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse hoe tile action json {} {}", fres, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse hoe tile action json {} {}", fres, ex, ex.fillInStackTrace());
             }
         });
         this.tileActions = entries.build();

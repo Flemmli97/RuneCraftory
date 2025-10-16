@@ -495,6 +495,8 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.DRAGON_HEAD);
 
         // Crops stuff
+        this.tag(RunecraftoryTags.Items.MONSTER_FEEDS)
+                .add(Items.WHEAT);
         this.tag(RunecraftoryTags.Items.TURNIP)
                 .add(RuneCraftoryItems.TURNIP.get())
                 .add(RuneCraftoryItems.TURNIP_GIANT.get())

@@ -69,9 +69,10 @@ public class BlockStatesGen extends BlockStateProvider {
                     ResourceLocation texture = this.itemTexture(giant.getCrop(BuiltInRegistries.ITEM.asLookup()));
                     ResourceLocation parent = state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? FLOWER_GIANT_BOTTOM : FLOWER_GIANT_TOP;
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(reg.getID().toString()
+                                    + "_" + state.getValue(GiantCropBlock.AGE)
                                     + (state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? "" : "_top"), parent, "layer0", texture))
                             .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
-                }, ExtendedCropBlock.WILTED, GiantCropBlock.AGE);
+                }, ExtendedCropBlock.WILTED);
             } else if (block instanceof ExtendedCropBlock)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(ExtendedCropBlock.AGE);
@@ -92,12 +93,18 @@ public class BlockStatesGen extends BlockStateProvider {
             Block block = reg.get();
             if (block instanceof GiantCropBlock) {
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
-                    ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, reg.getID().getPath());
+                    ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, reg.getID().getPath())
+                            .withPath(s -> s + "_" + state.getValue(GiantCropBlock.AGE));
                     ResourceLocation parent = state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? CROP_GIANT_BOTTOM : CROP_GIANT_TOP;
+                    if (reg == RuneCraftoryBlocks.LEEK_GIANT || reg == RuneCraftoryBlocks.PUMPKIN_GIANT
+                            || reg == RuneCraftoryBlocks.GOLDEN_PUMPKIN_GIANT) {
+                        parent = state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? FLOWER_GIANT_BOTTOM : FLOWER_GIANT_TOP;
+                    }
                     return ConfiguredModel.builder().modelFile(this.models().singleTexture(reg.getID().toString()
+                                    + "_" + state.getValue(GiantCropBlock.AGE)
                                     + (state.getValue(GiantCropBlock.HALF) == Half.BOTTOM ? "" : "_top"), parent, "layer0", texture))
                             .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360).build();
-                }, ExtendedCropBlock.WILTED, GiantCropBlock.AGE);
+                }, ExtendedCropBlock.WILTED);
             } else if (block instanceof ExtendedCropBlock)
                 this.getVariantBuilder(block).forAllStatesExcept(state -> {
                     int stage = state.getValue(ExtendedCropBlock.AGE);

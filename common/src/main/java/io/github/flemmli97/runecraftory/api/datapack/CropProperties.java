@@ -68,8 +68,8 @@ public class CropProperties {
         this.growth = growth;
         this.maxDrops = maxDrops;
         this.regrowable = regrowable;
-        this.bestSeasons = EnumSet.copyOf(bestSeasons);
-        this.badSeasons = EnumSet.copyOf(badSeasons);
+        this.bestSeasons = bestSeasons.isEmpty() ? EnumSet.noneOf(Season.class) : EnumSet.copyOf(bestSeasons);
+        this.badSeasons = badSeasons.isEmpty() ? EnumSet.noneOf(Season.class) : EnumSet.copyOf(badSeasons);
         this.translationTexts = this.generateText();
     }
 

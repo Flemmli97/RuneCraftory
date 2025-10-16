@@ -81,19 +81,30 @@ public class CropUtils {
         if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock cropBlock) || !cropBlock.isMaxAge(state))
             return;
         Growable growable = (Growable) cropBlock;
-        growable.onQuickHarvest(state, serverLevel, pos, entity, stack, stackConsumer);
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+        BlockPos cropPos = growable.getCropPosition(serverLevel, pos, state);
+        state = level.getBlockState(cropPos);
+        if (stackConsumer != null) {
+            Block.getDrops(state, serverLevel, cropPos, null, entity, stack)
+                    .forEach(s -> {
+                        ItemStack rest = stackConsumer.apply(s);
+                        if (!rest.isEmpty())
+                            Block.popResource(serverLevel, cropPos, rest);
+                    });
+            state.spawnAfterBreak(serverLevel, cropPos, ItemStack.EMPTY, true);
+        } else
+            Block.dropResources(state, serverLevel, cropPos, null, entity, stack);
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, cropPos, Block.getId(state));
         if (props != null && props.regrowable() && FarmlandHandler.get(level.getServer())
-                .getData(serverLevel, growable.getFarmlandPosition(pos, state))
+                .getData(serverLevel, growable.getFarmlandPosition(serverLevel, cropPos, state))
                 .map(d -> d.getHealth() > 0).orElse(false)) {
             // Actually handled at block state change detection
-            level.setBlock(pos, state.setValue(((CropBlockAccessor) cropBlock).cropAgeProperty(), 0), Block.UPDATE_ALL);
+            level.setBlock(cropPos, state.setValue(((CropBlockAccessor) cropBlock).cropAgeProperty(), 0), Block.UPDATE_ALL);
         } else {
-            level.removeBlock(pos, false);
+            level.removeBlock(cropPos, false);
         }
         if (entity instanceof ServerPlayer player) {
             RuneCraftoryCriteria.HARVEST_CROP.get().trigger(player, state);
-            spawnRuney(player, pos);
+            spawnRuney(player, cropPos);
             LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FARMING, 2f);
         }
         if (entity instanceof LivingEntity living)

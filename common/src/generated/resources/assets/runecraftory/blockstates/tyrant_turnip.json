@@ -1,33 +1,93 @@
 {
   "variants": {
-    "facing=east,half=bottom": {
-      "model": "runecraftory:block/tyrant_turnip",
+    "age=0,facing=east,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_0",
       "y": 90
     },
-    "facing=east,half=top": {
-      "model": "runecraftory:block/tyrant_turnip_top",
+    "age=0,facing=east,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_0_top",
       "y": 90
     },
-    "facing=north,half=bottom": {
-      "model": "runecraftory:block/tyrant_turnip"
+    "age=0,facing=north,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_0"
     },
-    "facing=north,half=top": {
-      "model": "runecraftory:block/tyrant_turnip_top"
+    "age=0,facing=north,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_0_top"
     },
-    "facing=south,half=bottom": {
-      "model": "runecraftory:block/tyrant_turnip",
+    "age=0,facing=south,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_0",
       "y": 180
     },
-    "facing=south,half=top": {
-      "model": "runecraftory:block/tyrant_turnip_top",
+    "age=0,facing=south,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_0_top",
       "y": 180
     },
-    "facing=west,half=bottom": {
-      "model": "runecraftory:block/tyrant_turnip",
+    "age=0,facing=west,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_0",
       "y": 270
     },
-    "facing=west,half=top": {
-      "model": "runecraftory:block/tyrant_turnip_top",
+    "age=0,facing=west,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_0_top",
+      "y": 270
+    },
+    "age=1,facing=east,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_1",
+      "y": 90
+    },
+    "age=1,facing=east,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_1_top",
+      "y": 90
+    },
+    "age=1,facing=north,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_1"
+    },
+    "age=1,facing=north,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_1_top"
+    },
+    "age=1,facing=south,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_1",
+      "y": 180
+    },
+    "age=1,facing=south,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_1_top",
+      "y": 180
+    },
+    "age=1,facing=west,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_1",
+      "y": 270
+    },
+    "age=1,facing=west,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_1_top",
+      "y": 270
+    },
+    "age=2,facing=east,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_2",
+      "y": 90
+    },
+    "age=2,facing=east,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_2_top",
+      "y": 90
+    },
+    "age=2,facing=north,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_2"
+    },
+    "age=2,facing=north,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_2_top"
+    },
+    "age=2,facing=south,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_2",
+      "y": 180
+    },
+    "age=2,facing=south,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_2_top",
+      "y": 180
+    },
+    "age=2,facing=west,half=bottom": {
+      "model": "runecraftory:block/tyrant_turnip_2",
+      "y": 270
+    },
+    "age=2,facing=west,half=top": {
+      "model": "runecraftory:block/tyrant_turnip_2_top",
       "y": 270
     }
   }

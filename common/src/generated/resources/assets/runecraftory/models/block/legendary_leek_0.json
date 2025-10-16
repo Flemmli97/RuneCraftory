@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/giant_flower_bottom",
+  "textures": {
+    "layer0": "runecraftory:block/legendary_leek_0"
+  }
+}

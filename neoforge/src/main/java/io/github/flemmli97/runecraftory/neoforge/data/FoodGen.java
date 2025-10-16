@@ -592,11 +592,11 @@ public class FoodGen extends FoodProvider {
                 .setRPIncrease(40, 0)
                 .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
                 .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(RuneCraftoryItems.BOK_CHOY.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.NAPA_CABBAGE.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(30, 0)
                 .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
                 .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));
-        this.addStat(RuneCraftoryItems.BOK_CHOY_GIANT.get(), new FoodProperties.Builder(6000)
+        this.addStat(RuneCraftoryItems.NAPA_CABBAGE_GIANT.get(), new FoodProperties.Builder(6000)
                 .setHPRegen(60, 0)
                 .addCookingBonus(RuneCraftoryAttributes.HEALTH_GAIN.asHolder(), 10)
                 .addCookingBonus(RuneCraftoryAttributes.RUNE_POINTS_GAIN.asHolder(), 5));

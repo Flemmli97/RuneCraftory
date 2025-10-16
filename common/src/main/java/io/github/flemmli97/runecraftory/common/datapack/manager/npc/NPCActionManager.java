@@ -52,8 +52,7 @@ public class NPCActionManager extends SimpleJsonResourceReloadListener implement
                 try {
                     builder.put(fres, new ReloadableHolder<>(fres, NPCAttackActions.CODEC.parse(ops, el).getOrThrow()));
                 } catch (Exception ex) {
-                    RuneCraftory.LOGGER.error("Couldn't parse npc actions json {} {}", fres, ex);
-                    ex.fillInStackTrace();
+                    RuneCraftory.LOGGER.error("Couldn't parse npc actions json {} {}", fres, ex, ex.fillInStackTrace());
                 }
             }
         });

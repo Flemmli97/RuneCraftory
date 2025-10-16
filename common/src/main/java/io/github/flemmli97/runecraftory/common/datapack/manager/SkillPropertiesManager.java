@@ -43,8 +43,7 @@ public class SkillPropertiesManager extends SimpleJsonResourceReloadListener imp
                 Skills skills = Skills.valueOf(key.getPath().toUpperCase(Locale.ROOT));
                 propertiesBuilder.put(skills, props);
             } catch (Exception ex) {
-                RuneCraftory.LOGGER.error("Couldn't parse skill properties json {} {}", key, ex);
-                ex.fillInStackTrace();
+                RuneCraftory.LOGGER.error("Couldn't parse skill properties json {} {}", key, ex, ex.fillInStackTrace());
             }
         });
         List<Skills> missing = new ArrayList<>();
