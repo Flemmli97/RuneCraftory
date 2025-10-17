@@ -48,8 +48,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       int baseLevel, @Nullable List<ResourceLocation> combatActions, int unique,
                       RelationShipState relationShipState, List<ResourceLocation> possibleChildren) {
 
-    public static final Map<Holder<Attribute>, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 3d, Attributes.ATTACK_DAMAGE, 1d,
-            RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5d, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1d, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5d);
+    public static final Map<Holder<Attribute>, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 5d, Attributes.ATTACK_DAMAGE, 0.5,
+            RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.2);
     public static final ReloadableHolder<NPCData> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_npc"),
             new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
                     Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of()));

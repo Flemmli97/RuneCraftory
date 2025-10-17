@@ -20,6 +20,7 @@ public class LibConstants {
     public static final ResourceLocation FOOD_MODIFIER_MULTI = RuneCraftory.modRes("food_modifier_multiplier");
 
     public static final ResourceLocation MONSTER_LEVEL_MODIFIER = RuneCraftory.modRes("monster_level_modifier");
+    public static final ResourceLocation MONSTER_RANDOM_SPAWN_BONUS = RuneCraftory.modRes("monster_random_spawn_bonus");
     public static final ResourceLocation MONSTER_BRUSH_MODIFIER = RuneCraftory.modRes("monster_brush_modifier");
     public static final ResourceLocation FRIENDSHIP_MODIFIER = RuneCraftory.modRes("friendship_modifier");
     public static final ResourceLocation MONSTER_GIFT_MODIFIER = RuneCraftory.modRes("monster_gift_modifier");

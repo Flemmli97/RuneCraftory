@@ -158,6 +158,7 @@ public class CombatUtils {
             case IGNORE_VANILLA_PLAYER_HURT -> !(source instanceof DynamicDamage) && entity instanceof Player;
             case IGNORE_VANILLA_PLAYER ->
                     !(source instanceof DynamicDamage) && (entity instanceof Player || source.getEntity() instanceof Player);
+            case IGNORE_NONE -> false;
         };
         if (!ignoreDefence) {
             if (source.is(RunecraftoryTags.DamageTypes.IS_MAGIC)) {
@@ -171,7 +172,7 @@ public class CombatUtils {
         if (reduce > amount * 0.8)
             dmg = (float) Math.max(0.05 * amount, amount * 0.2 * Math.pow(0.997, reduce - amount * 0.8));
         if (source instanceof DynamicDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
-            dmg += entity.level().random.nextGaussian() * dmg / 10.0;
+            dmg += (float) (entity.level().random.nextGaussian() * dmg / 10.0);
         }
         return elementalReduction(entity, source, dmg);
     }

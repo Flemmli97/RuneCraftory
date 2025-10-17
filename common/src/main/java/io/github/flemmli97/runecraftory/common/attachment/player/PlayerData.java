@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.DamageSourceUtils;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
@@ -156,8 +157,9 @@ public class PlayerData {
     }
 
     private void updateLevelAttributes() {
-        int lvl = this.level.getLevel() - 1;
-        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * lvl, AttributeUpdate.REPLACE);
+        float lvl = this.level.getLevel() - 1;
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * (lvl + LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 25, 30, 1)), AttributeUpdate.REPLACE);
+        lvl += LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 1);
         this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.rpPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.strPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.vitPerLevel * lvl, AttributeUpdate.REPLACE);
@@ -165,11 +167,13 @@ public class PlayerData {
     }
 
     private void updateSkillLevelAttributes() {
-        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::healthIncrease), AttributeUpdate.REPLACE);
-        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
-        this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::strIncrease), AttributeUpdate.REPLACE);
-        this.setForVitality(LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::vitIncrease), AttributeUpdate.REPLACE);
-        this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(SkillProperties::intelIncrease), AttributeUpdate.REPLACE);
+        float adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 0.5f);
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::healthIncrease), AttributeUpdate.REPLACE);
+        adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 150, 30, 0.5f);
+        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::strIncrease), AttributeUpdate.REPLACE);
+        this.setForVitality(LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::vitIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::intelIncrease), AttributeUpdate.REPLACE);
     }
 
     private void clearAtributeModifier(Holder<Attribute> attribute, ResourceLocation modifier) {
@@ -311,11 +315,12 @@ public class PlayerData {
             this.player.setHealth(this.player.getMaxHealth());
             this.runePoints = this.getMaxRunePoints();
         }
+        EntityUtils.sendAttributesTo(serverPlayer, serverPlayer);
         LoaderNetwork.INSTANCE.sendToPlayer(new S2CLevelPkt(this), serverPlayer);
     }
 
-    private double skillVal(Function<SkillProperties, Number> func) {
-        return this.skillLevels.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
+    private double skillVal(float adjust, Function<SkillProperties, Number> func) {
+        return this.skillLevels.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1 + adjust) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     public XpLevelHolder getSkillLevel(Skills skill) {

@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 
 public class GeneralConfig {
 
-    public static DefenceSystem defenceSystem = DefenceSystem.IGNORE_VANILLA_PLAYER;
+    public static DefenceSystem defenceSystem = DefenceSystem.IGNORE_NONE;
     public static boolean gateSpawning = true;
     public static boolean disableVanillaSpawning = false;
     public static boolean randomDamage = true;
@@ -38,12 +38,12 @@ public class GeneralConfig {
     public static int startingMoney = 100;
     public static int startingStr = 0;
     public static int startingVit = 0;
-    public static int startingIntel = 3;
+    public static int startingIntel = 1;
     public static float hpPerLevel = 5;
     public static float rpPerLevel = 2;
-    public static float strPerLevel = 1;
-    public static float vitPerLevel = 1.5f;
-    public static float intPerLevel = 1;
+    public static float strPerLevel = 0.5f;
+    public static float vitPerLevel = 0.4f;
+    public static float intPerLevel = 0.5f;
     public static float shortSwordUltimate = 7;
     public static float longSwordUltimate = 7;
     public static float spearUltimate = 7;
@@ -84,6 +84,7 @@ public class GeneralConfig {
         IGNORE_VANILLA_PLAYER_ATT,
         IGNORE_VANILLA_PLAYER_HURT,
         IGNORE_VANILLA_PLAYER,
+        IGNORE_NONE,
     }
 
     public enum RecipeSystem {

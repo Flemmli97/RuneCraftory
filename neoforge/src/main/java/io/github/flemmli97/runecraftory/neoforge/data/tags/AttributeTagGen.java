@@ -91,5 +91,11 @@ public class AttributeTagGen extends TagsProvider<Attribute> {
                         RuneCraftoryAttributes.CHARGE_TIME.getKey(),
                         RuneCraftoryAttributes.HEALTH_GAIN.getKey(),
                         RuneCraftoryAttributes.RUNE_POINTS_GAIN.getKey());
+        this.tag(RunecraftoryTags.Attributes.RANDOMIZABLE_ATTRIBUTES)
+                .add(Attributes.MAX_HEALTH.unwrapKey().get(),
+                        Attributes.ATTACK_DAMAGE.unwrapKey().get(),
+                        RuneCraftoryAttributes.DEFENCE.getKey(),
+                        RuneCraftoryAttributes.MAGIC_ATTACK.getKey(),
+                        RuneCraftoryAttributes.MAGIC_DEFENCE.getKey());
     }
 }

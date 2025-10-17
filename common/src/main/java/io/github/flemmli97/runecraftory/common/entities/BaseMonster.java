@@ -1673,23 +1673,27 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             if (inst != null) {
                 val *= 0.01;
                 inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER);
-                float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
+                float levelBonus;
                 if (att == Attributes.MAX_HEALTH) {
-                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.15f) * 0.02f;
+                    levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 30, 1);
                 } else {
-                    multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.015f;
+                    levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 30, 1);
                 }
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
-                if (att == Attributes.MAX_HEALTH)
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER,
+                        (this.xpLevel().getLevel() - 1 + levelBonus) * val,
+                        AttributeModifier.Operation.ADD_VALUE));
+                if (att == Attributes.MAX_HEALTH) {
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
+                }
             }
         });
     }
 
     @Override
     public int friendPoints(UUID player) {
-        if (player.equals(this.getOwnerUUID()))
+        if (player.equals(this.getOwnerUUID())) {
             return this.entityData.get(FRIEND_POINTS_SYNC);
+        }
         return 0;
     }
 
@@ -1783,6 +1787,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 this.getAnimationHandler().setAnimation(this.getSpawnAnimation());
             }
         }
+        ((AttributeMapAccessor) this.getAttributes()).getAttributes()
+                .forEach((att, inst) -> {
+                    if (att.is(RunecraftoryTags.Attributes.RANDOMIZABLE_ATTRIBUTES)) {
+                        inst.addOrReplacePermanentModifier(new AttributeModifier(LibConstants.MONSTER_RANDOM_SPAWN_BONUS,
+                                0.2 * this.getRandom().nextDouble() - 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                    }
+                });
+        this.setHealth(this.getMaxHealth());
         return spawnData;
     }
 
@@ -1855,13 +1867,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                         DataPackHandler.INSTANCE.itemStatManager().get(stack.getItem()).ifPresent(s -> s.getMonsterGiftIncrease().forEach((att, d) -> {
                             AttributeInstance inst = this.getAttribute(att);
                             if (inst != null) {
-                                AttributeModifier mod = inst.getModifier(LibConstants.SHIELD_PENALTY);
+                                AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_GIFT_MODIFIER);
                                 double val = d;
                                 if (mod != null) {
                                     val += mod.amount();
                                     inst.removeModifier(mod);
                                 }
-                                inst.addPermanentModifier(new AttributeModifier(LibConstants.SHIELD_PENALTY, val, AttributeModifier.Operation.ADD_VALUE));
+                                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_GIFT_MODIFIER, val, AttributeModifier.Operation.ADD_VALUE));
                             }
                         }));
                     }

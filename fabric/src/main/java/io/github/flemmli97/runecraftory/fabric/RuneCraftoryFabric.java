@@ -13,10 +13,8 @@ import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldRegistrationCalls;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
-import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryRegistries;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
 import io.github.flemmli97.runecraftory.fabric.network.PacketHandler;
@@ -76,7 +74,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        RuneCraftoryRegistries.register();
+        RuneCraftory.commonInit();
         NeoForgeModConfigEvents.loading(RuneCraftory.MODID).register(config -> {
             ConfigHolder<?> holder = ConfigHolder.CONFIGS.get(config.getSpec());
             if (holder != null)
@@ -172,7 +170,5 @@ public class RuneCraftoryFabric implements ModInitializer {
             SpawnPlacements.register(RuneCraftoryEntities.GATE.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
             RuneCraftory.updateAttributeLimits();
         }));
-
-        QuestHandler.register();
     }
 }

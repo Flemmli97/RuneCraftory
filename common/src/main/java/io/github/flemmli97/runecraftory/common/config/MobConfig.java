@@ -35,13 +35,13 @@ public class MobConfig {
     public static final double NPC_HEALTH = 20;
     public static final double NPC_ATTACK = 1;
     public static final double NPC_DEFENCE = 0;
-    public static final double NPC_MAGIC_ATTACK = 5;
+    public static final double NPC_MAGIC_ATTACK = 1;
     public static final double NPC_MAGIC_DEFENCE = 0;
     public static final double NPC_HEALTH_GAIN = 5;
-    public static final double NPC_ATTACK_GAIN = 2;
-    public static final double NPC_DEFENCE_GAIN = 2;
-    public static final double NPC_MAGIC_ATTACK_GAIN = 2;
-    public static final double NPC_MAGIC_DEFENCE_GAIN = 2;
+    public static final double NPC_ATTACK_GAIN = 0.5f;
+    public static final double NPC_DEFENCE_GAIN = 0.2f;
+    public static final double NPC_MAGIC_ATTACK_GAIN = 0.5f;
+    public static final double NPC_MAGIC_DEFENCE_GAIN = 0.2f;
 
     public static int npcSpawnRateMin = 3600;
     public static int npcSpawnRateMax = 7200;

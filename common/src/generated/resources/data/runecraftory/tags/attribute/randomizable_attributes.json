@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:generic.max_health",
+    "minecraft:generic.attack_damage",
+    "runecraftory:defence",
+    "runecraftory:magic_attack",
+    "runecraftory:magic_defence"
+  ]
+}

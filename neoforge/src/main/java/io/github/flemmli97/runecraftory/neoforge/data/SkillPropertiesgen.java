@@ -41,10 +41,10 @@ public class SkillPropertiesgen implements DataProvider {
         this.skillProps.put(Skills.LIGHT, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
         this.skillProps.put(Skills.LOVE, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
 
-        this.skillProps.put(Skills.FARMING, new SkillProperties(100, 1, 1, 0, 0.5f, 0, 1));
+        this.skillProps.put(Skills.FARMING, new SkillProperties(100, 1, 1, 0, 0.4f, 0, 1));
         this.skillProps.put(Skills.LOGGING, new SkillProperties(100, 1, 1, 0.1f, 0.3f, 0, 1));
         this.skillProps.put(Skills.MINING, new SkillProperties(100, 1, 1, 0.1f, 0.3f, 0, 1));
-        this.skillProps.put(Skills.FISHING, new SkillProperties(100, 1, 1, 0, 0, 0.5f, 1));
+        this.skillProps.put(Skills.FISHING, new SkillProperties(100, 1, 1, 0, 0, 0.4f, 1));
 
         this.skillProps.put(Skills.COOKING, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0, 1));
         this.skillProps.put(Skills.FORGING, new SkillProperties(100, 0, 0.25f, 0.25f, 0.1f, 0, 1));

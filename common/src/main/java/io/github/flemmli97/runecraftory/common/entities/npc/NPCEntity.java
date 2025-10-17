@@ -1326,45 +1326,43 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 val *= 0.01;
                 AttributeInstance inst = this.getAttribute(att);
                 if (inst != null) {
-                    float multiplier = 1;
+                    float levelBonus;
                     if (att == Attributes.MAX_HEALTH) {
-                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0.12f) * 0.015f;
+                        levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 30, 1);
                     } else {
-                        multiplier += LevelCalc.getMultiplierInterval(this.xpLevel().getLevel(), 20, 30, 0) * 0.01f;
+                        levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 30, 1);
                     }
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADD_VALUE));
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER,
+                            (this.xpLevel().getLevel() - 1 + levelBonus) * val,
+                            AttributeModifier.Operation.ADD_VALUE));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);
                 }
             });
             return;
         }
-        int levelOffset = 1;
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
-            float multiplier = 1;
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_HEALTH_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            float levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 30, 0.5f);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_HEALTH_GAIN, AttributeModifier.Operation.ADD_VALUE));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
+        float levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 30, 0.5f);
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
-            float multiplier = 1;
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_ATTACK_GAIN, AttributeModifier.Operation.ADD_VALUE));
         }
         inst = this.getAttribute(RuneCraftoryAttributes.DEFENCE.asHolder());
         if (inst != null) {
-            float multiplier = 1;
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_DEFENCE_GAIN, AttributeModifier.Operation.ADD_VALUE));
         }
         inst = this.getAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder());
         if (inst != null) {
-            float multiplier = 1;
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_ATTACK_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_MAGIC_ATTACK_GAIN, AttributeModifier.Operation.ADD_VALUE));
         }
         inst = this.getAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder());
         if (inst != null) {
-            float multiplier = 1;
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - levelOffset) * MobConfig.NPC_MAGIC_DEFENCE_GAIN * multiplier, AttributeModifier.Operation.ADD_VALUE));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_MAGIC_DEFENCE_GAIN, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 

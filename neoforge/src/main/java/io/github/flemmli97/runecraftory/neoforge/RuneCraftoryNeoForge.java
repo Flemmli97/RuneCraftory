@@ -4,10 +4,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.specs.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
-import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryRegistries;
 import io.github.flemmli97.runecraftory.neoforge.client.ClientEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
@@ -42,6 +40,8 @@ import java.util.Map;
 public class RuneCraftoryNeoForge {
 
     public RuneCraftoryNeoForge(IEventBus modBus, ModContainer container) {
+        RuneCraftory.commonInit();
+        registries(modBus);
         modBus.addListener(this::common);
         modBus.addListener(this::confLoad);
         modBus.addListener(this::confReload);
@@ -52,8 +52,6 @@ public class RuneCraftoryNeoForge {
         modBus.addListener(TOP::enqueueIMC);
         if (FMLEnvironment.dist == Dist.CLIENT)
             ClientEvents.register(modBus);
-        RuneCraftoryRegistries.register();
-        registries(modBus);
 
         IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(this::addReloadListener);
@@ -64,7 +62,6 @@ public class RuneCraftoryNeoForge {
             ConfigHolder<?> loader = confs.getValue();
             container.registerConfig(loader.configType() == ConfigHolder.ConfigType.COMMON ? ModConfig.Type.COMMON : ModConfig.Type.CLIENT, confs.getKey(), loader.configName());
         }
-        QuestHandler.register();
     }
 
     public static void registries(IEventBus modBus) {

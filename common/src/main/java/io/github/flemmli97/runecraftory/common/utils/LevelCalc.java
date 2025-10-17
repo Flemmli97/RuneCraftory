@@ -314,16 +314,17 @@ public class LevelCalc {
         return data.useRunePoints(usage, hurt);
     }
 
-    public static float getMultiplierInterval(int level, int interval, float max, float bonus) {
-        if (level < interval || bonus == 0)
-            return (level - 1);
-        int mod = level % interval;
-        int completed = (level / interval);
-        float multiplier = interval - 2;
-        for (int i = 1; i < completed; i++) {
-            multiplier += interval * Math.min(max, i + bonus);
+    public static float getIntervalledMultiplier(int level, int interval, float max, float increase) {
+        level -= interval;
+        if (level <= 0 || increase == 0)
+            return 0;
+        int full = (level / interval);
+        int rest = level % interval;
+        float multiplier = 0;
+        for (int i = 1; i <= full; i++) {
+            multiplier += interval * Math.min(max, i * increase);
         }
-        multiplier += (mod + 1) * Math.min(max, (1 + completed * bonus));
+        multiplier += rest * Math.min(max, (1 + full) * increase);
         return multiplier;
     }
 
