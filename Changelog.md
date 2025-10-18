@@ -1,3 +1,20 @@
+RuneCraftory 2.2.0
+================
+- Fix nullpointer with circle elemental spell
+- Rewrite npc renders:
+  - Now supports swapping out the whole model
+  - Now supports conditional look features
+- Fix npc not moving in rain without shelter
+- Rewrite giant crops handling:
+  - Giant crops now 2x2 instead of 2x1
+  - Fix giant crops never regrowable
+- Updated and added all missing crops
+- Removed fodder item in favor of just using vanilla wheat (albeit this feature is still unused)
+- Farming monster now use 20% health per day instead of using health per farm action.
+  - Cost can be reduced with higher friendship
+  - Unloaded monsters will still take damage!
+- Some stats are now bit randomized for monsters
+
 RuneCraftory 2.1.3
 ================
 - Change default attack move speed to 0.2
