@@ -1,23 +1,20 @@
-apply from: "https://raw.githubusercontent.com/Flemmli97/GradleScripts/arch-loom-v2/common.gradle"
-
-loom {
-    accessWidenerPath.set project(":fabric").file("src/main/resources/runecraftory.accesswidener")
+plugins {
+    id 'io.github.flemmli97.multiloader.platform-common'
 }
 
 dependencies {
-    modCompileOnly "io.github.flemmli97:tenshilib:${tenshilib_version}-common"
-    modCompileOnly ("io.github.flemmli97:simplequests_api:${simplequests_api_version}-common") {
+    implementation "io.github.flemmli97:tenshilib:${tenshilib_version}-common"
+    implementation("io.github.flemmli97:simplequests_api:${simplequests_api_version}-common") {
         transitive = false
     }
-    modCompileOnly "net.tslat.smartbrainlib:SmartBrainLib-common-${minecraft_version}:${sbl_version}"
-    modCompileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${forge_config_api}"
+    implementation "net.tslat.smartbrainlib:SmartBrainLib-common-${minecraft_version}:${sbl_version}"
+    implementation "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${forge_config_api}"
 
-    modCompileOnly "mezz.jei:jei-1.21.1-fabric:${jei_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:${rei_version}"
-    modCompileOnly "maven.modrinth:jade:${jade_fabric}"
-
-    modCompileOnly "maven.modrinth:serene-seasons:${seasons_fabric}"
+    commonDependency("mezz.jei:jei-1.21.1-neoforge:${jei_version}")
+    commonDependency("me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}")
+    commonDependency("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}")
+    commonDependency("maven.modrinth:jade:${jade_neoforge}")
+    commonDependency("maven.modrinth:serene-seasons:${seasons_neoforge}")
 }
 
 sourceSets.main.resources {

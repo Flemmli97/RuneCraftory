@@ -1,16 +1,21 @@
-apply from: "https://raw.githubusercontent.com/Flemmli97/GradleScripts/arch-loom-v2/neoforge.gradle"
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'io.github.flemmli97.multiloader.platform-neoforge'
+}
 
-loom {
+neoForge {
     runs {
+        var common = project(":common")
         data {
             data()
-            programArgs "--all", "--mod", "runecraftory"
-            programArgs "--output", project(":common").file("src/generated/resources").absolutePath
-            programArgs "--existing", file("src/main/resources").absolutePath
-            programArgs "--existing", project(":common").file("src/main/resources").absolutePath
+            programArguments.addAll "--all", "--mod", "runecraftory"
+            programArguments.addAll "--output", common.file("src/generated/resources").absolutePath
+            programArguments.addAll "--existing", file("src/main/resources").absolutePath
+            programArguments.addAll "--existing", common.file("src/main/resources").absolutePath
         }
         client {
-            vmArgs "-XX:+AllowEnhancedClassRedefinition"
+            jvmArgument "-XX:+AllowEnhancedClassRedefinition"
         }
     }
 }
@@ -32,23 +37,25 @@ afterEvaluate {
 
 repositories {
     maven {
-        name = "CurseMaven"
-        url "https://www.cursemaven.com"
-    }
-    maven {
         name = "minecolonies"
         url "https://ldtteam.jfrog.io/ldtteam/modding/"
+        content {
+            includeGroup 'com.ldtteam'
+        }
     }
     maven {
         name = "The one probe"
         url "https://maven.k-4u.nl"
+        content {
+            includeGroup 'mcjty.theoneprobe'
+        }
     }
 }
 
 dependencies {
-    modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}-neoforge"
-    modImplementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${minecraft_version}:${sbl_version}"
-    modImplementation include("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge")
+    implementation "io.github.flemmli97:tenshilib:${tenshilib_version}-neoforge"
+    implementation "net.tslat.smartbrainlib:SmartBrainLib-neoforge-${minecraft_version}:${sbl_version}"
+    jarJar(implementation("io.github.flemmli97:simplequests_api:${simplequests_api_version}-neoforge"))
 
     implementation "net.favouriteless.modopedia:modopedia-neoforge-${minecraft_version}:${modopedia}"
     compileOnly "io.github.flemmli97:improvedmobs:1.21.1-1.14.2-neoforge"
@@ -56,22 +63,22 @@ dependencies {
     datagenRuntime "io.github.flemmli97:improvedmobs:1.21.1-1.14.2-neoforge"
 
     // Jar-Jar not added otherwise
-    modRuntimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    runtimeOnly "io.github.flemmli97:lingua_bib:${lingua_bib}-neoforge"
+    compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
 
-    modCompileOnly("mcjty.theoneprobe:theoneprobe:${top_version}")
+    compileOnly("mcjty.theoneprobe:theoneprobe:${top_version}")
 
-    modRuntimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
-//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    runtimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
+//    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
-    modCompileOnly "com.ldtteam:minecolonies:${minecolonies}"
+    compileOnly "com.ldtteam:minecolonies:${minecolonies}"
 
-    modRuntimeOnly "maven.modrinth:jade:${jade_neoforge}"
+    runtimeOnly "maven.modrinth:jade:${jade_neoforge}"
 
     // Mods useful for testing things
-    modRuntimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.8-neoforge"
-    modRuntimeOnly "io.github.flemmli97:mobbattle:1.21.1-2.6.2-neoforge"
-    modRuntimeOnly "curse.maven:moonlight-499980:6682378"
-    modRuntimeOnly "curse.maven:dummy-225738:6608246"
-    modRuntimeOnly "curse.maven:spark-361579:6225208"
+    runtimeOnly "io.github.flemmli97:debugutils:1.21.1-1.0.8-neoforge"
+    runtimeOnly "io.github.flemmli97:mobbattle:1.21.1-2.6.2-neoforge"
+    runtimeOnly "curse.maven:moonlight-499980:6682378"
+    runtimeOnly "curse.maven:dummy-225738:6608246"
+    runtimeOnly "curse.maven:spark-361579:6225208"
 }

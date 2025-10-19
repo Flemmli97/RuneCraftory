@@ -1,9 +1,8 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.10-SNAPSHOT" apply false
+    id 'fabric-loom' version '1.10-SNAPSHOT' apply false
+    id 'net.neoforged.moddev' version '2.0.107' apply false
+    id 'io.github.flemmli97.multiloader.discord_hook' version '1.+'
 }
-
-apply from: "https://raw.githubusercontent.com/Flemmli97/GradleScripts/arch-loom-v2/main.gradle"
 
 subprojects {
     repositories {
@@ -11,27 +10,57 @@ subprojects {
         maven {
             name = "TenshiLib"
             url "https://maven.blazing-coop.net/releases"
+            content {
+                includeGroup 'io.github.flemmli97'
+            }
         }
         maven {
             name = "Fuzs Mod Resources"
             url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+            content {
+                includeGroup 'fuzs.forgeconfigapiport'
+            }
         }
         maven {
             name = "SmartBrainLib (SBL) Maven Repo"
             url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
+            content {
+                includeGroup 'net.tslat.smartbrainlib'
+            }
         }
         maven {
-            url "https://maven.blamejared.com"
+            url = "https://maven.blamejared.com"
+            content {
+                includeGroup 'mezz.jei'
+            }
         }
         maven {
-            url "https://maven.shedaniel.me/"
+            url = "https://maven.shedaniel.me/"
+            content {
+                includeGroupByRegex 'me.shedaniel.*'
+                includeGroup 'me.shedaniel'
+                includeGroup 'dev.architectury'
+            }
         }
         maven {
             url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup 'maven.modrinth'
+            }
+        }
+        maven {
+            name = "CurseMaven"
+            url "https://www.cursemaven.com"
+            content {
+                includeGroup 'curse.maven'
+            }
         }
         maven {
             name = 'Favouriteless Maven'
             url 'https://maven.favouriteless.net/releases'
+            content {
+                includeGroup 'net.favouriteless.modopedia'
+            }
         }
     }
 }
