@@ -5,8 +5,8 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -28,7 +28,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
     public UpgradeGui(ContainerUpgrade container, Inventory inv, Component name) {
         super(container, inv, name);
-        this.data = Platform.INSTANCE.getPlayerData(inv.player);
+        this.data = RunecraftoryAttachments.PLAYER_DATA.get().get(inv.player);
         this.skill = this.menu.craftingType().skill;
     }
 

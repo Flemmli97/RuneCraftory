@@ -7,7 +7,8 @@ import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopResul
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,7 +68,7 @@ public class ItemUtils {
             return ShopResult.NOSPACE;
         }
         int price = getBuyPrice(stack) * stack.getCount();
-        if (Platform.INSTANCE.getPlayerData(player).useMoney(price)) {
+        if (RunecraftoryAttachments.PLAYER_DATA.get().get(player).useMoney(price)) {
             if (player instanceof ServerPlayer serverPlayer)
                 RuneCraftoryCriteria.SHOP_TRIGGER.get().trigger(serverPlayer, npc, stack);
             player.playSound(RuneCraftorySounds.GENERIC_SUCCESS.get(), 1.0f, 1.0f);

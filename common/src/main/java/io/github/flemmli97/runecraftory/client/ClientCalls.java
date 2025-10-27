@@ -22,9 +22,9 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
@@ -81,7 +81,7 @@ public class ClientCalls {
     public static void clientTick() {
         BossBarTracker.tickSounds();
         Player player = Minecraft.getInstance().player;
-        if (player != null && Platform.INSTANCE.getPlayerData(player).getWeaponHandler().isItemSwapBlocked()) {
+        if (player != null && RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().isItemSwapBlocked()) {
             Options options = Minecraft.getInstance().options;
             //Disable changing held item
             for (int i = 0; i < 9; ++i) {
@@ -137,7 +137,7 @@ public class ClientCalls {
             input.jumping = false;
             input.shiftKeyDown = false;
         }
-        float reduction = Platform.INSTANCE.getPlayerData(player).getWeaponHandler().movementReduction();
+        float reduction = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().movementReduction();
         if (reduction != 1) {
             input.leftImpulse *= reduction;
             input.forwardImpulse *= reduction;
@@ -309,7 +309,7 @@ public class ClientCalls {
     }
 
     public static boolean invis(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).isInvisible();
+        return RunecraftoryAttachments.ENTITY_DATA.get().get(entity).isInvisible();
     }
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,

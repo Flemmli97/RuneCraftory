@@ -7,7 +7,8 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -101,13 +102,13 @@ public class LootingAndLuckLootFunction extends LootItemConditionalFunction {
     public static List<LivingEntity> getContributingEntities(LootContext ctx) {
         Entity entity = ctx.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
         if (entity instanceof Player player) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             return entity.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(64), data.party::isPartyMember);
         } else if (entity instanceof BaseMonster monster) {
-            if (monster.getOwner() != null && Platform.INSTANCE.getPlayerData(monster.getOwner()).party.isPartyMember(monster))
+            if (monster.getOwner() != null && RunecraftoryAttachments.PLAYER_DATA.get().get(monster.getOwner()).party.isPartyMember(monster))
                 return List.of(monster);
         } else if (entity instanceof NPCEntity npc) {
-            if (npc.followEntity() != null && Platform.INSTANCE.getPlayerData(npc.followEntity()).party.isPartyMember(npc))
+            if (npc.followEntity() != null && RunecraftoryAttachments.PLAYER_DATA.get().get(npc.followEntity()).party.isPartyMember(npc))
                 return List.of(npc);
         }
         return List.of();

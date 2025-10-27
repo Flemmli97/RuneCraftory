@@ -10,9 +10,10 @@ import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -149,7 +150,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
                 this.runePointCost.set(-1);
                 this.selected = null;
             } else {
-                this.runePointCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()), this.selected.value(), output.bonusItems(), output.clientResult().getItem() != RuneCraftoryItems.UNKNOWN.get()));
+                this.runePointCost.set(CraftingUtils.craftingCost(this.type, RunecraftoryAttachments.PLAYER_DATA.get().get(this.craftingInv.getPlayer()), this.selected.value(), output.bonusItems(), output.clientResult().getItem() != RuneCraftoryItems.UNKNOWN.get()));
                 trueOutput = output.serverResult();
                 clientOutput = output.clientResult();
             }
@@ -163,7 +164,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
         this.output.setItem(1, clientOutput);
         if (this.craftingInv.getPlayer() instanceof ServerPlayer player) {
             if (recipeChanged) {
-                this.sendCraftingRecipesToClient(player, Platform.INSTANCE.getPlayerData(player));
+                this.sendCraftingRecipesToClient(player, RunecraftoryAttachments.PLAYER_DATA.get().get(player));
             }
             player.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.incrementStateId(), 0, clientOutput));
         }
@@ -215,7 +216,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
             itemstack = itemstack1.copy();
             if (slotID == 0) {
                 itemstack1.onCraftedBy(player.level(), player, itemstack1.getCount());
-                Platform.INSTANCE.getPlayerData(player).onCrafted(player);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(player).onCrafted(player);
                 if (!this.moveItemStackTo(itemstack1, 1, 37, false))
                     return ItemStack.EMPTY;
                 slot.onQuickCraft(itemstack1, itemstack);

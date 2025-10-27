@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.advancements;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -36,7 +36,7 @@ public class LevelTrigger extends SimpleCriterionTrigger<LevelTrigger.TriggerIns
         }
 
         public boolean matches(ServerPlayer player) {
-            return Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() >= this.level;
+            return RunecraftoryAttachments.PLAYER_DATA.get().get(player).getPlayerLevel().getLevel() >= this.level;
         }
     }
 }

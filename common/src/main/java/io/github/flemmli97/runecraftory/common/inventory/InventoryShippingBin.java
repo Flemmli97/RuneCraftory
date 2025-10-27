@@ -6,8 +6,9 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,7 +26,7 @@ public class InventoryShippingBin extends SimpleItemContainer {
     }
 
     public void shipItems(ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         int money = 0;
         for (int i = 0; i < this.getContainerSize(); ++i) {
             ItemStack stack = this.getItem(i);

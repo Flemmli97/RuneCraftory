@@ -64,6 +64,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -93,6 +94,7 @@ import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
@@ -581,10 +583,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     private void onSetBehaviour() {
         if (this.behaviourState().following) {
             if (this.followEntity() != null)
-                Platform.INSTANCE.getPlayerData(this.followEntity()).party.addPartyMember(this);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(this.followEntity()).party.addPartyMember(this);
         } else {
             if (this.followEntity() != null)
-                Platform.INSTANCE.getPlayerData(this.followEntity()).party.removePartyMember(this);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(this.followEntity()).party.removePartyMember(this);
             this.setTarget(null);
         }
         this.getNavigation().stop();
@@ -1142,7 +1144,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         }
         if (this.followEntity() != null && source.getEntity() != null) {
             Player follow = this.followEntity();
-            if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).party.isPartyMember(source.getEntity()))
+            if (follow.equals(source.getEntity()) || RunecraftoryAttachments.PLAYER_DATA.get().get(follow).party.isPartyMember(source.getEntity()))
                 return false;
         }
         return super.hurt(source, amount);
@@ -1802,7 +1804,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public void openShopForPlayer(ServerPlayer player) {
         if (this.canTrade() == ShopState.OPEN && this.getProfession().hasShop) {
             this.interactWithPlayer(player);
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             NonNullList<ItemStack> shopList = data.getShop(this.getProfession());
             Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
                 @Override

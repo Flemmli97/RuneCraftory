@@ -4,13 +4,14 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -34,7 +35,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR.get(), stack);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR.get(), stack);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (player.isCreative() || data.getSkillLevel(Skills.SPEAR).getLevel() >= 5) {
             if (player instanceof ServerPlayer) {
                 if (data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get(), false)) {
@@ -75,7 +76,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer);
             int time = stack.getUseDuration(entity) - timeLeft - 1;
             if (time >= ItemComponentUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get())) {
                 data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), stack);
@@ -107,7 +108,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
         Collection<LivingEntity> list = CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(player, this.getRange(player, stack), 0.5, 0.5))
                 .apply(player, null);
         if (!list.isEmpty()) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.SPEAR, 2);
+            LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.SPEAR, 2);
             list.forEach(e -> CombatUtils.attackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false));
         }
         if (finishing)

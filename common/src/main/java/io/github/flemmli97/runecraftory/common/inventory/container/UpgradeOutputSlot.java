@@ -6,9 +6,11 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -61,7 +63,7 @@ public class UpgradeOutputSlot extends Slot {
         RuneCraftoryCriteria.UPGRADE_ITEM.get().trigger(serverPlayer);
         if (ItemComponentUtils.getElement(toUpgrade) != ItemComponentUtils.getElement(stack))
             RuneCraftoryCriteria.CHANGE_ELEMENT.get().trigger(serverPlayer);
-        PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer);
         if (stack.getItem() instanceof ItemStaffBase) {
             if (DataPackHandler.INSTANCE.itemStatManager().get(material.getItem()).map(s -> s.getTier1Spell().isPresent() || s.getTier2Spell().isPresent() || s.getTier3Spell().isPresent()).orElse(false))
                 RuneCraftoryCriteria.CHANGE_SPELL.get().trigger(serverPlayer);
@@ -101,6 +103,6 @@ public class UpgradeOutputSlot extends Slot {
 
     @Override
     public boolean mayPickup(Player player) {
-        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.container.rpCost();
+        return player.isCreative() || RunecraftoryAttachments.PLAYER_DATA.get().get(player).getMaxRunePoints() >= this.container.rpCost();
     }
 }

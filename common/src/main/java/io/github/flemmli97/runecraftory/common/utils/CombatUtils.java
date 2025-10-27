@@ -18,11 +18,13 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.mixin.MobEffectInstanceAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -139,7 +141,7 @@ public class CombatUtils {
         if (target instanceof Player player) {
             Skills matchingSkill = matchingSkill(att);
             if (matchingSkill != null)
-                res += Platform.INSTANCE.getPlayerData(player).getSkillLevel(matchingSkill).getLevel() * 0.005;
+                res += RunecraftoryAttachments.PLAYER_DATA.get().get(player).getSkillLevel(matchingSkill).getLevel() * 0.005;
         }
         res *= 0.01;
         return value * (1 - res);
@@ -525,37 +527,37 @@ public class CombatUtils {
         if (poisonChance) {
             EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.POISON.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_POISON, 5);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_POISON, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_POISON, 15);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_POISON, 15);
         }
         if (fatigueChance) {
             EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.FATIGUE.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_FATIGUE, 5);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_FATIGUE, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_FATIGUE, 15);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_FATIGUE, 15);
         }
         if (coldChance) {
             EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.COLD.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_COLD, 5);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_COLD, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_COLD, 15);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_COLD, 15);
         }
         if (paraChance) {
             EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.PARALYSIS.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_PARA, 5);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_PARA, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_PARA, 15);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_PARA, 15);
         }
         if (sealChance) {
             EntityUtils.applyPermanentEffect(target, RuneCraftoryEffects.SEAL.asHolder(), 0);
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SEAL, 5);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_SEAL, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SEAL, 15);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_SEAL, 15);
         }
         if (dizzyChance) {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
@@ -566,9 +568,9 @@ public class CombatUtils {
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(RuneCraftoryEffects.SLEEP.asHolder(), 80, 0, true, false));
             if (attackingEntity instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SLEEP, 5);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_SLEEP, 5);
             if (target instanceof ServerPlayer player)
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.RES_SLEEP, 15);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.RES_SLEEP, 15);
         }
     }
 
@@ -620,7 +622,7 @@ public class CombatUtils {
     }
 
     public static void hitEntityWithItemPlayer(ServerPlayer player, ItemStack stack) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         //Weapons
         if (stack.getItem() instanceof ItemStaffBase) {
             switch (ItemComponentUtils.getElement(stack)) {
@@ -703,7 +705,7 @@ public class CombatUtils {
     public static boolean canPerform(LivingEntity entity, Skills skill, int requiredLvl) {
         if (!(entity instanceof Player player))
             return false;
-        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).getSkillLevel(skill).getLevel() >= requiredLvl;
+        return player.isCreative() || RunecraftoryAttachments.PLAYER_DATA.get().get(player).getSkillLevel(skill).getLevel() >= requiredLvl;
     }
 
     public static class EntityAttack {

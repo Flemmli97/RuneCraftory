@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -55,7 +56,7 @@ public class C2SNPCInteraction implements CustomPacketPayload {
             switch (pkt.type) {
                 case TALK -> npc.talkTo(sender);
                 case FOLLOW -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(sender);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(sender);
                     if (!data.party.isPartyMember(entity) && data.party.isPartyFull()) {
                         sender.displayClientMessage(Component.translatable("runecraftory.monster.interact.party.full"), true);
                         return;

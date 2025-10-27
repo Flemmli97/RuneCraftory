@@ -28,6 +28,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryStructures;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySubPredicates;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.TenshiLib;
 import net.minecraft.resources.ResourceLocation;
@@ -67,6 +68,7 @@ public class RuneCraftory {
         RuneCraftoryActivities.ACTIVITIES.registerContent();
         RuneCraftoryArmorEffects.ARMOR_EFFECTS.register().registerContent();
         RuneCraftoryArmorMaterials.MATERIALS.registerContent();
+        RunecraftoryAttachments.ATTACHMENTS.registerContent();
         RuneCraftoryAttackActions.ATTACK_ACTIONS.register().registerContent();
         RuneCraftoryAttributes.ATTRIBUTES.registerContent();
         RuneCraftoryBlocks.BLOCK_ENTITY_TYPES.registerContent();

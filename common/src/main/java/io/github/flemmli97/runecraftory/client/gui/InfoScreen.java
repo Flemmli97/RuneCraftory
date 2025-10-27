@@ -5,10 +5,10 @@ import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.gui.widget.TexturedButton;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -42,7 +42,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         super(container, inv, name);
         this.imageWidth = 213;
         this.imageHeight = 202;
-        this.data = Platform.INSTANCE.getPlayerData(inv.player);
+        this.data = RunecraftoryAttachments.PLAYER_DATA.get().get(inv.player);
     }
 
     @Override

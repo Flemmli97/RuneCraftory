@@ -5,8 +5,9 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -67,7 +68,7 @@ public class S2COpenNPCGui implements CustomPacketPayload {
         this.actions = entity.getProfession().actions(entity, player);
         this.quest = QuestHandler.questForExists(player, entity);
         if (entity.getEntityToFollowUUID() == null)
-            this.followState = Platform.INSTANCE.getPlayerData(player).party.isPartyFull() ? 2 : 0;
+            this.followState = RunecraftoryAttachments.PLAYER_DATA.get().get(player).party.isPartyFull() ? 2 : 0;
         else
             this.followState = entity.getEntityToFollowUUID().equals(player.getUUID()) ? 1 : 2;
         this.family = entity.getFamily().forSyncing(entity, player);

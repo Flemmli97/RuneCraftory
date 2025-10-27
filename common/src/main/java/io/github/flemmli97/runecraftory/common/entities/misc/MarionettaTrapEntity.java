@@ -2,13 +2,14 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
@@ -141,13 +142,13 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
         --this.tickLeft;
         this.caughtEntities.forEach(entity -> {
             if (entity.isAlive()) {
-                Platform.INSTANCE.getEntityData(entity).setInvis(10);
+                RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setInvis(10);
                 if (entity instanceof ServerPlayer player) {
                     player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
                 } else {
                     entity.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
                 }
-                EntityData data = Platform.INSTANCE.getEntityData(entity);
+                EntityData data = RunecraftoryAttachments.ENTITY_DATA.get().get(entity);
                 if (!data.thirdPersonView())
                     data.setThirdPersonView(true);
             }
@@ -167,8 +168,8 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
             }
             if (this.tickLeft <= 0) {
                 this.caughtEntities.forEach(entity -> {
-                    Platform.INSTANCE.getEntityData(entity).setInvis(0);
-                    Platform.INSTANCE.getEntityData(entity).setThirdPersonView(false);
+                    RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setInvis(0);
+                    RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setThirdPersonView(false);
                 });
                 this.discard();
             }

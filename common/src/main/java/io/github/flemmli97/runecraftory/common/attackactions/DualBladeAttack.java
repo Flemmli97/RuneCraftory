@@ -8,10 +8,10 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import net.minecraft.server.level.ServerPlayer;
@@ -151,7 +151,7 @@ public class DualBladeAttack extends AttackAction {
     @Override
     public void onStart(LivingEntity entity, AttackActionHandler handler) {
         if (handler.getComboCount() != 8 && entity instanceof ServerPlayer player)
-            LevelCalc.useRP(Platform.INSTANCE.getPlayerData(player), GeneralConfig.dualBladeUltimate, true, 0, false);
+            LevelCalc.useRP(RunecraftoryAttachments.PLAYER_DATA.get().get(player), GeneralConfig.dualBladeUltimate, true, 0, false);
     }
 
     @Override

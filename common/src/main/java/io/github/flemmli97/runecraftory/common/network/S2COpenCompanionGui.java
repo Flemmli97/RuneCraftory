@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -38,7 +39,7 @@ public class S2COpenCompanionGui implements CustomPacketPayload {
 
     public S2COpenCompanionGui(BaseMonster entity, ServerPlayer player) {
         this.entityID = entity.getId();
-        this.fullParty = Platform.INSTANCE.getPlayerData(player).party.isPartyFull();
+        this.fullParty = RunecraftoryAttachments.PLAYER_DATA.get().get(player).party.isPartyFull();
         this.hasHome = entity.getAssignedBarn() != null;
     }
 

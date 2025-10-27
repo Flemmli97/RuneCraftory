@@ -45,11 +45,6 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void clone(PlayerEvent.Clone event) {
-        EntityCalls.clone(event.getOriginal(), event.getEntity(), event.isWasDeath());
-    }
-
-    @SubscribeEvent
     public void updateLivingTick(EntityTickEvent.Post event) {
         if (event.getEntity() instanceof LivingEntity living) {
             EntityCalls.updateLivingTick(living);

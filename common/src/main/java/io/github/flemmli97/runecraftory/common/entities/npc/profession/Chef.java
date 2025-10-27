@@ -5,8 +5,9 @@ import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -37,7 +38,7 @@ public class Chef extends NPCProfession {
     public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (!data.useMoney(BREAD_PRICE)) {
             player.displayClientMessage(Component.translatable(BREAD_ACTION_FAIL, player.getName(), BREAD_PRICE), false);
             return;

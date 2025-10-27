@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -53,7 +54,7 @@ public class S2CWeaponUse implements CustomPacketPayload {
     public static void handle(S2CWeaponUse pkt, Player client) {
         Entity target = client.level().getEntity(pkt.entity);
         if (target instanceof Player player)
-            Platform.INSTANCE.getPlayerData(player).getWeaponHandler().clientSideUpdate(pkt.action, pkt.stack, pkt.count);
+            RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().clientSideUpdate(pkt.action, pkt.stack, pkt.count);
     }
 
     @Override

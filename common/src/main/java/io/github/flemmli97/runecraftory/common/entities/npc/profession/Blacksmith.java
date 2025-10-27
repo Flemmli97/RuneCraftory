@@ -6,7 +6,8 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,7 +54,7 @@ public class Blacksmith extends NPCProfession {
     public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.canTrade() == ShopState.OPEN)
             if (action.equals(BARN_ACTION)) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 int amount = COST_FUNC.applyAsInt(data.getBoughtBarns());
                 Map<ItemPredicate, List<ItemStack>> stacks = new HashMap<>();
                 for (ItemStack stack : player.getInventory().items) {
@@ -96,7 +97,7 @@ public class Blacksmith extends NPCProfession {
     }
 
     private static List<Component> getBarnActionComponent(ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         Object[] obj = new Object[MATERIALS.size()];
         int i = 0;
         for (Map.Entry<ItemPredicate, Integer> e : MATERIALS.entrySet()) {

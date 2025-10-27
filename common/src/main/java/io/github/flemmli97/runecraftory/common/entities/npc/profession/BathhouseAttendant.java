@@ -4,7 +4,8 @@ import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -28,7 +29,7 @@ public class BathhouseAttendant extends NPCProfession {
     public void handleAction(NPCEntity npc, Player player, String action) {
         if (npc.canTrade() == ShopState.OPEN)
             if (action.equals(BATH_ACTION)) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 int baths = data.getDailyUpdater().getBathCounter() + 1;
                 int amount = 300 * baths + (Math.max(0, baths - 1)) * 100;
                 if (data.useMoney(amount)) {
@@ -43,7 +44,7 @@ public class BathhouseAttendant extends NPCProfession {
 
     @Override
     public Map<String, List<Component>> actions(NPCEntity entity, ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         int baths = data.getDailyUpdater().getBathCounter() + 1;
         int cost = 300 * baths + (Math.max(0, baths - 1)) * 100;
         return Map.of(BATH_ACTION, List.of(Component.translatable(BATH_COST, cost)));

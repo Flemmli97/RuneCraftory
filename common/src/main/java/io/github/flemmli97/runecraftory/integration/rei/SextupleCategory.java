@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.integration.rei;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -55,7 +56,7 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
         widgets.add(Widgets.createTexturedWidget(GUI,
                 bounds.getX(), bounds.getY(), 19, 20, X_SIZE, Y_SIZE));
         Player player = Minecraft.getInstance().player;
-        if (display.recipe() != null && Platform.INSTANCE.getPlayerData(player).getRecipeKeeper().isUnlocked(display.recipe())) {
+        if (display.recipe() != null && RunecraftoryAttachments.PLAYER_DATA.get().get(player).getRecipeKeeper().isUnlocked(display.recipe())) {
             for (int y = 0; y < 2; y++) {
                 for (int x = 0; x < 3; x++) {
                     int ind = x + y * 3;

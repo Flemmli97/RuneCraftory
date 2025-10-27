@@ -4,8 +4,9 @@ import com.google.common.base.Suppliers;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -40,7 +41,7 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
     public RecipeOutput createOutput(PlayerBoundCraftingContainer inv, boolean unlocked) {
         if (inv.isEmpty())
             return null;
-        CraftingUtils.RAND.setSeed(Platform.INSTANCE.getPlayerData(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
+        CraftingUtils.RAND.setSeed(RunecraftoryAttachments.PLAYER_DATA.get().get(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
         ItemStack res = this.alternateResult != null && CraftingUtils.RAND.nextFloat() < this.alternateResult.chance() ? this.alternateResult.stack().copy() :
                 this.getResultItem(inv.getPlayer().registryAccess());
         return new RecipeOutput(res, new ItemStack(RuneCraftoryItems.UNKNOWN.get()), NonNullList.create());

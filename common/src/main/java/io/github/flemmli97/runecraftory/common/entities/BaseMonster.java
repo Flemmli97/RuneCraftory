@@ -40,6 +40,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -756,12 +757,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                                 this.getOwner().displayClientMessage(Component.translatable("runecraftory.monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition().toShortString()), false);
                             this.setBehaviour(Behaviour.WANDER);
                         }
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner()).party.removePartyMember(this);
                     }
                 }
                 case FOLLOW -> {
                     if (this.getOwner() != null) {
-                        PlayerData data = Platform.INSTANCE.getPlayerData(this.getOwner());
+                        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner());
                         boolean party = !data.party.isPartyFull() || data.party.isPartyMember(this);
                         if (party) {
                             this.clearRestriction();
@@ -772,16 +773,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 case FOLLOW_DISTANCE -> {
                     this.clearRestriction();
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner()).party.addPartyMember(this);
                 }
                 case STAY -> {
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.addPartyMember(this);
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner()).party.addPartyMember(this);
                 }
                 case WANDER -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner()).party.removePartyMember(this);
                 }
                 case FARM -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition(), load);
@@ -792,7 +793,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                     if (this.getCropInventory() == null)
                         this.setCropInventory(nearestInv);
                     if (this.getOwner() != null)
-                        Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner()).party.removePartyMember(this);
                 }
             }
         }
@@ -1267,7 +1268,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     public void onDeathDamageRecord(ServerPlayer player, DamageSource source, float damage) {
         if (damage > this.getMaxHealth() * 0.05) {
-            Platform.INSTANCE.getPlayerData(player).increaseMobFrom(this);
+            RunecraftoryAttachments.PLAYER_DATA.get().get(player).increaseMobFrom(this);
         }
     }
 
@@ -1397,7 +1398,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         BrainUtils.setTargetOfEntity(this, null);
         this.level().broadcastEntityEvent(this, (byte) 10);
         this.updater.setLastUpdateDay(WorldUtils.day(this.level()));
-        if (Platform.INSTANCE.getPlayerData(owner).party.isPartyFull())
+        if (RunecraftoryAttachments.PLAYER_DATA.get().get(owner).party.isPartyFull())
             this.setBehaviour(Behaviour.WANDER);
         else
             this.setBehaviour(Behaviour.FOLLOW);
@@ -1410,7 +1411,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         });
         this.setLastHurtByMob(null);
         if (owner instanceof ServerPlayer serverPlayer) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer);
             data.entityStatsTracker.tameEntity(this);
             RuneCraftoryCriteria.TAME_MONSTER_TRIGGER.get().trigger(serverPlayer, this, data.entityStatsTracker);
             LevelCalc.levelSkill(data, Skills.TAMING, 10);
@@ -1437,7 +1438,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             RunecraftorySavedData.get(this.getServer())
                     .removeMonsterFromPlayer(this.getOwnerUUID(), this);
             if (this.getOwner() != null) {
-                Platform.INSTANCE.getPlayerData(this.getOwner()).party.removePartyMember(this);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(this.getOwner()).party.removePartyMember(this);
             } else {
                 RunecraftorySavedData.get(this.getServer()).toRemovePartyMember(this);
             }
@@ -1852,7 +1853,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 if (food || !this.playDeath()) {
                     if (player instanceof ServerPlayer serverPlayer) {
                         EntityUtils.playSoundForPlayer(serverPlayer, sound, SoundSource.NEUTRAL, 0.7f, 1);
-                        Platform.INSTANCE.getPlayerData(serverPlayer).getDailyUpdater().onGiveMonsterItem();
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer).getDailyUpdater().onGiveMonsterItem();
                     }
                     stack.setCount(count);
                     this.feedTimeOut = 7;

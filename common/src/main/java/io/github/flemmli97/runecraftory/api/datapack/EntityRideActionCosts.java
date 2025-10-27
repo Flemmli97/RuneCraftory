@@ -5,9 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +42,7 @@ public class EntityRideActionCosts {
         if (!(entity instanceof ServerPlayer player))
             return true;
         RideActionCost cost = this.getCost(command);
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (spell == null || !cost.multiplier) {
             if (cost.multiplier)
                 return true;

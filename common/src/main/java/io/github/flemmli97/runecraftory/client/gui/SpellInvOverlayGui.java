@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,7 +23,7 @@ public class SpellInvOverlayGui {
 
     public void render(GuiGraphics graphics, DeltaTracker tracker) {
         if (!this.mc.player.isSpectator()) {
-            InventorySpells inv = Platform.INSTANCE.getPlayerData(this.mc.player).getInv();
+            InventorySpells inv = RunecraftoryAttachments.PLAYER_DATA.get().get(this.mc.player).getInv();
             int x = ClientConfig.spellsDisplayPosition
                     .positionX(this.mc.getWindow().getGuiScaledWidth(), 44, ClientConfig.spellsDisplayX);
             int y = ClientConfig.spellsDisplayPosition

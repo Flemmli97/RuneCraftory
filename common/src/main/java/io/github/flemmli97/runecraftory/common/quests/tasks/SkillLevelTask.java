@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
@@ -14,6 +14,7 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -81,7 +82,7 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
 
         @Override
         public boolean submit(ServerPlayer player) {
-            return Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() >= this.level;
+            return RunecraftoryAttachments.PLAYER_DATA.get().get(player).getPlayerLevel().getLevel() >= this.level;
         }
 
         @Override

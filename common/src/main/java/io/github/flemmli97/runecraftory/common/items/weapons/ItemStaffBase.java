@@ -7,8 +7,9 @@ import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -50,7 +51,7 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF.get(), stack);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF.get(), stack);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
                     Spell spell = stack.getOrDefault(RuneCraftoryDataComponentTypes.STAFF.get(), StaffData.DEFAULT)
                             .fromChargeLevel(stack, chargeLevel);
                     if (spell != null && player instanceof ServerPlayer serverPlayer) {
-                        Platform.INSTANCE.getPlayerData(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
+                        RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
                     }
                 } else
                     player.startUsingItem(hand);
@@ -98,7 +99,7 @@ public class ItemStaffBase extends Item implements ExtendedWeapon {
                     .fromChargeLevel(stack, chargeLevel);
             if (spell != null) {
                 if (entity instanceof ServerPlayer player) {
-                    Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
+                    RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.STAFF_USE.get(), stack, spell);
                     return;
                 }
                 spell.use((ServerLevel) level, entity, stack);

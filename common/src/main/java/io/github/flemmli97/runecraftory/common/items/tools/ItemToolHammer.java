@@ -9,10 +9,11 @@ import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -44,7 +45,7 @@ public class ItemToolHammer extends PickaxeItem {
     }
 
     public static void onHammering(ServerPlayer player, boolean level) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (data.getWeaponHandler().getCurrentAction() == RuneCraftoryAttackActions.TOOL_HAMMER_USE.get()) // Action does rp use itself
             return;
         LevelCalc.useRP(data, 5, true, 0, true, Skills.MINING);
@@ -87,7 +88,7 @@ public class ItemToolHammer extends PickaxeItem {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             int useTime = data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier));
             int range = Math.min(useTime, tier.getTierLevel());
             BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);

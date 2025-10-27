@@ -4,7 +4,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -46,7 +47,7 @@ public class C2SSetMonsterBehaviour implements CustomPacketPayload {
         if (entity instanceof BaseMonster monster && sender.getUUID().equals(monster.getOwnerUUID())) {
             switch (pkt.type) {
                 case HOME, FOLLOW, FOLLOW_DISTANCE, STAY, WANDER -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(sender);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(sender);
                     if (pkt.type == Action.FOLLOW && !data.party.isPartyMember(entity) && data.party.isPartyFull()) {
                         sender.displayClientMessage(Component.translatable("runecraftory.monster.interact.party.full"), false);
                         return;
@@ -60,7 +61,7 @@ public class C2SSetMonsterBehaviour implements CustomPacketPayload {
                     RuneCraftoryCriteria.COMMAND_FARMING.get().trigger(sender);
                 }
                 case CENTER, CENTER_FARM -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(sender);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(sender);
                     data.entitySelector.selectedEntity = monster;
                     data.entitySelector.poi = monster.getRestrictCenter();
                     data.entitySelector.apply = (player, pos) -> {
@@ -69,7 +70,7 @@ public class C2SSetMonsterBehaviour implements CustomPacketPayload {
                     };
                 }
                 case HARVESTINV -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(sender);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(sender);
                     data.entitySelector.selectedEntity = monster;
                     data.entitySelector.poi = monster.getCropInventory();
                     data.entitySelector.apply = (player, pos) -> {
@@ -82,7 +83,7 @@ public class C2SSetMonsterBehaviour implements CustomPacketPayload {
                     };
                 }
                 case SEEDINV -> {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(sender);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(sender);
                     data.entitySelector.selectedEntity = monster;
                     data.entitySelector.poi = monster.getSeedInventory();
                     data.entitySelector.apply = (player, pos) -> {

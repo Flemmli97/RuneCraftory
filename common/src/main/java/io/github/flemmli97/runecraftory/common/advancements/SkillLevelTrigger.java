@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
@@ -45,7 +45,7 @@ public class SkillLevelTrigger extends SimpleCriterionTrigger<SkillLevelTrigger.
         }
 
         public boolean matches(ServerPlayer player, Skills skill) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             return this.skill.map(s -> s == skill).orElse(true)
                     && data.getSkillLevel(skill).getLevel() >= this.level;
         }

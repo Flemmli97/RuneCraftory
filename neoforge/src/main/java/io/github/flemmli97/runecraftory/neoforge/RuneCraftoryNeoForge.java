@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.neoforge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.neoforge.event.WorldEvents;
 import io.github.flemmli97.runecraftory.neoforge.integration.top.TOP;
 import io.github.flemmli97.runecraftory.neoforge.network.PacketHandler;
-import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryAttachments;
 import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryFluidTypes;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.world.entity.EntityType;
@@ -65,7 +64,6 @@ public class RuneCraftoryNeoForge {
     }
 
     public static void registries(IEventBus modBus) {
-        RuneCraftoryAttachments.ATTACHMENT_TYPES.register(modBus);
         RuneCraftoryFluidTypes.FLUID_TYPES.register(modBus);
     }
 

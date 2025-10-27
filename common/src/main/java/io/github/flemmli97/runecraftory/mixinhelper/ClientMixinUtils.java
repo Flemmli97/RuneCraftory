@@ -15,10 +15,11 @@ import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -137,7 +138,7 @@ public class ClientMixinUtils {
         float partialTicks = ClientHandlers.getPartialTicks();
         if (!(entity instanceof Player player))
             return;
-        PlayerWeaponHandler weaponHandler = Platform.INSTANCE.getPlayerData(player).getWeaponHandler();
+        PlayerWeaponHandler weaponHandler = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler();
         boolean ignoreRiding = weaponHandler.getCurrentAction() == RuneCraftoryAttackActions.DUAL_USE.get();
         boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, model, weaponHandler, partialTicks);
         if (result) {
@@ -162,7 +163,7 @@ public class ClientMixinUtils {
             if (leftHand) {
                 return AnimatedItemHandRendering;
             }
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             if (data != null) {
                 PlayerRenderer renderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
                 float partialTicks = ClientHandlers.getPartialTicks();

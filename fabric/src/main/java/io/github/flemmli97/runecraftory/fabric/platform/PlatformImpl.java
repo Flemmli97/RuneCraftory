@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.creativetab.CreativeTabBuilderExtension;
 import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
-import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -45,16 +44,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PlatformImpl implements Platform {
-
-    @Override
-    public PlayerData getPlayerData(Player player) {
-        return ((PlayerDataGetter) player).runecraftory$getPlayerData();
-    }
-
-    @Override
-    public EntityData getEntityData(LivingEntity living) {
-        return ((EntityDataGetter) living).runecraftory$getEntityData();
-    }
 
     @Override
     public void openGuiMenu(ServerPlayer player, MenuProvider provider) {

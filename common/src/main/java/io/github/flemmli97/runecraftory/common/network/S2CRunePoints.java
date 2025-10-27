@@ -2,7 +2,8 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -37,7 +38,7 @@ public class S2CRunePoints implements CustomPacketPayload {
     public static void handle(S2CRunePoints pkt, Player player) {
         if (player == null)
             return;
-        Platform.INSTANCE.getPlayerData(player).setRunePoints(pkt.rp);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).setRunePoints(pkt.rp);
     }
 
     @Override

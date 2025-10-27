@@ -8,8 +8,8 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -43,7 +43,7 @@ public class ToolHammerUse extends AttackAction {
                     .filter(p -> hammer.hammer(serverLevel, p.immutable(), stack, entity, true) != ItemToolHammer.HammerState.FAIL)
                     .count();
             if (amount > 0 && entity instanceof ServerPlayer player) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 LevelCalc.useRP(data, range * 15, true, 0, true, Skills.MINING);
                 LevelCalc.levelSkill(data, Skills.MINING, (range + 1) * 10);
             }

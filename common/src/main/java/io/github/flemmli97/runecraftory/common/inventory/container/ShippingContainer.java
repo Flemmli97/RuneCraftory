@@ -1,7 +1,8 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +15,7 @@ public class ShippingContainer extends AbstractContainerMenu {
     private final Container container;
 
     public ShippingContainer(int i, Inventory inventory) {
-        this(i, inventory, Platform.INSTANCE.getPlayerData(inventory.player).getShippingInv());
+        this(i, inventory, RunecraftoryAttachments.PLAYER_DATA.get().get(inventory.player).getShippingInv());
     }
 
     public ShippingContainer(int i, Inventory inventory, Container shippingBin) {

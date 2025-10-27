@@ -5,8 +5,9 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.UpgradingCraftingBl
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -76,7 +77,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     private void updateOutput() {
         if (this.craftingInv.getPlayer().level().isClientSide)
             return;
-        Pair<Integer, ItemStack> res = CraftingUtils.getUpgradeResult(this.craftingInv.getItem(0), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()),
+        Pair<Integer, ItemStack> res = CraftingUtils.getUpgradeResult(this.craftingInv.getItem(0), RunecraftoryAttachments.PLAYER_DATA.get().get(this.craftingInv.getPlayer()),
                 this.craftingInv.getItem(1), this.craftingType());
         this.output.setItem(0, res.getSecond());
         this.rpCost.set(res.getFirst());

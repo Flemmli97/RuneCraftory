@@ -6,7 +6,8 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.CraftingBlockEntity
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -82,7 +83,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
         Player player = Minecraft.getInstance().player;
         builder.setShapeless();
         T recipe = holder.value();
-        if (Platform.INSTANCE.getPlayerData(player).getRecipeKeeper().isUnlocked(holder)) {
+        if (RunecraftoryAttachments.PLAYER_DATA.get().get(player).getRecipeKeeper().isUnlocked(holder)) {
             for (int i = 0; i < recipe.getIngredients().size(); i++) {
                 int x = i % 3;
                 int y = i / 3;

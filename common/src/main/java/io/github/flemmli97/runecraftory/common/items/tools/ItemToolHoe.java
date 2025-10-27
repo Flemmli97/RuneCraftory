@@ -6,10 +6,11 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +46,7 @@ public class ItemToolHoe extends HoeItem {
     }
 
     public static void onHoeUse(ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         LevelCalc.useRP(data, 3, true, 0, true, Skills.FARMING, Skills.EARTH);
         LevelCalc.levelSkill(data, Skills.FARMING, 3);
         LevelCalc.levelSkill(data, Skills.EARTH, 1.5f);
@@ -101,7 +102,7 @@ public class ItemToolHoe extends HoeItem {
                         .filter(p -> this.hoeBlock(new UseOnContext(player, entity.getUsedItemHand(), hit.apply(p.immutable()))))
                         .count();
                 if (amount > 0) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                     LevelCalc.useRP(data, 0, true, range * 17.5f, true, Skills.FARMING);
                     LevelCalc.levelSkill(data, Skills.FARMING, range * 15);
                     LevelCalc.levelSkill(data, Skills.EARTH, range * 2);

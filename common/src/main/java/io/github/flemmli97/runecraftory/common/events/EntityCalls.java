@@ -30,6 +30,7 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CropUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
@@ -42,14 +43,13 @@ import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandle
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.AttributeInstanceExtension;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -96,7 +96,7 @@ public class EntityCalls {
     public static void joinPlayer(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(RunecraftorySavedData.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             data.onJoin();
             QuestHandler.removeNPCQuestsFor(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSyncConfig(), serverPlayer);
@@ -122,7 +122,7 @@ public class EntityCalls {
         }));
         //If the party member still got killed somehow remove them here
         Set<UUID> toRemove = RunecraftorySavedData.get(serverPlayer.getServer()).removedPartyMembersFor(serverPlayer);
-        PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer);
         toRemove.forEach(data.party::removePartyMember);
         toRemove.clear();
     }
@@ -139,7 +139,7 @@ public class EntityCalls {
     public static void onLoadEntity(LivingEntity living) {
         if (living instanceof ServerPlayer player) {
             onPlayerLoad(player);
-            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(Platform.INSTANCE.getPlayerData(player)), player);
+            LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(RunecraftoryAttachments.PLAYER_DATA.get().get(player)), player);
             updateWeaponState(living);
         }
     }
@@ -209,7 +209,7 @@ public class EntityCalls {
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
         Entity attacker = source.getEntity();
         if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && target instanceof Player player) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             if (data.getWeaponHandler().isInvulnerable(player))
                 return true;
             // Only trigger if caused by any entity
@@ -235,7 +235,7 @@ public class EntityCalls {
         if (damage < 0)
             entity.heal(-damage);
         else if (damage > 1 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && entity instanceof ServerPlayer player) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
+            LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f);
         }
         return damage;
     }
@@ -293,16 +293,7 @@ public class EntityCalls {
 
     public static void dropInventoryDeath(LivingEntity entity) {
         if (entity instanceof ServerPlayer player && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
-            Platform.INSTANCE.getPlayerData(player).getInv().dropItemsAt(player);
-    }
-
-    public static void clone(Player origin, Player player, boolean death) {
-        if (player instanceof ServerPlayer) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(origin);
-            if (death)
-                data.useMoney((int) (data.getMoney() * 0.2));
-            Platform.INSTANCE.getPlayerData(player).readFromNBT(data.writeToNBT(new CompoundTag(), death));
-        }
+            RunecraftoryAttachments.PLAYER_DATA.get().get(player).getInv().dropItemsAt(player);
     }
 
     public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos, InteractionHand hand) {
@@ -355,7 +346,7 @@ public class EntityCalls {
 
     public static void updateLivingTick(LivingEntity entity) {
         if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).tick();
+            RunecraftoryAttachments.PLAYER_DATA.get().get(player).tick();
             if (GeneralConfig.disableHunger) {
                 int food = player.hasEffect(RuneCraftoryEffects.PARALYSIS.asHolder()) ? 6 : 14;
                 player.getFoodData().setFoodLevel(food);
@@ -373,7 +364,7 @@ public class EntityCalls {
             if (disabled && !mob.getNavigation().isDone())
                 mob.getNavigation().stop();
         }
-        Platform.INSTANCE.getEntityData(entity).tick();
+        RunecraftoryAttachments.ENTITY_DATA.get().get(entity).tick();
     }
 
     /**
@@ -404,7 +395,7 @@ public class EntityCalls {
             FoodProperties prop = DataPackHandler.INSTANCE.foodManager().get(stack.getItem());
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.has(DataComponents.FOOD)) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                     if (data.foodBuff().duration() <= 0)
                         LevelCalc.levelSkill(data, Skills.EATING, 5);
                     data.regenRunePoints(EntityUtils.getRPFromVanillaFood(stack));
@@ -412,7 +403,7 @@ public class EntityCalls {
                 return;
             }
             if (entity instanceof ServerPlayer player) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 if (data.foodBuff().duration() <= 0)
                     data.getDailyUpdater().onFoodEaten();
                 data.applyFoodEffect(stack);
@@ -436,7 +427,7 @@ public class EntityCalls {
     public static void wakeUp(Player player) {
         if (GeneralConfig.healOnWakeUp && player instanceof ServerPlayer) {
             player.heal(player.getMaxHealth());
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             data.regenRunePoints(data.getMaxRunePoints());
             LevelCalc.levelSkill(data, Skills.SLEEPING, 75);
             player.removeEffect(RuneCraftoryEffects.FATIGUE.asHolder());
@@ -456,7 +447,7 @@ public class EntityCalls {
         }
         if (!player.hasCorrectToolForDrops(state))
             return;
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
@@ -476,7 +467,7 @@ public class EntityCalls {
 
     public static void onLootTableBlockGen(Player player) {
         if (player instanceof ServerPlayer) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             LevelCalc.levelSkill(data, Skills.SEARCHING, 7);
         }
     }
@@ -486,7 +477,7 @@ public class EntityCalls {
     }
 
     public static boolean onPlayerUseItem(Player player, InteractionHand hand) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         return data.getWeaponHandler().getCurrentAction() == RuneCraftoryAttackActions.NONE.get()
                 || ItemStack.isSameItemSameComponents(player.getItemInHand(hand), data.getWeaponHandler().get(DataKey.USED_WEAPON));
     }

@@ -6,7 +6,8 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
@@ -106,7 +107,7 @@ public class JEI implements IModPlugin {
             Predicate<T> keep = recipe -> {
                 if (player == null)
                     return true;
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 if (ingredient)
                     return data.getRecipeKeeper().isUnlocked((RecipeHolder<?>) recipe);
                 return data.getRecipeKeeper().isUnlockedForCrafting((RecipeHolder<?>) recipe);

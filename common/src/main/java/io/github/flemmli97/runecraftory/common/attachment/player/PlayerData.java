@@ -30,6 +30,7 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
+import io.github.flemmli97.tenshilib.common.attachment.SerializableAttachment;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -64,7 +65,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class PlayerData {
+public class PlayerData implements SerializableAttachment<CompoundTag, PlayerData> {
 
     private final Player player;
 
@@ -110,6 +111,17 @@ public class PlayerData {
             this.skillLevels.put(skill, new XpLevelHolder());
         }
         this.weaponHandler = new PlayerWeaponHandler(player);
+    }
+
+    public PlayerData(Player player, PlayerData other, boolean death) {
+        this(player);
+        CompoundTag tag = other.write(player.registryAccess());
+        if (death) {
+            tag.putInt("Money", (int) (other.getMoney() * 0.2));
+            tag.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
+            tag.putDouble("RunePoints", this.runePoints * GeneralConfig.deathRpPercent);
+        }
+        this.read(tag, player.registryAccess());
     }
 
     public Player player() {
@@ -566,32 +578,44 @@ public class PlayerData {
         return this.mobLevelIncrease;
     }
 
-    public void readFromNBT(CompoundTag nbt) {
-        HolderLookup.Provider provider = this.player.registryAccess();
+    public void resetAll() {
+        PlayerData newData = new PlayerData(this.player);
+        newData.spells.load(this.spells.save(this.player.registryAccess()), this.player.registryAccess());
+        newData.shippingBin.load(this.shippingBin.save(this.player.registryAccess()), this.player.registryAccess());
+        this.read(newData.write(this.player.registryAccess()), this.player.registryAccess());
+        this.recalculateStats(false);
+        this.refreshShop();
+        this.starting = false;
+        this.entityStatsTracker.reset();
+        this.mobLevelIncrease = 0;
+    }
+
+    @Override
+    public PlayerData read(CompoundTag tag, HolderLookup.Provider provider) {
         DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
-        this.starting = nbt.getBoolean("Starting");
-        if (nbt.contains("RestoreHP") && this.player instanceof ServerPlayer serverPlayer) {
-            float f = nbt.getFloat("RestoreHP");
+        this.starting = tag.getBoolean("Starting");
+        if (tag.contains("RestoreHP") && this.player instanceof ServerPlayer serverPlayer) {
+            float f = tag.getFloat("RestoreHP");
             //Sheduling the health update in case other mods modify max health
             serverPlayer.getServer().tell(new TickTask(1, () -> this.player.setHealth(f)));
         }
-        this.runePoints = nbt.getDouble("RunePoints");
-        this.level.read(nbt.get("XpLevel"));
-        CompoundTag skillCompound = nbt.getCompound("Skills");
+        this.runePoints = tag.getDouble("RunePoints");
+        this.level.read(tag.get("XpLevel"));
+        CompoundTag skillCompound = tag.getCompound("Skills");
         for (Skills skill : Skills.values()) {
             this.skillLevels.get(skill).read(skillCompound.get(skill.toString()));
         }
-        this.money = nbt.getInt("Money");
-        this.keeper.read(nbt.getCompound("Recipes"));
+        this.money = tag.getInt("Money");
+        this.keeper.read(tag.getCompound("Recipes"));
 
-        this.shippingBin.load(nbt.getCompound("Shippingbin"), provider);
-        ListTag ship = nbt.getList("ShippedItems", Tag.TAG_COMPOUND);
+        this.shippingBin.load(tag.getCompound("Shippingbin"), provider);
+        ListTag ship = tag.getList("ShippedItems", Tag.TAG_COMPOUND);
         ship.forEach(t -> {
             CompoundTag data = (CompoundTag) t;
             this.shippedItems.put(BuiltInRegistries.ITEM.byNameCodec().parse(ops, data.get("Item")).getOrThrow(),
                     new ShippedItemData(data.getInt("Amount"), data.getInt("Level")));
         });
-        ListTag shop = nbt.getList("ShopItems", Tag.TAG_COMPOUND);
+        ListTag shop = tag.getList("ShopItems", Tag.TAG_COMPOUND);
         shop.forEach(t -> {
             CompoundTag data = (CompoundTag) t;
             NonNullList<ItemStack> list = NonNullList.create();
@@ -599,34 +623,27 @@ public class PlayerData {
             items.forEach(lt -> ItemStack.parse(provider, lt).ifPresent(list::add));
             this.shopItems.put(RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
         });
-        this.spells.load(nbt.getCompound("Inventory"), provider);
-        this.updater.read(nbt.getCompound("DailyUpdater"));
+        this.spells.load(tag.getCompound("Inventory"), provider);
+        this.updater.read(tag.getCompound("DailyUpdater"));
 
-        this.lastEaten = nbt.contains("LastFood") ? BuiltInRegistries.ITEM.holderByNameCodec().parse(NbtOps.INSTANCE, nbt.get("LastFood")).getOrThrow() : null;
-        this.foodDuration = nbt.getInt("FoodBuffDuration");
+        this.lastEaten = tag.contains("LastFood") ? BuiltInRegistries.ITEM.holderByNameCodec().parse(NbtOps.INSTANCE, tag.get("LastFood")).getOrThrow() : null;
+        this.foodDuration = tag.getInt("FoodBuffDuration");
 
-        this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
-        this.entityStatsTracker.read(nbt.getCompound("TamedEntityTracker"));
-        this.party.load(nbt.getCompound("PartyTag"));
-        this.craftingSeed = nbt.getInt("CraftingSeed");
-        this.boughtBarns = nbt.getInt("BoughtBarns");
-        this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
+        this.walkingTracker.read(tag.getCompound("WalkingTracker"));
+        this.entityStatsTracker.read(tag.getCompound("TamedEntityTracker"));
+        this.party.load(tag.getCompound("PartyTag"));
+        this.craftingSeed = tag.getInt("CraftingSeed");
+        this.boughtBarns = tag.getInt("BoughtBarns");
+        this.mobLevelIncrease = tag.getInt("MobLevelIncrease");
+        return this;
     }
 
-    public CompoundTag writeToNBTPlain(CompoundTag nbt) {
-        return this.writeToNBT(nbt, false);
-    }
-
-    public CompoundTag writeToNBT(CompoundTag tag, boolean wasDead) {
-        HolderLookup.Provider provider = this.player.registryAccess();
+    @Override
+    public CompoundTag write(HolderLookup.Provider provider) {
+        CompoundTag tag = new CompoundTag();
         DynamicOps<Tag> ops = provider.createSerializationContext(NbtOps.INSTANCE);
         tag.putBoolean("Starting", this.starting);
-        if (wasDead) {
-            tag.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
-            tag.putDouble("RunePoints", this.runePoints * GeneralConfig.deathRpPercent);
-        } else {
-            tag.putDouble("RunePoints", this.runePoints);
-        }
+        tag.putDouble("RunePoints", this.runePoints);
         tag.put("XpLevel", this.level.save());
         CompoundTag skillCompound = new CompoundTag();
         for (Skills skill : Skills.values()) {
@@ -670,18 +687,6 @@ public class PlayerData {
         tag.putInt("BoughtBarns", this.boughtBarns);
         tag.putInt("MobLevelIncrease", this.mobLevelIncrease);
         return tag;
-    }
-
-    public void resetAll() {
-        PlayerData newData = new PlayerData(this.player);
-        newData.spells.load(this.spells.save(this.player.registryAccess()), this.player.registryAccess());
-        newData.shippingBin.load(this.shippingBin.save(this.player.registryAccess()), this.player.registryAccess());
-        this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()));
-        this.recalculateStats(false);
-        this.refreshShop();
-        this.starting = false;
-        this.entityStatsTracker.reset();
-        this.mobLevelIncrease = 0;
     }
 
     public record ShippedItemData(int amount, int maxLevel) {

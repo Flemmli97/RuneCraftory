@@ -4,10 +4,11 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.ExplosionSpellEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.ProjectileUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +18,7 @@ public class ExplosionSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FIRE, 10);
+        LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.FIRE, 10);
     }
 
     @Override

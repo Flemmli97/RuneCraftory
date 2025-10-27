@@ -4,14 +4,15 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.items.creative.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -137,7 +138,7 @@ public class TreasureChestEntity extends Entity implements AnimatedEntity {
                 this.getAnimationHandler().setAnimation(OPEN);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> this.openChest(serverPlayer, serverPlayer.getItemInHand(hand));
-                LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.SEARCHING, 20);
+                LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.SEARCHING, 20);
             }
         }
         return InteractionResult.CONSUME;

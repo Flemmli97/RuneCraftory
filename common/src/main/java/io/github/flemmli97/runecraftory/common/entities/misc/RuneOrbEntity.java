@@ -3,13 +3,14 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
 import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
 import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -55,7 +56,7 @@ public class RuneOrbEntity extends Entity {
         }
         this.discard();
         Skills randomSkill = Skills.values()[player.getRandom().nextInt(Skills.values().length)];
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (this.entityData.get(LEVELSTATS))
             data.increaseSkill(randomSkill, LevelCalc.xpAmountForSkillLevelUp(randomSkill, data.getSkillLevel(randomSkill).getLevel()) - data.getSkillLevel(randomSkill).getXp());
         data.regenRunePoints(150);

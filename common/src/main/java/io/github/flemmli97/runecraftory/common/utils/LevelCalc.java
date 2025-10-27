@@ -11,7 +11,8 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -171,7 +172,7 @@ public class LevelCalc {
                 player = sP;
         }
         if (player != null) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             data.addXp(adjustOnLevel ? levelXpWith(base, data.getPlayerLevel().getLevel(), level) : base);
             data.setMoney(data.getMoney() + LevelCalc.getMoney(money, level));
             if (!(attacker instanceof Player))
@@ -248,7 +249,7 @@ public class LevelCalc {
         int lvl = 0;
         boolean mean = MobConfig.playerLevelType.mean;
         for (Player player : list) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             int pL = levelFunc != null ? levelFunc.applyAsInt(player, data) : 0;
             if (MobConfig.playerLevelType.increased)
                 pL += data.getMobLevelIncrease();

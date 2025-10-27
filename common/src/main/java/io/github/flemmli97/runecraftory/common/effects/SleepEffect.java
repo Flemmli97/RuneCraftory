@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.mixinhelper.MobToggleHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -41,13 +42,13 @@ public class SleepEffect extends SyncedMobEffect {
         if (entity instanceof SleepingEntity sleeping)
             sleeping.setSleeping(true);
         entity.setDeltaMovement(Vec3.ZERO);
-        Platform.INSTANCE.getEntityData(entity).setSleeping(true);
+        RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setSleeping(true);
     }
 
     @Override
     public void onEffectRemoved(LivingEntity entity, MobEffectInstance instance) {
         if (entity instanceof SleepingEntity sleeping)
             sleeping.setSleeping(false);
-        Platform.INSTANCE.getEntityData(entity).setSleeping(false);
+        RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setSleeping(false);
     }
 }

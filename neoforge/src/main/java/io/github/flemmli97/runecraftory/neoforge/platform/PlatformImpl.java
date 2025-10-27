@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.creativetab.CreativeTabBuilderExtension;
 import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
-import io.github.flemmli97.runecraftory.neoforge.registry.RuneCraftoryAttachments;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -44,16 +43,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PlatformImpl implements Platform {
-
-    @Override
-    public PlayerData getPlayerData(Player player) {
-        return player.getData(RuneCraftoryAttachments.PLAYER_DATA);
-    }
-
-    @Override
-    public EntityData getEntityData(LivingEntity living) {
-        return living.getData(RuneCraftoryAttachments.ENTITY_DATA);
-    }
 
     @Override
     public void openGuiMenu(ServerPlayer player, MenuProvider provider) {

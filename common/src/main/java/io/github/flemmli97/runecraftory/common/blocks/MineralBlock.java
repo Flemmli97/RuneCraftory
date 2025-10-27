@@ -9,11 +9,12 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -141,7 +142,7 @@ public class MineralBlock extends Block implements SimpleWaterloggedBlock, Exten
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity instanceof Player player) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             float addChance = data.getSkillLevel(Skills.MINING).getLevel() * 0.03f;
             ItemStack stack = player.getMainHandItem();
             if (stack.getItem() instanceof ItemToolHammer && stack.has(RuneCraftoryDataComponentTypes.TOOL_TIER.get())) {

@@ -14,8 +14,9 @@ import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAd
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -139,11 +140,11 @@ public class EntityUtils {
     public static float tamingChance(BaseMonster monster, Player player, float itemMultiplier, int brushCount, int loveAttackCount) {
         if (itemMultiplier == 0 || GeneralConfig.tamingMultiplier == 0)
             return 0;
-        int lvl = Platform.INSTANCE.getPlayerData(player).getPlayerLevel().getLevel() + 1;
+        int lvl = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getPlayerLevel().getLevel() + 1;
         float lvlPenalty = Math.max(0, (monster.xpLevel().getLevel() - lvl) * 0.02f);
         float brushBonus = brushCount * 0.05f;
         float loveAttackBonus = loveAttackCount * 0.002f;
-        float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).getSkillLevel(Skills.TAMING).getLevel() - 1) * 0.005f;
+        float tamingLvlBonus = (RunecraftoryAttachments.PLAYER_DATA.get().get(player).getSkillLevel(Skills.TAMING).getLevel() - 1) * 0.005f;
         float tamingBonus = 1 + brushBonus + loveAttackBonus + tamingLvlBonus;
         return monster.tamingChance() * GeneralConfig.tamingMultiplier * tamingBonus - lvlPenalty;
     }

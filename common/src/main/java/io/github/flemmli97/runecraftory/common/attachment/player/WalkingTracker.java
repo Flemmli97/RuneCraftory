@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,7 +39,7 @@ public class WalkingTracker {
         }
         if (mult != 0) {
             float finalMult = mult * 0.3f;
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.WALKING, finalMult);
+            LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.WALKING, finalMult);
         }
         return mult != 0;
     }

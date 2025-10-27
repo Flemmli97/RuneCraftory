@@ -5,9 +5,10 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.GiantCropBlock;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryArmorEffects;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +27,7 @@ import net.minecraft.world.phys.HitResult;
 public class MixinUtils {
 
     public static boolean playerPose(Player player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         Pose pose = data.getWeaponHandler().getCurrentAction().getPose(player, data.getWeaponHandler());
         if (pose != null) {
             if (player.getPose() != pose)

@@ -15,11 +15,11 @@ import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.MathsHelper;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.AttackBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.SelectableBehaviourBuilder;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetWalkTargetWithinDist;
@@ -31,6 +31,7 @@ import io.github.flemmli97.tenshilib.common.entity.data.SyncedDataContainer;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -150,7 +151,7 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
                 S2CScreenShake.sendAround(entity, 24, 4, 1);
             }
             if (anim.isPast("attack_end") && !entity.caughtEntities.isEmpty()) {
-                Platform.INSTANCE.getEntityData(entity).setInvis(0);
+                RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setInvis(0);
                 entity.caughtEntities.clear();
             }
         });
@@ -282,7 +283,7 @@ public class Handonetta extends BossMonster implements BoundEntityListListener {
                         entity.setPos(this.getX(), this.getY(0.5), this.getZ());
                     }
                     if (invis)
-                        Platform.INSTANCE.getEntityData(entity).setInvis(10);
+                        RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setInvis(10);
                     entity.hurtMarked = true;
                 }
             });

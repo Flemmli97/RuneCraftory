@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,7 +54,7 @@ public class WaterLaserAttack extends AttackAction {
             }
             if (!entity.level().isClientSide) {
                 if (anim.isPast("continue")) {
-                    if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && Platform.INSTANCE.getPlayerData(player).getInv().getInUseStack() != handler.get(DataKey.USED_WEAPON)) {
+                    if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && RunecraftoryAttachments.PLAYER_DATA.get().get(player).getInv().getInUseStack() != handler.get(DataKey.USED_WEAPON)) {
                         handler.doWeaponAttack(this, handler.get(DataKey.USED_WEAPON), handler.get(DataKey.USED_SPELL));
                     }
                 }

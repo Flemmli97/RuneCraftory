@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.api.registry;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 public class ArmorEffect {
 
     public static boolean hasArmorEffect(LivingEntity entity, Holder<ArmorEffect> effect) {
-        return Platform.INSTANCE.getEntityData(entity).hasArmorFlag(effect);
+        return RunecraftoryAttachments.ENTITY_DATA.get().get(entity).hasArmorFlag(effect);
     }
 
     public static void runArmorEffectFor(ItemStack stack, Consumer<ArmorEffect> cons) {

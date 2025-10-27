@@ -9,10 +9,10 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -34,7 +34,7 @@ public abstract class Spell {
     public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell, float costMultiplier, boolean hurt) {
         if (!(entity instanceof ServerPlayer player))
             return true;
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (!LevelCalc.useRP(data, spell.properties().rpCost() * costMultiplier, hurt, spell.properties().percentageCost(), true, spell.costReductionSkills())) {
             if (!hurt)
                 EntityUtils.playSoundForPlayer(player, RuneCraftorySounds.GENERIC_DENY.get(), 1, 1);
@@ -50,7 +50,7 @@ public abstract class Spell {
     public void levelSkill(ServerPlayer player) {
         Map<Skills, Float> skillXp = this.properties().skillXP();
         if (!skillXp.isEmpty()) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             skillXp.forEach((skill, xp) -> LevelCalc.levelSkill(data, Skills.DARK, xp));
         }
     }

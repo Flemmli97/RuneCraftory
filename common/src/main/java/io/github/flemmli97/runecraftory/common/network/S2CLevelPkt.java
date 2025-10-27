@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -40,7 +41,7 @@ public class S2CLevelPkt implements CustomPacketPayload {
     }
 
     public static void handle(S2CLevelPkt pkt, Player player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         data.getPlayerLevel().from(pkt.level);
         data.setRunePoints(pkt.rp);
     }

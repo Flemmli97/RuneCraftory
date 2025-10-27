@@ -6,12 +6,13 @@ import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.lib.LootTableResources;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixinhelper.ExtendedFishingRodHookTrigger;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -189,7 +190,7 @@ public class CustomFishingHookEntity extends AdvancedProjectile {
             this.setOnCooldown = null;
             this.canAttack = null;
             if (this.getOwner() instanceof ServerPlayer player) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 LevelCalc.levelSkill(data, Skills.FISHING, 10);
                 LevelCalc.levelSkill(data, Skills.WATER, 1);
             }
@@ -216,21 +217,21 @@ public class CustomFishingHookEntity extends AdvancedProjectile {
     public void remove(RemovalReason reason) {
         super.remove(reason);
         if (this.getOwner() instanceof LivingEntity living)
-            Platform.INSTANCE.getEntityData(living).fishingHook = null;
+            RunecraftoryAttachments.ENTITY_DATA.get().get(living).fishingHook = null;
     }
 
     @Override
     public void onClientRemoval() {
         super.onClientRemoval();
         if (this.getOwner() instanceof LivingEntity living)
-            Platform.INSTANCE.getEntityData(living).fishingHook = null;
+            RunecraftoryAttachments.ENTITY_DATA.get().get(living).fishingHook = null;
     }
 
     @Override
     public void onUpdateOwner() {
         super.onUpdateOwner();
         if (this.getOwner() instanceof LivingEntity living)
-            Platform.INSTANCE.getEntityData(living).fishingHook = this;
+            RunecraftoryAttachments.ENTITY_DATA.get().get(living).fishingHook = this;
     }
 
     private boolean shouldStopFishing() {
@@ -377,7 +378,7 @@ public class CustomFishingHookEntity extends AdvancedProjectile {
         if (this.nibble > 0) {
             //For now using vanilla loottables
             float luck = this.luck + owner.getLuck() + this.difficultyBonus * 0.5f
-                    + Platform.INSTANCE.getPlayerData(owner).getSkillLevel(Skills.FISHING).getLevel() * 0.02f;
+                    + RunecraftoryAttachments.PLAYER_DATA.get().get(owner).getSkillLevel(Skills.FISHING).getLevel() * 0.02f;
             LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
                     .withParameter(LootContextParams.ORIGIN, this.position())
                     .withParameter(LootContextParams.TOOL, stack)
@@ -399,7 +400,7 @@ public class CustomFishingHookEntity extends AdvancedProjectile {
                     owner.awardStat(Stats.FISH_CAUGHT, 1);
             }
             if (this.getOwner() instanceof ServerPlayer player) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 LevelCalc.useRP(data, 10 * (this.nibbleBonus + 1), true, 0, true, Skills.FISHING);
                 LevelCalc.levelSkill(data, Skills.FISHING, 25);
                 LevelCalc.levelSkill(data, Skills.WATER, 5);

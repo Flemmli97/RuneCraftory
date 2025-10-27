@@ -5,8 +5,9 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryLootRegistries;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -49,7 +50,7 @@ public class SkillLevelCondition implements LootItemCondition {
     @Override
     public boolean test(LootContext ctx) {
         if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player) {
-            return Platform.INSTANCE.getPlayerData(player).getSkillLevel(this.skill).getLevel() >= this.min;
+            return RunecraftoryAttachments.PLAYER_DATA.get().get(player).getSkillLevel(this.skill).getLevel() >= this.min;
         }
         return false;
     }

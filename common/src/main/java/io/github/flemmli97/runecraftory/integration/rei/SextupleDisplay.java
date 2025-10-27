@@ -2,7 +2,8 @@ package io.github.flemmli97.runecraftory.integration.rei;
 
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -43,8 +44,8 @@ public class SextupleDisplay extends BasicDisplay {
     public boolean shouldShowDisplay(boolean asIngredient) {
         return Minecraft.getInstance().player == null ||
                 this.recipe() == null ||
-                (asIngredient ? Platform.INSTANCE.getPlayerData(Minecraft.getInstance().player).getRecipeKeeper().isUnlocked(this.recipe())
-                        : Platform.INSTANCE.getPlayerData(Minecraft.getInstance().player).getRecipeKeeper().isUnlockedForCrafting(this.recipe()));
+                (asIngredient ? RunecraftoryAttachments.PLAYER_DATA.get().get(Minecraft.getInstance().player).getRecipeKeeper().isUnlocked(this.recipe())
+                        : RunecraftoryAttachments.PLAYER_DATA.get().get(Minecraft.getInstance().player).getRecipeKeeper().isUnlockedForCrafting(this.recipe()));
     }
 
     @Nullable

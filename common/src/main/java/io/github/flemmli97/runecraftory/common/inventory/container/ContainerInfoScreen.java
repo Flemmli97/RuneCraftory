@@ -4,7 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
@@ -63,7 +64,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD);
             }
         });
-        WrappedContainer spellWrapped = new WrappedContainer(Platform.INSTANCE.getPlayerData(playerInventory.player).getInv());
+        WrappedContainer spellWrapped = new WrappedContainer(RunecraftoryAttachments.PLAYER_DATA.get().get(playerInventory.player).getInv());
         for (int m = 0; m < 4; ++m) {
             this.addSlot(new Slot(spellWrapped, m, 78, 9 + m * 18) {
                 @Override

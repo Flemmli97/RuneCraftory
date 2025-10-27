@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +20,7 @@ public class ItemLevelUp extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             data.addXp(LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));

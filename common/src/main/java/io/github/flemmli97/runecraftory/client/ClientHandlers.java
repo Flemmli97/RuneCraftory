@@ -24,10 +24,10 @@ import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
@@ -93,7 +93,7 @@ public class ClientHandlers {
     public static boolean disableMouseMove() {
         Minecraft mc = Minecraft.getInstance();
         return mc.player != null && (EntityUtils.isDisabled(mc.player)
-                || Platform.INSTANCE.getPlayerData(mc.player).getWeaponHandler().get(DataKey.FIXED_LOOK)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+                || RunecraftoryAttachments.PLAYER_DATA.get().get(mc.player).getWeaponHandler().get(DataKey.FIXED_LOOK)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
     public static boolean disableMouseClick() {
@@ -103,7 +103,7 @@ public class ClientHandlers {
 
     public static boolean disableScrollMouse() {
         Minecraft mc = Minecraft.getInstance();
-        return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player).getWeaponHandler().isItemSwapBlocked()) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+        return mc.player != null && (EntityUtils.isDisabled(mc.player) || RunecraftoryAttachments.PLAYER_DATA.get().get(mc.player).getWeaponHandler().isItemSwapBlocked()) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
     public static boolean disableKeys(int key, int scanCode) {

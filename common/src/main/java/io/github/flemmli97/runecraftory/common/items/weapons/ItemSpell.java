@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -46,7 +47,7 @@ public class ItemSpell extends Item {
         if (!this.getSpell().canUse(player.serverLevel(), player, stack))
             return false;
         if (this.getSpell().useAction() != null) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             if (player.getCooldowns().getCooldownPercent(this, 0) <= 0) {
                 return data.getWeaponHandler().doWeaponAttack(this.getSpell().useAction(), stack, this.getSpell());
             }

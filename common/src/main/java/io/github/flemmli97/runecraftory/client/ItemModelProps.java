@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.items.BabySpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.resources.PlayerSkin;
@@ -34,7 +34,7 @@ public class ItemModelProps {
             if (main.getItem() instanceof ItemToolFishingRod) {
                 flag1 = false;
             }
-            return (flag || flag1) && Platform.INSTANCE.getEntityData(entity).fishingHook != null ? 1.0F : 0.0F;
+            return (flag || flag1) && RunecraftoryAttachments.ENTITY_DATA.get().get(entity).fishingHook != null ? 1.0F : 0.0F;
         }
     };
 

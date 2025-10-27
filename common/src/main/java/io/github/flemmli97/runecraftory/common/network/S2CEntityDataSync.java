@@ -2,7 +2,8 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -33,7 +34,7 @@ public record S2CEntityDataSync(int entityID,
     public static void handle(S2CEntityDataSync pkt, Player player) {
         Entity e = player.level().getEntity(pkt.entityID);
         if (e instanceof LivingEntity living) {
-            EntityData data = Platform.INSTANCE.getEntityData(living);
+            EntityData data = RunecraftoryAttachments.ENTITY_DATA.get().get(living);
             switch (pkt.dataType) {
                 case INVIS -> data.setInvis(pkt.flag ? 1 : 0);
                 case ORTHOVIEW -> data.setThirdPersonView(pkt.flag);

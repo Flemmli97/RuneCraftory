@@ -11,9 +11,10 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.ForgingRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -56,7 +57,7 @@ public class ItemRecipeBread extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
         if (living instanceof ServerPlayer player) {
             int amount = Math.max(1, ItemComponentUtils.itemLevel(stack) / 3);
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             // Group equal recipes together. E.g. if an item has multiple variants of a recipe
             Map<Pair<Item, Integer>, List<RecipeHolder<SextupleRecipe>>> grouped = new HashMap<>();
             player.getServer().getRecipeManager().getAllRecipesFor(CraftingUtils.getType(this.type))

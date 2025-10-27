@@ -5,8 +5,9 @@ import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -72,7 +73,7 @@ public class MonsterBarnBlock extends BaseEntityBlock {
         if (player.isCreative() || (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && player.getUUID().equals(owner = barn.getOwner())))
             return super.getDestroyProgress(state, player, level, pos);
         if (!player.level().isClientSide && owner != null) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             if (data.onBarnFailMine(pos))
                 player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner",
                         player.getServer().getProfileCache().get(owner).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);
@@ -98,7 +99,7 @@ public class MonsterBarnBlock extends BaseEntityBlock {
                             .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), true);
                 }
             } else if (owner != null) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 if (data.onBarnFailMine(pos))
                     player.displayClientMessage(Component.translatable("runecraftory.barn.interact.not.owner",
                             player.getServer().getProfileCache().get(owner).map(GameProfile::getName).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), false);

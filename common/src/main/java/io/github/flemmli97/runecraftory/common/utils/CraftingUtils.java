@@ -10,7 +10,8 @@ import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingCont
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -156,7 +157,7 @@ public class CraftingUtils {
                 break;
         }
         NonNullList<ItemStack> recipeStacks = materials.recipeMatches();
-        RAND.setSeed(Platform.INSTANCE.getPlayerData(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
+        RAND.setSeed(RunecraftoryAttachments.PLAYER_DATA.get().get(inv.getPlayer()).getCraftingSeed(inv.getPlayer()));
         if (recipeStacks.size() > 3) {
             while (i < 3) {
                 ItemStack rand = recipeStacks.get(RAND.nextInt(recipeStacks.size()));

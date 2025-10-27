@@ -7,9 +7,9 @@ import io.github.flemmli97.runecraftory.client.ClientCalendarHolder;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,7 +42,7 @@ public class OverlayGui {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         int guiWidth = this.mc.getWindow().getGuiScaledWidth();
         int guiHeight = this.mc.getWindow().getGuiScaledHeight();
-        PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(this.mc.player);
         if (ClientConfig.renderHealthRpBar != ClientConfig.HealthRPRenderType.NONE) {
             int barWidth = 76;
             int yHeight = ClientConfig.renderHealthRpBar == ClientConfig.HealthRPRenderType.BOTH ? 2 * 9 + 12 : 9;

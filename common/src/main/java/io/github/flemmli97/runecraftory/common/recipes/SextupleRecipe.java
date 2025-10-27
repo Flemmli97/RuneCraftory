@@ -8,8 +8,9 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingContainer;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -74,7 +75,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerBoundCraftingContai
         SextupleRecipe recipe = holder.value();
         if (!recipe.matches(inv, inv.getPlayer().level()))
             return null;
-        boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).getRecipeKeeper().isUnlocked(holder);
+        boolean unlocked = RunecraftoryAttachments.PLAYER_DATA.get().get(inv.getPlayer()).getRecipeKeeper().isUnlocked(holder);
         if (!unlocked && !GeneralConfig.recipeSystem.allowLocked)
             return null;
         return recipe.createOutput(inv, unlocked);

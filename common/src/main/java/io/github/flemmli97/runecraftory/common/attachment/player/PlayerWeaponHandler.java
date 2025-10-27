@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.server.level.ServerPlayer;
@@ -144,7 +144,7 @@ public class PlayerWeaponHandler implements AttackActionHandler {
             } else {
                 ItemStack weapon = this.get(DataKey.USED_WEAPON);
                 if (this.entity instanceof ServerPlayer player) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                     boolean changedItem = this.entity.getMainHandItem() != weapon;
                     if (changedItem && weapon.getItem() instanceof ItemSpell) {
                         for (int i = 0; i < data.getInv().getContainerSize(); i++) {

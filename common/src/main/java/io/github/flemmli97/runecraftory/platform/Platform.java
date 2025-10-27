@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.platform;
 
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
 import io.github.flemmli97.tenshilib.loader.LoaderInitializer;
 import net.minecraft.core.BlockPos;
@@ -39,10 +37,6 @@ public interface Platform {
     Platform INSTANCE = LoaderInitializer.getImplInstance(Platform.class,
             "io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl",
             "io.github.flemmli97.runecraftory.neoforge.platform.PlatformImpl");
-
-    PlayerData getPlayerData(Player player);
-
-    EntityData getEntityData(LivingEntity living);
 
     void openGuiMenu(ServerPlayer player, MenuProvider provider);
 

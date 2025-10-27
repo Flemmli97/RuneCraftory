@@ -6,8 +6,8 @@ import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SShopButton;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.mixinhelper.GuiGraphicsExtension;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.client.gui.widget.TexturedButton;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -58,7 +58,7 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         GuiGraphicsExtension.drawRightAlignedString(graphics, this.font,
-                Component.literal("" + Platform.INSTANCE.getPlayerData(this.minecraft.player).getMoney()),
+                Component.literal("" + RunecraftoryAttachments.PLAYER_DATA.get().get(this.minecraft.player).getMoney()),
                 this.leftPos + 237, this.topPos + 197, 0, false);
         if (this.menu.getCurrentCost() > 0) {
             GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, Component.literal("" + this.menu.getCurrentCost()),

@@ -6,9 +6,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -83,7 +84,7 @@ public class WorldUtils {
                     } else if (reason == Entity.RemovalReason.DISCARDED || reason == Entity.RemovalReason.KILLED) {
                         Player owner = partyOwner.get();
                         if (owner instanceof ServerPlayer player) {
-                            Platform.INSTANCE.getPlayerData(player).party.removePartyMember(member);
+                            RunecraftoryAttachments.PLAYER_DATA.get().get(player).party.removePartyMember(member);
                         } else
                             RunecraftorySavedData.get(serverLevel.getServer()).toRemovePartyMember(member);
                     }

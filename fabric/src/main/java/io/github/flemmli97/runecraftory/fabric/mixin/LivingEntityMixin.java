@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.effects.UncurableEffect;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric;
@@ -30,8 +29,6 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
     private Map<Holder<MobEffect>, MobEffectInstance> activeEffects;
 
     @Unique
-    private final EntityData runecraftory$EntityData = new EntityData((LivingEntity) (Object) this);
-    @Unique
     private boolean runecraftory$EffectCuringProcess;
 
     @Shadow
@@ -54,11 +51,6 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
                     .iterator();
         }
         return value;
-    }
-
-    @Override
-    public EntityData runecraftory$getEntityData() {
-        return this.runecraftory$EntityData;
     }
 
     @Override

@@ -6,10 +6,11 @@ import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -43,7 +44,7 @@ public class ItemToolSickle extends DiggerItem {
     }
 
     public void postUse(ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         LevelCalc.useRP(data, 2, true, 0, true, Skills.FARMING, Skills.WIND);
         LevelCalc.levelSkill(data, Skills.FARMING, 3);
         LevelCalc.levelSkill(data, Skills.WIND, 2);
@@ -53,7 +54,7 @@ public class ItemToolSickle extends DiggerItem {
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         Tool tool = stack.get(DataComponents.TOOL);
         if (tool != null && entityLiving instanceof ServerPlayer serverPlayer && tool.rules().stream().anyMatch(p -> state.is(p.blocks()))) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(serverPlayer);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer);
             LevelCalc.levelSkill(data, Skills.FARMING, 3);
             LevelCalc.levelSkill(data, Skills.WIND, 2);
         }
@@ -109,7 +110,7 @@ public class ItemToolSickle extends DiggerItem {
                         .filter(p -> this.sickleUse(player.serverLevel(), p.immutable(), stack, entity))
                         .count();
                 if (amount > 0) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                     LevelCalc.useRP(data, range * 10, true, 0, true, Skills.FARMING);
                     LevelCalc.levelSkill(data, Skills.FARMING, 3.5f);
                     LevelCalc.levelSkill(data, Skills.WIND, 2.5f);

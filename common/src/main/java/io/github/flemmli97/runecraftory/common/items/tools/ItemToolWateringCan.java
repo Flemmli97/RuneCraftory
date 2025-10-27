@@ -5,11 +5,12 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -40,7 +41,7 @@ public class ItemToolWateringCan extends Item {
     }
 
     public void postUse(ServerPlayer player) {
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         LevelCalc.useRP(data, 2, true, 0, true, Skills.FARMING, Skills.WATER);
         LevelCalc.levelSkill(data, Skills.FARMING, 4);
         LevelCalc.levelSkill(data, Skills.WATER, 1);
@@ -103,7 +104,7 @@ public class ItemToolWateringCan extends Item {
                         .filter(p -> this.moisten((ServerLevel) level, p.immutable(), stack, entity))
                         .count();
                 if (amount > 0) {
-                    PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                    PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                     LevelCalc.useRP(data, 0, true, range * 17.5f, true, Skills.FARMING);
                     LevelCalc.levelSkill(data, Skills.FARMING, range * 10);
                     LevelCalc.levelSkill(data, Skills.WATER, range * 3);

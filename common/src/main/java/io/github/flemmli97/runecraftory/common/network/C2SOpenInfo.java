@@ -2,8 +2,10 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -31,14 +33,14 @@ public record C2SOpenInfo(C2SOpenInfo.Action action) implements CustomPacketPayl
             case MAIN -> {
                 ItemStack stack = sender.containerMenu.getCarried();
                 sender.containerMenu.setCarried(ItemStack.EMPTY);
-                LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(Platform.INSTANCE.getPlayerData(sender)), sender);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(RunecraftoryAttachments.PLAYER_DATA.get().get(sender)), sender);
                 Platform.INSTANCE.openGuiMenu(sender, ContainerInfoScreen.create());
                 if (!stack.isEmpty()) {
                     sender.containerMenu.setCarried(stack);
                 }
             }
             case SUB -> {
-                LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(Platform.INSTANCE.getPlayerData(sender)), sender);
+                LoaderNetwork.INSTANCE.sendToPlayer(new S2CCapSync(RunecraftoryAttachments.PLAYER_DATA.get().get(sender)), sender);
                 Platform.INSTANCE.openGuiMenu(sender, ContainerInfoScreen.createSub());
             }
             case INV -> {

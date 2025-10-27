@@ -7,8 +7,8 @@ import io.github.flemmli97.runecraftory.common.entities.misc.CustomFishingHookEn
 import io.github.flemmli97.runecraftory.common.entities.utils.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.mixinhelper.MobToggleHandler;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public class EntityData {
     }
 
     public static SleepState getSleepStateFrom(LivingEntity entity) {
-        return Platform.INSTANCE.getEntityData(entity).getSleepState();
+        return RunecraftoryAttachments.ENTITY_DATA.get().get(entity).getSleepState();
     }
 
     public SleepState getSleepState() {

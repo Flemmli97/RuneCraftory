@@ -4,9 +4,10 @@ import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.effect.ExtendedMobEffect;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,12 +34,12 @@ public class BathEffect extends MobEffect implements ExtendedMobEffect {
     public boolean applyEffectTick(LivingEntity living, int amplifier) {
         if (living.level().isClientSide())
             return true;
-        EntityData entityData = Platform.INSTANCE.getEntityData(living);
+        EntityData entityData = RunecraftoryAttachments.ENTITY_DATA.get().get(living);
         if (this.isInWater(living)) {
             entityData.setEnteredBath(true);
             living.heal(living.getMaxHealth() * 0.04f);
             if (living instanceof ServerPlayer player) {
-                PlayerData data = Platform.INSTANCE.getPlayerData(player);
+                PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 data.regenRunePoints(Math.max(1, (int) (data.getMaxRunePoints() * 0.03f)));
                 LevelCalc.levelSkill(data, Skills.BATH, 2f);
             }
@@ -79,6 +80,6 @@ public class BathEffect extends MobEffect implements ExtendedMobEffect {
 
     @Override
     public void onEffectRemoved(LivingEntity entity, MobEffectInstance instance) {
-        Platform.INSTANCE.getEntityData(entity).setEnteredBath(false);
+        RunecraftoryAttachments.ENTITY_DATA.get().get(entity).setEnteredBath(false);
     }
 }

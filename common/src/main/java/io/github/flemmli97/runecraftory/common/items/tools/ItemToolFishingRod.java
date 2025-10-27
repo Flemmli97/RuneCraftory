@@ -3,9 +3,10 @@ package io.github.flemmli97.runecraftory.common.items.tools;
 import io.github.flemmli97.runecraftory.common.entities.misc.CustomFishingHookEntity;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -44,7 +45,7 @@ public class ItemToolFishingRod extends FishingRodItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
-        if (tier.getTierLevel() != 0 && Platform.INSTANCE.getEntityData(player).fishingHook == null) {
+        if (tier.getTierLevel() != 0 && RunecraftoryAttachments.ENTITY_DATA.get().get(player).fishingHook == null) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(stack);
         }
@@ -80,7 +81,7 @@ public class ItemToolFishingRod extends FishingRodItem {
     }
 
     protected void throwRod(Level level, LivingEntity entity, ItemStack stack, int charge) {
-        CustomFishingHookEntity hook = Platform.INSTANCE.getEntityData(entity).fishingHook;
+        CustomFishingHookEntity hook = RunecraftoryAttachments.ENTITY_DATA.get().get(entity).fishingHook;
         if (hook != null) {
             if (!level.isClientSide) {
                 hook.retract(stack);

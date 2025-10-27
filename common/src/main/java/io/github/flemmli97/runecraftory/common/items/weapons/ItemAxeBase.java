@@ -6,15 +6,16 @@ import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -70,7 +71,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
         double reach = CombatUtils.getRange(entity, 0);
         S2CScreenShake.sendAround(entity, 16, 4, 3);
         if (performRightClickAction(stack, entity, reach, 0.7f) && entity instanceof ServerPlayer player) {
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.HAMMERAXE, 5);
+            LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.HAMMERAXE, 5);
         }
     }
 
@@ -120,7 +121,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE.get(), stack);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE.get(), stack);
     }
 
     @Override
@@ -142,7 +143,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
-        PlayerData data = Platform.INSTANCE.getPlayerData(player);
+        PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         boolean canCharge = (data.getSkillLevel(Skills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.HAMMER_AXE_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
@@ -155,7 +156,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!level.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                Platform.INSTANCE.getPlayerData(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {

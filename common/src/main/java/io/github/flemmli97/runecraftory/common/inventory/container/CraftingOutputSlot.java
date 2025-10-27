@@ -7,9 +7,11 @@ import io.github.flemmli97.runecraftory.common.inventory.PlayerBoundCraftingCont
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.recipes.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -60,7 +62,7 @@ public class CraftingOutputSlot extends Slot {
         if (this.amountCrafted > 0) {
             stack.onCraftedBy(player.level(), player, this.amountCrafted);
             Platform.INSTANCE.craftingEvent(player, stack, this.ingredientInv);
-            Platform.INSTANCE.getPlayerData(player).onCrafted(player);
+            RunecraftoryAttachments.PLAYER_DATA.get().get(player).onCrafted(player);
         }
         this.amountCrafted = 0;
     }
@@ -72,7 +74,7 @@ public class CraftingOutputSlot extends Slot {
             return;
         NonNullList<ItemStack> remaining = this.craftingContainer.getSelected() != null ? this.craftingContainer.getSelected().value().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
         if (this.craftingContainer.runepointCost() >= 0) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player);
+            PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             data.useRunePoints(this.craftingContainer.runepointCost(), true);
             RecipeHolder<? extends SextupleRecipe> recipe = this.craftingContainer.getSelected();
             if (recipe != null && !(recipe.value() instanceof SpecialSextupleRecipe) && !data.getRecipeKeeper().isUnlocked(recipe)) {
@@ -142,6 +144,6 @@ public class CraftingOutputSlot extends Slot {
     public boolean mayPickup(Player player) {
         if (!GeneralConfig.useRp)
             return true;
-        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).getMaxRunePoints() >= this.craftingContainer.runepointCost());
+        return (player.isCreative() || RunecraftoryAttachments.PLAYER_DATA.get().get(player).getMaxRunePoints() >= this.craftingContainer.runepointCost());
     }
 }

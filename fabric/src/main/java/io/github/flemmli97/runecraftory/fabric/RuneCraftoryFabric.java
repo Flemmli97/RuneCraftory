@@ -114,7 +114,6 @@ public class RuneCraftoryFabric implements ModInitializer {
         }));
 
         EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
-        ServerPlayerEvents.COPY_FROM.register((old, newPlayer, keepEverything) -> EntityCalls.clone(old, newPlayer, !keepEverything));
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (EntityCalls.playerAttack(player, entity))

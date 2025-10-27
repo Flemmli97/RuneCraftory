@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.blocks;
 import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -55,7 +56,7 @@ public class ShippingBinBlock extends Block {
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (level.isClientSide)
             return ItemInteractionResult.SUCCESS;
-        InventoryShippingBin shippingInv = Platform.INSTANCE.getPlayerData(player).getShippingInv();
+        InventoryShippingBin shippingInv = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getShippingInv();
         player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> new ShippingContainer(id, inventory, shippingInv), Component.translatable(NAME)));
         return ItemInteractionResult.SUCCESS;
     }

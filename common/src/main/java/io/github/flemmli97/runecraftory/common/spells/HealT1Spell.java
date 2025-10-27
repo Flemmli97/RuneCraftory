@@ -4,8 +4,9 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +39,7 @@ public class HealT1Spell extends Spell {
                 return true;
             if (entity instanceof Player player) {
                 return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).party.isPartyMember(e);
+                        || e instanceof AbstractVillager || e instanceof Animal || RunecraftoryAttachments.PLAYER_DATA.get().get(player).party.isPartyMember(e);
             } else {
                 if (entity instanceof HealingPredicateEntity healer)
                     return healer.healeableEntities().test(e);

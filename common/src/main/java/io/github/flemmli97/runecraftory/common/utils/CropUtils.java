@@ -8,10 +8,11 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -105,7 +106,7 @@ public class CropUtils {
         if (entity instanceof ServerPlayer player) {
             RuneCraftoryCriteria.HARVEST_CROP.get().trigger(player, state);
             spawnRuney(player, cropPos);
-            LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(player), Skills.FARMING, 2f);
+            LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(player), Skills.FARMING, 2f);
         }
         if (entity instanceof LivingEntity living)
             living.swing(hand, true);

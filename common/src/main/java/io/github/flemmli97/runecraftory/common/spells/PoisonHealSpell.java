@@ -5,11 +5,12 @@ import io.github.flemmli97.runecraftory.common.entities.utils.HealingPredicateEn
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryParticles;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
-import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
 import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
 import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
+import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
@@ -62,7 +63,7 @@ public class PoisonHealSpell extends Spell {
                 return true;
             if (entity instanceof Player player) {
                 return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).party.isPartyMember(e);
+                        || e instanceof AbstractVillager || e instanceof Animal || RunecraftoryAttachments.PLAYER_DATA.get().get(player).party.isPartyMember(e);
             } else {
                 if (entity instanceof HealingPredicateEntity healer)
                     return healer.healeableEntities().test(e);

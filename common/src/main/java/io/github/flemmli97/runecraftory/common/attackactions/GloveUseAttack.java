@@ -5,10 +5,10 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,7 +43,7 @@ public class GloveUseAttack extends AttackAction {
                         .doOnSuccess(hit::add)
                         .executeAttack());
                 if (!hit.isEmpty() && entity instanceof ServerPlayer serverPlayer) {
-                    LevelCalc.levelSkill(Platform.INSTANCE.getPlayerData(serverPlayer), Skills.DUAL, 2);
+                    LevelCalc.levelSkill(RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer), Skills.DUAL, 2);
                 }
             }
         }
