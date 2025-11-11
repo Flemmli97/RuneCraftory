@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;

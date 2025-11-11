@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixinhelper.ExtendedFishingRodHookTrigger;
 import io.github.flemmli97.tenshilib.common.entity.AdvancedProjectile;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;

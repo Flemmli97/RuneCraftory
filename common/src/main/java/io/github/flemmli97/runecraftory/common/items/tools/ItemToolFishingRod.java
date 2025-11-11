@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponen
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;

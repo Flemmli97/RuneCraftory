@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.tenshilib.common.effect.ExtendedMobEffect;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;

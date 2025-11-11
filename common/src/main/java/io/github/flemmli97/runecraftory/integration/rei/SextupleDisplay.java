@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.integration.rei;
 import io.github.flemmli97.runecraftory.common.recipes.CraftingType;
 import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;

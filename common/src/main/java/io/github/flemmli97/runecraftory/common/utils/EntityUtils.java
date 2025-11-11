@@ -16,7 +16,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEffects;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;

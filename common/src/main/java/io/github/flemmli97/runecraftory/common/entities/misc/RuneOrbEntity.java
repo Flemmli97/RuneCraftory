@@ -10,7 +10,6 @@ import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
 import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
 import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

@@ -14,7 +14,6 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.ExtendedBlock;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import io.github.flemmli97.tenshilib.common.utils.VoxelUtils;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;

@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.recipes.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;

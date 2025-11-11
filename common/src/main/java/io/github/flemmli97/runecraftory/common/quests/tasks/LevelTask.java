@@ -12,7 +12,6 @@ import io.github.flemmli97.simplequests_api.quest.QuestBase;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;

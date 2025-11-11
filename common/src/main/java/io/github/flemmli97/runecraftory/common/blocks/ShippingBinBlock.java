@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

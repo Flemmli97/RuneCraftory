@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.items.ItemElement;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

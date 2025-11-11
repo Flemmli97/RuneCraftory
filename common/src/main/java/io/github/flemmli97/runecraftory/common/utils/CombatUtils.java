@@ -24,7 +24,6 @@ import io.github.flemmli97.runecraftory.mixin.MobEffectInstanceAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -692,7 +691,7 @@ public class CombatUtils {
     }
 
     public static Vec3 fromRelativeVector(Entity entity, Vec3 relative) {
-        return fromRelativeVector(entity.getYRot(), relative);
+        return fromRelativeVector(entity.getYHeadRot(), relative);
     }
 
     public static Vec3 fromRelativeVector(float yRot, Vec3 relative) {

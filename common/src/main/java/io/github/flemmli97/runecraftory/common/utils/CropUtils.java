@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandData;
 import io.github.flemmli97.runecraftory.common.world.data.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

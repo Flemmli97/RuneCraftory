@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;

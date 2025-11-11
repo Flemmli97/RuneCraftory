@@ -10,7 +10,6 @@ import io.github.flemmli97.tenshilib.common.particle.AdvancedParticleContainer;
 import io.github.flemmli97.tenshilib.common.particle.data.ColorData;
 import io.github.flemmli97.tenshilib.common.particle.data.MotionData;
 import io.github.flemmli97.tenshilib.common.particle.data.ParticleMetaData;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;

@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCrafting;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;

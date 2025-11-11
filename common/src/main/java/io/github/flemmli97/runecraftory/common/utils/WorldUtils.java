@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;

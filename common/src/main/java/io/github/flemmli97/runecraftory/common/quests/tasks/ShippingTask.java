@@ -13,7 +13,6 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

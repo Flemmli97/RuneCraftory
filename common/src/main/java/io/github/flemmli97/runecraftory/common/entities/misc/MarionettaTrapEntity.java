@@ -9,7 +9,6 @@ import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;

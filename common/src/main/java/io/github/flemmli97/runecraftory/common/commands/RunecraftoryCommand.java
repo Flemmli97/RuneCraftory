@@ -26,7 +26,6 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.MonsterBarnBlockEnt
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;

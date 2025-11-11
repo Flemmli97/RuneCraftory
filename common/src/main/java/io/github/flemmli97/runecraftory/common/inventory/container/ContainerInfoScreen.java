@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.inventory.WrappedContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMenuTypes;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;

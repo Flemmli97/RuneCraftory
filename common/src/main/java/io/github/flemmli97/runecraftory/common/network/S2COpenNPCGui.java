@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.family.SyncedFamilyData;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
