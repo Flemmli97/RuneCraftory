@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -34,8 +34,8 @@ public class HammerAxeAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("attack") && handler.getComboCount() != 3) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("attack") && handler.getComboCount() != 3) {
             CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                             CombatUtils.getRange(entity, 0),
                             CombatUtils.getWidth(entity, 0), 0.5)))
@@ -43,22 +43,22 @@ public class HammerAxeAttack extends AttackAction {
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
         if (handler.getComboCount() == 3) {
-            if (anim.isAt("spin_start")) {
+            if (state.isAt("spin_start")) {
                 handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                 handler.resetHitEntityTracker();
                 entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
             }
-            if (anim.isAt("reset")) {
+            if (state.isAt("reset")) {
                 handler.resetHitEntityTracker();
                 entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                         SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
             }
-            if (anim.isPast("spin_start") && !anim.isPast("spin_end")) {
+            if (state.isPast("spin_start") && !state.isPast("spin_end")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                if (anim.isAt("spin_start"))
+                if (state.isAt("spin_start"))
                     handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, 0.15, 0));
-                if (anim.isAt("spin_middle"))
+                if (state.isAt("spin_middle"))
                     handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, -0.15, 0));
                 entity.resetFallDistance();
                 if (!entity.level().isClientSide) {
@@ -71,23 +71,23 @@ public class HammerAxeAttack extends AttackAction {
             } else
                 handler.store(DataKey.MOVE_DIRECTION, null);
             handler.applyMoveDirection();
-            handler.store(DataKey.FIXED_LOOK, anim.isPast("spin_start") && !anim.isPast("spin_end"));
+            handler.store(DataKey.FIXED_LOOK, state.isPast("spin_start") && !state.isPast("spin_end"));
         }
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         if (handler.getComboCount() == 3 && entity instanceof ServerPlayer player)
             LevelCalc.useRP(RunecraftoryAttachments.PLAYER_DATA.get().get(player), GeneralConfig.hammerAxeUltimate, true, 0, false);
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return handler.getComboCount() == 3;
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

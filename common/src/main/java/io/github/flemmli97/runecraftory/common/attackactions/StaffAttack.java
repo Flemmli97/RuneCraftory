@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -28,8 +28,8 @@ public class StaffAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("attack")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("attack")) {
             if (entity.level() instanceof ServerLevel serverLevel) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                 CombatUtils.getRange(entity, 0),
@@ -42,7 +42,7 @@ public class StaffAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

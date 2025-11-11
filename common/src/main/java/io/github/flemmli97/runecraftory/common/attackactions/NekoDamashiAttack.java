@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
@@ -22,8 +22,8 @@ public class NekoDamashiAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("attack")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("attack")) {
             entity.playSound(RuneCraftorySounds.SPELL_GENERIC_POP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level().isClientSide) {
                 double range = Math.min(2.5, CombatUtils.getRange(entity, 0));

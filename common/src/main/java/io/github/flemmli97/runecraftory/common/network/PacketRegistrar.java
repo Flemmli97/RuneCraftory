@@ -60,6 +60,7 @@ public class PacketRegistrar {
         register.register(S2CBossbarMusicUpdate.TYPE, S2CBossbarMusicUpdate.STREAM_CODEC, S2CBossbarMusicUpdate::handle);
         register.register(S2CSimpleToast.TYPE, S2CSimpleToast.STREAM_CODEC, S2CSimpleToast::handle);
         register.register(S2CBoundEntityPacket.TYPE, S2CBoundEntityPacket.STREAM_CODEC, S2CBoundEntityPacket::handle);
+        register.register(S2CPlayerAnimation.TYPE, S2CPlayerAnimation.STREAM_CODEC, S2CPlayerAnimation::handle);
     }
 
     public interface ServerPacketRegister {

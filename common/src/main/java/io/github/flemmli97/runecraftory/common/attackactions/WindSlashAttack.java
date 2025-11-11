@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 public class WindSlashAttack extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getAnimation().isPast("chain_start") && !handler.getAnimation().isPast("spin_end"))
+            .addCombo(handler -> handler.matches(state -> state.isPast("chain_start") && !state.isPast("spin_end")))
             .build();
 
     @Override
@@ -28,9 +28,9 @@ public class WindSlashAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         handler.store(DataKey.FIXED_LOOK, true);
-        if (anim.isAt("spin_start")) {
+        if (state.isAt("spin_start")) {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
             handler.resetHitEntityTracker();
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
@@ -38,19 +38,19 @@ public class WindSlashAttack extends AttackAction {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35));
         }
-        if (anim.isAt("reset")) {
+        if (state.isAt("reset")) {
             handler.resetHitEntityTracker();
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                     SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
         }
-        if (anim.isAt("leap")) {
+        if (state.isAt("leap")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, 0.3, 0));
         }
-        if (anim.isAt("spin_end")) {
+        if (state.isAt("spin_end")) {
             handler.store(DataKey.MOVE_DIRECTION, null);
         }
-        if (anim.isPast("spin_start") && !anim.isPast("spin_end")) {
+        if (state.isPast("spin_start") && !state.isPast("spin_end")) {
             entity.resetFallDistance();
             if (!entity.level().isClientSide) {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.75)))
@@ -63,7 +63,7 @@ public class WindSlashAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         super.onStart(entity, handler);
         if (handler.getComboCount() == 2) {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot());

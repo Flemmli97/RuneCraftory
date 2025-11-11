@@ -44,7 +44,6 @@ import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.mixin.LivingEntityAccessor;
 import io.github.flemmli97.runecraftory.mixinhelper.AttributeInstanceExtension;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -215,7 +214,7 @@ public class EntityCalls {
             // Only trigger if caused by any entity
             if (source.getDirectEntity() != null && amount > 0) {
                 if (NaiveBladeAttack.canCounter(data.getWeaponHandler())) {
-                    data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null);
+                    data.getWeaponHandler().executeAttack(RuneCraftoryAttackActions.NAIVE_BLADE.get(), player.getMainHandItem(), null);
                     return true;
                 }
             }

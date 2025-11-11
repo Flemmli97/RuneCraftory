@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -29,11 +29,11 @@ public class GloveUseAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isPast("attack_start") && !handler.getAnimation().isPast("attack_end")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isPast("attack_start") && !state.isPast("attack_end")) {
             Vec3 move = EntityUtils.horizontalLookAngle(entity).scale(entity.onGround() ? 0.5 : 0.3).add(0, entity.getDeltaMovement().y, 0);
             entity.setDeltaMovement(move);
-            if (anim.isAt("reset"))
+            if (state.isAt("reset"))
                 handler.resetHitEntityTracker();
             if (!entity.level().isClientSide) {
                 List<LivingEntity> hit = new ArrayList<>();
@@ -50,21 +50,19 @@ public class GloveUseAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         entity.getAttribute(Attributes.STEP_HEIGHT)
                 .addTransientModifier(new AttributeModifier(LibConstants.STEP_UP_TEMP, 0.5, AttributeModifier.Operation.ADD_VALUE));
     }
 
     @Override
-    public void onEnd(LivingEntity entity, AttackActionHandler handler) {
+    public void onEnd(LivingEntity entity, WeaponHandler<?> handler) {
         entity.getAttribute(Attributes.STEP_HEIGHT).removeModifier(LibConstants.STEP_UP_TEMP);
     }
 
     @Override
-    public Pose getPose(LivingEntity entity, AttackActionHandler handler) {
-        if (handler.getAnimation() == null)
-            return null;
-        if (handler.getAnimation().isPast("attack_start") && !handler.getAnimation().isPast("attack_end"))
+    public Pose getPose(LivingEntity entity, WeaponHandler<?> handler) {
+        if (handler.matches(state -> state.isPast("attack_start") && !state.isPast("attack_end")))
             return Pose.SPIN_ATTACK;
         return null;
     }

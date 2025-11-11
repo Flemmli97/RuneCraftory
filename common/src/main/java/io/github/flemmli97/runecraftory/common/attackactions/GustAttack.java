@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -23,14 +23,14 @@ public class GustAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         handler.store(DataKey.FIXED_LOOK, true);
-        if (anim.isAt("jump")) {
+        if (state.isAt("jump")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             entity.setDeltaMovement(dir.scale(1.6).add(0, 0.4, 0));
             entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
-        if (anim.isAt("attack")) {
+        if (state.isAt("attack")) {
             if (!entity.level().isClientSide) {
                 double range = CombatUtils.getRange(entity, 0);
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(2, 0, 0)
@@ -46,7 +46,7 @@ public class GustAttack extends AttackAction {
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return true;
     }
 

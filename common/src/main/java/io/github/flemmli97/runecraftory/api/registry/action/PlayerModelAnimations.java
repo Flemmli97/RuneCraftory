@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.api.registry.action;
 
 import com.google.common.collect.ImmutableList;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationDefinitionContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationsBuilder;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
  * All relevant player model animations. NPCs also use them
  */
 public class PlayerModelAnimations {
+
+    public static final ResourceLocation ID = RuneCraftory.modRes("player_animation_definitions");
 
     public static final AnimationsBuilder BUILDER = new AnimationsBuilder();
 

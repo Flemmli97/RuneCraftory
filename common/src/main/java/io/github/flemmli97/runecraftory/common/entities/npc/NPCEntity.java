@@ -14,7 +14,7 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -94,7 +94,6 @@ import io.github.flemmli97.tenshilib.common.particle.data.ScaleData;
 import io.github.flemmli97.tenshilib.common.registry.TenshilibSyncableEntityDatas;
 import io.github.flemmli97.tenshilib.common.utils.TypedResource;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
@@ -299,7 +298,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
-    public final AttackActionHandler weaponHandler = new EntityWeaponHandler<>(this);
+    public final WeaponHandler<NPCEntity> weaponHandler = new WeaponHandler<>(this, this::getAnimationHandler);
 
     private final MoveStateTracker moveStateTracker = new MoveStateTracker(this, 5, MOVE_FLAGS, this::calculateMoveType);
 
@@ -1186,7 +1185,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     @Override
-    public AnimationHandler<?> getAnimationHandler() {
+    public AnimationHandler<NPCEntity> getAnimationHandler() {
         return this.animationHandler;
     }
 

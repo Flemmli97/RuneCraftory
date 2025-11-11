@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -23,7 +23,7 @@ public class TornadoSwingAttack extends AttackAction {
     private final ComboContainer combo;
 
     public TornadoSwingAttack() {
-        Predicate<AttackActionHandler> MAIN = handler -> handler.getAnimation().isAt("attack_end_1");
+        Predicate<WeaponHandler<?>> MAIN = handler -> handler.matches(state -> state.isAt("attack_end_1"));
         this.combo = ComboContainer.Builder.builder()
                 .addCombo(MAIN)
                 .addCombo(MAIN)
@@ -43,15 +43,15 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("attack_start_1")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("attack_start_1")) {
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
-        if (anim.isAt("attack_start_2")) {
+        if (state.isAt("attack_start_2")) {
             handler.resetHitEntityTracker();
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
-        CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start_1", 0), anim.getMarker("attack_end_1", 0),
+        CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("attack_start_1", 0), state.getMarker("attack_end_1", 0),
                 handler.get(DataKey.SPIN_ROTATION) + 110, handler.get(DataKey.SPIN_ROTATION) - 285, 0.5f);
         if (attack != null) {
             handler.addHitEntityTracker(attack
@@ -59,7 +59,7 @@ public class TornadoSwingAttack extends AttackAction {
                     .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.TORNADO_SWING))
                     .executeAttack());
         }
-        attack = spinAttack(entity, anim, anim.getMarker("attack_start_2", 0), anim.getMarker("attack_end_2", 0),
+        attack = spinAttack(entity, state, state.getMarker("attack_start_2", 0), state.getMarker("attack_end_2", 0),
                 handler.get(DataKey.SPIN_ROTATION) + 75, handler.get(DataKey.SPIN_ROTATION) - 35, 0.5f);
         if (attack != null) {
             handler.addHitEntityTracker(attack
@@ -70,7 +70,7 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         super.onStart(entity, handler);
         handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
         if (handler.getComboCount() != 1) {
@@ -79,7 +79,7 @@ public class TornadoSwingAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return 0.6f;
     }
 

@@ -15,7 +15,6 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
 import io.github.flemmli97.tenshilib.common.utils.HitResultUtils;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -121,7 +120,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE.get(), stack);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().executeAttack(RuneCraftoryAttackActions.HAMMER_AXE.get(), stack);
     }
 
     @Override
@@ -144,7 +143,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-        boolean canCharge = (data.getSkillLevel(Skills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.HAMMER_AXE_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -156,7 +155,7 @@ public class ItemAxeBase extends AxeItem implements ExtendedWeapon {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!level.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().executeAttack(RuneCraftoryAttackActions.HAMMER_AXE_USE.get(), stack);
                 return;
             }
             if (performRightClickAction(stack, entity, this.getRange(entity, stack), 0.7f)) {

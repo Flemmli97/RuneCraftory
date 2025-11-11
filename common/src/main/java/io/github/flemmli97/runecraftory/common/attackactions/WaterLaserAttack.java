@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -41,9 +41,9 @@ public class WaterLaserAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (handler.getComboCount() == 1) {
-            if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
+            if (entity.level() instanceof ServerLevel serverLevel && state.isAt("attack")) {
                 entity.swing(InteractionHand.MAIN_HAND);
                 if (handler.get(DataKey.USED_SPELL) != null) {
                     Spell spell = handler.get(DataKey.USED_SPELL);
@@ -53,9 +53,9 @@ public class WaterLaserAttack extends AttackAction {
                 }
             }
             if (!entity.level().isClientSide) {
-                if (anim.isPast("continue")) {
+                if (state.isPast("continue")) {
                     if (!(entity instanceof ServerPlayer player) || entity.getUseItem().isEmpty() && RunecraftoryAttachments.PLAYER_DATA.get().get(player).getInv().getInUseStack() != handler.get(DataKey.USED_WEAPON)) {
-                        handler.doWeaponAttack(this, handler.get(DataKey.USED_WEAPON), handler.get(DataKey.USED_SPELL));
+                        handler.executeAttack(this, handler.get(DataKey.USED_WEAPON), handler.get(DataKey.USED_SPELL));
                     }
                 }
             }
@@ -63,7 +63,7 @@ public class WaterLaserAttack extends AttackAction {
     }
 
     @Override
-    public AttackAction onChange(LivingEntity entity, AttackActionHandler handler) {
+    public AttackAction onChange(LivingEntity entity, WeaponHandler<?> handler) {
         if (handler.getComboCount() == 1) {
             if (entity instanceof ServerPlayer player) {
                 Spell spell = handler.get(DataKey.USED_SPELL);

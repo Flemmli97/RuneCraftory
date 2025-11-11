@@ -9,8 +9,8 @@ import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
@@ -19,7 +19,6 @@ import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -138,9 +137,9 @@ public class ClientMixinUtils {
         float partialTicks = ClientHandlers.getPartialTicks();
         if (!(entity instanceof Player player))
             return;
-        PlayerWeaponHandler weaponHandler = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler();
+        WeaponHandler<Player> weaponHandler = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler();
         boolean ignoreRiding = weaponHandler.getCurrentAction() == RuneCraftoryAttackActions.DUAL_USE.get();
-        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, model, weaponHandler, partialTicks);
+        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, model, weaponHandler.getAnimationHandler(), partialTicks);
         if (result) {
             ClientHandlers.getAnimatedPlayerModel().copyTo(model);
         }
@@ -167,7 +166,7 @@ public class ClientMixinUtils {
             if (data != null) {
                 PlayerRenderer renderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
                 float partialTicks = ClientHandlers.getPartialTicks();
-                AnimatedItemHandRendering = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, null, data.getWeaponHandler(), partialTicks);
+                AnimatedItemHandRendering = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, null, data.getWeaponHandler().getAnimationHandler(), partialTicks);
                 if (!AnimatedItemHandRendering) {
                     return false;
                 }

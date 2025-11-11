@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -34,32 +34,32 @@ public class LongSwordAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (handler.getComboCount() != 4) {
-            if (!entity.level().isClientSide && anim.isAt("attack")) {
+            if (!entity.level().isClientSide && state.isAt("attack")) {
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                 CombatUtils.getRange(entity, 0),
                                 CombatUtils.getWidth(entity, 0), 0.5)))
                         .executeAttack();
             }
-            if (anim.isAt("attack")) {
+            if (state.isAt("attack")) {
                 entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
-            if (anim.isAt("step")) {
+            if (state.isAt("step")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 entity.setDeltaMovement(dir.scale(0.5));
             }
         } else {
-            if (anim.isAt("spin_start")) {
+            if (state.isAt("spin_start")) {
                 handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                 handler.resetHitEntityTracker();
                 entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
-            if (anim.isAt("reset")) {
+            if (state.isAt("reset")) {
                 handler.resetHitEntityTracker();
                 entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
-            CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
+            CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                     handler.get(DataKey.SPIN_ROTATION) + 150, handler.get(DataKey.SPIN_ROTATION) - 500, 0);
             if (attack != null) {
                 handler.addHitEntityTracker(attack
@@ -70,18 +70,18 @@ public class LongSwordAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         if (handler.getComboCount() == 4 && entity instanceof ServerPlayer player)
             LevelCalc.useRP(RunecraftoryAttachments.PLAYER_DATA.get().get(player), GeneralConfig.longSwordUltimate, true, 0, false);
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return handler.getComboCount() == 4;
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -22,8 +22,8 @@ import net.minecraft.world.phys.HitResult;
 public class ToolHammerUse extends AttackAction {
 
     private final ComboContainer combo = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getAnimation().isPast("attack"), 4)
-            .addCombo(handler -> handler.getAnimation().isPast("attack"), 4)
+            .addCombo(handler -> handler.matches(state -> state.isPast("attack")), 4)
+            .addCombo(handler -> handler.matches(state -> state.isPast("attack")), 4)
             .build();
 
     @Override
@@ -32,8 +32,8 @@ public class ToolHammerUse extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack") && stack.getItem() instanceof ItemToolHammer hammer) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (entity.level() instanceof ServerLevel serverLevel && state.isAt("attack") && stack.getItem() instanceof ItemToolHammer hammer) {
             int range = handler.get(DataKey.TOOL_DATA).charge();
             BlockPos pos = entity.blockPosition();
             if (handler.get(DataKey.TOOL_DATA).result() instanceof BlockHitResult hitResult && hitResult.getType() != HitResult.Type.MISS) {

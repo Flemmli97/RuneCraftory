@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.DynamicDamage;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import io.github.flemmli97.tenshilib.common.utils.math.OrientedBoundingBox;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
@@ -106,8 +105,8 @@ public class SwipingWaterLaserEntity extends BaseBeam {
         }
         if (this.getOwner() instanceof ServerPlayer player) {
             PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-            AnimationState action = data.getWeaponHandler().getAnimation();
-            boolean keep = action != null && action.is(PlayerModelAnimations.WATER_LASER_ONE, PlayerModelAnimations.WATER_LASER_TWO, PlayerModelAnimations.WATER_LASER_THREE);
+            AnimationState state = data.getWeaponHandler().getAnimationHandler().getAnimation();
+            boolean keep = state != null && state.is(PlayerModelAnimations.WATER_LASER_ONE, PlayerModelAnimations.WATER_LASER_TWO, PlayerModelAnimations.WATER_LASER_THREE);
             if (!keep && this.tickCount < this.livingTickMax() - 5) {
                 this.entityData.set(MAX_LIVING_TICK, this.tickCount + 5);
             }

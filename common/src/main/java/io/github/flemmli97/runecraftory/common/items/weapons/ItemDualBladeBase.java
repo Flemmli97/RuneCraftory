@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.tenshilib.common.item.DualWeapon;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -66,7 +65,7 @@ public class ItemDualBladeBase extends SwordItem implements DualWeapon, Extended
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.DUAL_BLADES.get(), stack);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().executeAttack(RuneCraftoryAttackActions.DUAL_BLADES.get(), stack);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class ItemDualBladeBase extends SwordItem implements DualWeapon, Extended
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-        boolean canCharge = (data.getSkillLevel(Skills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.DUAL_USE.get());
+        boolean canCharge = (data.getSkillLevel(Skills.DUAL).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAttack(RuneCraftoryAttackActions.DUAL_USE.get());
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -101,7 +100,7 @@ public class ItemDualBladeBase extends SwordItem implements DualWeapon, Extended
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!level.isClientSide && stack.getUseDuration(entity) - timeLeft - 1 >= ItemComponentUtils.getChargeTime(entity)) {
             if (entity instanceof ServerPlayer player) {
-                RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.DUAL_USE.get(), stack);
+                RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().executeAttack(RuneCraftoryAttackActions.DUAL_USE.get(), stack);
                 return;
             }
             if (performRightClickAction(stack, entity, CombatUtils.getRange(entity, 0), CombatUtils.getWidth(entity, 0))) {

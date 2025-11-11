@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -24,27 +24,27 @@ public class AxelDisasterAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("move_1")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("move_1")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5).add(0, 0.5, 0));
             entity.playSound(RuneCraftorySounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
-        if (anim.isAt("move_2")) {
+        if (state.isAt("move_2")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5));
         }
-        if (anim.isAt("move_3")) {
+        if (state.isAt("move_3")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5).add(0, -0.5, 0));
         }
-        if (anim.isAt("move_done")) {
+        if (state.isAt("move_done")) {
             handler.store(DataKey.MOVE_DIRECTION, null);
         }
         handler.applyMoveDirection();
-        if (anim.isPast("attack_start") && !anim.isPast("attack_end")) {
+        if (state.isPast("attack_start") && !state.isPast("attack_end")) {
             if (!entity.level().isClientSide) {
-                if (anim.isAt("reset"))
+                if (state.isAt("reset"))
                     handler.resetHitEntityTracker();
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox()
                                 .inflate(0.75).expandTowards(0, 0, 0.5)))
@@ -56,13 +56,13 @@ public class AxelDisasterAttack extends AttackAction {
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return true;
     }
 
     @Override
-    public Pose getPose(LivingEntity entity, AttackActionHandler handler) {
-        if (handler.getAnimation().isPast("move_1") && !handler.getAnimation().isPast("move_done"))
+    public Pose getPose(LivingEntity entity, WeaponHandler<?> handler) {
+        if (handler.matches(state -> state.isPast("move_1") && !state.isPast("move_done")))
             return Pose.SPIN_ATTACK;
         return null;
     }

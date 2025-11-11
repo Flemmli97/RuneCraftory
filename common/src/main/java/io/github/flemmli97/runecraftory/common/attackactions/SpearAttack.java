@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -44,7 +44,7 @@ public class SpearAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState anim) {
         if (handler.getComboCount() != 5) {
             if (anim.isAt("attack")) {
                 if (!entity.level().isClientSide) {
@@ -113,18 +113,18 @@ public class SpearAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
             LevelCalc.useRP(RunecraftoryAttachments.PLAYER_DATA.get().get(player), GeneralConfig.spearUltimate, true, 0, false);
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return handler.getComboCount() == 5;
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.Spell;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -24,8 +24,8 @@ public class SpellUseAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (entity.level() instanceof ServerLevel serverLevel && anim.isAt("attack")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (entity.level() instanceof ServerLevel serverLevel && state.isAt("attack")) {
             entity.swing(InteractionHand.MAIN_HAND);
             if (handler.get(DataKey.USED_SPELL) != null) {
                 Spell spell = handler.get(DataKey.USED_SPELL);
@@ -39,7 +39,7 @@ public class SpellUseAttack extends AttackAction {
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 }

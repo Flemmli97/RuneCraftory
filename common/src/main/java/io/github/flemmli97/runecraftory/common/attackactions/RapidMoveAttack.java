@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -26,7 +26,7 @@ public class RapidMoveAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         Entity target = handler.get(DataKey.TARGET);
         if (target != null) {
             Vec3 dir = target.position().subtract(entity.position());
@@ -46,7 +46,7 @@ public class RapidMoveAttack extends AttackAction {
             entity.lookAt(EntityAnchorArgument.Anchor.EYES, direct);
             entity.hurtMarked = true;
         }
-        if (anim.isAt("attack")) {
+        if (state.isAt("attack")) {
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level().isClientSide) {
                 handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)
@@ -59,7 +59,7 @@ public class RapidMoveAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         super.onStart(entity, handler);
         if (!entity.level().isClientSide()) {
             LivingEntity target = entity.level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), entity, entity.getX(),

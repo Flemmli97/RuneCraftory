@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.api.registry.action;
 
 import io.github.flemmli97.runecraftory.api.registry.Spell;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerLevel;
@@ -47,15 +47,15 @@ public class AttackAction {
         return null;
     }
 
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
 
     }
 
-    public void onSetup(LivingEntity entity, AttackActionHandler handler) {
+    public void onSetup(LivingEntity entity, WeaponHandler<?> handler) {
 
     }
 
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         Spell spell = handler.get(DataKey.USED_SPELL);
         if (spell != null && !spell.delayedUse() && entity.level() instanceof ServerLevel serverLevel) {
             entity.swing(InteractionHand.MAIN_HAND);
@@ -66,15 +66,15 @@ public class AttackAction {
         }
     }
 
-    public AttackAction onChange(LivingEntity entity, AttackActionHandler handler) {
+    public AttackAction onChange(LivingEntity entity, WeaponHandler<?> handler) {
         this.onEnd(entity, handler);
         return null;
     }
 
-    public void onEnd(LivingEntity entity, AttackActionHandler handler) {
+    public void onEnd(LivingEntity entity, WeaponHandler<?> handler) {
     }
 
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return false;
     }
 
@@ -82,11 +82,11 @@ public class AttackAction {
         return true;
     }
 
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return 0;
     }
 
-    public Pose getPose(LivingEntity entity, AttackActionHandler handler) {
+    public Pose getPose(LivingEntity entity, WeaponHandler<?> handler) {
         return null;
     }
 
@@ -100,7 +100,7 @@ public class AttackAction {
 
     public enum OverrideType {
         NONE,
-        SCHEDULE,
-        REPLACE
+        CONTINUE,
+        START
     }
 }

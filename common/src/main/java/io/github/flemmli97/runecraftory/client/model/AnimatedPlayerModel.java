@@ -1,12 +1,11 @@
 package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
-import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.HumanoidArm;
@@ -21,7 +20,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity & MoveS
         super();
     }
 
-    public boolean setUpModel(Player entity, @Nullable HumanoidModel<?> model, @Nullable AttackActionHandler handler, float partialTicks) {
+    public boolean setUpModel(Player entity, @Nullable HumanoidModel<?> model, AnimationHandler<?> handler, float partialTicks) {
         if (model != null) {
             HumanoidMainHand hands = (HumanoidMainHand) model;
             hands.runecraftory$getLeftHandItem().resetAll();
@@ -33,20 +32,8 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity & MoveS
         return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
-    private boolean doAnimation(AttackActionHandler handler, float partialTicks, boolean mirror) {
-        AnimationState current = handler.getAnimation();
-        AnimationState last = handler.getLastAnimation();
-        float interpolationLast = handler.getLastTransitionProgress(partialTicks);
-        float interpolation = handler.getCurrentTransitionProgress(partialTicks);
-        boolean changed = false;
-        if (last != null && interpolationLast > 0) {
-            changed = this.attackAnimations.get().doAnimation(this, last.getAnimation(), last.getTick(partialTicks), interpolationLast, mirror, false);
-        }
-        if (current != null) {
-            if (this.attackAnimations.get().doAnimation(this, current.getAnimation(), current.getTick(partialTicks), interpolation, mirror, false) && !changed) {
-                changed = true;
-            }
-        }
+    private boolean doAnimation(AnimationHandler<?> handler, float partialTicks, boolean mirror) {
+        boolean changed = this.attackAnimations.get().doAnimation(this, handler, partialTicks, mirror);
         // Move the body so it stays at the same place
         if (changed && this.riding) {
             this.body.x = this.body.getDefaultPose().x;

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
@@ -19,9 +19,9 @@ import net.minecraft.world.item.ItemStack;
 public class GrandImpactAttack extends AttackAction {
 
     private final ComboContainer combos = ComboContainer.Builder.builder()
-            .addCombo(handler -> handler.getAnimation().isPast("attack_1") && !handler.getAnimation().isPast("combo_end"))
-            .addCombo(handler -> handler.getAnimation().isPast("attack_1") && !handler.getAnimation().isPast("combo_end"))
-            .addCombo(handler -> handler.getAnimation().isPast("attack_1") && !handler.getAnimation().isPast("combo_end"))
+            .addCombo(handler -> handler.matches(state -> state.isPast("attack_1") && !state.isPast("combo_end")))
+            .addCombo(handler -> handler.matches(state -> state.isPast("attack_1") && !state.isPast("combo_end")))
+            .addCombo(handler -> handler.matches(state -> state.isPast("attack_1") && !state.isPast("combo_end")))
             .build();
 
     @Override
@@ -31,8 +31,8 @@ public class GrandImpactAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (!entity.level().isClientSide && (anim.isAt("attack_1") || anim.isAt("attack_2"))) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (!entity.level().isClientSide && (state.isAt("attack_1") || state.isAt("attack_2"))) {
             float reach = (float) entity.getAttributeValue(RuneCraftoryAttributes.ATTACK_RANGE.asHolder());
             S2CScreenShake.sendAround(entity, 16, 6, 3);
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);

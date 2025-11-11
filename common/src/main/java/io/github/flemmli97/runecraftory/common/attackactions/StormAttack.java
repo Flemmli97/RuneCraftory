@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -31,8 +31,8 @@ public class StormAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("attack") && handler.getComboCount() != 5) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level().isClientSide) {
                 double range = CombatUtils.getRange(entity, 0) * 0.5;
                 if (handler.getComboCount() == 3) {
@@ -46,45 +46,45 @@ public class StormAttack extends AttackAction {
         }
         switch (handler.getComboCount()) {
             case 1 -> {
-                if (anim.isAt("move")) {
+                if (state.isAt("move")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.2).add(0, 0.1, 0));
                 }
             }
             case 2 -> {
-                if (anim.isAt("move")) {
+                if (state.isAt("move")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.3));
                 }
             }
             case 3 -> {
-                if (anim.isAt("move")) {
+                if (state.isAt("move")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.2));
                 }
             }
             case 4 -> {
-                if (anim.isAt("up")) {
+                if (state.isAt("up")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.15).add(0, 0.05, 0));
                 }
-                if (anim.isAt("down")) {
+                if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.15).add(0, -0.05, 0));
                 }
             }
             case 5 -> {
-                if (anim.isAt("up")) {
+                if (state.isAt("up")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.2).add(0, 0.15, 0));
                 }
-                if (anim.isAt("down")) {
+                if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.25).add(0, -0.35, 0));
                 }
                 handler.applyMoveDirection();
                 entity.fallDistance = 0;
-                if (anim.isAt("attack")) {
+                if (state.isAt("attack")) {
                     if (!entity.level().isClientSide) {
                         CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 0.5, 0)
                                         .expandTowards(0, -1, CombatUtils.getRange(entity, 0))))
@@ -99,14 +99,14 @@ public class StormAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         super.onStart(entity, handler);
         handler.store(DataKey.GRAVITY, entity.isNoGravity());
         entity.setNoGravity(true);
     }
 
     @Override
-    public void onEnd(LivingEntity entity, AttackActionHandler handler) {
+    public void onEnd(LivingEntity entity, WeaponHandler<?> handler) {
         handler.clearWith(DataKey.GRAVITY, entity::setNoGravity);
     }
 

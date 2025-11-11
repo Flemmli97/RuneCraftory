@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.attackactions;
 import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -22,23 +22,23 @@ public class CycloneAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (!anim.isPast("attack_start") || anim.isPast("attack_end")) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (!state.isPast("attack_start") || state.isPast("attack_end")) {
             entity.setDeltaMovement(entity.getDeltaMovement().multiply(0, 1, 0));
             entity.xxa = 0;
             entity.zza = 0;
         }
-        if (anim.isAt("attack_start")) {
+        if (state.isAt("attack_start")) {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot() + 170);
             handler.resetHitEntityTracker();
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        if (anim.isAt("reset")) {
+        if (state.isAt("reset")) {
             handler.resetHitEntityTracker();
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         if (!entity.level().isClientSide) {
-            CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("attack_start", 0), anim.getMarker("attack_end", 0),
+            CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("attack_start", 0), state.getMarker("attack_end", 0),
                     handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) - 360 * 4.5f, 0);
             if (attack != null) {
                 handler.addHitEntityTracker(attack
@@ -51,12 +51,12 @@ public class CycloneAttack extends AttackAction {
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return true;
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return 1;
     }
 

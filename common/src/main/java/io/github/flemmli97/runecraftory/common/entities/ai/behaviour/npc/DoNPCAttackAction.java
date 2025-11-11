@@ -27,7 +27,7 @@ public class DoNPCAttackAction extends ExtendedBehaviour<NPCEntity> {
     protected void start(NPCEntity entity) {
         BrainUtils.withMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get(), selected -> {
             this.current = selected;
-            entity.weaponHandler.doWeaponAttack(selected.action(), entity.getMainHandItem(), selected.spell().orElse(null));
+            entity.weaponHandler.executeAttack(selected.action(), entity.getMainHandItem(), selected.spell().orElse(null));
         });
         BrainUtils.clearMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get());
     }
@@ -36,7 +36,7 @@ public class DoNPCAttackAction extends ExtendedBehaviour<NPCEntity> {
     protected boolean shouldKeepRunning(NPCEntity entity) {
         if (this.current == null)
             return false;
-        if (entity.weaponHandler.isScheduledAction())
+        if (entity.weaponHandler.shouldContinueAttack())
             return true;
         return this.tryScheduleCombo(entity);
     }
@@ -49,11 +49,11 @@ public class DoNPCAttackAction extends ExtendedBehaviour<NPCEntity> {
     }
 
     private boolean tryScheduleCombo(NPCEntity npc) {
-        if (npc.weaponHandler.isScheduledAction())
+        if (npc.weaponHandler.shouldContinueAttack())
             return false;
         int combo = npc.weaponHandler.getComboCount();
         if (this.current != null && combo < this.current.comboCount()) {
-            npc.weaponHandler.doWeaponAttack(this.current.action(), npc.getMainHandItem(), this.current.spell().orElse(null));
+            npc.weaponHandler.executeAttack(this.current.action(), npc.getMainHandItem(), this.current.spell().orElse(null));
             return true;
         }
         return false;

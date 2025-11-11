@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -38,8 +38,8 @@ public class GloveAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
-        if (anim.isAt("attack") && handler.getComboCount() != 5) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
+        if (state.isAt("attack") && handler.getComboCount() != 5) {
             if (!entity.level().isClientSide) {
                 if (handler.getComboCount() != 4)
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
@@ -56,39 +56,39 @@ public class GloveAttack extends AttackAction {
         }
         switch (handler.getComboCount()) {
             case 1 -> {
-                if (anim.isAt("step")) {
+                if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.2));
                 }
             }
             case 2, 3 -> {
-                if (anim.isAt("step")) {
+                if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.3));
                 }
             }
             case 4 -> {
-                if (anim.isAt("jump")) {
+                if (state.isAt("jump")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(1.2).add(0, 0.9, 0));
                 }
-                if (anim.isAt("down")) {
+                if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(0.9).add(0, -0.5, 0));
                 }
                 entity.resetFallDistance();
             }
             case 5 -> {
-                if (anim.isAt("leap")) {
+                if (state.isAt("leap")) {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
                     Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
                     entity.setDeltaMovement(dir.scale(2.7).add(0, 0.6, 0));
                 }
                 entity.resetFallDistance();
-                if (anim.isAt("attack_start"))
+                if (state.isAt("attack_start"))
                     entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
-                if (!entity.level().isClientSide && anim.isPast("attack_start") && !anim.isPast("attack_end")) {
+                if (!entity.level().isClientSide && state.isPast("attack_start") && !state.isPast("attack_end")) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
@@ -97,31 +97,29 @@ public class GloveAttack extends AttackAction {
             }
         }
         if (handler.getComboCount() == 5) {
-            handler.store(DataKey.FIXED_LOOK, anim.isPast("move_start") && !anim.isPast("move_end"));
+            handler.store(DataKey.FIXED_LOOK, state.isPast("move_start") && !state.isPast("move_end"));
         }
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         if (handler.getComboCount() == 5 && entity instanceof ServerPlayer player)
             LevelCalc.useRP(RunecraftoryAttachments.PLAYER_DATA.get().get(player), GeneralConfig.gloveUltimate, true, 0, false);
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return handler.getComboCount() == 5;
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 
     @Override
-    public Pose getPose(LivingEntity entity, AttackActionHandler handler) {
-        if (handler.getAnimation() == null)
-            return null;
-        if (handler.getComboCount() == 5 && handler.getAnimation().isPast("attack_start") && !handler.getAnimation().isPast("attack_end"))
+    public Pose getPose(LivingEntity entity, WeaponHandler<?> handler) {
+        if (handler.getComboCount() == 5 && handler.matches(state -> state.isPast("attack_start") && !state.isPast("attack_end")))
             return Pose.SPIN_ATTACK;
         return null;
     }

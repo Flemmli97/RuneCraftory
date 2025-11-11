@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.AttackAction;
 import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimations;
-import io.github.flemmli97.runecraftory.common.attachment.AttackActionHandler;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -36,9 +36,9 @@ public class ShortSwordAttack extends AttackAction {
     }
 
     @Override
-    public void run(LivingEntity entity, ItemStack stack, AttackActionHandler handler, AnimationState anim) {
+    public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (handler.getComboCount() != 6) {
-            if (anim.isAt("attack")) {
+            if (state.isAt("attack")) {
                 if (!entity.level().isClientSide) {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(AOEWeapon.createOBB(entity,
                                     CombatUtils.getRange(entity, 0),
@@ -51,44 +51,44 @@ public class ShortSwordAttack extends AttackAction {
         Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
         switch (handler.getComboCount()) {
             case 1, 2 -> {
-                if (anim.isAt("step")) {
+                if (state.isAt("step")) {
                     entity.setDeltaMovement(dir.scale(0.35));
                 }
             }
             case 3 -> {
-                if (anim.isAt("step")) {
+                if (state.isAt("step")) {
                     entity.setDeltaMovement(dir.scale(0.25));
                 }
             }
             case 4 -> {
-                if (anim.isAt("step")) {
+                if (state.isAt("step")) {
                     entity.setDeltaMovement(dir.scale(0.35).add(0, 0.4, 0));
                 }
             }
             case 5 -> {
-                if (anim.isAt("step")) {
+                if (state.isAt("step")) {
                     entity.setDeltaMovement(new Vec3(0, -0.4, 0));
                 }
             }
             case 6 -> {
-                if (anim.isAt("spin_start")) {
+                if (state.isAt("spin_start")) {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
                     entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAt("reset")) {
+                if (state.isAt("reset")) {
                     handler.resetHitEntityTracker();
                     entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
-                if (anim.isAt("spin_start")) {
+                if (state.isAt("spin_start")) {
                     handler.store(DataKey.MOVE_DIRECTION, new Vec3(0, 0.1, 0));
                 }
-                if (anim.isAt("spin_end")) {
+                if (state.isAt("spin_end")) {
                     entity.setDeltaMovement(new Vec3(0, -0.1, 0));
                     handler.store(DataKey.MOVE_DIRECTION, null);
                 }
                 handler.applyMoveDirection();
-                CombatUtils.EntityAttack attack = spinAttack(entity, anim, anim.getMarker("spin_start", 0), anim.getMarker("spin_end", 0),
+                CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                         handler.get(DataKey.SPIN_ROTATION) + 30, handler.get(DataKey.SPIN_ROTATION) - 1100, 0);
                 if (attack != null) {
                     handler.addHitEntityTracker(attack
@@ -100,18 +100,18 @@ public class ShortSwordAttack extends AttackAction {
     }
 
     @Override
-    public void onStart(LivingEntity entity, AttackActionHandler handler) {
+    public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         if (handler.getComboCount() == 6 && entity instanceof ServerPlayer player)
             LevelCalc.useRP(RunecraftoryAttachments.PLAYER_DATA.get().get(player), GeneralConfig.shortSwordUltimate, true, 0, false);
     }
 
     @Override
-    public boolean isInvulnerable(LivingEntity entity, AttackActionHandler handler) {
+    public boolean isInvulnerable(LivingEntity entity, WeaponHandler<?> handler) {
         return handler.getComboCount() == 6;
     }
 
     @Override
-    public float movementReduction(AnimationState current) {
+    public float movementReduction(WeaponHandler<?> handler) {
         return GeneralConfig.MOVE_SPEED_ATTACK.get().floatValue();
     }
 

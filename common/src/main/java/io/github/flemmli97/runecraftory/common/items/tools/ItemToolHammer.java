@@ -13,7 +13,6 @@ import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -89,13 +88,13 @@ public class ItemToolHammer extends PickaxeItem {
         ToolItemTier tier = stack.getOrDefault(RuneCraftoryDataComponentTypes.TOOL_TIER.get(), ToolItemTier.SCRAP);
         if (tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-            int useTime = data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier));
+            int useTime = data.getWeaponHandler().canExecuteAttack(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), false) ? data.getWeaponHandler().get(DataKey.TOOL_DATA).charge() : ((stack.getUseDuration(entity) - timeLeft - 1) / ItemComponentUtils.getChargeTime(entity, tier));
             int range = Math.min(useTime, tier.getTierLevel());
             BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
             if (range == 0) {
                 this.useOnSingleBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
             } else {
-                data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), stack);
+                data.getWeaponHandler().executeAttack(RuneCraftoryAttackActions.TOOL_HAMMER_USE.get(), stack);
                 data.getWeaponHandler().store(DataKey.TOOL_DATA, new ToolUseData(result, range));
             }
         }

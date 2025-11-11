@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
+import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -31,6 +32,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.tenshilib.common.attachment.SerializableAttachment;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationHandler;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -99,7 +101,8 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
     private int boughtBarns;
     private int mobLevelIncrease;
 
-    private final PlayerWeaponHandler weaponHandler;
+    private final AnimationHandler<Player> animationHandler;
+    private final WeaponHandler<Player> weaponHandler;
     public final EntitySelector entitySelector = new EntitySelector();
     private BlockPos blockBreakPosForMsg;
     private int breakTick;
@@ -110,7 +113,8 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
         for (Skills skill : Skills.values()) {
             this.skillLevels.put(skill, new XpLevelHolder());
         }
-        this.weaponHandler = new PlayerWeaponHandler(player);
+        this.animationHandler = new PlayerAnimationHandler(player);
+        this.weaponHandler = new WeaponHandler<>(player, () -> this.animationHandler);
     }
 
     public PlayerData(Player player, PlayerData other, boolean death) {
@@ -497,11 +501,12 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
         this.foodDuration = data.duration();
     }
 
-    public PlayerWeaponHandler getWeaponHandler() {
+    public WeaponHandler<Player> getWeaponHandler() {
         return this.weaponHandler;
     }
 
     public void tick() {
+        this.animationHandler.tick();
         this.weaponHandler.tick();
         if (this.player instanceof ServerPlayer serverPlayer) {
             this.updater.tick(serverPlayer);

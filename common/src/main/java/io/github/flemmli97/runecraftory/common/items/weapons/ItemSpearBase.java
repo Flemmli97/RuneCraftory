@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.utils.ItemComponentUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.tenshilib.common.item.AOEWeapon;
 import io.github.flemmli97.tenshilib.common.item.ExtendedWeapon;
-import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -35,7 +34,7 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
 
     @Override
     public void executeAttack(Player player, ItemStack stack) {
-        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR.get(), stack);
+        RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler().executeAttack(RuneCraftoryAttackActions.SPEAR.get(), stack);
     }
 
     @Override
@@ -60,8 +59,8 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
         PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
         if (player.isCreative() || data.getSkillLevel(Skills.SPEAR).getLevel() >= 5) {
             if (player instanceof ServerPlayer) {
-                if (data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get(), false)) {
-                    data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), itemstack);
+                if (data.getWeaponHandler().canExecuteAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), false)) {
+                    data.getWeaponHandler().executeAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), itemstack);
                 } else {
                     if (data.getWeaponHandler().getCurrentAction() == RuneCraftoryAttackActions.NONE.get()) {
                         player.startUsingItem(hand);
@@ -78,8 +77,8 @@ public class ItemSpearBase extends Item implements ExtendedWeapon {
         if (entity instanceof ServerPlayer serverPlayer) {
             PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer);
             int time = stack.getUseDuration(entity) - timeLeft - 1;
-            if (time >= ItemComponentUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAction(RuneCraftoryAttackActions.SPEAR_USE.get())) {
-                data.getWeaponHandler().doWeaponAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), stack);
+            if (time >= ItemComponentUtils.getChargeTime(entity) && data.getWeaponHandler().canExecuteAttack(RuneCraftoryAttackActions.SPEAR_USE.get())) {
+                data.getWeaponHandler().executeAttack(RuneCraftoryAttackActions.SPEAR_USE.get(), stack);
             }
         }
     }
