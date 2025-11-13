@@ -216,6 +216,11 @@ public class WeaponHandler<E extends LivingEntity> {
         return (T) this.dataMap.getOrDefault(key, key.defaultValue().get());
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getSet(DataKey<T> key) {
+        return (T) this.dataMap.computeIfAbsent(key, k -> key.defaultValue().get());
+    }
+
     public <T> void clear(DataKey<T> key) {
         this.clearWith(key, key.onClear() == null ? null : val -> key.onClear().accept(this.getEntity(), val));
     }
@@ -263,7 +268,7 @@ public class WeaponHandler<E extends LivingEntity> {
     }
 
     public Set<LivingEntity> getHitEntityTracker() {
-        return this.get(DataKey.HIT_ENTITIES);
+        return this.getSet(DataKey.HIT_ENTITIES);
     }
 
     public void resetHitEntityTracker() {
