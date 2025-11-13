@@ -37,7 +37,6 @@ public class FlashStrikeAttack extends AttackAction {
         if (state.isAt("move_end")) {
             handler.store(DataKey.MOVE_DIRECTION, null);
         }
-        handler.applyMoveDirection();
         if (!entity.level().isClientSide) {
             if (state.isAt("reset"))
                 handler.resetHitEntityTracker();

@@ -26,7 +26,7 @@ public class MindThrustAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("step")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.4);
-            entity.setDeltaMovement(dir);
+            handler.applyDelta(dir);
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         if (state.isAt("attack")) {

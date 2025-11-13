@@ -739,9 +739,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     @Override
     public void aiStep() {
         this.updateSwingTime();
-        super.aiStep();
         this.getAnimationHandler().tick();
         this.weaponHandler.tick();
+        super.aiStep();
         boolean teleported = false;
         if (this.level() instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following && --this.tpCooldown <= 0) {
@@ -797,6 +797,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         } else {
             this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
+        this.weaponHandler.postTick();
     }
 
     @Override

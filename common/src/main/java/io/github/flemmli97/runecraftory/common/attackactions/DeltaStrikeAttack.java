@@ -25,7 +25,7 @@ public class DeltaStrikeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("step")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            entity.setDeltaMovement(dir.scale(0.33));
+            handler.applyDelta(dir.scale(0.33));
         }
         if (state.isAt("attack")) {
             if (!entity.level().isClientSide) {

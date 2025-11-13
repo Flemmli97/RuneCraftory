@@ -34,7 +34,7 @@ public class DashSlashAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (handler.getComboCount() == 2) {
             handler.store(DataKey.MOVE_DIRECTION, null);
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
+            handler.applyDelta(entity.getDeltaMovement().multiply(0.95, 1, 0.95));
             if (state.isAt("attack")) {
                 if (!entity.level().isClientSide) {
                     OrientedBoundingBox obb = new OrientedBoundingBox(new AABB(-entity.getBbWidth(), 0, 0, entity.getBbWidth(), 1, entity.getBbWidth() + 1)
@@ -57,7 +57,6 @@ public class DashSlashAttack extends AttackAction {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5));
                 }
-                handler.applyMoveDirection();
                 if (state.isAt("sound"))
                     entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 if (!entity.level().isClientSide && !state.isPast("attack_end")) {
@@ -72,7 +71,6 @@ public class DashSlashAttack extends AttackAction {
             if (state.isAt("attack_end")) {
                 handler.store(DataKey.MOVE_DIRECTION, null);
             }
-            handler.applyMoveDirection();
         }
     }
 
@@ -82,7 +80,7 @@ public class DashSlashAttack extends AttackAction {
             return;
         Vec3 mot = entity.getDeltaMovement();
         double lenHor = mot.x * mot.x + mot.z * mot.z;
-        entity.setDeltaMovement(mot.multiply(lenHor > 0.5 ? 0.5 : 1, 1, lenHor > 0.5 ? 0.5 : 1));
+        handler.applyDelta(mot.multiply(lenHor > 0.5 ? 0.5 : 1, 1, lenHor > 0.5 ? 0.5 : 1));
     }
 
     @Override

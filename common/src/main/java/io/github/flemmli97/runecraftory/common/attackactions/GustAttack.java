@@ -27,7 +27,7 @@ public class GustAttack extends AttackAction {
         handler.store(DataKey.FIXED_LOOK, true);
         if (state.isAt("jump")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            entity.setDeltaMovement(dir.scale(1.6).add(0, 0.4, 0));
+            handler.applyDelta(dir.scale(1.6).add(0, 0.4, 0));
             entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         if (state.isAt("attack")) {

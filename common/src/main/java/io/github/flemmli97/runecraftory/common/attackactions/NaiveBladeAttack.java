@@ -34,7 +34,7 @@ public class NaiveBladeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (handler.getComboCount() == 2) {
             if (state.isAt("jump")) {
-                entity.setDeltaMovement(new Vec3(0, 0.37, 0));
+                handler.applyDelta(new Vec3(0, 0.37, 0));
             }
             if (state.isAt("attack_1")) {
                 entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

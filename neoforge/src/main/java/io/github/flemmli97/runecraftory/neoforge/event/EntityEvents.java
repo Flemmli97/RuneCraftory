@@ -45,7 +45,7 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void updateLivingTick(EntityTickEvent.Post event) {
+    public void updateLivingTick(EntityTickEvent.Pre event) {
         if (event.getEntity() instanceof LivingEntity living) {
             EntityCalls.updateLivingTick(living);
             if (living.level().isClientSide)

@@ -201,7 +201,7 @@ public class Skelefang extends BossMonster {
                 entity.restoreDragon();
         });
         BiConsumer<AnimationState, Skelefang> trigger = (anim, entity) -> {
-            if (anim.isAt(0.24)) {
+            if (anim.isAt("sound")) {
                 entity.playRandomizedSound(RuneCraftorySounds.ENTITY_SKELEFANG_ROAR.get());
                 S2CScreenShake.sendAround(entity, 32, 40, 2);
             }

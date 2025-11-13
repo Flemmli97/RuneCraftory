@@ -90,7 +90,7 @@ public class Raccoon extends BossMonster {
     public static final String BARRAGE = BUILDER.add("punch_barrage", AnimationsBuilder.definition(3.4)
             .marker("attack", 0.6, 0.92, 1.36).marker("vulnerable_start", 1.64).marker("vulnerable_end", 3.08));
     public static final String ROAR = BUILDER.add("roar", AnimationsBuilder.definition(1.28).marker("roar", 0.28));
-    public static final String CLONE = BUILDER.add("clone", ROAR);
+    public static final String CLONE = BUILDER.add("clone", AnimationsBuilder.definition(1.28).marker("start", 0.1));
     public static final String TRANSFORM = BUILDER.add("transform", AnimationsBuilder.definition(1.5));
     public static final String UNTRANSFORM = BUILDER.add("untransform", AnimationsBuilder.definition(2.2)
             .marker("knockback_start", 1).marker("knockback_end", 1.5));
@@ -159,7 +159,7 @@ public class Raccoon extends BossMonster {
                     }
                 }
                 // Stuck check. Or e.g. if in water
-                if (anim.isPast(6.0) && (!entity.getBlockStateOn().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
+                if (anim.isPast(6) && (!entity.getBlockStateOn().is(Blocks.AIR) || !entity.getBlockStateOn().is(Blocks.AIR))) {
                     entity.getAnimationHandler().setAnimation(LAND);
                 }
             }
@@ -226,7 +226,7 @@ public class Raccoon extends BossMonster {
         });
         b.put(CLONE, (anim, entity) -> {
             entity.getNavigation().stop();
-            if (anim.isAt(0.1)) {
+            if (anim.isAt("start")) {
                 entity.playSound(RuneCraftorySounds.ENTITY_RACCOON_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
                 Vec3 center = entity.getTarget() == null ? entity.position() : (entity.distanceToSqr(entity.getTarget()) < 144 ? entity.getTarget().position()
                         : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));

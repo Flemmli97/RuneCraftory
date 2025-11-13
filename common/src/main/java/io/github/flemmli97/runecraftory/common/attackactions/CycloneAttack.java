@@ -24,7 +24,7 @@ public class CycloneAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (!state.isPast("attack_start") || state.isPast("attack_end")) {
-            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0, 1, 0));
+            handler.applyDelta(entity.getDeltaMovement().multiply(0, 1, 0));
             entity.xxa = 0;
             entity.zza = 0;
         }

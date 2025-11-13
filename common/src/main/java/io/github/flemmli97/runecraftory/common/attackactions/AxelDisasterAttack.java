@@ -41,7 +41,6 @@ public class AxelDisasterAttack extends AttackAction {
         if (state.isAt("move_done")) {
             handler.store(DataKey.MOVE_DIRECTION, null);
         }
-        handler.applyMoveDirection();
         if (state.isPast("attack_start") && !state.isPast("attack_end")) {
             if (!entity.level().isClientSide) {
                 if (state.isAt("reset"))

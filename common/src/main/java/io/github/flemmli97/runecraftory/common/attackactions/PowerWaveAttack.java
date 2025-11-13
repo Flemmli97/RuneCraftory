@@ -22,7 +22,7 @@ public class PowerWaveAttack extends SpellUseAttack {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("step")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.55);
-            entity.setDeltaMovement(dir);
+            handler.applyDelta(dir);
         }
         super.run(entity, stack, handler, state);
     }

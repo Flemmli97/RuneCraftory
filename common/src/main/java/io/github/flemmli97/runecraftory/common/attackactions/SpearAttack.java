@@ -60,12 +60,12 @@ public class SpearAttack extends AttackAction {
         switch (handler.getComboCount()) {
             case 1, 3, 4 -> {
                 if (anim.isAt("step")) {
-                    entity.setDeltaMovement(dir.scale(0.3));
+                    handler.applyDelta(dir.scale(0.3));
                 }
             }
             case 2 -> {
                 if (anim.isAt("step")) {
-                    entity.setDeltaMovement(dir.scale(0.15));
+                    handler.applyDelta(dir.scale(0.15));
                 }
             }
             case 5 -> {
@@ -86,7 +86,7 @@ public class SpearAttack extends AttackAction {
                             .executeAttack());
                 }
                 if (anim.isAt("leap"))
-                    entity.setDeltaMovement(dir.scale(1.3).add(0, 0.4, 0));
+                    handler.applyDelta(dir.scale(1.3).add(0, 0.4, 0));
                 if (anim.isAt("slam")) {
                     Vec3 look = entity.getLookAngle();
                     look = new Vec3(look.x(), 0, look.z()).scale(1.2);

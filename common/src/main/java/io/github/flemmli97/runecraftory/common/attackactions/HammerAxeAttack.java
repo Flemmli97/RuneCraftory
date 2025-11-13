@@ -70,7 +70,6 @@ public class HammerAxeAttack extends AttackAction {
                 }
             } else
                 handler.store(DataKey.MOVE_DIRECTION, null);
-            handler.applyMoveDirection();
             handler.store(DataKey.FIXED_LOOK, state.isPast("spin_start") && !state.isPast("spin_end"));
         }
     }

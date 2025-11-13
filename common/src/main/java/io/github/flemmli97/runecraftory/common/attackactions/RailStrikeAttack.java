@@ -35,7 +35,6 @@ public class RailStrikeAttack extends AttackAction {
             handler.resetHitEntityTracker();
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_LIGHT.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
-        handler.applyMoveDirection();
         if (!entity.level().isClientSide && state.isPast("attack_start") && !state.isPast("attack_end")) {
             double range = CombatUtils.getRange(entity, 0);
             handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 0.3, range * 0.7)

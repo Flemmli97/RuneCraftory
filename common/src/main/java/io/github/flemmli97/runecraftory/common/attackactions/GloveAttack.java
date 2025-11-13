@@ -58,23 +58,23 @@ public class GloveAttack extends AttackAction {
             case 1 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    entity.setDeltaMovement(dir.scale(0.2));
+                    handler.applyDelta(dir.scale(0.2));
                 }
             }
             case 2, 3 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    entity.setDeltaMovement(dir.scale(0.3));
+                    handler.applyDelta(dir.scale(0.3));
                 }
             }
             case 4 -> {
                 if (state.isAt("jump")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    entity.setDeltaMovement(dir.scale(1.2).add(0, 0.9, 0));
+                    handler.applyDelta(dir.scale(1.2).add(0, 0.9, 0));
                 }
                 if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    entity.setDeltaMovement(dir.scale(0.9).add(0, -0.5, 0));
+                    handler.applyDelta(dir.scale(0.9).add(0, -0.5, 0));
                 }
                 entity.resetFallDistance();
             }
@@ -83,7 +83,7 @@ public class GloveAttack extends AttackAction {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     handler.resetHitEntityTracker();
                     Vec3 dir = CombatUtils.fromRelativeVector(handler.get(DataKey.SPIN_ROTATION), new Vec3(0, 0, 1));
-                    entity.setDeltaMovement(dir.scale(2.7).add(0, 0.6, 0));
+                    handler.applyDelta(dir.scale(2.7).add(0, 0.6, 0));
                 }
                 entity.resetFallDistance();
                 if (state.isAt("attack_start"))

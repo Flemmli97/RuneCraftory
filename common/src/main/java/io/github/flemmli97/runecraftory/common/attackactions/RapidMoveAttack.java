@@ -35,12 +35,12 @@ public class RapidMoveAttack extends AttackAction {
             double closeDist = width * width + targetWidth * targetWidth;
             closeDist += 1;
             if (dir.lengthSqr() < closeDist) {
-                entity.setDeltaMovement(Vec3.ZERO);
+                handler.applyDelta(Vec3.ZERO);
             } else {
                 Vec3 motion = dir.normalize().scale(1 + entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 2);
                 if (dir.lengthSqr() < closeDist * 2)
                     motion = dir.scale(0.1);
-                entity.setDeltaMovement(motion);
+                handler.applyDelta(motion);
             }
             Vec3 direct = EntityUtils.getStraightProjectileTarget(entity.getEyePosition(), target);
             entity.lookAt(EntityAnchorArgument.Anchor.EYES, direct);

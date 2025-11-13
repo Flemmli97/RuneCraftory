@@ -17,7 +17,7 @@ public class HammerAxeUseAttack extends TimedUseAttack {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("jump")) {
-            entity.setDeltaMovement(new Vec3(0, 0.35, 0));
+            handler.applyDelta(new Vec3(0, 0.35, 0));
         }
         super.run(entity, stack, handler, state);
     }

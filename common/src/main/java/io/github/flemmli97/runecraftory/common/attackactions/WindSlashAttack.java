@@ -59,7 +59,6 @@ public class WindSlashAttack extends AttackAction {
                         .executeAttack());
             }
         }
-        handler.applyMoveDirection();
     }
 
     @Override

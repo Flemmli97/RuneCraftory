@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
+import io.github.flemmli97.runecraftory.common.network.S2CEntityPositionPacket;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -39,6 +40,7 @@ public class WeaponHandler<E extends LivingEntity> {
     private int comboCount, resetTime, nextCombo = -1;
     private boolean continueAttack;
 
+    private boolean movementUpdate;
     private final Map<DataKey<?>, Object> dataMap = new HashMap<>();
 
     public WeaponHandler(E entity, Supplier<AnimationHandler<E>> animationHandler) {
@@ -159,6 +161,7 @@ public class WeaponHandler<E extends LivingEntity> {
             ItemStack weapon = this.get(DataKey.USED_WEAPON);
             if (!this.isCurrentAnimationDone()) {
                 this.currentAction.run(this.entity, weapon, this, this.getAnimationHandler().getAnimation());
+                this.applyMoveDirection();
             }
             if (!this.entity.level().isClientSide) {
                 ComboContainer.ComboHandler handler = this.currentAction.combos() != null ? this.currentAction.combos().get(this.comboCount - 1) : null;
@@ -192,6 +195,14 @@ public class WeaponHandler<E extends LivingEntity> {
         }
     }
 
+    public void postTick() {
+        if (this.movementUpdate && !this.getEntity().level().isClientSide) {
+            this.movementUpdate = false;
+            // Vanilla sends the update at the start of the next tick which is why
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityPositionPacket(this.getEntity()), this.getEntity());
+        }
+    }
+
     public boolean shouldContinueAttack() {
         return this.continueAttack;
     }
@@ -214,7 +225,10 @@ public class WeaponHandler<E extends LivingEntity> {
         if (apply == null) {
             this.dataMap.remove(key);
         } else {
-            apply.accept((T) this.dataMap.remove(key));
+            T current = (T) this.dataMap.remove(key);
+            if (current != null) {
+                apply.accept(current);
+            }
         }
     }
 
@@ -264,9 +278,15 @@ public class WeaponHandler<E extends LivingEntity> {
         return this.getCurrentAction().isInvulnerable(entity, this);
     }
 
-    public void applyMoveDirection() {
-        Vec3 move = this.get(DataKey.MOVE_DIRECTION);
-        if (move != null)
-            this.getEntity().setDeltaMovement(move);
+    private void applyMoveDirection() {
+        Vec3 delta = this.get(DataKey.MOVE_DIRECTION);
+        if (delta != null) {
+            this.applyDelta(delta);
+        }
+    }
+
+    public void applyDelta(Vec3 delta) {
+        this.getEntity().setDeltaMovement(delta);
+        this.movementUpdate = true;
     }
 }

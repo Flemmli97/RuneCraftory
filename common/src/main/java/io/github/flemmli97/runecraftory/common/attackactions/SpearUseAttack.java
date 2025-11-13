@@ -20,7 +20,7 @@ public class SpearUseAttack extends AttackAction {
     private final ComboContainer combo;
 
     public SpearUseAttack() {
-        Predicate<WeaponHandler<?>> MAIN = handler -> handler.matches(state -> state.isPast("attack") && !state.isPast("0.52"));
+        Predicate<WeaponHandler<?>> MAIN = handler -> handler.matches(state -> state.isPast("attack") && !state.isPast("end_continue"));
         ComboContainer.Builder builder = ComboContainer.Builder.builder();
         for (int i = 0; i < 20; i++) {
             builder.addCombo(MAIN);

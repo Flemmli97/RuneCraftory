@@ -30,7 +30,7 @@ public class DoubleKickAttack extends AttackAction {
         }
         if (state.isAt("step")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(0.8);
-            entity.setDeltaMovement(dir);
+            handler.applyDelta(dir);
         }
         if (state.isAt("reset")) {
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

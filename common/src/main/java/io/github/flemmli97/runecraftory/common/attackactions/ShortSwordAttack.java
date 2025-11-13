@@ -52,22 +52,22 @@ public class ShortSwordAttack extends AttackAction {
         switch (handler.getComboCount()) {
             case 1, 2 -> {
                 if (state.isAt("step")) {
-                    entity.setDeltaMovement(dir.scale(0.35));
+                    handler.applyDelta(dir.scale(0.35));
                 }
             }
             case 3 -> {
                 if (state.isAt("step")) {
-                    entity.setDeltaMovement(dir.scale(0.25));
+                    handler.applyDelta(dir.scale(0.25));
                 }
             }
             case 4 -> {
                 if (state.isAt("step")) {
-                    entity.setDeltaMovement(dir.scale(0.35).add(0, 0.4, 0));
+                    handler.applyDelta(dir.scale(0.35).add(0, 0.4, 0));
                 }
             }
             case 5 -> {
                 if (state.isAt("step")) {
-                    entity.setDeltaMovement(new Vec3(0, -0.4, 0));
+                    handler.applyDelta(new Vec3(0, -0.4, 0));
                 }
             }
             case 6 -> {
@@ -84,10 +84,9 @@ public class ShortSwordAttack extends AttackAction {
                     handler.store(DataKey.MOVE_DIRECTION, new Vec3(0, 0.1, 0));
                 }
                 if (state.isAt("spin_end")) {
-                    entity.setDeltaMovement(new Vec3(0, -0.1, 0));
+                    handler.applyDelta(new Vec3(0, -0.1, 0));
                     handler.store(DataKey.MOVE_DIRECTION, null);
                 }
-                handler.applyMoveDirection();
                 CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                         handler.get(DataKey.SPIN_ROTATION) + 30, handler.get(DataKey.SPIN_ROTATION) - 1100, 0);
                 if (attack != null) {
