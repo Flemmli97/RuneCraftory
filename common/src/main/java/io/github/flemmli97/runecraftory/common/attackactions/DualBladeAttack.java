@@ -48,7 +48,7 @@ public class DualBladeAttack extends AttackAction {
                                     0.5)))
                             .executeAttack();
                 }
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
         }
         switch (handler.getComboCount()) {
@@ -93,13 +93,13 @@ public class DualBladeAttack extends AttackAction {
             case 6 -> {
                 if (state.isAt("spin_start")) {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot() - 90);
-                    entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                    playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     handler.applyDelta(dir.scale(0.5));
                 }
                 if (state.isAt("reset")) {
                     handler.resetHitEntityTracker();
-                    entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                    playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                         handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 360, 0);
@@ -129,14 +129,14 @@ public class DualBladeAttack extends AttackAction {
             case 8 -> {
                 if (state.isAt("spin_start")) {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot() + 120);
-                    entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                    playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (state.isAt("reset")) {
                     handler.resetHitEntityTracker();
-                    entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                    playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }
                 if (state.isAt("last"))
-                    entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
+                    playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.5f);
                 CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                         handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) - 4 * 360, 0);
                 if (attack != null) {

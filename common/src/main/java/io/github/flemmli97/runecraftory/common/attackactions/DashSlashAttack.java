@@ -44,21 +44,21 @@ public class DashSlashAttack extends AttackAction {
                             .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1))
                             .executeAttack();
                 }
-                entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                playSound(entity, SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
         } else {
             handler.store(DataKey.FIXED_LOOK, true);
             if (state.isAt("move_start")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5).add(0, 0.3, 0));
+                handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.6).add(0, 0.3, 0));
             }
             if (state.isPast("attack_start")) {
                 if (state.isAt("attack_start")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.8));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.9));
                 }
                 if (state.isAt("sound"))
-                    entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                    playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 if (!entity.level().isClientSide && !state.isPast("attack_end")) {
                     double range = CombatUtils.getRange(entity, -1);
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(range * 0.5, 0, 0)
@@ -69,6 +69,7 @@ public class DashSlashAttack extends AttackAction {
                 }
             }
             if (state.isAt("attack_end")) {
+                handler.applyDelta(entity.getDeltaMovement().multiply(0.8, 1, 0.8));
                 handler.store(DataKey.MOVE_DIRECTION, null);
             }
         }

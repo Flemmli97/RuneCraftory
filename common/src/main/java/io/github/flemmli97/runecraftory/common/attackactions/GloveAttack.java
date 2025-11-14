@@ -52,7 +52,7 @@ public class GloveAttack extends AttackAction {
                                             .add(entity.getDeltaMovement().normalize().scale(0.4)))))
                             .executeAttack();
             }
-            entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            playSound(entity, SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         switch (handler.getComboCount()) {
             case 1, 2, 3 -> {
@@ -81,7 +81,7 @@ public class GloveAttack extends AttackAction {
                 }
                 entity.resetFallDistance();
                 if (state.isAt("attack_start"))
-                    entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
+                    playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.3f);
                 if (!entity.level().isClientSide && state.isPast("attack_start") && !state.isPast("attack_end")) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
                                     CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(0.5)))

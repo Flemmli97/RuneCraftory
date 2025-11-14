@@ -56,7 +56,7 @@ public class RushAttack extends AttackAction {
                 handler.applyDelta(dir.scale(1.7).add(0, -0.4, 0));
             }
             if (state.isAt("attack_start")) {
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
             entity.fallDistance = 0;
             if (!entity.level().isClientSide && state.isPast("attack_start") && !state.isPast("attack_end")) {
@@ -83,7 +83,7 @@ public class RushAttack extends AttackAction {
                             .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.RUSH_ATTACK))
                             .executeAttack();
                 }
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             }
         }
     }

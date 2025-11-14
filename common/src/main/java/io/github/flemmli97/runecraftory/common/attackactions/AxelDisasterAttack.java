@@ -28,7 +28,7 @@ public class AxelDisasterAttack extends AttackAction {
         if (state.isAt("move_1")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.8).add(0, 0.5, 0));
-            entity.playSound(RuneCraftorySounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
+            playSound(entity, RuneCraftorySounds.SPELL_GENERIC_LEAP.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         if (state.isAt("move_2")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));

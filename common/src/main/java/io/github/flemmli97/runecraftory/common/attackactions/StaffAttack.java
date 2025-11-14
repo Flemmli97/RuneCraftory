@@ -37,7 +37,7 @@ public class StaffAttack extends AttackAction {
                         .executeAttack();
                 RuneCraftorySpells.STAFF_CAST.get().use(serverLevel, entity, stack);
             }
-            entity.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            playSound(entity, SoundEvents.PLAYER_ATTACK_SWEEP, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 

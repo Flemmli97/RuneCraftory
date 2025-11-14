@@ -24,7 +24,7 @@ public class StraightPunchAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("attack")) {
-            entity.playSound(RuneCraftorySounds.SPELL_STRAIGHT_PUNCH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            playSound(entity, RuneCraftorySounds.SPELL_STRAIGHT_PUNCH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
             if (!entity.level().isClientSide) {
                 S2CScreenShake.sendAround(entity, 12, 8, 3);
                 CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1.5f, 0, false))

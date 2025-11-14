@@ -6,7 +6,9 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +43,10 @@ public class AttackAction {
 
     public static AnimationState create(String animation, double speed) {
         return AnimationState.create(PlayerModelAnimations.ANIMS.get(animation), speed);
+    }
+
+    public static void playSound(Entity entity, SoundEvent event, float volume, float pitch) {
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), event, entity.getSoundSource(), volume, pitch);
     }
 
     public AnimationState getAnimation(LivingEntity entity, int comboIdx) {

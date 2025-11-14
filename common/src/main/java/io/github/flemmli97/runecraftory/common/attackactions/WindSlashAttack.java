@@ -33,15 +33,13 @@ public class WindSlashAttack extends AttackAction {
         if (state.isAt("spin_start")) {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
             handler.resetHitEntityTracker();
-            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
+            playSound(entity, SoundEvents.ENDER_DRAGON_FLAP, 0.7f, 0.5f);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5));
         }
         if (state.isAt("reset")) {
             handler.resetHitEntityTracker();
-            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
+            playSound(entity, SoundEvents.ENDER_DRAGON_FLAP, 1, 0.7f);
         }
         if (state.isAt("leap")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
@@ -67,8 +65,7 @@ public class WindSlashAttack extends AttackAction {
         if (handler.getComboCount() == 2) {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
             handler.resetHitEntityTracker();
-            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                    SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
+            playSound(entity, SoundEvents.ENDER_DRAGON_FLAP, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.7f);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35));
         }

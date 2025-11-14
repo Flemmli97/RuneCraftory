@@ -43,7 +43,7 @@ public class LongSwordAttack extends AttackAction {
                         .executeAttack();
             }
             if (state.isAt("attack")) {
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
             if (state.isAt("step")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
@@ -53,11 +53,11 @@ public class LongSwordAttack extends AttackAction {
             if (state.isAt("spin_start")) {
                 handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                 handler.resetHitEntityTracker();
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
             if (state.isAt("reset")) {
                 handler.resetHitEntityTracker();
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
             }
             CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                     handler.get(DataKey.SPIN_ROTATION) + 150, handler.get(DataKey.SPIN_ROTATION) - 500, 0);

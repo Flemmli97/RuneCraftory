@@ -28,7 +28,7 @@ public class GustAttack extends AttackAction {
         if (state.isAt("jump")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
             handler.applyDelta(dir.scale(2).add(0, 0.5, 0));
-            entity.playSound(RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
+            playSound(entity, RuneCraftorySounds.SPELL_GENERIC_WIND_LONG.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.2f);
         }
         if (state.isAt("attack")) {
             if (!entity.level().isClientSide) {
@@ -40,7 +40,7 @@ public class GustAttack extends AttackAction {
                         .doOnSuccess(e -> CombatUtils.knockBackEntity(entity, e, 1.1f))
                         .executeAttack());
             }
-            entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         handler.store(DataKey.FIXED_LOOK, true);
     }

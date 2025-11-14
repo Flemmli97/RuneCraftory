@@ -37,7 +37,7 @@ public class NaiveBladeAttack extends AttackAction {
                 handler.applyDelta(new Vec3(0, 0.37, 0));
             }
             if (state.isAt("attack_1")) {
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 if (!entity.level().isClientSide) {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.circleTargets(entity.getYRot() - 150, entity.getYRot() + 150, 0))
                             .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.NAIVE_BLADE))
@@ -48,7 +48,7 @@ public class NaiveBladeAttack extends AttackAction {
                 }
             }
             if (state.isAt("attack_2")) {
-                entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+                playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 if (!entity.level().isClientSide) {
                     CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 3, 0, false))
                             .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.NAIVE_BLADE))
@@ -56,7 +56,7 @@ public class NaiveBladeAttack extends AttackAction {
                 }
             }
         } else if (state.isAt("prepared")) {
-            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.CHAIN_PLACE, entity.getSoundSource(), 1.5f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            playSound(entity, SoundEvents.CHAIN_PLACE, 1.5f, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 
@@ -64,7 +64,7 @@ public class NaiveBladeAttack extends AttackAction {
     public void onStart(LivingEntity entity, WeaponHandler<?> handler) {
         super.onStart(entity, handler);
         if (handler.getComboCount() == 2) {
-            entity.playSound(RuneCraftorySounds.SPELL_NAIVE_BLADE.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
+            playSound(entity, RuneCraftorySounds.SPELL_NAIVE_BLADE.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
     }
 

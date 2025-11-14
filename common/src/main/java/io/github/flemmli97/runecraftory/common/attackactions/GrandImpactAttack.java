@@ -35,7 +35,7 @@ public class GrandImpactAttack extends AttackAction {
         if (!entity.level().isClientSide && (state.isAt("attack_1") || state.isAt("attack_2"))) {
             float reach = (float) entity.getAttributeValue(RuneCraftoryAttributes.ATTACK_RANGE.asHolder());
             S2CScreenShake.sendAround(entity, 16, 6, 3);
-            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
+            playSound(entity, SoundEvents.PLAYER_ATTACK_STRONG, 1.0f, 1.0f);
             CombatUtils.applyTempAttribute(entity, Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.GRAND_IMPACT));
             ItemAxeBase.performRightClickAction(stack, entity, reach + 1, 0.1f);
             CombatUtils.removeTempAttribute(entity, Attributes.ATTACK_DAMAGE);

@@ -40,19 +40,17 @@ public class HammerAxeAttack extends AttackAction {
                             CombatUtils.getRange(entity, 0),
                             CombatUtils.getWidth(entity, 0), 0.5)))
                     .executeAttack();
-            entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
         if (handler.getComboCount() == 3) {
             if (state.isAt("spin_start")) {
                 handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                 handler.resetHitEntityTracker();
-                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
+                playSound(entity, SoundEvents.ENDER_DRAGON_FLAP, 0.7f, 0.5f);
             }
             if (state.isAt("reset")) {
                 handler.resetHitEntityTracker();
-                entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 1, 0.7f);
+                playSound(entity, SoundEvents.ENDER_DRAGON_FLAP, 1, 0.7f);
             }
             if (state.isPast("spin_start") && !state.isPast("spin_end")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));

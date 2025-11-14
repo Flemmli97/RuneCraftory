@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.ComboContainer;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
-import io.github.flemmli97.runecraftory.common.network.S2CEntityPositionPacket;
+import io.github.flemmli97.runecraftory.common.network.S2CEntityMotionPacket;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttackActions;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
@@ -153,10 +153,6 @@ public class WeaponHandler<E extends LivingEntity> {
     }
 
     public void tick() {
-        if (this.nextCombo != -1) {
-            this.setState(this.currentAction, this.nextCombo);
-            this.nextCombo = -1;
-        }
         if (this.currentAction != RuneCraftoryAttackActions.NONE.get()) {
             ItemStack weapon = this.get(DataKey.USED_WEAPON);
             if (!this.isCurrentAnimationDone()) {
@@ -166,11 +162,7 @@ public class WeaponHandler<E extends LivingEntity> {
             if (!this.entity.level().isClientSide) {
                 ComboContainer.ComboHandler handler = this.currentAction.combos() != null ? this.currentAction.combos().get(this.comboCount - 1) : null;
                 if (this.continueAttack && handler != null && handler.canAdvance().test(this)) {
-                    if (this.getAnimationHandler().getAnimation() == null) {
-                        this.setState(this.currentAction, this.nextCombo);
-                    } else {
-                        this.nextCombo = handler.advanceTo().get(this);
-                    }
+                    this.setState(this.currentAction, this.nextCombo);
                     return;
                 }
                 boolean reset = this.isCurrentAnimationDone() && (handler == null || ++this.resetTime > handler.resetTime());
@@ -199,7 +191,7 @@ public class WeaponHandler<E extends LivingEntity> {
         if (this.movementUpdate && !this.getEntity().level().isClientSide) {
             this.movementUpdate = false;
             // Vanilla sends the update at the start of the next tick which is why
-            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityPositionPacket(this.getEntity()), this.getEntity());
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityMotionPacket(this.getEntity(), false), this.getEntity());
         }
     }
 
@@ -293,6 +285,9 @@ public class WeaponHandler<E extends LivingEntity> {
     public void applyDelta(Vec3 delta) {
         this.getEntity().setDeltaMovement(delta);
         this.movementUpdate = true;
+        if (!this.getEntity().level().isClientSide) {
+            LoaderNetwork.INSTANCE.sendToTracking(new S2CEntityMotionPacket(this.getEntity(), true), this.getEntity());
+        }
     }
 
     public void setGravityState(boolean noGravity) {

@@ -45,11 +45,11 @@ public class TornadoSwingAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("attack_start_1")) {
-            entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
         if (state.isAt("attack_start_2")) {
             handler.resetHitEntityTracker();
-            entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
         CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("attack_start_1", 0), state.getMarker("attack_end_1", 0),
                 handler.get(DataKey.SPIN_ROTATION) + 110, handler.get(DataKey.SPIN_ROTATION) - 285, 0.5f);
@@ -74,7 +74,7 @@ public class TornadoSwingAttack extends AttackAction {
         super.onStart(entity, handler);
         handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
         if (handler.getComboCount() != 1) {
-            entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
+            playSound(entity, RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 0.8f);
         }
     }
 
