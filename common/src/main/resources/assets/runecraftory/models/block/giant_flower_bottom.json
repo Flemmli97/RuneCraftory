@@ -1,6 +1,7 @@
 {
   "format_version": "1.21.6",
   "credit": "Made with Blockbench",
+  "ambientocclusion": false,
   "texture_size": [32, 32],
   "textures": {
     "particle": "#layer0"
