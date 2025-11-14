@@ -43,7 +43,7 @@ public class SetWeaponBasedAttack<E extends LivingEntity> extends ExtendedBehavi
         ItemStack weapon = entity.getMainHandItem();
         AttackActionData action = weapon.get(RuneCraftoryDataComponentTypes.ATTACK_ACTION.get());
         Optional<Holder<AttackAction>> opt = action.attackAction().get();
-        int amount = entity.getRandom().nextInt(opt.get().value().combos().size()) + 1;
+        int amount = Math.min(3, entity.getRandom().nextInt(opt.get().value().combos().size()) + 1);
         NPCAttackAction attackAction = new NPCAttackAction(opt.get().value(), amount, Optional.empty());
         BrainUtils.setMemory(entity, RuneCraftoryMemoryTypes.NPC_ATTACK_ACTION.get(), attackAction);
     }

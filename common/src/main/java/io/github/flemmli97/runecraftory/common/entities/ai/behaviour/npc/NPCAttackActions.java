@@ -59,8 +59,8 @@ public class NPCAttackActions {
             return new InvalidateMemory<>(MemoryModuleType.ATTACK_TARGET);
         if (this.behaviours.size() == 1) {
             return this.behaviours.getFirst().create()
-                    .startCondition(npc -> !npc.getAnimationHandler().hasAnimation() && BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN))
-                    .stopIf(npc -> npc.getAnimationHandler().hasAnimation() || !BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN));
+                    .startCondition(npc -> !npc.getAnimationHandler().hasAnimation() && !BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN))
+                    .stopIf(npc -> BrainUtils.hasMemory(npc, MemoryModuleType.ATTACK_COOLING_DOWN));
         }
         return new OneRandomBehaviour<NPCEntity>(this.behaviours.stream()
                 .map(seq -> Pair.of(seq.create(), seq.weight())).toArray(Pair[]::new))
