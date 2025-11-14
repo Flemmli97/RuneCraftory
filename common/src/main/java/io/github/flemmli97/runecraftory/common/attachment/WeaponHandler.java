@@ -134,7 +134,7 @@ public class WeaponHandler<E extends LivingEntity> {
             } else {
                 this.getAnimationHandler().setAnimation(anim.definition(),
                         anim.getStartTransition(), anim.getEndTransitionTime(),
-                        anim.getTick(1));
+                        anim.getTick(1), anim.getSpeed());
             }
         }
     }

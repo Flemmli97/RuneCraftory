@@ -13,7 +13,7 @@ public class PlayerAnimationHandler extends AnimationHandler<Player> {
     }
 
     @Override
-    protected void syncToClient(int startTransition, int endTransition, double offset) {
-        LoaderNetwork.INSTANCE.sendToTracking(S2CPlayerAnimation.create(this.getEntity(), startTransition, endTransition, offset), this.getEntity());
+    protected void syncToClient() {
+        LoaderNetwork.INSTANCE.sendToTracking(S2CPlayerAnimation.create(this.getEntity()), this.getEntity());
     }
 }

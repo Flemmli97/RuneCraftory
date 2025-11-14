@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 public class S2CPlayerAnimation implements CustomPacketPayload {
 
@@ -17,49 +18,46 @@ public class S2CPlayerAnimation implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CPlayerAnimation> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CPlayerAnimation decode(RegistryFriendlyByteBuf buf) {
-            return new S2CPlayerAnimation(buf.readInt(), buf.readUtf(), buf.readInt(), buf.readInt(), buf.readDouble());
+            return new S2CPlayerAnimation(buf.readInt(), buf.readBoolean() ? AnimationState.SyncableState.STREAM_CODEC.decode(buf) : null);
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, S2CPlayerAnimation pkt) {
             buf.writeInt(pkt.entityID);
-            buf.writeUtf(pkt.animID);
-            buf.writeInt(pkt.startTransition);
-            buf.writeInt(pkt.endTransition);
-            buf.writeDouble(pkt.start);
+            buf.writeBoolean(pkt.state != null);
+            if (pkt.state != null) {
+                AnimationState.SyncableState.STREAM_CODEC.encode(buf, pkt.state);
+            }
         }
     };
 
     private final int entityID;
-    private final String animID;
-    private final double start;
+    private final AnimationState.SyncableState state;
 
-    private final int startTransition, endTransition;
-
-    private S2CPlayerAnimation(int entityID, String animID, int startTransition, int endTransition, double start) {
+    private S2CPlayerAnimation(int entityID, @Nullable AnimationState.SyncableState state) {
         this.entityID = entityID;
-        this.animID = animID;
-        this.start = start;
-        this.startTransition = startTransition;
-        this.endTransition = endTransition;
+        this.state = state;
     }
 
-    public static S2CPlayerAnimation create(Player player, int startTransition, int endTransition, double start) {
-        return new S2CPlayerAnimation(player, startTransition, endTransition, start);
-    }
-
-    private S2CPlayerAnimation(Player player, int startTransition, int endTransition, double start) {
-        this.entityID = player.getId();
-        this.start = start;
-        this.startTransition = startTransition;
-        this.endTransition = endTransition;
+    private S2CPlayerAnimation(Player player, @Nullable AnimationState.SyncableState state) {
+        this(player.getId(), state);
         AnimationHandler<?> handler = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler()
                 .getAnimationHandler();
-        AnimationState state = handler.getAnimation();
-        this.animID = state != null ? state.getID() : "";
-        if (!this.animID.isEmpty() && handler.getAnimations().get(this.animID) == null) {
-            RuneCraftory.LOGGER.error("This animation is not registered for {}. Registered animations are {} but set animation is {}", player, handler.getAnimations().all(), this.animID);
+        if (state != null && handler.getAnimations().get(state.id()) == null) {
+            RuneCraftory.LOGGER.error("This animation is not registered for {}. Registered animations are {} but set animation is {}", player, handler.getAnimations().all(), state.id());
         }
+    }
+
+    public static S2CPlayerAnimation create(Player player) {
+        AnimationState state = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler()
+                .getAnimationHandler().getAnimation();
+        return new S2CPlayerAnimation(player, state != null ? state.forSync() : null);
+    }
+
+    public static S2CPlayerAnimation create(Player player, double offset) {
+        AnimationState state = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler()
+                .getAnimationHandler().getAnimation();
+        return new S2CPlayerAnimation(player, state != null ? state.forSync().withOffset(offset) : null);
     }
 
     @Override
@@ -72,8 +70,12 @@ public class S2CPlayerAnimation implements CustomPacketPayload {
         if (entity instanceof Player target) {
             AnimationHandler<?> handler = RunecraftoryAttachments.PLAYER_DATA.get().get(target).getWeaponHandler()
                     .getAnimationHandler();
-            handler.setAnimation(pkt.animID.isEmpty() ? null : handler.getAnimations().get(pkt.animID),
-                    pkt.startTransition, pkt.endTransition, pkt.start);
+            if (pkt.state == null) {
+                handler.setAnimationDef(null);
+            } else {
+                handler.setAnimation(handler.getAnimations().get(pkt.state.id()),
+                        pkt.state.startTransition(), pkt.state.endTransition(), pkt.state.offset(), pkt.state.speed());
+            }
         }
     }
 }
