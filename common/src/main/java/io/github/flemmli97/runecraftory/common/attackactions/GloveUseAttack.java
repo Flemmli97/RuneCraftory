@@ -31,7 +31,7 @@ public class GloveUseAttack extends AttackAction {
     @Override
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isPast("attack_start") && !state.isPast("attack_end")) {
-            Vec3 move = EntityUtils.horizontalLookAngle(entity).scale(entity.onGround() ? 0.5 : 0.3).add(0, entity.getDeltaMovement().y, 0);
+            Vec3 move = EntityUtils.horizontalLookAngle(entity).scale(entity.onGround() ? 0.55 : 0.3).add(0, entity.getDeltaMovement().y, 0);
             handler.applyDelta(move);
             if (state.isAt("reset"))
                 handler.resetHitEntityTracker();

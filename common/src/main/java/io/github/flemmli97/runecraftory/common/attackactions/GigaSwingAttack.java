@@ -28,7 +28,7 @@ public class GigaSwingAttack extends AttackAction {
         if (state.isAt("attack_start")) {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot() - 50);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1)).scale(-1);
-            handler.store(DataKey.MOVE_DIRECTION, dir.scale(2));
+            handler.applyDelta(dir.scale(1.5));
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         if (!entity.level().isClientSide) {

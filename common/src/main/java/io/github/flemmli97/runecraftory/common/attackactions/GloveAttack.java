@@ -55,13 +55,7 @@ public class GloveAttack extends AttackAction {
             entity.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
         }
         switch (handler.getComboCount()) {
-            case 1 -> {
-                if (state.isAt("step")) {
-                    Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.2));
-                }
-            }
-            case 2, 3 -> {
+            case 1, 2, 3 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                     handler.applyDelta(dir.scale(0.3));
@@ -70,11 +64,11 @@ public class GloveAttack extends AttackAction {
             case 4 -> {
                 if (state.isAt("jump")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(1.2).add(0, 0.9, 0));
+                    handler.applyDelta(dir.scale(1.5).add(0, 1.1, 0));
                 }
                 if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.9).add(0, -0.5, 0));
+                    handler.applyDelta(dir.scale(0.9).add(0, -0.3, 0));
                 }
                 entity.resetFallDistance();
             }

@@ -55,7 +55,7 @@ public class DashSlashAttack extends AttackAction {
             if (state.isPast("attack_start")) {
                 if (state.isAt("attack_start")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.8));
                 }
                 if (state.isAt("sound"))
                     entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);

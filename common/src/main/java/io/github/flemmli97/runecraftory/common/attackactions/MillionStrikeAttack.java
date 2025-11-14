@@ -26,14 +26,14 @@ public class MillionStrikeAttack extends AttackAction {
     public void run(LivingEntity entity, ItemStack stack, WeaponHandler<?> handler, AnimationState state) {
         if (state.isAt("attack")) {
             if (!entity.level().isClientSide) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 0, 1, false))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 1, false))
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.MILLION_STRIKE)).executeAttack();
             }
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.7f);
         }
         if (state.isAt("attack_crit")) {
             if (!entity.level().isClientSide) {
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 0, 1, false))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), 0, 1, 1, false))
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.MILLION_STRIKE))
                         .withBonusAttributes(RuneCraftoryAttributes.CRITICAL.asHolder(), 100d).executeAttack();
             }

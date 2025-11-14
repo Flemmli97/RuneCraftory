@@ -294,4 +294,9 @@ public class WeaponHandler<E extends LivingEntity> {
         this.getEntity().setDeltaMovement(delta);
         this.movementUpdate = true;
     }
+
+    public void setGravityState(boolean noGravity) {
+        this.store(DataKey.GRAVITY, this.getEntity().isNoGravity());
+        this.getEntity().setNoGravity(noGravity);
+    }
 }

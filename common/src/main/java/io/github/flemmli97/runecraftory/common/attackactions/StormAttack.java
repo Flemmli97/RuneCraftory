@@ -48,13 +48,13 @@ public class StormAttack extends AttackAction {
             case 1 -> {
                 if (state.isAt("move")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.2).add(0, 0.1, 0));
+                    handler.applyDelta(dir.scale(0.3).add(0, 0.1, 0));
                 }
             }
             case 2 -> {
                 if (state.isAt("move")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.3));
+                    handler.applyDelta(dir.scale(0.35));
                 }
             }
             case 3 -> {
@@ -66,21 +66,21 @@ public class StormAttack extends AttackAction {
             case 4 -> {
                 if (state.isAt("up")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.15).add(0, 0.05, 0));
+                    handler.applyDelta(dir.scale(0.2).add(0, 0.05, 0));
                 }
                 if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.15).add(0, -0.05, 0));
+                    handler.applyDelta(dir.scale(0.2).add(0, -0.05, 0));
                 }
             }
             case 5 -> {
                 if (state.isAt("up")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.2).add(0, 0.15, 0));
+                    handler.applyDelta(dir.scale(0.25).add(0, 0.15, 0));
                 }
                 if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.25).add(0, -0.35, 0));
+                    handler.applyDelta(dir.scale(0.3).add(0, -0.35, 0));
                 }
                 entity.fallDistance = 0;
                 if (state.isAt("attack")) {

@@ -29,13 +29,13 @@ public class StardustUpperAttack extends AttackAction {
             handler.store(DataKey.SPIN_ROTATION, entity.getYRot() - 110);
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.applyDelta(dir.scale(0.6));
+            handler.applyDelta(dir.scale(0.7));
         }
         if (state.isAt("attack_start_2")) {
             handler.resetHitEntityTracker();
             entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH_HEAVY.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1f);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.applyDelta(dir.scale(0.6));
+            handler.applyDelta(dir.scale(0.7));
         }
         if (!entity.level().isClientSide) {
             CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("attack_start_1", 0), state.getMarker("attack_end_1", 0),

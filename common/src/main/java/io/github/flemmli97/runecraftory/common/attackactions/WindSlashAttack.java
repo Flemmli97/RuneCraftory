@@ -36,7 +36,7 @@ public class WindSlashAttack extends AttackAction {
             entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                     SoundEvents.ENDER_DRAGON_FLAP, entity.getSoundSource(), 0.7f, 0.5f);
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35));
+            handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5));
         }
         if (state.isAt("reset")) {
             handler.resetHitEntityTracker();
@@ -45,7 +45,7 @@ public class WindSlashAttack extends AttackAction {
         }
         if (state.isAt("leap")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, 0.3, 0));
+            handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.5).add(0, 0.3, 0));
         }
         if (state.isAt("spin_end")) {
             handler.store(DataKey.MOVE_DIRECTION, null);

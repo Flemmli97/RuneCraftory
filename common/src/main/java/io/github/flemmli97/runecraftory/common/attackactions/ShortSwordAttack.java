@@ -57,12 +57,12 @@ public class ShortSwordAttack extends AttackAction {
             }
             case 3 -> {
                 if (state.isAt("step")) {
-                    handler.applyDelta(dir.scale(0.25));
+                    handler.applyDelta(dir.scale(0.3));
                 }
             }
             case 4 -> {
                 if (state.isAt("step")) {
-                    handler.applyDelta(dir.scale(0.35).add(0, 0.4, 0));
+                    handler.applyDelta(dir.scale(0.3).add(0, 0.4, 0));
                 }
             }
             case 5 -> {

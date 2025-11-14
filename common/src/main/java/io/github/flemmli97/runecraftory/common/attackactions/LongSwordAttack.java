@@ -47,7 +47,7 @@ public class LongSwordAttack extends AttackAction {
             }
             if (state.isAt("step")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.applyDelta(dir.scale(0.5));
+                handler.applyDelta(dir.scale(0.6));
             }
         } else {
             if (state.isAt("spin_start")) {

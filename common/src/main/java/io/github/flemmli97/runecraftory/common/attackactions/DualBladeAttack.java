@@ -55,32 +55,32 @@ public class DualBladeAttack extends AttackAction {
             case 1 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.15));
+                    handler.applyDelta(dir.scale(0.1));
                 }
             }
             case 2 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.2));
+                    handler.applyDelta(dir.scale(0.3));
                 }
             }
             case 3 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.25));
+                    handler.applyDelta(dir.scale(0.35));
                 }
             }
             case 4 -> {
                 if (state.isAt("step")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.3));
+                    handler.applyDelta(dir.scale(0.4));
                 }
             }
             case 5 -> {
                 if (state.isAt("step")) {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot());
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.3));
+                    handler.applyDelta(dir.scale(0.4));
                 }
                 CombatUtils.EntityAttack attack = spinAttack(entity, state, state.getMarker("spin_start", 0), state.getMarker("spin_end", 0),
                         handler.get(DataKey.SPIN_ROTATION), handler.get(DataKey.SPIN_ROTATION) + 360, 0);
@@ -95,7 +95,7 @@ public class DualBladeAttack extends AttackAction {
                     handler.store(DataKey.SPIN_ROTATION, entity.getYRot() - 90);
                     entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.3));
+                    handler.applyDelta(dir.scale(0.5));
                 }
                 if (state.isAt("reset")) {
                     handler.resetHitEntityTracker();
@@ -119,11 +119,11 @@ public class DualBladeAttack extends AttackAction {
             case 7 -> {
                 if (state.isAt("leap")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(1.1).add(0, 0.6, 0));
+                    handler.applyDelta(dir.scale(1.7).add(0, 0.7, 0));
                 }
                 if (state.isAt("down")) {
                     Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                    handler.applyDelta(dir.scale(0.9).add(0, -0.4, 0));
+                    handler.applyDelta(dir.scale(1).add(0, -0.2, 0));
                 }
             }
             case 8 -> {

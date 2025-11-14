@@ -65,7 +65,7 @@ public class SpearAttack extends AttackAction {
             }
             case 2 -> {
                 if (anim.isAt("step")) {
-                    handler.applyDelta(dir.scale(0.15));
+                    handler.applyDelta(dir.scale(0.2));
                 }
             }
             case 5 -> {
@@ -86,7 +86,7 @@ public class SpearAttack extends AttackAction {
                             .executeAttack());
                 }
                 if (anim.isAt("leap"))
-                    handler.applyDelta(dir.scale(1.3).add(0, 0.4, 0));
+                    handler.applyDelta(dir.scale(1.5).add(0, 0.4, 0));
                 if (anim.isAt("slam")) {
                     Vec3 look = entity.getLookAngle();
                     look = new Vec3(look.x(), 0, look.z()).scale(1.2);
@@ -101,7 +101,10 @@ public class SpearAttack extends AttackAction {
                         mut.set(Mth.floor(pos.x() + particlePos.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + particlePos.z()));
                         BlockState state = entity.level().getBlockState(mut);
                         if (state.getRenderShape() != RenderShape.INVISIBLE && entity.level() instanceof ServerLevel serverLevel)
-                            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + scaled.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + scaled.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                            serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+                                    attackPos.x() + scaled.x() + entity.getDeltaMovement().x(),
+                                    entity.getY() + 0.1,
+                                    attackPos.z() + scaled.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
                     }
                     entity.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
                 }

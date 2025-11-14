@@ -35,6 +35,7 @@ public class ReaperSlashAttack extends AttackAction {
                 handler.addHitEntityTracker(attack
                         .withBonusAttributesMultiplier(Attributes.ATTACK_DAMAGE, CombatUtils.getAbilityDamageBonus(stack, RuneCraftorySpells.REAPER_SLASH))
                         .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
+                        .doOnSuccess(target -> CombatUtils.knockBackEntity(entity, target, 0.5f))
                         .executeAttack());
             }
         }

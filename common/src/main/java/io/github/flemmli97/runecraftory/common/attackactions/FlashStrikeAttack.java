@@ -32,9 +32,10 @@ public class FlashStrikeAttack extends AttackAction {
         }
         if (state.isAt("move_2")) {
             Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-            handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.6));
+            handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.7));
         }
         if (state.isAt("move_end")) {
+            handler.applyDelta(entity.getDeltaMovement().scale(0.9));
             handler.store(DataKey.MOVE_DIRECTION, null);
         }
         if (!entity.level().isClientSide) {

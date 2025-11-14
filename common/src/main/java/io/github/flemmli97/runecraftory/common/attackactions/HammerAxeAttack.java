@@ -57,13 +57,13 @@ public class HammerAxeAttack extends AttackAction {
             if (state.isPast("spin_start") && !state.isPast("spin_end")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
                 if (state.isAt("spin_start"))
-                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, 0.15, 0));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.4).add(0, 0.15, 0));
                 if (state.isAt("spin_middle"))
-                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.35).add(0, -0.15, 0));
+                    handler.store(DataKey.MOVE_DIRECTION, dir.scale(0.4).add(0, -0.15, 0));
                 entity.resetFallDistance();
                 if (!entity.level().isClientSide) {
                     handler.addHitEntityTracker(CombatUtils.EntityAttack.create(entity,
-                                    CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1)))
+                                    CombatUtils.EntityAttack.aabbTargets(entity.getBoundingBox().inflate(1, 1, Math.max(1, CombatUtils.getRange(entity, -1)))))
                             .withTargetPredicate(e -> !handler.getHitEntityTracker().contains(e))
                             .withAttackSound(SoundEvents.PLAYER_ATTACK_STRONG)
                             .executeAttack());

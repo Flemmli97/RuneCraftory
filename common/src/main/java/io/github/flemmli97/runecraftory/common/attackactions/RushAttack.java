@@ -53,7 +53,7 @@ public class RushAttack extends AttackAction {
         if (handler.getComboCount() == 7) {
             if (state.isAt("leap")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.applyDelta(dir.scale(1.6).add(0, -0.6, 0));
+                handler.applyDelta(dir.scale(1.7).add(0, -0.4, 0));
             }
             if (state.isAt("attack_start")) {
                 entity.playSound(RuneCraftorySounds.PLAYER_ATTACK_SWOOSH.get(), 1, (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f + 1.0f);
@@ -69,11 +69,11 @@ public class RushAttack extends AttackAction {
         } else {
             if (state.isAt("step")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.applyDelta(dir.scale(0.2));
+                handler.applyDelta(dir.scale(0.3));
             }
             if (state.isAt("jump")) {
                 Vec3 dir = CombatUtils.fromRelativeVector(entity, new Vec3(0, 0, 1));
-                handler.applyDelta(dir.scale(0.5).add(0, 0.5, 0));
+                handler.applyDelta(dir.scale(0.5).add(0, 0.6, 0));
                 entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 12, 2, true, false, false));
             }
             entity.fallDistance = 0;

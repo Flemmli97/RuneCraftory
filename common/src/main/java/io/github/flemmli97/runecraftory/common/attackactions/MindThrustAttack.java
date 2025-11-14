@@ -31,7 +31,7 @@ public class MindThrustAttack extends AttackAction {
         }
         if (state.isAt("attack")) {
             if (!entity.level().isClientSide)
-                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), 1, 0.5f, false))
+                CombatUtils.EntityAttack.create(entity, CombatUtils.EntityAttack.obbTargets(entity.getYRot(), entity.getXRot(), 1.5f, 0.5f, false))
                         .withBonusAttributes(RuneCraftoryAttributes.PARALYSIS.asHolder(), 40)
                         .withBonusAttributes(RuneCraftoryAttributes.POISON.asHolder(), 10)
                         .withBonusAttributes(RuneCraftoryAttributes.SEAL.asHolder(), 25)

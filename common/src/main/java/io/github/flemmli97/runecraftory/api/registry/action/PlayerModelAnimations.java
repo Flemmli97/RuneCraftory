@@ -166,9 +166,9 @@ public class PlayerModelAnimations {
     );
     public static final String FLASH_STRIKE = BUILDER.add("flash_strike", AnimationsBuilder.definition(1.6)
             .marker("attack_start", 0.32).marker("attack_end", 1.04).marker("reset", 0.56, 0.8)
-            .marker("move_1", 0.36).marker("move_2", 0.48).marker("move_end", 1.16));
+            .marker("move_1", 0.36).marker("move_2", 0.48).marker("move_end", 1.08));
     public static final String DELTA_STRIKE = BUILDER.add("delta_strike", AnimationsBuilder.definition(1.32)
-            .marker("attack", 0.36, 0.6, 1.12).marker("step", 0.32, 1.04));
+            .marker("attack", 0.36, 0.6, 1.12).marker("step", 0.28, 1.04));
     public static final String NAIVE_BLADE = BUILDER.add("naive_blade", AnimationsBuilder.definition(0.84).marker("prepared", 0.12));
     public static final String NAIVE_BLADE_SUCCESS = BUILDER.add("naive_blade_success", AnimationsBuilder.definition(1.36)
             .marker("attack_1", 0.2).marker("attack_2", 1.04).marker("jump", 0.64));
@@ -181,7 +181,7 @@ public class PlayerModelAnimations {
             .marker("attack", 0.48, 0.58, 0.68, 0.78).marker("attack_crit", 0.78));
     public static final String AXEL_DISASTER = BUILDER.add("axel_disaster", AnimationsBuilder.definition(1.44)
             .marker("move_1", 0.28).marker("move_2", 0.44).marker("move_3", 1.04).marker("move_done", 1.24)
-            .marker("attack_start", 0.44).marker("attack_end", 1.08)
+            .marker("attack_start", 0.44).marker("attack_end", 1.12)
             .marker("move_start", 0.32).marker("move_end", 1.2));
     public static final String STARDUST_UPPER = BUILDER.add("stardust_upper", AnimationsBuilder.definition(1.76)
             .marker("attack_start_1", 0.16).marker("attack_end_1", 0.84)
