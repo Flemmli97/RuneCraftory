@@ -1,5 +1,7 @@
 {
   "base_values": {
+    "minecraft:generic.armor": 4.0,
+    "minecraft:generic.armor_toughness": 2.0,
     "minecraft:generic.attack_damage": 17.0,
     "minecraft:generic.knockback_resistance": 1.0,
     "minecraft:generic.max_health": 290.0,
@@ -12,7 +14,7 @@
     "runecraftory:faint_resistance": 100.0,
     "runecraftory:fatigue_resistance": 100.0,
     "runecraftory:love_resistance": -25.0,
-    "runecraftory:magic_attack": 14.0,
+    "runecraftory:magic_attack": 12.0,
     "runecraftory:magic_defence": 3.0,
     "runecraftory:paralysis_resistance": 90.0,
     "runecraftory:poison_resistance": 100.0,
@@ -23,11 +25,11 @@
   },
   "flying": false,
   "level_gains": {
-    "minecraft:generic.attack_damage": 283.0,
-    "minecraft:generic.max_health": 615.0,
-    "runecraftory:defence": 249.0,
-    "runecraftory:magic_attack": 278.0,
-    "runecraftory:magic_defence": 255.0
+    "minecraft:generic.attack_damage": 233.0,
+    "minecraft:generic.max_health": 915.0,
+    "runecraftory:defence": 199.0,
+    "runecraftory:magic_attack": 228.0,
+    "runecraftory:magic_defence": 205.0
   },
   "level_increase_on_kill": [
     {

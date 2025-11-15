@@ -10,21 +10,28 @@ import io.github.flemmli97.runecraftory.common.blocks.entity.TreeBlockEntity;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
+import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.tenshilib.common.entity.MultiPartEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
@@ -93,6 +100,9 @@ public class JadePlugin implements IWailaPlugin {
                     XpLevelHolder entityLevel = mob.xpLevel();
                     compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getProgress());
                     compoundTag.putInt("RunecraftoryLevel", entityLevel.getLevel());
+                }
+                if (entity instanceof BaseMonster mob && player.getMainHandItem().getItem() == RuneCraftoryItems.DEBUG.get()) {
+                    compoundTag.put("Attributes", mob.getAttributes().save());
                 }
                 if (entity instanceof BaseMonster monster) {
                     if (monster.getOwnerUUID() != null) {
@@ -182,6 +192,8 @@ public class JadePlugin implements IWailaPlugin {
             return accessor;
         });
         registration.registerEntityComponent(new IEntityComponentProvider() {
+
+            @SuppressWarnings("unchecked")
             @Override
             public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {
                 CompoundTag tag = entityAccessor.getServerData();
@@ -212,6 +224,15 @@ public class JadePlugin implements IWailaPlugin {
                             withText(iTooltip, "runecraftory.dependency.tooltips.behaviour", Component.literal(tag.getString("Behaviour")), ChatFormatting.YELLOW);
                         }
                     }
+                }
+                if (tag.contains("Attributes") && entityAccessor.getEntity() instanceof BaseMonster m) {
+                    AttributeMap map = new AttributeMap(DefaultAttributes.getSupplier((EntityType<? extends LivingEntity>) m.getType()));
+                    map.load(tag.getList("Attributes", Tag.TAG_COMPOUND));
+                    ((AttributeMapAccessor) map)
+                            .getAttributes()
+                            .values().stream().sorted((inst, inst2) -> RuneCraftoryAttributes.SORTED.compare(inst.getAttribute(), inst2.getAttribute()))
+                            .forEach(inst -> iTooltip.add(Component.translatable("runecraftory.tooltip.item.attribute",
+                                    Component.translatable(inst.getAttribute().value().getDescriptionId()), inst.getValue()).withStyle(ChatFormatting.GOLD)));
                 }
                 if (entityAccessor.getEntity() instanceof NPCEntity) {
                     if (tag.contains("NPCFollow")) {

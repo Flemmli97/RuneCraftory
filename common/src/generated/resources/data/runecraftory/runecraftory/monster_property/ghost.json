@@ -8,16 +8,16 @@
     "runecraftory:defence": 1.0,
     "runecraftory:dizzy": 3.0,
     "runecraftory:light_resistance": -10.0,
-    "runecraftory:magic_attack": 12.0,
+    "runecraftory:magic_attack": 10.0,
     "runecraftory:magic_defence": 1.0
   },
   "flying": true,
   "level_gains": {
-    "minecraft:generic.attack_damage": 271.0,
-    "minecraft:generic.max_health": 510.0,
-    "runecraftory:defence": 213.0,
-    "runecraftory:magic_attack": 263.0,
-    "runecraftory:magic_defence": 220.0
+    "minecraft:generic.attack_damage": 221.0,
+    "minecraft:generic.max_health": 710.0,
+    "runecraftory:defence": 163.0,
+    "runecraftory:magic_attack": 213.0,
+    "runecraftory:magic_defence": 170.0
   },
   "min_level": 1,
   "money": 0,

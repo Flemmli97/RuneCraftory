@@ -1,7 +1,7 @@
 {
   "health_increase": 0.0,
-  "intel_increase": 0.2,
-  "max_level": 100,
+  "intel_increase": 0.15,
+  "max_level": 999,
   "rp_increase": 0.5,
   "str_increase": 0.0,
   "vit_increase": 0.0,

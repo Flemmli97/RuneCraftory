@@ -174,8 +174,8 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
 
     private void updateLevelAttributes() {
         float lvl = this.level.getLevel() - 1;
-        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * (lvl + LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 25, 30, 1)), AttributeUpdate.REPLACE);
-        lvl += LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 1);
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * (lvl + LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 1)), AttributeUpdate.REPLACE);
+        lvl += LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 75, 30, 1);
         this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.rpPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.strPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.vitPerLevel * lvl, AttributeUpdate.REPLACE);
@@ -186,7 +186,7 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
         float adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 0.5f);
         this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::healthIncrease), AttributeUpdate.REPLACE);
         adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 150, 30, 0.5f);
-        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
+        this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.cappedSkillVal(adjust, 100, SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::strIncrease), AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::vitIncrease), AttributeUpdate.REPLACE);
         this.setAttributeValue(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::intelIncrease), AttributeUpdate.REPLACE);
@@ -337,6 +337,10 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
 
     private double skillVal(float adjust, Function<SkillProperties, Number> func) {
         return this.skillLevels.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1 + adjust) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
+    }
+
+    private double cappedSkillVal(float adjust, int max, Function<SkillProperties, Number> func) {
+        return this.skillLevels.entrySet().stream().mapToDouble(e -> (Math.min(max, e.getValue().getLevel()) - 1 + adjust) * func.apply(DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     public XpLevelHolder getSkillLevel(Skills skill) {
@@ -721,7 +725,7 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
                 }
             };
             instance.removeModifier(modifier);
-            if (this == REPLACE && value <= 0)
+            if (value == 0 || (this == REPLACE && value <= 0))
                 return;
             instance.addPermanentModifier(new AttributeModifier(modifier, value, operation));
         }

@@ -26,36 +26,36 @@ public class SkillPropertiesgen implements DataProvider {
 
     protected void add() {
         this.skillProps.clear();
-        this.skillProps.put(Skills.SHORTSWORD, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
-        this.skillProps.put(Skills.LONGSWORD, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
-        this.skillProps.put(Skills.SPEAR, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
-        this.skillProps.put(Skills.HAMMERAXE, new SkillProperties(100, 0, 0.25f, 0.5f, 0, 0, 1));
-        this.skillProps.put(Skills.DUAL, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
-        this.skillProps.put(Skills.FIST, new SkillProperties(100, 0, 0.25f, 0.25f, 0, 0, 1));
+        this.skillProps.put(Skills.SHORTSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
+        this.skillProps.put(Skills.LONGSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
+        this.skillProps.put(Skills.SPEAR, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
+        this.skillProps.put(Skills.HAMMERAXE, new SkillProperties(999, 0, 0.2f, 0.5f, 0, 0, 1));
+        this.skillProps.put(Skills.DUAL, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
+        this.skillProps.put(Skills.FIST, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
 
-        this.skillProps.put(Skills.FIRE, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.WATER, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.EARTH, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.WIND, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.DARK, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.LIGHT, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.LOVE, new SkillProperties(100, 0, 0.5f, 0, 0, 0.2f, 1));
+        this.skillProps.put(Skills.FIRE, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.WATER, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.EARTH, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.WIND, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.DARK, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.LIGHT, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.LOVE, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
 
-        this.skillProps.put(Skills.FARMING, new SkillProperties(100, 1, 1, 0, 0.4f, 0, 1));
-        this.skillProps.put(Skills.LOGGING, new SkillProperties(100, 1, 1, 0.1f, 0.3f, 0, 1));
-        this.skillProps.put(Skills.MINING, new SkillProperties(100, 1, 1, 0.1f, 0.3f, 0, 1));
-        this.skillProps.put(Skills.FISHING, new SkillProperties(100, 1, 1, 0, 0, 0.4f, 1));
+        this.skillProps.put(Skills.FARMING, new SkillProperties(100, 1, 1, 0, 0.3f, 0, 1));
+        this.skillProps.put(Skills.LOGGING, new SkillProperties(100, 1, 1, 0.1f, 0.2f, 0, 1));
+        this.skillProps.put(Skills.MINING, new SkillProperties(100, 1, 1, 0.1f, 0.2f, 0, 1));
+        this.skillProps.put(Skills.FISHING, new SkillProperties(100, 1, 1, 0, 0, 0.3f, 1));
 
         this.skillProps.put(Skills.COOKING, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0, 1));
-        this.skillProps.put(Skills.FORGING, new SkillProperties(100, 0, 0.25f, 0.25f, 0.1f, 0, 1));
+        this.skillProps.put(Skills.FORGING, new SkillProperties(100, 0, 0.25f, 0.1f, 0.1f, 0, 1));
         this.skillProps.put(Skills.CHEMISTRY, new SkillProperties(100, 0, 0.25f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.CRAFTING, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0.1f, 1));
+        this.skillProps.put(Skills.CRAFTING, new SkillProperties(100, 0, 0.25f, 0, 0, 0.1f, 1));
 
-        this.skillProps.put(Skills.SEARCHING, new SkillProperties(100, 0, 0.3f, 0, 0, 0.1f, 1));
-        this.skillProps.put(Skills.WALKING, new SkillProperties(100, 0.5f, 0.125f, 0, 0.1f, 0, 1));
-        this.skillProps.put(Skills.SLEEPING, new SkillProperties(100, 2f, 2, 0.5f, 1, 0.5f, 1));
-        this.skillProps.put(Skills.EATING, new SkillProperties(100, 1, 2, 0.5f, 0.5f, 0.2f, 1));
-        this.skillProps.put(Skills.DEFENCE, new SkillProperties(100, 1.5f, 0, 0, 1, 0, 1));
+        this.skillProps.put(Skills.SEARCHING, new SkillProperties(999, 0, 0.3f, 0, 0, 0.1f, 1));
+        this.skillProps.put(Skills.WALKING, new SkillProperties(999, 0.3f, 0.125f, 0, 0.1f, 0, 1));
+        this.skillProps.put(Skills.SLEEPING, new SkillProperties(999, 2f, 2, 0.4f, 0.4f, 0.3f, 1));
+        this.skillProps.put(Skills.EATING, new SkillProperties(999, 1, 2, 0.2f, 0.2f, 0.2f, 1));
+        this.skillProps.put(Skills.DEFENCE, new SkillProperties(999, 2, 0, 0, 0.75f, 0, 1));
 
         this.skillProps.put(Skills.RES_POISON, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
         this.skillProps.put(Skills.RES_SEAL, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
@@ -65,7 +65,7 @@ public class SkillPropertiesgen implements DataProvider {
         this.skillProps.put(Skills.RES_COLD, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
 
         this.skillProps.put(Skills.BATH, new SkillProperties(100, 1, 1, 0, 0.1f, 0, 1));
-        this.skillProps.put(Skills.TAMING, new SkillProperties(100, 0, 0.2f, 0, 0, 0.5f, 1));
+        this.skillProps.put(Skills.TAMING, new SkillProperties(100, 0, 0.2f, 0, 0, 0.3f, 1));
         this.skillProps.put(Skills.LEADER, new SkillProperties(100, 0, 0, 0.25f, 0, 0.1f, 1));
     }
 

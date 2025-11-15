@@ -36,10 +36,10 @@ public class GeneralConfig {
     public static int startingHealth = 20;
     public static int startingRp = 100;
     public static int startingMoney = 100;
-    public static int startingStr = 0;
+    public static int startingStr = 1;
     public static int startingVit = 0;
     public static int startingIntel = 1;
-    public static float hpPerLevel = 5;
+    public static float hpPerLevel = 3;
     public static float rpPerLevel = 2;
     public static float strPerLevel = 0.5f;
     public static float vitPerLevel = 0.4f;
