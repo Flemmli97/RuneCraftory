@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.entities.utils.RunecraftoryBossba
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
+import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.tenshilib.common.entity.OverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
@@ -244,7 +245,10 @@ public abstract class BossMonster extends BaseMonster implements OverlayEntityRe
     }
 
     @Override
-    protected float tamingMultiplier(ItemStack stack) {
+    protected float tamingMultiplier(Player player, ItemStack stack) {
+        if (RunecraftoryAttachments.PLAYER_DATA.get().get(player).entityStatsTracker.getKillCount(this.getType()) == 0) {
+            return 0;
+        }
         boolean flag = stack.is(this.tamingItem());
         return flag ? 1 : 0;
     }

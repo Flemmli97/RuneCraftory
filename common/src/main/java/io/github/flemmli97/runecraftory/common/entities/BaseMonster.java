@@ -1422,7 +1422,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         }
     }
 
-    protected float tamingMultiplier(ItemStack stack) {
+    protected float tamingMultiplier(Player player, ItemStack stack) {
         boolean flag = stack.is(this.tamingItem());
         return flag ? 2 : 1;
     }
@@ -1891,7 +1891,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
             };
             if (player instanceof ServerPlayer serverPlayer)
                 EntityUtils.playSoundForPlayer(serverPlayer, sound, SoundSource.NEUTRAL, 0.7f, 1);
-            float rightItemMultiplier = this.tamingMultiplier(stack);
+            float rightItemMultiplier = this.tamingMultiplier(player, stack);
             int count = stack.getCount();
             this.applyFoodEffect(stack);
             if (count == stack.getCount() && !player.isCreative())
