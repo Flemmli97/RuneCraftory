@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:hoe_iron",
   "item_stats": {
-    "minecraft:generic.attack_damage": 15.0,
+    "minecraft:generic.attack_damage": 10.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 3.0
   },

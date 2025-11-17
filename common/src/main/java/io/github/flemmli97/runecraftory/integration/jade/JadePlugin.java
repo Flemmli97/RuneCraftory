@@ -101,10 +101,10 @@ public class JadePlugin implements IWailaPlugin {
                     compoundTag.putFloat("RunecraftoryLevelPerc", entityLevel.getProgress());
                     compoundTag.putInt("RunecraftoryLevel", entityLevel.getLevel());
                 }
-                if (entity instanceof BaseMonster mob && player.getMainHandItem().getItem() == RuneCraftoryItems.DEBUG.get()) {
-                    compoundTag.put("Attributes", mob.getAttributes().save());
-                }
                 if (entity instanceof BaseMonster monster) {
+                    if (player.getMainHandItem().getItem() == RuneCraftoryItems.DEBUG.get()) {
+                        compoundTag.put("Attributes", monster.getAttributes().save());
+                    }
                     if (monster.getOwnerUUID() != null) {
                         String username = player.getServer().getProfileCache().get(monster.getOwnerUUID())
                                 .map(GameProfile::getName).orElse(null);

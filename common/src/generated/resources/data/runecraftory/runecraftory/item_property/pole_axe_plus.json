@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:pole_axe_plus",
   "item_stats": {
-    "minecraft:generic.attack_damage": 39.0,
+    "minecraft:generic.attack_damage": 61.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.0,
     "runecraftory:critical": 7.0,

@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:quartz",
   "item_stats": {
-    "minecraft:generic.attack_damage": 7.0
+    "minecraft:generic.attack_damage": 1.5
   },
   "monster_bonus": {
     "minecraft:generic.attack_damage": 0.5

@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:fishing_rod_platinum",
   "item_stats": {
-    "minecraft:generic.attack_damage": 89.0,
+    "minecraft:generic.attack_damage": 94.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 98.0
   },

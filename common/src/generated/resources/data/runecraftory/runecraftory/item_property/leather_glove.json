@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:leather_glove",
   "item_stats": {
-    "minecraft:generic.attack_damage": 5.0,
+    "minecraft:generic.attack_damage": 4.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.0,
     "runecraftory:dizzy": 3.0

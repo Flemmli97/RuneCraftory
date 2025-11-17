@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:bone",
   "item_stats": {
-    "runecraftory:defence": 2.0
+    "runecraftory:defence": 1.0
   },
   "monster_bonus": {
     "runecraftory:defence": 0.5

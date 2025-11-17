@@ -3,8 +3,8 @@
   "element": "NONE",
   "item": "minecraft:dragon_breath",
   "item_stats": {
-    "minecraft:generic.attack_damage": 4.0,
-    "runecraftory:magic_attack": 15.0
+    "minecraft:generic.attack_damage": 3.0,
+    "runecraftory:magic_attack": 7.0
   },
   "monster_bonus": {
     "runecraftory:magic_attack": 1.0

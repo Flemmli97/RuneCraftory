@@ -4,7 +4,7 @@
   "item": "runecraftory:watering_can_scrap",
   "item_stats": {
     "runecraftory:attack_range": 0.0,
-    "runecraftory:magic_attack": 1.0
+    "runecraftory:magic_attack": 2.0
   },
   "monster_bonus": {
     "minecraft:generic.max_health": 1.0

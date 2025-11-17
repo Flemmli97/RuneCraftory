@@ -4,7 +4,7 @@
   "item": "minecraft:obsidian",
   "item_stats": {
     "minecraft:generic.knockback_resistance": 0.2,
-    "runecraftory:defence": 5.0
+    "runecraftory:defence": 2.0
   },
   "monster_bonus": {
     "runecraftory:defence": 0.5

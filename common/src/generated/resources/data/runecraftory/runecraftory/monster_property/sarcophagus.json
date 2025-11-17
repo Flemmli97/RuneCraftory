@@ -13,7 +13,7 @@
     "runecraftory:faint_resistance": 100.0,
     "runecraftory:fatigue_resistance": 100.0,
     "runecraftory:love_resistance": -25.0,
-    "runecraftory:magic_attack": 18.0,
+    "runecraftory:magic_attack": 17.0,
     "runecraftory:magic_defence": 6.0,
     "runecraftory:paralysis_resistance": 100.0,
     "runecraftory:poison_resistance": 100.0,
@@ -23,11 +23,11 @@
   },
   "flying": false,
   "level_gains": {
-    "minecraft:generic.attack_damage": 226.0,
-    "minecraft:generic.max_health": 933.0,
-    "runecraftory:defence": 193.0,
-    "runecraftory:magic_attack": 230.0,
-    "runecraftory:magic_defence": 193.0
+    "minecraft:generic.attack_damage": 326.0,
+    "minecraft:generic.max_health": 1033.0,
+    "runecraftory:defence": 293.0,
+    "runecraftory:magic_attack": 330.0,
+    "runecraftory:magic_defence": 293.0
   },
   "level_increase_on_kill": [
     {

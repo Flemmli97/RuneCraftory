@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:gorgeous_lx",
   "item_stats": {
-    "minecraft:generic.attack_damage": 56.0,
+    "minecraft:generic.attack_damage": 50.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:defence": 16.0,
     "runecraftory:dizzy": 3.0

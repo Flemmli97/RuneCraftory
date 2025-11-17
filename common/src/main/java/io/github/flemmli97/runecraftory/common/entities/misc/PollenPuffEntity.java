@@ -36,7 +36,7 @@ public class PollenPuffEntity extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 60;
+        return 20;
     }
 
     @Override
@@ -53,6 +53,6 @@ public class PollenPuffEntity extends BaseProjectile {
 
     @Override
     protected float getGravityVelocity() {
-        return 0.02f;
+        return 0.015f;
     }
 }

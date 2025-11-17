@@ -4,7 +4,7 @@
   "item": "runecraftory:crystal_skull",
   "item_stats": {
     "runecraftory:magic_attack": 40.0,
-    "runecraftory:magic_defence": 70.0
+    "runecraftory:magic_defence": 50.0
   },
   "monster_bonus": {
     "runecraftory:magic_attack": 2.0,

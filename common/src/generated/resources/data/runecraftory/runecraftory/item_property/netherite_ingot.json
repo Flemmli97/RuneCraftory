@@ -3,8 +3,8 @@
   "element": "NONE",
   "item": "minecraft:netherite_ingot",
   "item_stats": {
-    "runecraftory:defence": 15.0,
-    "runecraftory:magic_defence": 15.0
+    "runecraftory:defence": 10.0,
+    "runecraftory:magic_defence": 10.0
   },
   "monster_bonus": {
     "runecraftory:defence": 2.0

@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:thief_knife",
   "item_stats": {
-    "minecraft:generic.attack_damage": 28.0,
+    "minecraft:generic.attack_damage": 22.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
     "runecraftory:defence": 11.0,

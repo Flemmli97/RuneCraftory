@@ -3,7 +3,7 @@
   "element": "WATER",
   "item": "runecraftory:sea_cutter",
   "item_stats": {
-    "minecraft:generic.attack_damage": 42.0,
+    "minecraft:generic.attack_damage": 34.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.5,
     "runecraftory:dizzy": 10.0

@@ -3,7 +3,7 @@
   "element": "WATER",
   "item": "runecraftory:frost_edge",
   "item_stats": {
-    "minecraft:generic.attack_damage": 12.0,
+    "minecraft:generic.attack_damage": 11.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
     "runecraftory:defence": 5.0,

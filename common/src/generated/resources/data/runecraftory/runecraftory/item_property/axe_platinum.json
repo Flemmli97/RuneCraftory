@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:axe_platinum",
   "item_stats": {
-    "minecraft:generic.attack_damage": 140.0,
+    "minecraft:generic.attack_damage": 120.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:critical": 15.0
   },

@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:rotten_flesh",
   "item_stats": {
-    "minecraft:generic.max_health": 5.0
+    "minecraft:generic.max_health": 7.0
   },
   "monster_bonus": {
     "minecraft:generic.max_health": 0.5

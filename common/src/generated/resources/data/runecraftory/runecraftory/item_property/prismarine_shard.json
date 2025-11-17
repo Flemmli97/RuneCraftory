@@ -3,8 +3,8 @@
   "element": "NONE",
   "item": "minecraft:prismarine_shard",
   "item_stats": {
-    "runecraftory:defence": 2.5,
-    "runecraftory:magic_defence": 5.0
+    "runecraftory:defence": 1.0,
+    "runecraftory:magic_defence": 1.5
   },
   "monster_bonus": {
     "runecraftory:magic_defence": 0.5

@@ -3,7 +3,7 @@
   "element": "EARTH",
   "item": "runecraftory:fist_of_earth",
   "item_stats": {
-    "minecraft:generic.attack_damage": 49.0,
+    "minecraft:generic.attack_damage": 59.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.0,
     "runecraftory:defence": 14.0,

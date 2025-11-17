@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:stick",
   "item_stats": {
-    "minecraft:generic.attack_damage": 1.0
+    "minecraft:generic.attack_damage": 0.3
   },
   "monster_bonus": {
     "minecraft:generic.attack_damage": 0.2

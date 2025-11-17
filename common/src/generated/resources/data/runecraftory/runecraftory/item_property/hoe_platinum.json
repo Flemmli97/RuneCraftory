@@ -3,7 +3,7 @@
   "element": "EARTH",
   "item": "runecraftory:hoe_platinum",
   "item_stats": {
-    "minecraft:generic.attack_damage": 111.0,
+    "minecraft:generic.attack_damage": 101.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 45.0
   },

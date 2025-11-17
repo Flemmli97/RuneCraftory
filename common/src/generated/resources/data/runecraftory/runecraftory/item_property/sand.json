@@ -3,10 +3,10 @@
   "element": "NONE",
   "item": "#minecraft:sand",
   "item_stats": {
-    "runecraftory:defence": 1.0
+    "runecraftory:defence": 0.2
   },
   "monster_bonus": {
-    "runecraftory:defence": 0.2
+    "runecraftory:defence": 0.1
   },
   "sell_price": 1,
   "upgrade_difficulty": 1

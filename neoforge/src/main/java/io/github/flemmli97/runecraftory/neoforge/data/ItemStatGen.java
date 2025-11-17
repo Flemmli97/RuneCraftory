@@ -28,41 +28,41 @@ public class ItemStatGen extends ItemStatProvider {
         //=====Vanilla stuff
         //Blocks
         this.addStat("stone", ItemTags.STONE_CRAFTING_MATERIALS, new ItemStat.Builder(5, 1, 1)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
-                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2));
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2)
+                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.1));
         this.addStat("sand", ItemTags.SAND, new ItemStat.Builder(5, 1, 1)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
-                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2));
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2)
+                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.1));
         this.addStat("gravel", Items.GRAVEL, new ItemStat.Builder(5, 1, 1)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.2));
         this.addStat("logs", ItemTags.LOGS, new ItemStat.Builder(10, 2, 3)
                 .addAttribute(Attributes.MAX_HEALTH, 3)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.25));
         this.addStat("wool", ItemTags.WOOL, new ItemStat.Builder(25, 3, 5)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.3)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.3));
         this.addStat("obsidian", Items.OBSIDIAN, new ItemStat.Builder(100, 5, 7)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 5)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.2)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
 
         //Misc
         this.addStat("sapling", ItemTags.SAPLINGS, new ItemStat.Builder(0, 0, 5)
-                .addAttribute(Attributes.MAX_HEALTH, 3)
+                .addAttribute(Attributes.MAX_HEALTH, 4)
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat("flowers", ItemTags.FLOWERS, new ItemStat.Builder(0, 0, 3)
-                .addAttribute(Attributes.MAX_HEALTH, 2)
+                .addAttribute(Attributes.MAX_HEALTH, 3)
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat("candles", ItemTags.CANDLES, new ItemStat.Builder(0, 0, 1)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
 
         this.addStat(Items.STICK, new ItemStat.Builder(11, 1, 1)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 1)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 0.3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2));
         this.addStat("arrows", ItemTags.ARROWS, new ItemStat.Builder(45, 2, 2)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
@@ -73,87 +73,87 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.2));
         this.addStat(Items.SNOWBALL, new ItemStat.Builder(15, 1, 5)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 1)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 0.5)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2)
                 .setSpell(RuneCraftorySpells.SNOWBALL.asHolder(), null, null));
         this.addStat(Items.STRING, new ItemStat.Builder(75, 7, 13)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 1)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addAttribute(RuneCraftoryAttributes.PARALYSIS.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
                 .setSpell(null, RuneCraftorySpells.WEB_SHOT.asHolder(), null));
         this.addStat(Items.FEATHER, new ItemStat.Builder(85, 7, 11)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setSpell(null, null, RuneCraftorySpells.GUST_SPELL.asHolder()));
         this.addStat(Items.ROTTEN_FLESH, new ItemStat.Builder(50, 5, 9)
-                .addAttribute(Attributes.MAX_HEALTH, 5)
+                .addAttribute(Attributes.MAX_HEALTH, 7)
                 .addMonsterStat(Attributes.MAX_HEALTH, 0.5));
         this.addStat(Items.BONE, new ItemStat.Builder(75, 5, 6)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(Items.GUNPOWDER, new ItemStat.Builder(100, 7, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.REDSTONE, new ItemStat.Builder(120, 7, 15)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(Items.FLINT, new ItemStat.Builder(103, 9, 8)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 3)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.QUARTZ, new ItemStat.Builder(263, 21, 14)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 7)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 1.5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(Items.GLOWSTONE_DUST, new ItemStat.Builder(200, 17, 17)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 4)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.LAPIS_LAZULI, new ItemStat.Builder(54, 4, 13)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.LEATHER, new ItemStat.Builder(170, 14, 23)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 9)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(Items.CLAY_BALL, new ItemStat.Builder(100, 9, 19)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(Items.BRICK, new ItemStat.Builder(132, 11, 20)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 5)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(Items.PAPER, new ItemStat.Builder(167, 13, 4)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 3)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.BOOK, new ItemStat.Builder(500, 42, 26)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 12)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.PRISMARINE_SHARD, new ItemStat.Builder(389, 34, 17)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2.5)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1.5)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(Items.PRISMARINE_CRYSTALS, new ItemStat.Builder(523, 46, 25)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 8)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.BLAZE_ROD, new ItemStat.Builder(350, 23, 25)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 12)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setSpell(RuneCraftorySpells.BLAZE_FIREBALLS.asHolder(), null, null));
         this.addStat(Items.ENDER_PEARL, new ItemStat.Builder(400, 28, 21)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 3)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addAttribute(RuneCraftoryAttributes.STUN_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(RuneCraftoryAttributes.STUN_RESISTANCE.asHolder(), 0.5));
         this.addStat(Items.SLIME_BALL, new ItemStat.Builder(375, 31, 18)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 12)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(Items.MAGMA_CREAM, new ItemStat.Builder(250, 21, 20)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 3)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 3)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 1)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 8)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(Items.GHAST_TEAR, new ItemStat.Builder(750, 49, 22)
-                .addAttribute(Attributes.MAX_HEALTH, 15)
+                .addAttribute(Attributes.MAX_HEALTH, 10)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 3)
                 .addMonsterStat(Attributes.MAX_HEALTH, 2)
@@ -165,31 +165,31 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.MOVEMENT_SPEED, 0.01)
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(Items.TOTEM_OF_UNDYING, new ItemStat.Builder(3500, 110, 17)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 9)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 9)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 7)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
                 .setSpell(null, RuneCraftorySpells.EVOKER_FANG.asHolder(), null));
         this.addStat(Items.DRAGON_BREATH, new ItemStat.Builder(2000, 150, 24)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 4)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 3)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 7)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setSpell(null, RuneCraftorySpells.DRAGON_FIREBALL.asHolder(), null));
         this.addStat(Items.SHULKER_SHELL, new ItemStat.Builder(700, 80, 29)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 17)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 12)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .setSpell(RuneCraftorySpells.SHULKER_BULLET.asHolder(), null, null));
         this.addStat(Items.WITHER_SKELETON_SKULL, new ItemStat.Builder(5000, 170, 29)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 20)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setSpell(RuneCraftorySpells.WITHER_SKULL.asHolder(), null, null)
                 .setElement(ItemElement.DARK));
         this.addStat(Items.NETHER_STAR, new ItemStat.Builder(20000, 600, 45)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 17)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 35)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 25)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.DRAIN.asHolder(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
@@ -229,26 +229,26 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.STEEL_SWORD.get(), new ItemStat.Builder(1320, 54, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 8)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.STEEL_SWORD_PLUS.get(), new ItemStat.Builder(2310, 99, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 12)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.CUTLASS.get(), new ItemStat.Builder(4240, 210, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 23)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 19)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.AQUA_SWORD.get(), new ItemStat.Builder(6850, 357, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 37)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 29)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
@@ -256,21 +256,21 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.INVISI_BLADE.get(), new ItemStat.Builder(9350, 571, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 49)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 38)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.DEFENDER.get(), new ItemStat.Builder(11830, 843, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 65)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 9)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 57)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.BURNING_SWORD.get(), new ItemStat.Builder(13440, 1290, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 79)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 68)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
@@ -278,13 +278,13 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.FIRE));
         this.addStat(RuneCraftoryItems.GORGEOUS_SWORD.get(), new ItemStat.Builder(16620, 1630, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 82)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 80)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.GAIA_SWORD.get(), new ItemStat.Builder(19260, 2120, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 95)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 92)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 5)
@@ -325,53 +325,53 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.ZWEIHAENDER.get(), new ItemStat.Builder(1360, 58, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 11)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 10)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.ZWEIHAENDER_PLUS.get(), new ItemStat.Builder(2170, 104, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 19)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 17)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.GREAT_SWORD.get(), new ItemStat.Builder(3960, 231, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 29)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 26)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.SEA_CUTTER.get(), new ItemStat.Builder(7170, 404, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 42)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 34)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.CYCLONE_BLADE.get(), new ItemStat.Builder(10680, 623, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 55)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 48)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WIND));
         this.addStat(RuneCraftoryItems.POISON_BLADE.get(), new ItemStat.Builder(13450, 837, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 70)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 62)
                 .addAttribute(RuneCraftoryAttributes.POISON.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.KATZBALGER.get(), new ItemStat.Builder(16920, 1030, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 87)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 74)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.EARTH_SHADE.get(), new ItemStat.Builder(19360, 1250, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 99)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 88)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -379,7 +379,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.BIG_KNIFE.get(), new ItemStat.Builder(22740, 1820, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 118)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 101)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3.5f)
@@ -410,40 +410,40 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.DAICONE.get(), new ItemStat.Builder(0, 0, 0));
 
         this.addStat(RuneCraftoryItems.SPEAR.get(), new ItemStat.Builder(190, 13, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.WOOD_STAFF.get(), new ItemStat.Builder(1070, 56, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 8)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.LANCE.get(), new ItemStat.Builder(1810, 101, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 13)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 11)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.LANCE_PLUS.get(), new ItemStat.Builder(3460, 198, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 21)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 16)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.NEEDLE_SPEAR.get(), new ItemStat.Builder(5770, 333, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 35)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 4)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 23)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.TRIDENT.get(), new ItemStat.Builder(9280, 543, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 50)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 35)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 8)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
@@ -451,7 +451,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.WATER_SPEAR.get(), new ItemStat.Builder(14730, 934, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 68)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 49)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 14)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
@@ -459,19 +459,19 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.HALBERD.get(), new ItemStat.Builder(18360, 1340, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 82)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 56)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.CORSESCA.get(), new ItemStat.Builder(20630, 1830, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 98)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 70)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.CORSESCA_PLUS.get(), new ItemStat.Builder(22130, 2010, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 109)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 84)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(5.3))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
@@ -515,28 +515,28 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.POLE_AXE.get(), new ItemStat.Builder(3250, 147, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 25)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 34)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 7)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.POLE_AXE_PLUS.get(), new ItemStat.Builder(5430, 245, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 39)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 61)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 7)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.GREAT_AXE.get(), new ItemStat.Builder(8580, 417, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 54)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 73)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.TOMAHAWK.get(), new ItemStat.Builder(11360, 683, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 70)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 94)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -544,7 +544,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WIND));
         this.addStat(RuneCraftoryItems.BASILISK_FANG.get(), new ItemStat.Builder(14280, 1220, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 105)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 116)
                 .addAttribute(RuneCraftoryAttributes.POISON.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
@@ -552,7 +552,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.ROCK_AXE.get(), new ItemStat.Builder(20280, 2420, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 128)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 145)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -560,7 +560,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.DEMON_AXE.get(), new ItemStat.Builder(26240, 3180, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 140)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 172)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -595,21 +595,21 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.WAR_HAMMER.get(), new ItemStat.Builder(2960, 138, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 20)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 25)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.WAR_HAMMER_PLUS.get(), new ItemStat.Builder(6340, 265, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 31)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 49)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 7)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.IRON_BAT.get(), new ItemStat.Builder(9350, 421, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 44)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 68)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
                 .addAttribute(Attributes.ATTACK_KNOCKBACK, 1)
@@ -617,14 +617,14 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.GREAT_HAMMER.get(), new ItemStat.Builder(12740, 658, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 63)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 83)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.ICE_HAMMER.get(), new ItemStat.Builder(15930, 910, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 88)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 103)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
@@ -633,7 +633,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.BONE_HAMMER.get(), new ItemStat.Builder(19370, 1240, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 109)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 126)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -641,7 +641,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.DARK));
         this.addStat(RuneCraftoryItems.STRONG_STONE.get(), new ItemStat.Builder(22430, 1930, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 136)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 153)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 30)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(4.5))
@@ -670,14 +670,14 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.STEEL_EDGE.get(), new ItemStat.Builder(950, 44, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 7)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.FROST_EDGE.get(), new ItemStat.Builder(2610, 121, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 12)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 11)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 4)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
@@ -686,21 +686,21 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.IRON_EDGE.get(), new ItemStat.Builder(4910, 230, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 18)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 14)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 8)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.THIEF_KNIFE.get(), new ItemStat.Builder(7940, 384, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 28)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 22)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.WIND_EDGE.get(), new ItemStat.Builder(9600, 568, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 44)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 32)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 12)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
@@ -709,27 +709,27 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WIND));
         this.addStat(RuneCraftoryItems.GORGEOUS_LX.get(), new ItemStat.Builder(13500, 836, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 56)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 50)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 16)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.STEEL_KATANA.get(), new ItemStat.Builder(16400, 1320, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 71)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 56)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 21)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.TWIN_BLADE.get(), new ItemStat.Builder(19430, 1830, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 86)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 70)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 26)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.RAMPAGE.get(), new ItemStat.Builder(21640, 2760, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 97)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 83)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 31)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
@@ -758,42 +758,42 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.TWIN_LEEKS.get(), new ItemStat.Builder(0, 0, 0));
 
         this.addStat(RuneCraftoryItems.LEATHER_GLOVE.get(), new ItemStat.Builder(190, 13, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 4)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.BRASS_KNUCKLES.get(), new ItemStat.Builder(1580, 74, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 9)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 11)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.KOTE.get(), new ItemStat.Builder(3170, 136, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 16)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 19)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(RuneCraftoryItems.GLOVES.get(), new ItemStat.Builder(5480, 238, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 22)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 31)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 4)
-                .addAttribute(Attributes.MAX_HEALTH, 15)
+                .addAttribute(Attributes.MAX_HEALTH, 9)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.BEAR_CLAWS.get(), new ItemStat.Builder(8140, 394, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 34)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 49)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.FIST_EARTH.get(), new ItemStat.Builder(12640, 587, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 49)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 59)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 14)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
@@ -803,7 +803,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.FIST_FIRE.get(), new ItemStat.Builder(14720, 794, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 63)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 78)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 18)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 18)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
@@ -813,7 +813,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.FIRE));
         this.addStat(RuneCraftoryItems.FIST_WATER.get(), new ItemStat.Builder(16380, 931, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 79)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 98)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 21)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 20)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
@@ -823,14 +823,14 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.DRAGON_CLAWS.get(), new ItemStat.Builder(19270, 1520, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 91)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 129)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 35)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0f))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.FIST_DARK.get(), new ItemStat.Builder(23930, 1960, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 101)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 164)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 24)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 24)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 10)
@@ -851,7 +851,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.FENRIR.get(), new ItemStat.Builder(0, 0, 0));
 
         this.addStat(RuneCraftoryItems.ROD.get(), new ItemStat.Builder(281, 32, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 4)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 1.5f)
@@ -859,70 +859,70 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(ItemElement.FIRE)
                 .setSpell(RuneCraftorySpells.FIREBALL.asHolder(), null, null));
         this.addStat(RuneCraftoryItems.AMETHYST_ROD.get(), new ItemStat.Builder(1550, 76, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 13)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.AQUAMARINE_ROD.get(), new ItemStat.Builder(3430, 186, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 17)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 16)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.FRIENDLY_ROD.get(), new ItemStat.Builder(6670, 297, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 28)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 26)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(ItemElement.LOVE));
         this.addStat(RuneCraftoryItems.LOVE_LOVE_ROD.get(), new ItemStat.Builder(8550, 436, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 41)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 34)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(ItemElement.LOVE));
         this.addStat(RuneCraftoryItems.STAFF.get(), new ItemStat.Builder(11110, 599, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 65)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 27)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.EMERALD_ROD.get(), new ItemStat.Builder(12430, 705, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 77)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 51)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5)
                 .setElement(ItemElement.WIND));
         this.addStat(RuneCraftoryItems.SILVER_STAFF.get(), new ItemStat.Builder(14600, 917, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 98)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 54)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(ItemElement.DARK));
         this.addStat(RuneCraftoryItems.FLARE_STAFF.get(), new ItemStat.Builder(18000, 1330, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 112)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 64)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(ItemElement.FIRE));
         this.addStat(RuneCraftoryItems.RUBY_ROD.get(), new ItemStat.Builder(21530, 1940, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 127)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 70)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
                 .setElement(ItemElement.FIRE));
         this.addStat(RuneCraftoryItems.SAPPHIRE_ROD.get(), new ItemStat.Builder(24620, 2350, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 149)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 82)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3.0))
                 .addAttribute(RuneCraftoryAttributes.ATTACK_WIDTH.asHolder(), 0.5f)
@@ -959,46 +959,46 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.HOE_IRON.get(), new ItemStat.Builder(4500, 121, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 10)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.HOE_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 34)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 25)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.HOE_GOLD.get(), new ItemStat.Builder(0, 550, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 76)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 50)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.EARTH));
         this.addStat(RuneCraftoryItems.HOE_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 111)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 101)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 45)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.EARTH));
 
         this.addStat(RuneCraftoryItems.WATERING_CAN_SCRAP.get(), new ItemStat.Builder(150, 45, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 1)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.WATERING_CAN_IRON.get(), new ItemStat.Builder(4500, 164, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 7)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.WATERING_CAN_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 19)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 20)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.WATER));
         this.addStat(RuneCraftoryItems.WATERING_CAN_GOLD.get(), new ItemStat.Builder(0, 550, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 39)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 45)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.WATER));
@@ -1013,21 +1013,21 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.SICKLE_IRON.get(), new ItemStat.Builder(4500, 118, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 19)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 13)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.SICKLE_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 36)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 31)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.SICKLE_GOLD.get(), new ItemStat.Builder(0, 550, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 79)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 51)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(ItemElement.WIND));
         this.addStat(RuneCraftoryItems.SICKLE_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 134)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 127)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 31)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
@@ -1039,22 +1039,22 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.AXE_IRON.get(), new ItemStat.Builder(4500, 148, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 22)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 17)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.AXE_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 39)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 33)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.AXE_GOLD.get(), new ItemStat.Builder(0, 550, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 83)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 55)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.AXE_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 140)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 120)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), 15)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
@@ -1072,19 +1072,19 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.HAMMER_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 47)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 41)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), -5)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.HAMMER_GOLD.get(), new ItemStat.Builder(0, 550, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 85)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 75)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), -5)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.HAMMER_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 145)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 135)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL.asHolder(), -7)
                 .addAttribute(RuneCraftoryAttributes.STUN.asHolder(), 10)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
@@ -1096,12 +1096,12 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.FISHING_ROD_IRON.get(), new ItemStat.Builder(4500, 135, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 9)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 8)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 14)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.FISHING_ROD_SILVER.get(), new ItemStat.Builder(25000, 300, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 26)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 24)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 27)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
@@ -1111,7 +1111,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(RuneCraftoryItems.FISHING_ROD_PLATINUM.get(), new ItemStat.Builder(0, 2000, 0)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 89)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 94)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 98)
                 .addAttribute(RuneCraftoryAttributes.ATTACK_RANGE.asHolder(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
@@ -1135,13 +1135,13 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.WETTABLE_POWDER.get(), new ItemStat.Builder(1500, 150, 0));
 
         this.addStat(RuneCraftoryItems.CHEAP_BRACELET.get(), new ItemStat.Builder(120, 21, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.BRONZE_BRACELET.get(), new ItemStat.Builder(850, 38, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 7)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.SILVER_BRACELET.get(), new ItemStat.Builder(3000, 300, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 10)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 15)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.GOLD_BRACELET.get(), new ItemStat.Builder(15000, 750, 0)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 25)
@@ -1263,24 +1263,24 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.VEST.get(), new ItemStat.Builder(1000, 30, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 4)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.COTTON_CLOTH.get(), new ItemStat.Builder(4000, 190, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 12)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.MAIL.get(), new ItemStat.Builder(7500, 350, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 19)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 13)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 12)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 9)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.CHAIN_MAIL.get(), new ItemStat.Builder(11000, 640, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 26)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 20)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 16)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 12)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.SCALE_VEST.get(), new ItemStat.Builder(14500, 1360, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 39)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 32)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 22)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 14)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.SPARKLING_SHIRT.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(RuneCraftoryItems.WIND_CLOAK.get(), new ItemStat.Builder(0, 0, 0));
@@ -1308,12 +1308,12 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.SEAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.PURPLE_RIBBON.get(), new ItemStat.Builder(500, 35, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 4)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3)
                 .addAttribute(RuneCraftoryAttributes.SEAL_RESISTANCE.asHolder(), 5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.SPECTACLES.get(), new ItemStat.Builder(1000, 100, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 5)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 6)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.STRAW_HAT.get(), new ItemStat.Builder(1500, 140, 0)
@@ -1356,19 +1356,19 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.PIYO_SANDALS.get(), new ItemStat.Builder(400, 35, 0)
                 .withArmorEffect(RuneCraftoryArmorEffects.PIYO_SANDALS.asHolder())
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 5)
                 .addAttribute(RuneCraftoryAttributes.LOVE_RESISTANCE.asHolder(), 1)
                 .addAttribute(RuneCraftoryAttributes.DIZZY_RESISTANCE.asHolder(), 50)
                 .addAttribute(RuneCraftoryAttributes.DIZZY.asHolder(), 20)
                 .addMonsterStat(RuneCraftoryAttributes.DIZZY_RESISTANCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.SECRET_SHOES.get(), new ItemStat.Builder(3600, 150, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 8)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 4)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.SILVER_BOOTS.get(), new ItemStat.Builder(5000, 310, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 12)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 8)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.HEAVY_BOOTS.get(), new ItemStat.Builder(9500, 680, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 15)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 13)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL_RESISTANCE.asHolder(), 10)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.5)
                 .addAttribute(RuneCraftoryAttributes.FATIGUE_RESISTANCE.asHolder(), -20)
@@ -1403,16 +1403,17 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat(RuneCraftoryItems.MONKEY_PLUSH.get(), new ItemStat.Builder(2400, 0, 0)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 15)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 9)
                 .addAttribute(RuneCraftoryAttributes.LOVE_RESISTANCE.asHolder(), 50)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5)
                 .setElement(ItemElement.LOVE));
         this.addStat(RuneCraftoryItems.ROUND_SHIELD.get(), new ItemStat.Builder(5100, 0, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 13)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 10)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.TURTLE_SHIELD.get(), new ItemStat.Builder(8700, 0, 0)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 20)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 13)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 14)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 11)
                 .addAttribute(RuneCraftoryAttributes.CRITICAL_RESISTANCE.asHolder(), 15)
                 .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.2)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
@@ -1437,76 +1438,76 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2));
         this.addStat("iron", RunecraftoryTags.Items.IRON, new ItemStat.Builder(150, 2, 5)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
-                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
-        this.addStat("tin", RunecraftoryTags.Items.RAW_MATERIALS_TIN, new ItemStat.Builder(400, 14, 12)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1.5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
+        this.addStat("tin", RunecraftoryTags.Items.INGOTS_TIN, new ItemStat.Builder(400, 14, 12)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
+                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
         this.addStat("copper", RunecraftoryTags.Items.COPPER, new ItemStat.Builder(200, 9, 10)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1.5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
-        this.addStat("bronze", RunecraftoryTags.Items.DUSTS_BRONZE, new ItemStat.Builder(400, 14, 12)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 3)
+        this.addStat("bronze", RunecraftoryTags.Items.INGOTS_BRONZE, new ItemStat.Builder(400, 14, 12)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 2.5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 0.5));
-        this.addStat("silver", RunecraftoryTags.Items.RAW_MATERIALS_SILVER, new ItemStat.Builder(1500, 27, 15)
+        this.addStat("silver", RunecraftoryTags.Items.INGOTS_SILVER, new ItemStat.Builder(1500, 27, 15)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat("gold", RunecraftoryTags.Items.GOLD, new ItemStat.Builder(3500, 34, 18)
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 7)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 2));
-        this.addStat("platinum", RunecraftoryTags.Items.RAW_MATERIALS_PLATINUM, new ItemStat.Builder(5000, 111, 34)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 18)
+        this.addStat("platinum", RunecraftoryTags.Items.INGOTS_PLATINUM, new ItemStat.Builder(5000, 111, 34)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 12)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 3));
         this.addStat("orichalcum", RunecraftoryTags.Items.ORICHALCUM, new ItemStat.Builder(20000, 750, 65)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 50)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 30)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 4));
         this.addStat("dragonic", RunecraftoryTags.Items.DRAGONIC, new ItemStat.Builder(0, 1000, 70)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 110)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 75)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 90)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 5));
         this.addStat(Items.NETHERITE_INGOT, new ItemStat.Builder(0, 200, 35)
-                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 15)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 15)
+                .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 10)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 10)
                 .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 2));
 
         this.addStat("emerald", RunecraftoryTags.Items.GEMS_EMERALD, new ItemStat.Builder(2500, 5, 19)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.5));
         this.addStat(Items.DIAMOND, new ItemStat.Builder(5000, 21, 23)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 10)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 8)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 2));
         this.addStat("amethyst", RunecraftoryTags.Items.GEMS_AMETHYST, new ItemStat.Builder(3500, 18, 19)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6)
-                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 2));
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
+                .addMonsterStat(RuneCraftoryAttributes.DEFENCE.asHolder(), 1));
         this.addStat("aquamarine", RunecraftoryTags.Items.GEMS_AQUAMARINE, new ItemStat.Builder(3500, 23, 19)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6)
-                .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3));
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
+                .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1));
         this.addStat("ruby", RunecraftoryTags.Items.GEMS_RUBY, new ItemStat.Builder(4000, 37, 19)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6)
-                .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 4));
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
+                .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1));
         this.addStat("sapphire", RunecraftoryTags.Items.GEMS_SAPPHIRE, new ItemStat.Builder(3500, 24, 19)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 6)
-                .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5));
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 5)
+                .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 1));
         this.addStat(RuneCraftoryItems.CORE_GREEN.get(), new ItemStat.Builder(15000, 1050, 70)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 50)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 35)
                 .addMonsterStat(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder(), 6)
                 .addMonsterStat(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), -3));
         this.addStat(RuneCraftoryItems.CORE_RED.get(), new ItemStat.Builder(15000, 1050, 70)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 50)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 35)
                 .addMonsterStat(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder(), 6)
                 .addMonsterStat(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder(), -3));
         this.addStat(RuneCraftoryItems.CORE_BLUE.get(), new ItemStat.Builder(15000, 1050, 70)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 50)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 35)
                 .addMonsterStat(RuneCraftoryAttributes.WATER_RESISTANCE.asHolder(), 6)
                 .addMonsterStat(RuneCraftoryAttributes.FIRE_RESISTANCE.asHolder(), -3));
         this.addStat(RuneCraftoryItems.CORE_YELLOW.get(), new ItemStat.Builder(15000, 1050, 70)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 50)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 35)
                 .addMonsterStat(RuneCraftoryAttributes.EARTH_RESISTANCE.asHolder(), 6)
                 .addMonsterStat(RuneCraftoryAttributes.WIND_RESISTANCE.asHolder(), -3));
         this.addStat(RuneCraftoryItems.CRYSTAL_SKULL.get(), new ItemStat.Builder(25000, 2300, 90)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 40)
-                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 70)
+                .addAttribute(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 50)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 3));
 
@@ -1561,7 +1562,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(RuneCraftoryItems.CRYSTAL_ELECTRO.get(), 0, 0, 0);
 
         this.addStat(RuneCraftoryItems.STICK_THICK.get(), new ItemStat.Builder(1900, 200, 45)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(RuneCraftoryItems.HORN_INSECT.get(), new ItemStat.Builder(130, 21, 8)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
@@ -1578,7 +1579,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(RuneCraftoryAttributes.DEFENCE.asHolder(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 2));
         this.addStat(RuneCraftoryItems.HORN_DEVIL.get(), new ItemStat.Builder(850, 91, 43)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 30)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 17)
                 .addAttribute(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 30)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 2));

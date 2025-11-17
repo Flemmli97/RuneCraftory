@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:war_hammer_plus",
   "item_stats": {
-    "minecraft:generic.attack_damage": 31.0,
+    "minecraft:generic.attack_damage": 49.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.0,
     "runecraftory:dizzy": 20.0,

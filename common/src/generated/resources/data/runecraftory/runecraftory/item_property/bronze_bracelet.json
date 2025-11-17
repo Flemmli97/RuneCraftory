@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:bronze_bracelet",
   "item_stats": {
-    "runecraftory:magic_defence": 4.0
+    "runecraftory:magic_defence": 7.0
   },
   "monster_bonus": {
     "runecraftory:magic_defence": 0.5

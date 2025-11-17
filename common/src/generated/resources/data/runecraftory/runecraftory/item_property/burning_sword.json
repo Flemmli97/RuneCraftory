@@ -3,7 +3,7 @@
   "element": "FIRE",
   "item": "runecraftory:burning_sword",
   "item_stats": {
-    "minecraft:generic.attack_damage": 79.0,
+    "minecraft:generic.attack_damage": 68.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
     "runecraftory:dizzy": 5.0,

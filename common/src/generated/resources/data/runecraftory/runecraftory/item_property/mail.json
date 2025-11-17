@@ -3,8 +3,8 @@
   "element": "NONE",
   "item": "runecraftory:mail",
   "item_stats": {
-    "runecraftory:defence": 19.0,
-    "runecraftory:magic_defence": 13.0
+    "runecraftory:defence": 12.0,
+    "runecraftory:magic_defence": 9.0
   },
   "monster_bonus": {
     "runecraftory:defence": 1.0

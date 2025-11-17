@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:rampage",
   "item_stats": {
-    "minecraft:generic.attack_damage": 97.0,
+    "minecraft:generic.attack_damage": 83.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
     "runecraftory:defence": 31.0,

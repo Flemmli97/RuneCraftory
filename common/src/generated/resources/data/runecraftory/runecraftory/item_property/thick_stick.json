@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:thick_stick",
   "item_stats": {
-    "minecraft:generic.attack_damage": 15.0
+    "minecraft:generic.attack_damage": 7.0
   },
   "monster_bonus": {
     "minecraft:generic.attack_damage": 1.0

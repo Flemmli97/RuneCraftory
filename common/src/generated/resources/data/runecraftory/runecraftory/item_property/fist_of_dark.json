@@ -3,7 +3,7 @@
   "element": "DARK",
   "item": "runecraftory:fist_of_dark",
   "item_stats": {
-    "minecraft:generic.attack_damage": 101.0,
+    "minecraft:generic.attack_damage": 164.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.0,
     "runecraftory:defence": 24.0,

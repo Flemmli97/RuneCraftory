@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:hammer_silver",
   "item_stats": {
-    "minecraft:generic.attack_damage": 47.0,
+    "minecraft:generic.attack_damage": 41.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:critical": -5.0,
     "runecraftory:stun": 10.0

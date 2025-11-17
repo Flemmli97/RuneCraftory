@@ -6,7 +6,7 @@
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 0.5,
     "runecraftory:dizzy": 15.0,
-    "runecraftory:magic_attack": 127.0
+    "runecraftory:magic_attack": 70.0
   },
   "monster_bonus": {
     "runecraftory:magic_attack": 1.0

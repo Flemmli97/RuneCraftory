@@ -1330,9 +1330,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 if (inst != null) {
                     float levelBonus;
                     if (att == Attributes.MAX_HEALTH) {
-                        levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 30, 1);
+                        levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 100, 1);
                     } else {
-                        levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 30, 1);
+                        levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 100, 1);
                     }
                     inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER,
                             (this.xpLevel().getLevel() - 1 + levelBonus) * val,
@@ -1345,11 +1345,11 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         }
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
-            float levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 30, 0.5f);
+            float levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 100, 0.5f);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_HEALTH_GAIN, AttributeModifier.Operation.ADD_VALUE));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
-        float levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 30, 0.5f);
+        float levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 100, 0.5f);
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER, (this.xpLevel().getLevel() - 1 + levelBonus) * MobConfig.NPC_ATTACK_GAIN, AttributeModifier.Operation.ADD_VALUE));

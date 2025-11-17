@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:great_axe",
   "item_stats": {
-    "minecraft:generic.attack_damage": 54.0,
+    "minecraft:generic.attack_damage": 73.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.0,
     "runecraftory:critical": 11.0,

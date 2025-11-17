@@ -29,7 +29,7 @@ public class SkillPropertiesgen implements DataProvider {
         this.skillProps.put(Skills.SHORTSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
         this.skillProps.put(Skills.LONGSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
         this.skillProps.put(Skills.SPEAR, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
-        this.skillProps.put(Skills.HAMMERAXE, new SkillProperties(999, 0, 0.2f, 0.5f, 0, 0, 1));
+        this.skillProps.put(Skills.HAMMERAXE, new SkillProperties(999, 0, 0.2f, 0.4f, 0, 0, 1));
         this.skillProps.put(Skills.DUAL, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
         this.skillProps.put(Skills.FIST, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
 

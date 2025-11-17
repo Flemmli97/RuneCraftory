@@ -3,7 +3,7 @@
   "element": "EARTH",
   "item": "runecraftory:gaia_sword",
   "item_stats": {
-    "minecraft:generic.attack_damage": 95.0,
+    "minecraft:generic.attack_damage": 92.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
     "runecraftory:defence": 7.0,

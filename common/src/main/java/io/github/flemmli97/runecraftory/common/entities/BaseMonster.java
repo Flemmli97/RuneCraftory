@@ -1676,9 +1676,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
                 inst.removeModifier(LibConstants.MONSTER_LEVEL_MODIFIER);
                 float levelBonus;
                 if (att == Attributes.MAX_HEALTH) {
-                    levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 30, 1);
+                    levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 10, 100, 1);
                 } else {
-                    levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 50, 30, 1);
+                    levelBonus = LevelCalc.getIntervalledMultiplier(this.xpLevel().getLevel(), 25, 100, 1);
                 }
                 inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_LEVEL_MODIFIER,
                         (this.xpLevel().getLevel() - 1 + levelBonus) * val,
@@ -1711,9 +1711,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
         for (Holder<Attribute> att : increasable) {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
-                double inc = (this.friendlyPoints.getLevel() - 1) * 0.03;
+                double inc = (this.friendlyPoints.getLevel() - 1) * (att == Attributes.MAX_HEALTH ? 0.02 : 0.01);
                 inst.removeModifier(LibConstants.FRIENDSHIP_MODIFIER);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.FRIENDSHIP_MODIFIER, inc, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.FRIENDSHIP_MODIFIER, inc, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
             }
         }
     }

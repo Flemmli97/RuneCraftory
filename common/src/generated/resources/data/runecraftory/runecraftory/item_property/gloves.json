@@ -3,8 +3,8 @@
   "element": "NONE",
   "item": "runecraftory:gloves",
   "item_stats": {
-    "minecraft:generic.attack_damage": 22.0,
-    "minecraft:generic.max_health": 15.0,
+    "minecraft:generic.attack_damage": 31.0,
+    "minecraft:generic.max_health": 9.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.0,
     "runecraftory:defence": 4.0,

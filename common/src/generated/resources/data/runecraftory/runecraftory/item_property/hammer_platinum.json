@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:hammer_platinum",
   "item_stats": {
-    "minecraft:generic.attack_damage": 145.0,
+    "minecraft:generic.attack_damage": 135.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:critical": -7.0,
     "runecraftory:stun": 10.0

@@ -3,7 +3,7 @@
   "element": "WATER",
   "item": "runecraftory:trident",
   "item_stats": {
-    "minecraft:generic.attack_damage": 50.0,
+    "minecraft:generic.attack_damage": 35.0,
     "runecraftory:attack_range": 2.3,
     "runecraftory:attack_width": 1.0,
     "runecraftory:dizzy": 6.0,

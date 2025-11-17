@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:fishing_rod_iron",
   "item_stats": {
-    "minecraft:generic.attack_damage": 9.0,
+    "minecraft:generic.attack_damage": 8.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 14.0
   },

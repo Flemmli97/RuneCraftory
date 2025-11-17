@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "#c:ingots/iron",
   "item_stats": {
-    "runecraftory:defence": 1.0
+    "runecraftory:defence": 1.5
   },
   "monster_bonus": {
     "runecraftory:defence": 0.5

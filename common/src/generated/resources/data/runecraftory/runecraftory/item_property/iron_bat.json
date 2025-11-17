@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:iron_bat",
   "item_stats": {
-    "minecraft:generic.attack_damage": 44.0,
+    "minecraft:generic.attack_damage": 68.0,
     "minecraft:generic.attack_knockback": 1.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.0,

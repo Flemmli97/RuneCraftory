@@ -3,7 +3,7 @@
   "element": "WIND",
   "item": "runecraftory:sickle_gold",
   "item_stats": {
-    "minecraft:generic.attack_damage": 79.0,
+    "minecraft:generic.attack_damage": 51.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 5.0
   },

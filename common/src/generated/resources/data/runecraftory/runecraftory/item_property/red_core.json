@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:red_core",
   "item_stats": {
-    "runecraftory:magic_defence": 50.0
+    "runecraftory:magic_defence": 35.0
   },
   "monster_bonus": {
     "runecraftory:fire_resistance": 6.0,

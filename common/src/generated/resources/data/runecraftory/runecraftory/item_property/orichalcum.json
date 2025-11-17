@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "#c:orichalcum",
   "item_stats": {
-    "runecraftory:defence": 50.0
+    "runecraftory:defence": 30.0
   },
   "monster_bonus": {
     "runecraftory:defence": 4.0

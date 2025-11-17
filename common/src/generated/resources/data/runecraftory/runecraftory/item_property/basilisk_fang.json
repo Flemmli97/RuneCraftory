@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:basilisk_fang",
   "item_stats": {
-    "minecraft:generic.attack_damage": 105.0,
+    "minecraft:generic.attack_damage": 116.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.0,
     "runecraftory:critical": 15.0,

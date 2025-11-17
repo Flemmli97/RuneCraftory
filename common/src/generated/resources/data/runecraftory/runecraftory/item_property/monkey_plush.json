@@ -4,7 +4,7 @@
   "item": "runecraftory:monkey_plush",
   "item_stats": {
     "runecraftory:love_resistance": 50.0,
-    "runecraftory:magic_defence": 15.0
+    "runecraftory:magic_defence": 9.0
   },
   "monster_bonus": {
     "runecraftory:magic_defence": 0.5

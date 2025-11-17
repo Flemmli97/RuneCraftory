@@ -3,7 +3,7 @@
   "element": "EARTH",
   "item": "runecraftory:earth_shade",
   "item_stats": {
-    "minecraft:generic.attack_damage": 99.0,
+    "minecraft:generic.attack_damage": 88.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.5,
     "runecraftory:dizzy": 10.0,

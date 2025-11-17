@@ -4,7 +4,6 @@
   "element": "NONE",
   "item": "runecraftory:piyo_sandals",
   "item_stats": {
-    "runecraftory:defence": 5.0,
     "runecraftory:dizzy": 20.0,
     "runecraftory:dizzy_resistance": 50.0,
     "runecraftory:love_resistance": 1.0

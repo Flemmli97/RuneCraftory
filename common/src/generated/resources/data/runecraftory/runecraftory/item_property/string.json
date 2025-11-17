@@ -3,8 +3,8 @@
   "element": "NONE",
   "item": "minecraft:string",
   "item_stats": {
-    "minecraft:generic.attack_damage": 2.0,
-    "runecraftory:magic_attack": 2.0,
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:magic_attack": 1.0,
     "runecraftory:paralysis": 3.0
   },
   "monster_bonus": {

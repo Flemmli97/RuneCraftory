@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:big_knife",
   "item_stats": {
-    "minecraft:generic.attack_damage": 118.0,
+    "minecraft:generic.attack_damage": 101.0,
     "runecraftory:attack_range": 1.5,
     "runecraftory:attack_width": 3.5,
     "runecraftory:dizzy": 10.0

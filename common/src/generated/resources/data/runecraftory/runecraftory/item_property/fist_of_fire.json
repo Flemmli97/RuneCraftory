@@ -3,7 +3,7 @@
   "element": "FIRE",
   "item": "runecraftory:fist_of_fire",
   "item_stats": {
-    "minecraft:generic.attack_damage": 63.0,
+    "minecraft:generic.attack_damage": 78.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.0,
     "runecraftory:defence": 18.0,

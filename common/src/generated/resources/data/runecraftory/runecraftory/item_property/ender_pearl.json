@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:ender_pearl",
   "item_stats": {
-    "runecraftory:magic_attack": 3.0,
+    "runecraftory:magic_attack": 1.0,
     "runecraftory:stun_resistance": 5.0
   },
   "monster_bonus": {

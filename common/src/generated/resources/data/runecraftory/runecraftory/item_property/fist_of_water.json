@@ -3,7 +3,7 @@
   "element": "WATER",
   "item": "runecraftory:fist_of_water",
   "item_stats": {
-    "minecraft:generic.attack_damage": 79.0,
+    "minecraft:generic.attack_damage": 98.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.0,
     "runecraftory:defence": 20.0,

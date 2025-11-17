@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:feather",
   "item_stats": {
-    "runecraftory:magic_attack": 2.0
+    "runecraftory:magic_attack": 1.0
   },
   "monster_bonus": {
     "runecraftory:magic_attack": 0.5

@@ -1,7 +1,7 @@
 {
   "buy_price": 1500,
   "element": "NONE",
-  "item": "#c:raw_materials/silver",
+  "item": "#c:ingots/silver",
   "item_stats": {
     "runecraftory:defence": 5.0
   },

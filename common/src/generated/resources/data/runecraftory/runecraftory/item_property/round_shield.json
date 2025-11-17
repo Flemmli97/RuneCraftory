@@ -3,7 +3,8 @@
   "element": "NONE",
   "item": "runecraftory:round_shield",
   "item_stats": {
-    "runecraftory:defence": 13.0
+    "runecraftory:defence": 10.0,
+    "runecraftory:magic_defence": 2.0
   },
   "monster_bonus": {
     "runecraftory:defence": 1.0

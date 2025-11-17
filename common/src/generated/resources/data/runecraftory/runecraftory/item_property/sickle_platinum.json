@@ -3,7 +3,7 @@
   "element": "WIND",
   "item": "runecraftory:sickle_platinum",
   "item_stats": {
-    "minecraft:generic.attack_damage": 134.0,
+    "minecraft:generic.attack_damage": 127.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 31.0
   },

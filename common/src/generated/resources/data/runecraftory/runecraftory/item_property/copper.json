@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "#c:ingots/copper",
   "item_stats": {
-    "runecraftory:defence": 2.0
+    "runecraftory:defence": 1.5
   },
   "monster_bonus": {
     "runecraftory:defence": 0.5

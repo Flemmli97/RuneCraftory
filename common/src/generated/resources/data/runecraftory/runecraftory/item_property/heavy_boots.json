@@ -5,7 +5,7 @@
   "item_stats": {
     "minecraft:generic.knockback_resistance": 0.5,
     "runecraftory:critical_resistance": 10.0,
-    "runecraftory:defence": 15.0,
+    "runecraftory:defence": 13.0,
     "runecraftory:fatigue_resistance": -20.0
   },
   "monster_bonus": {

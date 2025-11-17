@@ -170,8 +170,11 @@ public class CombatUtils {
             }
         }
         float dmg = amount - reduce;
-        if (reduce > amount * 0.8)
-            dmg = (float) Math.max(0.05 * amount, amount * 0.2 * Math.pow(0.997, reduce - amount * 0.8));
+        float threshold = amount * 0.2f;
+        if (dmg < threshold) {
+            reduce = Math.max(0, reduce - amount * 0.8f);
+            dmg = Math.max(0.03f * amount, threshold * (1 - (reduce / (reduce + threshold))));
+        }
         if (source instanceof DynamicDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
             dmg += (float) (entity.level().random.nextGaussian() * dmg / 10.0);
         }

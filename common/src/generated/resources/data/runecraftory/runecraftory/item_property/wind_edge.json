@@ -3,7 +3,7 @@
   "element": "WIND",
   "item": "runecraftory:wind_edge",
   "item_stats": {
-    "minecraft:generic.attack_damage": 44.0,
+    "minecraft:generic.attack_damage": 32.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
     "runecraftory:defence": 12.0,

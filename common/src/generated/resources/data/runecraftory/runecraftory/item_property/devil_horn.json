@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "runecraftory:devil_horn",
   "item_stats": {
-    "minecraft:generic.attack_damage": 30.0,
+    "minecraft:generic.attack_damage": 17.0,
     "runecraftory:magic_attack": 30.0
   },
   "monster_bonus": {

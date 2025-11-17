@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "#minecraft:flowers",
   "item_stats": {
-    "minecraft:generic.max_health": 2.0
+    "minecraft:generic.max_health": 3.0
   },
   "monster_bonus": {
     "minecraft:generic.max_health": 1.0

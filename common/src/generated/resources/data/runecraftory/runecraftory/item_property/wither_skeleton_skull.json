@@ -4,7 +4,7 @@
   "item": "minecraft:wither_skeleton_skull",
   "item_stats": {
     "minecraft:generic.attack_damage": 5.0,
-    "runecraftory:magic_attack": 20.0
+    "runecraftory:magic_attack": 15.0
   },
   "monster_bonus": {
     "runecraftory:magic_attack": 1.0

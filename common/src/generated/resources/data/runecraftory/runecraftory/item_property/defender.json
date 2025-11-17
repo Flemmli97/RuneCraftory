@@ -3,10 +3,10 @@
   "element": "NONE",
   "item": "runecraftory:defender",
   "item_stats": {
-    "minecraft:generic.attack_damage": 65.0,
+    "minecraft:generic.attack_damage": 57.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:attack_width": 1.5,
-    "runecraftory:defence": 9.0,
+    "runecraftory:defence": 6.0,
     "runecraftory:dizzy": 5.0
   },
   "monster_bonus": {

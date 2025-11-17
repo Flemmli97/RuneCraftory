@@ -1,9 +1,9 @@
 {
   "buy_price": 400,
   "element": "NONE",
-  "item": "#c:dusts/bronze",
+  "item": "#c:ingots/bronze",
   "item_stats": {
-    "runecraftory:defence": 3.0
+    "runecraftory:defence": 2.5
   },
   "monster_bonus": {
     "runecraftory:defence": 0.5

@@ -3,7 +3,7 @@
   "element": "NONE",
   "item": "minecraft:ghast_tear",
   "item_stats": {
-    "minecraft:generic.max_health": 15.0,
+    "minecraft:generic.max_health": 10.0,
     "runecraftory:defence": 3.0,
     "runecraftory:magic_attack": 2.0
   },

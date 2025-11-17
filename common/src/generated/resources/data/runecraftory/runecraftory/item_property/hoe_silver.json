@@ -3,7 +3,7 @@
   "element": "EARTH",
   "item": "runecraftory:hoe_silver",
   "item_stats": {
-    "minecraft:generic.attack_damage": 34.0,
+    "minecraft:generic.attack_damage": 25.0,
     "runecraftory:attack_range": 0.0,
     "runecraftory:magic_attack": 5.0
   },
