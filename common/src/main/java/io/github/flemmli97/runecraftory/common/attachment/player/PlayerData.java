@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DynamicOps;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
@@ -122,8 +123,17 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
         CompoundTag tag = other.write(player.registryAccess());
         if (death) {
             tag.putInt("Money", (int) (other.getMoney() * 0.2));
-            tag.putFloat("RestoreHP", this.player.getMaxHealth() * GeneralConfig.deathHpPercent);
-            tag.putDouble("RunePoints", this.runePoints * GeneralConfig.deathRpPercent);
+            tag.putFloat("RestoreHP", other.player().getMaxHealth() * GeneralConfig.deathHpPercent);
+            tag.putDouble("RunePoints", other.getMaxRunePoints() * GeneralConfig.deathRpPercent);
+            // Copy modifiers from this mod over
+            ((AttributeMapAccessor) other.player().getAttributes())
+                    .getAttributes().forEach((att, inst) -> inst.getModifiers().forEach(mod -> {
+                        if (mod.id().getNamespace().equals(RuneCraftory.MODID)) {
+                            player.getAttributes()
+                                    .getInstance(att)
+                                    .addPermanentModifier(mod);
+                        }
+                    }));
         }
         this.read(tag, player.registryAccess());
     }
@@ -174,8 +184,8 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
 
     private void updateLevelAttributes() {
         float lvl = this.level.getLevel() - 1;
-        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * (lvl + LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 1)), AttributeUpdate.REPLACE);
-        lvl += LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 75, 30, 1);
+        this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.hpPerLevel * (lvl + LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 25, 100, 1)), AttributeUpdate.REPLACE);
+        lvl += LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 100, 1);
         this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.rpPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.strPerLevel * lvl, AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_LEVEL_MODIFIER, GeneralConfig.vitPerLevel * lvl, AttributeUpdate.REPLACE);
@@ -183,9 +193,9 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
     }
 
     private void updateSkillLevelAttributes() {
-        float adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 30, 0.5f);
+        float adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 50, 100, 0.5f);
         this.setAttributeValue(Attributes.MAX_HEALTH, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::healthIncrease), AttributeUpdate.REPLACE);
-        adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 150, 30, 0.5f);
+        adjust = LevelCalc.getIntervalledMultiplier(this.level.getLevel(), 150, 100, 0.5f);
         this.setAttributeValue(RuneCraftoryAttributes.MAX_RUNEPOINTS.asHolder(), LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.cappedSkillVal(adjust, 100, SkillProperties::rpIncrease), AttributeUpdate.REPLACE);
         this.setAttributeValue(Attributes.ATTACK_DAMAGE, LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::strIncrease), AttributeUpdate.REPLACE);
         this.setForVitality(LibConstants.PLAYER_SKILL_LEVEL_MODIFIER, this.skillVal(adjust, SkillProperties::vitIncrease), AttributeUpdate.REPLACE);
