@@ -1,10 +1,8 @@
 RuneCraftory 2.2.0
 ================
-- Fix nullpointer with circle elemental spell
 - Rewrite npc renders:
   - Now supports swapping out the whole model
   - Now supports conditional look features
-- Fix npc not moving in rain without shelter
 - Rewrite giant crops handling:
   - Giant crops now 2x2 instead of 2x1
   - Fix giant crops never regrowable
@@ -14,6 +12,21 @@ RuneCraftory 2.2.0
   - Cost can be reduced with higher friendship
   - Unloaded monsters will still take damage!
 - Some stats are now bit randomized for monsters
+- Balancing changes
+  - Player stats gain reduced
+  - Monster stats gain increased
+  - Monster health gain increased
+  - Monster base magic attack decreased
+  - Boss monster now also have some armor points
+  - Weapon stats adjusted
+  - Updated defence damage reduction
+- Bosses now require defeating one first before being able to tame one
+- Update attack and skill movement to be more consistent
+- Experience calculation (level, skill, etc.) are now configurable
+- Fix nullpointer with circle elemental spell
+- Fix npc not moving in rain without shelter
+- Fix player attributes reset on death
+- Fix npc attack sometimes not working properly
 
 RuneCraftory 2.1.3
 ================
