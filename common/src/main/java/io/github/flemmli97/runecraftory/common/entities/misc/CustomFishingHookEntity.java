@@ -190,7 +190,7 @@ public class CustomFishingHookEntity extends AdvancedProjectile {
             this.canAttack = null;
             if (this.getOwner() instanceof ServerPlayer player) {
                 PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-                LevelCalc.levelSkill(data, Skills.FISHING, 10);
+                LevelCalc.levelSkill(data, Skills.FISHING, 3);
                 LevelCalc.levelSkill(data, Skills.WATER, 1);
             }
         }

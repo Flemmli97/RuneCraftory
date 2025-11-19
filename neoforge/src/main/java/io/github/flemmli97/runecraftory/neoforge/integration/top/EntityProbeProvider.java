@@ -1,12 +1,12 @@
-package io.github.flemmli97.runecraftory.forge.integration.top;
+package io.github.flemmli97.runecraftory.neoforge.integration.top;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import mcjty.theoneprobe.api.CompoundText;
 import mcjty.theoneprobe.api.ElementAlignment;
@@ -40,7 +40,7 @@ public class EntityProbeProvider implements IProbeInfoEntityProvider {
                 || player.getMainHandItem().getItem() == RuneCraftoryItems.DEBUG.get() || player.isCreative()
                 || (entity instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())))) {
             XpLevelHolder entityLevel = mob.xpLevel();
-            probeInfo.progress((int) entityLevel.getXp(), LevelCalc.xpAmountForLevelUp(entityLevel.getLevel()),
+            probeInfo.progress((int) entityLevel.getXp(), GeneralConfig.experienceLevel.xpAmountForNext(entityLevel.getLevel()),
                     probeInfo.defaultProgressStyle().width(150).height(12)
                             .color(0xff000000, 0xff0c8995, 0xff0c8995, 0xff8b8b8b)
                             .alignment(ElementAlignment.ALIGN_CENTER)

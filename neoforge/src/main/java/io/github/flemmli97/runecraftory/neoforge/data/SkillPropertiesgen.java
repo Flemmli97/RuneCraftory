@@ -17,6 +17,20 @@ import java.util.concurrent.CompletableFuture;
 
 public class SkillPropertiesgen implements DataProvider {
 
+    public static final String COMMON = "35 " +
+            "+ 9 * level ^ 2.555 " +
+            "- 12 * level ^ 2.249 " +
+            "+ level * 21";
+    public static final String SLOW = "25 " +
+            "+ (level - 1) * 15 + (level / 10) * 100 " +
+            "+ level ^ 1.2 * 3 " +
+            "+ (level / 10) ^ 2 * 50 " +
+            "+ (max(0, level - 50) / 10) ^ 1.235 * 500";
+    public static final String FAST = "40 + level * 30 + level ^ 1.75 * 0.125 * 10";
+    public static final String VERY_FAST = "50 + (level - 1) * 50";
+    public static final String CRAFTING = "50 + (level - 1) * 25 + floor(level / 10) * 100 + floor(level / 20) * 150";
+    public static final String FISHING = "50 + (level - 1) * 20 + floor(level / 10) * 75";
+
     private final PackOutput packOutput;
     private final EnumMap<Skills, SkillProperties> skillProps = new EnumMap<>(Skills.class);
 
@@ -26,47 +40,47 @@ public class SkillPropertiesgen implements DataProvider {
 
     protected void add() {
         this.skillProps.clear();
-        this.skillProps.put(Skills.SHORTSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
-        this.skillProps.put(Skills.LONGSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
-        this.skillProps.put(Skills.SPEAR, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
-        this.skillProps.put(Skills.HAMMERAXE, new SkillProperties(999, 0, 0.2f, 0.4f, 0, 0, 1));
-        this.skillProps.put(Skills.DUAL, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
-        this.skillProps.put(Skills.FIST, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1));
+        this.skillProps.put(Skills.SHORTSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1, SLOW));
+        this.skillProps.put(Skills.LONGSWORD, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1, SLOW));
+        this.skillProps.put(Skills.SPEAR, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1, SLOW));
+        this.skillProps.put(Skills.HAMMERAXE, new SkillProperties(999, 0, 0.2f, 0.4f, 0, 0, 1, SLOW));
+        this.skillProps.put(Skills.DUAL, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1, SLOW));
+        this.skillProps.put(Skills.FIST, new SkillProperties(999, 0, 0.2f, 0.2f, 0, 0, 1, SLOW));
 
-        this.skillProps.put(Skills.FIRE, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
-        this.skillProps.put(Skills.WATER, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
-        this.skillProps.put(Skills.EARTH, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
-        this.skillProps.put(Skills.WIND, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
-        this.skillProps.put(Skills.DARK, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
-        this.skillProps.put(Skills.LIGHT, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
-        this.skillProps.put(Skills.LOVE, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1));
+        this.skillProps.put(Skills.FIRE, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
+        this.skillProps.put(Skills.WATER, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
+        this.skillProps.put(Skills.EARTH, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
+        this.skillProps.put(Skills.WIND, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
+        this.skillProps.put(Skills.DARK, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
+        this.skillProps.put(Skills.LIGHT, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
+        this.skillProps.put(Skills.LOVE, new SkillProperties(999, 0, 0.5f, 0, 0, 0.15f, 1, SLOW));
 
-        this.skillProps.put(Skills.FARMING, new SkillProperties(100, 1, 1, 0, 0.3f, 0, 1));
-        this.skillProps.put(Skills.LOGGING, new SkillProperties(100, 1, 1, 0.1f, 0.2f, 0, 1));
-        this.skillProps.put(Skills.MINING, new SkillProperties(100, 1, 1, 0.1f, 0.2f, 0, 1));
-        this.skillProps.put(Skills.FISHING, new SkillProperties(100, 1, 1, 0, 0, 0.3f, 1));
+        this.skillProps.put(Skills.FARMING, new SkillProperties(100, 1, 1, 0, 0.3f, 0, 1, COMMON));
+        this.skillProps.put(Skills.LOGGING, new SkillProperties(100, 1, 1, 0.1f, 0.2f, 0, 1, COMMON));
+        this.skillProps.put(Skills.MINING, new SkillProperties(100, 1, 1, 0.1f, 0.2f, 0, 1, COMMON));
+        this.skillProps.put(Skills.FISHING, new SkillProperties(100, 1, 1, 0, 0, 0.3f, 1, FISHING));
 
-        this.skillProps.put(Skills.COOKING, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0, 1));
-        this.skillProps.put(Skills.FORGING, new SkillProperties(100, 0, 0.25f, 0.1f, 0.1f, 0, 1));
-        this.skillProps.put(Skills.CHEMISTRY, new SkillProperties(100, 0, 0.25f, 0, 0, 0.2f, 1));
-        this.skillProps.put(Skills.CRAFTING, new SkillProperties(100, 0, 0.25f, 0, 0, 0.1f, 1));
+        this.skillProps.put(Skills.COOKING, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0, 1, CRAFTING));
+        this.skillProps.put(Skills.FORGING, new SkillProperties(100, 0, 0.25f, 0.1f, 0.1f, 0, 1, CRAFTING));
+        this.skillProps.put(Skills.CHEMISTRY, new SkillProperties(100, 0, 0.25f, 0, 0, 0.2f, 1, CRAFTING));
+        this.skillProps.put(Skills.CRAFTING, new SkillProperties(100, 0, 0.25f, 0, 0, 0.1f, 1, CRAFTING));
 
-        this.skillProps.put(Skills.SEARCHING, new SkillProperties(999, 0, 0.3f, 0, 0, 0.1f, 1));
-        this.skillProps.put(Skills.WALKING, new SkillProperties(999, 0.3f, 0.125f, 0, 0.1f, 0, 1));
-        this.skillProps.put(Skills.SLEEPING, new SkillProperties(999, 2f, 2, 0.4f, 0.4f, 0.3f, 1));
-        this.skillProps.put(Skills.EATING, new SkillProperties(999, 1, 2, 0.2f, 0.2f, 0.2f, 1));
-        this.skillProps.put(Skills.DEFENCE, new SkillProperties(999, 2, 0, 0, 0.75f, 0, 1));
+        this.skillProps.put(Skills.SLEEPING, new SkillProperties(999, 2f, 2, 0.4f, 0.4f, 0.3f, 1, FAST));
+        this.skillProps.put(Skills.SEARCHING, new SkillProperties(999, 0, 0.3f, 0, 0, 0.1f, 1, VERY_FAST));
+        this.skillProps.put(Skills.WALKING, new SkillProperties(999, 0.3f, 0.125f, 0, 0.1f, 0, 1, COMMON));
+        this.skillProps.put(Skills.EATING, new SkillProperties(999, 1, 2, 0.2f, 0.2f, 0.2f, 1, VERY_FAST));
+        this.skillProps.put(Skills.DEFENCE, new SkillProperties(999, 2, 0, 0, 0.75f, 0, 1, COMMON));
 
-        this.skillProps.put(Skills.RES_POISON, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
-        this.skillProps.put(Skills.RES_SEAL, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
-        this.skillProps.put(Skills.RES_PARA, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
-        this.skillProps.put(Skills.RES_SLEEP, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
-        this.skillProps.put(Skills.RES_FATIGUE, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
-        this.skillProps.put(Skills.RES_COLD, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1));
+        this.skillProps.put(Skills.RES_POISON, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1, FAST));
+        this.skillProps.put(Skills.RES_SEAL, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1, FAST));
+        this.skillProps.put(Skills.RES_PARA, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1, FAST));
+        this.skillProps.put(Skills.RES_SLEEP, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1, FAST));
+        this.skillProps.put(Skills.RES_FATIGUE, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1, FAST));
+        this.skillProps.put(Skills.RES_COLD, new SkillProperties(100, 0, 0, 0, 0.1f, 0.05f, 1, FAST));
 
-        this.skillProps.put(Skills.BATH, new SkillProperties(100, 1, 1, 0, 0.1f, 0, 1));
-        this.skillProps.put(Skills.TAMING, new SkillProperties(100, 0, 0.2f, 0, 0, 0.3f, 1));
-        this.skillProps.put(Skills.LEADER, new SkillProperties(100, 0, 0, 0.25f, 0, 0.1f, 1));
+        this.skillProps.put(Skills.BATH, new SkillProperties(100, 1, 1, 0, 0.1f, 0, 1, FAST));
+        this.skillProps.put(Skills.TAMING, new SkillProperties(100, 0, 0.2f, 0, 0, 0.3f, 1, FAST));
+        this.skillProps.put(Skills.LEADER, new SkillProperties(100, 0, 0, 0.25f, 0, 0.1f, 1, FAST));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -26,7 +26,7 @@ public class NPCFriendPoints {
     public boolean talkTo(Level level, int xp) {
         int day = WorldUtils.day(level);
         if (day != this.lastUpdateTalk) {
-            this.points.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> {
+            this.points.addXP(xp, 10, lvl -> GeneralConfig.friendPointsExperience.xpAmountForNext(lvl), () -> {
             });
             this.lastUpdateTalk = day;
             this.answeredConversations.clear();
@@ -39,7 +39,7 @@ public class NPCFriendPoints {
     public boolean giftXP(Level level, int xp) {
         int day = WorldUtils.day(level);
         if (day != this.lastUpdateGift) {
-            this.points.addXP(xp, 20, LevelCalc::friendPointsForNext, () -> {
+            this.points.addXP(xp, 20, lvl -> GeneralConfig.friendPointsExperience.xpAmountForNext(lvl), () -> {
             });
             this.lastUpdateGift = day;
             return true;
@@ -49,7 +49,7 @@ public class NPCFriendPoints {
 
     public boolean answer(String conversation, int xp) {
         if (!this.answeredConversations.contains(conversation)) {
-            this.points.addXP(xp, 20, LevelCalc::friendPointsForNext, () -> {
+            this.points.addXP(xp, 20, lvl -> GeneralConfig.friendPointsExperience.xpAmountForNext(lvl), () -> {
             });
             this.answeredConversations.add(conversation);
             return true;

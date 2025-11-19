@@ -172,7 +172,8 @@ public class RunecraftoryTags {
         public static final TagKey<Block> STONE = blockCommon("stones");
         public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
 
-        public static final TagKey<Block> ORES = block("ores");
+        public static final TagKey<Block> ORES = blockCommon("ores");
+        public static final TagKey<Block> MINERALS = block("minerals");
         public static final TagKey<Block> SICKLE_DESTROYABLE = block("sickle_destroyable");
         public static final TagKey<Block> SICKLE_EFFECTIVE = blockCommon("mineable/sickle");
         public static final TagKey<Block> HAMMER_FLATTENABLE = block("hammer_flattenable");

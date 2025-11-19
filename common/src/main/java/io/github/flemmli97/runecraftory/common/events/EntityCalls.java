@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.api.registry.ArmorEffect;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attackactions.NaiveBladeAttack;
-import io.github.flemmli97.runecraftory.common.blocks.MineralBlock;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -450,9 +449,18 @@ public class EntityCalls {
         if (state.is(RunecraftoryTags.Blocks.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
-            LevelCalc.levelSkill(data, Skills.MINING, state.getBlock() instanceof MineralBlock ? 10 : 1);
+            int amount = 1;
+            if (state.is(RunecraftoryTags.Blocks.MINERALS)) {
+                amount = 10;
+            } else if (state.is(RunecraftoryTags.Blocks.ORES)) {
+                amount = 3;
+            }
+            LevelCalc.levelSkill(data, Skills.MINING, amount);
         }
         if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
+            LevelCalc.levelSkill(data, Skills.LOGGING, 1);
+        }
+        if (state.is(BlockTags.LEAVES)) {
             LevelCalc.levelSkill(data, Skills.LOGGING, 1);
         }
         if (state.is(BlockTags.MINEABLE_WITH_HOE)) {
@@ -471,7 +479,7 @@ public class EntityCalls {
         }
     }
 
-    public static boolean shouldPreventFarmlandTrample(Entity entity, LevelAccessor world) {
+    public static boolean shouldPreventFarmlandTrample(Entity entity, LevelAccessor levelAccessor) {
         return GeneralConfig.disableFarmlandTrample;
     }
 

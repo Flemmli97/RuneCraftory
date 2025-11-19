@@ -8,7 +8,7 @@
         {
           "description": "runecraftory.quest.mining.sub.1.task.0",
           "value": {
-            "blocks": "#runecraftory:ores"
+            "blocks": "#c:ores"
           }
         }
       ],

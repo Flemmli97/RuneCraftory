@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntityEx;
@@ -1647,18 +1648,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     @Override
     public void setXPLevel(int level) {
-        this.levelPair.setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.levelPair.setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
         this.updateStatsToLevel();
     }
 
     public void increaseLevel() {
-        this.levelPair.setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.levelPair.setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
         this.updateStatsToLevel();
     }
 
     public void addXp(float amount) {
         XpLevelHolder pair = this.xpLevel();
-        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
+        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl), () -> {
         });
         LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         if (res)
@@ -1699,7 +1700,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void increaseFriendPoints(int xp) {
-        boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(FRIEND_POINTS_SYNC, this.friendlyPoints.getLevel()));
+        boolean leveledUp = this.friendlyPoints.addXP(xp, 10, lvl -> GeneralConfig.friendPointsExperience.xpAmountForNext(lvl), () -> this.entityData.set(FRIEND_POINTS_SYNC, this.friendlyPoints.getLevel()));
         if (leveledUp) {
             this.updateFriendPointAttributeBonus();
         }

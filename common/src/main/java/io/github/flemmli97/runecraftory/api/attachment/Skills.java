@@ -1,56 +1,57 @@
 package io.github.flemmli97.runecraftory.api.attachment;
 
+import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+
 public enum Skills {
 
-    SHORTSWORD("short_sword", GainType.SLOW),
-    LONGSWORD("long_sword", GainType.SLOW),
-    SPEAR("spear", GainType.SLOW),
-    HAMMERAXE("hammer_and_axe", GainType.SLOW),
-    DUAL("dual_sword", GainType.SLOW),
-    FIST("fists", GainType.SLOW),
+    SHORTSWORD("short_sword"),
+    LONGSWORD("long_sword"),
+    SPEAR("spear"),
+    HAMMERAXE("hammer_and_axe"),
+    DUAL("dual_sword"),
+    FIST("fists"),
 
-    FIRE("fire", GainType.SLOW),
-    WATER("water", GainType.SLOW),
-    EARTH("earth", GainType.SLOW),
-    WIND("wind", GainType.SLOW),
-    DARK("dark", GainType.SLOW),
-    LIGHT("light", GainType.SLOW),
-    LOVE("love", GainType.SLOW),
+    FIRE("fire"),
+    WATER("water"),
+    EARTH("earth"),
+    WIND("wind"),
+    DARK("dark"),
+    LIGHT("light"),
+    LOVE("love"),
 
-    FARMING("farming", GainType.COMMON),
-    LOGGING("logging", GainType.COMMON),
-    MINING("mining", GainType.COMMON),
-    FISHING("fishing", GainType.VERY_FAST),
+    FARMING("farming"),
+    LOGGING("logging"),
+    MINING("mining"),
+    FISHING("fishing"),
 
-    COOKING("cooking", GainType.CRAFTING),
-    FORGING("forging", GainType.CRAFTING),
-    CHEMISTRY("chemistry", GainType.CRAFTING),
-    CRAFTING("crafting", GainType.CRAFTING),
+    COOKING("cooking"),
+    FORGING("forging"),
+    CHEMISTRY("chemistry"),
+    CRAFTING("crafting"),
 
-    SLEEPING("sleeping", GainType.FAST),
-    SEARCHING("searching", GainType.VERY_FAST),
-    WALKING("walking", GainType.COMMON),
-    EATING("eating", GainType.VERY_FAST),
-    DEFENCE("defence", GainType.COMMON),
+    SLEEPING("sleeping"),
+    SEARCHING("searching"),
+    WALKING("walking"),
+    EATING("eating"),
+    DEFENCE("defence"),
 
-    RES_POISON("poison_res", GainType.FAST),
-    RES_SEAL("seal_res", GainType.FAST),
-    RES_PARA("paralysis_res", GainType.FAST),
-    RES_SLEEP("sleep_res", GainType.FAST),
-    RES_FATIGUE("fatigue_res", GainType.FAST),
-    RES_COLD("cold_res", GainType.FAST),
+    RES_POISON("poison_res"),
+    RES_SEAL("seal_res"),
+    RES_PARA("paralysis_res"),
+    RES_SLEEP("sleep_res"),
+    RES_FATIGUE("fatigue_res"),
+    RES_COLD("cold_res"),
 
-    BATH("bathing", GainType.FAST),
-    TAMING("taming", GainType.FAST),
-    LEADER("leadership", GainType.FAST);
+    BATH("bathing"),
+    TAMING("taming"),
+    LEADER("leadership");
 
     public static final String PREFIX = "runecraftory.skill.";
-    public final GainType gainType;
     private final String translation;
 
-    Skills(String translation, GainType type) {
+    Skills(String translation) {
         this.translation = PREFIX + translation;
-        this.gainType = type;
     }
 
     public static Skills read(String s) {
@@ -63,6 +64,10 @@ public enum Skills {
 
     public String getTranslation() {
         return this.translation;
+    }
+
+    public SkillProperties getProperties() {
+        return DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(this);
     }
 
     public enum GainType {

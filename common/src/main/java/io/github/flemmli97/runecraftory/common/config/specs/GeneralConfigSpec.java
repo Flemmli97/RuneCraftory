@@ -67,6 +67,8 @@ public class GeneralConfigSpec {
     public final ModConfigSpec.DoubleValue xpMultiplier;
     public final ModConfigSpec.DoubleValue skillXpMultiplier;
     public final ModConfigSpec.DoubleValue tamingMultiplier;
+    public final ModConfigSpec.ConfigValue<String> experienceLevel;
+    public final ModConfigSpec.ConfigValue<String> friendPointsExperience;
 
     public final ModConfigSpec.BooleanValue debugMode;
     public final ModConfigSpec.BooleanValue debugAttack;
@@ -121,6 +123,8 @@ public class GeneralConfigSpec {
         this.xpMultiplier = builder.comment("Gain base xp * multiplier. Default 0 for now cause its not balanced").defineInRange("XP Multiplier", GeneralConfig.xpMultiplier, 0, Double.MAX_VALUE);
         this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier. Default 0 for now cause its not balanced").defineInRange("Skill XP Multiplier", GeneralConfig.skillXpMultiplier, 0, Double.MAX_VALUE);
         this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").defineInRange("Taming Chance Multiplier", GeneralConfig.tamingMultiplier, 0, Double.MAX_VALUE);
+        this.experienceLevel = builder.comment("Required xp for levelup").define("Level Experience", GeneralConfig.experienceLevel.experiencePerLevel().expression());
+        this.friendPointsExperience = builder.comment("Required xp for friendship levelup").define("Friendship experience", GeneralConfig.friendPointsExperience.experiencePerLevel().expression());
         builder.pop();
 
         builder.push("Integration");

@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.api.registry.action.PlayerModelAnimation
 import io.github.flemmli97.runecraftory.common.attachment.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.player.XpLevelHolder;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
@@ -304,7 +305,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public NPCEntity(EntityType<? extends NPCEntity> type, Level level) {
         super(type, level);
-        this.levelPair.setLevel(LibConstants.BASE_LEVEL, LevelCalc::xpAmountForLevelUp);
+        this.levelPair.setLevel(LibConstants.BASE_LEVEL, lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
         this.applyAttributes(true);
     }
 
@@ -895,7 +896,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                     this.speak(serverPlayer, ConversationContext.DIVORCE);
                     family.updateRelationship(FamilyEntry.Relationship.NONE, null);
                     this.relationManager.getFriendPointData(player.getUUID())
-                            .points.addXP(-2000, 10, LevelCalc::friendPointsForNext, () -> {
+                            .points.addXP(-2000, 10, lvl -> GeneralConfig.friendPointsExperience.xpAmountForNext(lvl), () -> {
                             });
                 } else {
                     this.speak(serverPlayer, ConversationContext.DIVORCE_ERROR);
@@ -1299,17 +1300,17 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     @Override
     public void setXPLevel(int level) {
-        this.xpLevel().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.xpLevel().setLevel(Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL), lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
         this.updateStatsToLevel();
     }
 
     public void increaseLevel() {
-        this.xpLevel().setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), LevelCalc::xpAmountForLevelUp);
+        this.xpLevel().setLevel(Mth.clamp(this.xpLevel().getLevel() + 1, 1, LibConstants.MAX_MONSTER_LEVEL), lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
         this.updateStatsToLevel();
     }
 
     public void addXp(float amount) {
-        boolean res = this.xpLevel().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
+        boolean res = this.xpLevel().addXP(amount, LibConstants.MAX_MONSTER_LEVEL, lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl), () -> {
         });
         LoaderNetwork.INSTANCE.sendToTracking(S2CEntityLevelPkt.create(this), this);
         if (res)

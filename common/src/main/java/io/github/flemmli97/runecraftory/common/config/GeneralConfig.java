@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.config;
 
+import io.github.flemmli97.runecraftory.api.datapack.ExperienceCache;
+import io.github.flemmli97.runecraftory.api.datapack.ExpressionHolder;
 import io.github.flemmli97.runecraftory.common.items.ToolItemTier;
 
 public class GeneralConfig {
@@ -64,6 +66,8 @@ public class GeneralConfig {
     public static float xpMultiplier = 1;
     public static float skillXpMultiplier = 1;
     public static float tamingMultiplier = 1;
+    public static ExperienceCache experienceLevel = new ExperienceCache(() -> GeneralConfig.maxLevel, new ExpressionHolder("10 + level * 10 + 15 * level ^ 1.25 + (level / 10) * 250 + (level / 20) * (level / 20) * 1000"), true);
+    public static ExperienceCache friendPointsExperience = new ExperienceCache(() -> 20, new ExpressionHolder("level >= 10 ? 1000 : 45 + level * 5 + level * level * 10"), true);
 
     public static boolean debugAttack = false;
 

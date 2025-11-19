@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.integration.top;
+package io.github.flemmli97.runecraftory.neoforge.integration.top;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.MonsterBarnBlock;

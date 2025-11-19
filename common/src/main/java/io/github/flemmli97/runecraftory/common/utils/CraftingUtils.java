@@ -69,7 +69,7 @@ public class CraftingUtils {
     }
 
     private static float xpForCrafting(Skills skill, SextupleRecipe recipe, int skillLevel) {
-        float mult = LevelCalc.getSkillXpMultiplier(skill);
+        float mult = skill.getProperties().xpMultiplier();
         float xp = (recipe.getCraftingLevel() * 2 + 10) * mult;
         if (skillLevel > recipe.getCraftingLevel())
             xp -= 2 * skillLevel - recipe.getCraftingLevel();
@@ -87,7 +87,7 @@ public class CraftingUtils {
     }
 
     private static float xpForUpgrade(Skills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
-        float mult = LevelCalc.getSkillXpMultiplier(skill) * 1.5f;
+        float mult = skill.getProperties().xpMultiplier() * 1.5f;
         int difficulty = DataPackHandler.INSTANCE.itemStatManager().get(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
         float xp = mult * (10 + ItemComponentUtils.itemLevel(equip));
         if (skillLevel < difficulty)

@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.DistanceZoningConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
@@ -31,124 +30,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.ToIntBiFunction;
 
 public class LevelCalc {
-
-    private static long[] LEVEL_XP_TOTAL;
-
-    private static long[] COMMON_SKILL_XP;
-    private static long[] SLOW_SKILL_XP;
-    private static long[] FAST_SKILL_XP;
-    private static long[] VERY_FAST_SKILL_XP;
-    private static long[] CRAFTING_SKILL_XP;
-
-    private static long[] FRIEND_XP_TOTAL;
-
-    /**
-     * Experimental calculations
-     */
-    public static int xpAmountForLevelUp(int level) {
-        if (level <= 0)
-            return 1;
-        if (level >= GeneralConfig.maxLevel)
-            return 0;
-        return (int) (totalXpForLevel(level + 1) - totalXpForLevel(level));
-    }
-
-    public static long totalXpForLevel(int level) {
-        if (level <= 0)
-            return 0;
-        if (LEVEL_XP_TOTAL == null || LEVEL_XP_TOTAL.length < level) {
-            int len = level + 10;
-            LEVEL_XP_TOTAL = new long[len];
-            LEVEL_XP_TOTAL[0] = 50;
-            long prev = LEVEL_XP_TOTAL[0];
-            for (int l = 1; l < len; l++) {
-                LEVEL_XP_TOTAL[l] = (long) (prev + 5 + l * 10L + 15 * Math.pow(l, 1.25) + (l / 10) * 250L + (l / 20) * (l / 20) * 1000L);
-                //Old calc. here for now
-                //levelXPTotal[l] = (long) (prev + 170 + 9 * Math.pow(l, 2.455) - 12 * Math.pow(l, 1.549) + (l - 1) * 125L);
-                prev = LEVEL_XP_TOTAL[l];
-            }
-        }
-        return LEVEL_XP_TOTAL[level - 1];
-    }
-
-    public static int xpAmountForSkillLevelUp(Skills skill, int level) {
-        if (level <= 0)
-            return 1;
-        if (level >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
-            return 0;
-        return (int) (totalSkillXpForLevel(skill, level + 1) - totalSkillXpForLevel(skill, level));
-    }
-
-    public static long totalSkillXpForLevel(Skills skill, int level) {
-        if (level <= 0)
-            return 0;
-        long[] xps = switch (skill.gainType) {
-            case COMMON -> (COMMON_SKILL_XP == null || COMMON_SKILL_XP.length < level) ?
-                    COMMON_SKILL_XP = calcSkillXPs(COMMON_SKILL_XP, level, (l, prev) -> (long) (prev + 35 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21L))
-                    : COMMON_SKILL_XP;
-            case SLOW -> (SLOW_SKILL_XP == null || SLOW_SKILL_XP.length < level) ?
-                    SLOW_SKILL_XP = calcSkillXPs(SLOW_SKILL_XP, level, (l, prev) -> prev + 25 + (l - 1L) * 15 + (l / 10) * 100L
-                            + (long) (Math.pow(l, 1.2) * 3 + Math.pow(l / 10, 2) * 50 + Math.pow(Math.max(0, l - 50) / 10, 1.235) * 500))
-                    : SLOW_SKILL_XP;
-            case FAST -> (FAST_SKILL_XP == null || FAST_SKILL_XP.length < level) ?
-                    FAST_SKILL_XP = calcSkillXPs(FAST_SKILL_XP, level, (l, prev) -> prev + 40 + l * 30 + (int) (Math.pow(l, 1.75) * 0.125) * 10)
-                    : FAST_SKILL_XP;
-            case VERY_FAST -> (VERY_FAST_SKILL_XP == null || VERY_FAST_SKILL_XP.length < level) ?
-                    VERY_FAST_SKILL_XP = calcSkillXPs(VERY_FAST_SKILL_XP, level, (l, prev) -> prev + 50 + (l - 1L) * 30)
-                    : VERY_FAST_SKILL_XP;
-            case CRAFTING -> (CRAFTING_SKILL_XP == null || CRAFTING_SKILL_XP.length < level) ?
-                    CRAFTING_SKILL_XP = calcSkillXPs(CRAFTING_SKILL_XP, level, (l, prev) -> prev + 50 + (l - 1L) * 15 + (l / 10) * 25L + (l % 10 == 0 ? (l / 10) * 35L : 0))
-                    : CRAFTING_SKILL_XP;
-        };
-        return xps[level - 1];
-    }
-
-    private static long[] calcSkillXPs(long[] current, int level, BiFunction<Integer, Long, Long> levelXP) {
-        if (current != null && current.length >= level)
-            return current;
-        int len = level + 10;
-        if (current != null) {
-            len = level + 50;
-        }
-        long[] xps = new long[len];
-        xps[0] = 0;
-        long prev = xps[0];
-        for (int l = 1; l < len; l++) {
-            xps[l] = levelXP.apply(l, prev);
-            prev = xps[l];
-        }
-        return xps;
-    }
-
-    public static int friendPointsForNext(int level) {
-        if (level <= 0)
-            return 1;
-        if (level >= 20)
-            return 0;
-        if (level >= 10)
-            return 1000;
-        return (int) (totalFriendPointsForLevel(level) - totalFriendPointsForLevel(level - 1));
-    }
-
-    public static long totalFriendPointsForLevel(int level) {
-        if (level <= 0 || level >= 10)
-            return 0;
-        if (FRIEND_XP_TOTAL == null) {
-            FRIEND_XP_TOTAL = new long[10];
-            FRIEND_XP_TOTAL[0] = 30;
-            long prev = FRIEND_XP_TOTAL[0];
-            for (int l = 1; l < 10; l++) {
-                FRIEND_XP_TOTAL[l] = prev + 45 + l * 5 + l * l * 10;
-                prev = FRIEND_XP_TOTAL[l];
-            }
-        }
-        return FRIEND_XP_TOTAL[level - 1];
-    }
 
     public static int getMoney(int base, int level) {
         return base;
@@ -205,14 +90,10 @@ public class LevelCalc {
         return xp * Math.max(0.01f, 1 - diff * 0.075f) * GeneralConfig.xpMultiplier;
     }
 
-    public static float getSkillXpMultiplier(Skills skill) {
-        return DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).xpMultiplier();
-    }
-
     public static void levelSkill(PlayerData data, Skills skill, float amount) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
-        data.increaseSkill(skill, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, skill.getProperties().xpMultiplier() * amount * GeneralConfig.skillXpMultiplier);
     }
 
     public static GateLevelResult levelFromPos(ServerLevel level, Vec3 pos) {

@@ -26,6 +26,8 @@ public class BlockTagGen extends IntrinsicHolderTagsProvider<Block> {
     public void addTags(HolderLookup.Provider provider) {
         this.tag(RunecraftoryTags.Blocks.ORES)
                 .add(RuneCraftoryBlocks.MINERAL_MAP.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
+        this.tag(RunecraftoryTags.Blocks.MINERALS)
+                .add(RuneCraftoryBlocks.MINERAL_MAP.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
 
         this.tag(RunecraftoryTags.Blocks.SICKLE_DESTROYABLE)
                 .addTag(BlockTags.CORAL_PLANTS)

@@ -1,4 +1,5 @@
 {
+  "experience_per_level": "40 + level * 30 + level ^ 1.75 * 0.125 * 10",
   "health_increase": 0.0,
   "intel_increase": 0.3,
   "max_level": 100,

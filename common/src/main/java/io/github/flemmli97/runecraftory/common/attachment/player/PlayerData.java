@@ -299,8 +299,8 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
     }
 
     public void setPlayerLevel(int level, float xpAmount, boolean recalc) {
-        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel), LevelCalc::xpAmountForLevelUp);
-        this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
+        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel), lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
+        this.level.setXp(Mth.clamp(xpAmount, 0, GeneralConfig.experienceLevel.xpAmountForNext(level)));
         if (this.player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(true);
@@ -312,7 +312,7 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
     public void addXp(float amount) {
         if (this.level.getLevel() >= GeneralConfig.maxLevel)
             return;
-        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, this::handleLevelStatUpdate);
+        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl), this::handleLevelStatUpdate);
         if (levelUp) {
             this.player.level().playSound(null, this.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -358,8 +358,8 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
     }
 
     public void setSkillLevel(Skills skill, int level, float xpAmount, boolean recalc) {
-        this.skillLevels.get(skill).setLevel(this.player.level().isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> LevelCalc.xpAmountForSkillLevelUp(skill, l));
-        this.skillLevels.get(skill).setXp(this.player.level().isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
+        this.skillLevels.get(skill).setLevel(this.player.level().isClientSide ? level : Mth.clamp(level, 1, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel()), l -> skill.getProperties().xpAmountForNext(l));
+        this.skillLevels.get(skill).setXp(this.player.level().isClientSide ? xpAmount : Mth.clamp(xpAmount, 0, skill.getProperties().xpAmountForNext(level)));
         if (this.player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(true);
@@ -372,7 +372,7 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
     public void increaseSkill(Skills skill, float amount) {
         if (this.skillLevels.get(skill).getLevel() >= DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
-        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), this::onSkillLevelUp);
+        boolean levelUp = this.skillLevels.get(skill).addXP(amount, DataPackHandler.INSTANCE.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> skill.getProperties().xpAmountForNext(lvl), this::onSkillLevelUp);
         if (levelUp) {
             this.player.level().playSound(null, this.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }

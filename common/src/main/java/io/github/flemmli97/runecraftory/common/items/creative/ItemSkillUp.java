@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.items.creative;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +21,7 @@ public class ItemSkillUp extends Item {
         if (!level.isClientSide) {
             PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             for (Skills skill : Skills.values())
-                data.increaseSkill(skill, LevelCalc.xpAmountForSkillLevelUp(skill, data.getSkillLevel(skill).getLevel()) - data.getSkillLevel(skill).getXp());
+                data.increaseSkill(skill, skill.getProperties().xpAmountForNext(data.getSkillLevel(skill).getLevel()) - data.getSkillLevel(skill).getXp());
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }

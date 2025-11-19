@@ -85,6 +85,8 @@ public record ConfigHolder<T>(ConfigType configType, String configName,
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();
         GeneralConfig.tamingMultiplier = spec.tamingMultiplier.get().floatValue();
+        GeneralConfig.experienceLevel.updateExpression(spec.experienceLevel.get());
+        GeneralConfig.friendPointsExperience.updateExpression(spec.friendPointsExperience.get());
 
         GeneralConfig.SERENE_SEASONS.read(spec.seasons.get() && TenshiLibCrossPlat.INSTANCE.isModLoaded("sereneseasons"));
 
