@@ -14,7 +14,7 @@ public class EmptyRender<T extends Entity> extends EntityRenderer<T> {
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packetLight) {
+    public void render(T entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource buffer, int packetLight) {
     }
 
     @Override

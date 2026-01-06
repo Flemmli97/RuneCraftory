@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
+package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -10,17 +10,16 @@ import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
-import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-public class RafflesiaModel<T extends Rafflesia> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
+public class RafflesiaModel<T extends Rafflesia> extends ExtendedEntityModel<T> implements RideableModel<T> {
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/rafflesia");
 
@@ -55,35 +54,35 @@ public class RafflesiaModel<T extends Rafflesia> extends EntityModel<T> implemen
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getModel().resetPoses();
-        float partialTicks = ClientHandlers.getPartialTicks();
-        this.mainRoot.yRot = (Mth.lerp(partialTicks, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
+        float partialTick = this.getPartialTick();
+        this.mainRoot.yRot = (Mth.lerp(partialTick, entity.yHeadRotO, entity.yHeadRot) - entity.getSpawnDirection().toYRot()) * Mth.DEG_TO_RAD;
         this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.3f;
         AnimationState current = entity.getAnimationHandler().getAnimation();
         if (entity.deathTime <= 0 && !entity.playDeath() && (current == null || !current.getAnimation().equals("breath"))) {
-            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTick);
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks, s -> Rafflesia.isMirrorAttack(s.definition()), null);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick, s -> Rafflesia.isMirrorAttack(s.definition()), null);
         if (current == null || current.getAnimation().equals("breath")) {
             this.head.xRot += headPitch * Mth.DEG_TO_RAD * 1;
         }
         RafflesiaPart horseTail = entity.getHorseTail();
         if (horseTail != null) {
             this.horseTail.visible = true;
-            this.anim.get().doAnimation(this, horseTail.getAnimationHandler(), partialTicks);
+            this.anim.get().doAnimation(this, horseTail.getAnimationHandler(), partialTick);
         } else {
             this.horseTail.visible = false;
         }
         RafflesiaPart flower = entity.getFlower();
         if (flower != null) {
             this.flower.visible = true;
-            this.anim.get().doAnimation(this, flower.getAnimationHandler(), partialTicks);
+            this.anim.get().doAnimation(this, flower.getAnimationHandler(), partialTick);
         } else {
             this.flower.visible = false;
         }
         RafflesiaPart pitcher = entity.getPitcher();
         if (pitcher != null) {
             this.pitcher.visible = true;
-            this.anim.get().doAnimation(this, pitcher.getAnimationHandler(), partialTicks);
+            this.anim.get().doAnimation(this, pitcher.getAnimationHandler(), partialTick);
         } else {
             this.pitcher.visible = false;
         }

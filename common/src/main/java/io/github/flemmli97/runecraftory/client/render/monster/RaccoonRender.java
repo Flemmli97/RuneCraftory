@@ -36,7 +36,7 @@ public class RaccoonRender<T extends Raccoon> extends RenderMonster<T, RaccoonBa
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         if (entity.isBerserk())
             this.shadowRadius = 0.7f;
         else
@@ -57,12 +57,12 @@ public class RaccoonRender<T extends Raccoon> extends RenderMonster<T, RaccoonBa
             this.model = entity.isBerserk() ? this.berserkModel : this.normalModel;
         if (!this.clone && anim != null && anim.is(Raccoon.CLONE) && entity.cloneCenter().isPresent()) {
             Vec3 center = entity.cloneCenter().get();
-            double dx = Mth.lerp(partialTicks, entity.getX(), entity.xOld) - center.x();
-            double dy = Mth.lerp(partialTicks, entity.getY(), entity.yOld) - center.y();
-            double dz = Mth.lerp(partialTicks, entity.getZ(), entity.zOld) - center.z();
+            double dx = Mth.lerp(partialTick, entity.getX(), entity.xOld) - center.x();
+            double dy = Mth.lerp(partialTick, entity.getY(), entity.yOld) - center.y();
+            double dz = Mth.lerp(partialTick, entity.getZ(), entity.zOld) - center.z();
             stack.pushPose();
             stack.translate(-dx, -dy, -dz);
-            float tick = Mth.lerp(partialTicks, entity.tickCount, entity.tickCount + 1);
+            float tick = Mth.lerp(partialTick, entity.tickCount, entity.tickCount + 1);
             this.clone = true;
             for (int i = 0; i < Raccoon.CLONE_POS.length; i++) {
                 Vec3 vec3 = Raccoon.CLONE_POS[i];
@@ -73,12 +73,12 @@ public class RaccoonRender<T extends Raccoon> extends RenderMonster<T, RaccoonBa
                 int rotAmount = i - entity.cloneIndex();
                 stack.mulPose(Axis.YP.rotationDegrees(-rotAmount * 90));
                 Minecraft.getInstance().getEntityRenderDispatcher()
-                        .render(entity, 0, 0, 0, entityYaw, partialTicks, stack, buffer, packedLight);
+                        .render(entity, 0, 0, 0, entityYaw, partialTick, stack, buffer, packedLight);
                 stack.popPose();
             }
             this.clone = false;
             stack.popPose();
         } else
-            super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
+            super.render(entity, entityYaw, partialTick, stack, buffer, packedLight);
     }
 }

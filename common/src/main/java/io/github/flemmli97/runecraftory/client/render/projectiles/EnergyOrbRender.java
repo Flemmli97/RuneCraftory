@@ -34,14 +34,14 @@ public class EnergyOrbRender extends SimpleModelRenderer<HomingEnergyOrbEntity> 
     }
 
     @Override
-    public void render(HomingEnergyOrbEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(HomingEnergyOrbEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
-        Vec3 start = entity.rootPosition(partialTicks);
+        Vec3 start = entity.rootPosition(partialTick);
         if (start == null)
             return;
-        Vec3 vec32 = this.getPositionLerped(entity, partialTicks);
+        Vec3 vec32 = this.getPositionLerped(entity, partialTick);
         Vec3 dir = start.subtract(vec32);
         float len = (float) (dir.length() + 1.0);
         dir = dir.normalize();
@@ -57,7 +57,7 @@ public class EnergyOrbRender extends SimpleModelRenderer<HomingEnergyOrbEntity> 
         int green = 154 + (int) (colorScale * (210 - 154));
         int blue = 207 - (int) (colorScale * (237 - 207));
 
-        float tick = entity.tickCount + partialTicks;
+        float tick = entity.tickCount + partialTick;
         float h = tick * 0.5f % 1.0f;
         float n = tick * 0.05f * -1.5f;
 
@@ -112,16 +112,16 @@ public class EnergyOrbRender extends SimpleModelRenderer<HomingEnergyOrbEntity> 
     }
 
     @Override
-    public void translate(HomingEnergyOrbEntity entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
-        super.translate(entity, stack, 0, 0, partialTicks);
+    public void translate(HomingEnergyOrbEntity entity, PoseStack stack, float pitch, float yaw, float partialTick) {
+        super.translate(entity, stack, 0, 0, partialTick);
         stack.translate(0.0, 1 / 16d, 0.0);
     }
 
     @Override
-    public void afterModelRender(HomingEnergyOrbEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
-        float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + this.yawOffset();
-        float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + this.pitchOffset();
-        this.layer.render(stack, buffer, packedLight, entity, 0, 0, partialTicks, entity.tickCount, yaw, pitch);
+    public void afterModelRender(HomingEnergyOrbEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+        float yaw = Mth.lerp(partialTick, entity.yRotO, entity.getYRot()) + this.yawOffset();
+        float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot()) + this.pitchOffset();
+        this.layer.render(stack, buffer, packedLight, entity, 0, 0, partialTick, entity.tickCount, yaw, pitch);
     }
 
     @Override

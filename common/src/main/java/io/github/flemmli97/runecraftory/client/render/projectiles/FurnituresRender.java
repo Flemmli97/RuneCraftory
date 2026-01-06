@@ -56,7 +56,7 @@ public class FurnituresRender extends EntityRenderer<FurnitureEntity> {
     }
 
     @Override
-    public void render(FurnitureEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(FurnitureEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(1.2f, 1.2f, 1.2f);
         stack.mulPose(Axis.YP.rotationDegrees(entity.getRandomRotationOffset()));
@@ -75,7 +75,7 @@ public class FurnituresRender extends EntityRenderer<FurnitureEntity> {
                     this.renderModel(stack, this.simpleConsumer(buffer, TEX_CHIPSQUEEK), packedLight, this.chipSqueekPlush);
         }
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

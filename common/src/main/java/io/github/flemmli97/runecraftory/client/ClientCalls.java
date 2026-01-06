@@ -312,11 +312,11 @@ public class ClientCalls {
         return RunecraftoryAttachments.ENTITY_DATA.get().get(entity).isInvisible();
     }
 
-    public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
+    public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTick,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
         boolean stunned = Minecraft.getInstance().player.hasEffect(RuneCraftoryEffects.STUNNED.asHolder());
         if (stunned) {
-            float pT = ((Minecraft.getInstance().player.tickCount - partialTicks) * 24) % 1000;
+            float pT = ((Minecraft.getInstance().player.tickCount - partialTick) * 24) % 1000;
             setYaw.accept(yaw + Mth.sin(pT) * 0.5f);
             setPitch.accept(pitch + Mth.sin(pT * 2) * 1);
         }
@@ -325,18 +325,18 @@ public class ClientCalls {
             return;
         float strengthPitch = ShakeHandler.shakeStrength * ClientConfig.screenShakeIntensity;
         float strengthRoll = ShakeHandler.shakeStrength * ClientConfig.screenShakeIntensity;
-        float pT = (t - partialTicks) * 24;
+        float pT = (t - partialTick) * 24;
         setPitch.accept(pitch + Mth.sin(pT * 2) * strengthPitch);
         setRoll.accept(roll + Mth.sin(pT) * strengthRoll);
     }
 
-    public static void renderEntityShake(LivingEntity entity, PoseStack stack, float partialTicks) {
+    public static void renderEntityShake(LivingEntity entity, PoseStack stack, float partialTick) {
         boolean stunned = entity.hasEffect(RuneCraftoryEffects.STUNNED.asHolder());
         if (!stunned)
             return;
-        float yRot = Mth.lerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
+        float yRot = Mth.lerp(partialTick, entity.yBodyRotO, entity.yBodyRot);
         Vec3 dir = Vec3.directionFromRotation(0, yRot + 90).scale(0.1);
-        float pT = Mth.sin(((entity.tickCount - partialTicks) * 10) % 1000);
+        float pT = Mth.sin(((entity.tickCount - partialTick) * 10) % 1000);
         stack.translate(pT * dir.x(), 0, pT * dir.z());
     }
 

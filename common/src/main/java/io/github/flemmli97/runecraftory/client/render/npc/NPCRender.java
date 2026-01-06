@@ -270,7 +270,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         boolean slim = isSlim(entity);
         this.updateModelFromEntity(entity, slim);
         this.getModel().setDelegate(this.internalHumanoid);
@@ -279,7 +279,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         for (NPCFeature feature : entity.lookFeatures) {
             NPCFeatureRenderers.get(feature).onSetup(feature, this, entity, stack);
         }
-        super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
+        super.render(entity, entityYaw, partialTick, stack, buffer, packedLight);
     }
 
     protected void updateModelFromEntity(T entity, boolean slim) {

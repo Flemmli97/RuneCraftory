@@ -25,7 +25,7 @@ public class SpiderWebRender extends EntityRenderer<SpiderWebEntity> {
     }
 
     @Override
-    public void render(SpiderWebEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(SpiderWebEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(1, 1, 1);
         stack.mulPose(Axis.YP.rotationDegrees(entity.yRotO + 45));
@@ -33,7 +33,7 @@ public class SpiderWebRender extends EntityRenderer<SpiderWebEntity> {
         stack.mulPose(Axis.YP.rotationDegrees(90));
         this.itemRenderer.renderStatic(this.stack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, stack, buffer, entity.level(), entity.getId());
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

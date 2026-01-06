@@ -20,7 +20,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity & MoveS
         super();
     }
 
-    public boolean setUpModel(Player entity, @Nullable HumanoidModel<?> model, AnimationHandler<?> handler, float partialTicks) {
+    public boolean setUpModel(Player entity, @Nullable HumanoidModel<?> model, AnimationHandler<?> handler, float partialTick) {
         if (model != null) {
             HumanoidMainHand hands = (HumanoidMainHand) model;
             hands.runecraftory$getLeftHandItem().resetAll();
@@ -29,11 +29,11 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity & MoveS
         if (handler == null)
             return false;
         this.copyFrom(model);
-        return this.doAnimation(handler, partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
+        return this.doAnimation(handler, partialTick, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
-    private boolean doAnimation(AnimationHandler<?> handler, float partialTicks, boolean mirror) {
-        boolean changed = this.attackAnimations.get().doAnimation(this, handler, partialTicks, mirror);
+    private boolean doAnimation(AnimationHandler<?> handler, float partialTick, boolean mirror) {
+        boolean changed = this.attackAnimations.get().doAnimation(this, handler, partialTick, mirror);
         // Move the body so it stays at the same place
         if (changed && this.riding) {
             this.body.x = this.body.getDefaultPose().x;

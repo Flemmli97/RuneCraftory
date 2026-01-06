@@ -16,13 +16,13 @@ public class ThrownItemRender extends ItemProjectileRenderer<ThrownItemEntity> {
     }
 
     @Override
-    public void render(ThrownItemEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(ThrownItemEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         if (entity.isRotating()) {
             stack.mulPose(Axis.ZP.rotationDegrees(entity.tickCount * 60));
             stack.translate(0, -0.3, 0);
         }
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 

@@ -38,11 +38,11 @@ public class CardsRender extends TextureRenderer<CardsEntity> {
     }
 
     @Override
-    public void render(CardsEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(CardsEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(0.8f, 0.8f, 0.8f);
         stack.translate(0, 0.3, 0);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 

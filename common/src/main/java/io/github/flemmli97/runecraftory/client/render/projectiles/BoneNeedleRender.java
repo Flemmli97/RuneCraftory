@@ -22,10 +22,10 @@ public class BoneNeedleRender extends CrossedTextureRenderer<BoneNeedleEntity> {
     }
 
     @Override
-    public void render(BoneNeedleEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(BoneNeedleEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.2, 0);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 }

@@ -20,22 +20,22 @@ public class BigRaccoonLeafRender extends TextureRenderer<BigRaccoonLeafEntity> 
     }
 
     @Override
-    public void render(BigRaccoonLeafEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(BigRaccoonLeafEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.27, 0.05);
         float spin = entity.initialYaw() + Mth.lerp(packedLight, 40 * entity.livingTicks(), 40 * entity.livingTicks() + 1);
         stack.mulPose(Axis.YP.rotationDegrees(entity.spinRight() ? spin : -spin));
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 
     @Override
-    public void adjustYawPitch(PoseStack stack, BigRaccoonLeafEntity entity, float partialTicks, float yaw, float pitch) {
-        super.adjustYawPitch(stack, entity, partialTicks, 0, 0);
+    public void adjustYawPitch(PoseStack stack, BigRaccoonLeafEntity entity, float partialTick, float yaw, float pitch) {
+        super.adjustYawPitch(stack, entity, partialTick, 0, 0);
     }
 
     @Override
-    public void doRender(BigRaccoonLeafEntity entity, float partialTicks, PoseStack stack, MultiBufferSource buffer) {
+    public void doRender(BigRaccoonLeafEntity entity, float partialTick, PoseStack stack, MultiBufferSource buffer) {
         stack.mulPose(Axis.XP.rotationDegrees(-20));
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
         stack.mulPose(Axis.XP.rotationDegrees(40));

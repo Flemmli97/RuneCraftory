@@ -125,7 +125,7 @@ public class ClientMixinUtils {
         return entity instanceof Player || entity instanceof AnimatedEntity;
     }
 
-    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
+    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, float partialTick) {
         InteractionHand main = entity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         InteractionHand off = entity.getMainArm() == HumanoidArm.RIGHT ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         if (model.rightArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(main).is(RuneCraftoryItems.UMBRELLA.get())) {
@@ -134,12 +134,11 @@ public class ClientMixinUtils {
         if (model.leftArmPose == HumanoidModel.ArmPose.ITEM && entity.getItemInHand(off).is(RuneCraftoryItems.UMBRELLA.get())) {
             model.leftArm.xRot -= 70 * Mth.DEG_TO_RAD;
         }
-        float partialTicks = ClientHandlers.getPartialTicks();
         if (!(entity instanceof Player player))
             return;
         WeaponHandler<Player> weaponHandler = RunecraftoryAttachments.PLAYER_DATA.get().get(player).getWeaponHandler();
         boolean ignoreRiding = weaponHandler.getCurrentAction() == RuneCraftoryAttackActions.DUAL_USE.get();
-        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, model, weaponHandler.getAnimationHandler(), partialTicks);
+        boolean result = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, model, weaponHandler.getAnimationHandler(), partialTick);
         if (result) {
             ClientHandlers.getAnimatedPlayerModel().copyTo(model);
         }
@@ -156,7 +155,7 @@ public class ClientMixinUtils {
         }
     }
 
-    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, MultiBufferSource buffer, int combinedLight) {
+    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, boolean leftHand, MultiBufferSource buffer, int combinedLight, float partialTick) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             leftHand = leftHand == (livingEntity.getMainArm() == HumanoidArm.RIGHT);
             if (leftHand) {
@@ -165,8 +164,7 @@ public class ClientMixinUtils {
             PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             if (data != null) {
                 PlayerRenderer renderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
-                float partialTicks = ClientHandlers.getPartialTicks();
-                AnimatedItemHandRendering = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, null, data.getWeaponHandler().getAnimationHandler(), partialTicks);
+                AnimatedItemHandRendering = ClientHandlers.getAnimatedPlayerModel().setUpModel(player, null, data.getWeaponHandler().getAnimationHandler(), partialTick);
                 if (!AnimatedItemHandRendering) {
                     return false;
                 }

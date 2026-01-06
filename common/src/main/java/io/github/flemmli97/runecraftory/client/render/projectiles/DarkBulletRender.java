@@ -23,12 +23,12 @@ public class DarkBulletRender<T extends DarkBulletEntity> extends EntityRenderer
     }
 
     @Override
-    public void render(T entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         this.textureBuilder.setLight(packedLight);
         this.textureBuilder.setColor(1, 1, 1, 1f);
         stack.pushPose();
-        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) + 90.0f));
-        stack.mulPose(Axis.ZP.rotationDegrees(-Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTick, entity.yRotO, entity.getYRot()) + 90.0f));
+        stack.mulPose(Axis.ZP.rotationDegrees(-Mth.lerp(partialTick, entity.xRotO, entity.getXRot())));
         stack.translate(0, 0.125, 0);
         stack.mulPose(Axis.XP.rotationDegrees(45.0f));
         for (int r = 0; r < 4; ++r) {
@@ -36,7 +36,7 @@ public class DarkBulletRender<T extends DarkBulletEntity> extends EntityRenderer
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutout(this.getTextureLocation(entity))), 0.35f, 0.35f, this.textureBuilder);
         }
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

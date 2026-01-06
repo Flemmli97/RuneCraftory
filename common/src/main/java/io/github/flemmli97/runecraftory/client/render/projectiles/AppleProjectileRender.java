@@ -17,12 +17,12 @@ public class AppleProjectileRender extends ItemProjectileRenderer<AppleProjectil
     }
 
     @Override
-    public void render(AppleProjectileEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(AppleProjectileEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         this.scaleX = entity.getScale();
         this.scaleY = entity.getScale();
         this.scaleZ = entity.getScale();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 

@@ -25,15 +25,15 @@ public class DarknessRender extends EntityRenderer<DarknessEntity> {
     }
 
     @Override
-    public void render(DarknessEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
-        float size = 1.5f + entity.getRadius() + Mth.sin((entity.tickCount + partialTicks) * 0.3f) * 0.06f;
+    public void render(DarknessEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+        float size = 1.5f + entity.getRadius() + Mth.sin((entity.tickCount + partialTick) * 0.3f) * 0.06f;
         this.textureBuilder.setLight(packedLight);
         stack.pushPose();
         boolean playerView = entity.getOwner() == Minecraft.getInstance().player
                 && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON;
         if (playerView) {
             stack.translate(0, 0.01, 0);
-            stack.mulPose(Axis.YP.rotationDegrees(-(entity.getOwner().yRotO + (entity.getOwner().getYRot() - entity.getOwner().yRotO) * partialTicks) - 180.0F));
+            stack.mulPose(Axis.YP.rotationDegrees(-(entity.getOwner().yRotO + (entity.getOwner().getYRot() - entity.getOwner().yRotO) * partialTick) - 180.0F));
             stack.mulPose(Axis.XP.rotationDegrees(-90));
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, size, this.textureBuilder);
         } else {
@@ -42,7 +42,7 @@ public class DarknessRender extends EntityRenderer<DarknessEntity> {
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, size, this.textureBuilder);
         }
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

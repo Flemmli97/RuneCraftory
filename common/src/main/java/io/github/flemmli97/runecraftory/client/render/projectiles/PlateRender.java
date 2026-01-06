@@ -18,9 +18,9 @@ public class PlateRender extends SimpleModelRenderer<BigPlateEntity> {
     }
 
     @Override
-    public void translate(BigPlateEntity entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
+    public void translate(BigPlateEntity entity, PoseStack stack, float pitch, float yaw, float partialTick) {
         stack.scale(1.5f, 1.5f, 1.5f);
-        super.translate(entity, stack, 0, 0, partialTicks);
+        super.translate(entity, stack, 0, 0, partialTick);
     }
 
     @Override

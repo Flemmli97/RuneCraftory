@@ -95,8 +95,8 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
         GuiGraphicsExtension.drawCenteredString(graphics, this.font, this.title,
                 this.leftPos + this.textureX * 0.5f, this.topPos + 7, 0, false);
     }

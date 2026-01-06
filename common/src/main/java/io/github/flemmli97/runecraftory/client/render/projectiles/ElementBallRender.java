@@ -35,7 +35,7 @@ public class ElementBallRender extends EntityRenderer<ElementalBallEntity> {
     }
 
     @Override
-    public void render(ElementalBallEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(ElementalBallEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         stack.mulPose(Axis.YP.rotationDegrees(180));
         AnimatedTexture text = null;
@@ -55,7 +55,7 @@ public class ElementBallRender extends EntityRenderer<ElementalBallEntity> {
         }
         this.textureBuilder.setLight(packedLight);
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

@@ -97,12 +97,12 @@ public class HomingEnergyOrbEntity extends BaseDamageCloud implements PowerableM
         return this.targetMob;
     }
 
-    public Vec3 rootPosition(float partialTicks) {
+    public Vec3 rootPosition(float partialTick) {
         if (this.getOwner() != null) {
             Entity owner = this.getOwner();
-            double x = Mth.lerp(partialTicks, owner.xOld, owner.getX());
-            double y = Mth.lerp(partialTicks, owner.yOld, owner.getY()) + owner.getBbHeight() * 0.5;
-            double z = Mth.lerp(partialTicks, owner.zOld, owner.getZ());
+            double x = Mth.lerp(partialTick, owner.xOld, owner.getX());
+            double y = Mth.lerp(partialTick, owner.yOld, owner.getY()) + owner.getBbHeight() * 0.5;
+            double z = Mth.lerp(partialTick, owner.zOld, owner.getZ());
             return new Vec3(x, y, z);
         }
         return this.spawnPos;

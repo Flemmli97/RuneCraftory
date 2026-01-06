@@ -30,20 +30,20 @@ public class RenderTreasureChest extends EntityRenderer<TreasureChestEntity> {
     }
 
     @Override
-    public void render(TreasureChestEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(TreasureChestEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
-        float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
-        float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
-        float partialLivingTicks = (float) entity.tickCount + partialTicks;
-        this.translate(entity, stack, pitch, yaw, partialTicks);
+        float yaw = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+        float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
+        float partialLivingTicks = (float) entity.tickCount + partialTick;
+        this.translate(entity, stack, pitch, yaw, partialTick);
         stack.scale(-1.0f, -1.0f, 1.0f);
         stack.translate(0.0, -1.501f, 0.0);
-        this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTicks);
+        this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTick);
         this.model.setupAnim(entity, 0.0F, 0.0F, partialLivingTicks, yaw, pitch);
         VertexConsumer ivertexbuilder = buffer.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
         this.model.renderToBuffer(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY);
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RenderTreasureChest extends EntityRenderer<TreasureChestEntity> {
         return COMMON;
     }
 
-    public void translate(TreasureChestEntity entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
+    public void translate(TreasureChestEntity entity, PoseStack stack, float pitch, float yaw, float partialTick) {
         stack.mulPose(Axis.YP.rotationDegrees(180.0F + yaw));
         stack.mulPose(Axis.XP.rotationDegrees(pitch));
     }

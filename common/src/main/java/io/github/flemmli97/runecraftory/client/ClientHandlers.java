@@ -42,7 +42,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.glfw.GLFW;
@@ -65,14 +64,6 @@ public class ClientHandlers {
     private static final AnimatedPlayerModel<?> ANIMATED_PLAYER_MODEL = new AnimatedPlayerModel<>();
 
     private static CameraType pastType = null;
-
-    public static Player getPlayer() {
-        return Minecraft.getInstance().player;
-    }
-
-    public static float getPartialTicks() {
-        return Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
-    }
 
     public static void updateClientCalendar(Calendar.Date date, Weather weather) {
         Season prev = ClientCalendarHolder.CLIENT_CALENDAR.currentSeason();

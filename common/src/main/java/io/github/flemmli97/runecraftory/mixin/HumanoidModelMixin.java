@@ -30,6 +30,8 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
     private ModelPartsContainer.ModelPartExtended runecraftory$RightHandItem;
     @Unique
     private List<Pair<ModelPart, PartPose>> runecraftory$defaultPoses;
+    @Unique
+    private float runecraftory$partialTick;
 
     @Inject(method = "<init>(Lnet/minecraft/client/model/geom/ModelPart;Ljava/util/function/Function;)V", at = @At("RETURN"))
     private void onInit(ModelPart root, Function<ResourceLocation, RenderType> renderType, CallbackInfo ci) {
@@ -37,6 +39,11 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
         ((ModelPartAccessor) (Object) root)
                 .getChildren().forEach((s, p) -> builder.add(Pair.of(p, p.storePose())));
         this.runecraftory$defaultPoses = builder.build();
+    }
+
+    @Inject(method = "prepareMobModel(Lnet/minecraft/world/entity/LivingEntity;FFF)V", at = @At("RETURN"))
+    private void onPrepare(T entity, float limbSwing, float limbSwingAmount, float partialTick, CallbackInfo ci) {
+        this.runecraftory$partialTick = partialTick;
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("HEAD"))
@@ -47,7 +54,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> implements Huma
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("RETURN"))
     private void modifyModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo info) {
-        ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this);
+        ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this, this.runecraftory$partialTick);
     }
 
     @Override

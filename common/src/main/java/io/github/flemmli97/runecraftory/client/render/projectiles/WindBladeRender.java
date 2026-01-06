@@ -22,11 +22,11 @@ public class WindBladeRender extends TextureRenderer<WindBladeEntity> {
     }
 
     @Override
-    public void render(WindBladeEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(WindBladeEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(0.75f, 0.75f, 0.75f);
         stack.translate(0, this.ySize * 0.15, 0);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 

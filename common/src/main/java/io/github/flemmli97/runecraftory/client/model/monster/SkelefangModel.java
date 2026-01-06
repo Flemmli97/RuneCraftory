@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
+package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -10,11 +10,10 @@ import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
-import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +23,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.function.Function;
 
-public class SkelefangModel<T extends Skelefang> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
+public class SkelefangModel<T extends Skelefang> extends ExtendedEntityModel<T> implements RideableModel<T> {
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/skelefang");
 
@@ -151,21 +150,21 @@ public class SkelefangModel<T extends Skelefang> extends EntityModel<T> implemen
         this.updateFromBones(entity);
         this.entityTick = entity.tickCount;
         AnimationState anim = entity.getAnimationHandler().getAnimation();
-        float partialTicks = ClientHandlers.getPartialTicks();
+        float partialTick = this.getPartialTick();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.neck.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.2;
             this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.2;
             this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.4;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.4;
-            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTick);
             {
-                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
             }
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
         if (anim != null && anim.is(Skelefang.BEAM)) {
             this.restoreProgress = anim.progress((float) anim.getMarker("restore_start", 0) * 20,
-                    (float) anim.getMarker("restore_end", 0) * 20, partialTicks, 0);
+                    (float) anim.getMarker("restore_end", 0) * 20, partialTick, 0);
         } else
             this.restoreProgress = -1;
     }

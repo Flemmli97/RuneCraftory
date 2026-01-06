@@ -54,20 +54,20 @@ public class MoveStateTracker {
         }
     }
 
-    public float interpolatedMoveTick(float partialTicks) {
+    public float interpolatedMoveTick(float partialTick) {
         if (this.genericMoveTick == -1)
             return 0;
-        float speedMod = Mth.clamp(this.entity.walkAnimation.speed(partialTicks) / 0.25f, 0, 1);
+        float speedMod = Mth.clamp(this.entity.walkAnimation.speed(partialTick) / 0.25f, 0, 1);
         MoveType current = this.getCurrent();
-        return Mth.clamp((this.genericMoveTick + (current != MoveType.NONE ? partialTicks : -partialTicks)) / (float) this.transitionTime, 0, 1) * speedMod;
+        return Mth.clamp((this.genericMoveTick + (current != MoveType.NONE ? partialTick : -partialTick)) / (float) this.transitionTime, 0, 1) * speedMod;
     }
 
-    public float interpolatedMoveTickOf(MoveType moveType, float partialTicks) {
+    public float interpolatedMoveTickOf(MoveType moveType, float partialTick) {
         int tick = this.states[moveType.ordinal()];
         if (tick == -1)
             return 0;
-        float speedMod = moveType.speedDependent ? Mth.clamp(this.entity.walkAnimation.speed(partialTicks) / 0.25f, 0, 1) : 1;
+        float speedMod = moveType.speedDependent ? Mth.clamp(this.entity.walkAnimation.speed(partialTick) / 0.25f, 0, 1) : 1;
         MoveType current = this.getCurrent();
-        return Mth.clamp((tick + (current == moveType ? partialTicks : -partialTicks)) / (float) this.transitionTime, 0, 1) * speedMod;
+        return Mth.clamp((tick + (current == moveType ? partialTick : -partialTick)) / (float) this.transitionTime, 0, 1) * speedMod;
     }
 }

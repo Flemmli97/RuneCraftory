@@ -207,20 +207,20 @@ public class MarionettaTrapEntity extends Entity implements OwnableEntity, Anima
         return this.tickLeft;
     }
 
-    public float getSpinProgress(float partialTicks) {
+    public float getSpinProgress(float partialTick) {
         int duration = SPIN_START - SPIN_STOP;
-        return 1 - Mth.clamp(((this.getTickLeft() - SPIN_STOP) - partialTicks) / duration, 0, 1);
+        return 1 - Mth.clamp(((this.getTickLeft() - SPIN_STOP) - partialTick) / duration, 0, 1);
     }
 
-    public float getAttackProgress(int idx, float partialTicks) {
+    public float getAttackProgress(int idx, float partialTick) {
         int time = ATTACK_TIMES[idx] - 1;
-        return 1 - Mth.clamp(((this.getTickLeft() - time) - partialTicks) / 6, 0, 1);
+        return 1 - Mth.clamp(((this.getTickLeft() - time) - partialTick) / 6, 0, 1);
     }
 
-    public float shake(float partialTicks) {
+    public float shake(float partialTick) {
         if (this.shakeTicks <= 0)
             return 0;
-        return this.shakeTicks - partialTicks;
+        return this.shakeTicks - partialTick;
     }
 
     public void playSpawnSound(int idx) {

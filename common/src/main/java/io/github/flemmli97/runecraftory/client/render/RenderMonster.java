@@ -42,8 +42,8 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+    public void render(T entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
         if (entity.deathRays() > 0) {
             poseStack.pushPose();
             poseStack.translate(0, entity.deathRayOffset(), 0);
@@ -59,10 +59,10 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & Rid
     }
 
     @Override
-    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
-        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks, scale);
+    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTick, float scale) {
+        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTick, scale);
         if (entity.getPlayDeathTick() > 0 && entity.getDeathAnimation() == null) {
-            float f = (entity.getPlayDeathTick() + (entity.playDeath() ? partialTicks : -partialTicks)) / 20.0f * 1.6f;
+            float f = (entity.getPlayDeathTick() + (entity.playDeath() ? partialTick : -partialTick)) / 20.0f * 1.6f;
             if ((f = Mth.sqrt(f)) > 1.0f) {
                 f = 1.0f;
             }

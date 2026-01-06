@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
+package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -7,15 +7,14 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.monster.SanoUno;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
-import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class SanoUnoModel<T extends SanoUno> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
+public class SanoUnoModel<T extends SanoUno> extends ExtendedEntityModel<T> implements RideableModel<T> {
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/sano_uno");
 

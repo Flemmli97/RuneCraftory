@@ -99,9 +99,9 @@ public class QuestGui extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         this.popup.active = this.selectedQuest != null;
-        super.render(graphics, mouseX, mouseY, partialTicks);
+        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override

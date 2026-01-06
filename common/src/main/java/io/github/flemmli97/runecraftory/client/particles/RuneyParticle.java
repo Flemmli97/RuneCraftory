@@ -31,9 +31,9 @@ public class RuneyParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-        this.alpha = Mth.sin((this.age + partialTicks) * 0.2f) * 0.4f + 0.2f;
-        super.render(buffer, renderInfo, partialTicks);
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTick) {
+        this.alpha = Mth.sin((this.age + partialTick) * 0.2f) * 0.4f + 0.2f;
+        super.render(buffer, renderInfo, partialTick);
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {

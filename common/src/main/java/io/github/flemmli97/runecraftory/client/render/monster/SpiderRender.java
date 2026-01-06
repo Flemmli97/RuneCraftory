@@ -15,10 +15,10 @@ public class SpiderRender<T extends Spider> extends RenderMonster<T, SpiderModel
     }
 
     @Override
-    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
-        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks, scale);
+    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTick, float scale) {
+        super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTick, scale);
         if (entity.climbingTicker >= 0) {
-            float f = (entity.climbingTicker + (entity.isClimbing() ? partialTicks : -partialTicks)) / Spider.CLIMB_MAX;
+            float f = (entity.climbingTicker + (entity.isClimbing() ? partialTick : -partialTick)) / Spider.CLIMB_MAX;
             if (f > 1)
                 f = 1;
             stack.mulPose(Axis.XP.rotationDegrees(f * 90));

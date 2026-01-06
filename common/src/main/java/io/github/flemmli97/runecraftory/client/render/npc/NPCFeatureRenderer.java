@@ -18,14 +18,14 @@ public class NPCFeatureRenderer<T extends NPCFeature> {
     /**
      * Use this if want to apply tranformations to the PoseStack on the base model
      */
-    public <E extends NPCEntity> void transformStack(T feature, NPCRender<E> renderer, E entity, PoseStack stack, float partialTicks) {
+    public <E extends NPCEntity> void transformStack(T feature, NPCRender<E> renderer, E entity, PoseStack stack, float partialTick) {
     }
 
     /**
      * Do any other rendering here
      */
     public <E extends NPCEntity> void render(T feature, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
-                                             int packedLight, float partialTicks,
+                                             int packedLight, float partialTick,
                                              float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 }

@@ -9,20 +9,19 @@ import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
-import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
+import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends EntityModel<T> implements ExtendedModel {
+public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends ExtendedEntityModel<T> {
 
     protected final ReloadableCache<ModelPartsContainer> model;
     protected final ReloadableCache<BedrockAnimations> animations;
 
     protected HumanoidBasedModel<?> main;
-    private float partialTicks;
+    private float partialTick;
 
     public FeatureModel(ResourceLocation location) {
         super(RenderType::entityTranslucent);
@@ -47,7 +46,7 @@ public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends Enti
     @Override
     public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
         super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
-        this.partialTicks = partialTick;
+        this.partialTick = partialTick;
     }
 
     @Override
@@ -58,15 +57,15 @@ public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends Enti
         if (this.animations != null) {
             BedrockAnimations animations = this.animations.get();
             HumanoidBasedModel.setupAnimationValues(this.main, animations, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
-            animations.doAnimation(this, "idle", entity.tickCount, this.partialTicks, 1);
-            animations.doAnimation(this, "walk", entity.tickCount, this.partialTicks, entity.interpolatedMoveTick(this.partialTicks));
-            animations.doAnimation(this, "run", entity.tickCount, this.partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTicks));
-            animations.doAnimation(this, "swim", entity.tickCount, this.partialTicks, entity.getSwimAmount(this.partialTicks));
+            animations.doAnimation(this, "idle", entity.tickCount, this.partialTick, 1);
+            animations.doAnimation(this, "walk", entity.tickCount, this.partialTick, entity.interpolatedMoveTick(this.partialTick));
+            animations.doAnimation(this, "run", entity.tickCount, this.partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTick));
+            animations.doAnimation(this, "swim", entity.tickCount, this.partialTick, entity.getSwimAmount(this.partialTick));
             if (this.main.crouching) {
-                animations.doAnimation(this, "crouching", entity.tickCount, this.partialTicks, 1, false, true);
+                animations.doAnimation(this, "crouching", entity.tickCount, this.partialTick, 1, false, true);
             }
             if (this.riding) {
-                animations.doAnimation(this, "riding", entity.tickCount, this.partialTicks, 1);
+                animations.doAnimation(this, "riding", entity.tickCount, this.partialTick, 1);
             }
         }
     }

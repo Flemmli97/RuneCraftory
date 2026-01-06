@@ -19,15 +19,15 @@ public class PoisonNeedleRender extends CrossedTextureRenderer<PoisonNeedleEntit
     }
 
     @Override
-    public void render(PoisonNeedleEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(PoisonNeedleEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.2, 0);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 
     @Override
-    public void doRender(PoisonNeedleEntity entity, float partialTicks, PoseStack stack, MultiBufferSource buffer) {
+    public void doRender(PoisonNeedleEntity entity, float partialTick, PoseStack stack, MultiBufferSource buffer) {
         stack.pushPose();
         stack.mulPose(Axis.XP.rotationDegrees(45.0F));
         for (int j = 0; j < 2; ++j) {

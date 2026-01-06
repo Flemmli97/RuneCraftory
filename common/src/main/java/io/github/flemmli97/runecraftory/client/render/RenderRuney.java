@@ -26,7 +26,7 @@ public class RenderRuney extends EntityRenderer<RuneyEntity> {
     }
 
     @Override
-    public void render(RuneyEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(RuneyEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         this.textureBuilder.setLight(packedLight);
         this.textureBuilder.setColor(255, 255, 255, Math.min(entity.tickCount * 10, 255));
         stack.pushPose();
@@ -36,7 +36,7 @@ public class RenderRuney extends EntityRenderer<RuneyEntity> {
         stack.translate(0, Mth.sin(entity.tickCount * 0.1f) * 0.1, 0);
         RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity))), 0.7f, 0.7f, this.textureBuilder);
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

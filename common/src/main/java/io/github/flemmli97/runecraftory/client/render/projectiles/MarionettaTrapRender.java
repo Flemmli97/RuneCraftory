@@ -35,34 +35,34 @@ public class MarionettaTrapRender extends EntityRenderer<MarionettaTrapEntity> {
     }
 
     @Override
-    public void render(MarionettaTrapEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(MarionettaTrapEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(1.25f, 1.25f, 1.25f);
-        float yaw = Mth.lerp(partialTicks, entity.yRotO, entity.getYRot());
-        float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
-        float partialLivingTicks = (float) entity.tickCount + partialTicks;
+        float yaw = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+        float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
+        float partialLivingTicks = (float) entity.tickCount + partialTick;
         stack.mulPose(Axis.YP.rotationDegrees(180.0F + yaw));
         stack.scale(-1.0f, -1.0f, 1.0f);
         stack.translate(0.0, -1.5, 0.0);
-        float shaking = entity.shake(partialTicks);
+        float shaking = entity.shake(partialTick);
         if (shaking > 0) {
             float pT = Mth.sin(shaking * 15);
             float pT2 = Mth.cos(shaking * 30);
             stack.translate(pT * 0.15, 0, pT2 * 0.1);
         }
-        this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTicks);
+        this.model.prepareMobModel(entity, 0.0F, 0.0F, partialTick);
         this.model.setupAnim(entity, 0.0F, 0.0F, partialLivingTicks, yaw, pitch);
         VertexConsumer ivertexbuilder = buffer.getBuffer(this.model.renderType(this.getTextureLocation(entity)));
         this.model.renderToBuffer(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, CommonColors.WHITE);
         stack.popPose();
         for (int i = 0; i < MarionettaTrapEntity.SWORDS; i++) {
-            float rotationSword = entity.getSpinProgress(partialTicks) * 480 - SWORD_OFFSET * i;
+            float rotationSword = entity.getSpinProgress(partialTick) * 480 - SWORD_OFFSET * i;
             if (rotationSword <= 0)
                 return;
             entity.playSpawnSound(i);
-            this.renderSwords(stack, entity, buffer, rotationSword, entity.getAttackProgress(i, partialTicks));
+            this.renderSwords(stack, entity, buffer, rotationSword, entity.getAttackProgress(i, partialTick));
         }
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     private void renderSwords(PoseStack stack, MarionettaTrapEntity entity, MultiBufferSource buffer,

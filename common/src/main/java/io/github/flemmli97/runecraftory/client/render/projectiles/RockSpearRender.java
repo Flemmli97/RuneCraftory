@@ -26,16 +26,16 @@ public class RockSpearRender extends EntityRenderer<RockSpearEntity> {
     }
 
     @Override
-    public void render(RockSpearEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(RockSpearEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         float size = entity.getRange() + 0.5f;
-        float yaw = -(entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks) - 90.0F;
-        float pitch = -(entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks);
+        float yaw = -(entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTick) - 90.0F;
+        float pitch = -(entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTick);
         RenderUtils.applyYawPitch(stack, yaw, pitch);
         this.textureBuilder.setLight(packedLight);
         stack.pushPose();
         boolean playerView = entity.getOwner() == Minecraft.getInstance().player
                 && Minecraft.getInstance().options.getCameraType() != CameraType.THIRD_PERSON_BACK;
-        float scale = Mth.lerp(partialTicks, entity.tickCount * (1 / 4.5f), (entity.tickCount + 1) * (1 / 4.5f));
+        float scale = Mth.lerp(partialTick, entity.tickCount * (1 / 4.5f), (entity.tickCount + 1) * (1 / 4.5f));
         stack.scale(Math.min(1, scale), 1, 1);
         stack.translate(size * 0.5, 0, 0);
         if (playerView) {
@@ -50,7 +50,7 @@ public class RockSpearRender extends EntityRenderer<RockSpearEntity> {
             RenderUtils.renderTexture(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(entity))), size, height, this.textureBuilder);
         }
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

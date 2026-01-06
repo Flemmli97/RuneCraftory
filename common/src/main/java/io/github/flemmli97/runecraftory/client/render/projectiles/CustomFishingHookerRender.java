@@ -33,7 +33,7 @@ public class CustomFishingHookerRender extends EntityRenderer<CustomFishingHookE
     }
 
     @Override
-    public void render(CustomFishingHookEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    public void render(CustomFishingHookEntity entity, float entityYaw, float partialTick, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         Entity eOwner = entity.getOwner();
         if (!(eOwner instanceof LivingEntity owner)) {
             return;
@@ -55,9 +55,9 @@ public class CustomFishingHookerRender extends EntityRenderer<CustomFishingHookE
         if (!(itemStack.getItem() instanceof ItemToolFishingRod)) {
             i = -i;
         }
-        float f = owner.getAttackAnim(partialTicks);
+        float f = owner.getAttackAnim(partialTick);
         float g = Mth.sin(Mth.sqrt(f) * (float) Math.PI);
-        float yRot = Mth.lerp(partialTicks, owner.yBodyRotO, owner.yBodyRot) * ((float) Math.PI / 180);
+        float yRot = Mth.lerp(partialTick, owner.yBodyRotO, owner.yBodyRot) * ((float) Math.PI / 180);
         double d = Mth.sin(yRot);
         double e = Mth.cos(yRot);
         double j = i * 0.35;
@@ -67,9 +67,9 @@ public class CustomFishingHookerRender extends EntityRenderer<CustomFishingHookE
         double zPos;
         float o;
         if (this.entityRenderDispatcher.options != null && !this.entityRenderDispatcher.options.getCameraType().isFirstPerson() || owner != Minecraft.getInstance().player) {
-            xPos = Mth.lerp(partialTicks, owner.xo, owner.getX()) - e * j - d * 0.8;
-            yPos = owner.yo + owner.getEyeHeight() + (owner.getY() - owner.yo) * partialTicks - 0.45;
-            zPos = Mth.lerp(partialTicks, owner.zo, owner.getZ()) - d * j + e * 0.8;
+            xPos = Mth.lerp(partialTick, owner.xo, owner.getX()) - e * j - d * 0.8;
+            yPos = owner.yo + owner.getEyeHeight() + (owner.getY() - owner.yo) * partialTick - 0.45;
+            zPos = Mth.lerp(partialTick, owner.zo, owner.getZ()) - d * j + e * 0.8;
             o = owner.isCrouching() ? -0.1875f : 0.0f;
         } else {
             p = 960.0 / this.entityRenderDispatcher.options.fov().get();
@@ -77,14 +77,14 @@ public class CustomFishingHookerRender extends EntityRenderer<CustomFishingHookE
             vec3 = vec3.scale(p);
             vec3 = vec3.yRot(g * 0.5f);
             vec3 = vec3.xRot(-g * 0.7f);
-            xPos = Mth.lerp(partialTicks, owner.xo, owner.getX()) + vec3.x;
-            yPos = Mth.lerp(partialTicks, owner.yo, owner.getY()) + vec3.y;
-            zPos = Mth.lerp(partialTicks, owner.zo, owner.getZ()) + vec3.z;
+            xPos = Mth.lerp(partialTick, owner.xo, owner.getX()) + vec3.x;
+            yPos = Mth.lerp(partialTick, owner.yo, owner.getY()) + vec3.y;
+            zPos = Mth.lerp(partialTick, owner.zo, owner.getZ()) + vec3.z;
             o = owner.getEyeHeight();
         }
-        p = Mth.lerp(partialTicks, entity.xo, entity.getX());
-        double q = Mth.lerp(partialTicks, entity.yo, entity.getY()) + 0.25;
-        double r = Mth.lerp(partialTicks, entity.zo, entity.getZ());
+        p = Mth.lerp(partialTick, entity.xo, entity.getX());
+        double q = Mth.lerp(partialTick, entity.yo, entity.getY()) + 0.25;
+        double r = Mth.lerp(partialTick, entity.zo, entity.getZ());
         float s = (float) (xPos - p);
         float t = (float) (yPos - q) + o;
         float u = (float) (zPos - r);
@@ -94,7 +94,7 @@ public class CustomFishingHookerRender extends EntityRenderer<CustomFishingHookE
             stringVertex(s, t, u, vertexConsumer2, pose2, w / 16f, (w + 1) / 16f);
         }
         matrixStack.popPose();
-        super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+        super.render(entity, entityYaw, partialTick, matrixStack, buffer, packedLight);
     }
 
     private static void vertex(VertexConsumer vertexConsumer, PoseStack.Pose pose, int light, float f, int j, int k, int l) {

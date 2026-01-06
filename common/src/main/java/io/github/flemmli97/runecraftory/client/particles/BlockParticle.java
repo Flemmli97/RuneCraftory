@@ -40,13 +40,13 @@ public class BlockParticle extends Particle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTick) {
         if (this.state.getRenderShape() != RenderShape.MODEL)
             return;
         Vec3 vec3 = renderInfo.getPosition();
-        float x = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
-        float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
-        float z = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
+        float x = (float) (Mth.lerp(partialTick, this.xo, this.x) - vec3.x());
+        float y = (float) (Mth.lerp(partialTick, this.yo, this.y) - vec3.y());
+        float z = (float) (Mth.lerp(partialTick, this.zo, this.z) - vec3.z());
         PoseStack stack = new PoseStack();
         stack.translate(x, y, z);
         stack.mulPose(Axis.YP.rotationDegrees(180.0F - this.yaw));

@@ -33,13 +33,13 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         ResourceLocation texture = FORGING;
         if (this.menu.craftingType() == CraftingType.ACCESSORY_WORKBENCH)
             texture = CRAFTING;

@@ -22,12 +22,12 @@ public class FireballRender extends TextureRenderer<FireballEntity> {
     }
 
     @Override
-    public void render(FireballEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(FireballEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.25, 0);
         if (entity.big())
             stack.scale(1.3f, 1.3f, 1.3f);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 

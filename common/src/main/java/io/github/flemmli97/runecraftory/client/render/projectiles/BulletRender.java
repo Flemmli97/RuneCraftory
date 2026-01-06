@@ -23,14 +23,14 @@ public class BulletRender extends TextureRenderer<BulletEntity> {
     }
 
     @Override
-    public void render(BulletEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(BulletEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.25, 0);
         if (entity.element() == ItemElement.FIRE)
             this.textureBuilder.setColor(255, 150, 150, 255);
         else
             this.textureBuilder.setColor(0xFFFFFFFF);
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         stack.popPose();
     }
 }

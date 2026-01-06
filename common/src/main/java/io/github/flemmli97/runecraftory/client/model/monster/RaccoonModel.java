@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
+package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -43,15 +43,15 @@ public class RaccoonModel<T extends Raccoon> extends RaccoonBaseModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getModel().resetPoses();
-        float partialTicks = ClientHandlers.getPartialTicks();
+        float partialTick = this.getPartialTick();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.8;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;
-            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTicks);
-            this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-            this.anim.get().doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, partialTicks));
+            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTick);
+            this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
+            this.anim.get().doAnimation(this, "run", entity.tickCount, partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, partialTick));
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
     }
 
     @Override

@@ -19,11 +19,11 @@ public class SkelefangRender<T extends Skelefang> extends RenderMonster<T, Skele
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         int hurt = entity.hurtTime;
         if (entity.hasBones())
             entity.hurtTime = 0;
-        super.render(entity, entityYaw, partialTicks, stack, buffer, packedLight);
+        super.render(entity, entityYaw, partialTick, stack, buffer, packedLight);
         entity.hurtTime = hurt;
     }
 }

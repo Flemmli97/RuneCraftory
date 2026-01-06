@@ -29,8 +29,8 @@ public class WaterLaserRender extends BeamRenderer<BeamEntity> {
     }
 
     @Override
-    public float widthFunc(BeamEntity entity, float partialTicks) {
-        return super.widthFunc(entity, partialTicks) / this.widthMod;
+    public float widthFunc(BeamEntity entity, float partialTick) {
+        return super.widthFunc(entity, partialTick) / this.widthMod;
     }
 
     @Override

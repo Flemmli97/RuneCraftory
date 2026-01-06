@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
+package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
@@ -17,13 +17,13 @@ public class MimicModel<T extends Mimic> extends ChestModel<T> implements Rideab
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getModel().resetPoses();
-        float partialTicks = ClientHandlers.getPartialTicks();
+        float partialTick = this.getPartialTick();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.isAwake())
-                this.anim.get().doAnimation(this, "open_idle", entity.tickCount, partialTicks);
-            this.anim.get().doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+                this.anim.get().doAnimation(this, "open_idle", entity.tickCount, partialTick);
+            this.anim.get().doAnimation(this, "move", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTicks);
+        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
     }
 
     @Override

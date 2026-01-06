@@ -17,7 +17,7 @@ public class RafflesiaRender<T extends Rafflesia> extends RenderMonster<T, Raffl
     }
 
     @Override
-    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks, float scale) {
-        super.setupRotations(entity, stack, ageInTicks, entity.getSpawnDirection().toYRot(), partialTicks, scale);
+    protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTick, float scale) {
+        super.setupRotations(entity, stack, ageInTicks, entity.getSpawnDirection().toYRot(), partialTick, scale);
     }
 }

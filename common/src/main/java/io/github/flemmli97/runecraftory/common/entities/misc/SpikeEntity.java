@@ -58,8 +58,8 @@ public class SpikeEntity extends BaseDamageCloud {
     }
 
     @Override
-    public Vec3 getLightProbePosition(float partialTicks) {
-        return this.getPosition(partialTicks).add(0, 2.1, 0);
+    public Vec3 getLightProbePosition(float partialTick) {
+        return this.getPosition(partialTick).add(0, 2.1, 0);
     }
 
     @Override
@@ -173,12 +173,12 @@ public class SpikeEntity extends BaseDamageCloud {
         }
     }
 
-    public float getAnimationProgress(float partialTicks) {
+    public float getAnimationProgress(float partialTick) {
         if (!this.attacking) {
             return 0.0f;
         }
         int i = this.livingTicks - this.clientAttackTime;
-        float lerped = Math.min(ATTACK_DURATION, Mth.lerp(partialTicks, i, i + 1));
+        float lerped = Math.min(ATTACK_DURATION, Mth.lerp(partialTick, i, i + 1));
         return Mth.sin(lerped * Mth.PI / ATTACK_DURATION) * 1.2f;
     }
 

@@ -100,11 +100,11 @@ public class SkelefangParticle extends Particle {
     }
 
     @Override
-    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTick) {
         Vec3 vec3 = renderInfo.getPosition();
-        float x = (float) (Mth.lerp(partialTicks, this.xo, this.x) - vec3.x());
-        float y = (float) (Mth.lerp(partialTicks, this.yo, this.y) - vec3.y());
-        float z = (float) (Mth.lerp(partialTicks, this.zo, this.z) - vec3.z());
+        float x = (float) (Mth.lerp(partialTick, this.xo, this.x) - vec3.x());
+        float y = (float) (Mth.lerp(partialTick, this.yo, this.y) - vec3.y());
+        float z = (float) (Mth.lerp(partialTick, this.zo, this.z) - vec3.z());
         PoseStack stack = new PoseStack();
         stack.translate(x, y, z);
         int next;
@@ -116,8 +116,8 @@ public class SkelefangParticle extends Particle {
             next = this.age + 1;
             spinAge = this.age;
         }
-        float yaw = Mth.lerp(partialTicks, this.initialRotY + this.yawSpin * spinAge, this.initialRotY + this.yawSpin * next);
-        float pitch = Mth.lerp(partialTicks, this.initialRotX + this.pitchSpin * spinAge, this.initialRotX + this.pitchSpin * next);
+        float yaw = Mth.lerp(partialTick, this.initialRotY + this.yawSpin * spinAge, this.initialRotY + this.yawSpin * next);
+        float pitch = Mth.lerp(partialTick, this.initialRotX + this.pitchSpin * spinAge, this.initialRotX + this.pitchSpin * next);
         stack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
         stack.mulPose(Axis.XP.rotationDegrees(pitch));
         stack.scale(-1.0F, -1.0F, 1.0F);

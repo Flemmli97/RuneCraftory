@@ -71,11 +71,11 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (this.menu.getMatchingRecipesClient().lastChange() != this.lastChange) {
             this.setupRecipes();
         }
-        super.render(graphics, mouseX, mouseY, partialTicks);
+        super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 

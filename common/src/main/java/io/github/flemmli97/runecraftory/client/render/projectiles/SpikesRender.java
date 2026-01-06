@@ -20,17 +20,17 @@ public class SpikesRender<T extends SpikeEntity> extends SimpleModelRenderer<T> 
     }
 
     @Override
-    public void render(T entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
-        if (entity.getAnimationProgress(partialTicks) > 0) {
-            super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+    public void render(T entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+        if (entity.getAnimationProgress(partialTick) > 0) {
+            super.render(entity, rotation, partialTick, stack, buffer, packedLight);
         }
     }
 
     @Override
-    public void translate(T entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
-        float scale = entity.getAnimationProgress(partialTicks);
+    public void translate(T entity, PoseStack stack, float pitch, float yaw, float partialTick) {
+        float scale = entity.getAnimationProgress(partialTick);
         stack.scale(1, scale, 1);
-        super.translate(entity, stack, 0, 0, partialTicks);
+        super.translate(entity, stack, 0, 0, partialTick);
     }
 
     @Override

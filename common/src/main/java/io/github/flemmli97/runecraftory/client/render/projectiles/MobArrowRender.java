@@ -21,10 +21,10 @@ public class MobArrowRender<T extends MobArrowEntity> extends EntityRenderer<T> 
     }
 
     @Override
-    public void render(T entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
-        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
-        stack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+        stack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTick, entity.yRotO, entity.getYRot()) - 90.0F));
+        stack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTick, entity.xRotO, entity.getXRot())));
 
         stack.mulPose(Axis.XP.rotationDegrees(45.0F));
         stack.scale(0.05625F, 0.05625F, 0.05625F);
@@ -49,7 +49,7 @@ public class MobArrowRender<T extends MobArrowEntity> extends EntityRenderer<T> 
         }
 
         stack.popPose();
-        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        super.render(entity, rotation, partialTick, stack, buffer, packedLight);
     }
 
     @Override

@@ -37,8 +37,8 @@ public class SingleFrameBeamRender<T extends BeamEntity> extends BeamRenderer<T>
     }
 
     @Override
-    public float widthFunc(T entity, float partialTicks) {
-        return super.widthFunc(entity, partialTicks) / this.widthMod;
+    public float widthFunc(T entity, float partialTick) {
+        return super.widthFunc(entity, partialTick) / this.widthMod;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class ElementalTrailRender extends TextureRenderer<ElementalTrailEntity> 
     }
 
     @Override
-    public void render(ElementalTrailEntity entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
+    public void render(ElementalTrailEntity entity, float rotation, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         switch (entity.element()) {
             case FIRE, DARK -> {

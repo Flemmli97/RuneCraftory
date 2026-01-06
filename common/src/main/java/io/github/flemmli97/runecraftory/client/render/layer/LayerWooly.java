@@ -25,7 +25,7 @@ public class LayerWooly<T extends Wooly> extends RenderLayer<T, WoolyModel<T>> {
     }
 
     @Override
-    public void render(PoseStack stack, MultiBufferSource buf, int light, T wooly, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack stack, MultiBufferSource buf, int light, T wooly, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!wooly.isSheared() && !wooly.isInvisible()) {
             int color = CommonColors.WHITE;
             if (wooly.hasCustomName() && "jeb_".equals(wooly.getName().getString())) {
@@ -33,7 +33,7 @@ public class LayerWooly<T extends Wooly> extends RenderLayer<T, WoolyModel<T>> {
                 int colorCount = DyeColor.values().length;
                 int l = tick % colorCount;
                 int m = (tick + 1) % colorCount;
-                float f = ((float) (wooly.tickCount % 25) + partialTicks) / 25.0F;
+                float f = ((float) (wooly.tickCount % 25) + partialTick) / 25.0F;
                 int n = Sheep.getColor(DyeColor.byId(l));
                 int o = Sheep.getColor(DyeColor.byId(m));
                 color = FastColor.ARGB32.lerp(f, n, o);
@@ -41,7 +41,7 @@ public class LayerWooly<T extends Wooly> extends RenderLayer<T, WoolyModel<T>> {
                 color = Sheep.getColorArray(wooly.getColor());
             }*/
             this.woolModel.syncModel(this.getParentModel());
-            coloredCutoutModelCopyLayerRender(this.getParentModel(), this.woolModel, this.tex, stack, buf, light, wooly, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, color);
+            coloredCutoutModelCopyLayerRender(this.getParentModel(), this.woolModel, this.tex, stack, buf, light, wooly, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTick, color);
         }
     }
 }

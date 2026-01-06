@@ -61,7 +61,7 @@ public class RenderGate extends EntityRenderer<GateEntity> {
     }
 
     @Override
-    public void render(GateEntity entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(GateEntity entity, float entityYaw, float partialTick, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
         stack.pushPose();
         float scale = 1.2f + Mth.sin(entity.tickCount * 0.1f) * 0.04f;
         stack.scale(scale, scale, scale);
@@ -75,7 +75,7 @@ public class RenderGate extends EntityRenderer<GateEntity> {
         float[][] colors = this.getColor(entity);
         VertexConsumer builder = bufferIn.getBuffer(RunecraftoryShaders.GATE_RENDER);
         float tick = entity.tickCount + entity.renderRand;
-        tick = ((tick % 24000) + partialTicks) / 24000.0f;
+        tick = ((tick % 24000) + partialTick) / 24000.0f;
         VertexUtils.addVertexData(
                 builder.addVertex(matrix4f, -xSize, -ySize, 0).setColor(colors[0][0], colors[0][1], colors[0][2], 1)
                         .setNormal(colors[1][0], colors[1][1], colors[1][2])

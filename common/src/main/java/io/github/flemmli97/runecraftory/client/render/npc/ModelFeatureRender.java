@@ -31,20 +31,20 @@ public class ModelFeatureRender extends NPCFeatureRenderer<ModelAttachmentsType.
 
     @Override
     public <E extends NPCEntity> void render(ModelAttachmentsType.ModelAttachmentsFeature feature, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
-                                             int packedLight, float partialTicks,
+                                             int packedLight, float partialTick,
                                              float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         for (ModelAttachmentsType.ModelAttachment attachment : feature.attachments()) {
-            this.renderModel(attachment, renderer, entity, poseStack, buffer, packedLight, partialTicks, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            this.renderModel(attachment, renderer, entity, poseStack, buffer, packedLight, partialTick, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         }
     }
 
     private <E extends NPCEntity> void renderModel(ModelAttachmentsType.ModelAttachment attachment, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
-                                                   int packedLight, float partialTicks,
+                                                   int packedLight, float partialTick,
                                                    float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         FeatureModel<NPCEntity> model = MODELS_CACHE.computeIfAbsent(attachment.model(), k -> new FeatureModel<>(attachment.model(), attachment.model()));
         poseStack.pushPose();
         model.setMain(renderer.getModel());
-        model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+        model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
         model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.setMain(null);
         ModelAttachmentsType.Location location = attachment.location();

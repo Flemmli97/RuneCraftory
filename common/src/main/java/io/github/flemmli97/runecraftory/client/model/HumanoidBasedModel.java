@@ -58,7 +58,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     public HumanoidModel.ArmPose leftArmPose = HumanoidModel.ArmPose.EMPTY;
     public HumanoidModel.ArmPose rightArmPose = HumanoidModel.ArmPose.EMPTY;
     public boolean crouching;
-    private float partialTicks;
+    private float partialTick;
 
     protected HumanoidModel<T> delegate;
 
@@ -134,7 +134,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     @Override
     public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
         super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
-        this.partialTicks = partialTick;
+        this.partialTick = partialTick;
         if (this.delegate != null) {
             this.delegate.attackTime = this.attackTime;
             this.delegate.riding = this.riding;
@@ -155,7 +155,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
             ext = this.leftLeg.extendedPose();
             ext2 = this.rightLeg.extendedPose();
         }
-        this.attackAnimations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTicks, entity.getMainArm() == HumanoidArm.LEFT);
+        this.attackAnimations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTick, entity.getMainArm() == HumanoidArm.LEFT);
         if (this.delegate != null)
             this.copyPropertiesTo(this.delegate);
 
@@ -186,15 +186,15 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
         BedrockAnimations miscAnimation = this.miscAnimations.get();
         setupAnimationValues(this, animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
 
-        miscAnimation.doAnimation(this, "idle", entity.tickCount, this.partialTicks, 1);
-        miscAnimation.doAnimation(this, "walk", entity.tickCount, this.partialTicks, entity.interpolatedMoveTick(this.partialTicks));
-        miscAnimation.doAnimation(this, "run", entity.tickCount, this.partialTicks, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTicks));
-        miscAnimation.doAnimation(this, "swim", entity.tickCount, this.partialTicks, entity.getSwimAmount(this.partialTicks));
+        miscAnimation.doAnimation(this, "idle", entity.tickCount, this.partialTick, 1);
+        miscAnimation.doAnimation(this, "walk", entity.tickCount, this.partialTick, entity.interpolatedMoveTick(this.partialTick));
+        miscAnimation.doAnimation(this, "run", entity.tickCount, this.partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTick));
+        miscAnimation.doAnimation(this, "swim", entity.tickCount, this.partialTick, entity.getSwimAmount(this.partialTick));
         if (this.crouching) {
-            miscAnimation.doAnimation(this, "crouching", entity.tickCount, this.partialTicks, 1, false, true);
+            miscAnimation.doAnimation(this, "crouching", entity.tickCount, this.partialTick, 1, false, true);
         }
         if (this.riding) {
-            miscAnimation.doAnimation(this, "riding", entity.tickCount, this.partialTicks, 1);
+            miscAnimation.doAnimation(this, "riding", entity.tickCount, this.partialTick, 1);
         }
     }
 
