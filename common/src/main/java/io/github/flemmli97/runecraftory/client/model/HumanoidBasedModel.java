@@ -14,8 +14,12 @@ import io.github.flemmli97.tenshilib.client.model.DeformationChange;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ItemHolderModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
+import io.github.flemmli97.tenshilib.client.model.MolangQueries;
 import io.github.flemmli97.tenshilib.client.model.PoseExtended;
+import io.github.flemmli97.tenshilib.client.model.animation.Animation;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.utils.math.parser.VariableMap;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -24,13 +28,16 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveStateHolder> extends EntityModel<T> implements ItemHolderModel, HeadedModel, ExtendedModel {
 
@@ -58,9 +65,12 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     public HumanoidModel.ArmPose leftArmPose = HumanoidModel.ArmPose.EMPTY;
     public HumanoidModel.ArmPose rightArmPose = HumanoidModel.ArmPose.EMPTY;
     public boolean crouching;
-    private float partialTick;
 
     protected HumanoidModel<T> delegate;
+
+    private WeakReference<T> entity;
+    private float partialTick;
+    private float limbSwing, limbSwingAmount;
 
     public HumanoidBasedModel() {
         this(HumanoidModelLocations.DEFAULT_PLAYER_LOCATION, HumanoidModelLocations.DEFAULT_NPC_ANIMATION, 0);
@@ -135,6 +145,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
         super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
         this.partialTick = partialTick;
+        this.entity = new WeakReference<>(entity);
         if (this.delegate != null) {
             this.delegate.attackTime = this.attackTime;
             this.delegate.riding = this.riding;
@@ -177,15 +188,13 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     }
 
     protected void preAnimSetup(T entity, float limbSwing, float limbSwingAmount, float netHeadYaw, float ageInTicks, float headPitch) {
+        this.limbSwing = limbSwing;
+        this.limbSwingAmount = limbSwingAmount;
         if (this.delegate != null) {
             this.delegate.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             this.copyFrom(this.delegate);
         }
-        BedrockAnimations animation = this.attackAnimations.get();
-        setupAnimationValues(this, animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
         BedrockAnimations miscAnimation = this.miscAnimations.get();
-        setupAnimationValues(this, animation, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
-
         miscAnimation.doAnimation(this, "idle", entity.tickCount, this.partialTick, 1);
         miscAnimation.doAnimation(this, "walk", entity.tickCount, this.partialTick, entity.interpolatedMoveTick(this.partialTick));
         miscAnimation.doAnimation(this, "run", entity.tickCount, this.partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTick));
@@ -198,22 +207,35 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
         }
     }
 
-    public static void setupAnimationValues(HumanoidBasedModel<?> model, BedrockAnimations animation, float limbSwing, float limbSwingAmount, float netHeadYaw, float headPitch) {
-        animation.setVariable("query.head_x_rotation", () -> headPitch);
-        animation.setVariable("query.head_y_rotation", () -> netHeadYaw);
-        animation.setVariable("left_held", () -> model.leftArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
-        animation.setVariable("left_arm_x_rot", () -> model.leftArm != null ? model.leftArm.xRot * Mth.RAD_TO_DEG : 0);
-        animation.setVariable("right_held", () -> model.rightArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
-        animation.setVariable("right_arm_x_rot", () -> model.rightArm != null ? model.rightArm.xRot * Mth.RAD_TO_DEG : 0);
-        animation.setVariable("limb_swing", () -> limbSwing * Mth.RAD_TO_DEG);
-        animation.setVariable("limb_swing_amount", () -> limbSwingAmount * Mth.RAD_TO_DEG);
-        animation.setVariable("crouching", () -> model.crouching ? 1 : 0);
-        animation.setVariable("riding", () -> model.riding ? 1 : 0);
+    @Override
+    public void onPlayAnimation(@Nullable AnimationState state, Animation animation, float tick, VariableMap variables) {
+        ExtendedModel.super.onPlayAnimation(state, animation, tick, variables);
+        HumanoidBasedModel.setupAnimationValues(this, variables, animation.variables(), this.getCurrentEntity(), this.partialTick,
+                this.limbSwing, this.limbSwingAmount);
+    }
+
+    public static void setupAnimationValues(HumanoidBasedModel<?> model, VariableMap map,
+                                            Set<String> used,
+                                            Entity entity, float partialTick,
+                                            float limbSwing, float limbSwingAmount) {
+        MolangQueries.applyEntityQueriesTo(map, used, entity, partialTick);
+        map.setVariable("left_held", () -> model.leftArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
+        map.setVariable("left_arm_x_rot", () -> model.leftArm != null ? model.leftArm.xRot * Mth.RAD_TO_DEG : 0);
+        map.setVariable("right_held", () -> model.rightArmPose != HumanoidModel.ArmPose.EMPTY ? 1 : 0);
+        map.setVariable("right_arm_x_rot", () -> model.rightArm != null ? model.rightArm.xRot * Mth.RAD_TO_DEG : 0);
+        map.setVariable("limb_swing", () -> limbSwing * Mth.RAD_TO_DEG);
+        map.setVariable("limb_swing_amount", () -> limbSwingAmount * Mth.RAD_TO_DEG);
+        map.setVariable("crouching", () -> model.crouching ? 1 : 0);
+        map.setVariable("riding", () -> model.riding ? 1 : 0);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         this.model.get().getRoot().renderForced(poseStack, buffer, packedLight, packedOverlay, color);
+    }
+
+    public T getCurrentEntity() {
+        return this.entity != null ? this.entity.get() : null;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

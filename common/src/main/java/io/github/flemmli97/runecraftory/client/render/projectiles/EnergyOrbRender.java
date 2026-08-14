@@ -28,8 +28,8 @@ public class EnergyOrbRender extends SimpleModelRenderer<HomingEnergyOrbEntity> 
     private final EnergyOrbSwirlLayer layer;
 
     public EnergyOrbRender(EntityRendererProvider.Context ctx) {
-        super(ctx, new EnergyOrbModel<>(1));
-        this.layer = new EnergyOrbSwirlLayer(this, ctx.getModelSet());
+        super(ctx, new EnergyOrbModel<>(0));
+        this.layer = new EnergyOrbSwirlLayer(this);
         this.alpha = 0.8f;
     }
 

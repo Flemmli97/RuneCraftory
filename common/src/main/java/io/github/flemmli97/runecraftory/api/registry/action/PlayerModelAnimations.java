@@ -61,9 +61,9 @@ public class PlayerModelAnimations {
 
     public static final List<String> HAMMER_AXE = addTo(3, "hammer_axe", count ->
             count == 3 ? AnimationsBuilder.definition(1.64).marker("spin_start", 0.44).marker("spin_middle", 0.96).marker("spin_end", 1.52)
-                    .marker("reset", 0.96).marker("leap", 0.32)
+                         .marker("reset", 0.96).marker("leap", 0.32)
                     : AnimationsBuilder.definition(0.92)
-                    .marker("attack", 0.8).marker("done", 0.8)
+                      .marker("attack", 0.8).marker("done", 0.8)
     );
     public static final String HAMME_AXE_USE = BUILDER.add("hammer_axe_use", AnimationsBuilder.definition(1.12)
             .marker("attack", 0.76).marker("jump", 0.36));
@@ -102,9 +102,9 @@ public class PlayerModelAnimations {
 
     public static final List<String> STAFF = addTo(2, "staff", count ->
             count == 2 ? AnimationsBuilder.definition(0.72)
-                    .marker("attack", 0.52)
+                         .marker("attack", 0.52)
                     : AnimationsBuilder.definition(0.84)
-                    .marker("attack", 0.72).marker("done", 0.72)
+                      .marker("attack", 0.72).marker("done", 0.72)
     );
     public static final String STAFF_USE = BUILDER.add("staff_use", AnimationsBuilder.definition(0.88).marker("attack", 0.52));
 
@@ -121,18 +121,18 @@ public class PlayerModelAnimations {
     public static final List<String> DASH_SLASH = addTo(2, "dash_slash", count ->
             count == 2 ? AnimationsBuilder.definition(0.64).marker("attack", 0.44)
                     : AnimationsBuilder.definition(0.96)
-                    .marker("move_start", 0.28).marker("sound", 0.44)
-                    .marker("attack_start", 0.32).marker("attack_end", 0.8)
+                      .marker("move_start", 0.28).marker("sound", 0.44)
+                      .marker("attack_start", 0.32).marker("attack_end", 0.8)
     );
     public static final List<String> RUSH_ATTACK = addTo(2, "rush_attack", count ->
             count == 2 ? AnimationsBuilder.definition(0.72)
-                    .marker("attack_start", 0.2).marker("attack_end", 0.52)
-                    .marker("leap", 0.16)
+                         .marker("attack_start", 0.2).marker("attack_end", 0.52)
+                         .marker("leap", 0.16)
                     : AnimationsBuilder.definition(1.96)
-                    .marker("attack", 0.4, 0.56, 1.08)
-                    .marker("chain_1_start", 0.4).marker("chain_1_end", 0.84)
-                    .marker("chain_2_start", 1.32).marker("chain_2_end", 1.6)
-                    .marker("step", 0.36, 0.56).marker("jump", 0.96)
+                      .marker("attack", 0.4, 0.56, 1.08)
+                      .marker("chain_1_start", 0.4).marker("chain_1_end", 0.84)
+                      .marker("chain_2_start", 1.32).marker("chain_2_end", 1.6)
+                      .marker("step", 0.36, 0.56).marker("jump", 0.96)
     );
     public static final String ROUND_BREAK = BUILDER.add("round_break", AnimationsBuilder.definition(1.12)
             .marker("attack_start", 0.28).marker("attack_end", 0.88));
@@ -160,9 +160,9 @@ public class PlayerModelAnimations {
             .marker("reset", 0.56, 0.84, 1));
     public static final List<String> WIND_SLASH = addTo(2, "wind_slash", count ->
             count == 2 ? AnimationsBuilder.definition(1.44).marker("spin_start", 0).marker("spin_end", 1.08)
-                    .marker("reset", 0.56)
+                         .marker("reset", 0.56)
                     : AnimationsBuilder.definition(1.76).marker("spin_start", 0.36).marker("spin_end", 1.4)
-                    .marker("reset", 0.88).marker("chain_start", 1.08).marker("leap", 0.28)
+                      .marker("reset", 0.88).marker("chain_start", 1.08).marker("leap", 0.28)
     );
     public static final String FLASH_STRIKE = BUILDER.add("flash_strike", AnimationsBuilder.definition(1.6)
             .marker("attack_start", 0.32).marker("attack_end", 1.04).marker("reset", 0.56, 0.8)

@@ -5,38 +5,26 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
-import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
-import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
-import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
 import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
-import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
+import io.github.flemmli97.tenshilib.client.model.animation.Animation;
+import io.github.flemmli97.tenshilib.common.entity.animated.AnimationState;
+import io.github.flemmli97.tenshilib.common.utils.math.parser.VariableMap;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends ExtendedEntityModel<T> {
 
-    protected final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> animations;
-
     protected HumanoidBasedModel<?> main;
-    private float partialTick;
+    private float limbSwing, limbSwingAmount;
 
     public FeatureModel(ResourceLocation location) {
-        super(RenderType::entityTranslucent);
-        this.model = this.load(location);
-        this.animations = null;
+        super(RenderType::entityTranslucent, location);
     }
 
     public FeatureModel(ResourceLocation location, ResourceLocation animation) {
-        super(RenderType::entityTranslucent);
-        this.model = this.load(location);
-        this.animations = GeoAnimationManager.getInstance().getAnimation(animation);
-    }
-
-    protected ReloadableCache<ModelPartsContainer> load(ResourceLocation location) {
-        return GeoModelManager.getInstance().getModel(location);
+        super(RenderType::entityTranslucent, location, animation);
     }
 
     public void setMain(HumanoidBasedModel<?> main) {
@@ -44,19 +32,14 @@ public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends Exte
     }
 
     @Override
-    public void prepareMobModel(T entity, float limbSwing, float limbSwingAmount, float partialTick) {
-        super.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
-        this.partialTick = partialTick;
-    }
-
-    @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (this.getModel() == null || this.main == null)
             return;
         this.getModel().resetPoses();
-        if (this.animations != null) {
-            BedrockAnimations animations = this.animations.get();
-            HumanoidBasedModel.setupAnimationValues(this.main, animations, limbSwing, limbSwingAmount, netHeadYaw, headPitch);
+        this.limbSwing = limbSwing;
+        this.limbSwingAmount = limbSwingAmount;
+        if (this.animation != null) {
+            BedrockAnimations animations = this.animation.get();
             animations.doAnimation(this, "idle", entity.tickCount, this.partialTick, 1);
             animations.doAnimation(this, "walk", entity.tickCount, this.partialTick, entity.interpolatedMoveTick(this.partialTick));
             animations.doAnimation(this, "run", entity.tickCount, this.partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTick));
@@ -78,7 +61,8 @@ public class FeatureModel<T extends LivingEntity & MoveStateHolder> extends Exte
     }
 
     @Override
-    public ModelPartsContainer getModel() {
-        return this.model.get();
+    public void onPlayAnimation(AnimationState state, Animation animation, float tick, VariableMap variables) {
+        HumanoidBasedModel.setupAnimationValues(this.main, variables, animation.variables(), this.getCurrentEntity(), this.partialTick,
+                this.limbSwing, this.limbSwingAmount);
     }
 }

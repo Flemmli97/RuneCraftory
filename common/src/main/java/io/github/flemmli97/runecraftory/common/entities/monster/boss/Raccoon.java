@@ -229,7 +229,7 @@ public class Raccoon extends BossMonster {
             if (anim.isAt("start")) {
                 entity.playSound(RuneCraftorySounds.ENTITY_RACCOON_ROAR.get(), 1, 1 + (entity.getRandom().nextFloat() - entity.getRandom().nextFloat()) * 0.2f);
                 Vec3 center = entity.getTarget() == null ? entity.position() : (entity.distanceToSqr(entity.getTarget()) < 144 ? entity.getTarget().position()
-                        : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));
+                                                                                : entity.getTarget().position().subtract(entity.position()).normalize().scale(12).add(entity.position()));
                 entity.setClonePos(center);
                 int id = entity.random.nextInt(CLONE_POS.length);
                 Vec3 pos = CLONE_POS[id];

@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.misc.EnergyOrbModel;
 import io.github.flemmli97.runecraftory.common.entities.misc.HomingEnergyOrbEntity;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -14,9 +13,9 @@ public class EnergyOrbSwirlLayer extends EnergySwirlLayer<HomingEnergyOrbEntity,
     public static final ResourceLocation TEXTURE = RuneCraftory.modRes("textures/entity/projectile/energy_orb_layer.png");
     private final EntityModel<HomingEnergyOrbEntity> model;
 
-    public EnergyOrbSwirlLayer(RenderLayerParent<HomingEnergyOrbEntity, EntityModel<HomingEnergyOrbEntity>> parent, EntityModelSet entityModelSet) {
+    public EnergyOrbSwirlLayer(RenderLayerParent<HomingEnergyOrbEntity, EntityModel<HomingEnergyOrbEntity>> parent) {
         super(parent);
-        this.model = new EnergyOrbModel<>(1.5f);
+        this.model = new EnergyOrbModel<>(1);
     }
 
     @Override

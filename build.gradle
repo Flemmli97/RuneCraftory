@@ -57,7 +57,7 @@ subprojects {
         }
         maven {
             name = 'Favouriteless Maven'
-            url 'https://maven.favouriteless.net/releases'
+            url 'https://maven.favouriteless.dev/releases'
             content {
                 includeGroup 'net.favouriteless.modopedia'
             }

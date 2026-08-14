@@ -99,7 +99,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
             Component name;
             if (this.npc == null) {
                 name = this.targetNPC != null ? RunecraftorySavedData.get(player.getServer())
-                        .npcHandler.getName(this.targetNPC) : null;
+                                                .npcHandler.getName(this.targetNPC) : null;
             } else {
                 name = this.npc.getName();
             }

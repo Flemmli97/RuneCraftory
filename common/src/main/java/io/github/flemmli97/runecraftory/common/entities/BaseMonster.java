@@ -976,7 +976,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
 
     protected Vec3 directionToLookAt() {
         return this.getAnimationHandler().hasAnimation() && this.getTargetPosition() != null ? this.getTargetPosition()
-                .asVec(this.position()).subtract(this.position()) : null;
+                                                                                               .asVec(this.position()).subtract(this.position()) : null;
     }
 
     protected float[] targetLookClamp() {
@@ -1072,7 +1072,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, Animat
     }
 
     public void setTargetPosition(LivingEntity target) {
-        this.setTargetPosition(TargetPosition.of(target));
+        this.setTargetPosition(TargetPosition.reducedRangeOf(target));
     }
 
     public void setTargetPosition(TargetPosition position) {

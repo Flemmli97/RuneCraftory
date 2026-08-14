@@ -20,10 +20,10 @@ public class MimicModel<T extends Mimic> extends ChestModel<T> implements Rideab
         float partialTick = this.getPartialTick();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.isAwake())
-                this.anim.get().doAnimation(this, "open_idle", entity.tickCount, partialTick);
-            this.anim.get().doAnimation(this, "move", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
+                this.animation.get().doAnimation(this, "open_idle", entity.tickCount, partialTick);
+            this.animation.get().doAnimation(this, "move", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
+        this.animation.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
     }
 
     @Override

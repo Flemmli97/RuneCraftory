@@ -389,11 +389,11 @@ public class FamilyEntry {
 
     public SyncedFamilyData forSyncing(NPCEntity npc, ServerPlayer player) {
         Component father = this.father != null ? this.familyHandler.getFamily(this.father)
-                .map(e -> e.name).orElse(null) : null;
+                                                 .map(e -> e.name).orElse(null) : null;
         Component mother = this.mother != null ? this.familyHandler.getFamily(this.mother)
-                .map(e -> e.name).orElse(null) : null;
+                                                 .map(e -> e.name).orElse(null) : null;
         Component partner = this.partner != null ? this.familyHandler.getFamily(this.partner)
-                .map(e -> e.name).orElse(null) : null;
+                                                   .map(e -> e.name).orElse(null) : null;
         return new SyncedFamilyData(Optional.ofNullable(father), Optional.ofNullable(mother), Optional.ofNullable(partner), this.relationship,
                 player.getUUID().equals(this.partner) && npc.canProcreate());
     }

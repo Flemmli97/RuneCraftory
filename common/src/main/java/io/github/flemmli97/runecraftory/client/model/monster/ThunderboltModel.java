@@ -1,15 +1,10 @@
 package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.Thunderbolt;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
-import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
-import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
-import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
-import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
@@ -22,26 +17,19 @@ public class ThunderboltModel<T extends Thunderbolt> extends ExtendedEntityModel
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/thunderbolt");
 
-    private final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> anim;
-
     public ModelPartsContainer.ModelPartExtended head;
     public ModelPartsContainer.ModelPartExtended neck;
     public ModelPartsContainer.ModelPartExtended ridingPosition;
 
     public ThunderboltModel() {
-        super();
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
-            this.head = model.getPart("head");
-            this.neck = model.getPart("neck");
-            this.ridingPosition = model.getPart("ridingPos");
-        });
-        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
+        super(LOCATION, LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
+    protected void onModelReload(ModelPartsContainer model) {
+        this.head = model.getPart("head");
+        this.neck = model.getPart("neck");
+        this.ridingPosition = model.getPart("ridingPos");
     }
 
     @Override
@@ -54,15 +42,10 @@ public class ThunderboltModel<T extends Thunderbolt> extends ExtendedEntityModel
 
         float partialTick = this.getPartialTick();
         if (entity.deathTime <= 0 && !entity.playDeath() && !entity.getAnimationHandler().isCurrent(Thunderbolt.FEINT)) {
-            this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
-            this.anim.get().doAnimation(this, "run", entity.tickCount, partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, partialTick));
+            this.animation.get().doAnimation(this, "walk", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
+            this.animation.get().doAnimation(this, "run", entity.tickCount, partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, partialTick));
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
-    }
-
-    @Override
-    public ModelPartsContainer getModel() {
-        return this.model.get();
+        this.animation.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
     }
 
     @Override

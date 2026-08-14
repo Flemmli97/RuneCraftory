@@ -1,14 +1,9 @@
 package io.github.flemmli97.runecraftory.client.model.monster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.Ambrosia;
-import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
-import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
-import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
-import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
@@ -22,26 +17,19 @@ public class AmbrosiaModel<T extends Ambrosia> extends ExtendedEntityModel<T> im
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/ambrosia");
 
-    private final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> anim;
-
     public ModelPartsContainer.ModelPartExtended body;
     public ModelPartsContainer.ModelPartExtended head;
     public ModelPartsContainer.ModelPartExtended ridingPosition;
 
     public AmbrosiaModel() {
-        super();
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
-            this.body = model.getPart("body");
-            this.head = model.getPart("head");
-            this.ridingPosition = model.getPart("ridingPos");
-        });
-        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
+        super(LOCATION, LOCATION);
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        this.getModel().getRoot().render(poseStack, buffer, packedLight, packedOverlay, color);
+    protected void onModelReload(ModelPartsContainer model) {
+        this.body = model.getPart("body");
+        this.head = model.getPart("head");
+        this.ridingPosition = model.getPart("ridingPos");
     }
 
     @Override
@@ -52,16 +40,11 @@ public class AmbrosiaModel<T extends Ambrosia> extends ExtendedEntityModel<T> im
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;
-            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTick);
+            this.animation.get().doAnimation(this, "idle", entity.tickCount, partialTick);
             if (entity.interpolatedMoveTick(partialTick) > 0 && anim == null)
                 this.body.xRot += Mth.DEG_TO_RAD * 2 * entity.interpolatedMoveTick(partialTick);
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
-    }
-
-    @Override
-    public ModelPartsContainer getModel() {
-        return this.model.get();
+        this.animation.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
     }
 
     @Override

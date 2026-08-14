@@ -6,10 +6,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.Skelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
-import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
-import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
-import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
-import io.github.flemmli97.tenshilib.client.model.BedrockAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedEntityModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;
@@ -26,9 +22,6 @@ import java.util.function.Function;
 public class SkelefangModel<T extends Skelefang> extends ExtendedEntityModel<T> implements RideableModel<T> {
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/skelefang");
-
-    private final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> anim;
 
     public ModelPartsContainer.ModelPartExtended head;
     public ModelPartsContainer.ModelPartExtended neck;
@@ -53,27 +46,28 @@ public class SkelefangModel<T extends Skelefang> extends ExtendedEntityModel<T> 
     private boolean translucentTail, translucentTailBase, translucentSpineBack, translucentSpineFront, translucentBackRibs, translucentFrontRibs;
 
     public SkelefangModel(Function<ResourceLocation, RenderType> function) {
-        super(function);
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> {
-            this.head = model.getPart("head");
-            this.neck = model.getPart("neckSpine");
-            this.body = model.getPart("body");
-            this.spineFront = model.getPart("spineFront");
-            this.ribsBody = model.getPart("ribsBody");
-            this.spineBack = model.getPart("spineBack");
-            this.ribsSpine = model.getPart("ribsSpine");
-            this.leftLegBase = model.getPart("legLeftConnectorBase");
-            this.rightLegBase = model.getPart("legRightConnectorBase");
-            this.tailBase = model.getPart("tailBase");
-            this.tail = model.getPart("tail");
-            this.heart = model.getPart("heartYAxis");
-            this.ridingPositionBones = model.getPart("ridingPosBones");
-            this.ridingPositionHeart = model.getPart("ridingPosHeart");
+        super(function, LOCATION, LOCATION);
+    }
 
-            this.bone1 = model.getPart("randomBone");
-            this.bone2 = model.getPart("randomBone2");
-        });
-        this.anim = GeoAnimationManager.getInstance().getAnimation(LOCATION);
+    @Override
+    protected void onModelReload(ModelPartsContainer model) {
+        this.head = model.getPart("head");
+        this.neck = model.getPart("neckSpine");
+        this.body = model.getPart("body");
+        this.spineFront = model.getPart("spineFront");
+        this.ribsBody = model.getPart("ribsBody");
+        this.spineBack = model.getPart("spineBack");
+        this.ribsSpine = model.getPart("ribsSpine");
+        this.leftLegBase = model.getPart("legLeftConnectorBase");
+        this.rightLegBase = model.getPart("legRightConnectorBase");
+        this.tailBase = model.getPart("tailBase");
+        this.tail = model.getPart("tail");
+        this.heart = model.getPart("heartYAxis");
+        this.ridingPositionBones = model.getPart("ridingPosBones");
+        this.ridingPositionHeart = model.getPart("ridingPosHeart");
+
+        this.bone1 = model.getPart("randomBone");
+        this.bone2 = model.getPart("randomBone2");
     }
 
     @Override
@@ -156,22 +150,17 @@ public class SkelefangModel<T extends Skelefang> extends ExtendedEntityModel<T> 
             this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.2;
             this.head.yRot += (netHeadYaw % 360) * Mth.DEG_TO_RAD * 0.4;
             this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.4;
-            this.anim.get().doAnimation(this, "idle", entity.tickCount, partialTick);
+            this.animation.get().doAnimation(this, "idle", entity.tickCount, partialTick);
             {
-                this.anim.get().doAnimation(this, "walk", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
+                this.animation.get().doAnimation(this, "walk", entity.tickCount, partialTick, entity.interpolatedMoveTick(partialTick));
             }
         }
-        this.anim.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
+        this.animation.get().doAnimation(this, entity.getAnimationHandler(), partialTick);
         if (anim != null && anim.is(Skelefang.BEAM)) {
             this.restoreProgress = anim.progress((float) anim.getMarker("restore_start", 0) * 20,
                     (float) anim.getMarker("restore_end", 0) * 20, partialTick, 0);
         } else
             this.restoreProgress = -1;
-    }
-
-    @Override
-    public ModelPartsContainer getModel() {
-        return this.model.get();
     }
 
     @Override

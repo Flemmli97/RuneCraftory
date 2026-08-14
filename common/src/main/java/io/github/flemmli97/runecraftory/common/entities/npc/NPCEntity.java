@@ -255,7 +255,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                     if (anim != null) {
                         if (this.getTarget() != null) {
                             this.lookAt(this.getTarget(), 360, 90);
-                            this.setTargetPosition(TargetPosition.of(this.getTarget()));
+                            this.setTargetPosition(TargetPosition.reducedRangeOf(this.getTarget()));
                         }
                     } else {
                         this.setTargetPosition(null);
@@ -1723,7 +1723,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 this.look = NPCLook.DEFAULT;
             else {
                 List<ResourceLocation> looks = this.data.value().look() == null ? List.of() : this.data.value().look().stream().filter(e -> e.gender() == NPCData.Gender.UNDEFINED || (e.gender() == NPCData.Gender.MALE) == this.isMale())
-                        .map(NPCData.NPCLookId::id).toList();
+                                                                                              .map(NPCData.NPCLookId::id).toList();
                 if (!looks.isEmpty())
                     this.look = DataPackHandler.INSTANCE.npcLookManager().get(looks.get(this.random.nextInt(looks.size())));
                 else

@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.misc.HomingEnergyOrbEntity;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
 import io.github.flemmli97.tenshilib.client.data.ReloadableCache;
+import io.github.flemmli97.tenshilib.client.model.DeformationChange;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
@@ -15,16 +16,13 @@ import net.minecraft.util.Mth;
 public class EnergyOrbModel<T extends HomingEnergyOrbEntity> extends EntityModel<T> {
 
     public static final ResourceLocation LOCATION = RuneCraftory.modRes("entity/energy_orb");
-    public static final ResourceLocation LAYER_LOCATION_LAYER = RuneCraftory.modRes("energy_orb_layer");
 
-    private final float growth;
     protected final ReloadableCache<ModelPartsContainer> model;
     protected ModelPartsContainer.ModelPartExtended bone;
 
     public EnergyOrbModel(float growth) {
         super(RenderType::entityTranslucentCull);
-        this.growth = growth;
-        this.model = GeoModelManager.getInstance().getModel(LOCATION, model -> this.bone = model.getPart("bone"));
+        this.model = GeoModelManager.getInstance().getModel(LOCATION, new DeformationChange(growth), model -> this.bone = model.getPart("bone"));
     }
 
     @Override
