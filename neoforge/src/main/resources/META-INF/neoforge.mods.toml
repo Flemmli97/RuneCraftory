@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[${loader_version},)"
+loaderVersion = "[${neoforge_loader_version},)"
 license = "ARR"
 issueTrackerURL = "https://github.com/Flemmli97/RuneCraftory/issues"
 [[mixins]]
@@ -17,7 +17,7 @@ description = '''A minecrafty Harvest Moon'''
 [[dependencies.runecraftory]]
 modId = "minecraft"
 type = "required"
-versionRange = "[${mcversion},)"
+versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.runecraftory]]
