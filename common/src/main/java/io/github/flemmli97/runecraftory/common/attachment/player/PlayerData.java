@@ -634,13 +634,12 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
             this.shippedItems.put(BuiltInRegistries.ITEM.byNameCodec().parse(ops, data.get("Item")).getOrThrow(),
                     new ShippedItemData(data.getInt("Amount"), data.getInt("Level")));
         });
-        ListTag shop = tag.getList("ShopItems", Tag.TAG_COMPOUND);
-        shop.forEach(t -> {
-            CompoundTag data = (CompoundTag) t;
+        CompoundTag shop = tag.getCompound("ShopItems");
+        shop.getAllKeys().forEach(t -> {
             NonNullList<ItemStack> list = NonNullList.create();
-            ListTag items = data.getList("Items", Tag.TAG_COMPOUND);
+            ListTag items = shop.getList(t, Tag.TAG_COMPOUND);
             items.forEach(lt -> ItemStack.parse(provider, lt).ifPresent(list::add));
-            this.shopItems.put(RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().parse(ops, data.get("Shop")).getOrThrow(), list);
+            this.shopItems.put(RuneCraftoryNPCProfessions.PROFESSIONS.registry().get(ResourceLocation.parse(t)), list);
         });
         this.spells.load(tag.getCompound("Inventory"), provider);
         this.updater.read(tag.getCompound("DailyUpdater"));
@@ -682,14 +681,12 @@ public class PlayerData implements SerializableAttachment<CompoundTag, PlayerDat
             ship.add(data);
         });
         tag.put("ShippedItems", ship);
-        ListTag shop = new ListTag();
+        CompoundTag shop = new CompoundTag();
         for (Map.Entry<NPCProfession, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
-            CompoundTag data = new CompoundTag();
-            data.put("Shop", RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().encodeStart(ops, entry.getKey()).getOrThrow());
             ListTag items = new ListTag();
             for (ItemStack stack : entry.getValue())
                 items.add(stack.save(provider, new CompoundTag()));
-            data.put("Items", items);
+            shop.put(RuneCraftoryNPCProfessions.PROFESSIONS.registry().getKey(entry.getKey()).toString(), items);
         }
         tag.put("ShopItems", shop);
         tag.put("Inventory", this.spells.save(provider));
