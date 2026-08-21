@@ -152,7 +152,7 @@ public class AdvancementGen extends AdvancementProvider {
             Criterion<KilledTrigger.TriggerInstance> trigger = parent != null ? KilledTrigger.TriggerInstance.playerKilledEntity(
                     EntityPredicate.Builder.entity().of(entity.get()),
                     DamageSourcePredicate.Builder.damageType()
-                            .source(LibAdvancements.playerAdvancementCheck(parent.id()))) :
+                    .source(LibAdvancements.playerAdvancementCheck(parent.id()))) :
                     KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(entity.get()));
             Advancement.Builder builder = Advancement.Builder.advancement().display(SpawnEgg.fromType(entity.get()).get(),
                             Component.translatable(String.format("runecraftory.advancements.progression.boss.%s.title", entity.getID().getPath())),

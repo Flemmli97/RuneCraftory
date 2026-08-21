@@ -1,11 +1,9 @@
 package io.github.flemmli97.runecraftory.fabric.platform;
 
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.creativetab.CreativeTabBuilderExtension;
 import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
-import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -13,6 +11,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,7 +56,9 @@ public class PlatformImpl implements Platform {
             public Object getScreenOpeningData(ServerPlayer serverPlayer) {
                 RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), player.registryAccess());
                 writer.accept(buf);
-                return buf;
+                byte[] bytes = ByteBufUtil.getBytes(buf);
+                buf.release();
+                return bytes;
             }
 
             @Override
@@ -90,7 +91,12 @@ public class PlatformImpl implements Platform {
 
     @Override
     public <T extends AbstractContainerMenu, D> MenuType<T> menuType(TriFunction<Integer, Inventory, D, T> create, StreamCodec<RegistryFriendlyByteBuf, D> codec) {
-        return new ExtendedScreenHandlerType<>(create::apply, codec);
+        return new ExtendedScreenHandlerType<>(((syncId, inventory, data) -> {
+            RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(data), inventory.player.registryAccess());
+            T menu = create.apply(syncId, inventory, codec.decode(buf));
+            buf.release();
+            return menu;
+        }), ByteBufCodecs.BYTE_ARRAY);
     }
 
     @Override

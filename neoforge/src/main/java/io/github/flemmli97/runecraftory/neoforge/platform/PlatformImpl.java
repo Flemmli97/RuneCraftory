@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.neoforge.platform;
 
-import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.creativetab.CreativeTabBuilderExtension;
 import io.github.flemmli97.runecraftory.common.creativetab.SubTab;
 import io.github.flemmli97.runecraftory.platform.Platform;

@@ -254,7 +254,7 @@ public class ClientRegister {
     }
 
     public static void registerScreen(MenuScreenRegister factory) {
-        factory.register(RuneCraftoryMenuTypes.CRAFTING_CONTAINER.get(), (CraftingGui::new));
+        factory.register(RuneCraftoryMenuTypes.CRAFTING_CONTAINER.get(), CraftingGui::new);
         factory.register(RuneCraftoryMenuTypes.UPGRADE_CONTAINER.get(), UpgradeGui::new);
         factory.register(RuneCraftoryMenuTypes.INFO_CONTAINER.get(), InfoScreen::new);
         factory.register(RuneCraftoryMenuTypes.INFO_SUB_CONTAINER.get(), InfoSubScreen::new);
