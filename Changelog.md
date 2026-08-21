@@ -1,3 +1,10 @@
+RuneCraftory 2.2.1
+================
+- Update dependencies
+- Fix menu opening error on fabric
+- Fix shop items not saved correctly
+- Fix npc unable to open shops
+
 RuneCraftory 2.2.0
 ================
 - Rewrite npc renders:
