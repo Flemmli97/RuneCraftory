@@ -1557,7 +1557,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             return ShopState.NOWORKPLACE;
         if (this.getBedPos() == null)
             return ShopState.NOBED;
-        if (this.getActivity() != Activity.WORK)
+        if (this.getNPCSchedule().currentActivity() != Activity.WORK)
             return ShopState.CLOSED;
         if (!this.nearWorkPlace(this.getWorkPlace(), 4))
             return ShopState.TOOFAR;

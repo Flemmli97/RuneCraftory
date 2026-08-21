@@ -34,6 +34,8 @@ public class NPCSchedule {
 
     private List<Component> view;
 
+    private Activity currentActivity = Activity.IDLE;
+
     public NPCSchedule(NPCEntity npc, Schedule schedule) {
         this.npc = npc;
         this.schedule = schedule;
@@ -48,6 +50,12 @@ public class NPCSchedule {
     }
 
     public Activity getActivity(ServerLevel level) {
+        Activity activity = this.getActivityNow(level);
+        this.currentActivity = activity;
+        return activity;
+    }
+
+    private Activity getActivityNow(ServerLevel level) {
         if (!this.npc.getProfession().hasSchedule)
             return Activity.IDLE;
         int dayTime = WorldUtils.dayTime(level);
@@ -72,6 +80,10 @@ public class NPCSchedule {
         if (dayTime < this.schedule.sleepTime)
             return Activity.IDLE;
         return Activity.REST;
+    }
+
+    public Activity currentActivity() {
+        return currentActivity;
     }
 
     public CompoundTag save() {
