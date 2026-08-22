@@ -1,3 +1,7 @@
+RuneCraftory 2.2.1.b
+================
+- Fix neoforge toml
+
 RuneCraftory 2.2.1
 ================
 - Update dependencies
