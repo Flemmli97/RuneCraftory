@@ -190,8 +190,7 @@ public class EntityUtils {
     }
 
     public static Vec3 horizontalLookAngle(Entity entity) {
-        Vec3 look = entity.getViewVector(1);
-        return new Vec3(look.x(), 0, look.z()).normalize();
+        return entity.calculateViewVector(0, entity.getViewYRot(1)).normalize();
     }
 
     public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {

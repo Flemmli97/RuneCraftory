@@ -24,15 +24,16 @@ public class MineralFeature extends Feature<ChancedBlockClusterConfig> {
     public boolean place(FeaturePlaceContext<ChancedBlockClusterConfig> ctx) {
         if (ctx.config().amount().getMaxValue() == 0)
             return false;
-        Holder<Biome> biome = ctx.level().getBiome(ctx.origin());
+        BlockPos origin = ctx.origin();
+        Holder<Biome> biome = ctx.level().getUncachedNoiseBiome(origin.getX(), origin.getY(), origin.getZ());
         if (!ctx.config().biomes().test(biome))
             return false;
-        BlockState state = ctx.config().stateProvider().getState(ctx.random(), ctx.origin());
+        BlockState state = ctx.config().stateProvider().getState(ctx.random(), origin);
         int amount = ctx.config().amount().sample(ctx.random());
         if (amount <= 0)
             return false;
         for (int i = 0; i < ctx.config().tries(); i++) {
-            BlockPos pos = ctx.origin().offset(ctx.random().nextInt(ctx.config().radius()) - ctx.random().nextInt(ctx.config().radius()),
+            BlockPos pos = origin.offset(ctx.random().nextInt(ctx.config().radius()) - ctx.random().nextInt(ctx.config().radius()),
                     ctx.random().nextInt(ctx.config().radius()) - ctx.random().nextInt(ctx.config().radius()), ctx.random().nextInt(ctx.config().radius()) - ctx.random().nextInt(ctx.config().radius()));
             if (ctx.level().getBlockState(pos).is(BlockTags.REPLACEABLE) && ctx.level().getBlockState(pos.below()).is(RunecraftoryTags.Blocks.MINERAL_GEN_PLACE) && state.canSurvive(ctx.level(), pos)) {
                 if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))

@@ -28,7 +28,7 @@ public class BiomeFilteredRandomFeature extends Feature<BiomeFilteredConfig> {
         WorldGenLevel level = ctx.level();
         ChunkGenerator generator = ctx.chunkGenerator();
         BlockPos origin = ctx.origin();
-        Holder<Biome> biome = ctx.level().getBiome(origin);
+        Holder<Biome> biome = ctx.level().getUncachedNoiseBiome(origin.getX(), origin.getY(), origin.getZ());
 
         List<BiomeFilteredConfig.BiomeFilteredEntry> features = config.features().stream()
                 .filter(p -> p.getWeight().asInt() > 0 && p.biomes().test(biome)).toList();
