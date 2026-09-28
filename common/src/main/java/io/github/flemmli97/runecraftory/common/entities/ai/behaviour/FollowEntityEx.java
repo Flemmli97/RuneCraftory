@@ -1,16 +1,16 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour;
 
+import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.FollowEntityExt;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FollowEntity;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
 import java.util.function.BiFunction;
 
-public class FollowEntityEx<E extends PathfinderMob, T extends Entity> extends FollowEntity<E, T> {
+public class FollowEntityEx<E extends PathfinderMob, T extends Entity> extends FollowEntityExt<E, T> {
 
     protected BiFunction<E, T, Double> followStartDist = (entity, target) -> 4d;
     protected BiFunction<E, T, Double> ignoreTargetDist = (entity, target) -> 20d;
