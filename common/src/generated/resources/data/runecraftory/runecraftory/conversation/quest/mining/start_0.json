@@ -1,4 +1,4 @@
 {
   "conversations": {},
-  "fallback_key": "quest.conversation.runecraftory:mining.start"
+  "fallback_key": "quest.conversation.runecraftory:mining.0.start"
 }

@@ -1,5 +1,5 @@
 {
-  "quest.conversation.runecraftory:tame_monster.active": "You still need to tame a monster.\nSome monsters prefer certain items more.",
-  "quest.conversation.runecraftory:tame_monster.end": "I see you've successfully tamed a monster. Congrats!",
-  "quest.conversation.runecraftory:tame_monster.start": "Did you know that you can tame the monsters in this world?\nYou would need to setup a barn first and then just give them an item. \n\nWith that said I would like you to tame a monster."
+  "quest.conversation.runecraftory:tame_monster.0.start": "Did you know that you can tame the monsters in this world?\nYou would need to setup a barn first and then just give them an item. \n\nWith that said I would like you to tame a monster.",
+  "quest.conversation.runecraftory:tame_monster.1.active": "You still need to tame a monster.\nSome monsters prefer certain items more.",
+  "quest.conversation.runecraftory:tame_monster.1.end": "I see you've successfully tamed a monster. Congrats!"
 }

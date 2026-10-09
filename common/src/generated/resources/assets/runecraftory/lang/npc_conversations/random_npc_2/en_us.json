@@ -1,5 +1,4 @@
 {
-  "npc.generic.1.follow_talk.1": "Where are we going?",
   "npc.generic.2.dating.no.1": "I’m not sure I can do that... I’m sorry.",
   "npc.generic.2.dating.no.2": "Oh... I’m sorry, but I can’t. I hope you’re not upset.",
   "npc.generic.2.dating.no.3": "I’m... I’m really sorry, but I don’t think I’m ready for that.",
@@ -22,6 +21,7 @@
   "npc.generic.2.follow.stop.2": "Alright... I’ll stay here until you need me.",
   "npc.generic.2.follow.yes.1": "Alright... I’ll be right behind you.",
   "npc.generic.2.follow.yes.2": "Sure... I’ll go with you. Just... stay close, okay?",
+  "npc.generic.2.follow_talk.1": "Where are we going?",
   "npc.generic.2.gift.default": "This is okay... Thanks for thinking of me.",
   "npc.generic.2.greeting.1": "Hi %player%... Um, did you need something??",
   "npc.generic.2.greeting.2": "Oh, it’s you... I’m glad you’re back.",

@@ -229,7 +229,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.generic.2.talk.2", "I... um, I saw some bunnies the other day. They were... very cute")
                             .addConversation("npc.generic.2.talk.3", "Um, I was thinking... Do you ever wonder what’s out there beyond the village?"));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
-                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
+                            .addConversation("npc.generic.2.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
                             .addConversation("npc.generic.2.follow.yes.1", "Alright... I’ll be right behind you.")
                             .addConversation("npc.generic.2.follow.yes.2", "Sure... I’ll go with you. Just... stay close, okay?"));
@@ -291,7 +291,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.generic.3.talk.3.response.nice", "Yeah I know right?")
                             .addConversation("npc.generic.3.talk.3.response.uhh", "Come on... You don't think so?"));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
-                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
+                            .addConversation("npc.generic.3.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
                             .addConversation("npc.generic.3.follow.yes.1", "Mmm... alright, I’ll follow... just don’t expect me to keep up if we’re running.")
                             .addConversation("npc.generic.3.follow.yes.2", "I’m in... as long as we can stop for naps along the way.")
@@ -357,7 +357,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.shop_owner.1.talk.2", "")
                             .addConversation("npc.shop_owner.1.talk.3", ""));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
-                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
+                            .addConversation("npc.shop_owner.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
                             .addConversation("npc.shop_owner.1.follow.yes.1", "Sure. Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
@@ -408,7 +408,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.smith.1.talk.3", "Working as a blacksmith is hard but very fun.")
                             .addConversation("npc.smith.1.talk.4", "Someday I would like to make some kind of legendary weapon."));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
-                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
+                            .addConversation("npc.smith.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
                             .addConversation("npc.smith.1.follow.yes.1", "Ok. Let's go then!"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
@@ -458,7 +458,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.doctor.1.talk.3", "Various herbs and grass are very useful in medicine")
                             .addConversation("npc.doctor.1.talk.4", "Being a doctor lots of people come to me for a variety of problems. Helping them with it is my duty."));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
-                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
+                            .addConversation("npc.doctor.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
                             .addConversation("npc.doctor.1.follow.yes.1", "Sure. But don't overexert yourself!"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
@@ -509,7 +509,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.cook.1.talk.2", "You should try out cooking too. Sometimes a homecooked meal can beat any other dishes. And who knows? Maybe it will awaken the culinary flame in you too.")
                             .addConversation("npc.cook.1.talk.3", "Seeing people eat the food I cook gives me an indescribable feeling of satisfaction."));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
-                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
+                            .addConversation("npc.cook.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
                             .addConversation("npc.cook.1.follow.yes.1", "Sure. Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()

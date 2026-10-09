@@ -56,10 +56,12 @@ import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
 import io.github.flemmli97.runecraftory.common.quests.QuestData;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
+import io.github.flemmli97.runecraftory.common.quests.progress.DeliveryTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
 import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestDefinition;
 import io.github.flemmli97.runecraftory.common.quests.quest.QuestResponses;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.ResolvedNPCBasedTask;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -84,8 +86,12 @@ import io.github.flemmli97.runecraftory.common.world.data.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
+import io.github.flemmli97.simplequests_api.player.ProgressionResult;
+import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
+import io.github.flemmli97.simplequests_api.player.TaskResult;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
+import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.entity.ai.TargetPosition;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToRestriction;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
@@ -123,7 +129,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
@@ -885,6 +890,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     public void giftItem(Player player, ItemStack stack) {
+        if (player instanceof ServerPlayer serverPlayer && this.respondToTrigger(serverPlayer, DeliveryTracker.KEY, Pair.of(stack, this))) {
+            EntityUtils.playSoundForPlayer(serverPlayer, SoundEvents.NOTE_BLOCK_PLING.value(), this.getSoundSource(), 0.7f, 1);
+            return;
+        }
         this.lookAt(player, 30, 30);
         int count = stack.getCount();
         SoundEvent sound = switch (stack.getUseAnimation()) {
@@ -968,7 +977,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             Calendar calendar = Calendar.get(serverPlayer.level());
             if (calendar.currentSeason() == this.birthday.getFirst() && calendar.date().date() == this.birthday.getSecond())
                 mult = 3;
-            EntityUtils.playSoundForPlayer(serverPlayer, sound, SoundSource.NEUTRAL, 0.7f, 1);
+            EntityUtils.playSoundForPlayer(serverPlayer, sound, this.getSoundSource(), 0.7f, 1);
         }
         Equipable equipable = Equipable.get(stack);
         EquipmentSlot slot = equipable != null ? equipable.getEquipmentSlot() : null;
@@ -1066,13 +1075,60 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         List<PlayerQuestData.ProgressResult<NPCTalkTask.NPCTalkResolved>> triggers = QuestHandler.getData(player).trigger(NPCTalkTracker.KEY, this, "", 1);
         if (!triggers.isEmpty()) {
             PlayerQuestData.ProgressResult<NPCTalkTask.NPCTalkResolved> progressResult = triggers.getFirst();
-            NPCTalkTask.NPCTalkResolved task = progressResult.completedTasks().stream().findFirst().map(Pair::getSecond).orElse(null);
+            NPCTalkTask.NPCTalkResolved task = progressResult.completedTasks().stream().filter(p -> p.result() != TaskResult.NONE)
+                    .map(ProgressionResult::task).findFirst().orElse(null);
             if (task != null && task.dialogue() != null) {
                 dialogues.add(task.dialogue());
             }
         }
         QuestData data = QuestHandler.getData(player);
         if (npcQuest != null && stage != -1) {
+            // Finally complete/check quest and respond appropriately
+            QuestResponses responses = npcQuest.source().dialogues().get(stage);
+            QuestState state = progress.tryComplete(progress.getRootQuest().submissionTrigger(player));
+            int stagePost = progress.getRootProgressStage();
+            switch (state) {
+                case NO -> {
+                    if (dialogues.isEmpty()) {
+                        responses.activeID().ifPresent(dialogues::add);
+                    }
+                }
+                case COMPLETE -> responses.endID().ifPresent(dialogues::add);
+                case PARTIAL_COMPLETE -> {
+                    responses.endID().ifPresent(dialogues::add);
+                    if (stage != stagePost && stagePost < npcQuest.source().dialogues().size()) {
+                        data.getAndUpdateActiveProgress(progress);
+                        responses = npcQuest.source().dialogues().get(stagePost);
+                        responses.startID().ifPresent(dialogues::add);
+                    }
+                }
+            }
+        }
+        if (dialogues.isEmpty())
+            return false;
+        this.speak(player, dialogues.stream().map(DataPackHandler.INSTANCE.npcConversationManager()::get).toList());
+        if (npcQuest != null) {
+            this.onCloseRunner.put(player, () -> data.tryCompleteQuest(progress, progress.getRootQuest().submissionTrigger(player)));
+        }
+        return true;
+    }
+
+    public <V, T extends ResolvedQuestTask & ResolvedNPCBasedTask> boolean respondToTrigger(ServerPlayer player, ProgressionTrackerKey<V, T> key, V value) {
+        List<PlayerQuestData.ProgressResult<T>> triggers = QuestHandler.getData(player).trigger(key, value, "", 1);
+        if (triggers.isEmpty())
+            return false;
+        QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
+        NPCQuestDefinition.NPCQuest npcQuest = progress != null && progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest quest ? quest : null;
+        List<ResourceLocation> dialogues = new ArrayList<>();
+        PlayerQuestData.ProgressResult<T> progressResult = triggers.getFirst();
+        T task = progressResult.completedTasks().stream().filter(p -> p.result() != TaskResult.NONE)
+                .map(ProgressionResult::task).findFirst().orElse(null);
+        if (task != null && task.dialogue() != null) {
+            dialogues.add(task.dialogue());
+        }
+        QuestData data = QuestHandler.getData(player);
+        if (npcQuest != null) {
+            int stage = progress.getRootProgressStage();
             // Finally complete/check quest and respond appropriately
             QuestResponses responses = npcQuest.source().dialogues().get(stage);
             QuestState state = progress.tryComplete(progress.getRootQuest().submissionTrigger(player));
@@ -1125,10 +1181,14 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
         if (progress != null) {
             progress.getTasks().forEach((key, value) -> {
-                if (value instanceof NPCTalkTask.NPCTalkResolved talk) {
-                    NPCEntity npc = talk.getNpc(player.level());
+                if (value instanceof ResolvedNPCBasedTask task) {
+                    NPCEntity npc = task.getNpc(player.level());
                     if (npc != null && npc != this) {
                         map.put(PlaceHolderComponent.QUEST_NPC_TARGET.apply(key), npc.getDisplayName());
+                    }
+                    Component comp = task.progressComponent(progress, key);
+                    if (comp != null) {
+                        map.put(PlaceHolderComponent.QUEST_PROGRESS.apply(key), comp);
                     }
                 }
             });

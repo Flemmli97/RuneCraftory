@@ -1,8 +1,8 @@
 {
   "conversations": {
-    "npc.generic.1.follow_talk.1": {
+    "npc.generic.3.follow_talk.1": {
       "conditions": [],
-      "translation_key": "npc.generic.1.follow_talk.1"
+      "translation_key": "npc.generic.3.follow_talk.1"
     }
   },
   "fallback_key": ""

@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.UUID;
 
-public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
+public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCBasedTask {
 
     public static final QuestTaskKey<NPCTalkTask> ID = new QuestTaskKey<>(RuneCraftory.modRes("npc_talk"));
     public static final MapCodec<NPCTalkTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
@@ -46,20 +46,21 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
         this(null, null, null);
     }
 
-    public NPCTalkTask(ResourceLocation generic) {
-        this(generic, null, null);
+    public NPCTalkTask(ResourceLocation npc) {
+        this(npc, null, null);
     }
 
-    public NPCTalkTask(ResourceLocation generic, @Nullable ResourceLocation dialogue) {
-        this(generic, dialogue, null);
+    public NPCTalkTask(ResourceLocation npc, @Nullable ResourceLocation dialogue) {
+        this(npc, dialogue, null);
     }
 
-    protected NPCTalkTask(@Nullable ResourceLocation generic, @Nullable ResourceLocation dialogue, EntityPredicate predicate) {
-        this.targetNPCId = generic;
+    protected NPCTalkTask(@Nullable ResourceLocation npc, @Nullable ResourceLocation dialogue, EntityPredicate predicate) {
+        this.targetNPCId = npc;
         this.dialogue = dialogue;
         this.predicate = predicate;
     }
 
+    @Override
     public ResourceLocation targetNPCId() {
         return this.targetNPCId;
     }
@@ -86,7 +87,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
         return null;
     }
 
-    public static class NPCTalkResolved implements ResolvedQuestTask {
+    public static class NPCTalkResolved implements ResolvedQuestTask, ResolvedNPCBasedTask {
 
         public static final MapCodec<NPCTalkResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(Codec.STRING.fieldOf("target_npc").xmap(UUID::fromString, UUID::toString).forGetter(d -> d.targetNPC),
@@ -116,6 +117,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
             return ID;
         }
 
+        @Override
         @Nullable
         public NPCEntity getNpc(Level level) {
             NPCEntity npc = this.npc == null ? null : this.npc.get();
@@ -126,6 +128,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
             return npc;
         }
 
+        @Override
         @Nullable
         public ResourceLocation dialogue() {
             return this.dialogue;

@@ -4,11 +4,13 @@ import com.mojang.datafixers.util.Either;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.network.S2COpenQuestGui;
+import io.github.flemmli97.runecraftory.common.quests.progress.DeliveryTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
 import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
 import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestDefinition;
 import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestSetupData;
+import io.github.flemmli97.runecraftory.common.quests.tasks.DeliveryTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.LevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
@@ -47,15 +49,17 @@ public class QuestHandler {
     public static final String QUEST_BOARD_TRIGGER = RuneCraftory.MODID + "_quest_board_trigger";
 
     public static void register() {
-        QuestEntryRegistry.registerSerializer(ShippingTask.ID, ShippingTask.CODEC, ShippingTask.SkillLevelTaskResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(DeliveryTask.ID, DeliveryTask.CODEC, DeliveryTask.DeliveryTaskResolved.CODEC);
         QuestEntryRegistry.registerSerializer(LevelTask.ID, LevelTask.CODEC, LevelTask.LevelTaskResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(NPCTalkTask.ID, NPCTalkTask.CODEC, NPCTalkTask.NPCTalkResolved.CODEC);
+        QuestEntryRegistry.registerSerializer(ShippingTask.ID, ShippingTask.CODEC, ShippingTask.SkillLevelTaskResolved.CODEC);
         QuestEntryRegistry.registerSerializer(SkillLevelTask.ID, SkillLevelTask.CODEC, SkillLevelTask.SkillLevelTaskResolved.CODEC);
         QuestEntryRegistry.registerSerializer(TamingTask.ID, TamingTask.CODEC, TamingTask.TamingTaskResolved.CODEC);
-        QuestEntryRegistry.registerSerializer(NPCTalkTask.ID, NPCTalkTask.CODEC, NPCTalkTask.NPCTalkResolved.CODEC);
         QuestDefinitionRegistry.register(NPCQuestDefinition.ID, NPCQuestDefinition.CODEC);
+        ProgressionTrackerRegistry.registerSerializer(DeliveryTracker.KEY, DeliveryTracker::new);
+        ProgressionTrackerRegistry.registerSerializer(NPCTalkTracker.KEY, NPCTalkTracker::new);
         ProgressionTrackerRegistry.registerSerializer(ShippingTracker.KEY, ShippingTracker::new);
         ProgressionTrackerRegistry.registerSerializer(TamingTracker.KEY, TamingTracker::new);
-        ProgressionTrackerRegistry.registerSerializer(NPCTalkTracker.KEY, NPCTalkTracker::new);
         PlayerQuestDataRegistry.registerFetcher(RuneCraftory.modRes("quest_data"), QuestHandler::getData);
     }
 

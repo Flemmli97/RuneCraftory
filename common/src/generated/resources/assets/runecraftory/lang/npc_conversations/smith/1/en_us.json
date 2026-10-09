@@ -1,5 +1,4 @@
 {
-  "npc.generic.1.follow_talk.1": "Where are we going?",
   "npc.smith.1.dating.no.1": "Thank you for asking, but I’m not looking for that kind of relationship.",
   "npc.smith.1.dating.no.2": "I’m sorry, but I don’t think I’m ready for a relationship.",
   "npc.smith.1.dating.yes.1": "You know what? Yes, I’d like to get to know you better.",
@@ -12,6 +11,7 @@
   "npc.smith.1.follow.no.1": "Hmm sorry but the forge calls for me.",
   "npc.smith.1.follow.stop.1": "Okay, bye then. Let me know if you need me again.",
   "npc.smith.1.follow.yes.1": "Ok. Let's go then!",
+  "npc.smith.1.follow_talk.1": "Where are we going?",
   "npc.smith.1.greeting.1": "Hello %player%. Let's do our best again today!",
   "npc.smith.1.marry.no.1": "This is difficult for me, but I have to say no.",
   "npc.smith.1.marry.no.2": "I’ve thought about it, but I don’t think I can say yes for now.",

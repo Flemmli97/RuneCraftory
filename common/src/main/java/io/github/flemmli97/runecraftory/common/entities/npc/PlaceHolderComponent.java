@@ -30,6 +30,7 @@ public class PlaceHolderComponent {
     public static final String DISLIKE = addReplacement("dislike", ChatFormatting.RED);
     public static final String HATE = addReplacement("hate", ChatFormatting.RED);
     public static final Function<String, String> QUEST_NPC_TARGET = addReplacement("quest.target_npc", Function.identity(), ChatFormatting.AQUA);
+    public static final Function<String, String> QUEST_PROGRESS = addReplacement("quest.progress", Function.identity(), ChatFormatting.AQUA);
 
     private static String addReplacement(String pattern, ChatFormatting... styles) {
         PLACEHOLDER_STYLES.put(pattern, styles);

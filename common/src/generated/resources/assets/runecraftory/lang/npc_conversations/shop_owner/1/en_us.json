@@ -1,5 +1,4 @@
 {
-  "npc.generic.1.follow_talk.1": "Where are we going?",
   "npc.shop_owner.1.dating.no.1": "Sorry. But I don't see you that way.",
   "npc.shop_owner.1.dating.no.2": "I appreciate your feelings, but I don’t think it’s a good idea.",
   "npc.shop_owner.1.dating.yes.1": "I didn’t see that coming, but yes, I’d love to.",
@@ -15,6 +14,7 @@
   "npc.shop_owner.1.follow.no.1": "Ah sorry but this is not possible right now.",
   "npc.shop_owner.1.follow.stop.1": "Got it. See ya then!",
   "npc.shop_owner.1.follow.yes.1": "Sure. Where are we going?",
+  "npc.shop_owner.1.follow_talk.1": "Where are we going?",
   "npc.shop_owner.1.gift.default": "Oh... thanks... it’s... alright.",
   "npc.shop_owner.1.greeting.1": "Goood morning %player%! How are you today",
   "npc.shop_owner.1.greeting.2": "Good day to you %player%! How are you today",

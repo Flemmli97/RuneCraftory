@@ -119,22 +119,39 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                     builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.Builder.entity().build(), desc).build(), ConstantValue.exactly(1)));
                 }, b -> b.setRepeatDelay(-1).withCategory(this.main));
 
-//        this.addNPCQuest(id("test_quest"), "Test Quest", "A test quest",
+//            this.addNPCQuest(id("test_quest"), "Test Quest", "A test quest",
 //                List.of(id("random_npc_1")),
 //                LootTable.lootTable().withPool(LootPool.lootPool().add(LootItem.lootTableItem(Items.STONE))),
 //                builder -> {
 //                    builder.push(new ConversationSet.Builder(builder.translationKeyOf("start"), """
 //                            Start dialogue. Now go tame a monster"""), null, null);
 //                    builder.addEntry(new NPCTalkTask());
+//                    // Generic task test
 //                    builder.push(null,
-//                            new ConversationSet.Builder(builder.translationKeyOf("active"), "Active dialogue 1. Tame a monster"),
-//                            new ConversationSet.Builder(builder.translationKeyOf("end"), "End dialogue 1"));
+//                            new ConversationSet.Builder(builder.translationKeyOf("active"), "Active dialogue tame task. Tame a monster"),
+//                            new ConversationSet.Builder(builder.translationKeyOf("end"), "End dialogue tame task"));
 //                    builder.addEntry("Tame a monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.Builder.entity().build(), desc).build(), ConstantValue.exactly(1)));
+//                    // Test talking to other npc
 //                    builder.push(new ConversationSet.Builder(builder.translationKeyOf("start_1"), """
 //                                    Talk to %quest.target_npc:0%"""),
-//                            new ConversationSet.Builder(builder.translationKeyOf("active_1"), "Active dialogue 1. Talk to %quest.target_npc:0%"),
-//                            new ConversationSet.Builder(builder.translationKeyOf("end_1"), "End dialogue 2. Quest done"));
+//                            new ConversationSet.Builder(builder.translationKeyOf("active_1"), "Active dialogue talk task. Talk to %quest.target_npc:0%"),
+//                            new ConversationSet.Builder(builder.translationKeyOf("end_1"), "End dialogue talk task. Quest done"));
 //                    builder.addEntry(new NPCTalkTask(id("random_npc_1"), builder.getConversation("talk_random_npc", new ConversationSet.Builder(builder.translationKeyOf("talk_random_npc"), "I am responding to a talk task"))));
+//
+//                    // Deliver item test. To self and other npc
+//                    builder.push(new ConversationSet.Builder(builder.translationKeyOf("start_2"), """
+//                                    Bring me %quest.progress:0%"""),
+//                            new ConversationSet.Builder(builder.translationKeyOf("active_2"), "Active dialogue deliver self task. You still need %quest.progress:0%"),
+//                            new ConversationSet.Builder(builder.translationKeyOf("end_2"), "End dialogue deliver self task"));
+//                    builder.addEntry(new DeliveryTask(List.of(DescriptiveValue.of(ItemPredicate.Builder.item().of(Items.APPLE).build(), builder.defineTranslation("apples", "Apples"))), ConstantValue.exactly(5)));
+//                    builder.push(new ConversationSet.Builder(builder.translationKeyOf("start_3"), """
+//                                    Now bring %quest.target_npc:0% 5 apples"""),
+//                            new ConversationSet.Builder(builder.translationKeyOf("active_3"), "Active dialogue deliver other task. Bring %quest.progress:0% to %quest.target_npc:0%"),
+//                            new ConversationSet.Builder(builder.translationKeyOf("end_3"), "End dialogue deliver other task. Quest done"));
+//                    builder.addEntry(new DeliveryTask(id("random_npc_1"),
+//                            builder.getConversation("deliver_random_npc", new ConversationSet.Builder(builder.translationKeyOf("deliver_random_npc"), "Thanks for the apples")),
+//                            List.of(DescriptiveValue.of(ItemPredicate.Builder.item().of(Items.APPLE).build(), builder.defineTranslation("apples", "Apples"))),
+//                            ConstantValue.exactly(5)));
 //                }, b -> b.setRepeatDelay(-1).withCategory(this.main));
     }
 
@@ -169,6 +186,10 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
         return String.format("%s.quest.%s.sub.%s.task.%s", id.getNamespace(), id.getPath(), sub, task);
     }
 
+    public static String getComponent(ResourceLocation id, int sub, String key) {
+        return String.format("%s.quest.%s.sub.%s.task.%s", id.getNamespace(), id.getPath(), sub, key);
+    }
+
     private static ResourceLocation id(String name) {
         return RuneCraftory.modRes(name);
     }
@@ -188,7 +209,13 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
         }
 
         public String translationKeyOf(String key) {
-            return String.format("quest.conversation.%s.%s", this.id, key);
+            return String.format("quest.conversation.%s.%s.%s", this.id, this.entries.size(), key);
+        }
+
+        public String defineTranslation(String key, String translation) {
+            key = getComponent(this.id, this.entries.size() - 1, key);
+            QuestGen.this.translations.put(key, translation);
+            return key;
         }
 
         private String translationPath() {
@@ -197,7 +224,9 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
 
         public ResourceLocation getConversation(String idSuffix, ConversationSet.Builder conv) {
             ResourceLocation id = this.id.withPath(p -> "quest/" + p + "/" + idSuffix);
-            QuestGen.this.questResponses.put(id, Pair.of(this.translationPath(), conv));
+            if (QuestGen.this.questResponses.put(id, Pair.of(this.translationPath(), conv)) != null) {
+                throw new IllegalStateException("Conversation exists already with id " + id);
+            }
             return id;
         }
 

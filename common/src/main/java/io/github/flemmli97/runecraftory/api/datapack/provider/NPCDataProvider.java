@@ -37,9 +37,11 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     private final Map<ResourceLocation, NPCAttackActions> actions = new HashMap<>();
     private final Map<ResourceLocation, NPCData> data = new HashMap<>();
 
-    //Translation for lang
+    // ==== Translations for lang
     public final Map<String, Map<String, String>> dialogueTranslations = new LinkedHashMap<>();
     private final Map<String, String> translations = new LinkedHashMap<>();
+    // Since dialogue translations are merged into one single map during runtime. Check for conflicts
+    private final Map<String, String> dialogueTranslationsVerifier = new HashMap<>();
 
     private final PackOutput packOutput;
     private final FileVerifier verifier;
@@ -107,15 +109,25 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
             this.addConversation(conversationId, value, id);
             data.addInteractionIfAbsent(key, conversationId);
         });
-        this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                .putAll(data.getTranslations());
+        this.addDialogueTranlation(id, data.getTranslations());
         this.data.put(ResourceLocation.fromNamespaceAndPath(this.modid, id), data.build());
     }
 
     public void addConversation(ResourceLocation id, ConversationSet.Builder builder, String translationPath) {
         this.conversations.put(id, builder.build());
-        this.dialogueTranslations.computeIfAbsent(translationPath, o -> new LinkedHashMap<>())
-                .putAll(builder.getTranslations());
+        this.addDialogueTranlation(translationPath, builder.getTranslations());
+    }
+
+    private void addDialogueTranlation(String translationPath, Map<String, String> translations) {
+        Map<String, String> map = this.dialogueTranslations.computeIfAbsent(translationPath, o -> new LinkedHashMap<>());
+        translations.forEach((k, t) -> {
+            if (!t.equals(this.dialogueTranslationsVerifier.get(k))) {
+                this.dialogueTranslationsVerifier.put(k, t);
+                map.put(k, t);
+            } else {
+                throw new IllegalStateException("Map contains translation already " + k);
+            }
+        });
     }
 
     public ResourceLocation addLook(ResourceLocation id, NPCLook look) {

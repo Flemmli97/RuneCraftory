@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.simplequests_api.impls.progression.ProgressionTrackerBase;
 import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
+import io.github.flemmli97.simplequests_api.player.TaskResult;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,8 +22,8 @@ public class NPCTalkTracker extends ProgressionTrackerBase<NPCEntity, NPCTalkTas
     }
 
     @Override
-    public boolean progress(ServerPlayer player, QuestProgress prog, NPCEntity with) {
-        return this.questEntry().trySubmit(player, with);
+    public TaskResult progress(ServerPlayer player, QuestProgress prog, NPCEntity with) {
+        return this.questEntry().trySubmit(player, with) ? TaskResult.COMPLETED : TaskResult.NONE;
     }
 
     @Override

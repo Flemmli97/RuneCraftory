@@ -27,6 +27,10 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
 import io.github.flemmli97.runecraftory.common.quests.QuestData;
+import io.github.flemmli97.runecraftory.common.quests.progress.DeliveryTracker;
+import io.github.flemmli97.runecraftory.common.quests.progress.ShippingTracker;
+import io.github.flemmli97.runecraftory.common.quests.progress.TamingTracker;
+import io.github.flemmli97.runecraftory.common.quests.tasks.DeliveryTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.LevelTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.quests.tasks.ShippingTask;
@@ -533,15 +537,22 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.quest.npc.header", "Requester: %1$s [%2$s,%3$s,%4$s]");
 
+        this.add(DeliveryTask.ID + ".not_resolved", "Unresolved delivery task");
+        this.add(DeliveryTask.ID + ".generic", "Could not find NPC to give items to");
+        this.add(DeliveryTask.ID.toString(), "%1$s %2$s");
         this.add(LevelTask.ID.toString(), "Reach level %s");
-        this.add(NPCTalkTask.ID.toString(), "Talk to %s");
         this.add(NPCTalkTask.ID + ".generic", "Could not find NPC to talk to");
         this.add(NPCTalkTask.ID + ".not_resolved", "Unresolved NPC talk task");
-        this.add(ShippingTask.ID + ".single", "Ship %1$s x%2$s");
-        this.add(ShippingTask.ID + ".multi", "Ship any of the following x%2$s: %1$s");
+        this.add(NPCTalkTask.ID.toString(), "Talk to %s");
         this.add(ShippingTask.ID + ".empty", "<Empty tag/items>");
+        this.add(ShippingTask.ID + ".multi", "Ship any of the following x%2$s: %1$s");
+        this.add(ShippingTask.ID + ".single", "Ship %1$s x%2$s");
         this.add(SkillLevelTask.ID.toString(), "Reach level %1$s in %s");
         this.add(TamingTask.ID.toString(), "Tame %2$s %1$s");
+
+        this.add(DeliveryTracker.PROGRESS_TRANSLATION, "%2$s %1$s");
+        this.add(ShippingTracker.PROGRESS_TRANSLATION, "Progress: %1$s/%2$s");
+        this.add(TamingTracker.PROGRESS_TRANSLATION, "Progress: %1$s/%2$s");
 
         for (AdditionalLanguages langs : this.additionalLanguages) {
             if (langs != null) {

@@ -8,6 +8,7 @@
   "npc.doctor.1.follow.no.1": "Ah sorry but I'm quite busy right now.",
   "npc.doctor.1.follow.stop.1": "Ok. Take care of yourself!",
   "npc.doctor.1.follow.yes.1": "Sure. But don't overexert yourself!",
+  "npc.doctor.1.follow_talk.1": "Where are we going?",
   "npc.doctor.1.greeting.1": "Good day %player%. How are you today?",
   "npc.doctor.1.marry.no.1": "That’s a big step, and I don’t think I’m ready to take it.",
   "npc.doctor.1.marry.yes.1": "Wow. I would've never expected that I would walk down this path. Yes lets do it!",
@@ -18,6 +19,5 @@
   "npc.doctor.1.talk.4": "Being a doctor lots of people come to me for a variety of problems. Helping them with it is my duty.",
   "npc.doctor.2.dislike": "I can't use this...",
   "npc.doctor.2.gift.default": "Oh? this might be useful. Thanks",
-  "npc.doctor.2.like": "Thanks! I really like this!",
-  "npc.generic.1.follow_talk.1": "Where are we going?"
+  "npc.doctor.2.like": "Thanks! I really like this!"
 }

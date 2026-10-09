@@ -5,14 +5,16 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CSimpleToast;
 import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestSetupData;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.ResolvedNPCBasedTask;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftorySounds;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.simplequests_api.datapack.QuestsManager;
 import io.github.flemmli97.simplequests_api.impls.progression.EntityTracker;
 import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
+import io.github.flemmli97.simplequests_api.player.ProgressionResult;
 import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
+import io.github.flemmli97.simplequests_api.player.TaskResult;
 import io.github.flemmli97.simplequests_api.quest.InvalidQuestStateException;
 import io.github.flemmli97.simplequests_api.quest.QuestDefinition;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
@@ -143,7 +145,7 @@ public class QuestData implements PlayerQuestData, SerializableAttachment<Compou
         List<QuestProgress> completed = new ArrayList<>();
         String trigger = npc == null ? QuestHandler.QUEST_BOARD_TRIGGER : npc.getUUID().toString();
         for (QuestProgress prog : this.currentQuests) {
-            Set<Pair<String, ResolvedQuestTask>> fulfilled = prog.submit(trigger);
+            Set<ProgressionResult<ResolvedQuestTask>> fulfilled = prog.submit(trigger);
             QuestState state = prog.tryComplete(trigger);
             switch (state) {
                 case COMPLETE -> {
@@ -159,8 +161,12 @@ public class QuestData implements PlayerQuestData, SerializableAttachment<Compou
                 case NO -> {
                     if (!fulfilled.isEmpty()) {
                         EntityUtils.playSoundForPlayer(this.player, RuneCraftorySounds.GENERIC_SUCCESS.get(), this.player.getSoundSource(), 2 * 0.75f, 1.0f);
-                        fulfilled.forEach(t -> LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.name(this.player).withStyle(ChatFormatting.DARK_PURPLE),
-                                t.getSecond().translation(this.player).withStyle(ChatFormatting.GOLD)), this.player));
+                        fulfilled.forEach(t -> {
+                            if (t.result() == TaskResult.COMPLETED) {
+                                LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.name(this.player).withStyle(ChatFormatting.DARK_PURPLE),
+                                        t.task().translation(this.player).withStyle(ChatFormatting.GOLD)), this.player);
+                            }
+                        });
                         completion.put(prog.getRootId(), state);
                     }
                 }
@@ -207,7 +213,7 @@ public class QuestData implements PlayerQuestData, SerializableAttachment<Compou
         List<QuestProgress> completed = new ArrayList<>();
         List<ProgressResult<T>> completion = new ArrayList<>();
         for (QuestProgress prog : this.currentQuests) {
-            Set<Pair<String, T>> fulfilled = prog.tryFulfill(this.player, key, with);
+            Set<ProgressionResult<T>> fulfilled = prog.tryFulfill(this.player, key, with);
             QuestState state = prog.tryComplete(trigger);
             switch (state) {
                 case COMPLETE -> {
@@ -223,9 +229,9 @@ public class QuestData implements PlayerQuestData, SerializableAttachment<Compou
                 case NO -> {
                     if (!fulfilled.isEmpty()) {
                         fulfilled.forEach(p -> {
-                            if (!(p.getSecond() instanceof NPCTalkTask.NPCTalkResolved)) {
+                            if (p.result() == TaskResult.COMPLETED && !(p.task() instanceof ResolvedNPCBasedTask)) {
                                 LoaderNetwork.INSTANCE.sendToPlayer(new S2CSimpleToast(prog.name(this.player).withStyle(ChatFormatting.DARK_PURPLE),
-                                        p.getSecond().translation(this.player).withStyle(ChatFormatting.GOLD)), this.player);
+                                        p.task().translation(this.player).withStyle(ChatFormatting.GOLD)), this.player);
                             }
                         });
                         completion.add(new ProgressResult<>(prog, fulfilled, state));

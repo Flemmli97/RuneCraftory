@@ -1900,6 +1900,10 @@
   "runecraftory:bgm.sarcophagus_fight": "Sarcophagus Fight",
   "runecraftory:bgm.skelefang_fight": "Skelefang Fight",
   "runecraftory:bgm.thunderbolt_fight": "Thunderbolt Fight",
+  "runecraftory:delivery": "Give %1$s %3$s %2$s",
+  "runecraftory:delivery.generic": "Could not find NPC to give items to",
+  "runecraftory:delivery.not_resolved": "Unresolved delivery task",
+  "runecraftory:delivery.progress": "%2$s %1$s",
   "runecraftory:entity.ambrosia.angry": "Ambrosia Angry",
   "runecraftory:entity.ambrosia.spawn": "Ambrosia Spawn",
   "runecraftory:entity.ambrosia.wave": "Ambrosia humming",
@@ -1974,6 +1978,7 @@
   "runecraftory:player.brush": "Player brushing",
   "runecraftory:shipping.empty": "<Empty tag/items>",
   "runecraftory:shipping.multi": "Ship any of the following x%2$s: %1$s",
+  "runecraftory:shipping.progress": "Progress: %1$s/%2$s",
   "runecraftory:shipping.single": "Ship %1$s x%2$s",
   "runecraftory:skill_level": "Reach level %1$s in %s",
   "runecraftory:spell.apple_rain": "Apple Rain",
@@ -1993,5 +1998,6 @@
   "runecraftory:spell.generic.wind_long": "Generic Wind Long",
   "runecraftory:spell.naive_blade": "Naive Blade",
   "runecraftory:spell.straight_punch": "Straight Punch",
-  "runecraftory:taming": "Tame %2$s %1$s"
+  "runecraftory:taming": "Tame %2$s %1$s",
+  "runecraftory:taming.progress": "Progress: %1$s/%2$s"
 }

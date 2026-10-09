@@ -9,7 +9,7 @@ import io.github.flemmli97.runecraftory.common.blocks.QuestboardBlock;
 import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.quests.QuestData;
-import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCBasedTask;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
@@ -140,7 +140,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
     private Map<ResourceLocation, UUID> collectNPCReferences(List<NPCEntity> nearbyNPCs, NPCEntity except) {
         Set<ResourceLocation> npcReferences = new HashSet<>();
         this.visit(def -> def.unresolvedTasks().forEach((s, task) -> {
-            if (task instanceof NPCTalkTask talk && talk.targetNPCId() != null) {
+            if (task instanceof NPCBasedTask talk && talk.targetNPCId() != null) {
                 npcReferences.add(talk.targetNPCId());
             }
         }));

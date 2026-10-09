@@ -1,4 +1,4 @@
 {
   "conversations": {},
-  "fallback_key": "quest.conversation.runecraftory:tame_monster.start"
+  "fallback_key": "quest.conversation.runecraftory:tame_monster.0.start"
 }

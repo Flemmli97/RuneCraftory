@@ -10,6 +10,7 @@
   "npc.cook.1.follow.no.1": "Sorry but I have a lot on my plate right now.",
   "npc.cook.1.follow.stop.1": "Stopping here? Alright, I’ll head back to the kitchen then.",
   "npc.cook.1.follow.yes.1": "Sure. Where are we going?",
+  "npc.cook.1.follow_talk.1": "Where are we going?",
   "npc.cook.1.greeting.1": "Good to see you %player%! What can I cook up for you today?",
   "npc.cook.1.marry.no.1": "You’re wonderful, but I’m not ready to commit to marriage yet. Let’s just keep enjoying each other’s company—and my cooking.",
   "npc.cook.1.marry.no.2": "Marriage is a big step, and I’m not sure I’m ready to share my kitchen—or my life—that way.",
@@ -21,6 +22,5 @@
   "npc.cook.1.talk.3": "Seeing people eat the food I cook gives me an indescribable feeling of satisfaction.",
   "npc.cook.2.dislike": "This can't even be used in my dishes...",
   "npc.cook.2.gift.default": "It’s nice of you to think of me. I’ll find a use for this.",
-  "npc.cook.2.like": "Wow thanks! I really like this!",
-  "npc.generic.1.follow_talk.1": "Where are we going?"
+  "npc.cook.2.like": "Wow thanks! I really like this!"
 }

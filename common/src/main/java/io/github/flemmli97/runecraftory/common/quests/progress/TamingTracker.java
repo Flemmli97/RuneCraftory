@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.TamingTask;
 import io.github.flemmli97.simplequests_api.impls.progression.ProgressionTrackerBase;
 import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
+import io.github.flemmli97.simplequests_api.player.TaskResult;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 public class TamingTracker extends ProgressionTrackerBase<Entity, TamingTask.TamingTaskResolved> {
 
-    public static final String TAMING_PROGRESS = TamingTask.ID + ".progress";
+    public static final String PROGRESS_TRANSLATION = TamingTask.ID + ".progress";
     public static final ProgressionTrackerKey<Entity, TamingTask.TamingTaskResolved> KEY = new ProgressionTrackerKey<>(RuneCraftory.MODID, "taming_tracker",
             TamingTask.ID);
 
@@ -30,21 +31,21 @@ public class TamingTracker extends ProgressionTrackerBase<Entity, TamingTask.Tam
     }
 
     @Override
-    public boolean progress(ServerPlayer player, QuestProgress prog, Entity with) {
+    public TaskResult progress(ServerPlayer player, QuestProgress prog, Entity with) {
         if (this.questEntry().predicate().value().matches(player, with)) {
             if (this.entities.contains(with.getUUID())) {
-                return false;
+                return TaskResult.NONE;
             }
             this.entities.add(with.getUUID());
-            return this.entities.size() >= this.questEntry().amount();
+            return this.entities.size() >= this.questEntry().amount() ? TaskResult.COMPLETED : TaskResult.ADVANCED;
         }
-        return false;
+        return TaskResult.NONE;
     }
 
     @Override
     public MutableComponent formattedProgress(ServerPlayer player, QuestProgress progress) {
         float perc = this.entities.size() / (float) this.questEntry().amount();
-        return Component.translatable(TAMING_PROGRESS, this.entities.size(), this.questEntry().amount())
+        return Component.translatable(PROGRESS_TRANSLATION, this.questEntry().predicate().getTranslation(), this.entities.size(), this.questEntry().amount())
                 .withStyle(ProgressionTrackerBase.of(perc));
     }
 
