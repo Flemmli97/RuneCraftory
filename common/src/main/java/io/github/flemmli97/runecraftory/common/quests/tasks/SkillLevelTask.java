@@ -7,11 +7,10 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.attachment.Skills;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
-import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
-import io.github.flemmli97.simplequests_api.quest.QuestBase;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
+import io.github.flemmli97.simplequests_api.quest.ResolvedQuest;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestTaskKey;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.network.chat.Component;
@@ -27,7 +26,7 @@ import java.util.List;
 
 public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskResolved> {
 
-    public static final QuestEntryKey<SkillLevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("skill_level"));
+    public static final QuestTaskKey<SkillLevelTask> ID = new QuestTaskKey<>(RuneCraftory.modRes("skill_level"));
     public static final MapCodec<SkillLevelTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     ExtraCodecs.nonEmptyList(CodecUtils.stringEnumCodec(Skills.class, null).listOf()).fieldOf("skill").forGetter(d -> d.skills),
@@ -61,13 +60,13 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
     }
 
     @Override
-    public QuestEntryKey<?> getId() {
+    public QuestTaskKey<?> getId() {
         return ID;
     }
 
     @Override
-    public SkillLevelTaskResolved resolve(PlayerQuestData data, QuestProgress progress, QuestBase base) {
-        LootContext ctx = SimpleQuestsAPI.createContext(data, base.id);
+    public SkillLevelTaskResolved resolve(QuestProgress progress, ResolvedQuest quest) {
+        LootContext ctx = SimpleQuestsAPI.createContext(progress.data(), quest.id());
         Skills skills = this.skills.get(ctx.getRandom().nextInt(this.skills.size()));
         return new SkillLevelTaskResolved(skills, this.range.getInt(ctx));
     }
@@ -85,7 +84,7 @@ public class SkillLevelTask implements QuestTask<SkillLevelTask.SkillLevelTaskRe
         }
 
         @Override
-        public QuestEntryKey<SkillLevelTask> getId() {
+        public QuestTaskKey<SkillLevelTask> getId() {
             return ID;
         }
 

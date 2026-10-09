@@ -101,45 +101,21 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
         return "NPCData for " + this.modid;
     }
 
-    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations,
-                           Map<ResourceLocation, QuestResponseBuilder> questConversations) {
+    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations) {
         conversations.forEach((key, value) -> {
             ResourceLocation conversationId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/" + key.key().getPath());
-            this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                    .putAll(value.getTranslations());
-            this.conversations.put(conversationId, value.build());
+            this.addConversation(conversationId, value, id);
             data.addInteractionIfAbsent(key, conversationId);
-        });
-        questConversations.forEach((key, value) -> {
-            ResourceLocation startId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/quest_start_" + key.getPath());
-            for (int i = 0; i < value.start.size(); i++) {
-                String path = startId.getPath();
-                if (i != 0)
-                    path += "_" + i;
-                ResourceLocation runIdI = ResourceLocation.fromNamespaceAndPath(this.modid, path);
-                this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                        .putAll(value.start.get(i).getTranslations());
-                this.conversations.put(runIdI, value.start.get(i).build());
-            }
-            ResourceLocation runId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/quest_active_" + key.getPath());
-            for (int i = 0; i < value.active.size(); i++) {
-                String path = runId.getPath();
-                if (i != 0)
-                    path += "_" + i;
-                ResourceLocation runIdI = ResourceLocation.fromNamespaceAndPath(this.modid, path);
-                this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                        .putAll(value.active.get(i).getTranslations());
-                this.conversations.put(runIdI, value.active.get(i).build());
-            }
-            ResourceLocation endId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/quest_end_" + key.getPath());
-            this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
-                    .putAll(value.end.getTranslations());
-            this.conversations.put(endId, value.end.build());
-            data.addQuestResponse(key, startId, runId, endId);
         });
         this.dialogueTranslations.computeIfAbsent(id, o -> new LinkedHashMap<>())
                 .putAll(data.getTranslations());
         this.data.put(ResourceLocation.fromNamespaceAndPath(this.modid, id), data.build());
+    }
+
+    public void addConversation(ResourceLocation id, ConversationSet.Builder builder, String translationPath) {
+        this.conversations.put(id, builder.build());
+        this.dialogueTranslations.computeIfAbsent(translationPath, o -> new LinkedHashMap<>())
+                .putAll(builder.getTranslations());
     }
 
     public ResourceLocation addLook(ResourceLocation id, NPCLook look) {

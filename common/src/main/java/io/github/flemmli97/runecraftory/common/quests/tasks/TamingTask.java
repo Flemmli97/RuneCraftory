@@ -5,11 +5,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
-import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
-import io.github.flemmli97.simplequests_api.quest.QuestBase;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
+import io.github.flemmli97.simplequests_api.quest.ResolvedQuest;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestTaskKey;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
 import io.github.flemmli97.simplequests_api.util.JsonCodecs;
@@ -27,7 +26,7 @@ import java.util.List;
 
 public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
 
-    public static final QuestEntryKey<TamingTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("taming"));
+    public static final QuestTaskKey<TamingTask> ID = new QuestTaskKey<>(RuneCraftory.modRes("taming"));
     public static final MapCodec<TamingTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     JsonCodecs.nonEmptyList(DescriptiveValue.withTranslation(EntityPredicate.CODEC), "predicates can't be empty").fieldOf("predicates").forGetter(d -> d.predicates),
@@ -61,13 +60,13 @@ public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
     }
 
     @Override
-    public QuestEntryKey<?> getId() {
+    public QuestTaskKey<?> getId() {
         return ID;
     }
 
     @Override
-    public TamingTaskResolved resolve(PlayerQuestData data, QuestProgress progress, QuestBase base) {
-        LootContext ctx = SimpleQuestsAPI.createContext(data, base.id);
+    public TamingTaskResolved resolve(QuestProgress progress, ResolvedQuest quest) {
+        LootContext ctx = SimpleQuestsAPI.createContext(progress.data(), quest.id());
         DescriptiveValue<EntityPredicate> val = this.predicates.get(ctx.getRandom().nextInt(this.predicates.size()));
         return new TamingTaskResolved(val, this.amount.getInt(ctx));
     }
@@ -86,7 +85,7 @@ public class TamingTask implements QuestTask<TamingTask.TamingTaskResolved> {
         }
 
         @Override
-        public QuestEntryKey<TamingTask> getId() {
+        public QuestTaskKey<TamingTask> getId() {
             return ID;
         }
 

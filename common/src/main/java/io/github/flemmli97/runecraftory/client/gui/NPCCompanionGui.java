@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +12,10 @@ import java.util.List;
 public class NPCCompanionGui extends CompanionGui<NPCEntity> {
 
     private final boolean isShopOpen;
-    private final ResourceLocation quest;
 
-    public NPCCompanionGui(NPCEntity entity, boolean isShopOpen, ResourceLocation quest) {
+    public NPCCompanionGui(NPCEntity entity, boolean isShopOpen) {
         super(entity);
         this.isShopOpen = isShopOpen;
-        this.quest = quest;
     }
 
     @Override
@@ -26,18 +23,11 @@ public class NPCCompanionGui extends CompanionGui<NPCEntity> {
         int x = 2;
         int xSize = 90;
         int y = 120;
-        this.addRenderableWidget(Button.builder(Component.translatable(C2SNPCInteraction.Action.TALK.translation), b -> {
-            LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.TALK));
+        this.addRenderableWidget(Button.builder(Component.translatable(C2SNPCInteraction.Action.FOLLOW_TALK.translation), b -> {
+            LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.FOLLOW_TALK));
             this.minecraft.setScreen(null);
         }).bounds(this.leftPos + x, this.topPos + y, xSize, 20).build());
         int buttonIndex = 1;
-        if (this.quest != null) {
-            this.addRenderableWidget(Button.builder(Component.translatable(C2SNPCInteraction.Action.QUEST.translation), b -> {
-                LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.QUEST, this.quest.toString()));
-                this.minecraft.setScreen(null);
-            }).bounds(this.leftPos + x + xSize + 6, this.topPos + y, xSize, 20).build());
-            buttonIndex++;
-        }
         List<C2SNPCInteraction.Action> buttonTypes = new ArrayList<>();
         switch (this.entity.behaviourState()) {
             case FOLLOW -> {

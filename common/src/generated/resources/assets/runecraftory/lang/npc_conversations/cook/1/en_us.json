@@ -21,5 +21,6 @@
   "npc.cook.1.talk.3": "Seeing people eat the food I cook gives me an indescribable feeling of satisfaction.",
   "npc.cook.2.dislike": "This can't even be used in my dishes...",
   "npc.cook.2.gift.default": "It’s nice of you to think of me. I’ll find a use for this.",
-  "npc.cook.2.like": "Wow thanks! I really like this!"
+  "npc.cook.2.like": "Wow thanks! I really like this!",
+  "npc.generic.1.follow_talk.1": "Where are we going?"
 }

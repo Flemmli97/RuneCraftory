@@ -6,11 +6,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.simplequests_api.SimpleQuestsAPI;
-import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
-import io.github.flemmli97.simplequests_api.quest.QuestBase;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
+import io.github.flemmli97.simplequests_api.quest.ResolvedQuest;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestTaskKey;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,7 +22,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
 
-    public static final QuestEntryKey<LevelTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("level"));
+    public static final QuestTaskKey<LevelTask> ID = new QuestTaskKey<>(RuneCraftory.modRes("level"));
     public static final MapCodec<LevelTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(Codec.STRING.fieldOf("description").forGetter(d -> d.description),
                     NumberProviders.CODEC.fieldOf("level").forGetter(d -> d.range)
@@ -49,13 +48,13 @@ public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
     }
 
     @Override
-    public QuestEntryKey<?> getId() {
+    public QuestTaskKey<?> getId() {
         return ID;
     }
 
     @Override
-    public LevelTaskResolved resolve(PlayerQuestData data, QuestProgress progress, QuestBase base) {
-        LootContext ctx = SimpleQuestsAPI.createContext(data, base.id);
+    public LevelTaskResolved resolve(QuestProgress progress, ResolvedQuest quest) {
+        LootContext ctx = SimpleQuestsAPI.createContext(progress.data(), quest.id());
         return new LevelTaskResolved(this.range.getInt(ctx));
     }
 
@@ -70,7 +69,7 @@ public class LevelTask implements QuestTask<LevelTask.LevelTaskResolved> {
         }
 
         @Override
-        public QuestEntryKey<LevelTask> getId() {
+        public QuestTaskKey<LevelTask> getId() {
             return ID;
         }
 

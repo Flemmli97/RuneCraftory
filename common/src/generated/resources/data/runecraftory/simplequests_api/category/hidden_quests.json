@@ -1,7 +1,0 @@
-{
-  "name": "runecraftory.quests.category.hidden",
-  "required_context": [
-    "runecraftory:contexts"
-  ],
-  "is_visible": false
-}

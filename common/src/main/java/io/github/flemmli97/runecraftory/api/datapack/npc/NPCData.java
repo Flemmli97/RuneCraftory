@@ -12,7 +12,7 @@ import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
-import io.github.flemmli97.runecraftory.common.entities.npc.QuestConversationContext;
+import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -41,7 +41,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       @Nullable Pair<Season, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationContext, ResourceLocation> interactions,
-                      QuestHandler questHandler,
+                      Set<ResourceLocation> requiredQuests,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Holder<Attribute>, Double> baseStats,
                       @Nullable Map<Holder<Attribute>, Double> statIncrease,
@@ -52,7 +52,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.2);
     public static final ReloadableHolder<NPCData> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_npc"),
             new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
-                    Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of()));
+                    Map.of(), Set.of(), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of()));
 
     public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
         Function<Map<ConversationContext, T>, DataResult<Map<ConversationContext, T>>> check = map -> {
@@ -73,7 +73,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             inst.group(
                     filledMap(Codec.unboundedMap(ResourceLocation.CODEC.flatComapMap(ConversationContext::get, ctx -> DataResult.success(ctx.key())), ResourceLocation.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
-                    QuestHandler.CODEC.fieldOf("quest_handler").forGetter(d -> d.questHandler),
+                    ResourceLocation.CODEC.listOf().fieldOf("required_quests").forGetter(d -> List.copyOf(d.requiredQuests)),
 
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
                     NPCCombat.CODEC.optionalFieldOf("combat").forGetter(d -> {
@@ -98,40 +98,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
-                            weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
+                            weight, neutralGift, interactions, Set.copyOf(questHandler), giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
                             combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null),
                             unique.orElse(0), relation.relationShipState, relation.possibleChildren)));
 
-    public ConversationSet getConversation(ConversationContext convCtx) {
+    public ReloadableHolder<ConversationSet> getConversation(ConversationContext convCtx) {
         ResourceLocation conversationId = this.interactions().get(convCtx);
         ConversationSet fallback = new ConversationSet("runecraftory.npc.conversation.context.missing", convCtx.key(), Map.of());
         if (conversationId == null)
-            return fallback;
+            return new ReloadableHolder<>(LibConstants.EMPTY, fallback);
         fallback = new ConversationSet("runecraftory.npc.conversation.missing", convCtx.key(), Map.of());
-        return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
-    }
-
-    public ConversationSet getFromQuest(ResourceLocation quest, QuestConversationContext ctx, int state) {
-        QuestResponses responses = this.questHandler().responses().get(quest);
-        ConversationSet fallback = new ConversationSet("runecraftory.npc.default.quest.response.missing", quest, Map.of());
-        if (responses == null)
-            return fallback;
-        ResourceLocation conversationId = switch (ctx) {
-            case NOT_STARTED -> {
-                if (state <= 0)
-                    yield responses.startID;
-                else
-                    yield ResourceLocation.fromNamespaceAndPath(responses.startID.getNamespace(), responses.startID.getPath() + "_" + state);
-            }
-            case IN_PROGRESS -> {
-                if (state == 0)
-                    yield responses.activeID;
-                else
-                    yield ResourceLocation.fromNamespaceAndPath(responses.activeID.getNamespace(), responses.activeID.getPath() + "_" + state);
-            }
-            case COMPLETED -> responses.endID;
-        };
-        fallback = new ConversationSet("npc.conversation.missing", conversationId, Map.of());
         return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
     }
 
@@ -174,26 +150,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record QuestHandler(Map<ResourceLocation, QuestResponses> responses, Set<ResourceLocation> requiredQuests) {
-
-        public static final Codec<QuestHandler> CODEC = RecordCodecBuilder.create(inst ->
-                inst.group(
-                        Codec.unboundedMap(ResourceLocation.CODEC, QuestResponses.CODEC).fieldOf("responses").forGetter(d -> d.responses),
-                        ResourceLocation.CODEC.listOf().fieldOf("required_quests").forGetter(d -> List.copyOf(d.requiredQuests))
-                ).apply(inst, (responses, required) -> new QuestHandler(responses, Set.copyOf(required))));
-    }
-
-    public record QuestResponses(ResourceLocation startID, ResourceLocation activeID,
-                                 ResourceLocation endID) {
-
-        public static final Codec<QuestResponses> CODEC = RecordCodecBuilder.create(inst ->
-                inst.group(
-                        ResourceLocation.CODEC.fieldOf("start_id").forGetter(d -> d.startID),
-                        ResourceLocation.CODEC.fieldOf("active_id").forGetter(d -> d.activeID),
-                        ResourceLocation.CODEC.fieldOf("end_id").forGetter(d -> d.endID)
-                ).apply(inst, QuestResponses::new));
-    }
-
     public static class Builder {
 
         private final String name;
@@ -216,7 +172,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private RelationShipState relationShipState = RelationShipState.DEFAULT;
         private final List<ResourceLocation> possibleChildIds = new ArrayList<>();
 
-        private final Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
         private final Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
 
         private final Map<String, String> translations = new LinkedHashMap<>();
@@ -326,11 +281,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addQuestResponse(ResourceLocation quest, ResourceLocation startingID, ResourceLocation activeID, ResourceLocation endID) {
-            this.responses.put(quest, new QuestResponses(startingID, activeID, endID));
-            return this;
-        }
-
         public Map<String, String> getTranslations() {
             return this.translations;
         }
@@ -343,7 +293,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     throw new IllegalStateException("Missing interactions for " + convCtx);
             }
             return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
-                    new QuestHandler(this.responses, this.requiredQuests), this.giftItems, this.schedule,
+                    this.requiredQuests, this.giftItems, this.schedule,
                     this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease,
                     this.baseLevel, this.combatAction, this.unique, this.relationShipState, this.possibleChildIds);
         }

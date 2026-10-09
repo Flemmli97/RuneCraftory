@@ -150,62 +150,64 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(genericAttack, meleeAndHeal, meleeAndHeal),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.first.1"), "Hello there! Haven't seen you around before. Are you new here?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.first.2"), "Greetings, adventurer. What brings you to this place?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.first.3"), "Ah, a new face! Welcome, stranger."));
+                            .addConversation("npc.generic.1.first.1", "Hello there! Haven't seen you around before. Are you new here?")
+                            .addConversation("npc.generic.1.first.2", "Greetings, adventurer. What brings you to this place?")
+                            .addConversation("npc.generic.1.first.3", "Ah, a new face! Welcome, stranger."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.1").addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %player%. What can I do for you today?")
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.2").addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %player%. How was your day?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.3"), "Hi. How are you today %player%?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.4"), "Hello %player%, always a pleasure to see you."));
+                            .addConversation("npc.generic.1.greeting.3", "Hi. How are you today %player%?")
+                            .addConversation("npc.generic.1.greeting.4", "Hello %player%, always a pleasure to see you."));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1").addCondition(WeatherCheck.weather().setRaining(false).build())
                                     .addAction(new ConversationSet.ConversationActionHolder("npc.generic.1.talk.1.answer.same", ConversationSet.ConversationAction.ANSWER, "npc.generic.1.talk.1.response.same", 0), "Same")
                                     .addAction(new ConversationSet.ConversationActionHolder("npc.generic.1.talk.1.answer.ok", ConversationSet.ConversationAction.ANSWER, "npc.generic.1.talk.1.response.ok", 0), "Ok..."), "On sunny days I like to go out and walk a lot.")
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1.response.same").setAnswer(), "It's nice right?")
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1.response.ok").setAnswer(), "You don't?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.2"), "I’ve been hearing some strange tales from the travelers passing through. Stories of a distant land where the sky is always dark and tall people appear there. Wonder what's that about.")
+                            .addConversation("npc.generic.1.talk.2", "I’ve been hearing some strange tales from the travelers passing through. Stories of a distant land where the sky is always dark and tall people appear there. Wonder what's that about.")
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.rain.1").addCondition(WeatherCheck.weather().setRaining(true).build()), "Rainy days like this always make me reflective. What’s on your mind?")
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.rain.2").addCondition(WeatherCheck.weather().setRaining(true).build()), "Quite the downpour, isn’t it? What can I do for you while we wait it out?"));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.yes.1"), "Lead the way, I'm right behind you.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.yes.2"), "Ready when you are. Let's move.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.yes.3"), "You can count on me. Let's go!"));
+                            .addConversation("npc.generic.1.follow.yes.1", "Lead the way, I'm right behind you.")
+                            .addConversation("npc.generic.1.follow.yes.2", "Ready when you are. Let's move.")
+                            .addConversation("npc.generic.1.follow.yes.3", "You can count on me. Let's go!"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.no.1"), "I'm afraid I can't right now. Perhaps another time?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.no.2"), "Now's not a good time. Maybe later?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.no.3"), "Sorry but I am busy right now."));
+                            .addConversation("npc.generic.1.follow.no.1", "I'm afraid I can't right now. Perhaps another time?")
+                            .addConversation("npc.generic.1.follow.no.2", "Now's not a good time. Maybe later?")
+                            .addConversation("npc.generic.1.follow.no.3", "Sorry but I am busy right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.stop.1"), "Got it. See you then.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.follow.stop.2"), "Ok. See you again."));
+                            .addConversation("npc.generic.1.follow.stop.1", "Got it. See you then.")
+                            .addConversation("npc.generic.1.follow.stop.2", "Ok. See you again."));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.dating.yes.1"), "I would love that. Let's enjoy our time together.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.dating.yes.2"), "Yes, I think this could be the start of something special.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.dating.yes.3"), "I... didn't think that day would come but yes!"));
+                            .addConversation("npc.generic.1.dating.yes.1", "I would love that. Let's enjoy our time together.")
+                            .addConversation("npc.generic.1.dating.yes.2", "Yes, I think this could be the start of something special.")
+                            .addConversation("npc.generic.1.dating.yes.3", "I... didn't think that day would come but yes!"));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.dating.no.1"), "I don't think that's the best idea. Let's keep things as they are.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.dating.no.2"), "I appreciate the offer, but I don't feel that way.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.dating.no.3"), "Sorry but i don't feel that way"));
+                            .addConversation("npc.generic.1.dating.no.1", "I don't think that's the best idea. Let's keep things as they are.")
+                            .addConversation("npc.generic.1.dating.no.2", "I appreciate the offer, but I don't feel that way.")
+                            .addConversation("npc.generic.1.dating.no.3", "Sorry but i don't feel that way"));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.marry.yes.1"), "This is the happiest day of my life! Of course, I'll marry you.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.marry.yes.2"), "Yes, I can't imagine spending my life with anyone else.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.marry.yes.3"), "Yes of course! You can't imagine how happy I am!"));
+                            .addConversation("npc.generic.1.marry.yes.1", "This is the happiest day of my life! Of course, I'll marry you.")
+                            .addConversation("npc.generic.1.marry.yes.2", "Yes, I can't imagine spending my life with anyone else.")
+                            .addConversation("npc.generic.1.marry.yes.3", "Yes of course! You can't imagine how happy I am!"));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.marry.no.1"), "Wait, what? Marriage? I didn’t think we were even at that stage...")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.marry.no.2"), "Uh, did I miss something? We were talking about something else, right?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.marry.no.3"), "I'm sorry, but I don’t see us taking that step together."));
+                            .addConversation("npc.generic.1.marry.no.1", "Wait, what? Marriage? I didn’t think we were even at that stage...")
+                            .addConversation("npc.generic.1.marry.no.2", "Uh, did I miss something? We were talking about something else, right?")
+                            .addConversation("npc.generic.1.marry.no.3", "I'm sorry, but I don’t see us taking that step together."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.divorce.success.1"), "You’re really doing this? After everything we’ve been through?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.divorce.success.2"), "I can’t believe you! Just like that, you want to throw it all away?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.divorce.success.3"), "After everything... I see... Goodbye then..."));
+                            .addConversation("npc.generic.1.divorce.success.1", "You’re really doing this? After everything we’ve been through?")
+                            .addConversation("npc.generic.1.divorce.success.2", "I can’t believe you! Just like that, you want to throw it all away?")
+                            .addConversation("npc.generic.1.divorce.success.3", "After everything... I see... Goodbye then..."));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.divorce.fail.1"), "Are you feeling alright? We've never been married.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.divorce.fail.2"), "I think you’re a bit confused. We’re not married, remember?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.divorce.fail.3"), "Huh? Why are you giving me that?"));
+                            .addConversation("npc.generic.1.divorce.fail.1", "Are you feeling alright? We've never been married.")
+                            .addConversation("npc.generic.1.divorce.fail.2", "I think you’re a bit confused. We’re not married, remember?")
+                            .addConversation("npc.generic.1.divorce.fail.3", "Huh? Why are you giving me that?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.procreation.fail.1"), "I understand, but I’m not sure I want that right now.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.procreation.fail.2"), "It's a big decision, and I’m not comfortable with it at this time.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.procreation.fail.3"), "I don't feel like we're in the right place for that yet."));
+                            .addConversation("npc.generic.1.procreation.fail.1", "I understand, but I’m not sure I want that right now.")
+                            .addConversation("npc.generic.1.procreation.fail.2", "It's a big decision, and I’m not comfortable with it at this time.")
+                            .addConversation("npc.generic.1.procreation.fail.3", "I don't feel like we're in the right place for that yet."));
                 }));
         this.addNPCData("random_npc_2", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(trashGift, "npc.generic.2.hate", -15), "Oh... I’m sorry, but I really don’t like this.")
@@ -215,54 +217,56 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(genericAttack, meleeAndHeal, meleeAndWater),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.first.1"), "Um, welcome. I'm ... %npc%. I hope you’ll like it here.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.first.2"), "Hi... I’m not used to seeing new faces around here. I'm %npc%... nice to meet you.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.first.3"), "Oh, um, hello... I didn’t expect to meet someone new today..."));
+                            .addConversation("npc.generic.2.first.1", "Um, welcome. I'm ... %npc%. I hope you’ll like it here.")
+                            .addConversation("npc.generic.2.first.2", "Hi... I’m not used to seeing new faces around here. I'm %npc%... nice to meet you.")
+                            .addConversation("npc.generic.2.first.3", "Oh, um, hello... I didn’t expect to meet someone new today..."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.greeting.1"), "Hi %player%... Um, did you need something??")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.greeting.2"), "Oh, it’s you... I’m glad you’re back.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.greeting.3"), "Oh, hi %player% again... It’s nice to see you..."));
+                            .addConversation("npc.generic.2.greeting.1", "Hi %player%... Um, did you need something??")
+                            .addConversation("npc.generic.2.greeting.2", "Oh, it’s you... I’m glad you’re back.")
+                            .addConversation("npc.generic.2.greeting.3", "Oh, hi %player% again... It’s nice to see you..."));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.talk.1"), "Life here is... quiet. I like it, but sometimes I wish for more.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.talk.2"), "I... um, I saw some bunnies the other day. They were... very cute")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.talk.3"), "Um, I was thinking... Do you ever wonder what’s out there beyond the village?"));
+                            .addConversation("npc.generic.2.talk.1", "Life here is... quiet. I like it, but sometimes I wish for more.")
+                            .addConversation("npc.generic.2.talk.2", "I... um, I saw some bunnies the other day. They were... very cute")
+                            .addConversation("npc.generic.2.talk.3", "Um, I was thinking... Do you ever wonder what’s out there beyond the village?"));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.follow.yes.1"), "Alright... I’ll be right behind you.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.follow.yes.2"), "Sure... I’ll go with you. Just... stay close, okay?"));
+                            .addConversation("npc.generic.2.follow.yes.1", "Alright... I’ll be right behind you.")
+                            .addConversation("npc.generic.2.follow.yes.2", "Sure... I’ll go with you. Just... stay close, okay?"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.follow.no.1"), "I appreciate the offer, but... I should stay here for now.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.follow.no.2"), "I’m sorry... I can’t, not right now."));
+                            .addConversation("npc.generic.2.follow.no.1", "I appreciate the offer, but... I should stay here for now.")
+                            .addConversation("npc.generic.2.follow.no.2", "I’m sorry... I can’t, not right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.follow.stop.1"), "Ok... see you then. Be careful, okay?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.follow.stop.2"), "Alright... I’ll stay here until you need me."));
+                            .addConversation("npc.generic.2.follow.stop.1", "Ok... see you then. Be careful, okay?")
+                            .addConversation("npc.generic.2.follow.stop.2", "Alright... I’ll stay here until you need me."));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.dating.yes.1"), "I... I never thought you’d ask. Yes, let’s give it a try.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.dating.yes.2"), "Oh... I didn’t expect that. But, yes, I’d love to.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.dating.yes.3"), "R-really? Um, yes, I’d like that..."));
+                            .addConversation("npc.generic.2.dating.yes.1", "I... I never thought you’d ask. Yes, let’s give it a try.")
+                            .addConversation("npc.generic.2.dating.yes.2", "Oh... I didn’t expect that. But, yes, I’d love to.")
+                            .addConversation("npc.generic.2.dating.yes.3", "R-really? Um, yes, I’d like that..."));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.dating.no.1"), "I’m not sure I can do that... I’m sorry.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.dating.no.2"), "Oh... I’m sorry, but I can’t. I hope you’re not upset.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.dating.no.3"), "I’m... I’m really sorry, but I don’t think I’m ready for that."));
+                            .addConversation("npc.generic.2.dating.no.1", "I’m not sure I can do that... I’m sorry.")
+                            .addConversation("npc.generic.2.dating.no.2", "Oh... I’m sorry, but I can’t. I hope you’re not upset.")
+                            .addConversation("npc.generic.2.dating.no.3", "I’m... I’m really sorry, but I don’t think I’m ready for that."));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.marry.yes.1"), "Oh my... Yes, of course! I’ve dreamed of this...")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.marry.yes.2"), "I... I can’t believe you asked. Yes, I’ll be with you forever.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.marry.yes.3"), "Y-yes... I can’t believe this is happening. I’d love to marry you."));
+                            .addConversation("npc.generic.2.marry.yes.1", "Oh my... Yes, of course! I’ve dreamed of this...")
+                            .addConversation("npc.generic.2.marry.yes.2", "I... I can’t believe you asked. Yes, I’ll be with you forever.")
+                            .addConversation("npc.generic.2.marry.yes.3", "Y-yes... I can’t believe this is happening. I’d love to marry you."));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.marry.no.1"), "Oh... I wish I could, but I don’t think I can.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.marry.no.2"), "This is hard to say, but... no, I’m not ready for that.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.marry.no.3"), "I’m sorry... I can’t. I’m not ready for something so big."));
+                            .addConversation("npc.generic.2.marry.no.1", "Oh... I wish I could, but I don’t think I can.")
+                            .addConversation("npc.generic.2.marry.no.2", "This is hard to say, but... no, I’m not ready for that.")
+                            .addConversation("npc.generic.2.marry.no.3", "I’m sorry... I can’t. I’m not ready for something so big."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.divorce.success.1"), "This is really hard, but... I’ll let you go if that’s what you need.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.divorce.success.2"), "It’s... it’s over then. I’ll always remember what we had.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.divorce.success.3"), "Oh... I didn’t think this would happen. I guess... this is goodbye."));
+                            .addConversation("npc.generic.2.divorce.success.1", "This is really hard, but... I’ll let you go if that’s what you need.")
+                            .addConversation("npc.generic.2.divorce.success.2", "It’s... it’s over then. I’ll always remember what we had.")
+                            .addConversation("npc.generic.2.divorce.success.3", "Oh... I didn’t think this would happen. I guess... this is goodbye."));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.divorce.fail.1"), "I... I’m not sure what you mean. We were never together.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.divorce.fail.2"), "I think there’s a misunderstanding... We were never married.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.divorce.fail.3"), "Wait... What? We were never married..."));
+                            .addConversation("npc.generic.2.divorce.fail.1", "I... I’m not sure what you mean. We were never together.")
+                            .addConversation("npc.generic.2.divorce.fail.2", "I think there’s a misunderstanding... We were never married.")
+                            .addConversation("npc.generic.2.divorce.fail.3", "Wait... What? We were never married..."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.procreation.fail.1"), "I... I don’t think having a child is right for me, not now.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.procreation.fail.2"), "I’ve thought about it, but... I don't think now is the right time.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.2.procreation.fail.3"), "I... I’m not ready for that kind of responsibility. I’m sorry."));
+                            .addConversation("npc.generic.2.procreation.fail.1", "I... I don’t think having a child is right for me, not now.")
+                            .addConversation("npc.generic.2.procreation.fail.2", "I’ve thought about it, but... I don't think now is the right time.")
+                            .addConversation("npc.generic.2.procreation.fail.3", "I... I’m not ready for that kind of responsibility. I’m sorry."));
                 }));
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
                         .addGiftResponse("hate", new NPCData.Gift(trashGift, "npc.generic.3.hate", -15), "Uhh... what should I do with this?")
@@ -272,59 +276,61 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(genericAttack, meleeAndHeal, meleeAndWater),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.first.1"), "Zzzz... huh? Oh a new face! I... wasn't sleeping no. Anyway Im' %npc%. Nice to meet you")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.first.2"), "Oh welcome. I'm %npc%. Nice to ... yawn... meet you")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.first.3"), "Yawn... oh. Haven't seen you around here before. Hello... I'm  %npc%."));
+                            .addConversation("npc.generic.3.first.1", "Zzzz... huh? Oh a new face! I... wasn't sleeping no. Anyway Im' %npc%. Nice to meet you")
+                            .addConversation("npc.generic.3.first.2", "Oh welcome. I'm %npc%. Nice to ... yawn... meet you")
+                            .addConversation("npc.generic.3.first.3", "Yawn... oh. Haven't seen you around here before. Hello... I'm  %npc%."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.greeting.1"), "Zzzzz... ! Oh hi. How are you today %player%?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.greeting.2"), "Hey there %player%... I wish the day was over already?"));
+                            .addConversation("npc.generic.3.greeting.1", "Zzzzz... ! Oh hi. How are you today %player%?")
+                            .addConversation("npc.generic.3.greeting.2", "Hey there %player%... I wish the day was over already?"));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.1"), "Those sheep look so fluffy... I bet you can fall asleep instantly if you lie on them")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.2"), "Some people have so much energy during the day. I wonder where they get all of it from...")
+                            .addConversation("npc.generic.3.talk.1", "Those sheep look so fluffy... I bet you can fall asleep instantly if you lie on them")
+                            .addConversation("npc.generic.3.talk.2", "Some people have so much energy during the day. I wonder where they get all of it from...")
                             .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.3")
                                     .addAction(new ConversationSet.ConversationActionHolder("npc.generic.3.talk.3.answer.nice", ConversationSet.ConversationAction.ANSWER, "npc.generic.3.talk.3.response.nice", 0), "Sounds great!")
                                     .addAction(new ConversationSet.ConversationActionHolder("npc.generic.3.talk.3.answer.uhh", ConversationSet.ConversationAction.ANSWER, "npc.generic.3.talk.3.response.uhh", 0), "..."), "If I bring a pillow with me i could nap everywhere I want. What do you think?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.3.response.nice"), "Yeah I know right?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.3.response.uhh"), "Come on... You don't think so?"));
+                            .addConversation("npc.generic.3.talk.3.response.nice", "Yeah I know right?")
+                            .addConversation("npc.generic.3.talk.3.response.uhh", "Come on... You don't think so?"));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.yes.1"), "Mmm... alright, I’ll follow... just don’t expect me to keep up if we’re running.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.yes.2"), "I’m in... as long as we can stop for naps along the way.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.yes.3"), "Sure. But can we take it slowly?"));
+                            .addConversation("npc.generic.3.follow.yes.1", "Mmm... alright, I’ll follow... just don’t expect me to keep up if we’re running.")
+                            .addConversation("npc.generic.3.follow.yes.2", "I’m in... as long as we can stop for naps along the way.")
+                            .addConversation("npc.generic.3.follow.yes.3", "Sure. But can we take it slowly?"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.no.1"), "I would, but... this spot is so comfy, I might just stay put.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.no.2"), "Sorry, but my bed is calling... maybe another time?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.no.3"), "Mmm... maybe later... I think I’ll just rest here for now."));
+                            .addConversation("npc.generic.3.follow.no.1", "I would, but... this spot is so comfy, I might just stay put.")
+                            .addConversation("npc.generic.3.follow.no.2", "Sorry, but my bed is calling... maybe another time?")
+                            .addConversation("npc.generic.3.follow.no.3", "Mmm... maybe later... I think I’ll just rest here for now."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.stop.1"), "Oh... stopping already? I was just getting used to the pace...")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.follow.stop.2"), "Mmm... okay, I’ll stay here... don’t worry, I’ll find a good spot to nap."));
+                            .addConversation("npc.generic.3.follow.stop.1", "Oh... stopping already? I was just getting used to the pace...")
+                            .addConversation("npc.generic.3.follow.stop.2", "Mmm... okay, I’ll stay here... don’t worry, I’ll find a good spot to nap."));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.dating.yes.1"), "Yeah... let’s see where this goes... maybe we can nap together sometime.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.dating.yes.2"), "I’d like that... as long as we can keep it low-key and relaxed.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.dating.yes.3"), "Mmm... dating sounds nice... as long as our dates are cozy."));
+                            .addConversation("npc.generic.3.dating.yes.1", "Yeah... let’s see where this goes... maybe we can nap together sometime.")
+                            .addConversation("npc.generic.3.dating.yes.2", "I’d like that... as long as we can keep it low-key and relaxed.")
+                            .addConversation("npc.generic.3.dating.yes.3", "Mmm... dating sounds nice... as long as our dates are cozy."));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.dating.no.1"), "Dating sounds... like a lot of work... and I’m just so sleepy.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.dating.no.2"), "Mmm... I’m flattered, but... I don’t think I’m up for that kind of energy.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.dating.no.3"), "Thanks, but... I’m not sure I can keep up with all that."));
+                            .addConversation("npc.generic.3.dating.no.1", "Dating sounds... like a lot of work... and I’m just so sleepy.")
+                            .addConversation("npc.generic.3.dating.no.2", "Mmm... I’m flattered, but... I don’t think I’m up for that kind of energy.")
+                            .addConversation("npc.generic.3.dating.no.3", "Thanks, but... I’m not sure I can keep up with all that."));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.marry.yes.1"), "Marriage? Mmm... yeah, I think I’d like that... as long as we keep it chill.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.marry.yes.2"), "Sure... as long as we can take naps together... I’m in.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.marry.yes.3"), "Marriage sounds nice... as long as we can keep things laid-back."));
+                            .addConversation("npc.generic.3.marry.yes.1", "Marriage? Mmm... yeah, I think I’d like that... as long as we keep it chill.")
+                            .addConversation("npc.generic.3.marry.yes.2", "Sure... as long as we can take naps together... I’m in.")
+                            .addConversation("npc.generic.3.marry.yes.3", "Marriage sounds nice... as long as we can keep things laid-back."));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.marry.no.1"), "Marriage is... a bit too much for me right now.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.marry.no.2"), "I appreciate it, but... I’m not really ready for that step.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.marry.no.3"), "Mmm... I don’t think marriage is in the cards for me... too much commitment."));
+                            .addConversation("npc.generic.3.marry.no.1", "Marriage is... a bit too much for me right now.")
+                            .addConversation("npc.generic.3.marry.no.2", "I appreciate it, but... I’m not really ready for that step.")
+                            .addConversation("npc.generic.3.marry.no.3", "Mmm... I don’t think marriage is in the cards for me... too much commitment."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.divorce.success.1"), "Mmm... so that’s it? I guess I shouldn’t have expected more...")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.divorce.success.2"), "What? Divorce? Mmm... that’s... really frustrating, you know.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.divorce.success.3"), "Divorce? Just like that? That’s... really disappointing."));
+                            .addConversation("npc.generic.3.divorce.success.1", "Mmm... so that’s it? I guess I shouldn’t have expected more...")
+                            .addConversation("npc.generic.3.divorce.success.2", "What? Divorce? Mmm... that’s... really frustrating, you know.")
+                            .addConversation("npc.generic.3.divorce.success.3", "Divorce? Just like that? That’s... really disappointing."));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.divorce.fail.1"), "Mmm... divorce? Wait, did I sleep through the wedding?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.divorce.fail.2"), "I think you’re confused... we’re not even married, remember?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.divorce.fail.3"), "You want to divorce me? But... I’m pretty sure we’re not married."));
+                            .addConversation("npc.generic.3.divorce.fail.1", "Mmm... divorce? Wait, did I sleep through the wedding?")
+                            .addConversation("npc.generic.3.divorce.fail.2", "I think you’re confused... we’re not even married, remember?")
+                            .addConversation("npc.generic.3.divorce.fail.3", "You want to divorce me? But... I’m pretty sure we’re not married."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.procreation.fail.1"), "A kid? I’m too tired just thinking about it...")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.procreation.fail.2"), "I’m sorry, but... I don’t think I can handle that right now.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.procreation.fail.3"), "Mmm... a child? I don’t think I have the energy for that right now."));
+                            .addConversation("npc.generic.3.procreation.fail.1", "A kid? I’m too tired just thinking about it...")
+                            .addConversation("npc.generic.3.procreation.fail.2", "I’m sorry, but... I don’t think I can handle that right now.")
+                            .addConversation("npc.generic.3.procreation.fail.3", "Mmm... a child? I don’t think I have the energy for that right now."));
                 }));
 
         ResourceLocation shopMale = this.addLook(RuneCraftory.modRes("shop_owner/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("shop", new IndexRange.FirstNIndices(3)), 1))))))));
@@ -340,43 +346,45 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(genericAttack),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.first.1"), "Ah, someone new! Let me know if you need any help finding something. I manage a general store so you should find something useful there. I'm %npc% by the way.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.first.2"), "Hello there, traveler! You seem to be new here. Whats your name? ... %player% I see. I'm %npc% and I have a general store where i sell various goods there.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.first.3"), "Ah, a new face in town! Welcome. I'm %npc% and I manage a general store. You should come by if you have some time"));
+                            .addConversation("npc.shop_owner.1.first.1", "Ah, someone new! Let me know if you need any help finding something. I manage a general store so you should find something useful there. I'm %npc% by the way.")
+                            .addConversation("npc.shop_owner.1.first.2", "Hello there, traveler! You seem to be new here. Whats your name? ... %player% I see. I'm %npc% and I have a general store where i sell various goods there.")
+                            .addConversation("npc.shop_owner.1.first.3", "Ah, a new face in town! Welcome. I'm %npc% and I manage a general store. You should come by if you have some time"));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
                             .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.greeting.1").addCondition(TimeCheck.time(IntRange.range(6000, 12000)).build()), "Goood morning %player%! How are you today")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.greeting.2"), "Good day to you %player%! How are you today"));
+                            .addConversation("npc.shop_owner.1.greeting.2", "Good day to you %player%! How are you today"));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.talk.1"), "Running this store keeps me busy, but I wouldn’t trade it for anything. Seeing so many people needing this store makes me happy.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.talk.2"), "")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.talk.3"), ""));
+                            .addConversation("npc.shop_owner.1.talk.1", "Running this store keeps me busy, but I wouldn’t trade it for anything. Seeing so many people needing this store makes me happy.")
+                            .addConversation("npc.shop_owner.1.talk.2", "")
+                            .addConversation("npc.shop_owner.1.talk.3", ""));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.follow.yes.1"), "Sure. Where are we going?"));
+                            .addConversation("npc.shop_owner.1.follow.yes.1", "Sure. Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.follow.no.1"), "Ah sorry but this is not possible right now."));
+                            .addConversation("npc.shop_owner.1.follow.no.1", "Ah sorry but this is not possible right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.follow.stop.1"), "Got it. See ya then!"));
+                            .addConversation("npc.shop_owner.1.follow.stop.1", "Got it. See ya then!"));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.dating.yes.1"), "I didn’t see that coming, but yes, I’d love to.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.dating.yes.2"), "I’ve been hoping you’d ask. Yes, I’d love to."));
+                            .addConversation("npc.shop_owner.1.dating.yes.1", "I didn’t see that coming, but yes, I’d love to.")
+                            .addConversation("npc.shop_owner.1.dating.yes.2", "I’ve been hoping you’d ask. Yes, I’d love to."));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.dating.no.1"), "Sorry. But I don't see you that way.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.dating.no.2"), "I appreciate your feelings, but I don’t think it’s a good idea."));
+                            .addConversation("npc.shop_owner.1.dating.no.1", "Sorry. But I don't see you that way.")
+                            .addConversation("npc.shop_owner.1.dating.no.2", "I appreciate your feelings, but I don’t think it’s a good idea."));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.marry.yes.1"), "This is the happiest moment of my life. Yes, I’ll marry you!")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.marry.yes.2"), "This is everything I hoped for. Yes, let’s get married!"));
+                            .addConversation("npc.shop_owner.1.marry.yes.1", "This is the happiest moment of my life. Yes, I’ll marry you!")
+                            .addConversation("npc.shop_owner.1.marry.yes.2", "This is everything I hoped for. Yes, let’s get married!"));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.marry.no.1"), "I’m sorry, but I’m not ready for that kind of commitment.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.marry.no.2"), "I care about you deeply, but I’m not ready for marriage yet."));
+                            .addConversation("npc.shop_owner.1.marry.no.1", "I’m sorry, but I’m not ready for that kind of commitment.")
+                            .addConversation("npc.shop_owner.1.marry.no.2", "I care about you deeply, but I’m not ready for marriage yet."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.divorce.success.1"), "You’re just going to walk away like that? After everything?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.divorce.success.2"), "I can’t believe this. You’re just going to throw it all away?"));
+                            .addConversation("npc.shop_owner.1.divorce.success.1", "You’re just going to walk away like that? After everything?")
+                            .addConversation("npc.shop_owner.1.divorce.success.2", "I can’t believe this. You’re just going to throw it all away?"));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.divorce.fail.1"), "Wait, what? We’re not even married!")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.divorce.fail.2"), "You can’t divorce someone you were never married to, you know."));
+                            .addConversation("npc.shop_owner.1.divorce.fail.1", "Wait, what? We’re not even married!")
+                            .addConversation("npc.shop_owner.1.divorce.fail.2", "You can’t divorce someone you were never married to, you know."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.procreation.fail.1"), "Now is not the time for that. Sorry.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.procreation.fail.2"), "I think we shoul wait a bit more before that step."));
+                            .addConversation("npc.shop_owner.1.procreation.fail.1", "Now is not the time for that. Sorry.")
+                            .addConversation("npc.shop_owner.1.procreation.fail.2", "I think we shoul wait a bit more before that step."));
                 }));
 
         ResourceLocation smithMale = this.addLook(RuneCraftory.modRes("smith/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("smith", new IndexRange.FirstNIndices(3)), 1))))))));
@@ -391,40 +399,42 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(meleeAndFireball),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.first.1"), "Are you new here? I see. My name is %npc% and operate a forge here. Swing by if you want to have a good weapon."));
+                            .addConversation("npc.smith.1.first.1", "Are you new here? I see. My name is %npc% and operate a forge here. Swing by if you want to have a good weapon."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.greeting.1"), "Hello %player%. Let's do our best again today!"));
+                            .addConversation("npc.smith.1.greeting.1", "Hello %player%. Let's do our best again today!"));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.talk.1"), "Nothing beats the clanging sound of a working forge.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.talk.2"), "There are multiple different weapon types. You should try them all out to find the one that suits you the best.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.talk.3"), "Working as a blacksmith is hard but very fun.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.talk.4"), "Someday I would like to make some kind of legendary weapon."));
+                            .addConversation("npc.smith.1.talk.1", "Nothing beats the clanging sound of a working forge.")
+                            .addConversation("npc.smith.1.talk.2", "There are multiple different weapon types. You should try them all out to find the one that suits you the best.")
+                            .addConversation("npc.smith.1.talk.3", "Working as a blacksmith is hard but very fun.")
+                            .addConversation("npc.smith.1.talk.4", "Someday I would like to make some kind of legendary weapon."));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.follow.yes.1"), "Ok. Let's go then!"));
+                            .addConversation("npc.smith.1.follow.yes.1", "Ok. Let's go then!"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.follow.no.1"), "Hmm sorry but the forge calls for me."));
+                            .addConversation("npc.smith.1.follow.no.1", "Hmm sorry but the forge calls for me."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.follow.stop.1"), "Okay, bye then. Let me know if you need me again."));
+                            .addConversation("npc.smith.1.follow.stop.1", "Okay, bye then. Let me know if you need me again."));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.dating.yes.1"), "You know what? Yes, I’d like to get to know you better.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.dating.yes.2"), "I think we’d have a great time. Yes, I’m in."));
+                            .addConversation("npc.smith.1.dating.yes.1", "You know what? Yes, I’d like to get to know you better.")
+                            .addConversation("npc.smith.1.dating.yes.2", "I think we’d have a great time. Yes, I’m in."));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.dating.no.1"), "Thank you for asking, but I’m not looking for that kind of relationship.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.dating.no.2"), "I’m sorry, but I don’t think I’m ready for a relationship."));
+                            .addConversation("npc.smith.1.dating.no.1", "Thank you for asking, but I’m not looking for that kind of relationship.")
+                            .addConversation("npc.smith.1.dating.no.2", "I’m sorry, but I don’t think I’m ready for a relationship."));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.marry.yes.1"), "Yes! Let us walk the path of the forge together.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.marry.yes.2"), "I never imagined something like this would happen, but yes, I’ll marry you."));
+                            .addConversation("npc.smith.1.marry.yes.1", "Yes! Let us walk the path of the forge together.")
+                            .addConversation("npc.smith.1.marry.yes.2", "I never imagined something like this would happen, but yes, I’ll marry you."));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.marry.no.1"), "This is difficult for me, but I have to say no.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.marry.no.2"), "I’ve thought about it, but I don’t think I can say yes for now."));
+                            .addConversation("npc.smith.1.marry.no.1", "This is difficult for me, but I have to say no.")
+                            .addConversation("npc.smith.1.marry.no.2", "I’ve thought about it, but I don’t think I can say yes for now."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.divorce.success.1"), "Fine. If this is what you want, just don’t expect me to forget.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.divorce.success.2"), "If this is what you want, so be it. But don’t think I’ll forgive easily."));
+                            .addConversation("npc.smith.1.divorce.success.1", "Fine. If this is what you want, just don’t expect me to forget.")
+                            .addConversation("npc.smith.1.divorce.success.2", "If this is what you want, so be it. But don’t think I’ll forgive easily."));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.divorce.fail.1"), "Huh what is this? I don't think i have any use for this?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.divorce.fail.2"), "Uhh are you ok? We are not married or anything you know..."));
+                            .addConversation("npc.smith.1.divorce.fail.1", "Huh what is this? I don't think i have any use for this?")
+                            .addConversation("npc.smith.1.divorce.fail.2", "Uhh are you ok? We are not married or anything you know..."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.smith.1.procreation.fail.1"), "This is a huge step, and i feel like now is not the right time for that"));
+                            .addConversation("npc.smith.1.procreation.fail.1", "This is a huge step, and i feel like now is not the right time for that"));
                 }));
 
         ResourceLocation doctorMale = this.addLook(RuneCraftory.modRes("doctor/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> m.put(RuneCraftoryNPCLooks.OUTFIT.get(), new OutfitFeatureType(new TypedIndexRange(List.of(WeightedEntry.wrap(Pair.of("doctor", new IndexRange.FirstNIndices(1)), 1))))))));
@@ -439,35 +449,37 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(meleeAndFireball),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.first.1"), "Hello! Who are you?\n...\nI see. I'm %npc% and I run a clinic here. If you ever need help feel free to drop by there."));
+                            .addConversation("npc.doctor.1.first.1", "Hello! Who are you?\n...\nI see. I'm %npc% and I run a clinic here. If you ever need help feel free to drop by there."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.greeting.1"), "Good day %player%. How are you today?"));
+                            .addConversation("npc.doctor.1.greeting.1", "Good day %player%. How are you today?"));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.talk.1"), "Medicine isn’t just a job to me; it’s a passion. Every patient has a story, and sometimes, understanding that story is the key to their treatment.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.talk.2"), "Whenever you have a status condition you let me check that out. They can be quite detrimental. Though i heard a good night's rest also helps with that.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.talk.3"), "Various herbs and grass are very useful in medicine")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.talk.4"), "Being a doctor lots of people come to me for a variety of problems. Helping them with it is my duty."));
+                            .addConversation("npc.doctor.1.talk.1", "Medicine isn’t just a job to me; it’s a passion. Every patient has a story, and sometimes, understanding that story is the key to their treatment.")
+                            .addConversation("npc.doctor.1.talk.2", "Whenever you have a status condition you let me check that out. They can be quite detrimental. Though i heard a good night's rest also helps with that.")
+                            .addConversation("npc.doctor.1.talk.3", "Various herbs and grass are very useful in medicine")
+                            .addConversation("npc.doctor.1.talk.4", "Being a doctor lots of people come to me for a variety of problems. Helping them with it is my duty."));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.follow.yes.1"), "Sure. But don't overexert yourself!"));
+                            .addConversation("npc.doctor.1.follow.yes.1", "Sure. But don't overexert yourself!"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.follow.no.1"), "Ah sorry but I'm quite busy right now."));
+                            .addConversation("npc.doctor.1.follow.no.1", "Ah sorry but I'm quite busy right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.follow.stop.1"), "Ok. Take care of yourself!"));
+                            .addConversation("npc.doctor.1.follow.stop.1", "Ok. Take care of yourself!"));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.dating.yes.1"), "That sounds wonderful. I’d love to.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.dating.yes.2"), "I’d like that. Let’s see where this goes."));
+                            .addConversation("npc.doctor.1.dating.yes.1", "That sounds wonderful. I’d love to.")
+                            .addConversation("npc.doctor.1.dating.yes.2", "I’d like that. Let’s see where this goes."));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.dating.no.1"), "I’m flattered, but I don't see us in that way."));
+                            .addConversation("npc.doctor.1.dating.no.1", "I’m flattered, but I don't see us in that way."));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.marry.yes.1"), "Wow. I would've never expected that I would walk down this path. Yes lets do it!"));
+                            .addConversation("npc.doctor.1.marry.yes.1", "Wow. I would've never expected that I would walk down this path. Yes lets do it!"));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.marry.no.1"), "That’s a big step, and I don’t think I’m ready to take it."));
+                            .addConversation("npc.doctor.1.marry.no.1", "That’s a big step, and I don’t think I’m ready to take it."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.divorce.success.1"), "I... was never expecting this. Especially from you..."));
+                            .addConversation("npc.doctor.1.divorce.success.1", "I... was never expecting this. Especially from you..."));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.divorce.fail.1"), "Hmm... why are you giving me this?"));
+                            .addConversation("npc.doctor.1.divorce.fail.1", "Hmm... why are you giving me this?"));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.doctor.1.procreation.fail.1"), "We should take this more slowly and not rush things."));
+                            .addConversation("npc.doctor.1.procreation.fail.1", "We should take this more slowly and not rush things."));
                 }));
 
         ResourceLocation cookMale = this.addLook(RuneCraftory.modRes("cook/male_1"), new NPCLook(NPCData.Gender.MALE, null, 0, defaultNPCFeatures(false, m -> {
@@ -488,38 +500,40 @@ public class NPCDataGen extends NPCDataProvider {
                         .withCombatActions(meleeAndFireball),
                 of(m -> {
                     m.put(ConversationContext.FIRST_TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.first.1"), "I don’t think we’ve met. I’m %npc%, the chef around here. Making sure folks are well-fed is what I do.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.first.2"), "Ah, a new face! I’m the cook here. If you are hungry you should swing by. I run a restaurant here serving various delicous dishes."));
+                            .addConversation("npc.cook.1.first.1", "I don’t think we’ve met. I’m %npc%, the chef around here. Making sure folks are well-fed is what I do.")
+                            .addConversation("npc.cook.1.first.2", "Ah, a new face! I’m the cook here. If you are hungry you should swing by. I run a restaurant here serving various delicous dishes."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.greeting.1"), "Good to see you %player%! What can I cook up for you today?"));
+                            .addConversation("npc.cook.1.greeting.1", "Good to see you %player%! What can I cook up for you today?"));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.talk.1"), "You know, people say cooking is just a job, but for me, it’s a passion. There's something magical about turning simple ingredients into something that brings folks together.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.talk.2"), "You should try out cooking too. Sometimes a homecooked meal can beat any other dishes. And who knows? Maybe it will awaken the culinary flame in you too.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.talk.3"), "Seeing people eat the food I cook gives me an indescribable feeling of satisfaction."));
+                            .addConversation("npc.cook.1.talk.1", "You know, people say cooking is just a job, but for me, it’s a passion. There's something magical about turning simple ingredients into something that brings folks together.")
+                            .addConversation("npc.cook.1.talk.2", "You should try out cooking too. Sometimes a homecooked meal can beat any other dishes. And who knows? Maybe it will awaken the culinary flame in you too.")
+                            .addConversation("npc.cook.1.talk.3", "Seeing people eat the food I cook gives me an indescribable feeling of satisfaction."));
+                    m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
+                            .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.follow.yes.1"), "Sure. Where are we going?"));
+                            .addConversation("npc.cook.1.follow.yes.1", "Sure. Where are we going?"));
                     m.put(ConversationContext.FOLLOW_NO, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.follow.no.1"), "Sorry but I have a lot on my plate right now."));
+                            .addConversation("npc.cook.1.follow.no.1", "Sorry but I have a lot on my plate right now."));
                     m.put(ConversationContext.FOLLOW_STOP, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.follow.stop.1"), "Stopping here? Alright, I’ll head back to the kitchen then."));
+                            .addConversation("npc.cook.1.follow.stop.1", "Stopping here? Alright, I’ll head back to the kitchen then."));
                     m.put(ConversationContext.DATING_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.dating.yes.1"), "You know, I’ve always had a soft spot for someone who appreciates good food. Let’s give it a shot!"));
+                            .addConversation("npc.cook.1.dating.yes.1", "You know, I’ve always had a soft spot for someone who appreciates good food. Let’s give it a shot!"));
                     m.put(ConversationContext.DATING_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.dating.no.1"), "I’m honored you’d ask, but my passion for cooking leaves little room for romance."));
+                            .addConversation("npc.cook.1.dating.no.1", "I’m honored you’d ask, but my passion for cooking leaves little room for romance."));
                     m.put(ConversationContext.MARRIAGE_ACCEPT, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.marry.yes.1"), "Marriage? Wow... I never thought I’d find someone who loves my cooking and me! Yes, let’s get married.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.marry.yes.2"), "This is the sweetest proposal I’ve ever had—yes, I’ll marry you, and I promise to keep your plate full of love."));
+                            .addConversation("npc.cook.1.marry.yes.1", "Marriage? Wow... I never thought I’d find someone who loves my cooking and me! Yes, let’s get married.")
+                            .addConversation("npc.cook.1.marry.yes.2", "This is the sweetest proposal I’ve ever had—yes, I’ll marry you, and I promise to keep your plate full of love."));
                     m.put(ConversationContext.MARRIAGE_DENY, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.marry.no.1"), "You’re wonderful, but I’m not ready to commit to marriage yet. Let’s just keep enjoying each other’s company—and my cooking.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.marry.no.2"), "Marriage is a big step, and I’m not sure I’m ready to share my kitchen—or my life—that way."));
+                            .addConversation("npc.cook.1.marry.no.1", "You’re wonderful, but I’m not ready to commit to marriage yet. Let’s just keep enjoying each other’s company—and my cooking.")
+                            .addConversation("npc.cook.1.marry.no.2", "Marriage is a big step, and I’m not sure I’m ready to share my kitchen—or my life—that way."));
                     m.put(ConversationContext.DIVORCE, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.divorce.success.1"), "You want to divorce me? After everything we’ve shared—meals, memories, and more? I can’t believe this!")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.divorce.success.2"), "So you’ve had your fill and now you’re done with me? I never thought it would come to this."));
+                            .addConversation("npc.cook.1.divorce.success.1", "You want to divorce me? After everything we’ve shared—meals, memories, and more? I can’t believe this!")
+                            .addConversation("npc.cook.1.divorce.success.2", "So you’ve had your fill and now you’re done with me? I never thought it would come to this."));
                     m.put(ConversationContext.DIVORCE_ERROR, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.divorce.fail.1"), "Divorce? You must have eaten something that’s gone bad—we’re not even married!")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.divorce.fail.2"), "Wait, divorce? But we never got married! Maybe you need to spend more time in the kitchen clearing your head."));
+                            .addConversation("npc.cook.1.divorce.fail.1", "Divorce? You must have eaten something that’s gone bad—we’re not even married!")
+                            .addConversation("npc.cook.1.divorce.fail.2", "Wait, divorce? But we never got married! Maybe you need to spend more time in the kitchen clearing your head."));
                     m.put(ConversationContext.PROCREATION_COOLDOWN, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.cook.1.procreation.fail.1"), "I’ve thought about it, but I don’t think kids are in the cards for me right now."));
+                            .addConversation("npc.cook.1.procreation.fail.1", "I’ve thought about it, but I don’t think kids are in the cards for me right now."));
                 }));
 
         //Test data using all possible fields
@@ -557,9 +571,11 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation(new NPCData.Conversation.Builder("npc.test.all.talk.2"), "Test"));
                 }),
                 Pair.of(RuneCraftory.modRes("test_look"), new NPCData.NPCLook(NPCData.Gender.UNDEFINED, "Flemmli97", 0, Map.of())), Map.of());*/
+
+        this.questGen.questResponses.forEach((id, conv) -> this.addConversation(id, conv.getSecond(), conv.getFirst()));
     }
 
-    private static <T extends NPCFeature> Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> defaultNPCFeatures(boolean female, Consumer<FeatureBuilderHelper> cons) {
+    private static Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> defaultNPCFeatures(boolean female, Consumer<FeatureBuilderHelper> cons) {
         Map<NPCFeatureType<?>, NPCFeature.NPCFeatureHolder<?>> map = new LinkedHashMap<>();
         // Just for generic sanity check
         FeatureBuilderHelper builder = map::put;
@@ -585,11 +601,6 @@ public class NPCDataGen extends NPCDataProvider {
         }
         cons.accept(builder);
         return map;
-    }
-
-    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations) {
-        this.addNPCData(id, data, conversations,
-                this.questGen.questResponses.getOrDefault(ResourceLocation.fromNamespaceAndPath(this.modid, id), Map.of()));
     }
 
     //For consistent order

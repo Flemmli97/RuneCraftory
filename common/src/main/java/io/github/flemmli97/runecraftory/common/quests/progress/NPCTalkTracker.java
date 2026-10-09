@@ -6,7 +6,7 @@ import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.simplequests_api.impls.progression.ProgressionTrackerBase;
 import io.github.flemmli97.simplequests_api.player.ProgressionTrackerKey;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
-import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +32,7 @@ public class NPCTalkTracker extends ProgressionTrackerBase<NPCEntity, NPCTalkTas
 
     @Override
     public Tag save() {
-        return EndTag.INSTANCE;
+        return ByteTag.ZERO;
     }
 
     @Override

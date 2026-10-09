@@ -1,16 +1,51 @@
 {
-  "category": "runecraftory:quests",
-  "name": "runecraftory.quest.tame_monster",
-  "description": "runecraftory.quest.tame_monster.description",
-  "repeat_delay": -1,
-  "visibility": "NEVER",
-  "target_npc_ids": [
-    "runecraftory:random_npc_1"
-  ],
   "quests": [
-    "runecraftory:tame_monster_ref_0",
-    "runecraftory:tame_monster_ref_1"
+    {
+      "quest": {
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        },
+        "name": "",
+        "loot_table": "minecraft:empty",
+        "type": "simplequests_api:quest"
+      },
+      "dialogues": {
+        "start_id": "runecraftory:quest/tame_monster/start_0"
+      }
+    },
+    {
+      "quest": {
+        "tasks": {
+          "0": {
+            "description": "",
+            "predicates": [
+              {
+                "description": "runecraftory.quest.tame_monster.sub.1.task.0",
+                "value": {}
+              }
+            ],
+            "amount": 1.0,
+            "id": "runecraftory:taming"
+          }
+        },
+        "name": "",
+        "loot_table": "minecraft:empty",
+        "type": "simplequests_api:quest"
+      },
+      "dialogues": {
+        "active_id": "runecraftory:quest/tame_monster/active_1",
+        "end_id": "runecraftory:quest/tame_monster/end_1"
+      }
+    }
   ],
   "loot_table": "runecraftory:tame_monster",
+  "repeat_delay": -1,
+  "category": "runecraftory:quests",
+  "name": "runecraftory.quest.tame_monster",
+  "quest_givers": [
+    "runecraftory:random_npc_1"
+  ],
   "type": "runecraftory:npc_quest"
 }

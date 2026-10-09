@@ -1,16 +1,56 @@
 {
-  "category": "runecraftory:quests",
-  "name": "runecraftory.quest.mining",
-  "description": "runecraftory.quest.mining.description",
-  "repeat_delay": -1,
-  "visibility": "NEVER",
-  "target_npc_ids": [
-    "runecraftory:smith/1"
-  ],
   "quests": [
-    "runecraftory:mining_ref_0",
-    "runecraftory:mining_ref_1"
+    {
+      "quest": {
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        },
+        "name": "",
+        "loot_table": "minecraft:empty",
+        "type": "simplequests_api:quest"
+      },
+      "dialogues": {
+        "start_id": "runecraftory:quest/mining/start_0"
+      }
+    },
+    {
+      "quest": {
+        "tasks": {
+          "0": {
+            "block_predicates": [
+              {
+                "description": "runecraftory.quest.mining.sub.1.task.0",
+                "value": {
+                  "blocks": "#c:ores"
+                }
+              }
+            ],
+            "amount": 10.0,
+            "consume": false,
+            "use": false,
+            "allow_dupes": true,
+            "description": "",
+            "id": "simplequests_api:block_interact"
+          }
+        },
+        "name": "",
+        "loot_table": "minecraft:empty",
+        "type": "simplequests_api:quest"
+      },
+      "dialogues": {
+        "active_id": "runecraftory:quest/mining/active_1",
+        "end_id": "runecraftory:quest/mining/end_1"
+      }
+    }
   ],
   "loot_table": "runecraftory:mining",
+  "repeat_delay": -1,
+  "category": "runecraftory:quests",
+  "name": "runecraftory.quest.mining",
+  "quest_givers": [
+    "runecraftory:smith/1"
+  ],
   "type": "runecraftory:npc_quest"
 }

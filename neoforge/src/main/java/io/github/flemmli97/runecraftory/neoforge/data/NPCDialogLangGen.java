@@ -6,9 +6,10 @@ import io.github.flemmli97.runecraftory.client.NPCDialogueLanguageManager;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -21,7 +22,7 @@ public class NPCDialogLangGen implements DataProvider {
     private final String locale;
     private final NPCDataGen npcDataGen;
 
-    public NPCDialogLangGen(PackOutput packOutput, @Nullable NPCDataGen npcDataGen) {
+    public NPCDialogLangGen(PackOutput packOutput, NPCDataGen npcDataGen) {
         this.packOutput = packOutput;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
@@ -30,15 +31,13 @@ public class NPCDialogLangGen implements DataProvider {
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-        if (this.npcDataGen != null) {
-            return CompletableFuture.allOf(this.npcDataGen.dialogueTranslations.entrySet().stream().map(entry -> {
-                Path path = this.packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.modid + "/" + NPCDialogueLanguageManager.DIRECTORY + "/" + entry.getKey() + "/" + this.locale + ".json");
-                JsonObject json = new JsonObject();
-                entry.getValue().forEach(json::addProperty);
-                return DataProvider.saveStable(cache, json, path);
-            }).toArray(CompletableFuture[]::new));
-        }
-        return CompletableFuture.allOf();
+        Map<String, Map<String, String>> translations = new HashMap<>(this.npcDataGen.dialogueTranslations);
+        return CompletableFuture.allOf(translations.entrySet().stream().map(entry -> {
+            Path path = this.packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.modid + "/" + NPCDialogueLanguageManager.DIRECTORY + "/" + entry.getKey() + "/" + this.locale + ".json");
+            JsonObject json = new JsonObject();
+            entry.getValue().forEach(json::addProperty);
+            return DataProvider.saveStable(cache, json, path);
+        }).toArray(CompletableFuture[]::new));
     }
 
     @Override

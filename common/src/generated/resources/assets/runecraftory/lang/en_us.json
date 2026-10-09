@@ -1705,6 +1705,7 @@
   "runecraftory.gui.npc.bed.no": "I don't have a bed",
   "runecraftory.gui.npc.distance": "Stay back a bit",
   "runecraftory.gui.npc.follow": "Follow me",
+  "runecraftory.gui.npc.follow_talk": "Talk",
   "runecraftory.gui.npc.id": "Npc data-id",
   "runecraftory.gui.npc.parent": "Parent:",
   "runecraftory.gui.npc.parents": "Parents:",

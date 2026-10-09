@@ -344,6 +344,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.date.format", "%s %s");
 
         this.add(C2SNPCInteraction.Action.TALK.translation, "Talk");
+        this.add(C2SNPCInteraction.Action.FOLLOW_TALK.translation, "Talk");
         this.add(C2SNPCInteraction.Action.FOLLOW.translation, "Follow me");
         this.add(C2SNPCInteraction.Action.FOLLOWDISTANCE.translation, "Stay back a bit");
         this.add(C2SNPCInteraction.Action.STAY.translation, "Stay here");

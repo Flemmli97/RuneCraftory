@@ -23,6 +23,7 @@
     "runecraftory:first": "runecraftory:doctor/1/first",
     "runecraftory:follow_no": "runecraftory:doctor/1/follow_no",
     "runecraftory:follow_stop": "runecraftory:doctor/1/follow_stop",
+    "runecraftory:follow_talk": "runecraftory:doctor/1/follow_talk",
     "runecraftory:follow_yes": "runecraftory:doctor/1/follow_yes",
     "runecraftory:greeting": "runecraftory:doctor/1/greeting",
     "runecraftory:marriage_accept": "runecraftory:doctor/1/marriage_accept",
@@ -44,12 +45,9 @@
   "profession": [
     "runecraftory:doctor"
   ],
-  "quest_handler": {
-    "required_quests": [],
-    "responses": {}
-  },
   "relation": {
     "relation_ship_state": "DEFAULT"
   },
+  "required_quests": [],
   "weight": 50
 }

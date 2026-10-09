@@ -3,8 +3,10 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.quests.QuestData;
 import io.github.flemmli97.tenshilib.common.attachment.AttachmentType;
 import io.github.flemmli97.tenshilib.loader.registry.AttachmentRegister;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -17,4 +19,6 @@ public class RunecraftoryAttachments {
     public static final Supplier<AttachmentType<LivingEntity, EntityData>> ENTITY_DATA = ATTACHMENTS.register("entity_data", AttachmentType.builder(EntityData::new));
     public static final Supplier<AttachmentType<Player, PlayerData>> PLAYER_DATA = ATTACHMENTS.register("player_data", AttachmentType.<Player, PlayerData>builder(PlayerData::new)
             .transferHandler(((from, targetHolder, wasDead) -> new PlayerData(targetHolder, from, wasDead))));
+    public static final Supplier<AttachmentType<ServerPlayer, QuestData>> PLAYER_QUEST_DATA = ATTACHMENTS.register("player_quest_data", AttachmentType.<ServerPlayer, QuestData>builder(QuestData::new)
+            .transferHandler((from, target, wasDead) -> new QuestData(target).clone(from)));
 }

@@ -24,7 +24,7 @@ public record NPCLook(NPCData.Gender gender, @Nullable String playerSkin, int we
                       List<ConditionalFeatures> conditionalFeatures) {
 
     public static final ReloadableHolder<NPCLook> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_look"),
-            new NPCLook(NPCData.Gender.MALE, null, 0, Map.of(), List.of()));
+            new NPCLook(NPCData.Gender.MALE, "steve", 0, Map.of(), List.of()));
 
     public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin())),

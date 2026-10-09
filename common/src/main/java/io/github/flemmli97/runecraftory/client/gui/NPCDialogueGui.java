@@ -1,13 +1,15 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
+import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.client.gui.widgets.DialogueOptionButton;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.PlaceHolderComponent;
 import io.github.flemmli97.runecraftory.common.network.C2SDialogueAction;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,15 @@ import java.util.Map;
 public class NPCDialogueGui<T extends NPCEntity> extends Screen {
 
     private static final ResourceLocation TEXTURE = RuneCraftory.modRes("hud/npc_dialogue");
+
+    /**
+     * Dummy data
+     */
+    private static final List<ConversationSet.NetworkConversation> TEST_CONVERSATION = List.of(
+            new ConversationSet.NetworkConversation(Component.literal("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.")),
+            new ConversationSet.NetworkConversation(Component.literal("Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.")),
+            new ConversationSet.NetworkConversation(Component.literal("Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat."))
+    );
 
     public static final int MAX_WIDTH = 200;
     public static final int MAX_HEIGHT = 73;
@@ -36,18 +48,16 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
     protected int leftPos;
     protected int topPos;
 
-    private int pageIndex, lineProgress, textProgress;
+    private int conversationIndex, pageIndex, lineProgress, textProgress;
 
     protected final T entity;
 
-    private ConversationContext convCtx;
-    private String conversationID;
-    private List<ConversationLine> conversation;
+    private List<List<ConversationLine>> conversation;
     private Map<String, Component> replacements = Map.of();
-    private List<Component> actions;
+    private Int2ObjectMap<ConversationSet.NetworkActions> actions;
 
     private final List<DialogueOptionButton> buttons = new ArrayList<>();
-    private boolean reset, calculateButtonVisiblity, removed;
+    private boolean reset, calculateButtonVisibility, removed;
 
     public NPCDialogueGui(T entity) {
         super(entity.getDisplayName());
@@ -77,19 +87,19 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
             this.buttons();
             this.reset = false;
         }
-        if (this.calculateButtonVisiblity) {
+        if (this.calculateButtonVisibility) {
             if (this.buttonsVisible())
                 this.showAllButtons();
-            this.calculateButtonVisiblity = false;
+            this.calculateButtonVisibility = false;
         }
         graphics.setColor(1, 1, 1, 0.85f);
         graphics.blitSprite(TEXTURE, this.leftPos, this.topPos, MAX_WIDTH, MAX_HEIGHT);
         graphics.setColor(1, 1, 1, 1);
-        int lines = Math.min(this.conversation.size(), (this.pageIndex + 1) * LINES_PER_PAGE);
+        int lines = Math.min(this.getCurrentLines().size(), (this.pageIndex + 1) * LINES_PER_PAGE);
         for (int i = this.pageIndex * LINES_PER_PAGE; i < lines; i++) {
             if (i > this.lineProgress)
                 continue;
-            ConversationLine txt = this.conversation.get(i);
+            ConversationLine txt = this.getCurrentLines().get(i);
             FormattedCharSequence txtRender = this.lineProgress == i ? Language.getInstance().getVisualOrder(this.font.substrByWidth(txt.raw(), this.textProgress))
                     : txt.txt();
             graphics.drawString(this.font, txtRender, this.leftPos + BORDER_SIZE, this.topPos + BORDER_SIZE + 13 * (i % LINES_PER_PAGE), 0xffffff, false);
@@ -101,16 +111,18 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
         this.buttons.clear();
         boolean visible = this.buttonsVisible();
         int y = 0;
-        for (int i = this.actions.size() - 1; i >= 0; i--) {
-            int actionIdx = i;
-            DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(this.actions.get(i), this.replacements), b -> {
-                if (this.convCtx != null && this.conversationID != null)
-                    LoaderNetwork.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), this.convCtx, this.conversationID, actionIdx));
-            });
-            btn.visible = visible;
-            this.buttons.add(btn);
-            this.addRenderableWidget(btn);
-            y -= btn.getHeight() + 8;
+        ConversationSet.NetworkActions actionsHolder = this.actions.get(this.conversationIndex);
+        if (actionsHolder != null) {
+            List<Component> actions = actionsHolder.actions();
+            for (int i = actions.size() - 1; i >= 0; i--) {
+                int actionIdx = i;
+                DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(actions.get(i), this.replacements),
+                        b -> LoaderNetwork.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), actionsHolder.setID(), actionsHolder.conversationID(), actionIdx)));
+                btn.visible = visible;
+                this.buttons.add(btn);
+                this.addRenderableWidget(btn);
+                y -= btn.getHeight() + 8;
+            }
         }
     }
 
@@ -120,10 +132,11 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
         int max = this.maxCurrentLineIndex();
         if (this.lineProgress <= max) {
             this.textProgress += 4;
-            ConversationLine txt = this.conversation.get(this.lineProgress);
+            List<NPCDialogueGui.ConversationLine> currentLines = this.getCurrentLines();
+            ConversationLine txt = currentLines.get(this.lineProgress);
             if (this.textProgress > txt.width()) {
                 this.lineProgress++;
-                if (this.lineProgress > this.conversation.size() - 1)
+                if (this.lineProgress > currentLines.size() - 1)
                     this.showAllButtons();
                 this.textProgress = 0;
             }
@@ -137,14 +150,13 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        int id = this.maxCurrentLineIndex();
-        if (this.lineProgress < id || (this.lineProgress / LINES_PER_PAGE == this.pageIndex && this.lineProgress < this.conversation.size() && this.textProgress < this.conversation.get(this.lineProgress).width())) {
-            this.lineProgress = id + 1;
-            this.calculateButtonVisiblity = true;
-        } else if (this.pageIndex + 1 <= (this.conversation.size() - 1) / LINES_PER_PAGE) {
-            this.pageIndex += 1;
-            this.textProgress = 0;
-            this.calculateButtonVisiblity = true;
+        if (this.isWriting()) {
+            this.lineProgress = this.maxCurrentLineIndex() + 1;
+            this.calculateButtonVisibility = true;
+        } else if (this.pageIndex + 1 <= (this.getCurrentLines().size() - 1) / LINES_PER_PAGE) {
+            this.advancePage();
+        } else if (this.conversationIndex < this.conversation.size() - 1) {
+            this.advanceConversation();
         } else if (this.buttons.isEmpty()) {
             this.removed = true;
         }
@@ -156,11 +168,44 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
     }
 
     private int maxCurrentLineIndex() {
-        return Math.min((LINES_PER_PAGE - 1) + (this.pageIndex * LINES_PER_PAGE), this.conversation.size() - 1);
+        return Math.min((LINES_PER_PAGE - 1) + (this.pageIndex * LINES_PER_PAGE), this.getCurrentLines().size() - 1);
     }
 
     private boolean buttonsVisible() {
-        return this.lineProgress >= this.conversation.size() - 1;
+        return this.lineProgress >= this.getCurrentLines().size() - 1;
+    }
+
+    private List<NPCDialogueGui.ConversationLine> getCurrentLines() {
+        return this.conversation.get(Mth.clamp(this.conversationIndex, 0, this.conversation.size() - 1));
+    }
+
+    private boolean isWriting() {
+        int max = this.maxCurrentLineIndex();
+        List<ConversationLine> currentLines = this.getCurrentLines();
+        return this.lineProgress < max || (this.lineProgress <= max && this.textProgress < currentLines.get(this.lineProgress).width());
+    }
+
+    private void advancePage() {
+        this.pageIndex += 1;
+        this.textProgress = 0;
+        this.calculateButtonVisibility = true;
+    }
+
+    private void advanceConversation() {
+        this.conversationIndex += 1;
+        this.lineProgress = 0;
+        this.textProgress = 0;
+        this.pageIndex = 0;
+        this.calculateButtonVisibility = true;
+    }
+
+    private void resetData() {
+        this.conversationIndex = 0;
+        this.lineProgress = 0;
+        this.textProgress = 0;
+        this.pageIndex = 0;
+        this.reset = true;
+        this.calculateButtonVisibility = true;
     }
 
     @Override
@@ -168,27 +213,38 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
         super.removed();
         Minecraft.getInstance().options.keyUse.consumeClick();
         Minecraft.getInstance().options.keyUse.setDown(false);
-        LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), this.convCtx == null ? C2SNPCInteraction.Action.CLOSE_QUEST : C2SNPCInteraction.Action.CLOSE, this.conversationID));
-        if (this.convCtx == ConversationContext.GREETING) {
-            LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.TALK));
+        if (this.conversationIndex < this.conversation.size() - 1) {
+            this.advanceConversation();
+            Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(this));
+        } else {
+            LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.CLOSE_DIALOGUE));
         }
     }
 
-    public void updateConversation(Minecraft mc, ConversationContext convCtx, String conversationID, Component conversation, Map<String, Component> data, List<Component> actions) {
-        conversation = PlaceHolderComponent.parseDialogueComponent(conversation, data);
-        this.conversation = mc.font.getSplitter().splitLines(conversation, LINE_WIDTH, conversation.getStyle())
-                .stream().map(txt -> new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt))).toList();
+    public void updateConversation(Minecraft mc, List<ConversationSet.NetworkConversation> conversations, Map<String, Component> data) {
+        List<List<ConversationLine>> lines = new ArrayList<>();
+        Int2ObjectMap<ConversationSet.NetworkActions> actions = new Int2ObjectOpenHashMap<>();
+        for (int i = 0; i < conversations.size(); i++) {
+            ConversationSet.NetworkConversation conversation = conversations.get(i);
+            Component text = PlaceHolderComponent.parseDialogueComponent(conversation.text(), data);
+            List<ConversationLine> pageLines = new ArrayList<>();
+            for (FormattedText txt : mc.font.getSplitter().splitLines(text, LINE_WIDTH, text.getStyle())) {
+                // Ignore empty lines at page start
+                if (i % LINES_PER_PAGE == 0 && txt.getString().trim().isEmpty()) {
+                    continue;
+                }
+                pageLines.add(new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt)));
+            }
+            lines.add(pageLines);
+            int idx = i;
+            conversation.action().ifPresent(act -> actions.put(idx, act));
+        }
+        this.conversation = lines;
         this.actions = actions;
-        this.convCtx = convCtx;
-        this.conversationID = conversationID;
         this.replacements = data;
-        this.lineProgress = 0;
-        this.textProgress = 0;
-        this.pageIndex = 0;
-        this.reset = true;
+        this.resetData();
     }
 
     record ConversationLine(int width, FormattedText raw, FormattedCharSequence txt) {
-
     }
 }

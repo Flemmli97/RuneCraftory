@@ -5,13 +5,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
-import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
+import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestDefinition;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
-import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
-import io.github.flemmli97.simplequests_api.quest.QuestBase;
-import io.github.flemmli97.simplequests_api.quest.entry.QuestEntryKey;
+import io.github.flemmli97.simplequests_api.quest.ResolvedQuest;
 import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestTaskKey;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -19,34 +18,54 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.UUID;
 
 public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
-    public static final QuestEntryKey<NPCTalkTask> ID = new QuestEntryKey<>(RuneCraftory.modRes("npc_talk"));
+    public static final QuestTaskKey<NPCTalkTask> ID = new QuestTaskKey<>(RuneCraftory.modRes("npc_talk"));
     public static final MapCodec<NPCTalkTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npc_id").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
+                    ResourceLocation.CODEC.optionalFieldOf("dialogue").forGetter(d -> Optional.ofNullable(d.dialogue)),
                     EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
-            ).apply(instance, (npcId, predicate) -> new NPCTalkTask(npcId.orElse(null), predicate.orElse(null))));
+            ).apply(instance, (npcId, dialogue, predicate) ->
+                    new NPCTalkTask(npcId.orElse(null), dialogue.orElse(null), predicate.orElse(null))));
 
-    // Unused atm
+    @Nullable
     private final ResourceLocation targetNPCId;
+    @Nullable
+    private final ResourceLocation dialogue;
 
     private final EntityPredicate predicate;
 
-    public NPCTalkTask(ResourceLocation generic) {
-        this(generic, null);
+    public NPCTalkTask() {
+        this(null, null, null);
     }
 
-    protected NPCTalkTask(ResourceLocation generic, EntityPredicate predicate) {
+    public NPCTalkTask(ResourceLocation generic) {
+        this(generic, null, null);
+    }
+
+    public NPCTalkTask(ResourceLocation generic, @Nullable ResourceLocation dialogue) {
+        this(generic, dialogue, null);
+    }
+
+    protected NPCTalkTask(@Nullable ResourceLocation generic, @Nullable ResourceLocation dialogue, EntityPredicate predicate) {
         this.targetNPCId = generic;
+        this.dialogue = dialogue;
         this.predicate = predicate;
     }
 
+    public ResourceLocation targetNPCId() {
+        return this.targetNPCId;
+    }
+
     @Override
-    public QuestEntryKey<NPCTalkTask> getId() {
+    public QuestTaskKey<NPCTalkTask> getId() {
         return ID;
     }
 
@@ -56,9 +75,14 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
     }
 
     @Override
-    public NPCTalkTask.NPCTalkResolved resolve(PlayerQuestData data, QuestProgress progress, QuestBase quest) {
-        if (progress.getQuest() instanceof NPCQuest npcQuest)
-            return new NPCTalkTask.NPCTalkResolved(npcQuest.getNpcUuid(), this.predicate);
+    public NPCTalkTask.NPCTalkResolved resolve(QuestProgress progress, ResolvedQuest quest) {
+        if (progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest npcQuest) {
+            UUID target = this.targetNPCId == null ? npcQuest.getQuestGiverUUID() : npcQuest.relevantNpcs().get(this.targetNPCId);
+            if (target == null) {
+                return null;
+            }
+            return new NPCTalkTask.NPCTalkResolved(target, this.dialogue, this.predicate);
+        }
         return null;
     }
 
@@ -66,15 +90,19 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
 
         public static final MapCodec<NPCTalkResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(Codec.STRING.fieldOf("target_npc").xmap(UUID::fromString, UUID::toString).forGetter(d -> d.targetNPC),
+                        ResourceLocation.CODEC.optionalFieldOf("dialogue").forGetter(d -> Optional.ofNullable(d.dialogue)),
                         EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
-                ).apply(instance, (target, predicate) -> new NPCTalkResolved(target, predicate.orElse(null))));
+                ).apply(instance, (target, dialogue, predicate) -> new NPCTalkResolved(target, dialogue.orElse(null), predicate.orElse(null))));
 
         private final UUID targetNPC;
+        @Nullable
+        private final ResourceLocation dialogue;
         private final EntityPredicate predicate;
-        private NPCEntity npc;
+        private WeakReference<NPCEntity> npc;
 
-        public NPCTalkResolved(UUID targetNPC, EntityPredicate predicate) {
+        public NPCTalkResolved(UUID targetNPC, @Nullable ResourceLocation dialogue, EntityPredicate predicate) {
             this.targetNPC = targetNPC;
+            this.dialogue = dialogue;
             this.predicate = predicate;
         }
 
@@ -84,24 +112,33 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved> {
         }
 
         @Override
-        public QuestEntryKey<NPCTalkTask> getId() {
+        public QuestTaskKey<NPCTalkTask> getId() {
             return ID;
+        }
+
+        @Nullable
+        public NPCEntity getNpc(Level level) {
+            NPCEntity npc = this.npc == null ? null : this.npc.get();
+            if (npc == null || !npc.isAlive()) {
+                npc = EntityUtils.findFromUUID(NPCEntity.class, level, this.targetNPC);
+                this.npc = new WeakReference<>(npc);
+            }
+            return npc;
+        }
+
+        @Nullable
+        public ResourceLocation dialogue() {
+            return this.dialogue;
         }
 
         @Override
         public MutableComponent translation(ServerPlayer player) {
-            if (this.npc == null || !this.npc.isAlive()) {
-                if (this.targetNPC == null)
-                    this.npc = null;
-                else
-                    this.npc = EntityUtils.findFromUUID(NPCEntity.class, player.level(), this.targetNPC);
-            }
+            NPCEntity npc = this.getNpc(player.level());
             Component name;
-            if (this.npc == null) {
-                name = this.targetNPC != null ? RunecraftorySavedData.get(player.getServer())
-                                                .npcHandler.getName(this.targetNPC) : null;
+            if (npc == null) {
+                name = this.targetNPC != null ? RunecraftorySavedData.get(player.getServer()).npcHandler.getName(this.targetNPC) : null;
             } else {
-                name = this.npc.getName();
+                name = npc.getName();
             }
             if (name != null)
                 return Component.translatable(this.getId().toString(), name);

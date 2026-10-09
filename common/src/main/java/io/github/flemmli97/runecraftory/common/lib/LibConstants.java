@@ -39,4 +39,9 @@ public class LibConstants {
             EquipmentSlot.LEGS, RuneCraftory.modRes("equipment_legs_modifier"),
             EquipmentSlot.FEET, RuneCraftory.modRes("equipment_feet_modifier"));
     public static final ResourceLocation SHIELD_PENALTY = RuneCraftory.modRes("shield_penalty");
+
+    /**
+     * Generic resource location indicating empty something for cases with nonnull res
+     */
+    public static final ResourceLocation EMPTY = RuneCraftory.modRes("empty");
 }

@@ -15,6 +15,7 @@ public record ConversationContext(ResourceLocation key) {
     public static final ConversationContext FIRST_TALK = register("first");
     public static final ConversationContext GREETING = register("greeting");
     public static final ConversationContext TALK = register("talk");
+    public static final ConversationContext FOLLOW_TALK = register("follow_talk");
     public static final ConversationContext FOLLOW_YES = register("follow_yes");
     public static final ConversationContext FOLLOW_NO = register("follow_no");
     public static final ConversationContext FOLLOW_STOP = register("follow_stop");

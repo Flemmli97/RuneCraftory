@@ -25,6 +25,7 @@
     "runecraftory:first": "runecraftory:smith/1/first",
     "runecraftory:follow_no": "runecraftory:smith/1/follow_no",
     "runecraftory:follow_stop": "runecraftory:smith/1/follow_stop",
+    "runecraftory:follow_talk": "runecraftory:smith/1/follow_talk",
     "runecraftory:follow_yes": "runecraftory:smith/1/follow_yes",
     "runecraftory:greeting": "runecraftory:smith/1/greeting",
     "runecraftory:marriage_accept": "runecraftory:smith/1/marriage_accept",
@@ -47,18 +48,9 @@
     "runecraftory:general_store",
     "runecraftory:blacksmith"
   ],
-  "quest_handler": {
-    "required_quests": [],
-    "responses": {
-      "runecraftory:mining": {
-        "active_id": "runecraftory:smith/1/quest_active_mining",
-        "end_id": "runecraftory:smith/1/quest_end_mining",
-        "start_id": "runecraftory:smith/1/quest_start_mining"
-      }
-    }
-  },
   "relation": {
     "relation_ship_state": "DEFAULT"
   },
+  "required_quests": [],
   "weight": 50
 }

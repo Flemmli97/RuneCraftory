@@ -15,12 +15,8 @@ import java.util.UUID;
 
 public class NPCRelationManager {
 
-    public static final int QUEST_COMPLETED = -2;
-    public static final int QUEST_NOT_STARTED = -1;
-
     private final Map<UUID, NPCFriendPoints> playerHearts = new HashMap<>();
     private final Map<UUID, Set<ResourceLocation>> completedQuests = new HashMap<>();
-    private final Map<UUID, Map<ResourceLocation, Integer>> questTracker = new HashMap<>();
 
     public boolean talkedTo(UUID uuid) {
         return this.playerHearts.containsKey(uuid);
@@ -39,32 +35,6 @@ public class NPCRelationManager {
         return ImmutableSet.copyOf(this.completedQuests.computeIfAbsent(uuid, key -> new HashSet<>()));
     }
 
-    public int questStateFor(UUID uuid, ResourceLocation questID) {
-        return this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>())
-                .getOrDefault(questID, QUEST_NOT_STARTED);
-    }
-
-    public int advanceQuest(UUID uuid, ResourceLocation questID) {
-        int newState = this.questStateFor(uuid, questID) + 1;
-        Map<ResourceLocation, Integer> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
-        map.put(questID, newState);
-        return newState;
-    }
-
-    public void endQuest(UUID uuid, ResourceLocation questID) {
-        Map<ResourceLocation, Integer> map = this.questTracker.computeIfAbsent(uuid, key -> new HashMap<>());
-        map.put(questID, QUEST_COMPLETED);
-    }
-
-    public void resetQuest(UUID uuid, ResourceLocation questID) {
-        Map<ResourceLocation, Integer> map = this.questTracker.get(uuid);
-        if (map != null) {
-            map.remove(questID);
-            if (map.isEmpty())
-                this.questTracker.remove(uuid);
-        }
-    }
-
     public CompoundTag save() {
         CompoundTag compound = new CompoundTag();
         CompoundTag heartsTag = new CompoundTag();
@@ -77,13 +47,6 @@ public class NPCRelationManager {
             quests.put(uuid.toString(), list);
         });
         compound.put("CompletedQuests", quests);
-        CompoundTag questsTracker = new CompoundTag();
-        this.questTracker.forEach((uuid, tracker) -> {
-            CompoundTag states = new CompoundTag();
-            tracker.forEach((id, state) -> states.putInt(id.toString(), state));
-            questsTracker.put(uuid.toString(), states);
-        });
-        compound.put("QuestStates", questsTracker);
         return compound;
     }
 
@@ -100,13 +63,6 @@ public class NPCRelationManager {
             Set<ResourceLocation> set = new HashSet<>();
             listTag.forEach(t -> set.add(ResourceLocation.parse(t.getAsString())));
             this.completedQuests.put(UUID.fromString(key), set);
-        });
-        CompoundTag questsTracker = compound.getCompound("QuestStates");
-        questsTracker.getAllKeys().forEach(key -> {
-            CompoundTag states = questsTracker.getCompound(key);
-            Map<ResourceLocation, Integer> map = new HashMap<>();
-            states.getAllKeys().forEach(id -> map.put(ResourceLocation.parse(id), states.getInt(id)));
-            this.questTracker.put(UUID.fromString(key), map);
         });
     }
 }

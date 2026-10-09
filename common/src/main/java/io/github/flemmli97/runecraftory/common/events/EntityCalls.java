@@ -96,7 +96,7 @@ public class EntityCalls {
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CCalendar(RunecraftorySavedData.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
             PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
             data.onJoin();
-            QuestHandler.removeNPCQuestsFor(serverPlayer);
+            QuestHandler.removeInvalidQuests(serverPlayer);
             LoaderNetwork.INSTANCE.sendToPlayer(new S2CSyncConfig(), serverPlayer);
             FamilyHandler.get(serverPlayer.getServer())
                     .getOrCreateEntry(serverPlayer)
@@ -349,6 +349,9 @@ public class EntityCalls {
                 int food = player.hasEffect(RuneCraftoryEffects.PARALYSIS.asHolder()) ? 6 : 14;
                 player.getFoodData().setFoodLevel(food);
                 player.getFoodData().setSaturation(0);
+            }
+            if (player instanceof ServerPlayer serverPlayer) {
+                RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer).tick();
             }
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {

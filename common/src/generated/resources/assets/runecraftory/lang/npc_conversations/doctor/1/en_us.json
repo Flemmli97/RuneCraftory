@@ -18,5 +18,6 @@
   "npc.doctor.1.talk.4": "Being a doctor lots of people come to me for a variety of problems. Helping them with it is my duty.",
   "npc.doctor.2.dislike": "I can't use this...",
   "npc.doctor.2.gift.default": "Oh? this might be useful. Thanks",
-  "npc.doctor.2.like": "Thanks! I really like this!"
+  "npc.doctor.2.like": "Thanks! I really like this!",
+  "npc.generic.1.follow_talk.1": "Where are we going?"
 }

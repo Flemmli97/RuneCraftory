@@ -30,6 +30,7 @@
     "runecraftory:first": "runecraftory:random_npc_2/first",
     "runecraftory:follow_no": "runecraftory:random_npc_2/follow_no",
     "runecraftory:follow_stop": "runecraftory:random_npc_2/follow_stop",
+    "runecraftory:follow_talk": "runecraftory:random_npc_2/follow_talk",
     "runecraftory:follow_yes": "runecraftory:random_npc_2/follow_yes",
     "runecraftory:greeting": "runecraftory:random_npc_2/greeting",
     "runecraftory:marriage_accept": "runecraftory:random_npc_2/marriage_accept",
@@ -38,12 +39,9 @@
     "runecraftory:talk": "runecraftory:random_npc_2/talk"
   },
   "neutral_gift_response": "npc.generic.2.gift.default",
-  "quest_handler": {
-    "required_quests": [],
-    "responses": {}
-  },
   "relation": {
     "relation_ship_state": "DEFAULT"
   },
+  "required_quests": [],
   "weight": 50
 }

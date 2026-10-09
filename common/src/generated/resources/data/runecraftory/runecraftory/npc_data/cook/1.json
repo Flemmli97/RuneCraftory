@@ -23,6 +23,7 @@
     "runecraftory:first": "runecraftory:cook/1/first",
     "runecraftory:follow_no": "runecraftory:cook/1/follow_no",
     "runecraftory:follow_stop": "runecraftory:cook/1/follow_stop",
+    "runecraftory:follow_talk": "runecraftory:cook/1/follow_talk",
     "runecraftory:follow_yes": "runecraftory:cook/1/follow_yes",
     "runecraftory:greeting": "runecraftory:cook/1/greeting",
     "runecraftory:marriage_accept": "runecraftory:cook/1/marriage_accept",
@@ -44,12 +45,9 @@
   "profession": [
     "runecraftory:chef"
   ],
-  "quest_handler": {
-    "required_quests": [],
-    "responses": {}
-  },
   "relation": {
     "relation_ship_state": "DEFAULT"
   },
+  "required_quests": [],
   "weight": 50
 }

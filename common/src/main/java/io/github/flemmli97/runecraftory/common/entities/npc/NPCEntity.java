@@ -54,9 +54,12 @@ import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
-import io.github.flemmli97.runecraftory.common.quests.NPCQuest;
+import io.github.flemmli97.runecraftory.common.quests.QuestData;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.progress.NPCTalkTracker;
+import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestDefinition;
+import io.github.flemmli97.runecraftory.common.quests.quest.QuestResponses;
+import io.github.flemmli97.runecraftory.common.quests.tasks.NPCTalkTask;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -80,6 +83,8 @@ import io.github.flemmli97.runecraftory.common.world.data.family.FamilyEntry;
 import io.github.flemmli97.runecraftory.common.world.data.family.FamilyHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.simplequests_api.player.PlayerQuestData;
+import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.QuestState;
 import io.github.flemmli97.tenshilib.common.entity.ai.TargetPosition;
 import io.github.flemmli97.tenshilib.common.entity.ai.brain.behaviour.SetMoveToRestriction;
@@ -201,7 +206,6 @@ import net.tslat.smartbrainlib.util.BrainUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,7 +214,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt,
         SmartBrainOwner<NPCEntity>, SyncedMobDataHandler, MoveStateHolder {
@@ -293,6 +296,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     private int tpCooldown;
 
     private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
+    private final Map<ServerPlayer, Runnable> onCloseRunner = new HashMap<>();
     private int interactionMoveCooldown;
 
     private final NPCSchedule schedule = new NPCSchedule(this, this.getRandom());
@@ -731,7 +735,6 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             if (this.getServer() != null) {
                 NPCHandler handler = RunecraftorySavedData.get(this.getServer()).npcHandler;
                 handler.addNPC(this);
-                handler.playersToReset(this.getUUID()).forEach(pair -> this.relationManager.resetQuest(pair.getFirst(), pair.getSecond()));
             }
         }
         super.tick();
@@ -943,7 +946,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 } else {
                     if (family.getRelationship() == FamilyEntry.Relationship.DATING) {
                         float chance = this.friendPoints(player) >= 10 ? 0.2f * (this.friendPoints(player) - 9) : 0;
-                        if (chance > 0 && this.relationManager.getCompletedQuests(player.getUUID()).containsAll(this.data.value().questHandler().requiredQuests()) &&
+                        if (chance > 0 && this.relationManager.getCompletedQuests(player.getUUID()).containsAll(this.data.value().requiredQuests()) &&
                                 this.updater.getDailyRandom().nextFloat() < chance) {
                             this.speak(serverPlayer, ConversationContext.MARRIAGE_ACCEPT);
                             family.updateRelationship(FamilyEntry.Relationship.MARRIED, player.getUUID());
@@ -980,16 +983,18 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             NPCData.Gift gift = this.giftOf(stack);
             if (gift != null) {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (gift.xp() * mult)))
-                    this.tellDialogue(serverPlayer, null, null, Component.translatable(gift.responseKey()), List.of());
+                    this.tellDialogue(serverPlayer, new ConversationSet.NetworkConversation(Component.translatable(gift.responseKey())));
             } else {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (5 * mult)))
-                    this.tellDialogue(serverPlayer, null, null, Component.translatable(this.data.value().neutralGiftResponse()), List.of());
+                    this.tellDialogue(serverPlayer, new ConversationSet.NetworkConversation(Component.translatable(this.data.value().neutralGiftResponse())));
             }
         }
         stack.shrink(1);
     }
 
     public void talkTo(ServerPlayer player) {
+        if (this.respondToQuest(player))
+            return;
         ConversationContext ctx = ConversationContext.TALK;
         NPCFriendPoints fp = this.relationManager.getFriendPointData(player.getUUID());
         boolean talkedTo = fp.talked();
@@ -997,89 +1002,116 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         if (!talkedTo) {
             ctx = ConversationContext.FIRST_TALK;
         } else if (doGreet) {
-            ctx = ConversationContext.GREETING;
+            this.speak(player, this.data.value().getConversation(ConversationContext.GREETING), this.data.value().getConversation(ConversationContext.TALK));
+            return;
         }
         this.speak(player, ctx);
     }
 
+    public void followTalk(ServerPlayer player) {
+        if (this.followEntity() != player)
+            return;
+        this.speak(player, ConversationContext.FOLLOW_TALK);
+    }
+
     public void speak(ServerPlayer player, ConversationContext convCtx) {
+        this.speak(player, this.data.value().getConversation(convCtx));
+    }
+
+    @SafeVarargs
+    private void speak(ServerPlayer player, ReloadableHolder<ConversationSet>... conversations) {
+        this.speak(player, List.of(conversations));
+    }
+
+    private void speak(ServerPlayer player, List<ReloadableHolder<ConversationSet>> conversations) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        ConversationSet conversations = this.data.value().getConversation(convCtx);
         LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
                 .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
         LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
-        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream()
-                .filter(c -> {
-                    //Disable if player already has a quest from this npc
-                    if (c.getValue().actions().stream().anyMatch(h -> h.action() == ConversationSet.ConversationAction.QUEST) &&
-                            QuestHandler.questForExists(player, this) != null &&
-                            !this.updater.alreadyAcceptedRandomquest(player))
-                        return false;
-                    return c.getValue().startingConversation() && c.getValue().test(heart, lootContext);
-                })
-                .collect(Collectors.toList());
-        Collections.shuffle(filtered, this.updater.getDailyRandom());
-        int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
-        if (size > 0) {
-            Map.Entry<String, ConversationSet.Conversation> randomLine = filtered.get(this.random.nextInt(size));
-            this.tellDialogue(player, convCtx, randomLine.getKey(), randomLine.getValue());
-        } else {
-            Component dialog = conversations.missing() != null
-                    ? Component.translatable(conversations.fallbackKey(), conversations.missing()) : Component.translatable(conversations.fallbackKey());
-            this.tellDialogue(player, convCtx, null, dialog, List.of());
+        List<ConversationSet.NetworkConversation> dialogues = new ArrayList<>();
+        for (ReloadableHolder<ConversationSet> conv : conversations) {
+            dialogues.add(ConversationSet.createRandom(conv, c -> {
+                //Disable if player already has a quest from this npc
+                if (c.getValue().actions().stream().anyMatch(h -> h.action() == ConversationSet.ConversationAction.QUEST) &&
+                        (QuestHandler.getFirstQuestFor(player, this) != null || this.updater.alreadyAcceptedRandomquest(player)))
+                    return false;
+                return c.getValue().startingConversation() && c.getValue().test(heart, lootContext);
+            }, this.updater.getDailyRandom()));
         }
+        this.tellDialogue(player, dialogues);
     }
 
-    public void respondToQuest(ServerPlayer player, ResourceLocation quest) {
-        QuestHandler.getData(player).trigger(NPCTalkTracker.KEY, this);
-        QuestState result = QuestHandler.checkCompletionQuest(player, this);
-        int questState = this.relationManager.questStateFor(player.getUUID(), quest);
-        QuestConversationContext questCtx = QuestConversationContext.NOT_STARTED;
-        if (questState != NPCRelationManager.QUEST_NOT_STARTED) {
-            questCtx = QuestConversationContext.IN_PROGRESS;
-            if (result == QuestState.COMPLETE) {
-                this.relationManager.endQuest(player.getUUID(), quest);
-                questState = NPCRelationManager.QUEST_COMPLETED;
-                questCtx = QuestConversationContext.COMPLETED;
-            } else if (result == QuestState.PARTIAL_COMPLETE) {
-                questState = this.relationManager.advanceQuest(player.getUUID(), quest);
-                questCtx = QuestConversationContext.NOT_STARTED;
+    private boolean respondToQuest(ServerPlayer player) {
+        QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
+        NPCQuestDefinition.NPCQuest npcQuest = progress != null && progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest quest ? quest : null;
+        List<ResourceLocation> dialogues = new ArrayList<>();
+        // Start dialogue has priority
+        int stage = -1;
+        if (npcQuest != null) {
+            QuestData data = QuestHandler.getData(player);
+            stage = progress.getRootProgressStage();
+            if (stage >= npcQuest.source().dialogues().size()) {
+                RuneCraftory.LOGGER.error("Invalid stage for quest {}. Stage is {}", npcQuest.id(), stage);
+                stage = -1;
+            } else if (!data.getAndUpdateActiveProgress(progress)) {
+                QuestResponses responses = npcQuest.source().dialogues().get(stage);
+                if (responses.startID().isPresent()) {
+                    dialogues.add(responses.startID().get());
+                }
             }
-        } else
-            this.relationManager.advanceQuest(player.getUUID(), quest);
-        int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        ConversationSet conversations = this.data.value().getFromQuest(quest, questCtx, questState);
-        LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
-                .withParameter(LootContextParams.THIS_ENTITY, this)
-                .withParameter(LootContextParams.ORIGIN, this.position())
-                .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
-                .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
-        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, lootContext))
-                .collect(Collectors.toList());
-        Collections.shuffle(filtered, this.updater.getDailyRandom());
-        int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
-        if (size > 0) {
-            Map.Entry<String, ConversationSet.Conversation> randomLine = filtered.get(this.random.nextInt(size));
-            this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
-        } else {
-            Component dialog = conversations.missing() != null
-                    ? Component.translatable(conversations.fallbackKey(), conversations.missing()) : Component.translatable(conversations.fallbackKey());
-            this.tellDialogue(player, null, null, dialog, List.of());
         }
+        List<PlayerQuestData.ProgressResult<NPCTalkTask.NPCTalkResolved>> triggers = QuestHandler.getData(player).trigger(NPCTalkTracker.KEY, this, "", 1);
+        if (!triggers.isEmpty()) {
+            PlayerQuestData.ProgressResult<NPCTalkTask.NPCTalkResolved> progressResult = triggers.getFirst();
+            NPCTalkTask.NPCTalkResolved task = progressResult.completedTasks().stream().findFirst().map(Pair::getSecond).orElse(null);
+            if (task != null && task.dialogue() != null) {
+                dialogues.add(task.dialogue());
+            }
+        }
+        QuestData data = QuestHandler.getData(player);
+        if (npcQuest != null && stage != -1) {
+            // Finally complete/check quest and respond appropriately
+            QuestResponses responses = npcQuest.source().dialogues().get(stage);
+            QuestState state = progress.tryComplete(progress.getRootQuest().submissionTrigger(player));
+            int stagePost = progress.getRootProgressStage();
+            switch (state) {
+                case NO -> {
+                    if (dialogues.isEmpty()) {
+                        responses.activeID().ifPresent(dialogues::add);
+                    }
+                }
+                case COMPLETE -> responses.endID().ifPresent(dialogues::add);
+                case PARTIAL_COMPLETE -> {
+                    responses.endID().ifPresent(dialogues::add);
+                    if (stage != stagePost && stagePost < npcQuest.source().dialogues().size()) {
+                        data.getAndUpdateActiveProgress(progress);
+                        responses = npcQuest.source().dialogues().get(stagePost);
+                        responses.startID().ifPresent(dialogues::add);
+                    }
+                }
+            }
+        }
+        if (dialogues.isEmpty())
+            return false;
+        this.speak(player, dialogues.stream().map(DataPackHandler.INSTANCE.npcConversationManager()::get).toList());
+        if (npcQuest != null) {
+            this.onCloseRunner.put(player, () -> data.tryCompleteQuest(progress, progress.getRootQuest().submissionTrigger(player)));
+        }
+        return true;
     }
 
-    private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, ConversationSet.Conversation conversation) {
-        List<Component> actions = conversation.actions().stream().map(e -> (Component) Component.translatable(e.translationKey())).toList();
-        this.tellDialogue(player, convCtx, conversationID, Component.translatable(conversation.translationKey()), actions);
+    private void tellDialogue(ServerPlayer player, ConversationSet.NetworkConversation... dialogues) {
+        this.tellDialogue(player, List.of(dialogues));
     }
 
-    private void tellDialogue(ServerPlayer player, ConversationContext convCtx, String conversationID, Component component, List<Component> actions) {
+    private void tellDialogue(ServerPlayer player, List<ConversationSet.NetworkConversation> dialogues) {
+        if (dialogues.isEmpty())
+            return;
         this.interactWithPlayer(player);
-        LoaderNetwork.INSTANCE.sendToPlayer(new S2CNpcDialogue(this.getId(), convCtx, conversationID, component, this.conversationData(player), actions), player);
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CNpcDialogue(this.getId(), dialogues, this.conversationData(player)), player);
     }
 
     private Map<String, Component> conversationData(ServerPlayer player) {
@@ -1090,24 +1122,33 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         this.randomGiftContext(7, 14).ifPresent(comp -> map.put(PlaceHolderComponent.LIKE, comp));
         this.randomGiftContext(-14, -1).ifPresent(comp -> map.put(PlaceHolderComponent.DISLIKE, comp));
         this.randomGiftContext(Integer.MIN_VALUE, -15).ifPresent(comp -> map.put(PlaceHolderComponent.HATE, comp));
+        QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
+        if (progress != null) {
+            progress.getTasks().forEach((key, value) -> {
+                if (value instanceof NPCTalkTask.NPCTalkResolved talk) {
+                    NPCEntity npc = talk.getNpc(player.level());
+                    if (npc != null && npc != this) {
+                        map.put(PlaceHolderComponent.QUEST_NPC_TARGET.apply(key), npc.getDisplayName());
+                    }
+                }
+            });
+        }
         return map;
     }
 
-    public void handleDialogueAction(ServerPlayer sender, ConversationContext convCtx, String conversationID, int actionIdx) {
-        ConversationSet conversations = this.data.value().getConversation(convCtx);
-        ConversationSet.Conversation conversation = conversations.conversations().get(conversationID);
+    public void handleDialogueAction(ServerPlayer sender, ResourceLocation setID, String conversationID, int actionIdx) {
+        ReloadableHolder<ConversationSet> conversations = DataPackHandler.INSTANCE.npcConversationManager().get(setID);
+        ConversationSet.Conversation conversation = conversations.value().conversations().get(conversationID);
         if (conversation != null && actionIdx < conversation.actions().size()) {
             ConversationSet.ConversationActionHolder action = conversation.actions().get(actionIdx);
             if (action != null) {
                 switch (action.action()) {
-                    case ANSWER -> {
-                        ConversationSet.Conversation answer = conversations.conversations().get(action.actionValue());
-                        if (answer != null) {
-                            this.relationManager.getFriendPointData(sender.getUUID())
-                                    .answer(conversationID, action.friendXP());
-                            this.tellDialogue(sender, convCtx, action.actionValue(), answer);
-                        }
-                    }
+                    case ANSWER -> ConversationSet.encode(conversations, action.actionValue())
+                            .ifPresent(conv -> {
+                                this.relationManager.getFriendPointData(sender.getUUID())
+                                        .answer(conversationID, action.friendXP());
+                                this.tellDialogue(sender, conv);
+                            });
                     case QUEST ->
                             QuestHandler.acceptQuestRandom(sender, this, ResourceLocation.parse(action.actionValue()));
                 }
@@ -1116,26 +1157,24 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     public void closedDialogue(ServerPlayer sender) {
+        this.closedInteraction(sender);
+        Runnable runner = this.onCloseRunner.get(sender);
+        if (runner != null) {
+            runner.run();
+            this.onCloseRunner.remove(sender);
+        }
+    }
+
+    public void closedInteraction(ServerPlayer sender) {
         this.decreaseInteractingPlayers(sender);
     }
 
-    public void closedQuestDialogue(ServerPlayer sender) {
-        this.closedDialogue(sender);
-        ResourceLocation quest = QuestHandler.questForExists(sender, this);
-        if (quest != null && this.relationManager.questStateFor(sender.getUUID(), quest) == -2)
-            QuestHandler.getData(sender).submit(this);
+    public void completeNPCQuest(ServerPlayer player, NPCQuestDefinition.NPCQuest quest) {
+        this.relationManager.completeQuest(player.getUUID(), quest.getOriginId());
     }
 
-    public void resetQuestProcess(ServerPlayer player, ResourceLocation quest) {
-        this.relationManager.resetQuest(player.getUUID(), quest);
-    }
-
-    public void completeNPCQuest(ServerPlayer player, NPCQuest quest) {
-        this.relationManager.completeQuest(player.getUUID(), quest.getOriginID());
-    }
-
-    public boolean canAcceptNPCQuest(ServerPlayer player, NPCQuest quest) {
-        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.neededParentQuests);
+    public boolean canAcceptNPCQuest(ServerPlayer player, NPCQuestDefinition quest) {
+        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.requiredParentQuests());
     }
 
     @Override

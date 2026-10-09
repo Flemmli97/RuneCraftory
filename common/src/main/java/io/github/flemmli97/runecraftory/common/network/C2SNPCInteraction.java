@@ -8,7 +8,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +53,7 @@ public class C2SNPCInteraction implements CustomPacketPayload {
         if (entity instanceof NPCEntity npc) {
             switch (pkt.type) {
                 case TALK -> npc.talkTo(sender);
+                case FOLLOW_TALK -> npc.followTalk(sender);
                 case FOLLOW -> {
                     PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(sender);
                     if (!data.party.isPartyMember(entity) && data.party.isPartyFull()) {
@@ -76,9 +76,8 @@ public class C2SNPCInteraction implements CustomPacketPayload {
                         npc.followEntity(null);
                 }
                 case SHOP -> npc.openShopForPlayer(sender);
-                case QUEST -> npc.respondToQuest(sender, ResourceLocation.parse(pkt.action));
-                case CLOSE -> npc.closedDialogue(sender);
-                case CLOSE_QUEST -> npc.closedQuestDialogue(sender);
+                case CLOSE -> npc.closedInteraction(sender);
+                case CLOSE_DIALOGUE -> npc.closedDialogue(sender);
                 case ACTION -> {
                     if (!npc.isBaby())
                         npc.getProfession().handleAction(npc, sender, pkt.action);
@@ -95,14 +94,14 @@ public class C2SNPCInteraction implements CustomPacketPayload {
     public enum Action {
 
         TALK("runecraftory.gui.npc.talk", null),
+        FOLLOW_TALK("runecraftory.gui.npc.follow_talk", null),
         FOLLOW("runecraftory.gui.npc.follow", NPCEntity.Behaviour.FOLLOW),
         FOLLOWDISTANCE("runecraftory.gui.npc.distance", NPCEntity.Behaviour.FOLLOW_DISTANCE),
         STAY("runecraftory.gui.npc.stay", NPCEntity.Behaviour.STAY),
         STOPFOLLOW("runecraftory.gui.npc.stopFollow", NPCEntity.Behaviour.WANDER),
         SHOP("runecraftory.gui.npc.shop", null),
         CLOSE("runecraftory.gui.npc.close", null),
-        CLOSE_QUEST("runecraftory.gui.npc.close.quest", null),
-        QUEST("runecraftory.gui.quest.button", null),
+        CLOSE_DIALOGUE("runecraftory.gui.npc.close.dialogue", null),
         ACTION("", null);
 
         public final String translation;

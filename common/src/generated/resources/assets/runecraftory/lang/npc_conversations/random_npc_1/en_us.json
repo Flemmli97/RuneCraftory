@@ -23,6 +23,7 @@
   "npc.generic.1.follow.yes.1": "Lead the way, I'm right behind you.",
   "npc.generic.1.follow.yes.2": "Ready when you are. Let's move.",
   "npc.generic.1.follow.yes.3": "You can count on me. Let's go!",
+  "npc.generic.1.follow_talk.1": "Where are we going?",
   "npc.generic.1.gift.default": "Not bad, thanks. I’ll find a use for it.",
   "npc.generic.1.greeting.1": "Good day %player%. What can I do for you today?",
   "npc.generic.1.greeting.2": "Good evening %player%. How was your day?",
@@ -46,8 +47,5 @@
   "npc.generic.1.talk.1.response.same": "It's nice right?",
   "npc.generic.1.talk.2": "I’ve been hearing some strange tales from the travelers passing through. Stories of a distant land where the sky is always dark and tall people appear there. Wonder what's that about.",
   "npc.generic.1.talk.rain.1": "Rainy days like this always make me reflective. What’s on your mind?",
-  "npc.generic.1.talk.rain.2": "Quite the downpour, isn’t it? What can I do for you while we wait it out?",
-  "npc.generic.quest.tame_monster.active": "You still need to tame a monster.\nSome monsters prefer certain items more.",
-  "npc.generic.quest.tame_monster.end": "I see you've successfully tamed a monster. Congrats!",
-  "npc.generic.quest.tame_monster.start": "Did you know that you can tame the monsters in this world?\nYou would need to setup a barn first and then just give them an item. \n\nWith that said I would like you to tame a monster."
+  "npc.generic.1.talk.rain.2": "Quite the downpour, isn’t it? What can I do for you while we wait it out?"
 }

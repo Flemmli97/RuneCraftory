@@ -1,4 +1,5 @@
 {
+  "npc.generic.1.follow_talk.1": "Where are we going?",
   "npc.shop_owner.1.dating.no.1": "Sorry. But I don't see you that way.",
   "npc.shop_owner.1.dating.no.2": "I appreciate your feelings, but I don’t think it’s a good idea.",
   "npc.shop_owner.1.dating.yes.1": "I didn’t see that coming, but yes, I’d love to.",
@@ -27,8 +28,5 @@
   "npc.shop_owner.1.procreation.fail.2": "I think we shoul wait a bit more before that step.",
   "npc.shop_owner.1.talk.1": "Running this store keeps me busy, but I wouldn’t trade it for anything. Seeing so many people needing this store makes me happy.",
   "npc.shop_owner.1.talk.2": "",
-  "npc.shop_owner.1.talk.3": "",
-  "npc.shop_owner.quest.ship_turnip.active": "Please ship a turnip.",
-  "npc.shop_owner.quest.ship_turnip.end": "Great. There are a lot of items you can ship to make money. Here takethese turnip seeds. It should come in handy.",
-  "npc.shop_owner.quest.ship_turnip.start": "Are you here for my request?\nI will show you how to ship items to make money: Shipping items is very simple. First you need a shipping bin. It can hold any shippable items in it.\nPut the items you want to ship in it and everyday in the morning your items will be automatically shipped. Lets try it out now: I want you to ship a turnip."
+  "npc.shop_owner.1.talk.3": ""
 }

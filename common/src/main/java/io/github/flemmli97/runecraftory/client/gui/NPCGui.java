@@ -47,18 +47,16 @@ public class NPCGui<T extends NPCEntity> extends Screen {
 
     private final Map<String, List<Component>> actions;
 
-    private final ResourceLocation quest;
     private final SyncedFamilyData family;
 
     private final List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
 
-    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, SyncedFamilyData family, Map<String, List<Component>> actions, ResourceLocation quest) {
+    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, SyncedFamilyData family, Map<String, List<Component>> actions) {
         super(entity.getDisplayName());
         this.entity = entity;
         this.isShopOpen = isShopOpen;
         this.canFollow = canFollow;
         this.actions = actions;
-        this.quest = quest;
         this.family = family;
     }
 
@@ -207,13 +205,6 @@ public class NPCGui<T extends NPCEntity> extends Screen {
                     }
                 });
             }
-        }
-        if (this.quest != null) {
-            y += 30;
-            this.addRenderableWidget(Button.builder(Component.translatable(C2SNPCInteraction.Action.QUEST.translation), b -> {
-                LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.QUEST, this.quest.toString()));
-                this.minecraft.setScreen(null);
-            }).bounds(this.leftPos + x, this.topPos + y, xSize, 20).build());
         }
         if (!this.entity.isBaby() && this.family.canProcreate()) {
             y += 30;

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
-import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
+import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
@@ -150,13 +150,13 @@ public class ClientHandlers {
         }
     }
 
-    public static void openNPCChat(int id, ShopState isShopOpen, SyncedFamilyData family, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
+    public static void openNPCChat(int id, ShopState isShopOpen, SyncedFamilyData family, int followState, Map<String, List<Component>> actions) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof NPCEntity npc) {
             if (followState == 1)
-                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
+                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN));
             else
-                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions, quest));
+                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, family, actions));
         }
     }
 
@@ -204,12 +204,12 @@ public class ClientHandlers {
         }
     }
 
-    public static void updateNPCDialogue(NPCEntity npc, ConversationContext convCtx, String conversationID, Component component, Map<String, Component> data, List<Component> actions) {
+    public static void updateNPCDialogue(NPCEntity npc, List<ConversationSet.NetworkConversation> conversations, Map<String, Component> data) {
         if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
-            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
+            gui.updateConversation(Minecraft.getInstance(), conversations, data);
         } else {
             NPCDialogueGui<NPCEntity> gui = new NPCDialogueGui<>(npc);
-            gui.updateConversation(Minecraft.getInstance(), convCtx, conversationID, component, data, actions);
+            gui.updateConversation(Minecraft.getInstance(), conversations, data);
             Minecraft.getInstance().setScreen(gui);
         }
     }
