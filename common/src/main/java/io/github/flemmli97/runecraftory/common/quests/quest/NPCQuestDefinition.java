@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.QuestboardBlock;
 import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.quests.QuestData;
 import io.github.flemmli97.runecraftory.common.quests.tasks.NPCBasedTask;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
@@ -33,12 +34,17 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -68,13 +74,15 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             ResourceLocation.CODEC.listOf().fieldOf("quest_givers").forGetter(d -> d.questGiverNPCDataIDs),
             QuestDialogueEntry.CODEC.listOf().fieldOf("quests").forGetter(d -> d.questDialogues),
             ResourceLocation.CODEC.fieldOf("loot_table").forGetter(d -> d.loot.location()),
-            Codec.BOOL.optionalFieldOf("global").forGetter(d -> Optional.of(d.global))
-    ).apply(instance, (data, questGivers, quests, loot, global) -> {
+            Codec.BOOL.optionalFieldOf("global").forGetter(d -> Optional.of(d.global)),
+            LootItemCondition.DIRECT_CODEC.listOf().optionalFieldOf("conditions").forGetter(d -> Optional.of(d.conditions))
+    ).apply(instance, (data, questGivers, quests, loot, global, conditions) -> {
         NPCQuestDefinition.Builder builder = data.applyTo(name -> new NPCQuestDefinition.Builder(name, questGivers, loot));
         quests.forEach(builder::withQuests);
         if (global.orElse(false)) {
             builder.global();
         }
+        conditions.ifPresent(list -> list.forEach(builder::condition));
         return builder.build();
     }));
 
@@ -83,13 +91,15 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             ResourceLocation.CODEC.listOf().fieldOf("quest_givers").forGetter(d -> d.questGiverNPCDataIDs),
             QuestDialogueEntry.OPT_CODEC.listOf().fieldOf("quests").forGetter(d -> d.questDialogues),
             ResourceLocation.CODEC.fieldOf("loot_table").forGetter(d -> d.loot.location()),
-            Codec.BOOL.optionalFieldOf("global").forGetter(d -> d.global ? Optional.of(true) : Optional.empty())
-    ).apply(instance, (data, questGivers, quests, loot, global) -> {
+            Codec.BOOL.optionalFieldOf("global").forGetter(d -> d.global ? Optional.of(true) : Optional.empty()),
+            LootItemCondition.DIRECT_CODEC.listOf().optionalFieldOf("conditions").forGetter(d -> d.conditions.isEmpty() ? Optional.empty() : Optional.of(d.conditions))
+    ).apply(instance, (data, questGivers, quests, loot, global, conditions) -> {
         NPCQuestDefinition.Builder builder = data.applyTo(name -> new NPCQuestDefinition.Builder(name, questGivers, loot));
         quests.forEach(builder::withQuests);
         if (global.orElse(false)) {
             builder.global();
         }
+        conditions.ifPresent(list -> list.forEach(builder::condition));
         return builder.build();
     }));
 
@@ -98,19 +108,22 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
     private final List<QuestHolder> quests;
     private final List<QuestResponses> dialogues;
     private final ResourceKey<LootTable> loot;
+    private final List<LootItemCondition> conditions;
     private final boolean global;
 
     private NPCQuestDefinition(QuestCategory category, String name, List<String> description,
                                List<ResourceLocation> requiredParentQuests, boolean redoParent,
                                TimeDuration repeatDelay, int repeatDaily, int maxRepeat, boolean isDailyQuest,
                                boolean needsUnlock, EntityPredicate unlockCondition, int sortingId, ItemStack icon, Visibility visibility,
-                               List<ResourceLocation> questGiverNPCDataIDs, List<QuestDialogueEntry> quests, ResourceKey<LootTable> loot, boolean global) {
+                               List<ResourceLocation> questGiverNPCDataIDs, List<QuestDialogueEntry> quests,
+                               ResourceKey<LootTable> loot, List<LootItemCondition> conditions, boolean global) {
         super(category, name, description, requiredParentQuests, redoParent, repeatDelay, repeatDaily, maxRepeat, isDailyQuest, needsUnlock, unlockCondition, sortingId, icon, visibility);
         this.questGiverNPCDataIDs = questGiverNPCDataIDs;
         this.questDialogues = quests;
         this.quests = quests.stream().map(QuestDialogueEntry::quest).toList();
         this.dialogues = quests.stream().map(QuestDialogueEntry::dialogues).toList();
         this.loot = loot;
+        this.conditions = conditions;
         this.global = global;
     }
 
@@ -122,7 +135,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
     public static List<NPCQuestSetupData> resolve(NPCQuestDefinition quest, ServerPlayer player, Vec3 at) {
         List<NPCEntity> nearbyNPCs = player.level().getEntities(EntityTypeTest.forClass(NPCEntity.class), aabbOf(at), e -> true);
         return nearbyNPCs.stream().map(npc -> {
-            if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()))
+            if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()) || !quest.matches(player, npc))
                 return null;
             Map<ResourceLocation, UUID> relevantNPCs = quest.collectNPCReferences(nearbyNPCs, npc);
             if (relevantNPCs == null)
@@ -174,6 +187,18 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
 
     public boolean global() {
         return this.global;
+    }
+
+    public boolean matches(ServerPlayer player, NPCEntity npc) {
+        if (this.conditions.isEmpty())
+            return true;
+        LootParams ctx = new LootParams.Builder((ServerLevel) npc.level())
+                .withParameter(LootContextParams.THIS_ENTITY, npc)
+                .withParameter(LootContextParams.ORIGIN, npc.position())
+                .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
+                .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
+        LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
+        return this.conditions.stream().allMatch(condition -> condition.test(lootContext));
     }
 
     @Override
@@ -334,6 +359,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
         private final List<ResourceLocation> questGiverNPCDataIDs;
         private final List<QuestDialogueEntry> quests = new ArrayList<>();
         private final ResourceKey<LootTable> loot;
+        private final List<LootItemCondition> conditions = new ArrayList<>();
         private boolean global;
 
         public Builder(String task, ResourceLocation npcDataID, ResourceLocation loot) {
@@ -356,6 +382,11 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             return this;
         }
 
+        public Builder condition(LootItemCondition condition) {
+            this.conditions.add(condition);
+            return this;
+        }
+
         public Builder global() {
             this.global = true;
             return this;
@@ -374,7 +405,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
                     this.requiredParentQuests, this.redoParent,
                     this.repeatDelay, this.repeatDaily, this.maxRepeat,
                     this.isDailyQuest, this.needsUnlock, this.unlockCondition, this.sortingId, this.icon, this.visibility,
-                    this.questGiverNPCDataIDs, this.quests, this.loot, this.global);
+                    this.questGiverNPCDataIDs, this.quests, this.loot, this.conditions, this.global);
         }
     }
 
