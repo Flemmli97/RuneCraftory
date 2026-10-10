@@ -28,7 +28,7 @@ public record SpellProperties(int cooldown, int rpCost, float percentageCost, fl
                     Codec.unboundedMap(CodecUtils.stringEnumCodec(Skills.class, null), Codec.FLOAT).fieldOf("skill_xp").forGetter(SpellProperties::skillXP),
                     CodecUtils.stringEnumCodec(Skills.class, null).listOf().optionalFieldOf("skills").forGetter(d -> d.skills().isEmpty() ? Optional.empty() : Optional.of(List.copyOf(d.skills())))
             ).apply(instance, (cooldown, rpCost, percentage, baseDamageMultiplier, skillXp, skills) ->
-                    new SpellProperties(cooldown, rpCost, percentage, baseDamageMultiplier, skillXp, skills.orElse(List.of()))));
+                    new SpellProperties(cooldown, rpCost, percentage, baseDamageMultiplier, skillXp, skills.orElseGet(List::of))));
 
     public static final SpellProperties DEFAULT_PROP = new SpellProperties(20, 0, 0, 1, new EnumMap<>(Skills.class), Set.of());
 

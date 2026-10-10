@@ -249,7 +249,7 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
                     }
                     pageLines.add(new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt)));
                 }
-                Component speaker = dialogue.speaker().map(conversation.participants()::get).orElse(data.get(PlaceHolderComponent.NPC));
+                Component speaker = dialogue.speaker().map(conversation.participants()::get).orElseGet(() -> data.get(PlaceHolderComponent.NPC));
                 if (speaker == null) {
                     speaker = Component.translatable("runecraftory.npc.conversation.participant.missing");
                 } else {
