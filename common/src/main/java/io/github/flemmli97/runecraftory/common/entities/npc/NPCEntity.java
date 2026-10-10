@@ -33,6 +33,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.OpenDoo
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetRainShelterTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetWalkAroundPoiTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SleepInBed;
+import io.github.flemmli97.runecraftory.common.entities.ai.sensors.NearbyNPCSensor;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
@@ -424,7 +425,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 new NearbyLivingEntitySensor<NPCEntity>()
                         .setPredicate((target, entity) -> entity.targetPred.test(target))
                         .setScanRate(e -> 10),
-                new HurtBySensor<>());
+                new HurtBySensor<>(),
+                new NearbyNPCSensor().setScanRate(e -> 10));
     }
 
     @Override
@@ -1042,7 +1044,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
         List<ConversationSet.NetworkConversation> dialogues = new ArrayList<>();
         for (ReloadableHolder<ConversationSet> conv : conversations) {
-            dialogues.add(ConversationSet.createRandom(conv, c -> {
+            dialogues.add(ConversationSet.createRandom(this, conv, c -> {
                 //Disable if player already has a quest from this npc
                 if (c.getValue().actions().stream().anyMatch(h -> h.action() == ConversationSet.ConversationAction.QUEST) &&
                         (QuestHandler.getFirstQuestFor(player, this) != null || this.updater.alreadyAcceptedRandomquest(player)))
@@ -1203,12 +1205,13 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             ConversationSet.ConversationActionHolder action = conversation.actions().get(actionIdx);
             if (action != null) {
                 switch (action.action()) {
-                    case ANSWER -> ConversationSet.encode(conversations, action.actionValue())
-                            .ifPresent(conv -> {
-                                this.relationManager.getFriendPointData(sender.getUUID())
-                                        .answer(conversationID, action.friendXP());
-                                this.tellDialogue(sender, conv);
-                            });
+                    case ANSWER ->
+                            ConversationSet.encode(this, conversations, action.actionValue(), this.updater.getDailyRandom())
+                                    .ifPresent(conv -> {
+                                        this.relationManager.getFriendPointData(sender.getUUID())
+                                                .answer(conversationID, action.friendXP());
+                                        this.tellDialogue(sender, conv);
+                                    });
                     case QUEST ->
                             QuestHandler.acceptQuestRandom(sender, this, ResourceLocation.parse(action.actionValue()));
                 }

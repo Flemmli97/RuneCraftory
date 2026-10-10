@@ -2,11 +2,13 @@
   "conversations": {
     "npc.generic.3.talk.1": {
       "conditions": [],
-      "translation_key": "npc.generic.3.talk.1"
+      "dialogues": "npc.generic.3.talk.1",
+      "speakers": {}
     },
     "npc.generic.3.talk.2": {
       "conditions": [],
-      "translation_key": "npc.generic.3.talk.2"
+      "dialogues": "npc.generic.3.talk.2",
+      "speakers": {}
     },
     "npc.generic.3.talk.3": {
       "actions": [
@@ -22,15 +24,18 @@
         }
       ],
       "conditions": [],
-      "translation_key": "npc.generic.3.talk.3"
+      "dialogues": "npc.generic.3.talk.3",
+      "speakers": {}
     },
     "npc.generic.3.talk.3.response.nice": {
       "conditions": [],
-      "translation_key": "npc.generic.3.talk.3.response.nice"
+      "dialogues": "npc.generic.3.talk.3.response.nice",
+      "speakers": {}
     },
     "npc.generic.3.talk.3.response.uhh": {
       "conditions": [],
-      "translation_key": "npc.generic.3.talk.3.response.uhh"
+      "dialogues": "npc.generic.3.talk.3.response.uhh",
+      "speakers": {}
     }
   },
   "fallback_key": ""

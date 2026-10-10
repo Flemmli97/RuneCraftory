@@ -2,15 +2,18 @@
   "conversations": {
     "npc.generic.3.procreation.fail.1": {
       "conditions": [],
-      "translation_key": "npc.generic.3.procreation.fail.1"
+      "dialogues": "npc.generic.3.procreation.fail.1",
+      "speakers": {}
     },
     "npc.generic.3.procreation.fail.2": {
       "conditions": [],
-      "translation_key": "npc.generic.3.procreation.fail.2"
+      "dialogues": "npc.generic.3.procreation.fail.2",
+      "speakers": {}
     },
     "npc.generic.3.procreation.fail.3": {
       "conditions": [],
-      "translation_key": "npc.generic.3.procreation.fail.3"
+      "dialogues": "npc.generic.3.procreation.fail.3",
+      "speakers": {}
     }
   },
   "fallback_key": ""

@@ -19,21 +19,25 @@
           "raining": false
         }
       ],
-      "translation_key": "npc.generic.1.talk.1"
+      "dialogues": "npc.generic.1.talk.1",
+      "speakers": {}
     },
     "npc.generic.1.talk.1.response.ok": {
       "conditions": [],
-      "starting_conversation": false,
-      "translation_key": "npc.generic.1.talk.1.response.ok"
+      "dialogues": "npc.generic.1.talk.1.response.ok",
+      "speakers": {},
+      "starting_conversation": false
     },
     "npc.generic.1.talk.1.response.same": {
       "conditions": [],
-      "starting_conversation": false,
-      "translation_key": "npc.generic.1.talk.1.response.same"
+      "dialogues": "npc.generic.1.talk.1.response.same",
+      "speakers": {},
+      "starting_conversation": false
     },
     "npc.generic.1.talk.2": {
       "conditions": [],
-      "translation_key": "npc.generic.1.talk.2"
+      "dialogues": "npc.generic.1.talk.2",
+      "speakers": {}
     },
     "npc.generic.1.talk.rain.1": {
       "conditions": [
@@ -42,7 +46,8 @@
           "raining": true
         }
       ],
-      "translation_key": "npc.generic.1.talk.rain.1"
+      "dialogues": "npc.generic.1.talk.rain.1",
+      "speakers": {}
     },
     "npc.generic.1.talk.rain.2": {
       "conditions": [
@@ -51,7 +56,8 @@
           "raining": true
         }
       ],
-      "translation_key": "npc.generic.1.talk.rain.2"
+      "dialogues": "npc.generic.1.talk.rain.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""

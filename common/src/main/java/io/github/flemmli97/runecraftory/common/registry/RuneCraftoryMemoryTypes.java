@@ -2,14 +2,18 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackAction;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class RuneCraftoryMemoryTypes {
@@ -21,4 +25,5 @@ public class RuneCraftoryMemoryTypes {
     public static final RegistryEntrySupplier<MemoryModuleType<?>, MemoryModuleType<Unit>> STAYING = MEMORYIES.register("staying", () -> new MemoryModuleType<>(Optional.empty()));
     public static final RegistryEntrySupplier<MemoryModuleType<?>, MemoryModuleType<NPCAttackAction>> NPC_ATTACK_ACTION = MEMORYIES.register("npc_attack_action", () -> new MemoryModuleType<>(Optional.empty()));
     public static final RegistryEntrySupplier<MemoryModuleType<?>, MemoryModuleType<Entity>> ITEM_THROW_TARGET = MEMORYIES.register("item_throw_target", () -> new MemoryModuleType<>(Optional.empty()));
+    public static final RegistryEntrySupplier<MemoryModuleType<?>, MemoryModuleType<Map<ResourceLocation, List<NPCEntity>>>> NEARBY_NPCS = MEMORYIES.register("nearby_npcs", () -> new MemoryModuleType<>(Optional.empty()));
 }

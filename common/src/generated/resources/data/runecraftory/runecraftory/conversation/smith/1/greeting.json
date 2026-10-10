@@ -2,7 +2,8 @@
   "conversations": {
     "npc.smith.1.greeting.1": {
       "conditions": [],
-      "translation_key": "npc.smith.1.greeting.1"
+      "dialogues": "npc.smith.1.greeting.1",
+      "speakers": {}
     }
   },
   "fallback_key": ""

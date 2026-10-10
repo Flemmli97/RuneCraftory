@@ -10,11 +10,13 @@
           }
         }
       ],
-      "translation_key": "npc.shop_owner.1.greeting.1"
+      "dialogues": "npc.shop_owner.1.greeting.1",
+      "speakers": {}
     },
     "npc.shop_owner.1.greeting.2": {
       "conditions": [],
-      "translation_key": "npc.shop_owner.1.greeting.2"
+      "dialogues": "npc.shop_owner.1.greeting.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""

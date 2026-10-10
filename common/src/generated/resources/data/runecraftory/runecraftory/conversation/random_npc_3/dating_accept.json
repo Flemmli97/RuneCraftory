@@ -2,15 +2,18 @@
   "conversations": {
     "npc.generic.3.dating.yes.1": {
       "conditions": [],
-      "translation_key": "npc.generic.3.dating.yes.1"
+      "dialogues": "npc.generic.3.dating.yes.1",
+      "speakers": {}
     },
     "npc.generic.3.dating.yes.2": {
       "conditions": [],
-      "translation_key": "npc.generic.3.dating.yes.2"
+      "dialogues": "npc.generic.3.dating.yes.2",
+      "speakers": {}
     },
     "npc.generic.3.dating.yes.3": {
       "conditions": [],
-      "translation_key": "npc.generic.3.dating.yes.3"
+      "dialogues": "npc.generic.3.dating.yes.3",
+      "speakers": {}
     }
   },
   "fallback_key": ""

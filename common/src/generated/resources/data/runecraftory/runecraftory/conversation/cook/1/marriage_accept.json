@@ -2,11 +2,13 @@
   "conversations": {
     "npc.cook.1.marry.yes.1": {
       "conditions": [],
-      "translation_key": "npc.cook.1.marry.yes.1"
+      "dialogues": "npc.cook.1.marry.yes.1",
+      "speakers": {}
     },
     "npc.cook.1.marry.yes.2": {
       "conditions": [],
-      "translation_key": "npc.cook.1.marry.yes.2"
+      "dialogues": "npc.cook.1.marry.yes.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""

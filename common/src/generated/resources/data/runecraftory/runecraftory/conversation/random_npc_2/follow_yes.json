@@ -2,11 +2,13 @@
   "conversations": {
     "npc.generic.2.follow.yes.1": {
       "conditions": [],
-      "translation_key": "npc.generic.2.follow.yes.1"
+      "dialogues": "npc.generic.2.follow.yes.1",
+      "speakers": {}
     },
     "npc.generic.2.follow.yes.2": {
       "conditions": [],
-      "translation_key": "npc.generic.2.follow.yes.2"
+      "dialogues": "npc.generic.2.follow.yes.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""

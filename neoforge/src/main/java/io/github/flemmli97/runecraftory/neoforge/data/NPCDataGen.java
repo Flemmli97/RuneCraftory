@@ -154,19 +154,19 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.generic.1.first.2", "Greetings, adventurer. What brings you to this place?")
                             .addConversation("npc.generic.1.first.3", "Ah, a new face! Welcome, stranger."));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.1").addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %player%. What can I do for you today?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.2").addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %player%. How was your day?")
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.1", "Good day %player%. What can I do for you today?").addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()))
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.greeting.2", "Good evening %player%. How was your day?").addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()))
                             .addConversation("npc.generic.1.greeting.3", "Hi. How are you today %player%?")
                             .addConversation("npc.generic.1.greeting.4", "Hello %player%, always a pleasure to see you."));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1").addCondition(WeatherCheck.weather().setRaining(false).build())
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1", "On sunny days I like to go out and walk a lot.").addCondition(WeatherCheck.weather().setRaining(false).build())
                                     .addAction(new ConversationSet.ConversationActionHolder("npc.generic.1.talk.1.answer.same", ConversationSet.ConversationAction.ANSWER, "npc.generic.1.talk.1.response.same", 0), "Same")
-                                    .addAction(new ConversationSet.ConversationActionHolder("npc.generic.1.talk.1.answer.ok", ConversationSet.ConversationAction.ANSWER, "npc.generic.1.talk.1.response.ok", 0), "Ok..."), "On sunny days I like to go out and walk a lot.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1.response.same").setAnswer(), "It's nice right?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1.response.ok").setAnswer(), "You don't?")
+                                    .addAction(new ConversationSet.ConversationActionHolder("npc.generic.1.talk.1.answer.ok", ConversationSet.ConversationAction.ANSWER, "npc.generic.1.talk.1.response.ok", 0), "Ok..."))
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1.response.same", "It's nice right?").setAnswer())
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.1.response.ok", "You don't?").setAnswer())
                             .addConversation("npc.generic.1.talk.2", "I’ve been hearing some strange tales from the travelers passing through. Stories of a distant land where the sky is always dark and tall people appear there. Wonder what's that about.")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.rain.1").addCondition(WeatherCheck.weather().setRaining(true).build()), "Rainy days like this always make me reflective. What’s on your mind?")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.rain.2").addCondition(WeatherCheck.weather().setRaining(true).build()), "Quite the downpour, isn’t it? What can I do for you while we wait it out?"));
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.rain.1", "Rainy days like this always make me reflective. What’s on your mind?").addCondition(WeatherCheck.weather().setRaining(true).build()))
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.1.talk.rain.2", "Quite the downpour, isn’t it? What can I do for you while we wait it out?").addCondition(WeatherCheck.weather().setRaining(true).build())));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
                             .addConversation("npc.generic.1.follow_talk.1", "Where are we going?"));
                     m.put(ConversationContext.FOLLOW_YES, new ConversationSet.Builder()
@@ -285,9 +285,9 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
                             .addConversation("npc.generic.3.talk.1", "Those sheep look so fluffy... I bet you can fall asleep instantly if you lie on them")
                             .addConversation("npc.generic.3.talk.2", "Some people have so much energy during the day. I wonder where they get all of it from...")
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.3")
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.generic.3.talk.3", "If I bring a pillow with me i could nap everywhere I want. What do you think?")
                                     .addAction(new ConversationSet.ConversationActionHolder("npc.generic.3.talk.3.answer.nice", ConversationSet.ConversationAction.ANSWER, "npc.generic.3.talk.3.response.nice", 0), "Sounds great!")
-                                    .addAction(new ConversationSet.ConversationActionHolder("npc.generic.3.talk.3.answer.uhh", ConversationSet.ConversationAction.ANSWER, "npc.generic.3.talk.3.response.uhh", 0), "..."), "If I bring a pillow with me i could nap everywhere I want. What do you think?")
+                                    .addAction(new ConversationSet.ConversationActionHolder("npc.generic.3.talk.3.answer.uhh", ConversationSet.ConversationAction.ANSWER, "npc.generic.3.talk.3.response.uhh", 0), "..."))
                             .addConversation("npc.generic.3.talk.3.response.nice", "Yeah I know right?")
                             .addConversation("npc.generic.3.talk.3.response.uhh", "Come on... You don't think so?"));
                     m.put(ConversationContext.FOLLOW_TALK, new ConversationSet.Builder()
@@ -350,7 +350,7 @@ public class NPCDataGen extends NPCDataProvider {
                             .addConversation("npc.shop_owner.1.first.2", "Hello there, traveler! You seem to be new here. Whats your name? ... %player% I see. I'm %npc% and I have a general store where i sell various goods there.")
                             .addConversation("npc.shop_owner.1.first.3", "Ah, a new face in town! Welcome. I'm %npc% and I manage a general store. You should come by if you have some time"));
                     m.put(ConversationContext.GREETING, new ConversationSet.Builder()
-                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.greeting.1").addCondition(TimeCheck.time(IntRange.range(6000, 12000)).build()), "Goood morning %player%! How are you today")
+                            .addConversation(new ConversationSet.Conversation.Builder("npc.shop_owner.1.greeting.1", "Goood morning %player%! How are you today").addCondition(TimeCheck.time(IntRange.range(6000, 12000)).build()))
                             .addConversation("npc.shop_owner.1.greeting.2", "Good day to you %player%! How are you today"));
                     m.put(ConversationContext.TALK, new ConversationSet.Builder()
                             .addConversation("npc.shop_owner.1.talk.1", "Running this store keeps me busy, but I wouldn’t trade it for anything. Seeing so many people needing this store makes me happy.")
@@ -537,40 +537,58 @@ public class NPCDataGen extends NPCDataProvider {
                 }));
 
         //Test data using all possible fields
-        /*ResourceLocation attackAll = this.addAttackActions(RuneCraftory.modRes("attack_all"), new NPCAttackActions.Builder()
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new AttackMeleeAction(ConstantValue.exactly(40), ConstantValue.exactly(0)))
-                        .action(new RunToLeadAction(ConstantValue.exactly(40), ConstantValue.exactly(0))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new FoodThrowAction(List.of(new ItemStack(Items.APPLE)), ConstantValue.exactly(40), ConstantValue.exactly(0))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new RunAwayAction(ConstantValue.exactly(40), ConstantValue.exactly(0), 6)))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, ConstantValue.exactly(40), ConstantValue.exactly(0))))
-                .addAction(new NPCAttackActions.ActionBuilder(1)
-                        .action(new PartyTargetAction(ModSpells.CURE_ALL.get(), false, ConstantValue.exactly(0)))));
-        this.addNPCDataAll("random_npc_all_test", new NPCData.Builder(50, "Name", "Surname", NPCData.Gender.UNDEFINED)
-                        .setNeutralGiftResponse("npc.test.all.gift.default", "Test")
-                        .withBirthday(com.mojang.datafixers.util.Pair.of(EnumSeason.SPRING, 1))
-                        .setUnique(1)
-                        .withProfession(ModNPCJobs.GENERAL.getSecond())
-                        .addGiftResponse("gift", new NPCData.Gift(RunecraftoryTags.SEEDS, "gift.response.test", 1), "Test")
-                        .withSchedule(new NPCSchedule.Schedule(0, 1, 1, 1, 1, 1, 1, 1, EnumSet.noneOf(EnumDay.class)))
-                        .setBaseStat(Attributes.MAX_HEALTH, 1)
-                        .setStatIncrease(Attributes.MAX_HEALTH, 1)
-                        .setBaseLevel(5).withCombatActions(attackAll),
-                of(m -> {
-                    for (ConversationContext ctx : ConversationContext.getRegistered()) {
-                        m.put(ctx, new NPCData.ConversationSet.Builder("npc.test.all" + ctx.key(), "Test"));
-                    }
-                    m.put(ConversationContext.GREETING, new NPCData.ConversationSet.Builder("npc.test.all.talk.default", "Test")
-                            .addConversation(new NPCData.Conversation.Builder("npc.test.all.greeting.1"), "Test")
-                            .addConversation(new NPCData.Conversation.Builder("npc.test.all.greeting.2"), "Test"));
-                    m.put(ConversationContext.TALK, new NPCData.ConversationSet.Builder("npc.test.talk.default", "Test")
-                            .addConversation(new NPCData.Conversation.Builder("npc.test.all.talk.1"), "Test")
-                            .addConversation(new NPCData.Conversation.Builder("npc.test.all.talk.2"), "Test"));
-                }),
-                Pair.of(RuneCraftory.modRes("test_look"), new NPCData.NPCLook(NPCData.Gender.UNDEFINED, "Flemmli97", 0, Map.of())), Map.of());*/
+//        ResourceLocation attackAll = this.addAttackActions(RuneCraftory.modRes("attack_all"), new NPCAttackActions.Builder()
+//                .addAction(new NPCAttackActions.ActionBuilder(1)
+//                        .action(new AttackMeleeAction(ConstantValue.exactly(40), ConstantValue.exactly(0)))
+//                        .action(new RunToLeadAction(ConstantValue.exactly(40), ConstantValue.exactly(0))))
+//                .addAction(new NPCAttackActions.ActionBuilder(1)
+//                        .action(new FoodThrowAction(List.of(new ItemStack(Items.APPLE)), ConstantValue.exactly(40), ConstantValue.exactly(0))))
+//                .addAction(new NPCAttackActions.ActionBuilder(1)
+//                        .action(new RunAwayAction(ConstantValue.exactly(40), ConstantValue.exactly(0), 6)))
+//                .addAction(new NPCAttackActions.ActionBuilder(1)
+//                        .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, ConstantValue.exactly(40), ConstantValue.exactly(0))))
+//                .addAction(new NPCAttackActions.ActionBuilder(1)
+//                        .action(new PartyTargetAction(ModSpells.CURE_ALL.get(), false, ConstantValue.exactly(0)))));
+//        ResourceLocation attackAll = this.addAttackActions(RuneCraftory.modRes("attack_all"), new NPCAttackActions.Builder()
+//                .addSequence(5)
+//                .add(RuneCraftoryNPCBehaviour.WALK_TO.get().of(new SerializableBehaviours.WalkToData(1, 1)))
+//                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_WEAPON.get().of(Unit.INSTANCE))
+//                .timeout(UniformGenerator.between(30, 80))
+//                .end()
+//                .addSequence(1)
+//                .add(RuneCraftoryNPCBehaviour.KEEP_DISTANCE.get().of(new SerializableBehaviours.KeepDistanceData(1.1f, 5, 9)))
+//                .add(RuneCraftoryNPCBehaviour.ATTACK_WITH_SPELL.get().of(new SerializableBehaviours.SpellAttackData(RuneCraftorySpells.WATER_LASER.get())))
+//                .timeout(UniformGenerator.between(50, 100))
+//                .end()
+//                .addSequence(1)
+//                .add(RuneCraftoryNPCBehaviour.THROW_ITEM.get().of(new SerializableBehaviours.ItemThrowData(List.of(new ItemStack(Items.APPLE)), false)))
+//                .timeout(UniformGenerator.between(50, 100))
+//                .end());
+//        ResourceLocation testLook = this.addLook(RuneCraftory.modRes("test_look"), new NPCLook(NPCData.Gender.UNDEFINED, "Flemmli97", 0, Map.of()));
+//        this.addNPCData("test_npc", new NPCData.Builder(50)
+//                        .withLook(new NPCData.NPCLookId(testLook, NPCData.Gender.UNDEFINED))
+//                        .withProfession(RuneCraftoryNPCProfessions.GENERAL_STORE.get())
+//                        .addGiftResponse("dislike", new NPCData.Gift(mineralGift, "npc.test.dislike", -7), "Dislike response")
+//                        .addGiftResponse("like", new NPCData.Gift(flowers, "npc.test.like", 10), "Like response")
+//                        .setNeutralGiftResponse("npc.test.all.gift.default", "Neutral gift response")
+//                        .withBirthday(Pair.of(Season.SPRING, 1))
+//                        .withCombatActions(attackAll)
+//                        .withSchedule(new NPCSchedule.Schedule(0, 1, 1, 1, 1, 1, 1, 1, EnumSet.noneOf(DayOfWeek.class)))
+//                        .setBaseStat(Attributes.MAX_HEALTH, 10)
+//                        .setStatIncrease(Attributes.MAX_HEALTH, 1)
+//                        .setBaseLevel(5),
+//                of(m -> {
+//                    for (ConversationContext ctx : ConversationContext.getRegistered()) {
+//                        if (ctx == ConversationContext.TALK)
+//                            continue;
+//                        m.put(ctx, new ConversationSet.Builder("npc.test.all" + ctx.key(), "Test ctx " + ctx.key()));
+//                    }
+//                    m.put(ConversationContext.TALK, new ConversationSet.Builder("npc.test.fallback", "Fallback response")
+//                            .addConversation(new ConversationSet.Conversation.Builder("npc.test.talk", "Init talking dialogue")
+//                                    .withDialogue(new ConversationSet.Dialogue("npc.test.talk.1", "other"), "Speaker: %other%, Reference target %npc%")
+//                                    .withDialogue(new ConversationSet.Dialogue("npc.test.talk.2"), "Speaker: %npc%, Reference target %other%")
+//                                    .withParticipant("other", new ConversationSet.Participant(RuneCraftory.modRes("test_npc")))));
+//                }));
 
         this.questGen.questResponses.forEach((id, conv) -> this.addConversation(id, conv.getSecond(), conv.getFirst()));
     }

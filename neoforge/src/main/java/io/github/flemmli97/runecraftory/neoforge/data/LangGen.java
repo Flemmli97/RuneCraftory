@@ -532,6 +532,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.npc.conversation.context.missing", "-Missing Conversation for context %s-");
         this.add("runecraftory.npc.conversation.response.missing", "-Missing quest response for quest %s-");
         this.add("runecraftory.npc.default.gift.neutral", "Thank you for your gift.");
+        this.add("runecraftory.npc.conversation.participant.missing", "Unknown Participant");
 
         this.add("runecraftory.npc.spawn.name.missing", "Missing name for baby!");
 

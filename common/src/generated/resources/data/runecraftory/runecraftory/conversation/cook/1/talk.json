@@ -2,15 +2,18 @@
   "conversations": {
     "npc.cook.1.talk.1": {
       "conditions": [],
-      "translation_key": "npc.cook.1.talk.1"
+      "dialogues": "npc.cook.1.talk.1",
+      "speakers": {}
     },
     "npc.cook.1.talk.2": {
       "conditions": [],
-      "translation_key": "npc.cook.1.talk.2"
+      "dialogues": "npc.cook.1.talk.2",
+      "speakers": {}
     },
     "npc.cook.1.talk.3": {
       "conditions": [],
-      "translation_key": "npc.cook.1.talk.3"
+      "dialogues": "npc.cook.1.talk.3",
+      "speakers": {}
     }
   },
   "fallback_key": ""

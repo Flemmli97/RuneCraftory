@@ -4,8 +4,8 @@ import io.github.flemmli97.runecraftory.client.NPCDialogueLanguageManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +29,7 @@ public class PlaceHolderComponent {
     public static final String LIKE = addReplacement("like", ChatFormatting.BLUE);
     public static final String DISLIKE = addReplacement("dislike", ChatFormatting.RED);
     public static final String HATE = addReplacement("hate", ChatFormatting.RED);
+    public static final Function<ResourceLocation, String> SPEAKER = addReplacement("speaker", ResourceLocation::toString, ChatFormatting.AQUA);
     public static final Function<String, String> QUEST_NPC_TARGET = addReplacement("quest.target_npc", Function.identity(), ChatFormatting.AQUA);
     public static final Function<String, String> QUEST_PROGRESS = addReplacement("quest.progress", Function.identity(), ChatFormatting.AQUA);
 
@@ -45,7 +46,7 @@ public class PlaceHolderComponent {
     /**
      * Parse the component by replacing the placeholder texts
      */
-    public static Component parseDialogueComponent(Component component, Map<String, Component> replacements) {
+    public static Component parseDialogueComponent(Component component, Map<String, Component> replacements, Map<String, Component> participants) {
         Component parse;
         if (component.getContents() instanceof TranslatableContents translatable) {
             String translation = NPCDialogueLanguageManager.INSTANCE
@@ -59,15 +60,20 @@ public class PlaceHolderComponent {
             while (matcher.find()) {
                 String pattern = matcher.group(1);
                 Component replacement = replacements.get(pattern);
+                boolean isParticipant = false;
+                if (replacement == null) {
+                    replacement = participants.get(pattern);
+                    isParticipant = true;
+                }
                 if (replacement != null) {
                     translation = translation.replace("%" + pattern + "%", "%" + (args.size() + 1) + "$s");
-                    if (replacement instanceof MutableComponent mut) {
-                        int dot = pattern.indexOf(SEPARATOR);
-                        String prefix = dot != -1 ? pattern.substring(0, dot) : pattern;
-                        ChatFormatting[] styles = PLACEHOLDER_STYLES.get(prefix);
-                        if (styles != null) {
-                            mut.withStyle(styles);
-                        }
+                    int dot = pattern.indexOf(SEPARATOR);
+                    String prefix = dot != -1 ? pattern.substring(0, dot) : pattern;
+                    ChatFormatting[] styles = PLACEHOLDER_STYLES.get(prefix);
+                    if (styles != null) {
+                        replacement = replacement.copy().withStyle(styles);
+                    } else if (isParticipant) {
+                        replacement = replacement.copy().withStyle(ChatFormatting.AQUA);
                     }
                     args.add(replacement);
                 }
@@ -76,7 +82,7 @@ public class PlaceHolderComponent {
         } else {
             parse = component.plainCopy();
         }
-        List<Component> children = component.getSiblings().stream().map(c -> parseDialogueComponent(c, replacements)).toList();
+        List<Component> children = component.getSiblings().stream().map(c -> parseDialogueComponent(c, replacements, participants)).toList();
         parse.getSiblings().addAll(children);
         return parse;
     }

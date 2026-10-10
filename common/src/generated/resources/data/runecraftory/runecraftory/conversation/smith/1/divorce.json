@@ -2,11 +2,13 @@
   "conversations": {
     "npc.smith.1.divorce.success.1": {
       "conditions": [],
-      "translation_key": "npc.smith.1.divorce.success.1"
+      "dialogues": "npc.smith.1.divorce.success.1",
+      "speakers": {}
     },
     "npc.smith.1.divorce.success.2": {
       "conditions": [],
-      "translation_key": "npc.smith.1.divorce.success.2"
+      "dialogues": "npc.smith.1.divorce.success.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""

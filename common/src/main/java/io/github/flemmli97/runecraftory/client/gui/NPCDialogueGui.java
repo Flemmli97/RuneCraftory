@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class NPCDialogueGui<T extends NPCEntity> extends Screen {
 
     private static final ResourceLocation TEXTURE = RuneCraftory.modRes("hud/npc_dialogue");
+    private static final ResourceLocation NAME_PLATE = RuneCraftory.modRes("hud/npc_dialogue_name_plate");
 
     /**
      * Dummy data
@@ -52,7 +54,7 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
 
     protected final T entity;
 
-    private List<List<ConversationLine>> conversation;
+    private List<ConversationContainer> conversation;
     private Map<String, Component> replacements = Map.of();
     private Int2ObjectMap<ConversationSet.NetworkActions> actions;
 
@@ -93,8 +95,15 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
             this.calculateButtonVisibility = false;
         }
         graphics.setColor(1, 1, 1, 0.85f);
+        Component speaker = this.getCurrentContainer().speaker();
+        int plateX = this.leftPos;
+        int border = 5;
+        int plateY = this.topPos - this.font.lineHeight - border * 2;
+        graphics.blitSprite(NAME_PLATE, plateX, plateY, this.font.width(speaker) + border * 2, this.font.lineHeight + 5 * 2);
         graphics.blitSprite(TEXTURE, this.leftPos, this.topPos, MAX_WIDTH, MAX_HEIGHT);
         graphics.setColor(1, 1, 1, 1);
+
+        graphics.drawString(this.font, speaker, plateX + border, plateY + border, 0xffffff, false);
         int lines = Math.min(this.getCurrentLines().size(), (this.pageIndex + 1) * LINES_PER_PAGE);
         for (int i = this.pageIndex * LINES_PER_PAGE; i < lines; i++) {
             if (i > this.lineProgress)
@@ -116,7 +125,7 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
             List<Component> actions = actionsHolder.actions();
             for (int i = actions.size() - 1; i >= 0; i--) {
                 int actionIdx = i;
-                DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(actions.get(i), this.replacements),
+                DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(actions.get(i), this.replacements, this.getCurrentContainer().participants()),
                         b -> LoaderNetwork.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), actionsHolder.setID(), actionsHolder.conversationID(), actionIdx)));
                 btn.visible = visible;
                 this.buttons.add(btn);
@@ -175,9 +184,14 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
         return this.lineProgress >= this.getCurrentLines().size() - 1;
     }
 
-    private List<NPCDialogueGui.ConversationLine> getCurrentLines() {
+    private ConversationContainer getCurrentContainer() {
         return this.conversation.get(Mth.clamp(this.conversationIndex, 0, this.conversation.size() - 1));
     }
+
+    private List<NPCDialogueGui.ConversationLine> getCurrentLines() {
+        return this.getCurrentContainer().lines();
+    }
+
 
     private boolean isWriting() {
         int max = this.maxCurrentLineIndex();
@@ -222,21 +236,28 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
     }
 
     public void updateConversation(Minecraft mc, List<ConversationSet.NetworkConversation> conversations, Map<String, Component> data) {
-        List<List<ConversationLine>> lines = new ArrayList<>();
+        List<ConversationContainer> lines = new ArrayList<>();
         Int2ObjectMap<ConversationSet.NetworkActions> actions = new Int2ObjectOpenHashMap<>();
-        for (int i = 0; i < conversations.size(); i++) {
-            ConversationSet.NetworkConversation conversation = conversations.get(i);
-            Component text = PlaceHolderComponent.parseDialogueComponent(conversation.text(), data);
-            List<ConversationLine> pageLines = new ArrayList<>();
-            for (FormattedText txt : mc.font.getSplitter().splitLines(text, LINE_WIDTH, text.getStyle())) {
-                // Ignore empty lines at page start
-                if (i % LINES_PER_PAGE == 0 && txt.getString().trim().isEmpty()) {
-                    continue;
+        for (ConversationSet.NetworkConversation conversation : conversations) {
+            for (ConversationSet.NetworkDialog dialogue : conversation.dialogues()) {
+                List<ConversationLine> pageLines = new ArrayList<>();
+                Component text = PlaceHolderComponent.parseDialogueComponent(dialogue.text(), data, conversation.participants());
+                for (FormattedText txt : mc.font.getSplitter().splitLines(text, LINE_WIDTH, text.getStyle())) {
+                    // Ignore empty lines at page start
+                    if (pageLines.size() % LINES_PER_PAGE == 0 && txt.getString().trim().isEmpty()) {
+                        continue;
+                    }
+                    pageLines.add(new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt)));
                 }
-                pageLines.add(new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt)));
+                Component speaker = dialogue.speaker().map(conversation.participants()::get).orElse(data.get(PlaceHolderComponent.NPC));
+                if (speaker == null) {
+                    speaker = Component.translatable("runecraftory.npc.conversation.participant.missing");
+                } else {
+                    speaker = speaker.copy().withStyle(ChatFormatting.WHITE);
+                }
+                lines.add(new ConversationContainer(speaker, conversation.participants(), pageLines));
             }
-            lines.add(pageLines);
-            int idx = i;
+            int idx = lines.size() - 1;
             conversation.action().ifPresent(act -> actions.put(idx, act));
         }
         this.conversation = lines;
@@ -246,5 +267,8 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
     }
 
     record ConversationLine(int width, FormattedText raw, FormattedCharSequence txt) {
+    }
+
+    record ConversationContainer(Component speaker, Map<String, Component> participants, List<ConversationLine> lines) {
     }
 }

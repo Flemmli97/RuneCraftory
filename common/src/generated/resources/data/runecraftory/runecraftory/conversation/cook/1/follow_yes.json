@@ -2,7 +2,8 @@
   "conversations": {
     "npc.cook.1.follow.yes.1": {
       "conditions": [],
-      "translation_key": "npc.cook.1.follow.yes.1"
+      "dialogues": "npc.cook.1.follow.yes.1",
+      "speakers": {}
     }
   },
   "fallback_key": ""

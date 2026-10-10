@@ -121,7 +121,7 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
     private void addDialogueTranlation(String translationPath, Map<String, String> translations) {
         Map<String, String> map = this.dialogueTranslations.computeIfAbsent(translationPath, o -> new LinkedHashMap<>());
         translations.forEach((k, t) -> {
-            if (!t.equals(this.dialogueTranslationsVerifier.get(k))) {
+            if (t.equals(this.dialogueTranslationsVerifier.getOrDefault(k, t))) {
                 this.dialogueTranslationsVerifier.put(k, t);
                 map.put(k, t);
             } else {

@@ -2,11 +2,13 @@
   "conversations": {
     "npc.shop_owner.1.marry.yes.1": {
       "conditions": [],
-      "translation_key": "npc.shop_owner.1.marry.yes.1"
+      "dialogues": "npc.shop_owner.1.marry.yes.1",
+      "speakers": {}
     },
     "npc.shop_owner.1.marry.yes.2": {
       "conditions": [],
-      "translation_key": "npc.shop_owner.1.marry.yes.2"
+      "dialogues": "npc.shop_owner.1.marry.yes.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""

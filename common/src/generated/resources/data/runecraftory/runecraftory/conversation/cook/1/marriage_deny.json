@@ -2,11 +2,13 @@
   "conversations": {
     "npc.cook.1.marry.no.1": {
       "conditions": [],
-      "translation_key": "npc.cook.1.marry.no.1"
+      "dialogues": "npc.cook.1.marry.no.1",
+      "speakers": {}
     },
     "npc.cook.1.marry.no.2": {
       "conditions": [],
-      "translation_key": "npc.cook.1.marry.no.2"
+      "dialogues": "npc.cook.1.marry.no.2",
+      "speakers": {}
     }
   },
   "fallback_key": ""
