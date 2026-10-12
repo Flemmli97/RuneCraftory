@@ -1,4 +1,11 @@
 {
+  "loot_table": "runecraftory:ship_turnip",
+  "repeat_delay": -1,
+  "category": "runecraftory:quests",
+  "name": "runecraftory.quest.ship_turnip",
+  "quest_givers": [
+    "runecraftory:shop_owner/1"
+  ],
   "quests": [
     {
       "quest": {
@@ -41,13 +48,6 @@
         "end_id": "runecraftory:quest/ship_turnip/end_1"
       }
     }
-  ],
-  "loot_table": "runecraftory:ship_turnip",
-  "repeat_delay": -1,
-  "category": "runecraftory:quests",
-  "name": "runecraftory.quest.ship_turnip",
-  "quest_givers": [
-    "runecraftory:shop_owner/1"
   ],
   "type": "runecraftory:npc_quest"
 }

@@ -1,4 +1,11 @@
 {
+  "loot_table": "runecraftory:tame_monster",
+  "repeat_delay": -1,
+  "category": "runecraftory:quests",
+  "name": "runecraftory.quest.tame_monster",
+  "quest_givers": [
+    "runecraftory:random_npc_1"
+  ],
   "quests": [
     {
       "quest": {
@@ -39,13 +46,6 @@
         "end_id": "runecraftory:quest/tame_monster/end_1"
       }
     }
-  ],
-  "loot_table": "runecraftory:tame_monster",
-  "repeat_delay": -1,
-  "category": "runecraftory:quests",
-  "name": "runecraftory.quest.tame_monster",
-  "quest_givers": [
-    "runecraftory:random_npc_1"
   ],
   "type": "runecraftory:npc_quest"
 }

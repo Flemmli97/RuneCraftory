@@ -1,4 +1,11 @@
 {
+  "loot_table": "runecraftory:mining",
+  "repeat_delay": -1,
+  "category": "runecraftory:quests",
+  "name": "runecraftory.quest.mining",
+  "quest_givers": [
+    "runecraftory:smith/1"
+  ],
   "quests": [
     {
       "quest": {
@@ -44,13 +51,6 @@
         "end_id": "runecraftory:quest/mining/end_1"
       }
     }
-  ],
-  "loot_table": "runecraftory:mining",
-  "repeat_delay": -1,
-  "category": "runecraftory:quests",
-  "name": "runecraftory.quest.mining",
-  "quest_givers": [
-    "runecraftory:smith/1"
   ],
   "type": "runecraftory:npc_quest"
 }

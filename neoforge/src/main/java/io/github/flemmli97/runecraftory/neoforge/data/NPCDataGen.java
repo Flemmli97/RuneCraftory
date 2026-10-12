@@ -573,7 +573,7 @@ public class NPCDataGen extends NPCDataProvider {
 //                        .setNeutralGiftResponse("npc.test.all.gift.default", "Neutral gift response")
 //                        .withBirthday(Pair.of(Season.SPRING, 1))
 //                        .withCombatActions(attackAll)
-//                        .withSchedule(new NPCSchedule.Schedule(0, 1, 1, 1, 1, 1, 1, 1, EnumSet.noneOf(DayOfWeek.class)))
+//                        .withSchedule(new NPCSchedule.Schedule(List.of(new NPCSchedule.ActivityTime(2000, Activity.MEET)), List.of(new NPCSchedule.ActivityTime(2000, Activity.MEET)), EnumSet.noneOf(DayOfWeek.class)))
 //                        .setBaseStat(Attributes.MAX_HEALTH, 10)
 //                        .setStatIncrease(Attributes.MAX_HEALTH, 1)
 //                        .setBaseLevel(5),
