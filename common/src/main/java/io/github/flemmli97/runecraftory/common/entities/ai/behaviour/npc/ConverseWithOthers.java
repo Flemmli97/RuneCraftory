@@ -27,7 +27,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
     private final Predicate<E> newGroupChance = e -> e.getRandom().nextInt(100) == 0;
 
     public ConverseWithOthers() {
-        this(6);
+        this(5);
     }
 
     public ConverseWithOthers(double range) {

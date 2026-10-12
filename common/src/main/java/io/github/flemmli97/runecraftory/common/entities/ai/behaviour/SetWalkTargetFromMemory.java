@@ -63,17 +63,17 @@ public class SetWalkTargetFromMemory<E extends PathfinderMob> extends ExtendedBe
         GlobalPos pos = BrainUtils.getMemory(entity, this.poiMemory);
         if (pos == null)
             return;
+        int range = this.closeEnough.applyAsInt(entity);
         if (this.tiredOfTryingToFindTarget(entity)) {
             this.onInvalidate.accept(entity);
-        } else if (pos.pos().distManhattan(entity.blockPosition()) > 100) {
+        } else if (pos.pos().distManhattan(entity.blockPosition()) > range * 1.5) {
             Vec3 vec3 = DefaultRandomPos.getPosTowards(entity, 15, 7, Vec3.atCenterOf(pos.pos()), 90 * Mth.DEG_TO_RAD);
             if (vec3 == null) {
                 BrainUtils.setMemory(entity, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, entity.level().getGameTime());
                 return;
             }
-            BrainUtils.setMemory(entity, MemoryModuleType.WALK_TARGET, new WalkTarget(pos.pos(), this.speedMod.apply(entity), this.closeEnough.applyAsInt(entity)));
-        } else
-            BrainUtils.setMemory(entity, MemoryModuleType.WALK_TARGET, new WalkTarget(pos.pos(), this.speedMod.apply(entity), this.closeEnough.applyAsInt(entity)));
+            BrainUtils.setMemory(entity, MemoryModuleType.WALK_TARGET, new WalkTarget(pos.pos(), this.speedMod.apply(entity), range));
+        }
     }
 
     private boolean tiredOfTryingToFindTarget(E entity) {
