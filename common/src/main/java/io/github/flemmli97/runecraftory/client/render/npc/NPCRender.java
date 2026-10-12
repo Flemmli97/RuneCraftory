@@ -405,8 +405,12 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         private boolean pendingTextures;
 
         public PlayerSkinData(String name) {
-            SkullBlockEntity.fetchGameProfile(name)
-                    .thenAccept(prof -> prof.ifPresent(p -> this.gameProfile = p));
+            if (name.equals(NPCLook.DEFAULT_SKIN)) {
+                this.pendingTextures = true;
+            } else {
+                SkullBlockEntity.fetchGameProfile(name)
+                        .thenAccept(prof -> prof.ifPresent(p -> this.gameProfile = p));
+            }
         }
 
         public ResourceLocation getLocation() {
