@@ -88,7 +88,7 @@ public class RuneCraftory {
         RuneCraftoryLootRegistries.LOOTCONDITIONS.registerContent();
         RuneCraftoryLootRegistries.LOOTFUNCTION.registerContent();
         RuneCraftoryLootRegistries.NUMBER_PROVIDERS.registerContent();
-        RuneCraftoryMemoryTypes.MEMORYIES.registerContent();
+        RuneCraftoryMemoryTypes.MEMORIES.registerContent();
         RuneCraftoryMenuTypes.CONTAINERS.registerContent();
         RuneCraftoryNPCBehaviour.BEHAVIOURS.register().registerContent();
         RuneCraftoryNPCLooks.NPC_FEATURES.register().registerContent();

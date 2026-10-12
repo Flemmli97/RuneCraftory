@@ -26,6 +26,8 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntit
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetFromMemory;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.AcquirePOITask;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.ConverseWithOthers;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.InteractInConversation;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.InvalidatePOITask;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.LookAtInteractingPlayer;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
@@ -33,6 +35,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.OpenDoo
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetRainShelterTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetWalkAroundPoiTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SleepInBed;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SpeakInConversation;
 import io.github.flemmli97.runecraftory.common.entities.ai.sensors.NearbyNPCSensor;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
@@ -422,9 +425,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     @Override
     public List<? extends ExtendedSensor<? extends NPCEntity>> getSensors() {
         return List.of(new NearbyPlayersSensor<>(),
-                new NearbyLivingEntitySensor<NPCEntity>()
-                        .setPredicate((target, entity) -> entity.targetPred.test(target))
-                        .setScanRate(e -> 10),
+                new NearbyLivingEntitySensor<NPCEntity>().setScanRate(e -> 10),
                 new HurtBySensor<>(),
                 new NearbyNPCSensor().setScanRate(e -> 10));
     }
@@ -447,6 +448,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 new InvalidatePOITask<>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING, NPCEntity::releaseMeetingPoi),
                 new AcquirePOITask<NPCEntity>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING),
                 new InvalidateMemory<>(MemoryModuleType.HIDING_PLACE).invalidateIf((e, p) -> !e.level().isRaining()),
+                new ConverseWithOthers<>(),
+                new InvalidateMemory<>(MemoryModuleType.INTERACTION_TARGET).invalidateIf((e, t) -> !t.isAlive()),
+                new SpeakInConversation<>(),
                 new FollowEntityEx<NPCEntity, Player>()
                         .startFollowingWhen((e, f) -> e.behaviourState() == NPCEntity.Behaviour.FOLLOW ? 8. : 12)
                         .ignoreIfTargetingTill(20)
@@ -465,13 +469,14 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     protected ExtendedBehaviour<? extends NPCEntity> lookBehaviour() {
-        return new AllApplicableBehaviours<>(
+        return new FirstApplicableBehaviour<>(
                 new LookAtInteractingPlayer(),
+                new InteractInConversation<>(),
                 new LookAtAttackTarget<>(),
                 new OneRandomBehaviour<>(
                         new SetRandomLookTarget<>().lookChance(ConstantFloat.of(1)),
                         new SetPlayerLookTarget<>()
-                ).startCondition(m -> m.getRandom().nextFloat() < 0.1 && !BrainUtils.hasMemory(m, MemoryModuleType.WALK_TARGET))
+                ).startCondition(m -> m.getRandom().nextInt(150) == 0 && !BrainUtils.hasMemory(m, MemoryModuleType.WALK_TARGET))
         ).startCondition(e -> !BrainUtils.hasMemory(e, MemoryModuleType.ATTACK_TARGET)
                 && !e.isSleeping() && !e.playDeath());
     }
@@ -482,7 +487,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 MonsterBehaviourUtils.moveTo(),
                 new FirstApplicableBehaviour<>(
                         new SetRainShelterTarget<>(),
-                        new TargetOrRetaliate<NPCEntity>(),
+                        new TargetOrRetaliate<NPCEntity>().attackablePredicate(this.targetPred),
                         new SetMoveToRestriction<NPCEntity>(),
                         new SetRandomWalkTarget<>().startCondition(m -> m.getRandom().nextInt(120) == 0)
                 )
@@ -1599,7 +1604,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     }
 
     public Activity getActivity() {
-        return this.getBrain().getActiveNonCoreActivity().orElse(null);
+        return this.getNPCSchedule().currentActivity();
     }
 
     public NPCSchedule getNPCSchedule() {

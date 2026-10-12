@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
+import io.github.flemmli97.runecraftory.common.entities.npc.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -52,7 +53,8 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                                                    Predicate<Map.Entry<String, ConversationSet.Conversation>> filter,
                                                    Random random) {
         List<Pair<Map.Entry<String, Conversation>, Map<String, Component>>> filtered = new ArrayList<>();
-        Map<ResourceLocation, List<NPCEntity>> nearby = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.NEARBY_NPCS.get());
+        ConversationGroupMemory group = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
+        Map<ResourceLocation, List<NPCEntity>> nearby = group != null ? group.mapTo() : Map.of();
         for (Map.Entry<String, ConversationSet.Conversation> entry : conversations.value().conversations().entrySet()) {
             if (!filter.test(entry))
                 continue;
@@ -85,7 +87,8 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
         Conversation conversation = conversations.value().conversations().get(conversationID);
         if (conversation == null)
             return Optional.empty();
-        Map<ResourceLocation, List<NPCEntity>> nearby = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.NEARBY_NPCS.get());
+        ConversationGroupMemory group = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
+        Map<ResourceLocation, List<NPCEntity>> nearby = group != null ? group.mapTo() : Map.of();
         Map<String, Component> participants = conversation.resolveParticipants(npc, nearby, random);
         if (participants == null)
             return Optional.empty();

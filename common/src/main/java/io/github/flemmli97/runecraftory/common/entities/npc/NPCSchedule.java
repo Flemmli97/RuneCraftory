@@ -174,7 +174,7 @@ public class NPCSchedule {
 
                             new ActivityTime(Math.max(wakeUpTime + 500, workTime), Activity.WORK),
                             new ActivityTime(breakTime, Activity.MEET),
-                            new ActivityTime(workTimeAfter, Activity.WORK),
+                            new ActivityTime(Math.max(breakTime, workTimeAfter), Activity.WORK),
                             new ActivityTime(doneWorkTime, Activity.IDLE),
 
                             new ActivityTime(sleepTime, Activity.REST)),

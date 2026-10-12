@@ -18,10 +18,6 @@ public class LookAtInteractingPlayer extends ExtendedBehaviour<NPCEntity> {
     private static final MemoryTest MEMORIES = MemoryTest.builder(1)
             .usesMemories(MemoryModuleType.LOOK_TARGET);
 
-    public LookAtInteractingPlayer() {
-        this.noTimeout();
-    }
-
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
         return MEMORIES;
@@ -34,27 +30,7 @@ public class LookAtInteractingPlayer extends ExtendedBehaviour<NPCEntity> {
     }
 
     @Override
-    protected boolean shouldKeepRunning(NPCEntity entity) {
-        Player player = entity.getLastInteractedPlayer();
-        return entity.isAlive() && player != null;
-    }
-
-    @Override
     protected void start(NPCEntity entity) {
         BrainUtils.setMemory(entity, MemoryModuleType.LOOK_TARGET, new EntityTracker(entity.getLastInteractedPlayer(), true));
-    }
-
-    @Override
-    protected void stop(NPCEntity entity) {
-        super.stop(entity);
-        BrainUtils.clearMemory(entity, MemoryModuleType.LOOK_TARGET);
-    }
-
-    @Override
-    protected void tick(NPCEntity entity) {
-        super.tick(entity);
-        BrainUtils.setMemory(entity, MemoryModuleType.LOOK_TARGET, new EntityTracker(entity.getLastInteractedPlayer(), true));
-        BrainUtils.clearMemory(entity, MemoryModuleType.PATH);
-        BrainUtils.clearMemory(entity, MemoryModuleType.WALK_TARGET);
     }
 }
