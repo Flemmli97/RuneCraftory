@@ -79,7 +79,9 @@ public class AcquirePOITask<E extends Mob> extends ExtendedBehaviour<E> {
 
     @Override
     protected List<Pair<MemoryModuleType<?>, MemoryStatus>> getMemoryRequirements() {
-        return List.of();
+        if (this.poiMemory == null)
+            return List.of();
+        return List.of(Pair.of(this.poiMemory, MemoryStatus.VALUE_ABSENT));
     }
 
     @Override
