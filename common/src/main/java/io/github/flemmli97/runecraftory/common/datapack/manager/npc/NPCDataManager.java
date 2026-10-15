@@ -30,7 +30,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
     public static final ResourceLocation DEFAULT_ID = RuneCraftory.modRes("default_npc");
 
     private Map<ResourceLocation, ReloadableHolder<NPCData>> data = ImmutableMap.of();
-    private final WeightedList<ReloadableHolder<NPCData>> view = new WeightedList<>();
+    private final WeightedList<ReloadableHolder<NPCData>> selectable = new WeightedList<>();
     private final WeightedList<ReloadableHolder<NPCData>> viewNoProfessionDefined = new WeightedList<>();
 
     private HolderLookup.Provider provider;
@@ -48,7 +48,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
     }
 
     public ReloadableHolder<NPCData> getRandom(RandomSource random, Predicate<ReloadableHolder<NPCData>> func, @Nullable Predicate<ReloadableHolder<NPCData>> other) {
-        return this.view.getRandom(random, NPCData.DEFAULT, func, other);
+        return this.selectable.getRandom(random, NPCData.DEFAULT, func, other);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
             }
         });
         this.data = builder.build();
-        this.view.setList(this.data.values().stream().map(d -> WeightedEntry.wrap(d, d.value().weight())).toList());
+        this.selectable.setList(this.data.values().stream().filter(d -> d.value().weight() > 0).map(d -> WeightedEntry.wrap(d, d.value().weight())).toList());
         this.viewNoProfessionDefined.setList(this.data.values().stream().filter(d -> d.value().profession().isEmpty()).map(d -> WeightedEntry.wrap(d, d.value().weight())).toList());
     }
 
