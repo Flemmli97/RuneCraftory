@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackAction;
-import io.github.flemmli97.runecraftory.common.entities.npc.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.social.ConversationGroupMemory;
 import io.github.flemmli97.tenshilib.loader.LoaderRegistryAccess;
 import io.github.flemmli97.tenshilib.loader.registry.LoaderRegister;
 import io.github.flemmli97.tenshilib.loader.registry.RegistryEntrySupplier;

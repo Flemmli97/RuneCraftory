@@ -14,6 +14,7 @@ public class LootCtxParameters {
     public static final LootContextParam<UUID> UUID_CONTEXT = new LootContextParam<>(RuneCraftory.modRes("uuid_context"));
     public static final LootContextParam<Integer> ITEM_LEVEL_CONTEXT = new LootContextParam<>(RuneCraftory.modRes("item_level_context"));
 
+    public static final LootContextParamSet NPC_INTERACTION_INIT = register("npc_interaction_init", b -> b.required(LootContextParams.THIS_ENTITY).required(LootContextParams.ORIGIN));
     public static final LootContextParamSet NPC_INTERACTION = register("npc_interaction", b -> b.required(LootContextParams.THIS_ENTITY).required(LootContextParams.ORIGIN).required(LootCtxParameters.UUID_CONTEXT));
     public static final LootContextParamSet MONSTER_INTERACTION = register("monster_interaction", b ->
             b.required(LootContextParams.THIS_ENTITY).required(LootContextParams.ORIGIN)

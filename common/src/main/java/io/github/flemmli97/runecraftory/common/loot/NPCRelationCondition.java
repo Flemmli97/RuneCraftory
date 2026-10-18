@@ -37,9 +37,9 @@ public record NPCRelationCondition(FamilyEntry.Relationship relation) implements
     @Override
     public boolean test(LootContext ctx) {
         if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof NPCEntity npc) {
-            UUID player = ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
-            if (player != null)
-                return npc.relationFor(player) == this.relation;
+            UUID target = ctx.getParamOrNull(LootCtxParameters.UUID_CONTEXT);
+            if (target != null)
+                return npc.relationFor(target) == this.relation;
         }
         return false;
     }

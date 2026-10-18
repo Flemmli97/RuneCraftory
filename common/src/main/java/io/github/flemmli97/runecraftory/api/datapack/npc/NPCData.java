@@ -84,17 +84,17 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     }),
 
                     RelationStruct.CODEC.fieldOf("relation").forGetter(d -> new RelationStruct(d.relationShipState, d.possibleChildren)),
-                    Codec.STRING.fieldOf("neutral_gift_response").forGetter(d -> d.neutralGiftResponse),
-                    Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("gift_items").forGetter(d -> d.giftItems),
+                    Codec.STRING.fieldOf("neutral_gift_response").forGetter(NPCData::neutralGiftResponse),
+                    Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("gift_items").forGetter(NPCData::giftItems),
 
                     NPCLookId.CODEC.listOf().optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look == null || d.look.isEmpty() ? null : d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
-                    ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
+                    ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(NPCData::weight),
                     ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("unique").forGetter(d -> d.unique == 0 ? Optional.empty() : Optional.of(d.unique)),
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
-                    CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
+                    CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(NPCData::gender),
                     RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
             ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
@@ -292,7 +292,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 if (!this.interactions.containsKey(convCtx))
                     throw new IllegalStateException("Missing interactions for " + convCtx);
             }
-            return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
+            return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse,
+                    this.interactions,
                     this.requiredQuests, this.giftItems, this.schedule,
                     this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease,
                     this.baseLevel, this.combatAction, this.unique, this.relationShipState, this.possibleChildIds);

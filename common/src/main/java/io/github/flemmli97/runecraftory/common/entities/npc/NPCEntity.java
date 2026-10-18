@@ -26,8 +26,6 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.FollowEntit
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.MonsterBehaviourUtils;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.SetWalkTargetFromMemory;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.AcquirePOITask;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.ConverseWithOthers;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.InteractInConversation;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.InvalidatePOITask;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.LookAtInteractingPlayer;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.NPCAttackActions;
@@ -35,11 +33,15 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.OpenDoo
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetRainShelterTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetWalkAroundPoiTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SleepInBed;
-import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SpeakInConversation;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.ConverseWithOthers;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.InteractInConversation;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.SpeakInConversation;
 import io.github.flemmli97.runecraftory.common.entities.ai.sensors.NearbyNPCSensor;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.social.ConversationGroupMemory;
+import io.github.flemmli97.runecraftory.common.entities.npc.social.TopicHolder;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
@@ -216,6 +218,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -445,8 +448,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 new AcquirePOITask<NPCEntity>(MemoryModuleType.JOB_SITE, m -> this.getProfession().matches(m)).canAquire(AcquirePOITask.withinRangeOf(NPCEntity::getBedPos))
                         .onAqcuire(e -> e.level().broadcastEntityEvent(this, (byte) 15))
                         .startCondition(m -> m.getProfession().hasPoi()),
-                new InvalidatePOITask<>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING, NPCEntity::releaseMeetingPoi),
-                new AcquirePOITask<NPCEntity>(MemoryModuleType.MEETING_POINT, PoiTypes.MEETING),
+                new InvalidatePOITask<>(MemoryModuleType.MEETING_POINT,
+                        this.getNPCSchedule()::poiMatchesActivity, NPCEntity::releaseMeetingPoi)
+                        .isStillValid((e, p) -> this.getActivity() == Activity.MEET),
+                new AcquirePOITask<NPCEntity>(MemoryModuleType.MEETING_POINT, this.getNPCSchedule()::poiMatchesActivity),
                 new InvalidateMemory<>(MemoryModuleType.HIDING_PLACE).invalidateIf((e, p) -> !e.level().isRaining()),
                 new ConverseWithOthers<>(),
                 new InvalidateMemory<>(MemoryModuleType.INTERACTION_TARGET).invalidateIf((e, t) -> !t.isAlive()),
@@ -533,7 +538,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     @Override
     public SmartBrainSchedule getSchedule() {
         // Returns null on init so this is why
-        return NPCSchedule.forBrain(() -> this.schedule);
+        return NPCSchedule.forBrain(this::getNPCSchedule);
     }
 
     @Override
@@ -1018,7 +1023,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         if (!talkedTo) {
             ctx = ConversationContext.FIRST_TALK;
         } else if (doGreet) {
-            this.speak(player, this.data.value().getConversation(ConversationContext.GREETING), this.data.value().getConversation(ConversationContext.TALK));
+            this.speak(player, ConversationContext.GREETING, ctx);
             return;
         }
         this.speak(player, ctx);
@@ -1030,34 +1035,62 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         this.speak(player, ConversationContext.FOLLOW_TALK);
     }
 
-    public void speak(ServerPlayer player, ConversationContext convCtx) {
-        this.speak(player, this.data.value().getConversation(convCtx));
-    }
-
-    @SafeVarargs
-    private void speak(ServerPlayer player, ReloadableHolder<ConversationSet>... conversations) {
-        this.speak(player, List.of(conversations));
+    public void speak(ServerPlayer player, ConversationContext... contexts) {
+        List<ReloadableHolder<ConversationSet>> conversations = new ArrayList<>(contexts.length);
+        int idx = -1;
+        for (ConversationContext convCtx : contexts) {
+            conversations.add(this.data.value().getConversation(convCtx));
+            if (convCtx.equals(ConversationContext.TALK)) {
+                idx = conversations.size() - 1;
+            }
+        }
+        this.speak(player, conversations, idx);
     }
 
     private void speak(ServerPlayer player, List<ReloadableHolder<ConversationSet>> conversations) {
+        this.speak(player, conversations, -1);
+    }
+
+    private void speak(ServerPlayer player, List<ReloadableHolder<ConversationSet>> conversations, int groupConversation) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        LootParams ctx = new LootParams.Builder((ServerLevel) this.level())
-                .withParameter(LootContextParams.THIS_ENTITY, this)
-                .withParameter(LootContextParams.ORIGIN, this.position())
-                .withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
-                .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
-        LootContext lootContext = new LootContext.Builder(ctx).create(Optional.empty());
+        LootContext lootContext = this.createConversationContext(player);
         List<ConversationSet.NetworkConversation> dialogues = new ArrayList<>();
+        int idx = 0;
         for (ReloadableHolder<ConversationSet> conv : conversations) {
-            dialogues.add(ConversationSet.createRandom(this, conv, c -> {
+            if (idx == groupConversation) {
+                ConversationGroupMemory group = BrainUtils.getMemory(this, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
+                if (group != null) {
+                    Optional<ConversationSet.NetworkConversation> dialogue = ConversationSet.fromTopic(group, group.topic());
+                    if (dialogue.isPresent()) {
+                        dialogues.add(dialogue.get());
+                        continue;
+                    }
+                }
+            }
+            dialogues.add(ConversationSet.createRandom(conv, c -> {
                 //Disable if player already has a quest from this npc
                 if (c.getValue().actions().stream().anyMatch(h -> h.action() == ConversationSet.ConversationAction.QUEST) &&
                         (QuestHandler.getFirstQuestFor(player, this) != null || this.updater.alreadyAcceptedRandomquest(player)))
                     return false;
                 return c.getValue().startingConversation() && c.getValue().test(heart, lootContext);
             }, this.updater.getDailyRandom()));
+            idx++;
         }
         this.tellDialogue(player, dialogues);
+    }
+
+    public LootContext createConversationContext(@Nullable ServerPlayer player) {
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.level())
+                .withParameter(LootContextParams.THIS_ENTITY, this)
+                .withParameter(LootContextParams.ORIGIN, this.position());
+        LootParams params;
+        if (player != null) {
+            params = builder.withParameter(LootCtxParameters.UUID_CONTEXT, player.getUUID())
+                    .withLuck(player.getLuck()).create(LootCtxParameters.NPC_INTERACTION);
+        } else {
+            params = builder.create(LootCtxParameters.NPC_INTERACTION_INIT);
+        }
+        return new LootContext.Builder(params).create(Optional.empty());
     }
 
     private boolean respondToQuest(ServerPlayer player) {
@@ -1210,18 +1243,42 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             ConversationSet.ConversationActionHolder action = conversation.actions().get(actionIdx);
             if (action != null) {
                 switch (action.action()) {
-                    case ANSWER ->
-                            ConversationSet.encode(this, conversations, action.actionValue(), this.updater.getDailyRandom())
-                                    .ifPresent(conv -> {
-                                        this.relationManager.getFriendPointData(sender.getUUID())
-                                                .answer(conversationID, action.friendXP());
-                                        this.tellDialogue(sender, conv);
-                                    });
+                    case ANSWER -> ConversationSet.encode(this, conversations, action.actionValue())
+                            .ifPresent(conv -> {
+                                this.relationManager.getFriendPointData(sender.getUUID())
+                                        .answer(conversationID, action.friendXP());
+                                this.tellDialogue(sender, conv);
+                            });
                     case QUEST ->
                             QuestHandler.acceptQuestRandom(sender, this, ResourceLocation.parse(action.actionValue()));
                 }
             }
         }
+    }
+
+    @Nullable
+    public TopicHolder conversationTopics() {
+        ReloadableHolder<ConversationSet> conversations = this.data.value().getConversation(ConversationContext.TALK);
+        LootContext ctx = this.createConversationContext(null);
+        List<TopicHolder.Topic> topics = conversations.value()
+                .conversations().entrySet().stream().filter(e -> {
+                    if (e.getValue().participants().isEmpty())
+                        return true;
+                    ConversationSet.Conversation conv = conversations.value().conversations().get(e.getKey());
+                    return !conv.startingConversation() || !conv.test(0, ctx);
+                })
+                .map(e -> {
+                    Map<ResourceLocation, Set<String>> participants = new HashMap<>();
+                    e.getValue().participants().forEach((key, value) ->
+                            participants.computeIfAbsent(value.npcID(), k -> new HashSet<>())
+                                    .add(key));
+                    return new TopicHolder.Topic(e.getKey(), e.getValue(), Map.copyOf(participants));
+                })
+                .toList();
+        if (topics.isEmpty()) {
+            return null;
+        }
+        return new TopicHolder(conversations, topics.get(this.getNPCSchedule().getScheduleRandom().nextInt(topics.size())));
     }
 
     public void closedDialogue(ServerPlayer sender) {
@@ -1598,7 +1655,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public void handleUpdatePacket(Player player, CompoundTag friendPoints, CompoundTag schedule, NPCProfession profession) {
         if (this.level().isClientSide) {
             this.relationManager.getFriendPointData(player.getUUID()).load(friendPoints);
-            this.schedule.load(schedule);
+            this.getNPCSchedule().load(schedule);
             this.setProfession(profession);
         }
     }

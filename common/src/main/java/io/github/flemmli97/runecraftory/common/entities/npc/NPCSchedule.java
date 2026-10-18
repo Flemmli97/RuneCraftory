@@ -9,14 +9,19 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryActivities;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.schedule.Activity;
 import net.tslat.smartbrainlib.api.core.schedule.SmartBrainSchedule;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class NPCSchedule {
@@ -35,7 +42,10 @@ public class NPCSchedule {
 
     private List<Component> view;
 
-    private Activity currentActivity = Activity.IDLE;
+    private ActivityTime currentActivity = ActivityTime.IDLE;
+    private final Random random = new Random();
+    private long randomSeed;
+    private boolean wantsToSocialize;
 
     public NPCSchedule(NPCEntity npc, Schedule schedule) {
         this.npc = npc;
@@ -51,14 +61,19 @@ public class NPCSchedule {
     }
 
     public Activity getActivity(ServerLevel level) {
-        Activity activity = this.getActivityNow(level);
-        this.currentActivity = activity;
-        return activity;
+        ActivityTime current = this.currentActivity;
+        this.currentActivity = this.getActivityNow(level);
+        if (current != this.currentActivity) {
+            this.randomSeed = this.npc.getRandom().nextLong();
+            float chance = this.currentActivity.socialChance().orElse(1f);
+            this.wantsToSocialize = this.getScheduleRandom().nextFloat() < chance;
+        }
+        return this.currentActivity();
     }
 
-    private Activity getActivityNow(ServerLevel level) {
+    private ActivityTime getActivityNow(ServerLevel level) {
         if (!this.npc.getProfession().hasSchedule)
-            return Activity.IDLE;
+            return ActivityTime.IDLE;
         int dayTime = WorldUtils.dayTime(level);
         DayOfWeek day = Calendar.get(level).date().day();
         List<ActivityTime> activities;
@@ -67,18 +82,43 @@ public class NPCSchedule {
         } else {
             activities = this.schedule.nonWorkDaysActivities;
         }
-        Activity activity = Activity.REST;
+        ActivityTime activity = ActivityTime.REST;
         for (ActivityTime time : activities) {
             if (time.start() > dayTime) {
                 break;
             }
-            activity = time.activity();
+            activity = time;
         }
         return activity;
     }
 
     public Activity currentActivity() {
+        return this.currentActivity.activity();
+    }
+
+    public ActivityTime getCurrentScheduleActivity() {
         return this.currentActivity;
+    }
+
+    public boolean poiMatchesActivity(Holder<PoiType> poi) {
+        ActivityTime schedule = this.getCurrentScheduleActivity();
+        if (schedule.activity() == Activity.MEET) {
+            return schedule.poi().map(poi::is).orElseGet(() -> poi.is(PoiTypes.MEETING));
+        }
+        return false;
+    }
+
+    public long getScheduleRandomSeed() {
+        return this.randomSeed;
+    }
+
+    public Random getScheduleRandom() {
+        this.random.setSeed(this.getScheduleRandomSeed());
+        return this.random;
+    }
+
+    public boolean wantsToSocialize() {
+        return this.wantsToSocialize;
     }
 
     public CompoundTag save() {
@@ -261,13 +301,23 @@ public class NPCSchedule {
         }
     }
 
-    public record ActivityTime(int start, Activity activity) implements Comparable<ActivityTime> {
+    public record ActivityTime(int start, Activity activity, Optional<Float> socialChance,
+                               Optional<ResourceKey<PoiType>> poi) implements Comparable<ActivityTime> {
 
         public static final Codec<ActivityTime> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(ExtraCodecs.NON_NEGATIVE_INT.fieldOf("time").forGetter(ActivityTime::start),
-                        BuiltInRegistries.ACTIVITY.byNameCodec().fieldOf("activity").forGetter(ActivityTime::activity)
+                        BuiltInRegistries.ACTIVITY.byNameCodec().fieldOf("activity").forGetter(ActivityTime::activity),
+                        Codec.FLOAT.optionalFieldOf("social_chance").forGetter(ActivityTime::socialChance),
+                        ResourceKey.codec(Registries.POINT_OF_INTEREST_TYPE).optionalFieldOf("poi").forGetter(ActivityTime::poi)
                 ).apply(inst, ActivityTime::new)
         );
+
+        public static ActivityTime IDLE = new ActivityTime(-1, Activity.IDLE);
+        public static ActivityTime REST = new ActivityTime(-1, Activity.REST);
+
+        public ActivityTime(int start, Activity activity) {
+            this(start, activity, Optional.empty(), Optional.empty());
+        }
 
         @Override
         public int compareTo(@NotNull NPCSchedule.ActivityTime o) {

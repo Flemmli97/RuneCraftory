@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
+package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;

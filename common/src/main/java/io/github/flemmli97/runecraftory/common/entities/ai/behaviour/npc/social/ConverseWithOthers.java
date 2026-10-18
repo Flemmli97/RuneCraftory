@@ -1,8 +1,8 @@
-package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc;
+package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.entities.npc.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.social.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
@@ -24,10 +24,10 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
 
     private final double rangeSqr;
 
-    private final Predicate<E> newGroupChance = e -> e.getRandom().nextInt(100) == 0;
+    private final Predicate<E> newGroupChance = e -> e.getRandom().nextInt(150) == 0;
 
     public ConverseWithOthers() {
-        this(5);
+        this(10);
     }
 
     public ConverseWithOthers(double range) {
@@ -50,6 +50,9 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
     }
 
     private boolean valid(E entity) {
+        if (!entity.getNPCSchedule().wantsToSocialize()) {
+            return false;
+        }
         Activity activity = entity.getActivity();
         GlobalPos target = null;
         if (activity == Activity.WORK) {
@@ -77,7 +80,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
     protected void start(E entity) {
         ConversationGroupMemory current = BrainUtils.getMemory(entity, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
         if (current != null && current.isValid(this.rangeSqr)) {
-            if (current.participants().isEmpty() && this.newGroupChance.test(entity)) {
+            if (!current.isGroupComplete() && this.newGroupChance.test(entity)) {
                 this.clearMemory(entity);
             }
             return;
@@ -89,7 +92,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
                 return false;
             }
             ConversationGroupMemory group = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
-            return group != null && group.canJoin();
+            return group != null && group.canJoin(npc);
         }).toList();
         if (groups.isEmpty()) {
             // Create a new group
