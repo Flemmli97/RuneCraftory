@@ -42,15 +42,15 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof NPCEntity npc) {
             NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
-            boolean profession = true;
             if (itemData.npcDataId().isPresent()) {
                 ReloadableHolder<NPCData> data = DataPackHandler.INSTANCE.npcDataManager().get(itemData.npcDataId().get());
                 if (data != null) {
                     npc.setNPCData(data, false);
-                    profession = data.value().profession().isEmpty();
+                    if (data.value().profession().isEmpty()) {
+                        itemData.profession().ifPresent(prof -> npc.setProfession(prof.value()));
+                    }
                 }
-            }
-            if (profession) {
+            } else {
                 itemData.profession().ifPresent(prof -> npc.randomizeData(prof.value(), true));
             }
         }

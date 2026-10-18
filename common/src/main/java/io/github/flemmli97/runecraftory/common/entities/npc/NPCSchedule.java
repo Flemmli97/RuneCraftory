@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -28,8 +29,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumSet;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -40,7 +43,7 @@ public class NPCSchedule {
 
     private Schedule schedule;
 
-    private List<Component> view;
+    private List<Pair<Component, List<Component>>> view;
 
     private ActivityTime currentActivity = ActivityTime.IDLE;
     private final Random random = new Random();
@@ -50,6 +53,28 @@ public class NPCSchedule {
     public NPCSchedule(NPCEntity npc, Schedule schedule) {
         this.npc = npc;
         this.schedule = schedule;
+    }
+
+    private static List<TimeSpan> getWorkTime(List<ActivityTime> timeline) {
+        List<TimeSpan> workTimes = new ArrayList<>();
+        for (int i = 0; i < timeline.size(); i++) {
+            ActivityTime current = timeline.get(i);
+            if (current.activity() == Activity.WORK) {
+                ActivityTime next = timeline.get(++i);
+                while (i < timeline.size() - 1) {
+                    ActivityTime pointer = timeline.get(i + 1);
+                    if (pointer.start() == next.start() || next.activity() == Activity.WORK) {
+                        i++;
+                        next = pointer;
+                    } else {
+                        break;
+                    }
+                }
+                int end = next.start();
+                workTimes.add(new TimeSpan(current.start(), end));
+            }
+        }
+        return workTimes;
     }
 
     public NPCSchedule(NPCEntity npc, RandomSource random) {
@@ -76,18 +101,21 @@ public class NPCSchedule {
             return ActivityTime.IDLE;
         int dayTime = WorldUtils.dayTime(level);
         DayOfWeek day = Calendar.get(level).date().day();
-        List<ActivityTime> activities;
-        if (!this.npc.isBaby() && this.schedule.workDays.contains(day) && this.npc.getProfession().hasWorkSchedule) {
-            activities = this.schedule.workdayActivities;
-        } else {
-            activities = this.schedule.nonWorkDaysActivities;
-        }
+        List<ActivityTime> activities = this.schedule.timelines.get(day);
         ActivityTime activity = ActivityTime.REST;
         for (ActivityTime time : activities) {
             if (time.start() > dayTime) {
                 break;
             }
             activity = time;
+        }
+        if (this.npc.isBaby()) {
+            if (activity.activity() == RuneCraftoryActivities.EARLY_IDLE.get()) {
+                return ActivityTime.REST;
+            }
+            if (activity.activity() == Activity.WORK) {
+                return ActivityTime.IDLE;
+            }
         }
         return activity;
     }
@@ -137,53 +165,51 @@ public class NPCSchedule {
         this.view = null;
     }
 
-    public List<Component> viewSchedule() {
+    public List<Pair<Component, List<Component>>> viewSchedule() {
         if (!this.npc.getProfession().hasSchedule || !this.npc.getProfession().hasWorkSchedule) {
             return List.of();
         }
         if (this.view == null) {
-            List<Component> newList = new ArrayList<>();
-            if (!this.schedule.workTimes.isEmpty()) {
-                newList.add(Component.translatable("runecraftory.npc.schedule.work", this.formatTime(this.schedule.workTimes.getFirst().start()), this.formatTime(this.schedule.workTimes.getFirst().end())));
-                for (int i = 1; i < this.schedule.workTimes.size(); ++i) {
-                    TimeSpan timeline = this.schedule.workTimes.get(i);
-                    newList.add(Component.translatable("runecraftory.npc.schedule.work.2", this.formatTime(timeline.start()), this.formatTime(timeline.end())));
-                }
-            }
-            newList.add(Component.translatable("runecraftory.npc.schedule.days.header"));
-            List<DayOfWeek> weekDayCounts = new ArrayList<>();
+            List<Pair<DayRange, List<TimeSpan>>> workTimes = new ArrayList<>();
             for (DayOfWeek day : DayOfWeek.values()) {
-                if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
-                    continue;
-                if (!this.schedule.workDays.contains(day))
-                    weekDayCounts.add(day);
-            }
-            if (this.schedule.workDays.size() == DayOfWeek.values().length) {
-                newList.add(Component.translatable("runecraftory.npc.schedule.days.all"));
-            } else {
-                switch (weekDayCounts.size()) {
-                    case 0 -> newList.add(Component.translatable("runecraftory.npc.schedule.days.0"));
-                    case 1 ->
-                            newList.add(Component.translatable("runecraftory.npc.schedule.days.1", Component.translatable(weekDayCounts.get(0).translationFull())));
-                    case 2 ->
-                            newList.add(Component.translatable("runecraftory.npc.schedule.days.2", Component.translatable(weekDayCounts.get(0).translationFull()), Component.translatable(weekDayCounts.get(1).translationFull())));
-                    default ->
-                            newList.add(Component.translatable("runecraftory.npc.schedule.days.with", this.schedule.workDays.stream().filter(day -> day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY).map(e -> Component.translatable(e.translationFull())).toArray()));
+                List<TimeSpan> timeSpans = getWorkTime(this.schedule.timelines.get(day));
+                Pair<DayRange, List<TimeSpan>> existing = workTimes.isEmpty() ? null : workTimes.getLast();
+                if (existing != null && existing.getSecond().equals(timeSpans)) {
+                    existing.getFirst().setEnd(day);
+                } else {
+                    workTimes.add(new Pair<>(new DayRange(day), timeSpans));
                 }
-                if (this.schedule.workDays.contains(DayOfWeek.SATURDAY)) {
-                    if (this.schedule.workDays.contains(DayOfWeek.SUNDAY))
-                        newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.2", Component.translatable(DayOfWeek.SATURDAY.translationFull()), Component.translatable(DayOfWeek.SUNDAY.translationFull())));
-                    else
-                        newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.1", Component.translatable(DayOfWeek.SATURDAY.translationFull())));
-                } else if (this.schedule.workDays.contains(DayOfWeek.SUNDAY))
-                    newList.add(Component.translatable("runecraftory.npc.schedule.days.weekend.1", Component.translatable(DayOfWeek.SUNDAY.translationFull())));
             }
-            this.view = ImmutableList.copyOf(newList);
+            List<Pair<Component, List<Component>>> display = new ArrayList<>();
+            display.add(Pair.of(Component.translatable("runecraftory.npc.schedule.days.header"), List.of()));
+            for (Pair<DayRange, List<TimeSpan>> entry : workTimes) {
+                if (entry.getSecond().isEmpty())
+                    continue;
+                Component day;
+                if (entry.getFirst().start() == DayOfWeek.MONDAY && entry.getFirst().end == DayOfWeek.SUNDAY) {
+                    day = Component.translatable("runecraftory.npc.schedule.days.all");
+                } else if (entry.getFirst().start() == DayOfWeek.MONDAY && entry.getFirst().end == DayOfWeek.FRIDAY) {
+                    day = Component.translatable("runecraftory.npc.schedule.days.weekdays");
+                } else if (entry.getFirst().start() == DayOfWeek.SATURDAY && entry.getFirst().end == DayOfWeek.SUNDAY) {
+                    day = Component.translatable("runecraftory.npc.schedule.days.weekends");
+                } else if (entry.getFirst().start() == entry.getFirst().end()) {
+                    day = Component.translatable("runecraftory.npc.schedule.day", Component.translatable(entry.getFirst().start().translationFull()));
+                } else {
+                    day = Component.translatable("runecraftory.npc.schedule.days.span", Component.translatable(entry.getFirst().start().translationFull()), Component.translatable(entry.getFirst().end().translationFull()));
+                }
+                List<Component> times = new ArrayList<>();
+                for (int i = 0; i < entry.getSecond().size(); ++i) {
+                    TimeSpan timeSpan = entry.getSecond().get(i);
+                    times.add(Component.translatable("runecraftory.npc.schedule.work", formatTime(timeSpan.start()), formatTime(timeSpan.end())));
+                }
+                display.add(new Pair<>(day, times));
+            }
+            this.view = ImmutableList.copyOf(display);
         }
         return this.view;
     }
 
-    private String formatTime(int timeInTicks) {
+    private static String formatTime(int timeInTicks) {
         int hour = ((timeInTicks + 6000) % 24000) / 1000;
         int min = (int) (timeInTicks % 1000 * 0.06);
         String minS = (min < 10 ? "0" : "") + min;
@@ -193,39 +219,13 @@ public class NPCSchedule {
     public static class Schedule {
 
         public static final Codec<Schedule> CODEC = RecordCodecBuilder.create(inst ->
-                inst.group(
-                        ActivityTime.CODEC.listOf().fieldOf("work_timeline").forGetter(d -> d.workdayActivities),
-                        ActivityTime.CODEC.listOf().fieldOf("offday_timeline").forGetter(d -> d.nonWorkDaysActivities),
-                        CodecUtils.stringEnumCodec(DayOfWeek.class, null).listOf().fieldOf("work_days").forGetter(d -> d.workDays.stream().toList())
+                inst.group(Codec.unboundedMap(CodecUtils.stringEnumCodec(ScheduleDays.class, null), ActivityTime.CODEC.listOf())
+                        .fieldOf("timelines").forGetter(d -> d.data)
                 ).apply(inst, Schedule::new)
         );
 
-        private final List<ActivityTime> workdayActivities, nonWorkDaysActivities;
-        private final List<TimeSpan> workTimes;
-
-        private final EnumSet<DayOfWeek> workDays;
-
-        private Schedule(List<ActivityTime> workdayActivities, List<ActivityTime> nonWorkDaysActivities, List<DayOfWeek> workDays) {
-            this(workdayActivities, nonWorkDaysActivities, workDays.isEmpty() ? EnumSet.noneOf(DayOfWeek.class) : EnumSet.copyOf(workDays));
-        }
-
-        private Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, List<DayOfWeek> workDays) {
-            this(List.of(new ActivityTime(wakeUpTime, RuneCraftoryActivities.EARLY_IDLE.get()),
-
-                            new ActivityTime(Math.max(wakeUpTime + 500, workTime), Activity.WORK),
-                            new ActivityTime(breakTime, Activity.MEET),
-                            new ActivityTime(Math.max(breakTime, workTimeAfter), Activity.WORK),
-                            new ActivityTime(doneWorkTime, Activity.IDLE),
-
-                            new ActivityTime(sleepTime, Activity.REST)),
-                    List.of(new ActivityTime(wakeUpTime, RuneCraftoryActivities.EARLY_IDLE.get()),
-
-                            new ActivityTime(meetTimeOffday, Activity.MEET),
-                            new ActivityTime(meetTimeAfterOffday, Activity.IDLE),
-
-                            new ActivityTime(sleepTime, Activity.REST)),
-                    workDays.isEmpty() ? EnumSet.noneOf(DayOfWeek.class) : EnumSet.copyOf(workDays));
-        }
+        private final Map<ScheduleDays, List<ActivityTime>> data;
+        private final EnumMap<DayOfWeek, List<ActivityTime>> timelines;
 
         public Schedule(RandomSource random) {
             this(randomizedTime(random, 6, 9),
@@ -242,30 +242,55 @@ public class NPCSchedule {
                     randomizedWorkDays(random));
         }
 
-        public Schedule(List<ActivityTime> workdayActivities, List<ActivityTime> nonWorkDaysActivities, EnumSet<DayOfWeek> workDays) {
-            List<TimeSpan> workTimes = new ArrayList<>();
-            workdayActivities = sanitize(workdayActivities);
-            for (int i = 0; i < workdayActivities.size(); i++) {
-                ActivityTime current = workdayActivities.get(i);
-                if (current.activity() == Activity.WORK) {
-                    ActivityTime next = workdayActivities.get(++i);
-                    while (i < workdayActivities.size() - 1) {
-                        ActivityTime pointer = workdayActivities.get(i + 1);
-                        if (pointer.start() == next.start() || next.activity() == Activity.WORK) {
-                            i++;
-                            next = pointer;
-                        } else {
-                            break;
-                        }
-                    }
-                    int end = next.start();
-                    workTimes.add(new TimeSpan(current.start(), end));
+        private Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, List<DayOfWeek> workDays) {
+            this(of(List.of(new ActivityTime(wakeUpTime, RuneCraftoryActivities.EARLY_IDLE.get()),
+
+                            new ActivityTime(Math.max(wakeUpTime + 500, workTime), Activity.WORK),
+                            new ActivityTime(breakTime, Activity.MEET),
+                            new ActivityTime(Math.max(breakTime, workTimeAfter), Activity.WORK),
+                            new ActivityTime(doneWorkTime, Activity.IDLE),
+
+                            new ActivityTime(sleepTime, Activity.REST)),
+                    List.of(new ActivityTime(wakeUpTime, RuneCraftoryActivities.EARLY_IDLE.get()),
+
+                            new ActivityTime(meetTimeOffday, Activity.MEET),
+                            new ActivityTime(meetTimeAfterOffday, Activity.IDLE),
+
+                            new ActivityTime(sleepTime, Activity.REST)),
+                    workDays));
+        }
+
+        public Schedule(Map<ScheduleDays, List<ActivityTime>> data) {
+            this.data = data;
+            EnumMap<DayOfWeek, List<ActivityTime>> timelines = new EnumMap<>(DayOfWeek.class);
+            for (Map.Entry<ScheduleDays, List<ActivityTime>> entry : data.entrySet()) {
+                List<ActivityTime> timeline = sanitize(entry.getValue());
+                for (DayOfWeek day : entry.getKey().days) {
+                    timelines.put(day, timeline);
                 }
             }
-            this.workdayActivities = workdayActivities;
-            this.nonWorkDaysActivities = sanitize(nonWorkDaysActivities);
-            this.workTimes = List.copyOf(workTimes);
-            this.workDays = workDays;
+            List<DayOfWeek> missing = new ArrayList<>();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                if (!timelines.containsKey(day)) {
+                    missing.add(day);
+                }
+            }
+            if (!missing.isEmpty()) {
+                throw new IllegalStateException("Missing days in schedule" + missing);
+            }
+            this.timelines = timelines;
+        }
+
+        private static Map<ScheduleDays, List<ActivityTime>> of(List<ActivityTime> workdaysTime, List<ActivityTime> offdays, List<DayOfWeek> workdays) {
+            Map<ScheduleDays, List<ActivityTime>> workTime = new LinkedHashMap<>();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                if (workdays.contains(day)) {
+                    workTime.put(ScheduleDays.of(day), workdaysTime);
+                } else {
+                    workTime.put(ScheduleDays.of(day), offdays);
+                }
+            }
+            return workTime;
         }
 
         private static List<ActivityTime> sanitize(List<ActivityTime> times) {
@@ -329,7 +354,35 @@ public class NPCSchedule {
         }
     }
 
-    public record TimeSpan(int start, int end) {
+    private record TimeSpan(int start, int end) {
+    }
+
+    private static class DayRange {
+
+        private final DayOfWeek start;
+        private DayOfWeek end;
+
+        private DayRange(DayOfWeek start) {
+            this.start = start;
+            this.end = start;
+        }
+
+        public void setEnd(DayOfWeek end) {
+            this.end = end;
+        }
+
+        public DayOfWeek start() {
+            return this.start;
+        }
+
+        public DayOfWeek end() {
+            return this.end;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%s, %s]", this.start, this.end);
+        }
     }
 
     public static class WrappedSchedule extends SmartBrainSchedule {
@@ -343,6 +396,37 @@ public class NPCSchedule {
         @Override
         public Activity tick(LivingEntity brainOwner) {
             return this.schedule.get().getActivity((ServerLevel) brainOwner.level());
+        }
+    }
+
+    public enum ScheduleDays {
+
+        MONDAY(DayOfWeek.MONDAY),
+        TUESDAY(DayOfWeek.TUESDAY),
+        WEDNESDAY(DayOfWeek.WEDNESDAY),
+        THURSDAY(DayOfWeek.THURSDAY),
+        FRIDAY(DayOfWeek.FRIDAY),
+        SATURDAY(DayOfWeek.SATURDAY),
+        SUNDAY(DayOfWeek.SUNDAY),
+        WEEKDAYS(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.TUESDAY, DayOfWeek.FRIDAY),
+        WEEKEND(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+
+        private final DayOfWeek[] days;
+
+        ScheduleDays(DayOfWeek... days) {
+            this.days = days;
+        }
+
+        static ScheduleDays of(DayOfWeek day) {
+            return switch (day) {
+                case MONDAY -> MONDAY;
+                case TUESDAY -> TUESDAY;
+                case WEDNESDAY -> WEDNESDAY;
+                case THURSDAY -> THURSDAY;
+                case FRIDAY -> FRIDAY;
+                case SATURDAY -> SATURDAY;
+                case SUNDAY -> SUNDAY;
+            };
         }
     }
 }

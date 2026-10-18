@@ -513,16 +513,13 @@ public class LangGen implements DataProvider {
         this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
         this.add(Doctor.CURE_COST, "Cost: %sG");
 
-        this.add("runecraftory.npc.schedule.work", "From: %1$s - %2$s");
-        this.add("runecraftory.npc.schedule.work.2", "And: %1$s - %2$s");
+        this.add("runecraftory.npc.schedule.work", "%1$s - %2$s");
         this.add("runecraftory.npc.schedule.days.header", "Open on:");
         this.add("runecraftory.npc.schedule.days.all", "Everyday");
-        this.add("runecraftory.npc.schedule.days.0", "All weekdays");
-        this.add("runecraftory.npc.schedule.days.1", "All weekdays except %s");
-        this.add("runecraftory.npc.schedule.days.2", "All weekdays except %1$s and %2$s");
-        this.add("runecraftory.npc.schedule.days.weekend.1", "%s");
-        this.add("runecraftory.npc.schedule.days.weekend.2", "%1$s and %2$s");
-        this.add("runecraftory.npc.schedule.days.with", "%1$s");
+        this.add("runecraftory.npc.schedule.days.weekdays", "All weekdays");
+        this.add("runecraftory.npc.schedule.days.weekends", "Weekends");
+        this.add("runecraftory.npc.schedule.day", "%1$s");
+        this.add("runecraftory.npc.schedule.days.span", "%1$s - %2$s");
 
         this.add("runecraftory.npc.shop.inventory.full", "You don't have enough inventory space for it");
         this.add("runecraftory.npc.shop.money.no", "You don't have enough money");

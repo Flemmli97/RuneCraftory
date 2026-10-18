@@ -1703,6 +1703,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     public void releaseMeetingPoi() {
         MeetingPoint meetingPoint = this.getMeetingPos();
+        if (meetingPoint == null)
+            return;
         BrainUtils.clearMemory(this, RuneCraftoryMemoryTypes.MEETING_LOCATION.get());
         if (meetingPoint.aquired()) {
             this.releasePoi(meetingPoint.pos(), p -> p.is(meetingPoint.poi()));

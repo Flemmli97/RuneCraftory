@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCProfession;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SpriteResources;
@@ -35,6 +36,7 @@ public class NPCGui<T extends NPCEntity> extends Screen {
 
     private final int offSetX = 140;
     private final int offSetY = 50;
+    private final int sizeX = 190;
     protected int leftPos;
     protected int topPos;
     private int lines;
@@ -78,39 +80,41 @@ public class NPCGui<T extends NPCEntity> extends Screen {
         int posX = 25;
         int posY = 25;
         int texY = this.lines * 13 + 10;
+        int centerX = (int) (this.sizeX * 0.5);
         boolean renderParents = this.family.father().isPresent() || this.family.mother().isPresent();
-        graphics.blitSprite(TEXTURE, posX, posY, 150, texY);
+        graphics.blitSprite(TEXTURE, posX, posY, this.sizeX, texY);
         int txtOffX = posX + 5;
         int txtOffY = posY + 5;
+        int txtOffXRight = posX + this.sizeX - 5;
 
-        GuiGraphicsExtension.drawCenteredString(graphics, this.font, this.entity.getName(), posX + 75, txtOffY, 0, false);
+        GuiGraphicsExtension.drawCenteredString(graphics, this.font, this.entity.getName(), posX + centerX, txtOffY, 0, false);
         int y = 1;
-        graphics.blitSprite(SpriteResources.HEART_ICON, posX + 65, txtOffY + 13 * y, 8, 8);
-        graphics.drawString(this.font, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0, false);
+        graphics.blitSprite(SpriteResources.HEART_ICON, posX + centerX - 10, txtOffY + 13 * y, 8, 8);
+        graphics.drawString(this.font, "" + this.entity.friendPoints(this.minecraft.player), posX + centerX, txtOffY + 13 * y, 0, false);
         y += 1;
         if (renderParents) {
             if (this.family.father().isEmpty()) {
                 graphics.drawString(this.font, Component.translatable("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0, false);
                 y += 1;
-                for (FormattedCharSequence ch : this.font.split(this.family.mother().get(), 150 - 10)) {
+                for (FormattedCharSequence ch : this.font.split(this.family.mother().get(), this.sizeX - 10)) {
                     graphics.drawString(this.font, ch, txtOffX, txtOffY + 13 * y, 0, false);
                     y += 1;
                 }
             } else if (this.family.mother().isEmpty()) {
                 graphics.drawString(this.font, Component.translatable("runecraftory.gui.npc.parent"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
-                for (FormattedCharSequence ch : this.font.split(this.family.father().get(), 150 - 10)) {
+                for (FormattedCharSequence ch : this.font.split(this.family.father().get(), this.sizeX - 10)) {
                     graphics.drawString(this.font, ch, txtOffX, txtOffY + 13 * y, 0, false);
                     y += 1;
                 }
             } else {
                 graphics.drawString(this.font, Component.translatable("runecraftory.gui.npc.parents"), txtOffX, txtOffY + 13 * y, 0);
                 y += 1;
-                for (FormattedCharSequence ch : this.font.split(this.family.father().get(), 150 - 10)) {
+                for (FormattedCharSequence ch : this.font.split(this.family.father().get(), this.sizeX - 10)) {
                     graphics.drawString(this.font, ch, txtOffX, txtOffY + 13 * y, 0, false);
                     y += 1;
                 }
-                for (FormattedCharSequence ch : this.font.split(this.family.mother().get(), 150 - 10)) {
+                for (FormattedCharSequence ch : this.font.split(this.family.mother().get(), this.sizeX - 10)) {
                     graphics.drawString(this.font, ch, txtOffX, txtOffY + 13 * y, 0, false);
                     y += 1;
                 }
@@ -145,7 +149,7 @@ public class NPCGui<T extends NPCEntity> extends Screen {
                 if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
                     shopComp.withStyle(ChatFormatting.DARK_RED);
                 for (FormattedCharSequence comp : this.font.split(shopComp, 140)) {
-                    float xCenter = posX + 75 - this.minecraft.font.width(comp) * 0.5f;
+                    float xCenter = posX + centerX - this.minecraft.font.width(comp) * 0.5f;
                     graphics.drawString(this.font, comp, (int) xCenter, txtOffY + 13 * y, 0, false);
                     y++;
                     shopSizeY += 13;
@@ -153,11 +157,18 @@ public class NPCGui<T extends NPCEntity> extends Screen {
             }
 
             if (this.entity.getProfession().hasWorkSchedule) {
-                for (Component comp : this.entity.getNPCSchedule().viewSchedule()) {
-                    for (FormattedCharSequence formatted : this.font.split(comp, 140)) {
-                        graphics.drawString(this.font, formatted, txtOffX, txtOffY + 13 * y, 0, false);
-                        y++;
+                for (Pair<Component, List<Component>> comp : this.entity.getNPCSchedule().viewSchedule()) {
+                    int dayY = y;
+                    for (FormattedCharSequence formatted : this.font.split(comp.getFirst(), 100)) {
+                        graphics.drawString(this.font, formatted, txtOffX, txtOffY + 13 * dayY, 0, false);
+                        dayY++;
                     }
+                    int timeY = y;
+                    for (Component time : comp.getSecond()) {
+                        GuiGraphicsExtension.drawRightAlignedString(graphics, this.font, time, txtOffXRight, txtOffY + 13 * timeY, 0, false);
+                        timeY++;
+                    }
+                    y = Math.max(dayY, timeY);
                 }
             }
         }
@@ -170,7 +181,7 @@ public class NPCGui<T extends NPCEntity> extends Screen {
 
     protected void buttons() {
         int x = -52;
-        int xSize = 150;
+        int xSize = this.sizeX;
         int y = 0;
         this.addRenderableWidget(Button.builder(Component.translatable(C2SNPCInteraction.Action.TALK.translation), b -> {
             LoaderNetwork.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Action.TALK));
@@ -215,11 +226,11 @@ public class NPCGui<T extends NPCEntity> extends Screen {
         }
         if (this.isShopOpen == ShopState.NOBED) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.bed.no"), 150));
+            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.bed.no"), this.sizeX));
         }
         if (!this.entity.isBaby() && this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getProfession().hasPoi()) {
             this.components = new ArrayList<>();
-            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getProfession())), 150));
+            this.components.addAll(this.font.split(Component.translatable("runecraftory.gui.npc.workplace.no", this.formatShopPoi(this.entity.getProfession())), this.sizeX));
         }
     }
 
