@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.common.entities.ai.memory.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
-import io.github.flemmli97.runecraftory.common.entities.npc.social.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;

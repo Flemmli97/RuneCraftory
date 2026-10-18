@@ -34,13 +34,15 @@ import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetRain
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SetWalkAroundPoiTarget;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.SleepInBed;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.ConverseWithOthers;
+import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.HandleMeetPoiTask;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.InteractInConversation;
 import io.github.flemmli97.runecraftory.common.entities.ai.behaviour.npc.social.SpeakInConversation;
+import io.github.flemmli97.runecraftory.common.entities.ai.memory.ConversationGroupMemory;
+import io.github.flemmli97.runecraftory.common.entities.ai.memory.MeetingPoint;
 import io.github.flemmli97.runecraftory.common.entities.ai.sensors.NearbyNPCSensor;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
-import io.github.flemmli97.runecraftory.common.entities.npc.social.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.social.TopicHolder;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
@@ -448,10 +450,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 new AcquirePOITask<NPCEntity>(MemoryModuleType.JOB_SITE, m -> this.getProfession().matches(m)).canAquire(AcquirePOITask.withinRangeOf(NPCEntity::getBedPos))
                         .onAqcuire(e -> e.level().broadcastEntityEvent(this, (byte) 15))
                         .startCondition(m -> m.getProfession().hasPoi()),
-                new InvalidatePOITask<>(MemoryModuleType.MEETING_POINT,
-                        this.getNPCSchedule()::poiMatchesActivity, NPCEntity::releaseMeetingPoi)
-                        .isStillValid((e, p) -> this.getActivity() == Activity.MEET),
-                new AcquirePOITask<NPCEntity>(MemoryModuleType.MEETING_POINT, this.getNPCSchedule()::poiMatchesActivity),
+                new HandleMeetPoiTask<>(),
                 new InvalidateMemory<>(MemoryModuleType.HIDING_PLACE).invalidateIf((e, p) -> !e.level().isRaining()),
                 new ConverseWithOthers<>(),
                 new InvalidateMemory<>(MemoryModuleType.INTERACTION_TARGET).invalidateIf((e, t) -> !t.isAlive()),
@@ -516,20 +515,24 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 .behaviours(new Idle<>()));
         map.put(Activity.REST, new BrainActivityGroup<NPCEntity>(Activity.REST).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT)
-                .behaviours(new SleepInBed<>(), new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, NPCEntity::releaseBedPoi), MonsterBehaviourUtils.moveTo()));
+                .behaviours(new SleepInBed<>(), SetWalkTargetFromMemory.create(MemoryModuleType.HOME, NPCEntity::releaseBedPoi), MonsterBehaviourUtils.moveTo()));
         map.put(RuneCraftoryActivities.EARLY_IDLE.get(), new BrainActivityGroup<NPCEntity>(RuneCraftoryActivities.EARLY_IDLE.get()).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.HOME, MemoryStatus.VALUE_PRESENT)
-                .behaviours(new SetWalkTargetFromMemory<>(MemoryModuleType.HOME, NPCEntity::releaseBedPoi)
-                        .closeEnough(10), MonsterBehaviourUtils.moveTo(), new SetWalkAroundPoiTarget<>(MemoryModuleType.HOME, 10).startCondition(m -> m.getRandom().nextInt(120) == 0)));
+                .behaviours(SetWalkTargetFromMemory.create(MemoryModuleType.HOME, NPCEntity::releaseBedPoi)
+                        .closeEnough(10), MonsterBehaviourUtils.moveTo(), SetWalkAroundPoiTarget.create(MemoryModuleType.HOME, 10).startCondition(m -> m.getRandom().nextInt(120) == 0)));
         map.put(Activity.WORK, new BrainActivityGroup<NPCEntity>(Activity.WORK).priority(15)
                 .onlyStartWithMemoryStatus(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT)
-                .behaviours(new SetWalkTargetFromMemory<>(MemoryModuleType.JOB_SITE, NPCEntity::releaseWorkplacePoi)
-                        .closeEnough(3), MonsterBehaviourUtils.moveTo(), new SetWalkAroundPoiTarget<>(MemoryModuleType.JOB_SITE, 3).startCondition(m -> m.getRandom().nextInt(120) == 0)));
+                .behaviours(SetWalkTargetFromMemory.create(MemoryModuleType.JOB_SITE, NPCEntity::releaseWorkplacePoi)
+                        .closeEnough(3), MonsterBehaviourUtils.moveTo(), SetWalkAroundPoiTarget.create(MemoryModuleType.JOB_SITE, 3).startCondition(m -> m.getRandom().nextInt(120) == 0)));
         map.put(Activity.MEET, new BrainActivityGroup<NPCEntity>(Activity.MEET).priority(15)
-                .onlyStartWithMemoryStatus(MemoryModuleType.MEETING_POINT, MemoryStatus.VALUE_PRESENT)
+                .onlyStartWithMemoryStatus(RuneCraftoryMemoryTypes.MEETING_LOCATION.get(), MemoryStatus.VALUE_PRESENT)
                 .behaviours(new SetRainShelterTarget<>(),
-                        new AllApplicableBehaviours<>(new SetWalkTargetFromMemory<>(MemoryModuleType.MEETING_POINT, NPCEntity::releaseMeetingPoi).closeEnough(8),
-                                new SetWalkAroundPoiTarget<>(MemoryModuleType.MEETING_POINT, 8).startCondition(m -> m.getRandom().nextInt(60) == 0)
+                        new AllApplicableBehaviours<>(
+                                new SetWalkTargetFromMemory<>(RuneCraftoryMemoryTypes.MEETING_LOCATION.get(), MeetingPoint::pos, NPCEntity::releaseMeetingPoi).closeEnough(8),
+                                new SetWalkTargetFromMemory<>(RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get(), ConversationGroupMemory::creatorPosition, e -> {
+                                }).closeEnough(3),
+                                new SetWalkAroundPoiTarget<>(RuneCraftoryMemoryTypes.MEETING_LOCATION.get(), MeetingPoint::pos, 8)
+                                        .startCondition(m -> !BrainUtils.hasMemory(m, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get()) && m.getRandom().nextInt(60) == 0)
                         ).startCondition(e -> !e.level().isRaining()),
                         MonsterBehaviourUtils.moveTo()));
         return map;
@@ -684,9 +687,13 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         GlobalPos workPlace = this.getWorkPlace();
         if (workPlace != null)
             tag.put("WorkPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, workPlace).getOrThrow());
-        GlobalPos meeting = this.getMeetingPos();
-        if (meeting != null)
-            tag.put("MeetingPos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, meeting).getOrThrow());
+        MeetingPoint meeting = this.getMeetingPos();
+        if (meeting != null) {
+            CompoundTag meetingTag = new CompoundTag();
+            meetingTag.put("Pos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, meeting.pos()).getOrThrow());
+            meetingTag.putBoolean("Aquired", meeting.aquired());
+            tag.put("MeetingPos", meetingTag);
+        }
         return tag;
     }
 
@@ -695,8 +702,13 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.HOME, pos));
         GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("WorkPos"))
                 .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.JOB_SITE, pos));
-        GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("MeetingPos"))
-                .result().ifPresent(pos -> BrainUtils.setMemory(this, MemoryModuleType.MEETING_POINT, pos));
+        Optional<GlobalPos> legacy = GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.get("MeetingPos")).result();
+        if (legacy.isPresent()) {
+            BrainUtils.setMemory(this, RuneCraftoryMemoryTypes.MEETING_LOCATION.get(), new MeetingPoint(legacy.get(), PoiTypes.MEETING, true));
+        } else {
+            MeetingPoint.CODEC.parse(NbtOps.INSTANCE, tag.get("MeetingPos"))
+                    .result().ifPresent(point -> BrainUtils.setMemory(this, RuneCraftoryMemoryTypes.MEETING_LOCATION.get(), point));
+        }
     }
 
     private CompoundTag saveNPCData() {
@@ -1685,19 +1697,28 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         this.releasePoi(MemoryModuleType.HOME, h -> h.is(PoiTypes.HOME));
     }
 
-    public GlobalPos getMeetingPos() {
-        return this.getBrain().getMemory(MemoryModuleType.MEETING_POINT).orElse(null);
+    public MeetingPoint getMeetingPos() {
+        return this.getBrain().getMemory(RuneCraftoryMemoryTypes.MEETING_LOCATION.get()).orElse(null);
     }
 
     public void releaseMeetingPoi() {
-        this.releasePoi(MemoryModuleType.MEETING_POINT, h -> h.is(PoiTypes.MEETING));
+        MeetingPoint meetingPoint = this.getMeetingPos();
+        BrainUtils.clearMemory(this, RuneCraftoryMemoryTypes.MEETING_LOCATION.get());
+        if (meetingPoint.aquired()) {
+            this.releasePoi(meetingPoint.pos(), p -> p.is(meetingPoint.poi()));
+        }
     }
 
     public void releasePoi(MemoryModuleType<GlobalPos> memory, Predicate<Holder<PoiType>> test) {
+        if (this.level() instanceof ServerLevel) {
+            GlobalPos current = BrainUtils.getMemory(this, memory);
+            this.releasePoi(current, test);
+        }
+    }
+
+    private void releasePoi(GlobalPos current, Predicate<Holder<PoiType>> test) {
         if (this.level() instanceof ServerLevel level) {
             MinecraftServer server = level.getServer();
-            GlobalPos current = BrainUtils.getMemory(this, memory);
-            BrainUtils.clearMemory(this, memory);
             if (current != null) {
                 ServerLevel serverLevel = level.dimension().equals(current.dimension()) ? level : server.getLevel(current.dimension());
                 if (serverLevel != null) {

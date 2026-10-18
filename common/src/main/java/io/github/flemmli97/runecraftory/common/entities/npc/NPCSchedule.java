@@ -319,6 +319,10 @@ public class NPCSchedule {
             this(start, activity, Optional.empty(), Optional.empty());
         }
 
+        public ActivityTime(int start, Activity activity, ResourceKey<PoiType> poi) {
+            this(start, activity, Optional.empty(), Optional.of(poi));
+        }
+
         @Override
         public int compareTo(@NotNull NPCSchedule.ActivityTime o) {
             return Integer.compare(this.start, o.start);

@@ -18,37 +18,43 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-public class SetWalkTargetFromMemory<E extends PathfinderMob> extends ExtendedBehaviour<E> {
+public class SetWalkTargetFromMemory<E extends PathfinderMob, T> extends ExtendedBehaviour<E> {
 
-    private static final MemoryTest MEMORIES = MemoryTest.builder(3)
+    private static final MemoryTest MEMORIES = MemoryTest.builder(2)
             .noMemory(MemoryModuleType.WALK_TARGET)
             .usesMemories(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
-    protected final MemoryModuleType<GlobalPos> poiMemory;
+    protected final MemoryModuleType<T> poiMemory;
+    protected final Function<T, GlobalPos> func;
     protected final Consumer<E> onInvalidate;
     protected Function<E, Float> speedMod = entity -> 1f;
     protected ToIntFunction<E> closeEnough = entity -> 0;
 
-    public SetWalkTargetFromMemory(MemoryModuleType<GlobalPos> poiMemory, Consumer<E> onInvalidate) {
+    public SetWalkTargetFromMemory(MemoryModuleType<T> poiMemory, Function<T, GlobalPos> func, Consumer<E> onInvalidate) {
         this.poiMemory = poiMemory;
+        this.func = func;
         this.onInvalidate = onInvalidate;
         this.entryCondition.put(poiMemory, MemoryStatus.VALUE_PRESENT);
     }
 
-    public SetWalkTargetFromMemory<E> speed(float speedMod) {
+    public static <E extends PathfinderMob> SetWalkTargetFromMemory<E, GlobalPos> create(MemoryModuleType<GlobalPos> poiMemory, Consumer<E> onInvalidate) {
+        return new SetWalkTargetFromMemory<>(poiMemory, Function.identity(), onInvalidate);
+    }
+
+    public SetWalkTargetFromMemory<E, T> speed(float speedMod) {
         return this.speed(entity -> speedMod);
     }
 
-    public SetWalkTargetFromMemory<E> speed(Function<E, Float> speedMod) {
+    public SetWalkTargetFromMemory<E, T> speed(Function<E, Float> speedMod) {
         this.speedMod = speedMod;
         return this;
     }
 
-    public SetWalkTargetFromMemory<E> closeEnough(int closeEnough) {
+    public SetWalkTargetFromMemory<E, T> closeEnough(int closeEnough) {
         return this.closeEnough(entity -> closeEnough);
     }
 
-    public SetWalkTargetFromMemory<E> closeEnough(ToIntFunction<E> closeEnough) {
+    public SetWalkTargetFromMemory<E, T> closeEnough(ToIntFunction<E> closeEnough) {
         this.closeEnough = closeEnough;
         return this;
     }
@@ -60,9 +66,10 @@ public class SetWalkTargetFromMemory<E extends PathfinderMob> extends ExtendedBe
 
     @Override
     protected void start(E entity) {
-        GlobalPos pos = BrainUtils.getMemory(entity, this.poiMemory);
-        if (pos == null)
+        T memory = BrainUtils.getMemory(entity, this.poiMemory);
+        if (memory == null)
             return;
+        GlobalPos pos = this.func.apply(memory);
         int range = this.closeEnough.applyAsInt(entity);
         if (this.tiredOfTryingToFindTarget(entity)) {
             this.onInvalidate.accept(entity);

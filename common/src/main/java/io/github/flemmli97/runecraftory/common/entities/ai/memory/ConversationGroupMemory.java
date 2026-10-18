@@ -1,9 +1,11 @@
-package io.github.flemmli97.runecraftory.common.entities.npc.social;
+package io.github.flemmli97.runecraftory.common.entities.ai.memory;
 
 import com.mojang.datafixers.util.Either;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.social.TopicHolder;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.tslat.smartbrainlib.util.BrainUtils;
@@ -91,6 +93,11 @@ public class ConversationGroupMemory {
 
     public boolean isGroupComplete() {
         return this.applyToGroup(GroupData::isComplete, () -> false);
+    }
+
+    public GlobalPos creatorPosition() {
+        return this.data.map(npc -> new GlobalPos(npc.level().dimension(), npc.blockPosition()),
+                d -> new GlobalPos(this.memoryHolder.level().dimension(), this.memoryHolder.blockPosition()));
     }
 
     private <T> T applyToGroup(Function<GroupData, T> function, Supplier<T> otherwise) {
