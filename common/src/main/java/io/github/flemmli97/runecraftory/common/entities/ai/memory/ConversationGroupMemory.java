@@ -24,14 +24,17 @@ public class ConversationGroupMemory {
 
     private final NPCEntity memoryHolder;
 
-    private final Either<NPCEntity, GroupData> data;
+    private final double rangeSqr;
 
-    public ConversationGroupMemory(NPCEntity memoryHolder) {
-        this(memoryHolder, null);
+    private Either<NPCEntity, GroupData> data;
+
+    public ConversationGroupMemory(NPCEntity memoryHolder, double range) {
+        this(memoryHolder, range, null);
     }
 
-    public ConversationGroupMemory(NPCEntity memoryHolder, NPCEntity npc) {
+    public ConversationGroupMemory(NPCEntity memoryHolder, double range, NPCEntity npc) {
         this.memoryHolder = memoryHolder;
+        this.rangeSqr = range * range;
         if (npc == null) {
             this.data = Either.right(new GroupData(memoryHolder));
         } else {
@@ -54,8 +57,9 @@ public class ConversationGroupMemory {
         return participants;
     }
 
-    public boolean isValid(double distSqr) {
-        return this.data.map(e -> e.isAlive() && e.distanceToSqr(this.memoryHolder) < distSqr, GroupData::valid);
+    public boolean isValid() {
+        return this.data.map(e -> e.isAlive() && this.memoryHolder.distanceToSqr(e) < this.rangeSqr && BrainUtils.hasMemory(e, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get()),
+                GroupData::valid);
     }
 
     public boolean canJoin(NPCEntity npc) {
@@ -102,12 +106,12 @@ public class ConversationGroupMemory {
 
     private <T> T applyToGroup(Function<GroupData, T> function, Supplier<T> otherwise) {
         return this.data.map(npc -> {
-            if (!npc.isAlive()) {
-                return otherwise == null ? null : otherwise.get();
-            }
             ConversationGroupMemory group = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
             if (group == null || group.data.right().isEmpty()) {
                 return otherwise == null ? null : otherwise.get();
+            }
+            if (!npc.isAlive()) {
+                this.transferOwnershipToThis(group.data.right().get());
             }
             return function.apply(group.data.right().get());
         }, function);
@@ -122,9 +126,24 @@ public class ConversationGroupMemory {
                 if (group == null || group.data.right().isEmpty()) {
                     return;
                 }
+                if (!npc.isAlive()) {
+                    this.transferOwnershipToThis(group.data.right().get());
+                }
                 consumer.accept(group.data.right().get());
             });
         }
+    }
+
+    private void transferOwnershipToThis(GroupData source) {
+        this.data = Either.right(source);
+        source.removeParticipant(this.memoryHolder);
+        source.participants.keySet().forEach(npc -> {
+            ConversationGroupMemory group = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
+            if (group != null && group.data.left().isPresent()) {
+                group.data = Either.left(this.memoryHolder);
+            }
+        });
+        source.addParticipant(this.memoryHolder, true);
     }
 
     static class GroupData {

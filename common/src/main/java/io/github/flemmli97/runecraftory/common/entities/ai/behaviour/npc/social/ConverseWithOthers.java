@@ -22,7 +22,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
             .usesMemories(RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get())
             .hasMemories(RuneCraftoryMemoryTypes.NEARBY_NPCS.get());
 
-    private final double rangeSqr;
+    private final double range;
 
     private final Predicate<E> newGroupChance = e -> e.getRandom().nextInt(150) == 0;
 
@@ -31,7 +31,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
     }
 
     public ConverseWithOthers(double range) {
-        this.rangeSqr = range * range;
+        this.range = range;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
     @Override
     protected void start(E entity) {
         ConversationGroupMemory current = BrainUtils.getMemory(entity, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
-        if (current != null && current.isValid(this.rangeSqr)) {
+        if (current != null && current.isValid()) {
             if (!current.isGroupComplete() && this.newGroupChance.test(entity)) {
                 this.clearMemory(entity);
             }
@@ -88,7 +88,7 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
 
         List<NPCEntity> nearby = BrainUtils.getMemory(entity, RuneCraftoryMemoryTypes.NEARBY_NPCS.get());
         List<NPCEntity> groups = nearby.stream().filter(npc -> {
-            if (npc.distanceToSqr(entity) > this.rangeSqr) {
+            if (npc.distanceToSqr(entity) > this.range) {
                 return false;
             }
             ConversationGroupMemory group = BrainUtils.getMemory(npc, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
@@ -96,12 +96,12 @@ public class ConverseWithOthers<E extends NPCEntity> extends ExtendedBehaviour<E
         }).toList();
         if (groups.isEmpty()) {
             // Create a new group
-            BrainUtils.setMemory(entity, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get(), new ConversationGroupMemory(entity));
+            BrainUtils.setMemory(entity, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get(), new ConversationGroupMemory(entity, this.range));
         } else {
             NPCEntity random = groups.get(entity.getRandom().nextInt(groups.size()));
             ConversationGroupMemory group = BrainUtils.getMemory(random, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get());
             group.join(entity);
-            BrainUtils.setMemory(entity, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get(), new ConversationGroupMemory(entity, random));
+            BrainUtils.setMemory(entity, RuneCraftoryMemoryTypes.CONVERSATION_GROUP.get(), new ConversationGroupMemory(entity, this.range, random));
         }
     }
 }
