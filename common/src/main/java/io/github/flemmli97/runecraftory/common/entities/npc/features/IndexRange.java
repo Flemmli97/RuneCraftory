@@ -39,7 +39,7 @@ public interface IndexRange {
 
         @Override
         public int getRandom(RandomSource random) {
-            if (this.n <= 0)
+            if (this.n <= 1)
                 return 0;
             return random.nextInt(this.n);
         }

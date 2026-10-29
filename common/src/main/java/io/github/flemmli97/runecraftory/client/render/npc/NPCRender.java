@@ -193,9 +193,9 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             }
             case OUTFIT_LAYER -> {
                 OutfitFeatureType.OutfitFeature feat = features.getFeature(RuneCraftoryNPCLooks.OUTFIT.get());
-                String location = String.format("textures/entity/npc/outfit/generic%s_0.png", slim ? "_slim" : "");
+                String location = String.format("textures/entity/npc/outfit/generic/%s_0.png", slim ? "_slim" : "");
                 if (feat != null)
-                    location = formatTextureTemplate("textures/entity/npc/outfit/", feat.outfit(), slim ? "slim" : "", feat.index());
+                    location = formatTextureTemplateBase("textures/entity/npc/outfit/", true, feat.outfit(), slim ? "slim" : "", feat.index());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case HAIR_LAYER -> {
@@ -217,6 +217,10 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
     }
 
     private static String formatTextureTemplate(String format, Object... args) {
+        return formatTextureTemplateBase(format, false, args);
+    }
+
+    private static String formatTextureTemplateBase(String format, boolean subDir, Object... args) {
         StringBuilder formatBuilder = new StringBuilder(format);
         List<Object> formatArgs = new ArrayList<>();
         int idx = 0;
@@ -228,9 +232,15 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             if (argRep.isEmpty()) {
                 continue;
             }
-            formatBuilder.append("%s");
-            formatArgs.add((idx != 0 ? "_" : "") + argRep);
-            idx++;
+            if (subDir) {
+                formatBuilder.append("%s/");
+                formatArgs.add(argRep);
+                subDir = false;
+            } else {
+                formatBuilder.append("%s");
+                formatArgs.add((idx != 0 ? "_" : "") + argRep);
+                idx++;
+            }
         }
         return String.format(formatBuilder.append(".png").toString(), formatArgs.toArray());
     }
@@ -318,6 +328,8 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
     private void setModelProperties(NPCEntity npc) {
         HumanoidBasedModel<T> currentModel = this.getModel();
         currentModel.setAllVisible(true);
+        currentModel.eyes.toggleEyes(false);
+
         currentModel.crouching = npc.isCrouching();
         HumanoidModel.ArmPose main = getArmPose(npc, InteractionHand.MAIN_HAND);
         HumanoidModel.ArmPose off = getArmPose(npc, InteractionHand.OFF_HAND);

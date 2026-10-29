@@ -37,6 +37,7 @@ import org.joml.Vector3f;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 
 public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveStateHolder> extends EntityModel<T> implements ItemHolderModel, HeadedModel, ExtendedModel {
@@ -46,6 +47,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     protected final ReloadableCache<BedrockAnimations> miscAnimations;
 
     public ModelPartsContainer.ModelPartExtended head;
+    public Eyes eyes;
     public ModelPartsContainer.ModelPartExtended body;
     public ModelPartsContainer.ModelPartExtended rightArm;
     public ModelPartsContainer.ModelPartExtended rightItem;
@@ -82,6 +84,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
                 inflate != 0 ? new DeformationChange(inflate) : DeformationChange.NONE,
                 model -> {
                     this.head = model.getPart("Head");
+                    this.eyes = new Eyes(model);
                     this.body = model.getPart("Body");
                     this.rightItem = model.getPart("RightItemRoot");
                     this.leftItem = model.getPart("LeftItemRoot");
@@ -188,6 +191,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     }
 
     protected void preAnimSetup(T entity, float limbSwing, float limbSwingAmount, float netHeadYaw, float ageInTicks, float headPitch) {
+        this.model.get().resetPoses();
         this.limbSwing = limbSwing;
         this.limbSwingAmount = limbSwingAmount;
         if (this.delegate != null) {
@@ -307,5 +311,27 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
                     .ifPresentOrElse(p -> p.visible = part.visible,
                             part::reset);
         });
+    }
+
+    public record Eyes(Optional<ModelPartsContainer.ModelPartExtended> base,
+                       Optional<ModelPartsContainer.ModelPartExtended> eyes,
+                       Optional<ModelPartsContainer.ModelPartExtended> eyeBrows) {
+
+        public Eyes(ModelPartsContainer container) {
+            this(container.getOptionalPart("EyesBase"), container.getOptionalPart("Eyes"), container.getOptionalPart("EyeBrows"));
+        }
+
+        public void toggleEyes(boolean visible) {
+            this.base.ifPresent(p -> p.setAllVisible(visible));
+        }
+
+        public void show(boolean eyeBrows) {
+            this.toggleEyes(true);
+            if (eyeBrows) {
+                this.eyes.ifPresent(p -> p.setAllVisible(false));
+            } else {
+                this.eyeBrows.ifPresent(p -> p.setAllVisible(false));
+            }
+        }
     }
 }

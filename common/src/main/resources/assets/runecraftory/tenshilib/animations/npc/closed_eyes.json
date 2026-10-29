@@ -1,0 +1,71 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "close_eyes": {
+      "loop": true,
+      "bones": {
+        "Eyes": {
+          "scale": [1, 0, 1]
+        },
+        "EyeBrows": {
+          "position": [0, -1, 0]
+        }
+      }
+    },
+    "half_close_eyes": {
+      "animation_length": 0.28,
+      "bones": {
+        "Eyes": {
+          "scale": [1, 0.5, 1]
+        },
+        "EyeBrows": {
+          "position": [0, -0.5, 0]
+        }
+      }
+    },
+    "close_left": {
+      "loop": true,
+      "bones": {
+        "LeftEye": {
+          "scale": [1, 0, 1]
+        },
+        "LeftEyeBrow": {
+          "position": [0, -1, 0]
+        }
+      }
+    },
+    "half_close_left": {
+      "loop": true,
+      "bones": {
+        "LeftEye": {
+          "scale": [1, 0.5, 1]
+        },
+        "LeftEyeBrow": {
+          "position": [0, -0.5, 0]
+        }
+      }
+    },
+    "close_right": {
+      "loop": true,
+      "bones": {
+        "RightEye": {
+          "scale": [1, 0, 1]
+        },
+        "RightEyeBrow": {
+          "position": [0, -1, 0]
+        }
+      }
+    },
+    "half_close_right": {
+      "loop": true,
+      "bones": {
+        "RightEye": {
+          "scale": [1, 0.5, 1]
+        },
+        "RightEyeBrow": {
+          "position": [0, -0.5, 0]
+        }
+      }
+    }
+  }
+}

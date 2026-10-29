@@ -321,6 +321,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     private final MoveStateTracker moveStateTracker = new MoveStateTracker(this, 5, MOVE_FLAGS, this::calculateMoveType);
 
+    private final EyeState eyeState = new EyeState(this, this::shouldCloseEyes);
+
     public NPCEntity(EntityType<? extends NPCEntity> type, Level level) {
         super(type, level);
         this.levelPair.setLevel(LibConstants.BASE_LEVEL, lvl -> GeneralConfig.experienceLevel.xpAmountForNext(lvl));
@@ -643,6 +645,14 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         return this.interactingPlayers.getLast();
     }
 
+    public boolean shouldCloseEyes() {
+        return this.isSleeping() || this.isDeadOrDying() || this.playDeath();
+    }
+
+    public float getEyeCloseProgress(float partialTicks) {
+        return this.eyeState.progress(partialTicks);
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -817,6 +827,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
         }
+        this.eyeState.tick();
         this.moveStateTracker.tick();
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);

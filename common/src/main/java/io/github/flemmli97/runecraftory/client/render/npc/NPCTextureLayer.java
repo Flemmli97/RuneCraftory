@@ -173,6 +173,18 @@ public class NPCTextureLayer<T extends NPCEntity> extends RenderLayer<T, Humanoi
                 model.rightArm.visible = this.renderer.getModel().rightArm.visible;
                 model.leftArm.visible = this.renderer.getModel().leftArm.visible;
             }
+            case IRIS_LAYER, SCLERA_LAYER -> {
+                if (model.head.visible) {
+                    model.eyes.show(false);
+                    model.head.visible = false;
+                }
+            }
+            case EYEBROWS_LAYER -> {
+                if (model.head.visible) {
+                    model.eyes.show(true);
+                    model.head.visible = false;
+                }
+            }
         }
     }
 
