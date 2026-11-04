@@ -61,7 +61,7 @@ public class NPCTextureLayer<T extends NPCEntity> extends RenderLayer<T, Humanoi
             case SCLERA_LAYER -> {
                 FaceFeaturesType.FaceFeatures feat = features.getFeature(RuneCraftoryNPCLooks.FACE.get());
                 if (feat == null || feat.sclera() == null)
-                    yield 0x000000;
+                    yield 0xffffff;
                 yield feat.sclera().color();
             }
             case EYEBROWS_LAYER -> {

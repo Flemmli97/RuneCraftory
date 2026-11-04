@@ -89,7 +89,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
                     NPCLookId.CODEC.listOf().optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look == null || d.look.isEmpty() ? null : d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
-                    ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(NPCData::weight),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(NPCData::weight),
                     ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("unique").forGetter(d -> d.unique == 0 ? Optional.empty() : Optional.of(d.unique)),
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),

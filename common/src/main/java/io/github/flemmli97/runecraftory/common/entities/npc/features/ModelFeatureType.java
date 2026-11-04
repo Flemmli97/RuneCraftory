@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc.features;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeature;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.client.model.HumanoidModelLocations;
@@ -28,6 +29,14 @@ public record ModelFeatureType(Optional<ModelData> model,
             ).apply(inst, ModelFeature::new));
     public static final StreamCodec<ByteBuf, ModelFeature> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.optional(ModelData.STREAM_CODEC), ModelFeature::model, ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC), ModelFeature::animation, ModelFeature::new);
+
+    public static ModelFeatureType defaultedTexture(boolean slim, String path) {
+        return new ModelFeatureType(Optional.of(ModelData.textured(slim, RuneCraftory.modRes("entity/npc/" + path))), Optional.empty());
+    }
+
+    public static ModelFeatureType defaultedTexture(boolean slim, ResourceLocation texture) {
+        return new ModelFeatureType(Optional.of(ModelData.textured(slim, texture)), Optional.empty());
+    }
 
     @Override
     public ModelFeature create(NPCEntity npc) {

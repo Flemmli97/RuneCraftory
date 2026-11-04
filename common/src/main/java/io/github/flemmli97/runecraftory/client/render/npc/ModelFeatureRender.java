@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelAttachmentsType;
@@ -41,7 +42,16 @@ public class ModelFeatureRender extends NPCFeatureRenderer<ModelAttachmentsType.
     private <E extends NPCEntity> void renderModel(ModelAttachmentsType.ModelAttachment attachment, NPCRender<E> renderer, E entity, PoseStack poseStack, MultiBufferSource buffer,
                                                    int packedLight, float partialTick,
                                                    float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        FeatureModel<NPCEntity> model = MODELS_CACHE.computeIfAbsent(attachment.model(), k -> new FeatureModel<>(attachment.model(), attachment.model()));
+        FeatureModel<NPCEntity> model = MODELS_CACHE.computeIfAbsent(attachment.model(), k -> {
+            try {
+                return new FeatureModel<>(attachment.model(), attachment.animation());
+            } catch (IllegalStateException e) {
+                RuneCraftory.LOGGER.error("Unable to load model {}", k, e);
+                return null;
+            }
+        });
+        if (model == null)
+            return;
         poseStack.pushPose();
         model.setMain(renderer.getModel());
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);

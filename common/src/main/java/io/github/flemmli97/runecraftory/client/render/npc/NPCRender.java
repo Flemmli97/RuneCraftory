@@ -132,7 +132,15 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         if (modelFeature != null) {
             prefix = modelFeature.model().map(ModelFeatureType.ModelData::layerPrefix).orElse(null);
             ResourceLocation texture = modelFeature.model().flatMap(ModelFeatureType.ModelData::texture).orElse(null);
-            if (texture != null) {
+            boolean useThis = texture != null && switch (type) {
+                case SKIN_LAYER -> true;
+                case OUTFIT_LAYER -> !features.contains(RuneCraftoryNPCLooks.OUTFIT.get());
+                case IRIS_LAYER, SCLERA_LAYER, EYEBROWS_LAYER -> !features.contains(RuneCraftoryNPCLooks.FACE.get());
+                case BLUSH_LAYER -> !features.contains(RuneCraftoryNPCLooks.BLUSH.get());
+                case HAIR_LAYER -> !features.contains(RuneCraftoryNPCLooks.HAIR.get());
+                case HAT_LAYER -> !features.contains(RuneCraftoryNPCLooks.HAT.get());
+            };
+            if (useThis) {
                 if (type != NPCTextureLayer.LayerType.SKIN_LAYER) {
                     return EMPTY;
                 }
@@ -193,9 +201,11 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
             }
             case OUTFIT_LAYER -> {
                 OutfitFeatureType.OutfitFeature feat = features.getFeature(RuneCraftoryNPCLooks.OUTFIT.get());
-                String location = String.format("textures/entity/npc/outfit/generic/%s_0.png", slim ? "_slim" : "");
+                String location;
                 if (feat != null)
                     location = formatTextureTemplateBase("textures/entity/npc/outfit/", true, feat.outfit(), slim ? "slim" : "", feat.index());
+                else
+                    location = formatTextureTemplate("textures/entity/npc/outfit/generic/", slim ? "slim" : "", 0);
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
             case HAIR_LAYER -> {
@@ -412,7 +422,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         private GameProfile gameProfile;
 
         private ResourceLocation location = DefaultPlayerSkin.getDefaultTexture();
-        private PlayerSkin.Model skinMeta = net.minecraft.client.resources.PlayerSkin.Model.SLIM;
+        private PlayerSkin.Model skinMeta = PlayerSkin.Model.SLIM;
 
         private boolean pendingTextures;
 

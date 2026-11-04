@@ -46,6 +46,10 @@ public record ColorSetting(List<Either<Integer, ColorRange>> colors) {
     public static final Codec<ColorSetting> CODEC = Codec.either(ColorRange.HEX_COLOR, ColorRange.CODEC).listOf()
             .xmap(ColorSetting::new, ColorSetting::colors);
 
+    public ColorSetting(int color) {
+        this(List.of(Either.left(color)));
+    }
+
     public int getRandom(RandomSource random) {
         if (this.colors.isEmpty())
             return 0xffffff;

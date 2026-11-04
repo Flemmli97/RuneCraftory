@@ -71,21 +71,28 @@ public record ModelAttachmentsType(
         }
     }
 
-    public record ModelAttachment(ResourceLocation model, ResourceLocation texture,
+    public record ModelAttachment(ResourceLocation model, ResourceLocation animation, ResourceLocation texture,
                                   Location location, Set<Location> hidden) {
 
         public static Codec<ModelAttachment> CODEC = RecordCodecBuilder.create(instance ->
                 instance.group(ResourceLocation.CODEC.fieldOf("model").forGetter(ModelAttachment::model),
+                                ResourceLocation.CODEC.fieldOf("animation").forGetter(ModelAttachment::animation),
                                 ResourceLocation.CODEC.fieldOf("texture").forGetter(ModelAttachment::texture),
                                 CodecUtils.stringEnumCodec(Location.class, null).fieldOf("location").forGetter(ModelAttachment::location),
                                 CodecUtils.stringEnumCodec(Location.class, null).listOf().fieldOf("hidden").forGetter(d -> List.copyOf(d.hidden())))
-                        .apply(instance, (model, texture, location, hidden) -> new ModelAttachment(model, texture, location, Set.copyOf(hidden))));
-        public static final StreamCodec<ByteBuf, ModelAttachment> STREAM_CODEC = StreamCodec.composite(ResourceLocation.STREAM_CODEC, ModelAttachment::model,
+                        .apply(instance, (model, animation, texture, location, hidden) -> new ModelAttachment(model, animation, texture, location, Set.copyOf(hidden))));
+        public static final StreamCodec<ByteBuf, ModelAttachment> STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC, ModelAttachment::model,
+                ResourceLocation.STREAM_CODEC, ModelAttachment::animation,
                 ResourceLocation.STREAM_CODEC, ModelAttachment::texture,
                 StreamCodecUtils.ofEnum(Location.class), ModelAttachment::location,
                 ByteBufCodecs.collection(i -> EnumSet.noneOf(Location.class), StreamCodecUtils.ofEnum(Location.class)), ModelAttachment::hidden,
                 ModelAttachment::new);
 
+        public ModelAttachment(ResourceLocation model, ResourceLocation texture,
+                               Location location, Set<Location> hidden) {
+            this(model, model, texture, location, hidden);
+        }
     }
 
     public enum Location {
