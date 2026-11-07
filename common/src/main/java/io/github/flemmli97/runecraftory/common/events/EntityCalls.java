@@ -350,9 +350,6 @@ public class EntityCalls {
                 player.getFoodData().setFoodLevel(food);
                 player.getFoodData().setSaturation(0);
             }
-            if (player instanceof ServerPlayer serverPlayer) {
-                RunecraftoryAttachments.PLAYER_DATA.get().get(serverPlayer).tick();
-            }
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR)
