@@ -8,9 +8,9 @@ import io.github.flemmli97.runecraftory.client.render.monster.SkelefangRender;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.Skelefang;
 import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
-import io.github.flemmli97.tenshilib.client.model.PoseExtended;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -48,37 +48,26 @@ public class SkelefangParticle extends Particle {
         this.pitchSpin = data.getPitchSpin();
         this.yawSpin = data.getYawSpin();
         this.lifetime = data.getMaxTime();
-        ModelPartsContainer.ModelPartExtended[] parts = switch (this.boneType) {
-            case TAIL ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.tailBase, MODEL.tail};
-            case TAIL_BASE -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.tailBase};
-            case LEFT_LEG ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.leftLegBase};
-            case RIGHT_LEG ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.rightLegBase};
-            case HEAD ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront, MODEL.neck, MODEL.head};
-            case NECK -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront, MODEL.neck};
-            case BACK -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack};
-            case BACK_RIBS -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineBack, MODEL.ribsSpine};
-            case FRONT -> new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront};
-            case FRONT_RIBS ->
-                    new ModelPartsContainer.ModelPartExtended[]{MODEL.body, MODEL.spineFront, MODEL.ribsBody};
+        ModelPartsContainer.ModelPartExtended part = switch (this.boneType) {
+            case TAIL -> MODEL.tail;
+            case TAIL_BASE -> MODEL.tailBase;
+            case LEFT_LEG -> MODEL.leftLegBase;
+            case RIGHT_LEG -> MODEL.rightLegBase;
+            case HEAD -> MODEL.head;
+            case NECK -> MODEL.neck;
+            case BACK -> MODEL.spineBack;
+            case BACK_RIBS -> MODEL.ribsSpine;
+            case FRONT -> MODEL.spineFront;
+            case FRONT_RIBS -> MODEL.ribsBody;
             default -> null;
         };
         //Offset pos based on part
-        if (parts != null) {
-            double mX = 0;
-            double mY = 0;
-            double mZ = 0;
-            for (ModelPartsContainer.ModelPartExtended part : parts) {
-                mX += part.x;
-                mY += part.y;
-                mZ += part.z;
-            }
-            Vec3 offset = new Vec3(mX, mY - 22.75, mZ)
+        if (part != null) {
+            part.resetAll();
+            PartPose pose = part.storePose(true);
+            Vec3 offset = new Vec3(pose.x / 16, pose.y / 16, pose.z / 16)
                     .yRot(Mth.wrapDegrees(this.initialRotY) * Mth.DEG_TO_RAD);
-            this.setPos(this.x + offset.x() * 1 / 16d, this.y - offset.y() * 1 / 16d, this.z - offset.z() * 1 / 16d);
+            this.setPos(this.x + offset.x(), this.y - offset.y(), this.z - offset.z());
             this.xo = this.x;
             this.yo = this.y;
             this.zo = this.z;
@@ -86,9 +75,7 @@ public class SkelefangParticle extends Particle {
     }
 
     public static SkelefangModel<Skelefang> particleModel() {
-        SkelefangModel<Skelefang> model = new SkelefangModel<>(RenderType::entityTranslucentCull);
-        model.getModel().getRoot().loadPoseRecursive(PoseExtended.ZERO);
-        return model;
+        return new SkelefangModel<>(RenderType::entityTranslucentCull);
     }
 
     @Override
@@ -120,8 +107,9 @@ public class SkelefangParticle extends Particle {
         float pitch = Mth.lerp(partialTick, this.initialRotX + this.pitchSpin * spinAge, this.initialRotX + this.pitchSpin * next);
         stack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
         stack.mulPose(Axis.XP.rotationDegrees(pitch));
-        stack.scale(-1.0F, -1.0F, 1.0F);
-        stack.translate(0.0D, -1.5, 0.0D);
+        // The flipping of models is a forever enigma... like why only y here...
+        // And also no 1.5 offset
+        stack.scale(1.0F, -1.0F, 1.0F);
         float alpha = 0.9f - this.age * 07f / this.lifetime;
         BlockPos pos = BlockPos.containing(this.x, this.y, this.z);
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);

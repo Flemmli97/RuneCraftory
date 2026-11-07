@@ -210,56 +210,62 @@ public class SkelefangModel<T extends Skelefang> extends ExtendedEntityModel<T> 
         this.body.setAllVisible(true);
         switch (boneType) {
             case TAIL -> {
-                this.tail.setPos(0, 22.75f, 0);
+                this.tail.setPos(0, -4, 0, true);
                 this.tail.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case TAIL_BASE -> {
                 this.tail.visible = false;
-                this.tailBase.setPos(0, 22.75f, 0);
+                this.tailBase.setPos(0, 0, 0, true);
                 this.tailBase.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case LEFT_LEG -> {
-                this.leftLegBase.setPos(0, 22.75f, 0);
+                this.leftLegBase.setPos(0, -22, 0, true);
                 this.leftLegBase.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case RIGHT_LEG -> {
-                this.rightLegBase.setPos(0, 22.75f, 0);
+                this.rightLegBase.setPos(0, -22, 0, true);
                 this.rightLegBase.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case HEAD -> {
-                this.head.setPos(0, 22.75f, 0);
+                this.head.setPos(0, 0, 0, true);
                 this.head.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case NECK -> {
                 this.head.visible = false;
-                this.neck.setPos(0, 22.75f, 0);
+                this.neck.setPos(0, 0, 0, true);
                 this.neck.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case BACK_RIBS -> {
                 this.tailBase.visible = false;
-                this.ribsSpine.setPos(0, 22.75f, 0);
+                this.ribsSpine.setPos(0, -14, 0, true);
                 this.ribsSpine.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case BACK -> {
                 this.tailBase.visible = false;
                 this.ribsSpine.visible = false;
-                this.spineBack.setPos(0, 22.75f, 0);
+                this.spineBack.setPos(0, 0, 0, true);
                 this.spineBack.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case FRONT_RIBS -> {
                 this.leftLegBase.visible = false;
                 this.rightLegBase.visible = false;
-                this.ribsBody.setPos(0, 22.75f, 0);
+                this.ribsBody.setPos(0, -28, 0, true);
                 this.ribsBody.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
             case FRONT -> {
                 this.neck.visible = false;
                 this.ribsBody.visible = false;
-                this.spineFront.setPos(0, 22.75f, 0);
+                this.spineFront.setPos(0, 0, 0, true);
                 this.spineFront.render(poseStack, buffer, packedLight, packedOverlay, color);
             }
-            case GENERIC -> this.bone1.render(poseStack, buffer, packedLight, packedOverlay, color);
-            case GENERIC2 -> this.bone2.render(poseStack, buffer, packedLight, packedOverlay, color);
+            case GENERIC -> {
+                this.bone1.setPos(0, 0, 0, true);
+                this.bone1.render(poseStack, buffer, packedLight, packedOverlay, color);
+            }
+            case GENERIC2 -> {
+                this.bone2.setPos(0, 0, 0, true);
+                this.bone2.render(poseStack, buffer, packedLight, packedOverlay, color);
+            }
         }
     }
 }

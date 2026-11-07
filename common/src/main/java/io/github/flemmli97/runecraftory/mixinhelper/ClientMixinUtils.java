@@ -18,12 +18,11 @@ import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryItems;
 import io.github.flemmli97.runecraftory.common.registry.RunecraftoryAttachments;
 import io.github.flemmli97.runecraftory.common.world.data.Calendar;
 import io.github.flemmli97.tenshilib.client.model.ModelPartsContainer;
+import io.github.flemmli97.tenshilib.client.model.baked.Bone;
 import io.github.flemmli97.tenshilib.common.entity.animated.AnimatedEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -40,6 +39,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -218,11 +218,12 @@ public class ClientMixinUtils {
     }
 
     public static ModelPartsContainer.ModelPartExtended createPlayerItemPart(boolean left) {
-        ModelPart item = new ModelPart(List.of(), Map.of());
-        item.loadPose(PartPose.offset(left ? -1.0F : 1.0F, -8.0F, 0.0F));
-        ModelPart root = new ModelPart(List.of(), Map.of(left ? "LeftItem" : "RightItem", item));
-        root.loadPose(PartPose.offset(left ? 1.0F : -1.0F, 8.0F, 0.0F));
-        return new ModelPartsContainer.ModelPartExtended("root", null, root);
+        List<Bone> children = new ArrayList<>();
+        Bone root = new Bone("Arm", null, left ? 6 : -6, 10, 0.0F,
+                0, 0, 0, children, List.of());
+        children.add(new Bone(left ? "LeftItem" : "RightItem", root, left ? -6 : 6, -10, 0.0F,
+                0, 0, 0, List.of(), List.of()));
+        return new ModelPartsContainer.ModelPartExtended(root);
     }
 
     record SeasonedTint(int origin, Season season) {

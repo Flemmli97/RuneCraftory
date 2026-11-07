@@ -166,13 +166,10 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
         PoseExtended ext = null;
         PoseExtended ext2 = null;
         if (this.riding) {
-            ext = this.leftLeg.extendedPose();
-            ext2 = this.rightLeg.extendedPose();
+            ext = this.leftLeg.extendedPose(false);
+            ext2 = this.rightLeg.extendedPose(false);
         }
         this.attackAnimations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTick, entity.getMainArm() == HumanoidArm.LEFT);
-        if (this.delegate != null)
-            this.copyPropertiesTo(this.delegate);
-
         // Move the body so it stays at the same place
         if (this.riding) {
             this.body.x = this.body.getDefaultPose().x;
@@ -185,9 +182,11 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
             this.body.x += v.x() - this.bodyVehicleOffset.x;
             this.body.y += v.y() - this.bodyVehicleOffset.y;
             this.body.z += v.z() - this.bodyVehicleOffset.z;
-            this.leftLeg.loadPose(ext);
-            this.rightLeg.loadPose(ext2);
+            this.leftLeg.loadPose(ext, false);
+            this.rightLeg.loadPose(ext2, false);
         }
+        if (this.delegate != null)
+            this.copyPropertiesTo(this.delegate);
     }
 
     protected void preAnimSetup(T entity, float limbSwing, float limbSwingAmount, float netHeadYaw, float ageInTicks, float headPitch) {
@@ -251,12 +250,12 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
         model.copyPropertiesTo((EntityModel) this);
         if (model instanceof HumanoidModel<?> other) {
             PartPose body = other.body.storePose();
-            this.body.loadPose(body);
-            this.leftArm.loadPose(TransformationHelper.withoutParent(body, other.leftArm.storePose()));
-            this.rightArm.loadPose(TransformationHelper.withoutParent(body, other.rightArm.storePose()));
-            this.leftLeg.loadPose(TransformationHelper.withoutParent(body, other.leftLeg.storePose()));
-            this.rightLeg.loadPose(TransformationHelper.withoutParent(body, other.rightLeg.storePose()));
-            this.head.loadPose(TransformationHelper.withoutParent(body, other.head.storePose()));
+            this.body.loadPose(body, true);
+            this.leftArm.loadPose(TransformationHelper.withoutParent(body, other.leftArm.storePose()), true);
+            this.rightArm.loadPose(TransformationHelper.withoutParent(body, other.rightArm.storePose()), true);
+            this.leftLeg.loadPose(TransformationHelper.withoutParent(body, other.leftLeg.storePose()), true);
+            this.rightLeg.loadPose(TransformationHelper.withoutParent(body, other.rightLeg.storePose()), true);
+            this.head.loadPose(TransformationHelper.withoutParent(body, other.head.storePose()), true);
         }
     }
 
@@ -264,14 +263,12 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     public void copyPropertiesTo(EntityModel<T> model) {
         super.copyPropertiesTo(model);
         if (model instanceof HumanoidBasedModel<?> other) {
-            other.getModel().getRoot().forEach((name, part) -> {
-                this.getModel().getOptionalPart(name)
-                        .ifPresentOrElse(p -> part.loadPose(p.extendedPose()),
-                                part::reset);
-            });
+            other.getModel().getRoot().forEach((name, part) -> this.getModel().getOptionalPart(name)
+                    .ifPresentOrElse(p -> part.loadPose(p.extendedPose(false), false),
+                            part::reset));
         }
         if (model instanceof HumanoidModel<?> other) {
-            PoseExtended body = this.body.extendedPose();
+            PoseExtended body = this.body.extendedPose(true);
             other.body.visible = this.body.visible;
             other.body.loadPose(body.asPartPose());
             other.head.visible = this.head.visible;
@@ -279,10 +276,10 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
             other.leftArm.visible = this.leftArm.visible;
             this.apply(other.leftArm, body, this.leftArm);
             HumanoidMainHand hands = (HumanoidMainHand) model;
-            hands.runecraftory$getLeftHandItem().loadPose(this.leftItem.storePose());
+            hands.runecraftory$getLeftHandItem().loadPose(this.leftItem.storePose(true), true);
             other.rightArm.visible = this.rightArm.visible;
             this.apply(other.rightArm, body, this.rightArm);
-            hands.runecraftory$getRightHandItem().loadPose(this.rightItem.storePose());
+            hands.runecraftory$getRightHandItem().loadPose(this.rightItem.storePose(true), true);
             if (!model.riding) {
                 this.apply(other.leftLeg, body, this.leftLeg);
                 this.apply(other.rightLeg, body, this.rightLeg);
@@ -298,7 +295,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
     }
 
     private void apply(ModelPart model, PoseExtended body, ModelPartsContainer.ModelPartExtended first) {
-        model.loadPose(TransformationHelper.withParent(body, first.storePose()));
+        model.loadPose(TransformationHelper.withParent(body, first.storePose(true)));
     }
 
     public void setAllVisible(boolean visible) {
