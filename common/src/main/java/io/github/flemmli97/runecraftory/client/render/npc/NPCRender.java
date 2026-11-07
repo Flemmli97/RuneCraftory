@@ -54,6 +54,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
     private static final Map<String, PlayerSkinData> PLAYER_SKIN_TEXTURE_LOCATIONS = new HashMap<>();
     private static final Map<String, ResourceLocation> TEXTURE_LAYERS_LOCATIONS = new HashMap<>();
     public static final ResourceLocation EMPTY = RuneCraftory.modRes("textures/entity/npc/empty.png");
+    public static final ResourceLocation FEATURE_ANIMATION = RuneCraftory.modRes("npc/feature_toggles");
 
     public final NPCArmorLayer<T> armorLayer;
     public final List<NPCTextureLayer<T>> textureLayers = new ArrayList<>();
@@ -339,6 +340,9 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
         HumanoidBasedModel<T> currentModel = this.getModel();
         currentModel.setAllVisible(true);
         currentModel.eyes.toggleEyes(false);
+        if (currentModel.chest != null && !npc.lookFeatures.contains(RuneCraftoryNPCLooks.CHEST.get())) {
+            currentModel.chest.setAllVisible(false);
+        }
 
         currentModel.crouching = npc.isCrouching();
         HumanoidModel.ArmPose main = getArmPose(npc, InteractionHand.MAIN_HAND);

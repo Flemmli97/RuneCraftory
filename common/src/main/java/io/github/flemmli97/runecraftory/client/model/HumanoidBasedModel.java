@@ -3,8 +3,12 @@ package io.github.flemmli97.runecraftory.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
+import io.github.flemmli97.runecraftory.client.render.npc.NPCRender;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ChestSizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveStateHolder;
 import io.github.flemmli97.runecraftory.common.entities.utils.MoveType;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
 import io.github.flemmli97.tenshilib.client.data.GeoAnimationManager;
 import io.github.flemmli97.tenshilib.client.data.GeoModelManager;
@@ -43,12 +47,15 @@ import java.util.Set;
 public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveStateHolder> extends EntityModel<T> implements ItemHolderModel, HeadedModel, ExtendedModel {
 
     protected final ReloadableCache<ModelPartsContainer> model;
-    protected final ReloadableCache<BedrockAnimations> attackAnimations;
-    protected final ReloadableCache<BedrockAnimations> miscAnimations;
+    protected final ReloadableCache<BedrockAnimations> defaultedAttackAnimations;
+    protected final ReloadableCache<BedrockAnimations> animations;
+    protected final ReloadableCache<BedrockAnimations> featureToggles;
 
     public ModelPartsContainer.ModelPartExtended head;
     public Eyes eyes;
     public ModelPartsContainer.ModelPartExtended body;
+    @Nullable
+    public ModelPartsContainer.ModelPartExtended chest;
     public ModelPartsContainer.ModelPartExtended rightArm;
     public ModelPartsContainer.ModelPartExtended rightItem;
     public ModelPartsContainer.ModelPartExtended leftArm;
@@ -86,6 +93,7 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
                     this.head = model.getPart("Head");
                     this.eyes = new Eyes(model);
                     this.body = model.getPart("Body");
+                    this.chest = model.getOptionalPart("Chest").orElse(null);
                     this.rightItem = model.getPart("RightItemRoot");
                     this.leftItem = model.getPart("LeftItemRoot");
                     this.rightArm = model.getPart("RightArm");
@@ -102,13 +110,18 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
                         this.bodyVehicleOffset = new Vector3f(attachmentPose.x - bodyPose.x, attachmentPose.y - bodyPose.y, attachmentPose.z - bodyPose.z);
                     }
                 });
-        this.attackAnimations = GeoAnimationManager.getInstance().getAnimation(HumanoidModelLocations.DEFAULT_PLAYER_LOCATION);
-        this.miscAnimations = GeoAnimationManager.getInstance().getOptionalAnimation(animationLocation);
+        this.defaultedAttackAnimations = GeoAnimationManager.getInstance().getAnimation(HumanoidModelLocations.DEFAULT_PLAYER_LOCATION);
+        this.animations = GeoAnimationManager.getInstance().getOptionalAnimation(animationLocation);
+        this.featureToggles = GeoAnimationManager.getInstance().getAnimation(NPCRender.FEATURE_ANIMATION);
     }
 
     @Override
     public ModelPartsContainer getModel() {
         return this.model.get();
+    }
+
+    public Optional<BedrockAnimations> getAnimation() {
+        return Optional.ofNullable(this.animations.get());
     }
 
     @Override
@@ -169,7 +182,9 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
             ext = this.leftLeg.extendedPose(false);
             ext2 = this.rightLeg.extendedPose(false);
         }
-        this.attackAnimations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTick, entity.getMainArm() == HumanoidArm.LEFT);
+        boolean success = this.animations.get() != null && this.animations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTick, entity.getMainArm() == HumanoidArm.LEFT);
+        if (!success)
+            this.defaultedAttackAnimations.get().doAnimation(this, entity.getAnimationHandler(), this.partialTick, entity.getMainArm() == HumanoidArm.LEFT);
         // Move the body so it stays at the same place
         if (this.riding) {
             this.body.x = this.body.getDefaultPose().x;
@@ -197,16 +212,27 @@ public class HumanoidBasedModel<T extends LivingEntity & AnimatedEntity & MoveSt
             this.delegate.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             this.copyFrom(this.delegate);
         }
-        BedrockAnimations miscAnimation = this.miscAnimations.get();
-        miscAnimation.doAnimation(this, "idle", entity.tickCount, this.partialTick, 1);
-        miscAnimation.doAnimation(this, "walk", entity.tickCount, this.partialTick, entity.interpolatedMoveTick(this.partialTick));
-        miscAnimation.doAnimation(this, "run", entity.tickCount, this.partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTick));
-        miscAnimation.doAnimation(this, "swim", entity.tickCount, this.partialTick, entity.getSwimAmount(this.partialTick));
+        BedrockAnimations animations = this.animations.get();
+        if (animations == null)
+            return;
+        animations.doAnimation(this, "idle", entity.tickCount, this.partialTick, 1);
+        animations.doAnimation(this, "walk", entity.tickCount, this.partialTick, entity.interpolatedMoveTick(this.partialTick));
+        animations.doAnimation(this, "run", entity.tickCount, this.partialTick, entity.interpolatedMoveTickOf(MoveType.RUN, this.partialTick));
+        animations.doAnimation(this, "swim", entity.tickCount, this.partialTick, entity.getSwimAmount(this.partialTick));
         if (this.crouching) {
-            miscAnimation.doAnimation(this, "crouching", entity.tickCount, this.partialTick, 1, false, true);
+            animations.doAnimation(this, "crouching", entity.tickCount, this.partialTick, 1, false, true);
         }
         if (this.riding) {
-            miscAnimation.doAnimation(this, "riding", entity.tickCount, this.partialTick, 1);
+            animations.doAnimation(this, "riding", entity.tickCount, this.partialTick, 1);
+        }
+        if (entity instanceof NPCEntity npc) {
+            ChestSizeFeatureType.SizeFeature feature = npc.lookFeatures.getFeature(RuneCraftoryNPCLooks.CHEST.get());
+            if (feature != null) {
+                float size = feature.size() * 20;
+                boolean success = this.getAnimation().map(a -> a.doAnimation(this, "chest_size", size, 1, false, false)).orElse(false);
+                if (!success)
+                    this.featureToggles.get().doAnimation(this, "chest_size", size, 1, false, false);
+            }
         }
     }
 

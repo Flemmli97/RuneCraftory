@@ -1,5 +1,5 @@
 {
-  "format_version": "1.12.0",
+  "format_version": "1.21.0",
   "minecraft:geometry": [
     {
       "description": {
@@ -106,6 +106,64 @@
               "origin": [-3, 25, -4],
               "size": [2, 2, 0],
               "uv": [9, 13]
+            }
+          ]
+        },
+        {
+          "name": "Chest",
+          "parent": "Body",
+          "pivot": [0, 19.5, -2],
+          "rotation": [45, 0, 0],
+          "cubes": [
+            {
+              "origin": [-4, 18, -3.5],
+              "size": [8, 3, 3],
+              "inflate": -0.025,
+              "uv": {
+                "north": {
+                  "uv": [20, 24],
+                  "uv_size": [8, 3]
+                },
+                "east": {
+                  "uv": [18, 23],
+                  "uv_size": [3, 3],
+                  "uv_rotation": 270
+                },
+                "west": {
+                  "uv": [27, 23],
+                  "uv_size": [3, 3],
+                  "uv_rotation": 90
+                },
+                "up": {
+                  "uv": [20, 22],
+                  "uv_size": [8, 3]
+                }
+              }
+            },
+            {
+              "origin": [-4, 18, -3.5],
+              "size": [8, 3, 3],
+              "inflate": 0.225,
+              "uv": {
+                "north": {
+                  "uv": [20, 40],
+                  "uv_size": [8, 3]
+                },
+                "east": {
+                  "uv": [18, 39],
+                  "uv_size": [3, 3],
+                  "uv_rotation": 270
+                },
+                "west": {
+                  "uv": [27, 39],
+                  "uv_size": [3, 3],
+                  "uv_rotation": 90
+                },
+                "up": {
+                  "uv": [20, 38],
+                  "uv_size": [8, 3]
+                }
+              }
             }
           ]
         },

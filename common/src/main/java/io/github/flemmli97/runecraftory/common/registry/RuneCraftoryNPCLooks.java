@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.BlushFeatureType;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.ChestSizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.HairFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.IndexedColorSettingType;
@@ -30,6 +31,7 @@ public class RuneCraftoryNPCLooks {
     // Layers
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<IndexedColorSettingType.IndexedColorFeature>> SKIN = NPC_FEATURES.register().register("skin_feature", RuneCraftoryNPCLooks::skin);
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<FaceFeaturesType.FaceFeatures>> FACE = NPC_FEATURES.register().register("face_feature", () -> new NPCFeatureType<>(FaceFeaturesType.TYPE_CODEC, FaceFeaturesType.CODEC, FaceFeaturesType.STREAM_CODEC));
+    public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<ChestSizeFeatureType.SizeFeature>> CHEST = NPC_FEATURES.register().register("chest_size", () -> new NPCFeatureType<>(ChestSizeFeatureType.TYPE_CODEC, ChestSizeFeatureType.CODEC, ChestSizeFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<BlushFeatureType.BlushFeature>> BLUSH = NPC_FEATURES.register().register("blush_feature", () -> new NPCFeatureType<>(BlushFeatureType.TYPE_CODEC, BlushFeatureType.CODEC, BlushFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<HairFeatureType.HairFeature>> HAIR = NPC_FEATURES.register().register("hair_feature", () -> new NPCFeatureType<>(HairFeatureType.TYPE_CODEC, HairFeatureType.CODEC, HairFeatureType.STREAM_CODEC));
     public static final RegistryEntrySupplier<NPCFeatureType<?>, NPCFeatureType<OutfitFeatureType.OutfitFeature>> OUTFIT = NPC_FEATURES.register().register("outfit_feature", () -> new NPCFeatureType<>(OutfitFeatureType.TYPE_CODEC, OutfitFeatureType.CODEC, OutfitFeatureType.STREAM_CODEC));

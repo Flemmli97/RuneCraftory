@@ -21,6 +21,7 @@ public class NPCFeatureRenderers {
         empty(RuneCraftoryNPCLooks.HAIR.get());
         empty(RuneCraftoryNPCLooks.OUTFIT.get());
         empty(RuneCraftoryNPCLooks.HAT.get());
+        empty(RuneCraftoryNPCLooks.CHEST.get());
         register(RuneCraftoryNPCLooks.MODEL_ATTACHMENT.get(), new ModelFeatureRender());
     }
 

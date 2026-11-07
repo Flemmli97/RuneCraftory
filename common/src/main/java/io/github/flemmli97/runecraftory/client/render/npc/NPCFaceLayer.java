@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.client.render.npc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.HumanoidBasedModel;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.FaceFeaturesType;
@@ -15,13 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 public class NPCFaceLayer<T extends NPCEntity> extends NPCTextureLayer<T> {
 
     private String textureType;
-    public static final ResourceLocation BLINK_LOCATION = RuneCraftory.modRes("npc/closed_eyes");
 
-    protected final ReloadableCache<BedrockAnimations> blinkAnimation;
+    protected final ReloadableCache<BedrockAnimations> animation;
 
     public NPCFaceLayer(NPCRender<T> renderer) {
         super(renderer, LayerType.IRIS_LAYER);
-        this.blinkAnimation = GeoAnimationManager.getInstance().getOptionalAnimation(BLINK_LOCATION);
+        this.animation = GeoAnimationManager.getInstance().getAnimation(NPCRender.FEATURE_ANIMATION);
     }
 
     @Override
@@ -31,7 +29,9 @@ public class NPCFaceLayer<T extends NPCEntity> extends NPCTextureLayer<T> {
         this.setup(layerModel);
         this.textureType = null;
         poseStack.pushPose();
-        this.blinkAnimation.get().doAnimation(layerModel, "close_eyes", 0, partialTick, entity.getEyeCloseProgress(partialTick));
+        boolean success = layerModel.getAnimation().map(a -> a.doAnimation(layerModel, "close_eyes", 0, partialTick, entity.getEyeCloseProgress(partialTick), false, false)).orElse(false);
+        if (!success)
+            this.animation.get().doAnimation(layerModel, "close_eyes", 0, partialTick, entity.getEyeCloseProgress(partialTick));
         this.actualRender(poseStack, buffer, packedLight, entity, layerModel);
         this.layer = LayerType.SCLERA_LAYER;
         float scale = 1 + 0.001f;

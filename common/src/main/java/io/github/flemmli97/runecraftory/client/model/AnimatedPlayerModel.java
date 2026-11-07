@@ -33,7 +33,7 @@ public class AnimatedPlayerModel<T extends LivingEntity & AnimatedEntity & MoveS
     }
 
     private boolean doAnimation(AnimationHandler<?> handler, float partialTick, boolean mirror) {
-        boolean changed = this.attackAnimations.get().doAnimation(this, handler, partialTick, mirror);
+        boolean changed = this.defaultedAttackAnimations.get().doAnimation(this, handler, partialTick, mirror);
         // Move the body so it stays at the same place
         if (changed && this.riding) {
             this.body.x = this.body.getDefaultPose().x;
