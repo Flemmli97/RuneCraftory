@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MobMixin extends LivingEntity implements MobToggleHandler {
 
     @Unique
-    private final ToggleStateHandler runecraftory$mobAiStateHandler = new ToggleStateHandler((Mob) (Object) this, ((Mob) (Object) this).isNoAi(),
+    private final ToggleStateHandler runecraftory$mobAiStateHandler = new ToggleStateHandler((Mob) (Object) this, ((Mob) (Object) this)::isNoAi,
             state -> ((Mob) (Object) this).setNoAi(state));
 
     @Unique
@@ -39,13 +39,18 @@ public abstract class MobMixin extends LivingEntity implements MobToggleHandler 
 
     @Inject(method = "setNoAi", at = @At("RETURN"))
     private void onSetNoAi(boolean noAi, CallbackInfo info) {
-        this.runecraftory$mobAiStateHandler.updateDefaultedValue(noAi);
+        this.runecraftory$NoAIState().updateDefaultedValue();
     }
 
     @Inject(method = "playAmbientSound", at = @At("HEAD"), cancellable = true)
     private void onAmbient(CallbackInfo info) {
         if (this.hasEffect(RuneCraftoryEffects.SLEEP.asHolder()))
             info.cancel();
+    }
+
+    @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))
+    private void onSavePre(CompoundTag compound, CallbackInfo ci) {
+        this.runecraftory$NoAIState().preSave();
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
@@ -55,7 +60,7 @@ public abstract class MobMixin extends LivingEntity implements MobToggleHandler 
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void onRead(CompoundTag compound, CallbackInfo ci) {
-        this.runecraftory$mobAiStateHandler.read(compound.getCompound("RunecraftoryAiState"));
+        this.runecraftory$NoAIState().read(compound.getCompound("RunecraftoryAiState"));
     }
 
     @Override

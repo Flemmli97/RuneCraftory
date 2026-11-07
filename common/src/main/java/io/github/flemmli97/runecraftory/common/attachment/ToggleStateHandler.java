@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Mob;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 public class ToggleStateHandler {
@@ -16,21 +17,23 @@ public class ToggleStateHandler {
     private final Mob mob;
     private final Consumer<Boolean> onToggle;
 
-    private boolean defaultedValue;
+    private final BooleanSupplier defaultedValueGetter;
     private final Set<ResourceLocation> disabledSources = new HashSet<>();
 
+    private boolean defaultedValue;
     private boolean updating;
 
-    public ToggleStateHandler(Mob mob, boolean defaultedValue, Consumer<Boolean> onToggle) {
+    public ToggleStateHandler(Mob mob, BooleanSupplier defaultedValueGetter, Consumer<Boolean> onToggle) {
         this.mob = mob;
-        this.defaultedValue = defaultedValue;
+        this.defaultedValueGetter = defaultedValueGetter;
+        this.defaultedValue = defaultedValueGetter.getAsBoolean();
         this.onToggle = onToggle;
     }
 
-    public void updateDefaultedValue(boolean value) {
+    public void updateDefaultedValue() {
         if (this.mob.level().isClientSide || this.updating)
             return;
-        this.defaultedValue = value;
+        this.defaultedValue = this.defaultedValueGetter.getAsBoolean();
     }
 
     public void addSource(ResourceLocation source) {
@@ -57,12 +60,17 @@ public class ToggleStateHandler {
         this.updating = false;
     }
 
+    public void preSave() {
+        // Restore default for saving
+        this.onToggle.accept(this.defaultedValue);
+    }
+
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         ListTag sources = new ListTag();
         this.disabledSources.forEach(res -> sources.add(StringTag.valueOf(res.toString())));
         tag.put("Sources", sources);
-        tag.putBoolean("Defaulted", this.defaultedValue);
+        this.updateState();
         return tag;
     }
 
@@ -70,7 +78,7 @@ public class ToggleStateHandler {
         this.disabledSources.clear();
         ListTag sources = tag.getList("Sources", Tag.TAG_STRING);
         sources.forEach(t -> this.disabledSources.add(ResourceLocation.parse(t.getAsString())));
-        this.defaultedValue = tag.getBoolean("Defaulted");
+        this.defaultedValue = this.defaultedValueGetter.getAsBoolean();
         this.updateState();
     }
 }
