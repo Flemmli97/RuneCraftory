@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -12,26 +11,24 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record HairFeatureType(TypedIndexRange types,
+public record HairFeatureType(WeightedIndexedTexture hairs,
                               ColorSetting color) implements NPCFeature.NPCFeatureHolder<HairFeatureType.HairFeature> {
 
     public static final MapCodec<HairFeatureType> TYPE_CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(TypedIndexRange.CODEC.fieldOf("styles").forGetter(d -> d.types),
+            inst.group(WeightedIndexedTexture.CODEC.fieldOf("hairs").forGetter(d -> d.hairs),
                     ColorSetting.CODEC.fieldOf("colors").forGetter(d -> d.color)
             ).apply(inst, HairFeatureType::new));
     public static MapCodec<HairFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(Codec.STRING.fieldOf("style").forGetter(HairFeature::hair),
-                    Codec.INT.fieldOf("index").forGetter(HairFeature::index),
+            inst.group(IndexedTexture.CODEC.fieldOf("hair").forGetter(HairFeature::hair),
                     Codec.INT.fieldOf("color").forGetter(HairFeature::color)
             ).apply(inst, HairFeature::new));
     public static final StreamCodec<ByteBuf, HairFeature> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8, HairFeature::hair, ByteBufCodecs.INT, HairFeature::index,
-            ByteBufCodecs.INT, HairFeature::color, HairFeature::new);
+            IndexedTexture.STREAM_CODEC, HairFeature::hair, ByteBufCodecs.INT, HairFeature::color, HairFeature::new);
 
     @Override
     public HairFeature create(NPCEntity npc) {
-        Pair<String, Integer> style = this.types.getRandom(npc.getRandom());
-        return new HairFeature(style.getFirst(), style.getSecond(), this.color.getRandom(npc.getRandom()));
+        IndexedTexture hair = this.hairs.getRandom(npc.getRandom());
+        return new HairFeature(hair, this.color.getRandom(npc.getRandom()));
     }
 
     @Override
@@ -39,7 +36,7 @@ public record HairFeatureType(TypedIndexRange types,
         return RuneCraftoryNPCLooks.HAIR.get();
     }
 
-    public record HairFeature(String hair, int index, int color) implements NPCFeature {
+    public record HairFeature(IndexedTexture hair, int color) implements NPCFeature {
 
         @Override
         public NPCFeatureType<HairFeature> type() {

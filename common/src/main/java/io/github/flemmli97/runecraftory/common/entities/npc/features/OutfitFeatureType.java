@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.npc.features;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,24 +8,25 @@ import io.github.flemmli97.runecraftory.api.registry.NPCFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.random.WeightedEntry;
 
 public record OutfitFeatureType(
-        TypedIndexRange types) implements NPCFeature.NPCFeatureHolder<OutfitFeatureType.OutfitFeature> {
+        WeightedIndexedTexture outfits) implements NPCFeature.NPCFeatureHolder<OutfitFeatureType.OutfitFeature> {
 
-    public static final MapCodec<OutfitFeatureType> TYPE_CODEC = TypedIndexRange.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::types);
-    public static MapCodec<OutfitFeature> CODEC = RecordCodecBuilder.mapCodec(inst ->
-            inst.group(Codec.STRING.fieldOf("outfit").forGetter(OutfitFeature::outfit),
-                    Codec.INT.fieldOf("index").forGetter(OutfitFeature::index)
-            ).apply(inst, OutfitFeature::new));
-    public static final StreamCodec<ByteBuf, OutfitFeature> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8, OutfitFeature::outfit, ByteBufCodecs.INT, OutfitFeature::index, OutfitFeature::new);
+    private static final Codec<WeightedEntry.Wrapper<String>> DIRECT_RESOURCE = RecordCodecBuilder.create(inst ->
+            inst.group(Codec.INT.fieldOf("weight").forGetter(d -> d.getWeight().asInt()),
+                    Codec.STRING.fieldOf("outfit").forGetter(WeightedEntry.Wrapper::data)
+            ).apply(inst, (weight, type) -> WeightedEntry.wrap(type, weight)));
+
+    public static final MapCodec<OutfitFeatureType> TYPE_CODEC = WeightedIndexedTexture.CODEC.fieldOf("outfits").xmap(OutfitFeatureType::new, OutfitFeatureType::outfits);
+    public static MapCodec<OutfitFeature> CODEC = IndexedTexture.CODEC.xmap(OutfitFeature::new, OutfitFeature::outfit);
+    public static final StreamCodec<ByteBuf, OutfitFeature> STREAM_CODEC = IndexedTexture.STREAM_CODEC.map(OutfitFeature::new, OutfitFeature::outfit);
 
     @Override
     public OutfitFeature create(NPCEntity npc) {
-        Pair<String, Integer> style = this.types.getRandom(npc.getRandom());
-        return new OutfitFeature(style.getFirst(), style.getSecond());
+        IndexedTexture texture = this.outfits.getRandom(npc.getRandom());
+        return new OutfitFeature(texture);
     }
 
     @Override
@@ -34,7 +34,7 @@ public record OutfitFeatureType(
         return RuneCraftoryNPCLooks.OUTFIT.get();
     }
 
-    public record OutfitFeature(String outfit, int index) implements NPCFeature {
+    public record OutfitFeature(IndexedTexture outfit) implements NPCFeature {
 
         @Override
         public NPCFeatureType<OutfitFeature> type() {

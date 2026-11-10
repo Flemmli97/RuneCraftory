@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.ModelFeatur
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.OutfitFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SimpleHatFeatureType;
+import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCLooks;
 import io.github.flemmli97.tenshilib.client.render.layer.ItemLayer;
 import net.minecraft.client.Minecraft;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBasedModel<T>> {
 
@@ -204,23 +206,24 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
                 OutfitFeatureType.OutfitFeature feat = features.getFeature(RuneCraftoryNPCLooks.OUTFIT.get());
                 String location;
                 if (feat != null)
-                    location = formatTextureTemplateBase("textures/entity/npc/outfit/", true, feat.outfit(), slim ? "slim" : "", feat.index());
+                    location = formatTextureTemplateBase(feat.outfit().texture().getNamespace() + ":textures/entity/npc/outfit/",
+                            true, feat.outfit().texture().getPath(), slim ? "slim" : "", feat.outfit().indexStr());
                 else
-                    location = formatTextureTemplate("textures/entity/npc/outfit/generic/", slim ? "slim" : "", 0);
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
+                    location = formatTextureTemplate("runecraftory:textures/entity/npc/outfit/generic/", slim ? "slim" : "", 0);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, parseTexture());
             }
             case HAIR_LAYER -> {
                 HairFeatureType.HairFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAIR.get());
                 if (feat == null)
                     yield null;
-                String location = formatTextureTemplate("textures/entity/npc/hair/", prefix, feat.hair(), feat.index());
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
+                String location = formatTextureTemplate(feat.hair().texture().getNamespace() + ":textures/entity/npc/hair/", prefix, feat.hair().texture().getPath(), feat.hair().indexStr());
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, parseTexture());
             }
             case HAT_LAYER -> {
                 SimpleHatFeatureType.SimpleHatFeature feat = features.getFeature(RuneCraftoryNPCLooks.HAT.get());
-                if (feat == null || feat.hat().isEmpty())
+                if (feat == null || feat.hat().equals(LibConstants.EMPTY))
                     yield null;
-                String location = formatTextureTemplate("textures/entity/npc/misc/", feat.hat());
+                String location = formatTextureTemplate(feat.hat().getNamespace() + ":textures/entity/npc/misc/", feat.hat().getPath());
                 yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
             }
         };
@@ -229,6 +232,17 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
 
     private static String formatTextureTemplate(String format, Object... args) {
         return formatTextureTemplateBase(format, false, args);
+    }
+
+    private static Function<String, ResourceLocation> parseTexture() {
+        return texture -> {
+            ResourceLocation location = ResourceLocation.tryParse(texture);
+            if (location == null) {
+                RuneCraftory.LOGGER.error("Invalid texture location: {}", texture);
+                return EMPTY;
+            }
+            return location;
+        };
     }
 
     private static String formatTextureTemplateBase(String format, boolean subDir, Object... args) {

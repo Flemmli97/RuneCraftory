@@ -60,7 +60,7 @@ public interface IndexRange {
 
         @Override
         public int getRandom(RandomSource random) {
-            return random.nextInt(this.max - this.min) + this.min;
+            return random.nextIntBetweenInclusive(this.min, this.max);
         }
     }
 
