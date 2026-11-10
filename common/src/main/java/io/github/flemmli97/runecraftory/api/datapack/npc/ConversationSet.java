@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.api.datapack.npc;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.ai.memory.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
@@ -33,7 +34,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public record ConversationSet(String fallbackKey, @Nullable ResourceLocation missing,
                               Map<String, Conversation> conversations) {
@@ -48,16 +48,9 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
     }
 
     public static NetworkConversation createRandom(ReloadableHolder<ConversationSet> conversations,
-                                                   Predicate<Map.Entry<String, ConversationSet.Conversation>> filter,
+                                                   Function<Map.Entry<String, Conversation>, Integer> filter,
                                                    Random random) {
-        List<Map.Entry<String, Conversation>> filtered = new ArrayList<>();
-        for (Map.Entry<String, ConversationSet.Conversation> entry : conversations.value().conversations().entrySet()) {
-            if (!filter.test(entry))
-                continue;
-            if (!entry.getValue().participants().isEmpty())
-                continue;
-            filtered.add(entry);
-        }
+        List<Map.Entry<String, Conversation>> filtered = conversations.value().filteredConversations(filter);
         Collections.shuffle(filtered, random);
         int size = Math.min(filtered.size(), 2 + random.nextInt(2)); //Select 2-3 random lines
         if (size > 0) {
@@ -75,6 +68,25 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                     ? Component.translatable(conversations.value().fallbackKey(), conversations.value().missing()) : Component.translatable(conversations.value().fallbackKey());
             return new NetworkConversation(dialog);
         }
+    }
+
+    public List<Map.Entry<String, Conversation>> filteredConversations(Function<Map.Entry<String, Conversation>, Integer> filter) {
+        int currentPriority = 0;
+        List<Map.Entry<String, Conversation>> filtered = new ArrayList<>();
+        for (Map.Entry<String, ConversationSet.Conversation> entry : this.conversations().entrySet()) {
+            int priority = filter.apply(entry);
+            if (priority < currentPriority) {
+                continue;
+            }
+            if (priority > currentPriority) {
+                currentPriority = priority;
+                filtered.clear();
+            }
+            if (!entry.getValue().participants().isEmpty())
+                continue;
+            filtered.add(entry);
+        }
+        return filtered;
     }
 
     public static Optional<NetworkConversation> fromTopic(ConversationGroupMemory group, TopicHolder topic) {
@@ -153,6 +165,59 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
         }
     }
 
+    public static class ContextBuilder {
+
+        private final String prefix;
+        private ConversationContext context;
+        private final Map<ConversationContext, ConversationSet.Builder> conversations = new LinkedHashMap<>();
+
+        public ContextBuilder(ResourceLocation prefix) {
+            this(prefix, true);
+        }
+
+        public ContextBuilder(ResourceLocation prefix, boolean defaulted) {
+            this.prefix = String.format("%s%s.%s", defaulted ? "npc." : "", prefix.getNamespace(), prefix.getPath().replace("/", "."));
+        }
+
+        public ContextBuilder push(ConversationContext context) {
+            this.context = context;
+            this.conversations.computeIfAbsent(this.context, ctx -> new ConversationSet.Builder());
+            return this;
+        }
+
+        public ContextBuilder addConversation(String translation) {
+            if (this.context == null) {
+                throw new IllegalStateException("Context is null");
+            }
+            ConversationSet.Builder builder = this.conversations.get(this.context);
+            int amount = builder.conversations.size() + 1;
+            String key = String.format("%s.%s.%s", this.prefix, this.context.key().getPath(), amount);
+            builder.addConversation(key, translation);
+            return this;
+        }
+
+        public ContextBuilder addConversation(Function<String, Conversation.Builder> conversation) {
+            if (this.context == null) {
+                throw new IllegalStateException("Context is null");
+            }
+            ConversationSet.Builder builder = this.conversations.get(this.context);
+            int amount = builder.conversations.size() + 1;
+            String key = String.format("%s.%s.%s", this.prefix, this.context.key().getPath(), amount);
+            builder.addConversation(conversation.apply(key));
+            return this;
+        }
+
+        public Map<ConversationContext, ConversationSet.Builder> build() {
+            return this.conversations;
+        }
+    }
+
+    public enum ConversationTestResult {
+        FAIL,
+        SUCCESS,
+        PASS
+    }
+
     public record Conversation(List<Dialogue> dialogues,
                                @Nullable NumberProvider minHearts, @Nullable NumberProvider maxHearts,
                                boolean startingConversation,
@@ -188,15 +253,27 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
             });
         }
 
-        public boolean test(int hearts, LootContext ctx) {
+        /**
+         * Calculates a priority for this conversation
+         * This way conversations with some specific condition are not gated behind the majority without conditions
+         *
+         * @return -1 if conditions are not met. Otherwise the conversations priority
+         */
+        public int priority(int hearts, LootContext ctx) {
+            int priority = 0;
+            if (this.minHearts != null || this.maxHearts != null) {
+                priority = 1;
+            }
+            if (this.conditions.length > 0)
+                priority = 2;
             if (this.minHearts != null && this.minHearts.getInt(ctx) > hearts)
-                return false;
+                return -1;
             if (this.maxHearts != null && this.maxHearts.getInt(ctx) < hearts)
-                return false;
+                return -1;
             for (LootItemCondition condition : this.conditions)
                 if (!condition.test(ctx))
-                    return false;
-            return true;
+                    return -1;
+            return priority;
         }
 
         public static class Builder {

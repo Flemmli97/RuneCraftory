@@ -1094,8 +1094,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 //Disable if player already has a quest from this npc
                 if (c.getValue().actions().stream().anyMatch(h -> h.action() == ConversationSet.ConversationAction.QUEST) &&
                         (QuestHandler.getFirstQuestFor(player, this) != null || this.updater.alreadyAcceptedRandomquest(player)))
-                    return false;
-                return c.getValue().startingConversation() && c.getValue().test(heart, lootContext);
+                    return -1;
+                return c.getValue().startingConversation() ? c.getValue().priority(heart, lootContext) : -1;
             }, this.updater.getDailyRandom()));
             idx++;
         }
@@ -1283,14 +1283,16 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
     public TopicHolder conversationTopics() {
         ReloadableHolder<ConversationSet> conversations = this.data.value().getConversation(ConversationContext.TALK);
         LootContext ctx = this.createConversationContext(null);
-        List<TopicHolder.Topic> topics = conversations.value()
-                .conversations().entrySet().stream().filter(e -> {
-                    if (e.getValue().participants().isEmpty())
-                        return true;
-                    ConversationSet.Conversation conv = conversations.value().conversations().get(e.getKey());
-                    return !conv.startingConversation() || !conv.test(0, ctx);
-                })
-                .map(e -> {
+        List<Map.Entry<String, ConversationSet.Conversation>> filtered = conversations.value().filteredConversations(e -> {
+            if (e.getValue().participants().isEmpty())
+                return -1;
+            ConversationSet.Conversation conv = conversations.value().conversations().get(e.getKey());
+            return conv.startingConversation() ? conv.priority(0, ctx) : -1;
+        });
+        if (filtered.isEmpty()) {
+            return null;
+        }
+        List<TopicHolder.Topic> topics = filtered.stream().map(e -> {
                     Map<ResourceLocation, Set<String>> participants = new HashMap<>();
                     e.getValue().participants().forEach((key, value) ->
                             participants.computeIfAbsent(value.npcID(), k -> new HashSet<>())
