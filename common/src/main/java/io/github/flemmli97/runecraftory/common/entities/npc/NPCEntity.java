@@ -1027,10 +1027,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             NPCData.Gift gift = this.giftOf(stack);
             if (gift != null) {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (gift.xp() * mult)))
-                    this.tellDialogue(serverPlayer, new ConversationSet.NetworkConversation(Component.translatable(gift.responseKey())));
+                    this.speak(serverPlayer, List.of(DataPackHandler.INSTANCE.npcConversationManager().get(gift.responseKey())));
             } else {
                 if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level(), (int) (5 * mult)))
-                    this.tellDialogue(serverPlayer, new ConversationSet.NetworkConversation(Component.translatable(this.data.value().neutralGiftResponse())));
+                    this.speak(serverPlayer, ConversationContext.DEFAULT_GIFT);
             }
         }
         stack.shrink(1);

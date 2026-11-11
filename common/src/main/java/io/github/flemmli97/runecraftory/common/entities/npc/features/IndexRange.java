@@ -28,9 +28,9 @@ public interface IndexRange {
         SELECTED
     }
 
-    record FirstNIndices(int n) implements IndexRange {
+    record FirstNIndices(int amount) implements IndexRange {
 
-        public static final MapCodec<FirstNIndices> CODEC = ExtraCodecs.POSITIVE_INT.fieldOf("amount").xmap(FirstNIndices::new, FirstNIndices::n);
+        public static final MapCodec<FirstNIndices> CODEC = ExtraCodecs.POSITIVE_INT.fieldOf("amount").xmap(FirstNIndices::new, FirstNIndices::amount);
 
         @Override
         public Type getType() {
@@ -39,9 +39,9 @@ public interface IndexRange {
 
         @Override
         public int getRandom(RandomSource random) {
-            if (this.n <= 1)
+            if (this.amount <= 1)
                 return 0;
-            return random.nextInt(this.n);
+            return random.nextInt(this.amount);
         }
     }
 

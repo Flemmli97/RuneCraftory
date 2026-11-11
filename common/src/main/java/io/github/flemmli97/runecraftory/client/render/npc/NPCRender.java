@@ -224,7 +224,7 @@ public class NPCRender<T extends NPCEntity> extends MobRenderer<T, HumanoidBased
                 if (feat == null || feat.hat().equals(LibConstants.EMPTY))
                     yield null;
                 String location = formatTextureTemplate(feat.hat().getNamespace() + ":textures/entity/npc/misc/", feat.hat().getPath());
-                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, RuneCraftory::modRes);
+                yield TEXTURE_LAYERS_LOCATIONS.computeIfAbsent(location, parseTexture());
             }
         };
         return texture == null ? EMPTY : texture;

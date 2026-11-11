@@ -15,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryAttributes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.runecraftory.common.utils.Utils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.core.Holder;
@@ -26,10 +27,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -39,7 +40,7 @@ import java.util.function.Function;
 public record NPCData(@Nullable String name, @Nullable String surname,
                       Gender gender, List<NPCProfession> profession, @Nullable List<NPCLookId> look,
                       @Nullable Pair<Season, Integer> birthday,
-                      int weight, String neutralGiftResponse,
+                      int weight,
                       Map<ConversationContext, ResourceLocation> interactions,
                       Set<ResourceLocation> requiredQuests,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
@@ -51,7 +52,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     public static final Map<Holder<Attribute>, Double> DEFAULT_GAIN = Map.of(Attributes.MAX_HEALTH, 5d, Attributes.ATTACK_DAMAGE, 0.5,
             RuneCraftoryAttributes.DEFENCE.asHolder(), 0.2, RuneCraftoryAttributes.MAGIC_ATTACK.asHolder(), 0.5, RuneCraftoryAttributes.MAGIC_DEFENCE.asHolder(), 0.2);
     public static final ReloadableHolder<NPCData> DEFAULT = new ReloadableHolder<>(RuneCraftory.modRes("default_npc"),
-            new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1, "runecraftory.npc.default.gift.neutral",
+            new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1,
                     Map.of(), Set.of(), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of()));
 
     public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
@@ -84,7 +85,6 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     }),
 
                     RelationStruct.CODEC.fieldOf("relation").forGetter(d -> new RelationStruct(d.relationShipState, d.possibleChildren)),
-                    Codec.STRING.fieldOf("neutral_gift_response").forGetter(NPCData::neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("gift_items").forGetter(NPCData::giftItems),
 
                     NPCLookId.CODEC.listOf().optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look == null || d.look.isEmpty() ? null : d.look)),
@@ -96,9 +96,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecUtils.stringEnumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(NPCData::gender),
                     RuneCraftoryNPCProfessions.PROFESSIONS.registry().byNameCodec().listOf().optionalFieldOf("profession").forGetter(d -> d.profession.isEmpty() ? Optional.empty() : Optional.of(d.profession))
-            ).apply(inst, (interactions, questHandler, schedule, combat, relation, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
+            ).apply(inst, (interactions, questHandler, schedule, combat, relation, giftItems, look, birthday, weight, unique, name, surname, gender, profession) ->
                     new NPCData(name.orElse(null), surname.orElse(null), gender, profession.orElse(List.of()), look.orElse(null), birthday.orElse(null),
-                            weight, neutralGift, interactions, Set.copyOf(questHandler), giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
+                            weight, interactions, Set.copyOf(questHandler), giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null),
                             combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null),
                             unique.orElse(0), relation.relationShipState, relation.possibleChildren)));
 
@@ -152,14 +152,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public static class Builder {
 
+        private final ResourceLocation id;
+
         private final String name;
         private final String surname;
         private final Gender gender;
         private final int weight;
-        private String neutralGiftResponse;
         private final List<NPCProfession> professions = new ArrayList<>();
-        private final Map<ConversationContext, ResourceLocation> interactions = new LinkedHashMap<>();
-        private final Map<String, Gift> giftItems = new LinkedHashMap<>();
+        private final Map<ConversationContext, ResourceLocation> interactions = new HashMap<>();
+        private final Map<ResourceLocation, ConversationSet.Builder> conversations = new HashMap<>();
+        private final Map<String, Gift> giftItems = new HashMap<>();
         private Pair<Season, Integer> birthday;
         private NPCSchedule.Schedule schedule;
         private List<NPCLookId> look;
@@ -172,32 +174,24 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private RelationShipState relationShipState = RelationShipState.DEFAULT;
         private final List<ResourceLocation> possibleChildIds = new ArrayList<>();
 
-        private final Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
+        private final Set<ResourceLocation> requiredQuests = new HashSet<>();
 
-        private final Map<String, String> translations = new LinkedHashMap<>();
+        private final Map<String, String> translations = new HashMap<>();
 
-        public Builder(int weight) {
-            this(weight, null, null, Gender.UNDEFINED);
+        public Builder(ResourceLocation id, int weight) {
+            this(id, weight, null, null, Gender.UNDEFINED);
         }
 
-        public Builder(int weight, String name, Gender gender) {
-            this(weight, name, null, gender);
+        public Builder(ResourceLocation id, int weight, String name, Gender gender) {
+            this(id, weight, name, null, gender);
         }
 
-        public Builder(int weight, String name, String surname, Gender gender) {
+        public Builder(ResourceLocation id, int weight, String name, String surname, Gender gender) {
+            this.id = id;
             this.weight = weight;
             this.name = name;
             this.surname = surname;
             this.gender = gender;
-            if (this.name != null) {
-                this.neutralGiftResponse = "npc." + name.toLowerCase(Locale.ROOT) + ".default.gift";
-            }
-        }
-
-        public Builder setNeutralGiftResponse(String neutralGiftResponse, String translation) {
-            this.neutralGiftResponse = neutralGiftResponse;
-            this.translations.put(this.neutralGiftResponse, translation);
-            return this;
         }
 
         public Builder withLook(NPCLookId... looks) {
@@ -215,20 +209,17 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addInteraction(ConversationContext convCtx, ResourceLocation conversationId) {
-            this.interactions.put(convCtx, conversationId);
-            return this;
-        }
-
         public Builder addInteractionIfAbsent(ConversationContext convCtx, ResourceLocation conversationId) {
             this.interactions.putIfAbsent(convCtx, conversationId);
             return this;
         }
 
-        public Builder addGiftResponse(String id, Gift gift, String translation) {
-            this.giftItems.put(id, gift);
-            this.translations.put(gift.responseKey, translation);
-            return this;
+        public GiftBuilder gifts() {
+            return new GiftBuilder(this.id);
+        }
+
+        public ContextBuilder conversations() {
+            return new ContextBuilder(this.id);
         }
 
         public Builder addTranslation(String key, String translation) {
@@ -285,18 +276,118 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this.translations;
         }
 
+        public Map<ResourceLocation, ConversationSet.Builder> getConversations() {
+            return this.conversations;
+        }
+
         public NPCData build() {
-            if (this.neutralGiftResponse == null)
-                throw new IllegalStateException("Neutral gift response not set.");
             for (ConversationContext convCtx : ConversationContext.getRegistered()) {
                 if (!this.interactions.containsKey(convCtx))
                     throw new IllegalStateException("Missing interactions for " + convCtx);
             }
-            return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight, this.neutralGiftResponse,
+            return new NPCData(this.name, this.surname, this.gender, this.professions, this.look, this.birthday, this.weight,
                     this.interactions,
                     this.requiredQuests, this.giftItems, this.schedule,
                     this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease,
                     this.baseLevel, this.combatAction, this.unique, this.relationShipState, this.possibleChildIds);
+        }
+
+        public class ContextBuilder {
+
+            private final ResourceLocation id;
+            private final String prefix;
+            private ConversationContext context;
+            private final Map<ConversationContext, ConversationSet.Builder> conversations = new LinkedHashMap<>();
+
+            public ContextBuilder(ResourceLocation id) {
+                this(id, true);
+            }
+
+            public ContextBuilder(ResourceLocation id, boolean defaulted) {
+                this.id = id;
+                this.prefix = String.format("%s%s.%s", defaulted ? "npc." : "", id.getNamespace(), id.getPath().replace("/", "."));
+            }
+
+            private ResourceLocation idFromContext(ConversationContext context) {
+                return this.id.withPath(p -> p + "/" + context.key().getPath());
+            }
+
+            public ContextBuilder push(ConversationContext context) {
+                this.context = context;
+                this.conversations.computeIfAbsent(this.context, ctx -> new ConversationSet.Builder(this.prefix));
+                return this;
+            }
+
+            public ContextBuilder addConversation(String translation) {
+                if (this.context == null) {
+                    throw new IllegalStateException("Context is null");
+                }
+                ConversationSet.Builder builder = this.conversations.get(this.context);
+                builder.addConversation(this.context.key().getPath(), translation);
+                Utils.mergeMapAndThrow(builder.getTranslations(), Builder.this.translations);
+                return this;
+            }
+
+            public ContextBuilder addConversation(Function<String, ConversationSet.Conversation.Builder> conversation) {
+                if (this.context == null) {
+                    throw new IllegalStateException("Context is null");
+                }
+                ConversationSet.Builder builder = this.conversations.get(this.context);
+                builder.addConversation(this.context.key().getPath(), conversation);
+                Utils.mergeMapAndThrow(builder.getTranslations(), Builder.this.translations);
+                return this;
+            }
+
+            public Builder end() {
+                this.conversations.forEach((ctx, builder) -> {
+                    ResourceLocation id = this.idFromContext(ctx);
+                    Builder.this.interactions.put(ctx, id);
+                    Builder.this.conversations.put(id, builder);
+                });
+                return Builder.this;
+            }
+        }
+
+        public class GiftBuilder {
+
+            private final ResourceLocation baseId;
+            private final String prefix;
+
+            private final Map<ResourceLocation, ConversationSet.Builder> conversations = new LinkedHashMap<>();
+
+            public GiftBuilder(ResourceLocation baseId) {
+                this(baseId, true);
+            }
+
+            public GiftBuilder(ResourceLocation baseId, boolean defaulted) {
+                this.baseId = baseId;
+                this.prefix = String.format("%s%s.%s", defaulted ? "npc." : "", baseId.getNamespace(), baseId.getPath().replace("/", "."));
+            }
+
+            public GiftBuilder addGift(String id, @Nullable ResourceLocation giftID, int xp, String translation) {
+                ConversationSet.Builder builder = new ConversationSet.Builder(this.prefix);
+                builder.addConversation(id, translation);
+                ResourceLocation conversationID = this.baseId.withPath(p -> p + "/" + id);
+                this.conversations.put(conversationID, builder);
+                Utils.mergeMapAndThrow(builder.getTranslations(), this.end().getTranslations());
+                Builder.this.giftItems.put(id, new Gift(giftID, conversationID, xp));
+                return this;
+            }
+
+            public GiftBuilder addGift(String id, @Nullable ResourceLocation giftID, int xp, Function<String, ConversationSet.Conversation.Builder> conversation) {
+                ConversationSet.Builder builder = new ConversationSet.Builder(this.prefix);
+                builder.addConversation(id, conversation);
+                ResourceLocation conversationID = this.baseId.withPath(p -> p + "/" + id);
+                this.conversations.put(conversationID, builder);
+                Utils.mergeMapAndThrow(builder.getTranslations(), this.end().getTranslations());
+                Builder.this.giftItems.put(id, new Gift(giftID, conversationID, xp));
+                return this;
+            }
+
+            public NPCData.Builder end() {
+                Builder.this.conversations.putAll(this.conversations);
+                return Builder.this;
+            }
         }
     }
 
@@ -321,12 +412,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record Gift(@Nullable ResourceLocation giftID, String responseKey, int xp) {
+    public record Gift(@Nullable ResourceLocation giftID, ResourceLocation responseKey, int xp) {
 
         public static final Codec<Gift> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         ResourceLocation.CODEC.optionalFieldOf("gift_id").forGetter(d -> Optional.ofNullable(d.giftID)),
-                        Codec.STRING.fieldOf("response_key").forGetter(d -> d.responseKey),
+                        ResourceLocation.CODEC.fieldOf("response").forGetter(d -> d.responseKey),
                         Codec.INT.fieldOf("xp").forGetter(d -> d.xp)
                 ).apply(inst, (items, respone, xp) -> new Gift(items.orElse(null), respone, xp)));
     }

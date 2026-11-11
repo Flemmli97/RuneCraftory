@@ -3,13 +3,13 @@ package io.github.flemmli97.runecraftory.api.datapack.npc;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.ai.memory.ConversationGroupMemory;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.social.TopicHolder;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryMemoryTypes;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.Utils;
 import io.github.flemmli97.tenshilib.common.utils.CodecUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -122,37 +122,38 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
 
     public static class Builder {
 
-        private final String fallback;
+        private final String prefix;
         private final Map<String, Conversation> conversations = new LinkedHashMap<>();
 
         private final Map<String, String> translations = new LinkedHashMap<>();
 
         public Builder() {
-            this.fallback = "";
+            this("");
         }
 
-        public Builder(String fallback, String enTranslation) {
-            this.fallback = fallback;
-            this.translations.put(this.fallback, enTranslation);
+        public Builder(String prefix) {
+            this(prefix, "");
+        }
+
+        public Builder(String prefix, String enTranslation) {
+            this.prefix = prefix;
+            if (!enTranslation.isEmpty()) {
+                this.translations.put(this.prefix, enTranslation);
+            }
         }
 
         public Builder addConversation(String conversation, String enTranslation) {
-            return this.addConversation(new Conversation.Builder(conversation, enTranslation));
+            return this.addConversation(conversation, p -> new Conversation.Builder(p, enTranslation));
         }
 
-        public Builder addConversation(Conversation.Builder conversation) {
-            return this.addConversation(conversation.key, conversation);
-        }
-
-        public Builder addConversation(String key, Conversation.Builder conversation) {
+        public Builder addConversation(String key, Function<String, Conversation.Builder> conversationFact) {
+            if (!this.prefix.isEmpty()) {
+                int amount = this.conversations.size() + 1;
+                key = String.format("%s.%s.%s", this.prefix, key, amount);
+            }
+            Conversation.Builder conversation = conversationFact.apply(key);
             this.conversations.put(key, conversation.build());
-            conversation.translations.forEach((k, t) -> {
-                if (t.equals(this.translations.getOrDefault(k, t))) {
-                    this.translations.put(k, t);
-                } else {
-                    throw new IllegalStateException("Map contains translation already " + k);
-                }
-            });
+            Utils.mergeMapAndThrow(conversation.translations, this.translations);
             return this;
         }
 
@@ -161,61 +162,8 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
         }
 
         public ConversationSet build() {
-            return new ConversationSet(this.fallback, this.conversations);
+            return new ConversationSet(this.translations.containsKey(this.prefix) ? this.prefix : "", this.conversations);
         }
-    }
-
-    public static class ContextBuilder {
-
-        private final String prefix;
-        private ConversationContext context;
-        private final Map<ConversationContext, ConversationSet.Builder> conversations = new LinkedHashMap<>();
-
-        public ContextBuilder(ResourceLocation prefix) {
-            this(prefix, true);
-        }
-
-        public ContextBuilder(ResourceLocation prefix, boolean defaulted) {
-            this.prefix = String.format("%s%s.%s", defaulted ? "npc." : "", prefix.getNamespace(), prefix.getPath().replace("/", "."));
-        }
-
-        public ContextBuilder push(ConversationContext context) {
-            this.context = context;
-            this.conversations.computeIfAbsent(this.context, ctx -> new ConversationSet.Builder());
-            return this;
-        }
-
-        public ContextBuilder addConversation(String translation) {
-            if (this.context == null) {
-                throw new IllegalStateException("Context is null");
-            }
-            ConversationSet.Builder builder = this.conversations.get(this.context);
-            int amount = builder.conversations.size() + 1;
-            String key = String.format("%s.%s.%s", this.prefix, this.context.key().getPath(), amount);
-            builder.addConversation(key, translation);
-            return this;
-        }
-
-        public ContextBuilder addConversation(Function<String, Conversation.Builder> conversation) {
-            if (this.context == null) {
-                throw new IllegalStateException("Context is null");
-            }
-            ConversationSet.Builder builder = this.conversations.get(this.context);
-            int amount = builder.conversations.size() + 1;
-            String key = String.format("%s.%s.%s", this.prefix, this.context.key().getPath(), amount);
-            builder.addConversation(conversation.apply(key));
-            return this;
-        }
-
-        public Map<ConversationContext, ConversationSet.Builder> build() {
-            return this.conversations;
-        }
-    }
-
-    public enum ConversationTestResult {
-        FAIL,
-        SUCCESS,
-        PASS
     }
 
     public record Conversation(List<Dialogue> dialogues,
@@ -278,7 +226,7 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
 
         public static class Builder {
 
-            private final String key;
+            private final String prefix;
             private final List<Dialogue> dialogues = new ArrayList<>();
             private NumberProvider minHearts, maxHearts;
             private boolean startingConversation = true;
@@ -288,13 +236,13 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
 
             private final Map<String, String> translations = new LinkedHashMap<>();
 
-            public Builder(String translationKey, String enTranslation) {
-                this(new Dialogue(translationKey), enTranslation);
+            public Builder(String prefix, String enTranslation) {
+                this(prefix, null, enTranslation);
             }
 
-            public Builder(Dialogue dialogue, String enTranslation) {
-                this.withDialogue(dialogue, enTranslation);
-                this.key = dialogue.translationKey;
+            public Builder(String prefix, @Nullable String speaker, String enTranslation) {
+                this.prefix = prefix;
+                this.withDialogue(speaker, enTranslation);
             }
 
             public Builder min(@Nullable NumberProvider minHearts) {
@@ -307,7 +255,9 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                 return this;
             }
 
-            public Builder withDialogue(Dialogue dialogue, String enTranslation) {
+            public Builder withDialogue(@Nullable String speaker, String enTranslation) {
+                int num = this.dialogues.size();
+                Dialogue dialogue = new Dialogue(String.format("%s%s", this.prefix, num == 0 ? "" : "." + num), Optional.ofNullable(speaker));
                 this.dialogues.add(dialogue);
                 if (enTranslation.equals(this.translations.getOrDefault(dialogue.translationKey(), enTranslation))) {
                     this.translations.put(dialogue.translationKey(), enTranslation);

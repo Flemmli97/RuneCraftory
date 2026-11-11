@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import io.github.flemmli97.runecraftory.api.datapack.ConversationContext;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.npc.GiftData;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCData;
@@ -28,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public abstract class NPCDataProvider implements DataProvider, AdditionalLanguages {
 
@@ -103,14 +103,16 @@ public abstract class NPCDataProvider implements DataProvider, AdditionalLanguag
         return "NPCData for " + this.modid;
     }
 
-    public void addNPCData(String id, NPCData.Builder data, Map<ConversationContext, ConversationSet.Builder> conversations) {
-        conversations.forEach((key, value) -> {
-            ResourceLocation conversationId = ResourceLocation.fromNamespaceAndPath(this.modid, id + "/" + key.key().getPath());
-            this.addConversation(conversationId, value, id);
-            data.addInteractionIfAbsent(key, conversationId);
-        });
+    public void addNPCData(String id, NPCData.Builder data) {
+        this.addNPCData(id, r -> data);
+    }
+
+    public void addNPCData(String id, Function<ResourceLocation, NPCData.Builder> dataFact) {
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(this.modid, id);
+        NPCData.Builder data = dataFact.apply(res);
+        data.getConversations().forEach((key, value) -> this.addConversation(key, value, id));
         this.addDialogueTranlation(id, data.getTranslations());
-        this.data.put(ResourceLocation.fromNamespaceAndPath(this.modid, id), data.build());
+        this.data.put(res, data.build());
     }
 
     public void addConversation(ResourceLocation id, ConversationSet.Builder builder, String translationPath) {

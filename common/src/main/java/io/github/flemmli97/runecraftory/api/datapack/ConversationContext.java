@@ -19,6 +19,7 @@ public record ConversationContext(ResourceLocation key) {
     public static final ConversationContext FOLLOW_YES = register("follow_yes");
     public static final ConversationContext FOLLOW_NO = register("follow_no");
     public static final ConversationContext FOLLOW_STOP = register("follow_stop");
+    public static final ConversationContext DEFAULT_GIFT = register("default_gift");
     public static final ConversationContext DATING_ACCEPT = register("dating_accept");
     public static final ConversationContext DATING_DENY = register("dating_deny");
     public static final ConversationContext MARRIAGE_ACCEPT = register("marriage_accept");
