@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.calendar.Season;
 import io.github.flemmli97.runecraftory.api.calendar.Weather;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.api.registry.action.DataKey;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
@@ -19,8 +20,10 @@ import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.widgets.QuestToast;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.armor.ArmorModels;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.quests.ClientSideQuestDisplay;
@@ -220,6 +223,12 @@ public class ClientHandlers {
 
     public static void openSpawneggGui(InteractionHand hand, List<ResourceLocation> npcIds) {
         Minecraft.getInstance().setScreen(new SpawnEggScreen(hand, npcIds));
+    }
+
+    public static void updateSpawnEggGui(ReloadableHolder<NPCLook> look, NPCFeatureContainer features) {
+        if (Minecraft.getInstance().screen instanceof SpawnEggScreen screen) {
+            screen.updateLook(look, features);
+        }
     }
 
     public static void translateRider(PoseStack poseStack, LivingEntity entity, Entity rider) {

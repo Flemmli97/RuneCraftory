@@ -1,8 +1,13 @@
 package io.github.flemmli97.runecraftory.client.gui;
 
+import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
 import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
+import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.EnsembleMonsters;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
 import io.github.flemmli97.runecraftory.common.items.creative.NPCSpawnEgg;
+import io.github.flemmli97.runecraftory.common.network.C2SNPCLookRequest;
 import io.github.flemmli97.runecraftory.common.network.C2SSpawnEgg;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
@@ -16,6 +21,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -24,6 +30,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +46,7 @@ public class SpawnEggScreen extends Screen {
     private final int sizeY = 200;
 
     private final List<EditBox> editBoxes = new ArrayList<>();
-    private EditBox levelEditor, npcIDEditor;
+    private EditBox levelEditor, npcIDEditor, npcProfessionEditor;
     private int level;
 
     private final List<ResourceLocation> npcIds;
@@ -76,6 +83,10 @@ public class SpawnEggScreen extends Screen {
             this.entities = List.copyOf(list);
         } else if (e instanceof LivingEntity living) {
             living.refreshDimensions();
+            if (stack.has(DataComponents.ENTITY_DATA)) {
+                CustomData data = stack.get(DataComponents.ENTITY_DATA);
+                data.loadInto(living);
+            }
             this.entities = List.of(living);
         } else {
             Minecraft.getInstance().setScreen(null);
@@ -158,20 +169,25 @@ public class SpawnEggScreen extends Screen {
         this.addRenderableWidget(this.levelEditor);
         if (stack.getItem() instanceof NPCSpawnEgg) {
             yOff += 8 * 9;
-            EditBox npcProfessionEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 130, 16, Component.literal(""),
+            this.npcProfessionEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 130, 16, Component.literal(""),
                     5, false, SuggestionEditBox.ofResourceLocation(RuneCraftoryNPCProfessions.PROFESSIONS.registry().keySet()));
             NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
             this.npcProfession = itemData.profession().map(h -> h.unwrapKey().orElseThrow().location()).orElse(null);
             if (this.npcProfession != null)
-                npcProfessionEditor.setValue(this.npcProfession.toString());
-            npcProfessionEditor.setResponder(s -> {
+                this.npcProfessionEditor.setValue(this.npcProfession.toString());
+            this.npcProfessionEditor.setResponder(s -> {
                 try {
+                    int len = this.npcProfession != null ? this.npcProfession.getPath().length() : 0;
                     this.npcProfession = s.isEmpty() ? null : ResourceLocation.parse(s);
+                    int newLen = this.npcProfession != null ? this.npcProfession.getPath().length() : 0;
+                    if (Math.abs(newLen - len) > 1) {
+                        LoaderNetwork.INSTANCE.sendToServer(new C2SNPCLookRequest(this.npcProfession, this.npcID));
+                    }
                 } catch (ResourceLocationException ignored) {
                 }
             });
-            this.addRenderableWidget(npcProfessionEditor);
-            this.editBoxes.add(npcProfessionEditor);
+            this.addRenderableWidget(this.npcProfessionEditor);
+            this.editBoxes.add(this.npcProfessionEditor);
             yOff += 20 + 16;
 
             this.npcIDEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""),
@@ -181,7 +197,12 @@ public class SpawnEggScreen extends Screen {
                 this.npcIDEditor.setValue(this.npcID.toString());
             this.npcIDEditor.setResponder(s -> {
                 try {
+                    int len = this.npcID != null ? this.npcID.toString().length() : 0;
                     this.npcID = s.isEmpty() ? null : ResourceLocation.parse(s);
+                    int newLen = this.npcID != null ? this.npcID.getPath().length() : 0;
+                    if (Math.abs(newLen - len) > 1) {
+                        LoaderNetwork.INSTANCE.sendToServer(new C2SNPCLookRequest(this.npcProfession, this.npcID));
+                    }
                 } catch (ResourceLocationException ignored) {
                 }
             });
@@ -214,5 +235,14 @@ public class SpawnEggScreen extends Screen {
         if (!click)
             this.setFocused(null);
         return click;
+    }
+
+    public void updateLook(ReloadableHolder<NPCLook> look, NPCFeatureContainer features) {
+        if (this.entities.isEmpty())
+            return;
+        if (!(this.entities.getFirst() instanceof NPCEntity npc))
+            return;
+        npc.lookFeatures.with(features);
+        npc.setClientLook(look);
     }
 }

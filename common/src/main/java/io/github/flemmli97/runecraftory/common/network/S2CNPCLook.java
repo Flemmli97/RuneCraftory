@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.NPCLook;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureContainer;
@@ -20,7 +21,7 @@ public class S2CNPCLook implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CNPCLook> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public S2CNPCLook decode(RegistryFriendlyByteBuf buf) {
-            return new S2CNPCLook(buf.readInt(), LOOK_CODEC.decode(buf), new NPCFeatureContainer().fromBuffer(buf));
+            return new S2CNPCLook(buf.readInt(), LOOK_CODEC.decode(buf), new NPCFeatureContainer().fromBuffer(buf), buf.readBoolean());
         }
 
         @Override
@@ -28,23 +29,44 @@ public class S2CNPCLook implements CustomPacketPayload {
             buf.writeInt(pkt.id);
             LOOK_CODEC.encode(buf, pkt.look);
             pkt.features.toBuffer(buf);
+            buf.writeBoolean(pkt.gui);
         }
     };
     private final int id;
     private final ReloadableHolder<NPCLook> look;
     private final NPCFeatureContainer features;
+    private final boolean gui;
 
     public S2CNPCLook(int id, ReloadableHolder<NPCLook> look, NPCFeatureContainer features) {
         this.id = id;
         this.look = look;
         this.features = features;
+        this.gui = false;
+    }
+
+    public S2CNPCLook(ReloadableHolder<NPCLook> look, NPCFeatureContainer features) {
+        this.id = 0;
+        this.look = look;
+        this.features = features;
+        this.gui = true;
+    }
+
+    private S2CNPCLook(int id, ReloadableHolder<NPCLook> look, NPCFeatureContainer features, boolean gui) {
+        this.id = id;
+        this.look = look;
+        this.features = features;
+        this.gui = gui;
     }
 
     public static void handle(S2CNPCLook pkt, Player player) {
-        Entity e = player.level().getEntity(pkt.id);
-        if (e instanceof NPCEntity npc) {
-            npc.lookFeatures.with(pkt.features);
-            npc.setClientLook(pkt.look);
+        if (pkt.gui) {
+            ClientHandlers.updateSpawnEggGui(pkt.look, pkt.features);
+        } else {
+            Entity e = player.level().getEntity(pkt.id);
+            if (e instanceof NPCEntity npc) {
+                npc.lookFeatures.with(pkt.features);
+                npc.setClientLook(pkt.look);
+            }
         }
     }
 
