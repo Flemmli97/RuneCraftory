@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.bathhouse_attendant.1.divorce.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.divorce.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.bathhouse_attendant.1.divorce.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.divorce.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.bathhouse_attendant.1.divorce.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.divorce.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

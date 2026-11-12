@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.misc_npcs.5.dating_accept.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.dating_accept.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.dating_accept.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.dating_accept.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.dating_accept.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.dating_accept.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

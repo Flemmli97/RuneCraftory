@@ -1,0 +1,10 @@
+{
+  "conversations": {
+    "npc.runecraftory.florist.1.hate.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.florist.1.hate.1",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

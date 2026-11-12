@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.bathhouse_attendant.1.marriage_accept.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.marriage_accept.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.bathhouse_attendant.1.marriage_accept.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.marriage_accept.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.bathhouse_attendant.1.marriage_accept.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.marriage_accept.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

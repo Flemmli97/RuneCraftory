@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.blacksmith.1.divorce.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.blacksmith.1.divorce.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.blacksmith.1.divorce.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.blacksmith.1.divorce.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.blacksmith.1.divorce.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.blacksmith.1.divorce.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

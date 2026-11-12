@@ -1,0 +1,10 @@
+{
+  "conversations": {
+    "npc.runecraftory.merchant.1.default_gift.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.default_gift.1",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

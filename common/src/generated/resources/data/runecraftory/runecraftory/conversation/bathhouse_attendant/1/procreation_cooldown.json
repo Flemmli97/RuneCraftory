@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.bathhouse_attendant.1.procreation_cooldown.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.procreation_cooldown.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.bathhouse_attendant.1.procreation_cooldown.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.procreation_cooldown.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.bathhouse_attendant.1.procreation_cooldown.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.bathhouse_attendant.1.procreation_cooldown.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

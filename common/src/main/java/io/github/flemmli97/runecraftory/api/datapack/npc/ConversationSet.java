@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public record ConversationSet(String fallbackKey, @Nullable ResourceLocation missing,
@@ -143,15 +144,15 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
         }
 
         public Builder addConversation(String conversation, String enTranslation) {
-            return this.addConversation(conversation, p -> new Conversation.Builder(p, enTranslation));
+            return this.addConversation(conversation, (p, i) -> new Conversation.Builder(p, enTranslation));
         }
 
-        public Builder addConversation(String key, Function<String, Conversation.Builder> conversationFact) {
+        public Builder addConversation(String key, BiFunction<String, Integer, Conversation.Builder> conversationFact) {
+            int amount = this.conversations.size() + 1;
             if (!this.prefix.isEmpty()) {
-                int amount = this.conversations.size() + 1;
                 key = String.format("%s.%s.%s", this.prefix, key, amount);
             }
-            Conversation.Builder conversation = conversationFact.apply(key);
+            Conversation.Builder conversation = conversationFact.apply(key, amount);
             this.conversations.put(key, conversation.build());
             Utils.mergeMapAndThrow(conversation.translations, this.translations);
             return this;
@@ -351,6 +352,10 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                         Codec.STRING.fieldOf("value").forGetter(d -> d.actionValue),
                         Codec.INT.optionalFieldOf("friend_xp").forGetter(d -> d.friendXP != 0 ? Optional.of(d.friendXP) : Optional.empty())
                 ).apply(inst, (key, action, value, xp) -> new ConversationActionHolder(key, action, value, xp.orElse(0))));
+
+        public static ConversationActionHolder answer(String translationKey, String answer, int xp) {
+            return new ConversationActionHolder(translationKey, ConversationAction.ANSWER, translationKey, xp);
+        }
     }
 
     public record NetworkConversation(List<NetworkDialog> dialogues, Map<String, Component> participants,

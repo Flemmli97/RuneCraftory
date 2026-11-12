@@ -1,23 +1,23 @@
 {
   "conversations": {
-    "npc.doctor.1.talk.1": {
+    "npc.runecraftory.doctor.1.talk.1": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.talk.1",
+      "dialogues": "npc.runecraftory.doctor.1.talk.1",
       "speakers": {}
     },
-    "npc.doctor.1.talk.2": {
+    "npc.runecraftory.doctor.1.talk.2": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.talk.2",
+      "dialogues": "npc.runecraftory.doctor.1.talk.2",
       "speakers": {}
     },
-    "npc.doctor.1.talk.3": {
+    "npc.runecraftory.doctor.1.talk.3": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.talk.3",
+      "dialogues": "npc.runecraftory.doctor.1.talk.3",
       "speakers": {}
     },
-    "npc.doctor.1.talk.4": {
+    "npc.runecraftory.doctor.1.talk.4": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.talk.4",
+      "dialogues": "npc.runecraftory.doctor.1.talk.4",
       "speakers": {}
     }
   },

@@ -7,17 +7,23 @@
   "gender": "UNDEFINED",
   "gift_items": {
     "dislike": {
-      "response_key": "npc.doctor.2.dislike",
+      "response": "runecraftory:doctor/1/dislike",
       "xp": -7
     },
+    "hate": {
+      "gift_id": "runecraftory:trash",
+      "response": "runecraftory:doctor/1/hate",
+      "xp": -15
+    },
     "like": {
-      "response_key": "npc.doctor.2.like",
+      "response": "runecraftory:doctor/1/like",
       "xp": 10
     }
   },
   "interactions": {
     "runecraftory:dating_accept": "runecraftory:doctor/1/dating_accept",
     "runecraftory:dating_deny": "runecraftory:doctor/1/dating_deny",
+    "runecraftory:default_gift": "runecraftory:doctor/1/default_gift",
     "runecraftory:divorce": "runecraftory:doctor/1/divorce",
     "runecraftory:divorce_error": "runecraftory:doctor/1/divorce_error",
     "runecraftory:first": "runecraftory:doctor/1/first",
@@ -41,7 +47,6 @@
       "look": "runecraftory:doctor/female_1"
     }
   ],
-  "neutral_gift_response": "npc.doctor.2.gift.default",
   "profession": [
     "runecraftory:doctor"
   ],

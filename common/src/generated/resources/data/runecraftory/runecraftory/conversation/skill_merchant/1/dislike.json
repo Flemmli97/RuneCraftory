@@ -1,0 +1,10 @@
+{
+  "conversations": {
+    "npc.runecraftory.skill_merchant.1.dislike.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.skill_merchant.1.dislike.1",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

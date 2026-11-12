@@ -74,13 +74,13 @@
           "color_min": "ffffff"
         }
       ],
-      "styles": [
+      "hairs": [
         {
-          "outfit": "short",
           "range": {
             "type": "FIRST_N",
             "amount": 5
           },
+          "texture": "runecraftory:short",
           "weight": 1
         }
       ]
@@ -157,11 +157,11 @@
       "type": "runecraftory:outfit_feature",
       "outfits": [
         {
-          "outfit": "doctor",
           "range": {
             "type": "FIRST_N",
             "amount": 1
           },
+          "texture": "runecraftory:doctor",
           "weight": 1
         }
       ]

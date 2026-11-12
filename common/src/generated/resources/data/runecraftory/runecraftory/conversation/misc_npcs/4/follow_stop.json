@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.misc_npcs.4.follow_stop.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.4.follow_stop.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.4.follow_stop.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.4.follow_stop.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.4.follow_stop.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.4.follow_stop.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

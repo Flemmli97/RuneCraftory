@@ -1,0 +1,10 @@
+{
+  "conversations": {
+    "npc.runecraftory.blacksmith.1.like.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.blacksmith.1.like.1",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

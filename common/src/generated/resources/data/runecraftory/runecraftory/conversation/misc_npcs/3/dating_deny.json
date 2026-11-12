@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.misc_npcs.3.dating_deny.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.3.dating_deny.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.3.dating_deny.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.3.dating_deny.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.3.dating_deny.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.3.dating_deny.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

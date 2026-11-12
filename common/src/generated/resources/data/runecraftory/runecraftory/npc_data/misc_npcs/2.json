@@ -1,0 +1,47 @@
+{
+  "combat": {
+    "combat_actions": [
+      "runecraftory:generic_melee_attack",
+      "runecraftory:melee_heal_attack",
+      "runecraftory:melee_water_attack"
+    ]
+  },
+  "gender": "UNDEFINED",
+  "gift_items": {
+    "dislike": {
+      "response": "runecraftory:misc_npcs/2/dislike",
+      "xp": -7
+    },
+    "hate": {
+      "gift_id": "runecraftory:trash",
+      "response": "runecraftory:misc_npcs/2/hate",
+      "xp": -15
+    },
+    "like": {
+      "response": "runecraftory:misc_npcs/2/like",
+      "xp": 10
+    }
+  },
+  "interactions": {
+    "runecraftory:dating_accept": "runecraftory:misc_npcs/2/dating_accept",
+    "runecraftory:dating_deny": "runecraftory:misc_npcs/2/dating_deny",
+    "runecraftory:default_gift": "runecraftory:misc_npcs/2/default_gift",
+    "runecraftory:divorce": "runecraftory:misc_npcs/2/divorce",
+    "runecraftory:divorce_error": "runecraftory:misc_npcs/2/divorce_error",
+    "runecraftory:first": "runecraftory:misc_npcs/2/first",
+    "runecraftory:follow_no": "runecraftory:misc_npcs/2/follow_no",
+    "runecraftory:follow_stop": "runecraftory:misc_npcs/2/follow_stop",
+    "runecraftory:follow_talk": "runecraftory:misc_npcs/2/follow_talk",
+    "runecraftory:follow_yes": "runecraftory:misc_npcs/2/follow_yes",
+    "runecraftory:greeting": "runecraftory:misc_npcs/2/greeting",
+    "runecraftory:marriage_accept": "runecraftory:misc_npcs/2/marriage_accept",
+    "runecraftory:marriage_deny": "runecraftory:misc_npcs/2/marriage_deny",
+    "runecraftory:procreation_cooldown": "runecraftory:misc_npcs/2/procreation_cooldown",
+    "runecraftory:talk": "runecraftory:misc_npcs/2/talk"
+  },
+  "relation": {
+    "relation_ship_state": "DEFAULT"
+  },
+  "required_quests": [],
+  "weight": 50
+}

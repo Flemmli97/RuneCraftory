@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
@@ -313,6 +314,12 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 return this;
             }
 
+            public ContextBuilder push(ConversationContext context, String enTranslation) {
+                this.context = context;
+                this.conversations.computeIfAbsent(this.context, ctx -> new ConversationSet.Builder(this.prefix, enTranslation));
+                return this;
+            }
+
             public ContextBuilder addConversation(String translation) {
                 if (this.context == null) {
                     throw new IllegalStateException("Context is null");
@@ -324,6 +331,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             }
 
             public ContextBuilder addConversation(Function<String, ConversationSet.Conversation.Builder> conversation) {
+                return this.addConversation((s, i) -> conversation.apply(s));
+            }
+
+            public ContextBuilder addConversation(BiFunction<String, Integer, ConversationSet.Conversation.Builder> conversation) {
                 if (this.context == null) {
                     throw new IllegalStateException("Context is null");
                 }
@@ -371,7 +382,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
             public GiftBuilder addGift(String id, @Nullable ResourceLocation giftID, int xp, Function<String, ConversationSet.Conversation.Builder> conversation) {
                 ConversationSet.Builder builder = new ConversationSet.Builder(this.prefix);
-                builder.addConversation(id, conversation);
+                builder.addConversation(id, (s, i) -> conversation.apply(s));
                 ResourceLocation conversationID = this.baseId.withPath(p -> p + "/" + id);
                 this.conversations.put(conversationID, builder);
                 Utils.mergeMapAndThrow(builder.getTranslations(), this.end().getTranslations());

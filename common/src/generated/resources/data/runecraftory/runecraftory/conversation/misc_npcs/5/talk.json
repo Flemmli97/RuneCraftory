@@ -1,0 +1,59 @@
+{
+  "conversations": {
+    "npc.runecraftory.misc_npcs.5.talk.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.talk.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.talk.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.3",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.talk.4": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.4",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.talk.5": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.5",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.talk.6": {
+      "actions": [
+        {
+          "actions": "ANSWER",
+          "translation_key": "npc.runecraftory.misc_npcs.5.talk.6.action.1",
+          "value": "npc.runecraftory.misc_npcs.5.talk.6.action.1"
+        },
+        {
+          "actions": "ANSWER",
+          "translation_key": "npc.runecraftory.misc_npcs.5.talk.6.action.2",
+          "value": "npc.runecraftory.misc_npcs.5.talk.6.action.2"
+        }
+      ],
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.6",
+      "speakers": {}
+    },
+    "npc.runecraftory.misc_npcs.5.talk.7": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.7",
+      "speakers": {},
+      "starting_conversation": false
+    },
+    "npc.runecraftory.misc_npcs.5.talk.8": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.talk.8",
+      "speakers": {},
+      "starting_conversation": false
+    }
+  },
+  "fallback_key": ""
+}

@@ -1,8 +1,18 @@
 {
   "conversations": {
-    "npc.doctor.1.follow.yes.1": {
+    "npc.runecraftory.doctor.1.follow_yes.1": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.follow.yes.1",
+      "dialogues": "npc.runecraftory.doctor.1.follow_yes.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.doctor.1.follow_yes.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.follow_yes.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.doctor.1.follow_yes.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.follow_yes.3",
       "speakers": {}
     }
   },

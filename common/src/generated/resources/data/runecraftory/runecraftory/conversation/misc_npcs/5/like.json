@@ -1,0 +1,10 @@
+{
+  "conversations": {
+    "npc.runecraftory.misc_npcs.5.like.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.misc_npcs.5.like.1",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.skill_merchant.1.follow_yes.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.skill_merchant.1.follow_yes.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.skill_merchant.1.follow_yes.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.skill_merchant.1.follow_yes.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.skill_merchant.1.follow_yes.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.skill_merchant.1.follow_yes.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

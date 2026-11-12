@@ -1,0 +1,25 @@
+{
+  "conversations": {
+    "npc.runecraftory.chef.1.greeting.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.chef.1.greeting.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.chef.1.greeting.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.chef.1.greeting.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.chef.1.greeting.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.chef.1.greeting.3",
+      "speakers": {}
+    },
+    "npc.runecraftory.chef.1.greeting.4": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.chef.1.greeting.4",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

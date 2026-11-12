@@ -1,8 +1,18 @@
 {
   "conversations": {
-    "npc.doctor.1.procreation.fail.1": {
+    "npc.runecraftory.doctor.1.procreation_cooldown.1": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.procreation.fail.1",
+      "dialogues": "npc.runecraftory.doctor.1.procreation_cooldown.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.doctor.1.procreation_cooldown.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.procreation_cooldown.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.doctor.1.procreation_cooldown.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.procreation_cooldown.3",
       "speakers": {}
     }
   },

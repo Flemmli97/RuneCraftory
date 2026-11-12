@@ -1,0 +1,10 @@
+{
+  "conversations": {
+    "npc.runecraftory.doctor.1.like.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.like.1",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

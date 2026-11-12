@@ -1,8 +1,18 @@
 {
   "conversations": {
-    "npc.doctor.1.divorce.fail.1": {
+    "npc.runecraftory.doctor.1.divorce_error.1": {
       "conditions": [],
-      "dialogues": "npc.doctor.1.divorce.fail.1",
+      "dialogues": "npc.runecraftory.doctor.1.divorce_error.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.doctor.1.divorce_error.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.divorce_error.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.doctor.1.divorce_error.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.doctor.1.divorce_error.3",
       "speakers": {}
     }
   },

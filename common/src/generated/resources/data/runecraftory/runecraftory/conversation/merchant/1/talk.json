@@ -1,0 +1,25 @@
+{
+  "conversations": {
+    "npc.runecraftory.merchant.1.talk.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.talk.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.merchant.1.talk.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.talk.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.merchant.1.talk.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.talk.3",
+      "speakers": {}
+    },
+    "npc.runecraftory.merchant.1.talk.4": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.talk.4",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

@@ -1,0 +1,20 @@
+{
+  "conversations": {
+    "npc.runecraftory.merchant.1.divorce_error.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.divorce_error.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.merchant.1.divorce_error.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.divorce_error.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.merchant.1.divorce_error.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.merchant.1.divorce_error.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}

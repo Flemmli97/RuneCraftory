@@ -46,6 +46,14 @@
       }
     },
     {
+      "type": "runecraftory:chest_size",
+      "size": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      }
+    },
+    {
       "type": "runecraftory:blush_feature",
       "chance": 0.5,
       "colors": [
@@ -87,13 +95,13 @@
           "color_min": "ffffff"
         }
       ],
-      "styles": [
+      "hairs": [
         {
-          "outfit": "long",
           "range": {
             "type": "FIRST_N",
             "amount": 5
           },
+          "texture": "runecraftory:long",
           "weight": 1
         }
       ]
@@ -170,11 +178,11 @@
       "type": "runecraftory:outfit_feature",
       "outfits": [
         {
-          "outfit": "doctor",
           "range": {
             "type": "FIRST_N",
             "amount": 1
           },
+          "texture": "runecraftory:doctor",
           "weight": 1
         }
       ]

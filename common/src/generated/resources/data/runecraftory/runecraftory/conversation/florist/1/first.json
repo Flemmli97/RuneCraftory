@@ -1,0 +1,25 @@
+{
+  "conversations": {
+    "npc.runecraftory.florist.1.first.1": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.florist.1.first.1",
+      "speakers": {}
+    },
+    "npc.runecraftory.florist.1.first.2": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.florist.1.first.2",
+      "speakers": {}
+    },
+    "npc.runecraftory.florist.1.first.3": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.florist.1.first.3",
+      "speakers": {}
+    },
+    "npc.runecraftory.florist.1.first.4": {
+      "conditions": [],
+      "dialogues": "npc.runecraftory.florist.1.first.4",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
+}
