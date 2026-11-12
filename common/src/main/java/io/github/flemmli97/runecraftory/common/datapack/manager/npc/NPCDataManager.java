@@ -19,6 +19,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.random.WeightedEntry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -51,6 +52,10 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
         return this.selectable.getRandom(random, NPCData.DEFAULT, func, other);
     }
 
+    public List<ResourceLocation> getNpcIds() {
+        return List.copyOf(this.data.keySet());
+    }
+
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profiler) {
         ImmutableMap.Builder<ResourceLocation, ReloadableHolder<NPCData>> builder = ImmutableMap.builder();
@@ -59,7 +64,12 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener implements 
             if (!fres.equals(DEFAULT_ID)) {
                 try {
                     JsonObject obj = el.getAsJsonObject();
-                    builder.put(fres, new ReloadableHolder<>(fres, NPCData.CODEC.parse(ops, obj).getOrThrow()));
+                    NPCData data = NPCData.CODEC.parse(ops, obj).getOrThrow();
+                    List<ResourceLocation> missingContext = data.missing();
+                    if (!missingContext.isEmpty()) {
+                        RuneCraftory.LOGGER.error("Npc data {} have missing conversation context {}", fres, missingContext);
+                    }
+                    builder.put(fres, new ReloadableHolder<>(fres, data));
                 } catch (Exception ex) {
                     RuneCraftory.LOGGER.error("Couldn't parse npc data json {} {}", fres, ex, ex.fillInStackTrace());
                 }

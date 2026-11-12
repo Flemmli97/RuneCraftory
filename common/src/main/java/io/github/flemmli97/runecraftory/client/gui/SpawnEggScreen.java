@@ -41,11 +41,14 @@ public class SpawnEggScreen extends Screen {
     private final List<EditBox> editBoxes = new ArrayList<>();
     private EditBox levelEditor, npcIDEditor;
     private int level;
+
+    private final List<ResourceLocation> npcIds;
     private ResourceLocation npcProfession, npcID;
 
-    public SpawnEggScreen(InteractionHand hand) {
+    public SpawnEggScreen(InteractionHand hand, List<ResourceLocation> npcIds) {
         super(Component.literal(""));
         this.hand = hand;
+        this.npcIds = npcIds == null ? List.of() : npcIds;
         this.player = Minecraft.getInstance().player;
     }
 
@@ -171,7 +174,8 @@ public class SpawnEggScreen extends Screen {
             this.editBoxes.add(npcProfessionEditor);
             yOff += 20 + 16;
 
-            this.npcIDEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""));
+            this.npcIDEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""),
+                    5, false, SuggestionEditBox.ofResourceLocation(this.npcIds));
             this.npcID = itemData.npcDataId().orElse(null);
             if (this.npcID != null)
                 this.npcIDEditor.setValue(this.npcID.toString());

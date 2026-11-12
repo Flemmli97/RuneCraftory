@@ -218,8 +218,8 @@ public class ClientHandlers {
         Minecraft.getInstance().setScreen(new QuestGui(hasActive, quests));
     }
 
-    public static void openSpawneggGui(InteractionHand hand) {
-        Minecraft.getInstance().setScreen(new SpawnEggScreen(hand));
+    public static void openSpawneggGui(InteractionHand hand, List<ResourceLocation> npcIds) {
+        Minecraft.getInstance().setScreen(new SpawnEggScreen(hand, npcIds));
     }
 
     public static void translateRider(PoseStack poseStack, LivingEntity entity, Entity rider) {

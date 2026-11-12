@@ -5,10 +5,14 @@ import io.github.flemmli97.runecraftory.common.components.NPCSpawnData;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.datapack.ReloadableHolder;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
+import io.github.flemmli97.runecraftory.common.network.S2CSpawnEggScreen;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryDataComponentTypes;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryNPCProfessions;
+import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -36,6 +40,11 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
         NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
         String key = itemData.profession().map(h -> h.value().getTranslationKey()).orElse(RuneCraftoryNPCProfessions.NONE.get().getTranslationKey());
         list.add(Component.translatable(key).withStyle(ChatFormatting.AQUA));
+    }
+
+    @Override
+    protected void openScreen(ServerPlayer player, InteractionHand hand) {
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CSpawnEggScreen(hand, DataPackHandler.INSTANCE.npcDataManager().getNpcIds()), player);
     }
 
     @Override

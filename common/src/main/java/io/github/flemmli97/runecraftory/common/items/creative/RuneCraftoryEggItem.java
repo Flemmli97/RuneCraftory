@@ -50,10 +50,14 @@ public class RuneCraftoryEggItem extends SpawnEgg {
         InteractionResultHolder<ItemStack> res = super.use(level, player, hand);
         if (res.getResult() == InteractionResult.PASS) {
             if (player instanceof ServerPlayer serverPlayer)
-                LoaderNetwork.INSTANCE.sendToPlayer(new S2CSpawnEggScreen(hand), serverPlayer);
+                this.openScreen(serverPlayer, hand);
             return InteractionResultHolder.consume(player.getItemInHand(hand));
         }
         return res;
+    }
+
+    protected void openScreen(ServerPlayer player, InteractionHand hand) {
+        LoaderNetwork.INSTANCE.sendToPlayer(new S2CSpawnEggScreen(hand), player);
     }
 
     @Override
