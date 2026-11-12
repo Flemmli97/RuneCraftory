@@ -55,24 +55,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             new NPCData(null, null, Gender.UNDEFINED, List.of(), null, null, 1,
                     Map.of(), Set.of(), Map.of(), null, null, null, 1, null, 0, RelationShipState.DEFAULT, List.of()));
 
-    public static <T> Codec<Map<ConversationContext, T>> filledMap(Codec<Map<ConversationContext, T>> codec) {
-        Function<Map<ConversationContext, T>, DataResult<Map<ConversationContext, T>>> check = map -> {
-            List<ResourceLocation> missing = new ArrayList<>();
-            for (ConversationContext e : ConversationContext.getRegistered()) {
-                if (!map.containsKey(e)) {
-                    missing.add(e.key());
-                }
-            }
-            if (!missing.isEmpty())
-                return DataResult.error(() -> "Conversation map is missing conversation for contexts: " + missing, map);
-            return DataResult.success(map);
-        };
-        return codec.flatXmap(check, DataResult::success);
-    }
-
     public static final Codec<NPCData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
-                    filledMap(Codec.unboundedMap(ResourceLocation.CODEC.flatComapMap(ConversationContext::get, ctx -> DataResult.success(ctx.key())), ResourceLocation.CODEC))
+                    Codec.unboundedMap(ResourceLocation.CODEC.flatComapMap(ConversationContext::get, ctx -> DataResult.success(ctx.key())), ResourceLocation.CODEC)
                             .fieldOf("interactions").forGetter(d -> d.interactions),
                     ResourceLocation.CODEC.listOf().fieldOf("required_quests").forGetter(d -> List.copyOf(d.requiredQuests)),
 
@@ -109,6 +94,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return new ReloadableHolder<>(LibConstants.EMPTY, fallback);
         fallback = new ConversationSet("runecraftory.npc.conversation.missing", convCtx.key(), Map.of());
         return DataPackHandler.INSTANCE.npcConversationManager().get(conversationId, fallback);
+    }
+
+    public List<ResourceLocation> missing() {
+        List<ResourceLocation> missing = new ArrayList<>();
+        for (ConversationContext e : ConversationContext.getRegistered()) {
+            if (!this.interactions().containsKey(e)) {
+                missing.add(e.key());
+            }
+        }
+        return missing;
     }
 
     public enum Gender {
