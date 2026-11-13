@@ -30,12 +30,12 @@
         {
           "actions": "ANSWER",
           "translation_key": "npc.runecraftory.misc_npcs.5.talk.6.action.1",
-          "value": "npc.runecraftory.misc_npcs.5.talk.6.action.1"
+          "value": "npc.runecraftory.misc_npcs.5.talk.7"
         },
         {
           "actions": "ANSWER",
           "translation_key": "npc.runecraftory.misc_npcs.5.talk.6.action.2",
-          "value": "npc.runecraftory.misc_npcs.5.talk.6.action.2"
+          "value": "npc.runecraftory.misc_npcs.5.talk.8"
         }
       ],
       "conditions": [],
