@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.loot.BiomeLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.CropWeaponLootFunction;
+import io.github.flemmli97.runecraftory.common.loot.EntityPredicateCondition;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
@@ -29,7 +29,7 @@ public class RuneCraftoryLootRegistries {
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> SKILL_CHECK = LOOTCONDITIONS.register("skill_check", () -> new LootItemConditionType(SkillLevelCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> INTERACTINGPLAYER = LOOTCONDITIONS.register("interacting_player", () -> new LootItemConditionType(NPCRelationCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> SEASONTYPE = LOOTCONDITIONS.register("season", () -> new LootItemConditionType(SeasonLootCondition.CODEC));
-    public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> BIOME = LOOTCONDITIONS.register("biome", () -> new LootItemConditionType(BiomeLootCondition.CODEC));
+    public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> PREDICATE_CONDITION = LOOTCONDITIONS.register("predicate_condition", () -> new LootItemConditionType(EntityPredicateCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> FRIENDPOINTS = LOOTCONDITIONS.register("friend_points", () -> new LootItemConditionType(FriendPointCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> FIRST_KILL = LOOTCONDITIONS.register("first_kill", () -> new LootItemConditionType(FirstKillCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> TALKCOUNT = LOOTCONDITIONS.register("talk_count", () -> new LootItemConditionType(TalkCountCondition.CODEC));
