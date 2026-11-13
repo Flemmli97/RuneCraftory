@@ -91,6 +91,8 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
     }
 
     public static Optional<NetworkConversation> fromTopic(ConversationGroupMemory group, TopicHolder topic) {
+        if (topic == null)
+            return Optional.empty();
         Conversation conversation = topic.holder().value().conversations().get(topic.topic().key());
         if (conversation == null || !group.isGroupComplete())
             return Optional.empty();
@@ -354,7 +356,7 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                 ).apply(inst, (key, action, value, xp) -> new ConversationActionHolder(key, action, value, xp.orElse(0))));
 
         public static ConversationActionHolder answer(String translationKey, String answer, int xp) {
-            return new ConversationActionHolder(translationKey, ConversationAction.ANSWER, translationKey, xp);
+            return new ConversationActionHolder(translationKey, ConversationAction.ANSWER, answer, xp);
         }
     }
 

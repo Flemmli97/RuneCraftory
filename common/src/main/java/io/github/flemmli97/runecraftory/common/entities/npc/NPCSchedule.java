@@ -408,7 +408,7 @@ public class NPCSchedule {
         FRIDAY(DayOfWeek.FRIDAY),
         SATURDAY(DayOfWeek.SATURDAY),
         SUNDAY(DayOfWeek.SUNDAY),
-        WEEKDAYS(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.TUESDAY, DayOfWeek.FRIDAY),
+        WEEKDAYS(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY),
         WEEKEND(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
         private final DayOfWeek[] days;

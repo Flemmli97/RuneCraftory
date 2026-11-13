@@ -9,6 +9,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.tslat.smartbrainlib.util.BrainUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +92,7 @@ public class ConversationGroupMemory {
         this.runForGroup(d -> d.setSpeaker(speaker, duration));
     }
 
+    @Nullable
     public TopicHolder topic() {
         return this.applyToGroup(d -> d.topicHolder, null);
     }
