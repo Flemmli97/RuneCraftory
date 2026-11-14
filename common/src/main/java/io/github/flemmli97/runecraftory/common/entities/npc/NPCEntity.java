@@ -44,6 +44,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.features.NPCFeatureC
 import io.github.flemmli97.runecraftory.common.entities.npc.features.SizeFeatureType;
 import io.github.flemmli97.runecraftory.common.entities.npc.profession.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.npc.social.TopicHolder;
+import io.github.flemmli97.runecraftory.common.entities.npc.text.PlaceholderProcessorRegistry;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.utils.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.utils.MobAttackExt;
@@ -1036,6 +1037,11 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         stack.shrink(1);
     }
 
+    public boolean isStranger(ServerPlayer player) {
+        NPCFriendPoints fp = this.relationManager.getFriendPointData(player.getUUID());
+        return !fp.talked();
+    }
+
     public void talkTo(ServerPlayer player) {
         if (this.respondToQuest(player))
             return;
@@ -1235,23 +1241,23 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     private Map<String, Component> conversationData(ServerPlayer player) {
         Map<String, Component> map = new HashMap<>();
-        map.put(PlaceHolderComponent.NPC, this.getDisplayName());
-        map.put(PlaceHolderComponent.PLAYER, player.getDisplayName());
-        this.randomGiftContext(15, Integer.MAX_VALUE).ifPresent(comp -> map.put(PlaceHolderComponent.FAVORITE, comp));
-        this.randomGiftContext(7, 14).ifPresent(comp -> map.put(PlaceHolderComponent.LIKE, comp));
-        this.randomGiftContext(-14, -1).ifPresent(comp -> map.put(PlaceHolderComponent.DISLIKE, comp));
-        this.randomGiftContext(Integer.MIN_VALUE, -15).ifPresent(comp -> map.put(PlaceHolderComponent.HATE, comp));
+        map.put(PlaceholderProcessorRegistry.NPC, this.getDisplayName());
+        map.put(PlaceholderProcessorRegistry.PLAYER, player.getDisplayName());
+        this.randomGiftContext(15, Integer.MAX_VALUE).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.FAVORITE, comp));
+        this.randomGiftContext(7, 14).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.LIKE, comp));
+        this.randomGiftContext(-14, -1).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.DISLIKE, comp));
+        this.randomGiftContext(Integer.MIN_VALUE, -15).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.HATE, comp));
         QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
         if (progress != null) {
             progress.getTasks().forEach((key, value) -> {
                 if (value instanceof ResolvedNPCBasedTask task) {
                     NPCEntity npc = task.getNpc(player.level());
                     if (npc != null && npc != this) {
-                        map.put(PlaceHolderComponent.QUEST_NPC_TARGET.apply(key), npc.getDisplayName());
+                        map.put(PlaceholderProcessorRegistry.QUEST_NPC_TARGET.apply(key), npc.getDisplayName());
                     }
                     Component comp = task.progressComponent(progress, key);
                     if (comp != null) {
-                        map.put(PlaceHolderComponent.QUEST_PROGRESS.apply(key), comp);
+                        map.put(PlaceholderProcessorRegistry.QUEST_PROGRESS.apply(key), comp);
                     }
                 }
             });

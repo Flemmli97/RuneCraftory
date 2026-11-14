@@ -135,7 +135,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
     public static List<NPCQuestSetupData> resolve(NPCQuestDefinition quest, ServerPlayer player, Vec3 at) {
         List<NPCEntity> nearbyNPCs = player.level().getEntities(EntityTypeTest.forClass(NPCEntity.class), aabbOf(at), e -> true);
         return nearbyNPCs.stream().map(npc -> {
-            if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()) || !quest.matches(player, npc))
+            if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()) || npc.isStranger(player) || !quest.matches(player, npc))
                 return null;
             Map<ResourceLocation, UUID> relevantNPCs = quest.collectNPCReferences(nearbyNPCs, npc);
             if (relevantNPCs == null)

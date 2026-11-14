@@ -4,7 +4,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.client.gui.widgets.DialogueOptionButton;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
-import io.github.flemmli97.runecraftory.common.entities.npc.PlaceHolderComponent;
+import io.github.flemmli97.runecraftory.common.entities.npc.text.PlaceHolderComponent;
+import io.github.flemmli97.runecraftory.common.entities.npc.text.PlaceholderProcessorRegistry;
 import io.github.flemmli97.runecraftory.common.network.C2SDialogueAction;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.tenshilib.loader.LoaderNetwork;
@@ -125,7 +126,7 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
             List<Component> actions = actionsHolder.actions();
             for (int i = actions.size() - 1; i >= 0; i--) {
                 int actionIdx = i;
-                DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, PlaceHolderComponent.parseDialogueComponent(actions.get(i), this.replacements, this.getCurrentContainer().participants()),
+                DialogueOptionButton btn = new DialogueOptionButton(this.width / 2, this.topPos - 20 + y, this.font, actions.get(i),
                         b -> LoaderNetwork.INSTANCE.sendToServer(new C2SDialogueAction(this.entity.getId(), actionsHolder.setID(), actionsHolder.conversationID(), actionIdx)));
                 btn.visible = visible;
                 this.buttons.add(btn);
@@ -249,7 +250,7 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
                     }
                     pageLines.add(new ConversationLine(mc.font.width(txt), txt, Language.getInstance().getVisualOrder(txt)));
                 }
-                Component speaker = dialogue.speaker().map(conversation.participants()::get).orElseGet(() -> data.get(PlaceHolderComponent.NPC));
+                Component speaker = dialogue.speaker().map(conversation.participants()::get).orElseGet(() -> data.get(PlaceholderProcessorRegistry.NPC));
                 if (speaker == null) {
                     speaker = Component.translatable("runecraftory.npc.conversation.participant.missing");
                 } else {
@@ -258,7 +259,7 @@ public class NPCDialogueGui<T extends NPCEntity> extends Screen {
                 lines.add(new ConversationContainer(speaker, conversation.participants(), pageLines));
             }
             int idx = lines.size() - 1;
-            conversation.action().ifPresent(act -> actions.put(idx, act));
+            conversation.action().ifPresent(act -> actions.put(idx, act.updatedComponents(comp -> PlaceHolderComponent.parseDialogueComponent(comp, data, conversation.participants()))));
         }
         this.conversation = lines;
         this.actions = actions;

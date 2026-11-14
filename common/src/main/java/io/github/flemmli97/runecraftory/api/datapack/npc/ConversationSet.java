@@ -427,5 +427,9 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
                 buf.writeCollection(pkt.actions(), (b, c) -> ComponentSerialization.STREAM_CODEC.encode(buf, c));
             }
         };
+
+        public NetworkActions updatedComponents(Function<Component, Component> update) {
+            return new NetworkActions(this.setID(), this.conversationID(), this.actions().stream().map(update).toList());
+        }
     }
 }
