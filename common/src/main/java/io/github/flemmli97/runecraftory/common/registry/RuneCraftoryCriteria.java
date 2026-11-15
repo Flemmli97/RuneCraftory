@@ -38,6 +38,7 @@ public class RuneCraftoryCriteria {
     public static final RegistryEntrySupplier<CriterionTrigger<?>, PlayerTrigger> CRAFTING = register("crafting", PlayerTrigger::new);
     public static final RegistryEntrySupplier<CriterionTrigger<?>, PlayerTrigger> MEDICINE = register("medicine", PlayerTrigger::new);
     public static final RegistryEntrySupplier<CriterionTrigger<?>, PlayerTrigger> COOKING = register("cooking", PlayerTrigger::new);
+    public static final RegistryEntrySupplier<CriterionTrigger<?>, PlayerTrigger> MONSTER_BARN = register("monster_barn", PlayerTrigger::new);
 
     private static <T extends CriterionTrigger<?>> RegistryEntrySupplier<CriterionTrigger<?>, T> register(String name, Supplier<T> inst) {
         return TRIGGERS.register(name, inst);

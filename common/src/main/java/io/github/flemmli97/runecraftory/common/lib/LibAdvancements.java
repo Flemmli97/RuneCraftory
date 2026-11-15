@@ -9,6 +9,7 @@ public class LibAdvancements {
 
     public static final ResourceLocation ROOT = mainLine("root");
 
+    public static final ResourceLocation MONSTER_BARN = mainLine("taming/monster_barn");
     public static final ResourceLocation TAME_FIRST = mainLine("taming/first");
     public static final ResourceLocation TAME_TEN = mainLine("taming/ten");
     public static final ResourceLocation TAME_BOSS_FIRST = mainLine("taming/boss_first");

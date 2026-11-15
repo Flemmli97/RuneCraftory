@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks.entity;
 
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
 import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryBlocks;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryCriteria;
 import io.github.flemmli97.runecraftory.common.world.data.BarnData;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import net.minecraft.core.BlockPos;
@@ -11,6 +12,8 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +27,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
     private static final int MAX_SIZE = 5;
 
     private UUID owner;
+    private Player player;
     private int cooldown = 0;
 
     private BarnData barnData;
@@ -84,6 +88,12 @@ public class MonsterBarnBlockEntity extends BlockEntity {
         } else {
             blockEntity.barnData.update(0, -1);
         }
+        if (blockEntity.getBarnData().getCapacity() > 0) {
+            Player player = blockEntity.getPlayerOwner();
+            if (player instanceof ServerPlayer serverPlayer) {
+                RuneCraftoryCriteria.MONSTER_BARN.get().trigger(serverPlayer);
+            }
+        }
     }
 
     private static boolean matches(Level level, BlockPos pos, boolean ground) {
@@ -98,6 +108,22 @@ public class MonsterBarnBlockEntity extends BlockEntity {
 
     public UUID getOwner() {
         return this.owner;
+    }
+
+    public Player getPlayerOwner() {
+        UUID uuid = this.getOwner();
+        if (uuid != null) {
+            if (this.player == null || !this.player.isAlive()) {
+                if (this.level != null) {
+                    if (this.level.isClientSide)
+                        this.player = this.level.getPlayerByUUID(uuid);
+                    else
+                        this.player = this.level.getServer().getPlayerList().getPlayer(uuid);
+                }
+            }
+        } else
+            this.player = null;
+        return this.player;
     }
 
     public void setOwner(UUID uuid) {
