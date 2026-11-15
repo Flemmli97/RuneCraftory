@@ -88,7 +88,7 @@ public class DeliveryTask implements QuestTask<DeliveryTask.DeliveryTaskResolved
     @Override
     public DeliveryTaskResolved resolve(QuestProgress progress, ResolvedQuest quest) {
         if (progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest npcQuest) {
-            UUID target = this.targetNPCId == null ? npcQuest.getQuestGiverUUID() : npcQuest.relevantNpcs().get(this.targetNPCId);
+            UUID target = this.targetNPCId == null ? npcQuest.getQuestGiverUUID() : npcQuest.getRandomNpcFor(progress.player().getRandom(), this.targetNPCId);
             if (target == null) {
                 return null;
             }

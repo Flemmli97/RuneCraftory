@@ -14,11 +14,14 @@ import io.github.flemmli97.simplequests_api.quest.entry.QuestTaskKey;
 import io.github.flemmli97.simplequests_api.quest.entry.ResolvedQuestTask;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -31,14 +34,17 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
     public static final MapCodec<NPCTalkTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npc_id").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
                     ResourceLocation.CODEC.optionalFieldOf("dialogue").forGetter(d -> Optional.ofNullable(d.dialogue)),
+                    ResourceLocation.CODEC.optionalFieldOf("loot_return").forGetter(d -> Optional.ofNullable(d.dialogue)),
                     EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
-            ).apply(instance, (npcId, dialogue, predicate) ->
-                    new NPCTalkTask(npcId.orElse(null), dialogue.orElse(null), predicate.orElse(null))));
+            ).apply(instance, (npcId, dialogue, lootReturn, predicate) ->
+                    new NPCTalkTask(npcId.orElse(null), dialogue.orElse(null), lootReturn.orElse(null), predicate.orElse(null))));
 
     @Nullable
     private final ResourceLocation targetNPCId;
     @Nullable
     private final ResourceLocation dialogue;
+    @Nullable
+    private final ResourceLocation lootReturn;
 
     private final EntityPredicate predicate;
 
@@ -47,16 +53,17 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
     }
 
     public NPCTalkTask(ResourceLocation npc) {
-        this(npc, null, null);
+        this(npc, null, null, null);
     }
 
-    public NPCTalkTask(ResourceLocation npc, @Nullable ResourceLocation dialogue) {
-        this(npc, dialogue, null);
+    public NPCTalkTask(@Nullable ResourceLocation npc, @Nullable ResourceLocation dialogue, @Nullable ResourceLocation lootReturn) {
+        this(npc, dialogue, lootReturn, null);
     }
 
-    protected NPCTalkTask(@Nullable ResourceLocation npc, @Nullable ResourceLocation dialogue, EntityPredicate predicate) {
+    protected NPCTalkTask(@Nullable ResourceLocation npc, @Nullable ResourceLocation dialogue, @Nullable ResourceLocation lootReturn, EntityPredicate predicate) {
         this.targetNPCId = npc;
         this.dialogue = dialogue;
+        this.lootReturn = lootReturn;
         this.predicate = predicate;
     }
 
@@ -78,11 +85,11 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
     @Override
     public NPCTalkTask.NPCTalkResolved resolve(QuestProgress progress, ResolvedQuest quest) {
         if (progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest npcQuest) {
-            UUID target = this.targetNPCId == null ? npcQuest.getQuestGiverUUID() : npcQuest.relevantNpcs().get(this.targetNPCId);
+            UUID target = this.targetNPCId == null ? npcQuest.getQuestGiverUUID() : npcQuest.getRandomNpcFor(progress.player().getRandom(), this.targetNPCId);
             if (target == null) {
                 return null;
             }
-            return new NPCTalkTask.NPCTalkResolved(target, this.dialogue, this.predicate);
+            return new NPCTalkTask.NPCTalkResolved(target, this.dialogue, this.lootReturn, this.predicate);
         }
         return null;
     }
@@ -92,18 +99,22 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
         public static final MapCodec<NPCTalkResolved> CODEC = RecordCodecBuilder.mapCodec((instance) ->
                 instance.group(Codec.STRING.fieldOf("target_npc").xmap(UUID::fromString, UUID::toString).forGetter(d -> d.targetNPC),
                         ResourceLocation.CODEC.optionalFieldOf("dialogue").forGetter(d -> Optional.ofNullable(d.dialogue)),
+                        ResourceLocation.CODEC.optionalFieldOf("loot_return").forGetter(d -> d.lootReturn == null ? Optional.empty() : Optional.of(d.lootReturn.location())),
                         EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
-                ).apply(instance, (target, dialogue, predicate) -> new NPCTalkResolved(target, dialogue.orElse(null), predicate.orElse(null))));
+                ).apply(instance, (target, dialogue, lootReturn, predicate) -> new NPCTalkResolved(target, dialogue.orElse(null), lootReturn.orElse(null), predicate.orElse(null))));
 
         private final UUID targetNPC;
         @Nullable
         private final ResourceLocation dialogue;
+        @Nullable
+        private final ResourceKey<LootTable> lootReturn;
         private final EntityPredicate predicate;
         private WeakReference<NPCEntity> npc;
 
-        public NPCTalkResolved(UUID targetNPC, @Nullable ResourceLocation dialogue, EntityPredicate predicate) {
+        public NPCTalkResolved(UUID targetNPC, @Nullable ResourceLocation dialogue, @Nullable ResourceLocation lootReturn, EntityPredicate predicate) {
             this.targetNPC = targetNPC;
             this.dialogue = dialogue;
+            this.lootReturn = lootReturn == null ? null : ResourceKey.create(Registries.LOOT_TABLE, lootReturn);
             this.predicate = predicate;
         }
 
@@ -117,6 +128,10 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
             return ID;
         }
 
+        public ResourceKey<LootTable> lootReturn() {
+            return this.lootReturn;
+        }
+
         @Override
         @Nullable
         public NPCEntity getNpc(Level level) {
@@ -126,6 +141,10 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
                 this.npc = new WeakReference<>(npc);
             }
             return npc;
+        }
+
+        public UUID targetNPC() {
+            return this.targetNPC;
         }
 
         @Override

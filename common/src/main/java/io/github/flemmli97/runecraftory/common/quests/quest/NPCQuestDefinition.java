@@ -20,13 +20,17 @@ import io.github.flemmli97.simplequests_api.quest.QuestDefinitionImpl;
 import io.github.flemmli97.simplequests_api.quest.QuestDefinitionRef;
 import io.github.flemmli97.simplequests_api.quest.QuestHolder;
 import io.github.flemmli97.simplequests_api.quest.ResolvedQuest;
+import io.github.flemmli97.simplequests_api.quest.entry.QuestTask;
 import io.github.flemmli97.simplequests_api.util.TimeDuration;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtils;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -36,6 +40,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -137,7 +142,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
         return nearbyNPCs.stream().map(npc -> {
             if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()) || npc.isStranger(player) || !quest.matches(player, npc))
                 return null;
-            Map<ResourceLocation, UUID> relevantNPCs = quest.collectNPCReferences(nearbyNPCs, npc);
+            Map<ResourceLocation, List<UUID>> relevantNPCs = quest.collectNPCReferences(nearbyNPCs, npc);
             if (relevantNPCs == null)
                 return null;
             return new NPCQuestSetupData(quest, npc, relevantNPCs);
@@ -150,25 +155,48 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
         return ResourceLocation.fromNamespaceAndPath(quest.id().getNamespace(), quest.id().getPath() + "/" + uuid);
     }
 
-    private Map<ResourceLocation, UUID> collectNPCReferences(List<NPCEntity> nearbyNPCs, NPCEntity except) {
-        Set<ResourceLocation> npcReferences = new HashSet<>();
-        this.visit(def -> def.unresolvedTasks().forEach((s, task) -> {
-            if (task instanceof NPCBasedTask talk && talk.targetNPCId() != null) {
-                npcReferences.add(talk.targetNPCId());
+    private Map<ResourceLocation, List<UUID>> collectNPCReferences(List<NPCEntity> nearbyNPCs, NPCEntity except) {
+        Object2IntMap<ResourceLocation> npcReferences = new Object2IntOpenHashMap<>();
+        this.visit(def -> {
+            Object2IntMap<ResourceLocation> definitionRefs = new Object2IntOpenHashMap<>();
+            for (QuestTask<?> task : def.unresolvedTasks().values()) {
+                if (task instanceof NPCBasedTask talk && talk.targetNPCId() != null) {
+                    definitionRefs.computeInt(talk.targetNPCId(), (k, i) -> i == 0 ? 1 : i + 1);
+                }
             }
-        }));
+            definitionRefs.forEach((k, v) -> {
+                int current = npcReferences.getInt(k);
+                if (v > current) {
+                    npcReferences.put(k, v.intValue());
+                }
+            });
+        });
         if (npcReferences.isEmpty())
             return Map.of();
-        Map<ResourceLocation, UUID> relevantNpcs = new HashMap<>();
+        Map<ResourceLocation, List<UUID>> relevantNpcs = new HashMap<>();
         for (NPCEntity entity : nearbyNPCs) {
             if (entity == except)
                 continue;
-            if (npcReferences.contains(entity.getDataID()) && !relevantNpcs.containsKey(entity.getDataID())) {
-                relevantNpcs.put(entity.getDataID(), entity.getUUID());
+            ResourceLocation targetId = entity.getDataID();
+            int required = npcReferences.getInt(targetId);
+            if (required == 0) {
+                targetId = NPCBasedTask.ANY_NPC;
+                required = npcReferences.getInt(targetId);
+            }
+            int current = relevantNpcs.getOrDefault(targetId, List.of()).size();
+            if (current < required) {
+                relevantNpcs.computeIfAbsent(targetId, k -> new ArrayList<>())
+                        .add(entity.getUUID());
             }
         }
         if (relevantNpcs.size() != npcReferences.size()) {
             return null;
+        }
+        for (Object2IntMap.Entry<ResourceLocation> entry : npcReferences.object2IntEntrySet()) {
+            int current = relevantNpcs.getOrDefault(entry.getKey(), List.of()).size();
+            if (current < entry.getIntValue()) {
+                return null;
+            }
         }
         return relevantNpcs;
     }
@@ -246,15 +274,19 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
         private WeakReference<NPCEntity> questGiver;
 
         private final ResourceLocation questId;
-        private final Map<ResourceLocation, UUID> relevantNPCs;
+        private final Map<ResourceLocation, List<UUID>> relevantNPCs;
         private final Set<UUID> relevantNPCIds;
 
-        public NPCQuest(NPCEntity questGiver, Map<ResourceLocation, UUID> relevantNPCs, NPCQuestDefinition definition) {
+        private final Set<UUID> takenNPCIds = new HashSet<>();
+
+        public NPCQuest(NPCEntity questGiver, Map<ResourceLocation, List<UUID>> relevantNPCs, NPCQuestDefinition definition) {
             super(definition);
             this.questGiverUUID = questGiver.getUUID();
             this.questGiver = new WeakReference<>(questGiver);
             this.relevantNPCs = ImmutableMap.copyOf(relevantNPCs);
-            this.relevantNPCIds = Set.copyOf(relevantNPCs.values());
+            this.relevantNPCIds = this.relevantNPCs.values().stream()
+                    .flatMap(List::stream)
+                    .collect(Collectors.toSet());
             this.questId = withUuid(definition, this.questGiverUUID);
         }
 
@@ -262,13 +294,17 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             super(definition);
             CompoundTag tag = (CompoundTag) t;
             this.questGiverUUID = UUIDUtil.CODEC.parse(NbtOps.INSTANCE, tag.get("QuestGiver")).getOrThrow();
-            ImmutableMap.Builder<ResourceLocation, UUID> builder = ImmutableMap.builder();
+            ImmutableMap.Builder<ResourceLocation, List<UUID>> builder = ImmutableMap.builder();
             CompoundTag relevantNPCs = tag.getCompound("RelevantNPCs");
             relevantNPCs.getAllKeys().forEach(id -> {
-                builder.put(ResourceLocation.parse(id), UUIDUtil.CODEC.parse(NbtOps.INSTANCE, relevantNPCs.get(id)).getOrThrow());
+                builder.put(ResourceLocation.parse(id), UUIDUtil.CODEC.listOf().parse(NbtOps.INSTANCE, relevantNPCs.get(id)).getOrThrow());
             });
             this.relevantNPCs = builder.build();
-            this.relevantNPCIds = Set.copyOf(this.relevantNPCs.values());
+            this.relevantNPCIds = this.relevantNPCs.values().stream()
+                    .flatMap(List::stream)
+                    .collect(Collectors.toSet());
+            ListTag taken = tag.getList("TakenNPCs", Tag.TAG_INT_ARRAY);
+            taken.forEach(val -> this.takenNPCIds.add(UUIDUtil.CODEC.parse(NbtOps.INSTANCE, val).getOrThrow()));
             this.questId = withUuid(definition, this.questGiverUUID);
         }
 
@@ -280,8 +316,18 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             return super.id();
         }
 
-        public Map<ResourceLocation, UUID> relevantNpcs() {
-            return this.relevantNPCs;
+        public UUID getRandomNpcFor(RandomSource random, ResourceLocation npcId) {
+            List<UUID> uuids = this.relevantNPCs.get(npcId);
+            if (uuids == null || uuids.isEmpty()) {
+                return null;
+            }
+            uuids = uuids.stream().filter(id -> !this.takenNPCIds.contains(id)).toList();
+            if (uuids.isEmpty()) {
+                return null;
+            }
+            UUID randomId = uuids.get(random.nextInt(uuids.size()));
+            this.takenNPCIds.add(randomId);
+            return randomId;
         }
 
         public Set<UUID> relevantNpcIds() {
@@ -293,7 +339,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             if (!savedData.npcHandler.doesNPCExist(this.getQuestGiverUUID())) {
                 return false;
             }
-            return this.relevantNPCs.values().stream().allMatch(savedData.npcHandler::doesNPCExist);
+            return this.relevantNPCIds.stream().allMatch(savedData.npcHandler::doesNPCExist);
         }
 
         @Nullable
@@ -343,13 +389,20 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             this.onReset(serverPlayer);
         }
 
+        public void releaseNPC(UUID uuid) {
+            this.takenNPCIds.remove(uuid);
+        }
+
         @Override
         public Tag save(HolderLookup.Provider lookup) {
             CompoundTag tag = new CompoundTag();
             tag.put("QuestGiver", UUIDUtil.CODEC.encodeStart(NbtOps.INSTANCE, this.questGiverUUID).getOrThrow());
             CompoundTag relevantNPCs = new CompoundTag();
-            this.relevantNPCs.forEach((id, uuid) -> relevantNPCs.put(id.toString(), UUIDUtil.CODEC.encodeStart(NbtOps.INSTANCE, uuid).getOrThrow()));
+            this.relevantNPCs.forEach((id, uuid) -> relevantNPCs.put(id.toString(), UUIDUtil.CODEC.listOf().encodeStart(NbtOps.INSTANCE, uuid).getOrThrow()));
             tag.put("RelevantNPCs", relevantNPCs);
+            ListTag taken = new ListTag();
+            this.takenNPCIds.forEach(id -> taken.add(UUIDUtil.CODEC.encodeStart(NbtOps.INSTANCE, id).getOrThrow()));
+            tag.put("TakenNPCs", taken);
             return tag;
         }
     }
