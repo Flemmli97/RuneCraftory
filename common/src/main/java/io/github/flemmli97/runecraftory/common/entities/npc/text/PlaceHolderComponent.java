@@ -72,9 +72,7 @@ public class PlaceHolderComponent {
         int cursor = 0;
         while (matcher.find()) {
             result.append(text, cursor, matcher.start());
-            if (matcher.group(1) == null) {
-                result.append("%").append(implicitIndex++).append("$s");
-            }
+            result.append("%").append(implicitIndex++).append("$s");
             cursor = matcher.end();
         }
         result.append(text.substring(cursor));

@@ -1102,7 +1102,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                         (QuestHandler.getFirstQuestFor(player, this) != null || this.updater.alreadyAcceptedRandomquest(player)))
                     return -1;
                 return c.getValue().startingConversation() ? c.getValue().priority(heart, lootContext) : -1;
-            }, this.updater.getDailyRandom()));
+            }, this.updater.getDailyRandom(), this.getRandom()));
             idx++;
         }
         this.tellDialogue(player, dialogues);

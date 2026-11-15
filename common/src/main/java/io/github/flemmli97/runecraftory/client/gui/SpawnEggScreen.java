@@ -171,6 +171,7 @@ public class SpawnEggScreen extends Screen {
             yOff += 8 * 9;
             this.npcProfessionEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 130, 16, Component.literal(""),
                     5, false, SuggestionEditBox.ofResourceLocation(RuneCraftoryNPCProfessions.PROFESSIONS.registry().keySet()));
+            this.npcProfessionEditor.setMaxLength(128);
             NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
             this.npcProfession = itemData.profession().map(h -> h.unwrapKey().orElseThrow().location()).orElse(null);
             if (this.npcProfession != null)
@@ -192,6 +193,7 @@ public class SpawnEggScreen extends Screen {
 
             this.npcIDEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""),
                     5, false, SuggestionEditBox.ofResourceLocation(this.npcIds));
+            this.npcIDEditor.setMaxLength(128);
             this.npcID = itemData.npcDataId().orElse(null);
             if (this.npcID != null)
                 this.npcIDEditor.setValue(this.npcID.toString());

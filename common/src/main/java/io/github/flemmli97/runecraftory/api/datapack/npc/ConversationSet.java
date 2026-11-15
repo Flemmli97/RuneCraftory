@@ -17,6 +17,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -48,14 +49,18 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
         this(fallbackKey, null, conversations);
     }
 
+    /**
+     * @param random A fixed seeded random to shuffle the conversations deterministically
+     */
     public static NetworkConversation createRandom(ReloadableHolder<ConversationSet> conversations,
                                                    Function<Map.Entry<String, Conversation>, Integer> filter,
-                                                   Random random) {
+                                                   Random random, RandomSource randomSource) {
         List<Map.Entry<String, Conversation>> filtered = conversations.value().filteredConversations(filter);
         Collections.shuffle(filtered, random);
-        int size = Math.min(filtered.size(), 2 + random.nextInt(2)); //Select 2-3 random lines
+        int minRand = filtered.size() < 5 ? 1 : 2;
+        int size = Math.min(filtered.size(), minRand + random.nextInt(minRand)); //Select 2-3 random lines
         if (size > 0) {
-            Map.Entry<String, Conversation> randomLine = filtered.get(random.nextInt(size));
+            Map.Entry<String, Conversation> randomLine = filtered.get(randomSource.nextInt(size));
             Conversation conversation = randomLine.getValue();
             Optional<NetworkActions> actions;
             if (conversation.actions().isEmpty()) {
@@ -66,7 +71,7 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
             return new NetworkConversation(conversation.dialogues().stream().map(NetworkDialog::new).toList(), Map.of(), actions);
         } else {
             Component dialog = conversations.value().missing() != null
-                    ? Component.translatable(conversations.value().fallbackKey(), conversations.value().missing()) : Component.translatable(conversations.value().fallbackKey());
+                    ? Component.translatable(conversations.value().fallbackKey(), conversations.value().missing().toString()) : Component.translatable(conversations.value().fallbackKey());
             return new NetworkConversation(dialog);
         }
     }
