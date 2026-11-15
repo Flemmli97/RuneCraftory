@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
 
 public class PlaceHolderComponent {
 
-    private static final String PATH_OR_NAMESPACE = "([A-Za-z_.-]+)(?::([A-Za-z0-9_/.-]+))?";
+    private static final String PATH_OR_NAMESPACE = "([A-Za-z_.-]+)(?::([A-Za-z0-9_/.:-]+))?";
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("%(" + PATH_OR_NAMESPACE + ")%");
     private static final Pattern TAG_PATTERN = Pattern.compile("<(/?)" + PATH_OR_NAMESPACE + ">");
 
-    private static final Pattern FORMAT_PATTERN = Pattern.compile("%(s|$)");
+    private static final Pattern FORMAT_PATTERN = Pattern.compile("%s");
 
     public static final char SEPARATOR = ':';
 
@@ -83,6 +83,8 @@ public class PlaceHolderComponent {
 
     private static Component parseTags(String text, Style style, Map<String, Component> placeholderMap, @Nullable List<Object> args) {
         List<ComponentStack> stacks = new ArrayList<>();
+        ComponentStack root = new ComponentStack("", null, style);
+        stacks.add(root);
         Matcher matcher = TAG_PATTERN.matcher(text);
         int cursor = 0;
         while (matcher.find()) {
@@ -101,12 +103,16 @@ public class PlaceHolderComponent {
                 } else {
                     ComponentStack last = stacks.getLast();
                     component.setStyle(last.style());
-                    stacks.getLast().children().add(Either.left(component));
+                    last.children().add(Either.left(component));
                 }
             }
             boolean close = !matcher.group(1).isEmpty();
-            if (close) {
-                if (stacks.isEmpty() || !stacks.getLast().tag().equals(tag)) {
+            if (tag.equals(TagProcessorRegistry.RESET) || tag.equals(TagProcessorRegistry.RESET2)) {
+                while (stacks.size() > 1) {
+                    stacks.removeLast();
+                }
+            } else if (close) {
+                if (stacks.size() < 2 || !stacks.getLast().tag().equals(tag)) {
                     RuneCraftory.LOGGER.error("Component placeholder processor error: Mismatched tag containers");
                     return args == null ? Component.literal(text) : Component.translatable(text, args);
                 }
@@ -127,7 +133,7 @@ public class PlaceHolderComponent {
         String content = text.substring(cursor);
         if (!content.isEmpty()) {
             MutableComponent component = content.isBlank() ? Component.literal(content) : parsePlaceholders(content, placeholderMap, args);
-            if (stacks.isEmpty()) {
+            if (root.children().isEmpty()) {
                 return component;
             } else {
                 ComponentStack last = stacks.getLast();
@@ -135,10 +141,10 @@ public class PlaceHolderComponent {
                 stacks.getLast().children().add(Either.left(component));
             }
         }
-        if (stacks.isEmpty()) {
+        if (root.children().isEmpty()) {
             return args == null ? Component.literal(text) : Component.translatable(text, args);
         }
-        return stacks.getLast().toComponent();
+        return root.toComponent();
     }
 
     private static MutableComponent parsePlaceholders(String text,

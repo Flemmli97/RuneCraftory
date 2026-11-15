@@ -1247,6 +1247,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         this.randomGiftContext(7, 14).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.LIKE, comp));
         this.randomGiftContext(-14, -1).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.DISLIKE, comp));
         this.randomGiftContext(Integer.MIN_VALUE, -15).ifPresent(comp -> map.put(PlaceholderProcessorRegistry.HATE, comp));
+        map.put(PlaceholderProcessorRegistry.BIRTHDAY, Component.translatable("runecraftory.npc.birthday", this.getBirthday().getSecond(), Component.translatable(this.getBirthday().getFirst().translationKey())));
         QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
         if (progress != null) {
             progress.getTasks().forEach((key, value) -> {
