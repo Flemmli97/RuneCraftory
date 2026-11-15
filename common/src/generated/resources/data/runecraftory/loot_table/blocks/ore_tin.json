@@ -12,13 +12,13 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:iron_ingot",
+          "name": "minecraft:raw_iron",
           "quality": 15,
           "weight": 40
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:copper_ingot",
+          "name": "minecraft:raw_copper",
           "quality": 24,
           "weight": 25
         },

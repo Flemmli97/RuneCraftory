@@ -719,22 +719,22 @@ public class Loottables extends LootTableProvider {
             switch (tier) {
                 case IRON -> {
                     build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
-                    build.add(ore(40, 17, Items.IRON_INGOT));
+                    build.add(ore(40, 17, Items.RAW_IRON));
                     build.add(ore(5, 5, RuneCraftoryItems.INVIS_STONE.get()));
                     build.add(ore(10, 3, RuneCraftoryItems.INVIS_STONE.get(), 10));
                     build.add(ore(1, 7, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case TIN -> {
                     build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
-                    build.add(ore(40, 15, Items.IRON_INGOT));
-                    build.add(ore(25, 24, Items.COPPER_INGOT));
+                    build.add(ore(40, 15, Items.RAW_IRON));
+                    build.add(ore(25, 24, Items.RAW_COPPER));
                     build.add(ore(4, 3, RuneCraftoryItems.INVIS_STONE.get(), 5));
                     build.add(ore(5, 3, RuneCraftoryItems.INVIS_STONE.get(), 20));
                     build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case SILVER -> {
                     build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
-                    build.add(ore(40, 12, Items.IRON_INGOT));
+                    build.add(ore(40, 12, Items.RAW_IRON));
                     build.add(ore(20, 31, RuneCraftoryItems.RAW_SILVER.get()));
                     build.add(ore(2, 2, RuneCraftoryItems.INVIS_STONE.get(), 5));
                     build.add(ore(3, 2, RuneCraftoryItems.INVIS_STONE.get(), 10));
@@ -743,8 +743,8 @@ public class Loottables extends LootTableProvider {
                 }
                 case GOLD -> {
                     build.add(ore(100, 3, RuneCraftoryItems.SCRAP.get()));
-                    build.add(ore(50, 8, Items.IRON_INGOT));
-                    build.add(ore(20, 31, Items.GOLD_INGOT));
+                    build.add(ore(50, 8, Items.RAW_IRON));
+                    build.add(ore(20, 31, Items.RAW_GOLD));
                     build.add(ore(3, 8, RuneCraftoryItems.CRYSTAL_SMALL.get(), 40));
                 }
                 case DIAMOND -> {
