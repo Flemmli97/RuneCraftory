@@ -1250,6 +1250,9 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         map.put(PlaceholderProcessorRegistry.BIRTHDAY, Component.translatable("runecraftory.npc.birthday", this.getBirthday().getSecond(), Component.translatable(this.getBirthday().getFirst().translationKey())));
         QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
         if (progress != null) {
+            if (progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest quest && quest.getNpc(this.level()) != null) {
+                map.put(PlaceholderProcessorRegistry.QUEST_GIVER, quest.getNpc(this.level()).getDisplayName());
+            }
             progress.getTasks().forEach((key, value) -> {
                 if (value instanceof ResolvedNPCBasedTask task) {
                     NPCEntity npc = task.getNpc(player.level());

@@ -166,7 +166,7 @@ public class PlaceHolderComponent {
                 int idx = lookup.computeIfAbsent(pattern, k -> argIndex);
                 text = text.replace("%" + pattern + "%", "%" + idx + "$s");
                 if (processor != null) {
-                    replacement = replacement.copy().withStyle(processor.colors());
+                    replacement = processor.styles().apply(replacement.copy());
                 }
                 if (argIndex == idx)
                     arguments.add(replacement);
