@@ -311,6 +311,11 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.command.weather.no", "No such weather %s");
         this.add("runecraftory.command.set.weather", "Set current weather to %s");
         this.add("runecraftory.command.recalc.stats", "Recalculated level stats for %s entities");
+        this.add("runecraftory.command.quest.noexist", "Quest with id %s does not exist!");
+        this.add("runecraftory.command.quest.not_npc", "ATM only npc based quests supported");
+        this.add("runecraftory.command.quest.no_npc", "No NPC nearby valid for this quest");
+        this.add("runecraftory.command.quest.accepted", "Force accepted quest %s");
+        this.add("runecraftory.command.quest.reset", "Reset current quest %s");
 
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");
@@ -534,6 +539,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.npc.conversation.response.missing", "-Missing quest response for quest %s-");
         this.add("runecraftory.npc.default.gift.neutral", "Thank you for your gift.");
         this.add("runecraftory.npc.conversation.participant.missing", "Unknown Participant");
+        this.add("runecraftory.npc.conversation.unkown_placeholder", "-Unkown placeholder %s-");
 
         this.add("runecraftory.npc.spawn.name.missing", "Missing name for baby!");
 
