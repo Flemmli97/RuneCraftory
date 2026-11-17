@@ -1,0 +1,63 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:fertilizer",
+  "name": "runecraftory.quest.fertilizer",
+  "parent_id": "runecraftory:harvest_1",
+  "quest_givers": [
+    "runecraftory:florist/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/fertilizer/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/fertilizer/active_1",
+        "end_id": "runecraftory:quest/fertilizer/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "amount": 1.0,
+            "block_predicates": [
+              {
+                "value": {
+                  "blocks": "#c:farmland"
+                }
+              }
+            ],
+            "consume": false,
+            "description": "runecraftory.quest.fertilizer.sub.1.task.0",
+            "id": "simplequests_api:block_interact",
+            "item_predicates": [
+              {
+                "value": {
+                  "items": "runecraftory:formular_a"
+                }
+              }
+            ],
+            "use": false
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}

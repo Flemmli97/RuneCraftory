@@ -33,7 +33,7 @@
   "npc.runecraftory.general_store_owner.1.greeting.2": "Well, look who it is! \nI was just thinking about taking a little walk outside. Care to tell me how your day's been?",
   "npc.runecraftory.general_store_owner.1.greeting.3": "Hello again! Anything exciting happening? \nThe village has been rather quiet lately, and I'm starting to miss a little excitement.",
   "npc.runecraftory.general_store_owner.1.greeting.4": "Oh, it's you! Always nice to have a familiar face around. \nTell me, have you discovered anything interesting on your travels?",
-  "npc.runecraftory.general_store_owner.1.hate.1": "Oh... that's certainly an unusual choice. \nI can't say I'm particularly fond of it, but I suppose I'll have to make do.",
+  "npc.runecraftory.general_store_owner.1.hate.1": "Oh... that's certainly an unusual choice. \nCan't say I'm particularly fond of it though...",
   "npc.runecraftory.general_store_owner.1.like.1": "Oh, now this is wonderful! What a lovely surprise, %player%! \nYou really know how to make someone's day.",
   "npc.runecraftory.general_store_owner.1.marriage_accept.1": "Marriage? You really want to spend your life with me? Well, I can't think of a greater adventure than building a future together. Yes, %player%! Absolutely!",
   "npc.runecraftory.general_store_owner.1.marriage_accept.2": "I've spent so long chasing dreams of distant lands and great discoveries. But I think I've finally found something even more precious right here. Yes, I'll marry you!",
@@ -44,7 +44,7 @@
   "npc.runecraftory.general_store_owner.1.procreation_cooldown.1": "Let's not rush things, shall we? Even the most ambitious plans need a little time between them.",
   "npc.runecraftory.general_store_owner.1.procreation_cooldown.2": "Perhaps we should just enjoy each other's company for now. There's no need to hurry through life's little adventures.",
   "npc.runecraftory.general_store_owner.1.procreation_cooldown.3": "Not just yet, love. I think we deserve a little time to ourselves before our next big adventure.",
-  "npc.runecraftory.general_store_owner.1.talk.1": "I've always wanted to see what's beyond the mountains. There must be entire places out there that nobody from around here has ever visited. Imagine all the things waiting to be discovered!",
+  "npc.runecraftory.general_store_owner.1.talk.1": "I've always wanted to see what's beyond the mountains. There must be entire places out there that nobody from around here has ever visited.",
   "npc.runecraftory.general_store_owner.1.talk.2": "Sometimes I wonder whether I'm chasing too many dreams at once. There are so many things I'd like to accomplish, and somehow there never seem to be enough hours in the day.",
   "npc.runecraftory.general_store_owner.1.talk.3": "Have you ever found something completely unexpected while exploring? I once stumbled upon a tiny pond hidden between some hills. Nothing particularly valuable there, but it was one of the most beautiful places I've ever seen.",
   "npc.runecraftory.general_store_owner.1.talk.4": "I don't mind a little danger now and then. Makes life more interesting, doesn't it? Though I suppose there's a difference between being adventurous and being reckless."

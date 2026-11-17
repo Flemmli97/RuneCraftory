@@ -376,6 +376,8 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
+        this.add("runecraftory.advancements.tame.monster_barn.title", "Monster also need a place to stay");
+        this.add("runecraftory.advancements.tame.monster_barn.description", "Setup a proper monster barn");
         this.add("runecraftory.advancements.tame.first.title", "First buddy");
         this.add("runecraftory.advancements.tame.first.description", "Tame your first monster");
         this.add("runecraftory.advancements.tame.ten.title", "Monster tamer");
@@ -520,6 +522,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.npc.schedule.days.weekends", "Weekends");
         this.add("runecraftory.npc.schedule.day", "%1$s");
         this.add("runecraftory.npc.schedule.days.span", "%1$s - %2$s");
+
+        this.add("runecraftory.npc.birthday", "%s %s");
 
         this.add("runecraftory.npc.shop.inventory.full", "You don't have enough inventory space for it");
         this.add("runecraftory.npc.shop.money.no", "You don't have enough money");

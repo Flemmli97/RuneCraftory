@@ -1,0 +1,56 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:gifts",
+  "name": "runecraftory.quest.gifts",
+  "parent_id": "runecraftory:socialize",
+  "quest_givers": [
+    "runecraftory:general_store_owner/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/gifts/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/gifts/active_1",
+        "end_id": "runecraftory:quest/gifts/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "amount": 1.0,
+            "dialogue": "runecraftory:quest/gifts/deliver_task",
+            "id": "runecraftory:delivery",
+            "items": [
+              {
+                "description": "runecraftory.quest.gifts.sub.1.task.0",
+                "value": {
+                  "items": "runecraftory:formular_a"
+                }
+              }
+            ],
+            "target_npc_id": "runecraftory:florist/1"
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}

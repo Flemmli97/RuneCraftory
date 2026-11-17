@@ -1,32 +1,43 @@
 {
-  "loot_table": "runecraftory:ship_turnip",
-  "repeat_delay": -1,
+  "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:ship_turnip",
   "name": "runecraftory.quest.ship_turnip",
+  "parent_id": "runecraftory:socialize",
   "quest_givers": [
-    "runecraftory:shop_owner/1"
+    "runecraftory:general_store_owner/1"
   ],
   "quests": [
     {
+      "dialogues": {
+        "start_id": "runecraftory:quest/ship_turnip/start_0"
+      },
       "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
         "tasks": {
           "0": {
             "id": "runecraftory:npc_talk"
           }
-        },
-        "name": "",
-        "loot_table": "minecraft:empty",
-        "type": "simplequests_api:quest"
-      },
-      "dialogues": {
-        "start_id": "runecraftory:quest/ship_turnip/start_0"
+        }
       }
     },
     {
+      "dialogues": {
+        "active_id": "runecraftory:quest/ship_turnip/active_1",
+        "end_id": "runecraftory:quest/ship_turnip/end_1"
+      },
       "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
         "tasks": {
           "0": {
+            "amount": 1.0,
             "description": "",
+            "id": "runecraftory:shipping",
             "item_predicates": [
               {
                 "description": "runecraftory.quest.ship_turnip.sub.1.task.0",
@@ -34,20 +45,11 @@
                   "items": "runecraftory:turnip"
                 }
               }
-            ],
-            "amount": 1.0,
-            "id": "runecraftory:shipping"
+            ]
           }
-        },
-        "name": "",
-        "loot_table": "minecraft:empty",
-        "type": "simplequests_api:quest"
-      },
-      "dialogues": {
-        "active_id": "runecraftory:quest/ship_turnip/active_1",
-        "end_id": "runecraftory:quest/ship_turnip/end_1"
+        }
       }
     }
   ],
-  "type": "runecraftory:npc_quest"
+  "repeat_delay": -1
 }

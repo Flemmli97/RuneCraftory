@@ -1,5 +1,5 @@
 {
-  "parent": "runecraftory:main/root",
+  "parent": "runecraftory:main/taming/monster_barn",
   "criteria": {
     "tame_monster": {
       "conditions": {

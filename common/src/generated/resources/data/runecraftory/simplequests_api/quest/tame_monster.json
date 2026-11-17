@@ -1,51 +1,53 @@
 {
-  "loot_table": "runecraftory:tame_monster",
-  "repeat_delay": -1,
+  "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:tame_monster",
   "name": "runecraftory.quest.tame_monster",
+  "parent_id": "runecraftory:monster_barn",
   "quest_givers": [
-    "runecraftory:random_npc_1"
+    "runecraftory:blacksmith/1"
   ],
   "quests": [
     {
+      "dialogues": {
+        "start_id": "runecraftory:quest/tame_monster/start_0"
+      },
       "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
         "tasks": {
           "0": {
             "id": "runecraftory:npc_talk"
           }
-        },
-        "name": "",
-        "loot_table": "minecraft:empty",
-        "type": "simplequests_api:quest"
-      },
-      "dialogues": {
-        "start_id": "runecraftory:quest/tame_monster/start_0"
+        }
       }
     },
     {
+      "dialogues": {
+        "active_id": "runecraftory:quest/tame_monster/active_1",
+        "end_id": "runecraftory:quest/tame_monster/end_1"
+      },
       "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
         "tasks": {
           "0": {
+            "amount": 1.0,
             "description": "",
+            "id": "runecraftory:taming",
             "predicates": [
               {
                 "description": "runecraftory.quest.tame_monster.sub.1.task.0",
                 "value": {}
               }
-            ],
-            "amount": 1.0,
-            "id": "runecraftory:taming"
+            ]
           }
-        },
-        "name": "",
-        "loot_table": "minecraft:empty",
-        "type": "simplequests_api:quest"
-      },
-      "dialogues": {
-        "active_id": "runecraftory:quest/tame_monster/active_1",
-        "end_id": "runecraftory:quest/tame_monster/end_1"
+        }
       }
     }
   ],
-  "type": "runecraftory:npc_quest"
+  "repeat_delay": -1
 }

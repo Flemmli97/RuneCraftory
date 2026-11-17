@@ -1,0 +1,51 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:monster_barn",
+  "name": "runecraftory.quest.monster_barn",
+  "parent_id": "runecraftory:mining",
+  "quest_givers": [
+    "runecraftory:blacksmith/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/monster_barn/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/monster_barn/active_1",
+        "end_id": "runecraftory:quest/monster_barn/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "advancements": [
+              {
+                "value": "runecraftory:main/taming/monster_barn"
+              }
+            ],
+            "id": "simplequests_api:advancement",
+            "reset": false
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}

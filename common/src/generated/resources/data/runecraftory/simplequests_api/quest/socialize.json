@@ -1,0 +1,62 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:socialize",
+  "name": "runecraftory.quest.socialize",
+  "parent_id": "runecraftory:first_quest",
+  "quest_givers": [
+    "runecraftory:general_store_owner/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/socialize/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/socialize/active_1",
+        "end_id": "runecraftory:quest/socialize/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk",
+            "target_npc_id": "runecraftory:any"
+          },
+          "1": {
+            "id": "runecraftory:npc_talk",
+            "target_npc_id": "runecraftory:any"
+          },
+          "2": {
+            "id": "runecraftory:npc_talk",
+            "target_npc_id": "runecraftory:any"
+          },
+          "3": {
+            "id": "runecraftory:npc_talk",
+            "target_npc_id": "runecraftory:any"
+          },
+          "4": {
+            "id": "runecraftory:npc_talk",
+            "target_npc_id": "runecraftory:any"
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}

@@ -1,0 +1,54 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:harvest_1",
+  "name": "runecraftory.quest.harvest_1",
+  "parent_id": "runecraftory:ship_turnip",
+  "quest_givers": [
+    "runecraftory:florist/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/harvest_1/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/harvest_1/active_1",
+        "end_id": "runecraftory:quest/harvest_1/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "amount": 4.0,
+            "dialogue": "runecraftory:quest/harvest_1/toyherb_progress",
+            "id": "runecraftory:delivery",
+            "items": [
+              {
+                "value": {
+                  "items": "runecraftory:toyherb"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}

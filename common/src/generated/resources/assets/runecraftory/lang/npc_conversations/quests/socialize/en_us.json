@@ -1,0 +1,5 @@
+{
+  "quest.conversation.runecraftory:socialize.0.start": "Ah, hello there! Say, have you had a chance to meet some of the people around here?\nOne of the nicest things about living in a village is getting to know its people. Everyone has their own stories, dreams, and experiences. There's always something interesting to discover if you take the time to listen!\nWhy not go around and talk to few other villagers? It's a lovely way to start becoming part of the community!\n\nHmm let's see... maybe talking to 5 other people is a good start",
+  "quest.conversation.runecraftory:socialize.1.active": "Still making your rounds, I see! Don't be shy, %player%.\nThere's plenty of interesting people around here, and I'm sure they'd appreciate a friendly introduction.\nTake your time, there's no rush and go talk to a few more people!",
+  "quest.conversation.runecraftory:socialize.1.end": "Well, look at you! Making friends already, are we?\nGetting to know the people around you is just as important as any adventure.\nYou never know when a familiar face might come in handy. Well done, %player%!"
+}

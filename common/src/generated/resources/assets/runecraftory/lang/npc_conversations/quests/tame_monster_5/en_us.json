@@ -1,0 +1,5 @@
+{
+  "quest.conversation.runecraftory:tame_monster_5.0.start": "Well, look who's getting the hang of things! Seems you've developed quite a knack for handling monsters, %player%!\nHow about taking things a step further? I'd like to see you build up a proper little collection of companions!\nTry taming five monsters this time. Now go and start befriending them!",
+  "quest.conversation.runecraftory:tame_monster_5.1.active": "Hah! How's your little monster collection coming along, %player%?\nFive monsters, remember! There's no shortage of different creatures out there, so get exploring and see what you can find.",
+  "quest.conversation.runecraftory:tame_monster_5.1.end": "Wow! Now that's what I call a collection!\nYou've certainly come a long way, %player%. Not everyone has the patience to earn the trust of that many creatures.\nJust make sure you've got enough room in that %item:runecraftory:monster_barn%. Otherwise you won't be able to make more friends."
+}

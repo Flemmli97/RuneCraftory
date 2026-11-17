@@ -1,0 +1,53 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:purchase_item",
+  "name": "runecraftory.quest.purchase_item",
+  "parent_id": "runecraftory:ship_turnip",
+  "quest_givers": [
+    "runecraftory:merchant/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/purchase_item/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/purchase_item/active_1",
+        "end_id": "runecraftory:quest/purchase_item/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "amount": 1.0,
+            "id": "runecraftory:delivery",
+            "items": [
+              {
+                "value": {
+                  "items": "runecraftory:rice"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}

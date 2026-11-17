@@ -27,7 +27,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:raw_iron"
         },
         {
           "type": "minecraft:item",
@@ -42,7 +42,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:copper_ingot"
+          "name": "minecraft:raw_copper"
         }
       ],
       "rolls": 1.0

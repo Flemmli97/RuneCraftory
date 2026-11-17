@@ -1,31 +1,42 @@
 {
-  "loot_table": "runecraftory:mining",
-  "repeat_delay": -1,
+  "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:mining",
   "name": "runecraftory.quest.mining",
+  "parent_id": "runecraftory:socialize",
   "quest_givers": [
-    "runecraftory:smith/1"
+    "runecraftory:blacksmith/1"
   ],
   "quests": [
     {
+      "dialogues": {
+        "start_id": "runecraftory:quest/mining/start_0"
+      },
       "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
         "tasks": {
           "0": {
             "id": "runecraftory:npc_talk"
           }
-        },
-        "name": "",
-        "loot_table": "minecraft:empty",
-        "type": "simplequests_api:quest"
-      },
-      "dialogues": {
-        "start_id": "runecraftory:quest/mining/start_0"
+        }
       }
     },
     {
+      "dialogues": {
+        "active_id": "runecraftory:quest/mining/active_1",
+        "end_id": "runecraftory:quest/mining/end_1"
+      },
       "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
         "tasks": {
           "0": {
+            "allow_dupes": true,
+            "amount": 10.0,
             "block_predicates": [
               {
                 "description": "runecraftory.quest.mining.sub.1.task.0",
@@ -34,23 +45,14 @@
                 }
               }
             ],
-            "amount": 10.0,
             "consume": false,
-            "use": false,
-            "allow_dupes": true,
             "description": "",
-            "id": "simplequests_api:block_interact"
+            "id": "simplequests_api:block_interact",
+            "use": false
           }
-        },
-        "name": "",
-        "loot_table": "minecraft:empty",
-        "type": "simplequests_api:quest"
-      },
-      "dialogues": {
-        "active_id": "runecraftory:quest/mining/active_1",
-        "end_id": "runecraftory:quest/mining/end_1"
+        }
       }
     }
   ],
-  "type": "runecraftory:npc_quest"
+  "repeat_delay": -1
 }

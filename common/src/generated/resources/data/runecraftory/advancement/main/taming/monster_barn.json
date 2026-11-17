@@ -1,0 +1,26 @@
+{
+  "parent": "runecraftory:main/root",
+  "criteria": {
+    "monster_barn": {
+      "trigger": "runecraftory:monster_barn"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "runecraftory.advancements.monster_barn.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "runecraftory:monster_barn"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.monster_barn.title"
+    }
+  },
+  "requirements": [
+    [
+      "monster_barn"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

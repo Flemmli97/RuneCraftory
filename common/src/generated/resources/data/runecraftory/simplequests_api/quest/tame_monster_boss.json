@@ -1,0 +1,55 @@
+{
+  "type": "runecraftory:npc_quest",
+  "category": "runecraftory:quests",
+  "global": true,
+  "loot_table": "runecraftory:tame_monster_boss",
+  "name": "runecraftory.quest.tame_monster_boss",
+  "parent_id": "runecraftory:monster_barn",
+  "quest_givers": [
+    "runecraftory:blacksmith/1"
+  ],
+  "quests": [
+    {
+      "dialogues": {
+        "start_id": "runecraftory:quest/tame_monster_boss/start_0"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "id": "runecraftory:npc_talk"
+          }
+        }
+      }
+    },
+    {
+      "dialogues": {
+        "active_id": "runecraftory:quest/tame_monster_boss/active_1",
+        "end_id": "runecraftory:quest/tame_monster_boss/end_1"
+      },
+      "quest": {
+        "type": "simplequests_api:quest",
+        "loot_table": "minecraft:empty",
+        "name": "",
+        "tasks": {
+          "0": {
+            "amount": 1.0,
+            "description": "Tame a boss",
+            "id": "runecraftory:taming",
+            "predicates": [
+              {
+                "description": "runecraftory.quest.tame_monster_boss.sub.1.task.0",
+                "value": {
+                  "type": "#runecraftory:boss_monsters"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "repeat_delay": -1
+}
