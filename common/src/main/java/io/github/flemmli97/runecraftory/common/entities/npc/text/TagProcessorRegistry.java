@@ -34,7 +34,8 @@ public class TagProcessorRegistry {
             try {
                 if (tagValue == null)
                     return style;
-                int color = Integer.parseInt(tagValue.replace("0x", ""), 16);
+                int color = Integer.parseInt(tagValue.replace("0x", "")
+                        .replaceFirst("#", ""), 16);
                 return style.withColor(color);
             } catch (NumberFormatException e) {
                 RuneCraftory.LOGGER.error("Invalid color value: {}", tagValue);
