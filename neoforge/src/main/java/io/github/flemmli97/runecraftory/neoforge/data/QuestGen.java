@@ -124,14 +124,14 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                     Try approaching a villager and pressing %key:key.drop% to give them something from your inventory. I'm sure it'll put a smile on their face!
                                     
                                     For demonstration here... hmm... lets see... I got it!
-                                    %quest.target_npc:0% was asking for some %item:runecraftory:formula_a%. Can you bring this to them? Would be much appreciated!
+                                    %quest.target_npc:0% was asking for some %item:runecraftory:formular_a%. Can you bring this to them? Would be much appreciated!
                                     And do take good care of it! If you happen to lose it, I'm afraid you'll have to find another one yourself. Hah!"""),
                             null, null);
-                    builder.addEntry(new NPCTalkTask(null, null, this.withLoot(id("quest_gifts_formula_a"), LootTable.lootTable().withPool(LootPool.lootPool()
+                    builder.addEntry(new NPCTalkTask(null, null, this.withLoot(id("quest_gifts_formular_a"), LootTable.lootTable().withPool(LootPool.lootPool()
                             .add(LootItem.lootTableItem(RuneCraftoryItems.FORMULAR_A.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))))));
                     builder.push(null,
                             new ConversationSet.Builder(builder.translationKeyOf("active"), """
-                                    %quest.target_npc:0% is still asking for the %item:runecraftory:formula_a%.
+                                    %quest.target_npc:0% is still asking for the %item:runecraftory:formular_a%.
                                     Remember: To give someone an item simply walk up to them and drop the item on them."""),
                             new ConversationSet.Builder(builder.translationKeyOf("end"), """
                                     Great! That's how you gift someone an items. Pretty simply and straigforward isn't that right?
@@ -140,7 +140,7 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                     builder.addEntry("Deliver Task", desc -> new DeliveryTask(id("florist/1"),
                             builder.getConversation("deliver_task", new ConversationSet.Builder(builder.translationKeyOf("deliver_task"), """
                                     Huh? What's this...
-                                    Oh yeah that's the %item:runecraftory:formula_a% I asked for from %quest_giver%.
+                                    Oh yeah that's the %item:runecraftory:formular_a% I asked for from %quest_giver%.
                                     How come you are bringing this to me?
                                     ...
                                     Hmm I see. Well anyway please say thanks to %quest_giver% that I appreciate this. I needed this.""")),
@@ -240,19 +240,19 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                             No -> You haven't? You really should try them out. Fertilizer can really boost your farming experience you know?
                             Yes -> I see. Then you might already know about various benefits of using them right? Thats great!
                             
-                            Here, take this! I've got a piece of %item:runecraftory:formula_a% you can try out.
+                            Here, take this! I've got a piece of %item:runecraftory:formular_a% you can try out.
                             This one increases the rate at which your crops grow.
                             Go on, give it a try! I'd love to hear what you think!"""), null, null);
-                    builder.addEntry(new NPCTalkTask(null, null, this.withLoot(id("fertilizer_formula_a"), LootTable.lootTable().withPool(LootPool.lootPool()
+                    builder.addEntry(new NPCTalkTask(null, null, this.withLoot(id("fertilizer_formular_a"), LootTable.lootTable().withPool(LootPool.lootPool()
                             .add(LootItem.lootTableItem(RuneCraftoryItems.FORMULAR_A.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))))));
                     builder.push(null,
                             new ConversationSet.Builder(builder.translationKeyOf("active"), """
-                                    Hehe, have you tried the %item:runecraftory:formula_a% yet, %player%?
+                                    Hehe, have you tried the %item:runecraftory:formular_a% yet, %player%?
                                     Remember, you just need to apply it to some prepared farmland. Your plants will thank you for it!
                                     Give it a try when you get the chance!"""),
                             new ConversationSet.Builder(builder.translationKeyOf("end"), """
                                     Yay! You did it, %player%!
-                                    See? A little fertilizer can go a long way! There are all sorts of fertilizers out there, each with its own benefits. 
+                                    See? A little fertilizer can go a long way! There are all sorts of fertilizers out there, each with its own benefits.
                                     Some help plants grow faster, while others can improve their size or quality.
                                     If you want to obtain more I sell some in my shop. Or you can also craft them yourself if you get a %item:runecraftory:chemistry%"""));
                     builder.addEntry("Use Fertilizer", d -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.Blocks.FARMLAND).build()).build(), DescriptiveValue.list(ItemPredicate.Builder.item().of(RuneCraftoryItems.FORMULAR_A.get()).build()).build(),

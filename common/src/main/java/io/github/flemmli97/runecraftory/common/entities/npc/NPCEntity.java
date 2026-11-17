@@ -228,6 +228,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEntity, TargetableOpponent, MobAttackExt,
@@ -312,6 +313,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
 
     private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
     private final Map<ServerPlayer, Runnable> onCloseRunner = new HashMap<>();
+    private Consumer<Map<String, Component>> additionalConversationData = null;
     private int interactionMoveCooldown;
 
     private final NPCSchedule schedule = new NPCSchedule(this, this.getRandom());
@@ -1142,12 +1144,21 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             }
         }
         List<PlayerQuestData.ProgressResult<NPCTalkTask.NPCTalkResolved>> triggers = QuestHandler.getData(player).trigger(NPCTalkTracker.KEY, this, "", 1);
+        List<Runnable> onClose = new ArrayList<>();
         if (!triggers.isEmpty()) {
             PlayerQuestData.ProgressResult<NPCTalkTask.NPCTalkResolved> progressResult = triggers.getFirst();
             NPCTalkTask.NPCTalkResolved task = progressResult.completedTasks().stream().filter(p -> p.result() != TaskResult.NONE)
                     .map(ProgressionResult::task).findFirst().orElse(null);
-            if (task != null && task.dialogue() != null) {
-                dialogues.add(task.dialogue());
+            if (task != null) {
+                onClose.add(task.runOnCompleteFor(player));
+                if (task.dialogue() != null)
+                    dialogues.add(task.dialogue());
+                if (progressResult.progress().getRootQuest() instanceof NPCQuestDefinition.NPCQuest npcQuest2) {
+                    NPCEntity giver = npcQuest2.getNpc(this.level());
+                    if (giver != null) {
+                        this.additionalConversationData = map -> map.put(PlaceholderProcessorRegistry.QUEST_GIVER, giver.getDisplayName());
+                    }
+                }
             }
         }
         QuestData data = QuestHandler.getData(player);
@@ -1177,7 +1188,10 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
             return false;
         this.speak(player, dialogues.stream().map(DataPackHandler.INSTANCE.npcConversationManager()::get).toList());
         if (npcQuest != null) {
-            this.onCloseRunner.put(player, () -> data.tryCompleteQuest(progress, progress.getRootQuest().submissionTrigger(player)));
+            this.onCloseRunner.put(player, () -> {
+                onClose.forEach(Runnable::run);
+                data.tryCompleteQuest(progress, progress.getRootQuest().submissionTrigger(player));
+            });
         }
         return true;
     }
@@ -1186,15 +1200,23 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         List<PlayerQuestData.ProgressResult<T>> triggers = QuestHandler.getData(player).trigger(key, value, "", 1);
         if (triggers.isEmpty())
             return false;
-        QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
-        NPCQuestDefinition.NPCQuest npcQuest = progress != null && progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest quest ? quest : null;
         List<ResourceLocation> dialogues = new ArrayList<>();
         PlayerQuestData.ProgressResult<T> progressResult = triggers.getFirst();
         T task = progressResult.completedTasks().stream().filter(p -> p.result() != TaskResult.NONE)
                 .map(ProgressionResult::task).findFirst().orElse(null);
-        if (task != null && task.dialogue() != null) {
-            dialogues.add(task.dialogue());
+        if (task != null) {
+            if (progressResult.progress().getRootQuest() instanceof NPCQuestDefinition.NPCQuest npcQuest) {
+                NPCEntity giver = npcQuest.getNpc(this.level());
+                if (giver != null) {
+                    this.additionalConversationData = map -> map.put(PlaceholderProcessorRegistry.QUEST_GIVER, giver.getDisplayName());
+                }
+            }
+            if (task.dialogue() != null) {
+                dialogues.add(task.dialogue());
+            }
         }
+        QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
+        NPCQuestDefinition.NPCQuest npcQuest = progress != null && progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest quest ? quest : null;
         QuestData data = QuestHandler.getData(player);
         if (npcQuest != null) {
             int stage = progress.getRootProgressStage();
@@ -1250,9 +1272,6 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         map.put(PlaceholderProcessorRegistry.BIRTHDAY, Component.translatable("runecraftory.npc.birthday", this.getBirthday().getSecond(), Component.translatable(this.getBirthday().getFirst().translationKey())));
         QuestProgress progress = QuestHandler.getFirstQuestFor(player, this);
         if (progress != null) {
-            if (progress.getRootQuest() instanceof NPCQuestDefinition.NPCQuest quest && quest.getNpc(this.level()) != null) {
-                map.put(PlaceholderProcessorRegistry.QUEST_GIVER, quest.getNpc(this.level()).getDisplayName());
-            }
             progress.getTasks().forEach((key, value) -> {
                 if (value instanceof ResolvedNPCBasedTask task) {
                     NPCEntity npc = task.getNpc(player.level());
@@ -1266,6 +1285,8 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
                 }
             });
         }
+        if (this.additionalConversationData != null)
+            this.additionalConversationData.accept(map);
         return map;
     }
 

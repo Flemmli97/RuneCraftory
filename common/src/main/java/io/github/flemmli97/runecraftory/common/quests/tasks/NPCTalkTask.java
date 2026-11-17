@@ -4,8 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.entities.misc.TreasureChestEntity;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCEntity;
 import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestDefinition;
+import io.github.flemmli97.runecraftory.common.registry.RuneCraftoryEntities;
 import io.github.flemmli97.runecraftory.common.world.data.RunecraftorySavedData;
 import io.github.flemmli97.simplequests_api.player.QuestProgress;
 import io.github.flemmli97.simplequests_api.quest.ResolvedQuest;
@@ -20,7 +22,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +38,7 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
     public static final MapCodec<NPCTalkTask> CODEC = RecordCodecBuilder.mapCodec((instance) ->
             instance.group(ResourceLocation.CODEC.optionalFieldOf("target_npc_id").forGetter(d -> Optional.ofNullable(d.targetNPCId)),
                     ResourceLocation.CODEC.optionalFieldOf("dialogue").forGetter(d -> Optional.ofNullable(d.dialogue)),
-                    ResourceLocation.CODEC.optionalFieldOf("loot_return").forGetter(d -> Optional.ofNullable(d.dialogue)),
+                    ResourceLocation.CODEC.optionalFieldOf("loot_return").forGetter(d -> Optional.ofNullable(d.lootReturn)),
                     EntityPredicate.CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.predicate))
             ).apply(instance, (npcId, dialogue, lootReturn, predicate) ->
                     new NPCTalkTask(npcId.orElse(null), dialogue.orElse(null), lootReturn.orElse(null), predicate.orElse(null))));
@@ -126,6 +130,23 @@ public class NPCTalkTask implements QuestTask<NPCTalkTask.NPCTalkResolved>, NPCB
         @Override
         public QuestTaskKey<NPCTalkTask> getId() {
             return ID;
+        }
+
+        public Runnable runOnCompleteFor(ServerPlayer player) {
+            return () -> {
+                TreasureChestEntity chest = RuneCraftoryEntities.TREASURE_CHEST.get().create(player.serverLevel());
+                if (chest != null && this.lootReturn() != null && !this.lootReturn().equals(BuiltInLootTables.EMPTY)) {
+                    chest.absMoveTo(player.getX(2), player.getY(1.5), player.getZ(2), player.getRandom().nextFloat() * 360.0f, 0.0f);
+                    int tries = 0;
+                    while (!player.level().noCollision(chest) && tries < 10) {
+                        chest.absMoveTo(player.getX(2), player.getY(1.5), player.getZ(2), player.getRandom().nextFloat() * 360.0f, 0.0f);
+                        tries++;
+                    }
+                    chest.setChestLoot(this.lootReturn());
+                    player.serverLevel().addFreshEntity(chest);
+                    chest.playSound(SoundEvents.CHEST_LOCKED, 1, 0.8f);
+                }
+            };
         }
 
         public ResourceKey<LootTable> lootReturn() {

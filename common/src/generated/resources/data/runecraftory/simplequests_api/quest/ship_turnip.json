@@ -19,7 +19,8 @@
         "name": "",
         "tasks": {
           "0": {
-            "id": "runecraftory:npc_talk"
+            "id": "runecraftory:npc_talk",
+            "loot_return": "runecraftory:quest_ship_turnip_turnip"
           }
         }
       }

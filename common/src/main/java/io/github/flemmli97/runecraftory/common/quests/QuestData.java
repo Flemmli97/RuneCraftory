@@ -103,11 +103,11 @@ public class QuestData implements PlayerQuestData, SerializableAttachment<Compou
         if (quest == null) {
             return false;
         }
-        return this.acceptQuest(quest);
+        return this.acceptQuest(quest, false);
     }
 
-    public boolean acceptQuest(QuestHandler.QuestboardQuestHolder quest) {
-        AcceptType type = this.canAcceptQuest(quest, false);
+    public boolean acceptQuest(QuestHandler.QuestboardQuestHolder quest, boolean forced) {
+        AcceptType type = forced ? AcceptType.ACCEPT : this.canAcceptQuest(quest, false);
         if (type != AcceptType.ACCEPT) {
             this.player.displayClientMessage(Component.translatable(type.langKey()).withStyle(ChatFormatting.DARK_RED), false);
             return false;

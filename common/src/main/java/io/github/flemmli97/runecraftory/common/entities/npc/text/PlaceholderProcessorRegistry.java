@@ -40,9 +40,10 @@ public class PlaceholderProcessorRegistry {
         if (v == null)
             return null;
         try {
-            Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(v));
-            if (item == Items.AIR)
-                return null;
+            ResourceLocation id = ResourceLocation.parse(v);
+            Item item = BuiltInRegistries.ITEM.get(id);
+            if (item == Items.AIR && !id.toString().equals("minecraft:air"))
+                return Component.literal("missingno");
             return Component.translatable(item.getDescriptionId()).withColor(HIGHLIGHT_BLUE);
         } catch (ResourceLocationException ex) {
             RuneCraftory.LOGGER.error("Failed to parse item {}", v, ex);
@@ -56,7 +57,7 @@ public class PlaceholderProcessorRegistry {
             ResourceLocation id = ResourceLocation.parse(v);
             EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(id);
             if (entityType == EntityType.PIG && !id.toString().equals("minecraft:pig"))
-                return null;
+                return Component.literal("missingno");
             return Component.translatable(entityType.getDescriptionId()).withColor(HIGHLIGHT_BLUE);
         } catch (ResourceLocationException ex) {
             RuneCraftory.LOGGER.error("Failed to parse entity {}", v, ex);

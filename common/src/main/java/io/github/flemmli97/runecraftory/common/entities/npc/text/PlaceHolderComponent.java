@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.NPCDialogueLanguageManager;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -159,17 +160,19 @@ public class PlaceHolderComponent {
             if (replacement == null && processor != null) {
                 replacement = processor.component().apply(namespace, matcher.group(3));
             }
+            if (arguments == null)
+                arguments = new ArrayList<>();
+            int argIndex = arguments.size() + 1;
+            int idx = lookup.computeIfAbsent(pattern, k -> argIndex);
+            text = text.replace("%" + pattern + "%", "%" + idx + "$s");
             if (replacement != null) {
-                if (arguments == null)
-                    arguments = new ArrayList<>();
-                int argIndex = arguments.size() + 1;
-                int idx = lookup.computeIfAbsent(pattern, k -> argIndex);
-                text = text.replace("%" + pattern + "%", "%" + idx + "$s");
                 if (processor != null) {
                     replacement = processor.styles().apply(replacement.copy());
                 }
                 if (argIndex == idx)
                     arguments.add(replacement);
+            } else {
+                arguments.add(Component.translatable("runecraftory.npc.conversation.unkown_placeholder", pattern).withStyle(ChatFormatting.RED));
             }
         }
         return arguments == null || arguments.isEmpty() ? Component.literal(text) : Component.translatable(text, arguments.toArray());

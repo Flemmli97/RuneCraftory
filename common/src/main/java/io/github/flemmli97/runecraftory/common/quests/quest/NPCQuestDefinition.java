@@ -138,9 +138,13 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
     }
 
     public static List<NPCQuestSetupData> resolve(NPCQuestDefinition quest, ServerPlayer player, Vec3 at) {
+        return resolve(quest, player, at, false);
+    }
+
+    public static List<NPCQuestSetupData> resolve(NPCQuestDefinition quest, ServerPlayer player, Vec3 at, boolean ignoreConditions) {
         List<NPCEntity> nearbyNPCs = player.level().getEntities(EntityTypeTest.forClass(NPCEntity.class), aabbOf(at), e -> true);
         return nearbyNPCs.stream().map(npc -> {
-            if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()) || npc.isStranger(player) || !quest.matches(player, npc))
+            if (!quest.questGiverNPCDataIDs().contains(npc.getDataID()) || !ignoreConditions && (npc.isStranger(player) || !quest.matches(player, npc)))
                 return null;
             Map<ResourceLocation, List<UUID>> relevantNPCs = quest.collectNPCReferences(nearbyNPCs, npc);
             if (relevantNPCs == null)
@@ -161,7 +165,7 @@ public class NPCQuestDefinition extends QuestDefinitionImpl {
             Object2IntMap<ResourceLocation> definitionRefs = new Object2IntOpenHashMap<>();
             for (QuestTask<?> task : def.unresolvedTasks().values()) {
                 if (task instanceof NPCBasedTask talk && talk.targetNPCId() != null) {
-                    definitionRefs.computeInt(talk.targetNPCId(), (k, i) -> i == 0 ? 1 : i + 1);
+                    definitionRefs.computeInt(talk.targetNPCId(), (k, i) -> i == null ? 1 : i + 1);
                 }
             }
             definitionRefs.forEach((k, v) -> {
