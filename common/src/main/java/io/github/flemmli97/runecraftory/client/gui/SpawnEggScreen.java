@@ -139,8 +139,7 @@ public class SpawnEggScreen extends Screen {
                 posY -= abs * 15;
             }
             posX -= size;
-            RenderUtils.renderScaledEntityGui(graphics, this.leftPos + posX, this.topPos + posY, size,
-                    size, 30 * scale, 0, mouseX, mouseY, entity);
+            RenderUtils.renderScaledEntityGui(graphics, this.leftPos + posX, this.topPos + posY, size, size, 30 * scale, 0, mouseX, mouseY, entity);
         }
     }
 
@@ -151,8 +150,7 @@ public class SpawnEggScreen extends Screen {
         this.levelEditor = new EditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 48, 16, Component.literal("")) {
             @Override
             public boolean charTyped(char codePoint, int modifiers) {
-                if (Character.isDigit(codePoint))
-                    return super.charTyped(codePoint, modifiers);
+                if (Character.isDigit(codePoint)) return super.charTyped(codePoint, modifiers);
                 return false;
             }
         };
@@ -169,19 +167,16 @@ public class SpawnEggScreen extends Screen {
         this.addRenderableWidget(this.levelEditor);
         if (stack.getItem() instanceof NPCSpawnEgg) {
             yOff += 8 * 9;
-            this.npcProfessionEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 130, 16, Component.literal(""),
-                    5, false, SuggestionEditBox.ofResourceLocation(RuneCraftoryNPCProfessions.PROFESSIONS.registry().keySet()));
+            this.npcProfessionEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, 130, 16, Component.literal(""), 5, false, SuggestionEditBox.ofResourceLocation(RuneCraftoryNPCProfessions.PROFESSIONS.registry().keySet()));
             this.npcProfessionEditor.setMaxLength(128);
             NPCSpawnData itemData = stack.getOrDefault(RuneCraftoryDataComponentTypes.NPC_SPAWN_DATA.get(), NPCSpawnData.DEFAULT);
             this.npcProfession = itemData.profession().map(h -> h.unwrapKey().orElseThrow().location()).orElse(null);
-            if (this.npcProfession != null)
-                this.npcProfessionEditor.setValue(this.npcProfession.toString());
+            if (this.npcProfession != null) this.npcProfessionEditor.setValue(this.npcProfession.toString());
             this.npcProfessionEditor.setResponder(s -> {
                 try {
-                    int len = this.npcProfession != null ? this.npcProfession.getPath().length() : 0;
+                    ResourceLocation prev = this.npcProfession;
                     this.npcProfession = s.isEmpty() ? null : ResourceLocation.parse(s);
-                    int newLen = this.npcProfession != null ? this.npcProfession.getPath().length() : 0;
-                    if (Math.abs(newLen - len) > 1) {
+                    if (this.npcProfession != null && !this.npcProfession.equals(prev) && RuneCraftoryNPCProfessions.PROFESSIONS.registry().containsKey(this.npcProfession)) {
                         LoaderNetwork.INSTANCE.sendToServer(new C2SNPCLookRequest(this.npcProfession, this.npcID));
                     }
                 } catch (ResourceLocationException ignored) {
@@ -191,18 +186,15 @@ public class SpawnEggScreen extends Screen {
             this.editBoxes.add(this.npcProfessionEditor);
             yOff += 20 + 16;
 
-            this.npcIDEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""),
-                    5, false, SuggestionEditBox.ofResourceLocation(this.npcIds));
+            this.npcIDEditor = new SuggestionEditBox(this.minecraft.font, this.leftPos + padding, this.topPos + yOff, this.sizeX - padding * 2, 16, Component.literal(""), 5, false, SuggestionEditBox.ofResourceLocation(this.npcIds));
             this.npcIDEditor.setMaxLength(128);
             this.npcID = itemData.npcDataId().orElse(null);
-            if (this.npcID != null)
-                this.npcIDEditor.setValue(this.npcID.toString());
+            if (this.npcID != null) this.npcIDEditor.setValue(this.npcID.toString());
             this.npcIDEditor.setResponder(s -> {
                 try {
-                    int len = this.npcID != null ? this.npcID.toString().length() : 0;
+                    ResourceLocation prev = this.npcID;
                     this.npcID = s.isEmpty() ? null : ResourceLocation.parse(s);
-                    int newLen = this.npcID != null ? this.npcID.getPath().length() : 0;
-                    if (Math.abs(newLen - len) > 1) {
+                    if (this.npcID != null && !this.npcID.equals(prev) && this.npcIds.contains(this.npcID)) {
                         LoaderNetwork.INSTANCE.sendToServer(new C2SNPCLookRequest(this.npcProfession, this.npcID));
                     }
                 } catch (ResourceLocationException ignored) {
@@ -234,16 +226,13 @@ public class SpawnEggScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean click = super.mouseClicked(mouseX, mouseY, button);
-        if (!click)
-            this.setFocused(null);
+        if (!click) this.setFocused(null);
         return click;
     }
 
     public void updateLook(ReloadableHolder<NPCLook> look, NPCFeatureContainer features) {
-        if (this.entities.isEmpty())
-            return;
-        if (!(this.entities.getFirst() instanceof NPCEntity npc))
-            return;
+        if (this.entities.isEmpty()) return;
+        if (!(this.entities.getFirst() instanceof NPCEntity npc)) return;
         npc.lookFeatures.with(features);
         npc.setClientLook(look);
     }
