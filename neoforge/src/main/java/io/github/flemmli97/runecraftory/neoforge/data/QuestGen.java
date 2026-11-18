@@ -6,6 +6,8 @@ import io.github.flemmli97.runecraftory.api.datapack.npc.ConversationSet;
 import io.github.flemmli97.runecraftory.api.datapack.provider.AdditionalLanguages;
 import io.github.flemmli97.runecraftory.common.lib.LibAdvancements;
 import io.github.flemmli97.runecraftory.common.lib.RunecraftoryTags;
+import io.github.flemmli97.runecraftory.common.loot.EntityPredicateCondition;
+import io.github.flemmli97.runecraftory.common.loot.LevelCondition;
 import io.github.flemmli97.runecraftory.common.quests.QuestHandler;
 import io.github.flemmli97.runecraftory.common.quests.quest.NPCQuestDefinition;
 import io.github.flemmli97.runecraftory.common.quests.quest.QuestDialogueEntry;
@@ -27,6 +29,7 @@ import io.github.flemmli97.simplequests_api.util.DescriptiveValue;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.PlayerPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -234,15 +237,25 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                 LootTable.lootTable().withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(RuneCraftoryItems.FORMULAR_A.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(3))))),
                 builder -> {
-                    builder.push(new ConversationSet.Builder(builder.translationKeyOf("start"), """
-                            Oh, hello, %player%! I've got something lovely to show you today!
-                            Have you ever tried using fertilizer in your crops?
-                            No -> You haven't? You really should try them out. Fertilizer can really boost your farming experience you know?
-                            Yes -> I see. Then you might already know about various benefits of using them right? Thats great!
-                            
-                            Here, take this! I've got a piece of %item:runecraftory:formular_a% you can try out.
-                            This one increases the rate at which your crops grow.
-                            Go on, give it a try! I'd love to hear what you think!"""), null, null);
+                    builder.push(new ConversationSet.Builder(builder.translationKeyOf("start"))
+                                    .addConversation("", (p, i) -> new ConversationSet.Conversation.Builder(p, """
+                                            Oh, hello, %player%! I've got something lovely to show you today!
+                                            Have you ever tried using fertilizer in your crops?""")
+                                            .addAction(ConversationSet.ConversationActionHolder.answer(p + ".action.1", p.replace("." + i, "." + (i + 1)), 0), "Not yet")
+                                            .addAction(ConversationSet.ConversationActionHolder.answer(p + ".action.2", p.replace("." + i, "." + (i + 2)), 0), "Yes I have"))
+                                    .addConversation("", (p, i) -> new ConversationSet.Conversation.Builder(p, """
+                                            You haven't? You really should try them out. Fertilizer can really boost your farming experience you know?
+                                            
+                                            Here, take this! I've got a piece of %item:runecraftory:formular_a% you can try out.
+                                            This one increases the rate at which your crops grow.
+                                            Go on, give it a try! I'd love to hear what you think!"""))
+                                    .addConversation("", (p, i) -> new ConversationSet.Conversation.Builder(p, """
+                                            I see. Then you might already know about various benefits of using them right? Thats great!
+                                            
+                                            Here, take this! I've got a piece of %item:runecraftory:formular_a% you can try out.
+                                            This one increases the rate at which your crops grow.
+                                            Go on, give it a try! I'd love to hear what you think!""")),
+                            null, null);
                     builder.addEntry(new NPCTalkTask(null, null, this.withLoot(id("fertilizer_formular_a"), LootTable.lootTable().withPool(LootPool.lootPool()
                             .add(LootItem.lootTableItem(RuneCraftoryItems.FORMULAR_A.get()).apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))))))));
                     builder.push(null,
@@ -256,8 +269,9 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                     Some help plants grow faster, while others can improve their size or quality.
                                     If you want to obtain more I sell some in my shop. Or you can also craft them yourself if you get a %item:runecraftory:chemistry%"""));
                     builder.addEntry("Use Fertilizer", d -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.Blocks.FARMLAND).build()).build(), DescriptiveValue.list(ItemPredicate.Builder.item().of(RuneCraftoryItems.FORMULAR_A.get()).build()).build(),
-                            ConstantValue.exactly(1), false, false, false, d, null));
-                }, b -> b.addParent(harvestCrop).global().setRepeatDelay(-1).withCategory(this.main));
+                            ConstantValue.exactly(1), true, false, false, d, null));
+                }, b -> b.addParent(harvestCrop).global().setRepeatDelay(-1).withCategory(this.main)
+                        .condition(LevelCondition.get(3).build()));
 
         ResourceLocation mining = this.addNPCQuest(id("mining"), "Acquire Hardware??", "",
                 List.of(id("blacksmith/1")),
@@ -289,7 +303,9 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                     While its a bit shabby it's still a proper mining tool, built for breaking those mineral deposits. Give it a swing next time you're out there, and you'll see what I mean!"""));
                     builder.addEntry("Break %s mineral blocks", desc -> new BlockInteractTask(DescriptiveValue.list(BlockPredicate.Builder.block().of(RunecraftoryTags.Blocks.ORES).build(), desc).build(),
                             List.of(), ConstantValue.exactly(10), false, false, true, "", null));
-                }, b -> b.addParent(socialize).global().setRepeatDelay(-1).withCategory(this.main));
+                }, b -> b.addParent(socialize).global().setRepeatDelay(-1).withCategory(this.main)
+                        .condition(EntityPredicateCondition.get(EntityPredicate.Builder.entity()
+                                .subPredicate(PlayerPredicate.Builder.player().checkAdvancementDone(ResourceLocation.parse("story/iron_tools"), true).build())).build()));
         ResourceLocation monsterBarn = this.addNPCQuest(id("monster_barn"), "Monster housing", "",
                 List.of(id("blacksmith/1")),
                 LootTable.lootTable().withPool(LootPool.lootPool()
@@ -312,11 +328,12 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                             new ConversationSet.Builder(builder.translationKeyOf("end"), """
                                     Well, look at that! A %item:runecraftory:monster_barn% of your very own! Not bad at all, %player%!
                                     Now you've got somewhere to keep all those creatures you manage to tame. Just remember, looking after monsters is a responsibility. They'll need proper care, just like any other livestock.
-                                    Who knows? Before long, you might have quite a collection of beasts living there!
-                                    
-                                    Just don't let them chew on your tools. I've had enough trouble repairing things as it is! Hah!"""));
+                                    Who knows? Before long, you might have quite a collection of beasts living there!"""));
                     builder.addEntry(new AdvancementTask(DescriptiveValue.list(LibAdvancements.MONSTER_BARN).build(), false, "", null));
-                }, b -> b.addParent(mining).global().setRepeatDelay(-1).withCategory(this.main));
+                }, b -> b.addParent(mining).global().setRepeatDelay(-1).withCategory(this.main)
+                        .condition(LevelCondition.get(5).build())
+                        .condition(EntityPredicateCondition.get(EntityPredicate.Builder.entity()
+                                .subPredicate(PlayerPredicate.Builder.player().checkAdvancementDone(ResourceLocation.parse("adventure/kill_a_mob"), true).build())).build()));
         ResourceLocation taming = this.addNPCQuest(id("tame_monster"), "Tame a monster", "",
                 List.of(id("blacksmith/1")),
                 LootTable.lootTable().withPool(LootPool.lootPool()
@@ -365,7 +382,8 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                     You've certainly come a long way, %player%. Not everyone has the patience to earn the trust of that many creatures.
                                     Just make sure you've got enough room in that %item:runecraftory:monster_barn%. Otherwise you won't be able to make more friends."""));
                     builder.addEntry("Tame 5 monster", desc -> new TamingTask("", DescriptiveValue.list(EntityPredicate.Builder.entity().build(), desc).build(), ConstantValue.exactly(5)));
-                }, b -> b.addParent(monsterBarn).global().setRepeatDelay(-1).withCategory(this.main));
+                }, b -> b.addParent(monsterBarn).global().setRepeatDelay(-1).withCategory(this.main)
+                        .condition(LevelCondition.get(10).build()));
         ResourceLocation tamingBoss = this.addNPCQuest(id("tame_monster_boss"), "Tame a boss", "",
                 List.of(id("blacksmith/1")),
                 LootTable.lootTable().withPool(LootPool.lootPool()
@@ -399,7 +417,8 @@ public class QuestGen extends QuestProvider implements AdditionalLanguages {
                                     You've managed to tame one of the mightiest creatures out there! I must admit, I'm impressed, %player%. It takes more than a strong arm to earn the trust of a beast like that.
                                     Well, I reckon you've earned yourself a reputation as quite the monster tamer."""));
                     builder.addEntry("Tame a boss", desc -> new TamingTask("Tame a boss", DescriptiveValue.list(EntityPredicate.Builder.entity().of(RunecraftoryTags.EntityTypes.BOSS_MONSTERS).build(), desc).build(), ConstantValue.exactly(1)));
-                }, b -> b.addParent(monsterBarn).global().setRepeatDelay(-1).withCategory(this.main));
+                }, b -> b.addParent(monsterBarn).global().setRepeatDelay(-1).withCategory(this.main)
+                        .condition(LevelCondition.get(20).build()));
 
         // Make and craft from forge, cooking, chem, armor
         // upgrade weapon, upgrade armor, change weapon element, upgrade staff

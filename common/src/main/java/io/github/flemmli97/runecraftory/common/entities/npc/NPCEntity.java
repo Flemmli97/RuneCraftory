@@ -1132,6 +1132,7 @@ public class NPCEntity extends AgeableMob implements Npc, IBaseMob, AnimatedEnti
         int stage = -1;
         if (npcQuest != null) {
             QuestData data = QuestHandler.getData(player);
+            data.submit(this);
             stage = progress.getRootProgressStage();
             if (stage >= npcQuest.source().dialogues().size()) {
                 RuneCraftory.LOGGER.error("Invalid stage for quest {}. Stage is {}", npcQuest.id(), stage);

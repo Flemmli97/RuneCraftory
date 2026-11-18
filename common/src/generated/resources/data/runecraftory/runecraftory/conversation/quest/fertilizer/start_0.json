@@ -1,4 +1,32 @@
 {
-  "conversations": {},
-  "fallback_key": "quest.conversation.runecraftory:fertilizer.0.start"
+  "conversations": {
+    "quest.conversation.runecraftory:fertilizer.0.start.1": {
+      "actions": [
+        {
+          "actions": "ANSWER",
+          "translation_key": "quest.conversation.runecraftory:fertilizer.0.start.1.action.1",
+          "value": "quest.conversation.runecraftory:fertilizer.0.start.2"
+        },
+        {
+          "actions": "ANSWER",
+          "translation_key": "quest.conversation.runecraftory:fertilizer.0.start.1.action.2",
+          "value": "quest.conversation.runecraftory:fertilizer.0.start.3"
+        }
+      ],
+      "conditions": [],
+      "dialogues": "quest.conversation.runecraftory:fertilizer.0.start.1",
+      "speakers": {}
+    },
+    "quest.conversation.runecraftory:fertilizer.0.start.2": {
+      "conditions": [],
+      "dialogues": "quest.conversation.runecraftory:fertilizer.0.start.2",
+      "speakers": {}
+    },
+    "quest.conversation.runecraftory:fertilizer.0.start.3": {
+      "conditions": [],
+      "dialogues": "quest.conversation.runecraftory:fertilizer.0.start.3",
+      "speakers": {}
+    }
+  },
+  "fallback_key": ""
 }

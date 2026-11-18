@@ -381,8 +381,8 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
-        this.add("runecraftory.advancements.tame.monster_barn.title", "Monster also need a place to stay");
-        this.add("runecraftory.advancements.tame.monster_barn.description", "Setup a proper monster barn");
+        this.add("runecraftory.advancements.monster_barn.title", "Monster housing");
+        this.add("runecraftory.advancements.monster_barn.description", "Setup a proper monster barn");
         this.add("runecraftory.advancements.tame.first.title", "First buddy");
         this.add("runecraftory.advancements.tame.first.description", "Tame your first monster");
         this.add("runecraftory.advancements.tame.ten.title", "Monster tamer");

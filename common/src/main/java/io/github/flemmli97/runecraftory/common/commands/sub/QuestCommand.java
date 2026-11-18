@@ -45,7 +45,7 @@ public class QuestCommand {
             ctx.getSource().sendFailure(Component.translatable("runecraftory.command.quest.not_npc", id.toString()));
             return 0;
         }
-        QuestHandler.QuestboardQuestHolder data = NPCQuestDefinition.resolve(npcQuest, player, player.position()).stream().limit(1)
+        QuestHandler.QuestboardQuestHolder data = NPCQuestDefinition.resolve(npcQuest, player, player.position(), true).stream().limit(1)
                 .findFirst().map(QuestHandler.QuestboardQuestHolder::new).orElse(null);
         if (data == null) {
             ctx.getSource().sendFailure(Component.translatable("runecraftory.command.quest.no_npc", id.toString()));

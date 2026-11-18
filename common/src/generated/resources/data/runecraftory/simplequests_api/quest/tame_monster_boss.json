@@ -1,6 +1,12 @@
 {
   "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "conditions": [
+    {
+      "condition": "runecraftory:level_check",
+      "minimum_level": 20
+    }
+  ],
   "global": true,
   "loot_table": "runecraftory:tame_monster_boss",
   "name": "runecraftory.quest.tame_monster_boss",

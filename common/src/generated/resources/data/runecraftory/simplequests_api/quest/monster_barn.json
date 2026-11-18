@@ -1,6 +1,23 @@
 {
   "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "conditions": [
+    {
+      "condition": "runecraftory:level_check",
+      "minimum_level": 5
+    },
+    {
+      "condition": "runecraftory:predicate_condition",
+      "predicate": {
+        "type_specific": {
+          "type": "minecraft:player",
+          "advancements": {
+            "minecraft:adventure/kill_a_mob": true
+          }
+        }
+      }
+    }
+  ],
   "global": true,
   "loot_table": "runecraftory:monster_barn",
   "name": "runecraftory.quest.monster_barn",

@@ -1,6 +1,12 @@
 {
   "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "conditions": [
+    {
+      "condition": "runecraftory:level_check",
+      "minimum_level": 3
+    }
+  ],
   "global": true,
   "loot_table": "runecraftory:fertilizer",
   "name": "runecraftory.quest.fertilizer",
@@ -54,7 +60,7 @@
                 }
               }
             ],
-            "use": false
+            "use": true
           }
         }
       }

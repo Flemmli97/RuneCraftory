@@ -157,7 +157,7 @@ public record ConversationSet(String fallbackKey, @Nullable ResourceLocation mis
         public Builder addConversation(String key, BiFunction<String, Integer, Conversation.Builder> conversationFact) {
             int amount = this.conversations.size() + 1;
             if (!this.prefix.isEmpty()) {
-                key = String.format("%s.%s.%s", this.prefix, key, amount);
+                key = String.format("%s%s.%s", this.prefix, key.isEmpty() ? "" : "." + key, amount);
             }
             Conversation.Builder conversation = conversationFact.apply(key, amount);
             this.conversations.put(key, conversation.build());

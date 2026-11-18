@@ -1,6 +1,19 @@
 {
   "type": "runecraftory:npc_quest",
   "category": "runecraftory:quests",
+  "conditions": [
+    {
+      "condition": "runecraftory:predicate_condition",
+      "predicate": {
+        "type_specific": {
+          "type": "minecraft:player",
+          "advancements": {
+            "minecraft:story/iron_tools": true
+          }
+        }
+      }
+    }
+  ],
   "global": true,
   "loot_table": "runecraftory:mining",
   "name": "runecraftory.quest.mining",
