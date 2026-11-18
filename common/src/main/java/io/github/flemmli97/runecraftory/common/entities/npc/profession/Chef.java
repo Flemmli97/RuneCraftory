@@ -38,7 +38,7 @@ public class Chef extends NPCProfession {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
         PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-        if (!data.useMoney(BREAD_PRICE)) {
+        if (!player.hasInfiniteMaterials() && !data.useMoney(BREAD_PRICE)) {
             player.displayClientMessage(Component.translatable(BREAD_ACTION_FAIL, player.getName(), BREAD_PRICE), false);
             return;
         }

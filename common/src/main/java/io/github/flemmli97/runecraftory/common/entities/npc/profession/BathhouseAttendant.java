@@ -31,7 +31,7 @@ public class BathhouseAttendant extends NPCProfession {
                 PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
                 int baths = data.getDailyUpdater().getBathCounter() + 1;
                 int amount = 300 * baths + (Math.max(0, baths - 1)) * 100;
-                if (data.useMoney(amount)) {
+                if (player.hasInfiniteMaterials() || data.useMoney(amount)) {
                     player.displayClientMessage(Component.translatable(BATH_ACTION_SUCCESS, player.getName()), false);
                     player.addEffect(new MobEffectInstance(RuneCraftoryEffects.BATH.asHolder(), 1700, 0, false, true, false));
                     data.getDailyUpdater().increaseBathCounter();

@@ -34,7 +34,7 @@ public class Doctor extends NPCProfession {
         if (npc.updater.getBreadToBuy() <= 0)
             return;
         PlayerData data = RunecraftoryAttachments.PLAYER_DATA.get().get(player);
-        if (!data.useMoney(CURE_PRICE)) {
+        if (!player.hasInfiniteMaterials() && !data.useMoney(CURE_PRICE)) {
             player.displayClientMessage(Component.translatable(CURE_ACTION_FAIL, player.getName(), CURE_PRICE), false);
             return;
         }

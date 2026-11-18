@@ -64,26 +64,29 @@ public class Blacksmith extends NPCProfession {
                     }
                 }
                 float multiplier = COST_FUNC_MAT_MULTIPLIER.apply(data.getBoughtBarns());
-                boolean enough = MATERIALS.entrySet().stream()
-                        .allMatch(p -> stacks.getOrDefault(p.getKey(), List.of()).stream().mapToInt(ItemStack::getCount).sum() >= (int) (p.getValue() * multiplier));
-                if (enough && data.useMoney(amount)) {
+                boolean enough = player.hasInfiniteMaterials() || (MATERIALS.entrySet().stream()
+                        .allMatch(p -> stacks.getOrDefault(p.getKey(), List.of()).stream().mapToInt(ItemStack::getCount).sum() >= (int) (p.getValue() * multiplier))
+                        && data.useMoney(amount));
+                if (enough) {
                     player.displayClientMessage(Component.translatable(BARN_ACTION_SUCCESS, player.getName()), false);
-                    for (Map.Entry<ItemPredicate, List<ItemStack>> e : stacks.entrySet()) {
-                        int needed = (int) (MATERIALS.get(e.getKey()) * multiplier);
-                        for (ItemStack stack : e.getValue()) {
-                            if (needed > stack.getCount()) {
-                                int count = stack.getCount();
-                                stack.setCount(0);
-                                needed -= count;
-                            } else {
-                                stack.shrink(needed);
-                                break;
+                    if (!player.hasInfiniteMaterials()) {
+                        for (Map.Entry<ItemPredicate, List<ItemStack>> e : stacks.entrySet()) {
+                            int needed = (int) (MATERIALS.get(e.getKey()) * multiplier);
+                            for (ItemStack stack : e.getValue()) {
+                                if (needed > stack.getCount()) {
+                                    int count = stack.getCount();
+                                    stack.setCount(0);
+                                    needed -= count;
+                                } else {
+                                    stack.shrink(needed);
+                                    break;
+                                }
                             }
                         }
+                        data.onBuyBarn();
                     }
                     if (!player.addItem(new ItemStack(RuneCraftoryItems.MONSTER_BARN.get())))
                         player.spawnAtLocation(new ItemStack(RuneCraftoryItems.MONSTER_BARN.get()));
-                    data.onBuyBarn();
                 } else {
                     player.displayClientMessage(Component.translatable(BARN_ACTION_FAIL, player.getName(), amount), false);
                 }
