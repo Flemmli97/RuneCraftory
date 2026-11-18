@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.loot.EntityPredicateCondition;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
+import io.github.flemmli97.runecraftory.common.loot.LevelCondition;
 import io.github.flemmli97.runecraftory.common.loot.LootingAndLuckLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.LuckBonusNumberProvider;
 import io.github.flemmli97.runecraftory.common.loot.NPCRelationCondition;
@@ -26,6 +27,7 @@ public class RuneCraftoryLootRegistries {
     public static final LoaderRegister<LootItemFunctionType<?>> LOOTFUNCTION = LoaderRegistryAccess.INSTANCE.of(Registries.LOOT_FUNCTION_TYPE, RuneCraftory.MODID);
     public static final LoaderRegister<LootNumberProviderType> NUMBER_PROVIDERS = LoaderRegistryAccess.INSTANCE.of(Registries.LOOT_NUMBER_PROVIDER_TYPE, RuneCraftory.MODID);
 
+    public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> LEVEL_CHECK = LOOTCONDITIONS.register("level_check", () -> new LootItemConditionType(LevelCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> SKILL_CHECK = LOOTCONDITIONS.register("skill_check", () -> new LootItemConditionType(SkillLevelCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> INTERACTINGPLAYER = LOOTCONDITIONS.register("interacting_player", () -> new LootItemConditionType(NPCRelationCondition.CODEC));
     public static final RegistryEntrySupplier<LootItemConditionType, LootItemConditionType> SEASONTYPE = LOOTCONDITIONS.register("season", () -> new LootItemConditionType(SeasonLootCondition.CODEC));
