@@ -1,3 +1,44 @@
+RuneCraftory 2.3.0
+================
+- Overhauled the questing system
+  - Quests now support talking to other npcs instead of just the quest giver
+  - Overhauled quest dialogue responses
+    - Quest define the dialogues now instead of the npc
+  - Added deliver tasks: Give the target npc the defined items
+- Add npc to npc dialogues options
+  - It's now possible to reference other npcs and define speakers in dialogues  
+    to allow other npc to also participate
+  - Depending on defined dialogues npc can form conversation groups during certain times
+  - Npc will "talk" to each other in a group
+- Overhauled npc schedule definition
+  - Schedule allows defining activities now.
+    - Note only following are allowed/functional: `minecraft:idle, minecraft:work, minecraft:rest, minecraft:meet, runecraftory:early_idle`
+  - `meet, work` activity can define a `social_chance` value indicating likelyhood to form a conversation group
+  - `meet` activity can define a poi target to have the npc move towards it.
+    - If not defined will use the vanilla `meeting` poi which is a bell.
+  - Schedules are now individual day based instead of splitting it between work/no work days
+- Lots of internal data structure changes to npc data
+  - Outfit, Hair and Hats features use resource location now instead of string so they are not hard locked to the mod id
+  - Gifts now use a conversation id as response instead of a plain translation key
+- Conversations with conditions now have a priority in being selected.  
+- Conversations can now use various text formatting tags leaning on html syntax:
+  - Example: `<b>foo</b>` will turn `foo` bold
+  - Supported tags (short and long version both work: `b/bold`, `i/italics`, `u/underline`, `o/obfuscated`, `s/strikethrough`
+  - All vanilla chat formatting colors such as `blue`, `yellow`
+  - Custom colors in form of `c:hex_code` where `hex_code` being in rgb e.g. `c:ff0000` = bright red
+  - `r/reset` resets all applied formatting. this does NOT need a closing syntax (so no `</r>`)
+- Added more npc outfits
+- Added more npc dialogues and quests
+  - **Existing npc will most likely be broken!** If you got attached to them... idk what to say cause they were so barebones
+- NPC spawnegg gui now show a proper preview of the npc instead of a steve texture
+- Creative mode ignore resources on addititional shop options (e.g. buying monster barn)
+- Add level loot condition for players level (had skill condition but not the level) `runecraftory:level_check`
+- Fix a crash with missing npc look features
+- Fix a deadlock with some worldgen features
+- Fix some follow ai problems if e.g. follow target was in the air
+- Fix npc poi acquire ai taking up all poi tickets
+- Fix no ai state handler breaking e.g. data command
+
 RuneCraftory 2.2.1.b
 ================
 - Fix neoforge toml
